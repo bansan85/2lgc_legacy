@@ -234,28 +234,32 @@ common_ville_get_ville (wchar_t  *ligne,
   int      code_postal_, altitude_, population_;
   wchar_t *dep_;
   
-  BUGMSG (ligne, FALSE, gettext ("Paramètre %s incorrect.\n"), "ligne")
+  BUGPARAM (ligne, "%p", ligne, FALSE)
   
-  BUGMSG (dep_ = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (dep_ = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   // On récupère les numéros caractéristant la ville en cours.
-  BUGMSG (swscanf (ligne,
-                   L"%d\t%d\t%d\t%ls\t%d\t%d\t%d\t%d\t",
-                   &cdc_,
-                   &cheflieu_,
-                   &reg_,
-                   dep_,
-                   &com_,
-                   &ar_,
-                   &ct_,
-                   &tncc_) == 8,
-          FALSE,
-          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
-  BUGMSG ((0 < wcslen (dep_)) && (wcslen (dep_) <= 3),
-          FALSE,
-          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
+  INFO (swscanf (ligne,
+                 L"%d\t%d\t%d\t%ls\t%d\t%d\t%d\t%d\t",
+                 &cdc_,
+                 &cheflieu_,
+                 &reg_,
+                 dep_,
+                 &com_,
+                 &ar_,
+                 &ct_,
+                 &tncc_) == 8,
+        FALSE,
+        (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
+                  ligne);
+          free (dep_);)
+  INFO ((0 < wcslen (dep_)) && (wcslen (dep_) <= 3),
+        FALSE,
+        (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
+                  ligne);
+          free (dep_);)
   if (cdc != NULL)
     *cdc = cdc_;
   if (cheflieu != NULL)
@@ -308,16 +312,18 @@ common_ville_get_ville (wchar_t  *ligne,
     }
   }
   
-  BUGMSG (ligne[j] != '\000',
-          FALSE,
-          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
-  BUGMSG (swscanf (&(ligne[j]),
-                   L"%d\t%d\t%d\n",
-                   &code_postal_,
-                   &altitude_,
-                   &population_) == 3,
-          FALSE,
-          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
+  INFO (ligne[j] != '\000',
+        FALSE,
+        (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
+                  ligne);)
+  INFO (swscanf (&(ligne[j]),
+                 L"%d\t%d\t%d\n",
+                 &code_postal_,
+                 &altitude_,
+                 &population_) == 3,
+        FALSE,
+        (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
+                  ligne);)
   
   if (code_postal != NULL)
     *code_postal = code_postal_;
@@ -371,21 +377,20 @@ common_ville_set (Projet  *p,
   Type_Seisme seisme_tmp;
   wchar_t    *tmp;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (departement,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "departement")
-  BUGMSG (ville, FALSE, gettext ("Paramètre %s incorrect.\n"), "ville")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (departement, "%p", departement, FALSE)
+  BUGPARAM (ville, "%p", ville, FALSE)
   
-  BUGMSG (villes = fopen (DATADIR"/france_villes.csv", "r"),
-          FALSE,
-          gettext ("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv")
+  INFO (villes = fopen (DATADIR"/france_villes.csv", "r"),
+        FALSE,
+        (gettext ("Le fichier '%s' est introuvable.\n"),
+                  DATADIR"/france_villes.csv");)
   
   // On passe la première ligne qui est l'étiquette des colonnes.
-  ligne = common_text_get_line (villes);
+  BUG (ligne = common_text_get_line (villes), FALSE, fclose (villes);)
   free (ligne);
   
-  ligne = common_text_get_line (villes);
+  BUG (ligne = common_text_get_line (villes), FALSE, fclose (villes);)
   do
   {
     BUG (common_ville_get_ville (ligne,
@@ -404,11 +409,15 @@ common_ville_set (Projet  *p,
                                  &code_postal,
                                  NULL,
                                  &population),
-         FALSE)
-    BUGMSG (tmp = malloc (sizeof (wchar_t) *
+         FALSE,
+         free (ligne);
+           fclose (villes);)
+    BUGCRIT (tmp = malloc (sizeof (wchar_t) *
                                       (wcslen (artmin) + wcslen (nccenr) + 2)),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (ligne);
+               fclose (villes);)
     wcscpy (tmp, artmin);
     wcscat (tmp,
             ((article == 5) || (article == 1) || (article == 0)) ? L"" : L" ");
@@ -428,15 +437,20 @@ common_ville_set (Projet  *p,
         free (p->parametres.adresse.departement);
         BUG (p->parametres.adresse.departement =
                                         common_text_wcstostr_dup (departement),
-             FALSE)
+             FALSE,
+             free (ligne);
+               fclose (villes);)
         p->parametres.adresse.commune = com;
         p->parametres.adresse.code_postal = code_postal;
         free (p->parametres.adresse.ville);
         BUG (p->parametres.adresse.ville = common_text_wcstostr_dup (tmp),
-             FALSE)
+             FALSE,
+             free (ligne);
+               fclose (villes);)
       }
       
       free (ligne);
+      fclose (villes);
       
       // On actualise la fenêtre graphique
 #ifdef ENABLE_GTK
@@ -489,9 +503,9 @@ common_ville_set (Projet  *p,
                                  common_gtk_informations_entry_del_char,
                                  NULL));
         
-        BUGMSG (code_postal2 = g_strdup_printf ("%d", code_postal),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (code_postal2 = g_strdup_printf ("%d", code_postal),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));)
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
                             code_postal2);
@@ -552,35 +566,54 @@ common_ville_set (Projet  *p,
         free (tmp);
       
       // Le zonage neige.
-      BUGMSG (villes = fopen (DATADIR"/france_neige.csv", "r"),
-              FALSE,
-              gettext ("Le fichier '%s' est introuvable.\n"), DATADIR"/france_neige.csv")
+      INFO (villes = fopen (DATADIR"/france_neige.csv", "r"),
+            FALSE,
+            (gettext ("Le fichier '%s' est introuvable.\n"),
+                      DATADIR"/france_neige.csv");)
       // On commence par chercher le département et on applique la règle de
       // base.
       dep_parcours = NULL;
       while (dep_parcours == NULL)
       {
-        BUGMSG (ligne = common_text_get_line (villes),
-                FALSE,
-                gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_neige.csv")
+        INFO (ligne = common_text_get_line (villes),
+              FALSE,
+              (gettext ("Le fichier '%s' est incomplet.\n"),
+                        DATADIR"/france_neige.csv");
+                fclose (villes);)
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);
+                   free (champ1);)
+        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);
+                   free (champ1);
+                   free (champ2);)
         
-        BUGMSG (swscanf (ligne,
-                         L"%ls\t%ls\t%ls\n",
-                         champ1,
-                         dep_parcours,
-                         champ2) == 3,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
+        INFO (swscanf (ligne,
+                       L"%ls\t%ls\t%ls\n",
+                       champ1,
+                       dep_parcours,
+                       champ2) == 3,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_neige.csv");
+                fclose (villes);
+                free (ligne);
+                free (champ1);
+                free (champ2);
+                free (dep_parcours);)
         
         if ((wcscmp (dep_parcours, dep) != 0) ||
             (wcscmp (champ1, L"DEP") != 0))
@@ -595,6 +628,7 @@ common_ville_set (Projet  *p,
         free (ligne);
         free (champ1);
       }
+      
       if (wcscmp (champ2, L"A1") == 0)
         neige_tmp = NEIGE_A1;
       else if (wcscmp (champ2, L"A2") == 0)
@@ -612,10 +646,14 @@ common_ville_set (Projet  *p,
       else if (wcscmp (champ2, L"E") == 0)
         neige_tmp = NEIGE_E;
       else
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
-      free(champ2);
+        FAILINFO (FALSE,
+                  (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                            DATADIR"/france_neige.csv",
+                            champ2);
+                    free (champ2);
+                    fclose (villes);)
+      free (champ2);
+      
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
       while (done == FALSE)
@@ -625,16 +663,26 @@ common_ville_set (Projet  *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);
+                   free (champ1);)
         
-        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
+        INFO (swscanf (ligne, L"%ls", champ1) == 1,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_neige.csv");
+                fclose (villes);
+                free (ligne);
+                free (champ1);
+                free (champ2);)
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
@@ -643,13 +691,18 @@ common_ville_set (Projet  *p,
         {
           int numero;
           
-          BUGMSG (swscanf (ligne,
-                           L"%ls\t%d\t%ls\n",
-                           champ1,
-                           &numero,
-                           champ2) == 3,
-                  FALSE,
-                  gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
+          INFO (swscanf (ligne,
+                         L"%ls\t%d\t%ls\n",
+                         champ1,
+                         &numero,
+                         champ2) == 3,
+                FALSE,
+                (gettext ("Le fichier '%s' est corrompu.\n"),
+                          DATADIR"/france_neige.csv");
+                  fclose (villes);
+                  free (ligne);
+                  free (champ1);
+                  free (champ2);)
           if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
               ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
@@ -670,9 +723,14 @@ common_ville_set (Projet  *p,
             else if (wcscmp (champ2, L"E") == 0)
               neige_tmp = NEIGE_E;
             else
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
+              FAILINFO (FALSE,
+                        (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                                  DATADIR"/france_neige.csv",
+                                  champ2);
+                          fclose (villes);
+                          free (ligne);
+                          free (champ1);
+                          free (champ2);)
             done = TRUE;
           }
           else
@@ -696,35 +754,54 @@ common_ville_set (Projet  *p,
       // Fin Neige
       
       // Le zonage vent.
-      BUGMSG (villes = fopen (DATADIR"/france_vent.csv", "r"),
-              FALSE,
-              gettext ("Le fichier '%s' est introuvable.\n"), DATADIR"/france_vent.csv")
+      INFO (villes = fopen (DATADIR"/france_vent.csv", "r"),
+            FALSE,
+            (gettext ("Le fichier '%s' est introuvable.\n"),
+                      DATADIR"/france_vent.csv");)
       // On commence par chercher le département et on applique la règle de
       // base.
       dep_parcours = NULL;
       while (dep_parcours == NULL)
       {
-        BUGMSG (ligne = common_text_get_line (villes),
-                FALSE,
-                gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_vent.csv")
+        INFO (ligne = common_text_get_line (villes),
+              FALSE,
+              (gettext ("Le fichier '%s' est incomplet.\n"),
+                        DATADIR"/france_vent.csv");
+                fclose (villes);)
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   fclose (villes);
+                   free (ligne);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
+        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ2);
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
         
-        BUGMSG (swscanf (ligne,
-                         L"%ls\t%ls\t%ls\n",
-                         champ1,
-                         dep_parcours,
-                         champ2) == 3,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
+        INFO (swscanf (ligne,
+                       L"%ls\t%ls\t%ls\n",
+                       champ1,
+                       dep_parcours,
+                       champ2) == 3,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_vent.csv");
+                free (dep_parcours);
+                free (champ2);
+                free (champ1);
+                free (ligne);
+                fclose (villes);)
         
         if ((wcscmp (dep_parcours, dep) != 0) ||
             (wcscmp (champ1, L"DEP") != 0))
@@ -748,9 +825,12 @@ common_ville_set (Projet  *p,
       else if (wcscmp (champ2, L"4") == 0)
         vent_tmp = VENT_4;
       else
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
+        FAILINFO (FALSE,
+                  (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                            DATADIR"/france_vent.csv",
+                            champ2);
+                    free (champ2);
+                    fclose (villes);)
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
@@ -761,16 +841,26 @@ common_ville_set (Projet  *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (ligne);
+                   fclose (villes);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
         
-        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
+        INFO (swscanf (ligne, L"%ls", champ1) == 1,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_vent.csv");
+                free (champ2);
+                free (champ1);
+                free (ligne);
+                fclose (villes);)
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
@@ -779,13 +869,18 @@ common_ville_set (Projet  *p,
         {
           int numero;
           
-          BUGMSG (swscanf (ligne,
-                           L"%ls\t%d\t%ls\n",
-                           champ1,
-                           &numero,
-                           champ2) == 3,
-                  FALSE,
-                  gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
+          INFO (swscanf (ligne,
+                         L"%ls\t%d\t%ls\n",
+                         champ1,
+                         &numero,
+                         champ2) == 3,
+                FALSE,
+                (gettext ("Le fichier '%s' est corrompu.\n"),
+                          DATADIR"/france_vent.csv");
+                  free (champ2);
+                  free (champ1);
+                  free (ligne);
+                  fclose (villes);)
           if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
               ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
@@ -798,9 +893,14 @@ common_ville_set (Projet  *p,
             else if (wcscmp (champ2, L"4") == 0)
               vent_tmp = VENT_4;
             else
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
+              FAILINFO (FALSE,
+                        (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                                  DATADIR"/france_vent.csv",
+                                  champ2);
+                          free (champ2);
+                          free (champ1);
+                          free (ligne);
+                          fclose (villes);)
             done = TRUE;
           }
           else
@@ -824,35 +924,54 @@ common_ville_set (Projet  *p,
       // Fin Vent
       
       // Le zonage sismique.
-      BUGMSG (villes = fopen (DATADIR"/france_seisme.csv", "r"),
-              FALSE,
-              gettext ("Le fichier '%s' est introuvable.\n"), DATADIR"/france_seisme.csv")
+      INFO (villes = fopen (DATADIR"/france_seisme.csv", "r"),
+            FALSE,
+            (gettext ("Le fichier '%s' est introuvable.\n"),
+                      DATADIR"/france_seisme.csv");)
       // On commence par chercher le département et on applique la règle de
       // base.
       dep_parcours = NULL;
       while (dep_parcours == NULL)
       {
-        BUGMSG (ligne = common_text_get_line (villes),
-                FALSE,
-                gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_seisme.csv")
+        INFO (ligne = common_text_get_line (villes),
+              FALSE,
+              (gettext ("Le fichier '%s' est incomplet.\n"),
+                        DATADIR"/france_seisme.csv");
+                fclose (villes);)
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                    free (ligne);
+                    fclose (villes);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
+        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ2);
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
         
-        BUGMSG (swscanf (ligne,
-                         L"%ls\t%ls\t%ls\n",
-                         champ1,
-                         dep_parcours,
-                         champ2) == 3,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
+        INFO (swscanf (ligne,
+                       L"%ls\t%ls\t%ls\n",
+                       champ1,
+                       dep_parcours,
+                       champ2) == 3,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_seisme.csv");
+                free (dep_parcours);
+                free (champ2);
+                free (champ1);
+                free (ligne);
+                fclose (villes);)
         
         if ((wcscmp (dep_parcours, dep) != 0) ||
             (wcscmp (champ1, L"DEP") != 0))
@@ -878,9 +997,12 @@ common_ville_set (Projet  *p,
       else if (wcscmp (champ2, L"5") == 0)
         seisme_tmp = SEISME_5;
       else
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
+        FAILINFO (FALSE,
+                  (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                            DATADIR"/france_seisme.csv",
+                            champ2);
+                    free (champ2);
+                    fclose (villes);)
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
@@ -891,16 +1013,26 @@ common_ville_set (Projet  *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (ligne);
+                   fclose (villes);)
+        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (champ1);
+                   free (ligne);
+                   fclose (villes);)
         
-        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
-                FALSE,
-                gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
+        INFO (swscanf (ligne, L"%ls", champ1) == 1,
+              FALSE,
+              (gettext ("Le fichier '%s' est corrompu.\n"),
+                        DATADIR"/france_seisme.csv");
+                free (champ2);
+                free (champ1);
+                free (ligne);
+                fclose (villes);)
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
@@ -909,13 +1041,18 @@ common_ville_set (Projet  *p,
         {
           int numero;
           
-          BUGMSG (swscanf (ligne,
-                           L"%ls\t%d\t%ls\n",
-                           champ1,
-                           &numero,
-                           champ2) == 3,
-                  FALSE,
-                  gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
+          INFO (swscanf (ligne,
+                         L"%ls\t%d\t%ls\n",
+                         champ1,
+                         &numero,
+                         champ2) == 3,
+                FALSE,
+                (gettext ("Le fichier '%s' est corrompu.\n"),
+                          DATADIR"/france_seisme.csv");
+                  free (champ2);
+                  free (champ1);
+                  free (ligne);
+                  fclose (villes);)
           if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
               ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
@@ -930,9 +1067,14 @@ common_ville_set (Projet  *p,
             else if (wcscmp (champ2, L"5") == 0)
               seisme_tmp = SEISME_5;
             else
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
+              FAILINFO (FALSE,
+                        (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
+                                  DATADIR"/france_seisme.csv",
+                                  champ2);
+                          free (champ2);
+                          free (champ1);
+                          free (ligne);
+                          fclose (villes);)
             done = TRUE;
           }
           else
@@ -980,7 +1122,7 @@ common_ville_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   free (p->parametres.adresse.departement);
   p->parametres.adresse.departement = NULL;
