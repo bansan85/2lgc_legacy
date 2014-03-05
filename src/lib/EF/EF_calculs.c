@@ -27,6 +27,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_fonction.h"
+#include "common_gtk.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_noeuds.h"
@@ -2574,11 +2575,11 @@ EF_calculs_free (Projet *p)
   }
   
 #ifdef ENABLE_GTK
-  gtk_widget_set_sensitive (p->ui.comp.menu_resultats_afficher, FALSE);
+  gtk_widget_set_sensitive (UI_GTK.menu_resultats_afficher, FALSE);
   
-  if (p->ui.ef_resultats.builder != NULL)
+  if (UI_RES.builder != NULL)
   {
-    list_parcours = p->ui.ef_resultats.tableaux;
+    list_parcours = UI_RES.tableaux;
     
     while (list_parcours != NULL)
     {
@@ -2589,8 +2590,8 @@ EF_calculs_free (Projet *p)
       list_parcours = g_list_next (list_parcours);
     }
   }
-  if (p->ui.ef_rapport.builder != NULL)
-    gtk_list_store_clear (p->ui.ef_rapport.liste);
+  if (UI_RAP.builder != NULL)
+    gtk_list_store_clear (UI_RAP.liste);
 #endif
   
   return TRUE;

@@ -98,7 +98,7 @@ projet_free (Projet *p)
   if (p->modele.relachements != NULL)
     BUG (EF_relachement_free (p), FALSE)
 #ifdef ENABLE_GTK
-  if (p->ui.m3d.data != NULL)
+  if (UI_M3D.data != NULL)
     BUG (m3d_free (p), FALSE)
   EF_gtk_resultats_free (p);
 #endif

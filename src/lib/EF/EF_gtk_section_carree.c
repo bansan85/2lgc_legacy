@@ -323,7 +323,7 @@ EF_gtk_section_carree (Projet  *p,
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_SEC_CA.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return TRUE;
 }

@@ -670,7 +670,7 @@ EF_gtk_materiaux (Projet *p)
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_MATX.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
 }
 
 

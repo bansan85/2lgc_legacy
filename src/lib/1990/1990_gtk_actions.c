@@ -1540,7 +1540,7 @@ _1990_gtk_actions (Projet *p)
                      GDK_ACTION_MOVE);
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_ACT.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return;
 }

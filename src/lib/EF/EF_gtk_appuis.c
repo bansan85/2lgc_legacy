@@ -1078,7 +1078,7 @@ EF_gtk_appuis (Projet *p)
                             FALSE);
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_APP.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
 }
 
 #endif

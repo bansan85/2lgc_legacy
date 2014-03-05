@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_gtk.h"
 #include "1990_action.h"
 #include "1990_combinaisons.h"
 #include "1992_1_1_barres.h"
@@ -76,7 +77,7 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   
   BUG (_1990_combinaisons_genere (p), )
   
-  gtk_widget_set_sensitive (p->ui.comp.menu_resultats_afficher, TRUE);
+  gtk_widget_set_sensitive (UI_GTK.menu_resultats_afficher, TRUE);
   
   return;
 }

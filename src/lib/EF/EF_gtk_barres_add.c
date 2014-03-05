@@ -300,19 +300,19 @@ EF_gtk_barres_ajouter (GtkButton *button,
   
   g_object_set (gtk_builder_get_object (UI_BARADD.builder,
                                         "EF_gtk_barres_add_type_combobox"),
-                "model", p->ui.ef_barres.liste_types,
+                "model", UI_BAR.liste_types,
                 NULL);
   g_object_set (gtk_builder_get_object (UI_BARADD.builder,
                                         "EF_gtk_barres_add_section_combobox"),
-                "model", p->ui.ef_sections.liste_sections,
+                "model", UI_SEC.liste_sections,
                 NULL);
   g_object_set (gtk_builder_get_object (UI_BARADD.builder,
                                         "EF_gtk_barres_add_materiau_combobox"),
-                "model", p->ui.ef_materiaux.liste_materiaux,
+                "model", UI_MAT.liste_materiaux,
                 NULL);
   g_object_set (gtk_builder_get_object (UI_BARADD.builder,
                                      "EF_gtk_barres_add_relachement_combobox"),
-                "model", p->ui.ef_relachements.liste_relachements,
+                "model", UI_REL.liste_relachements,
                 NULL);
   
   if (p->modele.barres != NULL)
@@ -338,7 +338,7 @@ EF_gtk_barres_ajouter (GtkButton *button,
                             FALSE);
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_BARADD.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
 }
 
 #endif

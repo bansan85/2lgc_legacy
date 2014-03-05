@@ -54,7 +54,7 @@ m3d_configure_event (GtkWidget         *drawing,
   Projet      *p = (Projet *) data2;
   SGlobalData *data = (SGlobalData *) UI_M3D.data;
   
-  BUGCRIT (p->ui.comp.window,
+  BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "principale");)
@@ -171,7 +171,7 @@ m3d_key_press (GtkWidget   *widget,
   SGlobalData *data  = (SGlobalData *) UI_M3D.data;
   
   BUGPARAM (p, "%p", p, FALSE)
-  BUGCRIT (p->ui.comp.window,
+  BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "principale");)
@@ -284,7 +284,7 @@ m3d_get_rect (double *xmin,
   BUGPARAM (ymin, "%p", ymin, FALSE)
   BUGPARAM (ymax, "%p", ymax, FALSE)
   INFO (p->modele.noeuds, FALSE, (gettext ("Aucun noeud n'est existant.\n"));)
-  BUGCRIT (p->ui.comp.window,
+  BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "principale");)
@@ -358,7 +358,7 @@ m3d_camera_zoom_all (Projet *p)
   int           i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
   
   BUGPARAM (p, "%p", p, FALSE)
-  BUGCRIT (p->ui.comp.window,
+  BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "principale");)
@@ -614,7 +614,7 @@ m3d_camera_axe_##NOM (Projet *p) \
   \
   BUGPARAM (p, "%p", p, FALSE) \
   \
-  BUGCRIT (p->ui.comp.window, \
+  BUGCRIT (UI_GTK.window, \
            FALSE, \
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), \
                      "principale");) \

@@ -536,7 +536,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
     acier_data && !ERR (m_g (acier_data->nu), COEFFICIENT_NU_ACIER));
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_ACI.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return TRUE;
 }
@@ -556,7 +556,7 @@ _1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
  */
 {
   BUGPARAMCRIT (p, "%p", p, )
-  BUGCRIT (p->ui.ef_materiaux.builder,
+  BUGCRIT (UI_MAT.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Ajout Matériau Acier");)

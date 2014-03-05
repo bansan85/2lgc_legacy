@@ -160,7 +160,7 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
           ,
           gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                    "Barres")
-  BUGMSG (p->ui.ef_sections.liste_sections,
+  BUGMSG (UI_SEC.liste_sections,
           ,
           gettext ("La liste des sections est indéfinie.\n"))
   
@@ -204,7 +204,7 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
           ,
           gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                    "Barres")
-  BUGMSG (p->ui.ef_materiaux.liste_materiaux,
+  BUGMSG (UI_MAT.liste_materiaux,
           ,
           gettext ("La liste des matériaux est indéfinie.\n"))
   
@@ -247,7 +247,7 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
           ,
           gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                    "Barres")
-  BUGMSG (p->ui.ef_relachements.liste_relachements,
+  BUGMSG (UI_REL.liste_relachements,
           ,
           gettext ("La liste des relâchements de barre est indéfinie.\n"))
   
@@ -954,17 +954,17 @@ EF_gtk_barres (Projet *p)
   g_object_set (gtk_builder_get_object (UI_BAR.builder,
                                         "EF_barres_treeview_cell2"),
                 "model",
-                p->ui.ef_sections.liste_sections,
+                UI_SEC.liste_sections,
                 NULL);
   g_object_set (gtk_builder_get_object (UI_BAR.builder,
                                         "EF_barres_treeview_cell3"),
                 "model",
-                p->ui.ef_materiaux.liste_materiaux,
+                UI_MAT.liste_materiaux,
                 NULL);
   g_object_set (gtk_builder_get_object (UI_BAR.builder,
                                         "EF_barres_treeview_cell7"),
                 "model",
-                p->ui.ef_relachements.liste_relachements,
+                UI_REL.liste_relachements,
                 NULL);
   
   g_object_set_data (gtk_builder_get_object (UI_BAR.builder,
@@ -1070,7 +1070,7 @@ EF_gtk_barres (Projet *p)
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_BAR.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
 }
 
 #endif

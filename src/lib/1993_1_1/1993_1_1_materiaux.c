@@ -27,6 +27,7 @@
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
+#include "common_gtk.h"
 #include "1992_1_1_barres.h"
 #include "1993_1_1_materiaux.h"
 #include "EF_calculs.h"
@@ -176,9 +177,9 @@ _1993_1_1_materiaux_modif (Projet      *p,
   }
   
 #ifdef ENABLE_GTK
-  if (p->ui.ef_materiaux.builder != NULL)
+  if (UI_MAT.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                        p->ui.ef_materiaux.builder, "EF_materiaux_treeview")));
+                        UI_MAT.builder, "EF_materiaux_treeview")));
 #endif
   
   return TRUE;
