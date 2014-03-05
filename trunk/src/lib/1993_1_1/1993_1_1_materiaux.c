@@ -27,11 +27,14 @@
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
-#include "common_gtk.h"
 #include "1992_1_1_barres.h"
 #include "1993_1_1_materiaux.h"
 #include "EF_calculs.h"
 #include "EF_materiaux.h"
+
+#ifdef ENABLE_GTK
+#include "common_gtk.h"
+#endif
 
 
 EF_Materiau *
