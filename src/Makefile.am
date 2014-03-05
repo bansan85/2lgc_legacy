@@ -1,4 +1,6 @@
 SUBDIRS =	lib \
-		gui \
 		test
 
+if ENABLE_GTK
+SUBDIRS += gui
+endif

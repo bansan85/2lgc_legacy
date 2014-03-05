@@ -27,13 +27,17 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_fonction.h"
-#include "common_gtk.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
 #include "EF_sections.h"
 #include "EF_materiaux.h"
+
+#ifdef ENABLE_GTK
+#include "common_gtk.h"
+#endif
+
 
 gboolean
 EF_calculs_initialise (Projet *p)
