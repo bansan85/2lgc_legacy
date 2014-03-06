@@ -18,7 +18,7 @@ else
 libeurocodes_la_CFLAGS      +=  @GLIB_CFLAGS@
 endif
 
-libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0
+libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
 
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 

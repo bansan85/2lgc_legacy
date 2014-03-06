@@ -23,7 +23,7 @@ CUSTOM_CFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CFLAGS 	+= -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -Wuninitialized -Wmaybe-uninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wno-error=conversion -Wno-error=sign-conversion -Wformat=1 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length
+CUSTOM_CFLAGS 	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wno-error=conversion -Wno-error=sign-conversion -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length
 #-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
 
 if PLATFORM_WIN32
@@ -37,7 +37,9 @@ endif
 endif
 
 AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
-AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -std=gnu++11 -Wold-style-cast
+
+AM_CXXFLAGS		  = $(CUSTOM_CFLAGS) -std=gnu++11 -Wold-style-cast
+AM_CXXFLAGS		 += -D__STRICT_ANSI__
 if ENABLE_GTK
 AM_CFLAGS      += @GTK_CFLAGS@
 AM_CXXFLAGS    += @GTK_CFLAGS@

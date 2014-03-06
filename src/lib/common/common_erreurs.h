@@ -22,7 +22,8 @@
 #include "config.h"
 #include <stdio.h>
 
-#define NOWARNING _Pragma("GCC diagnostic ignored \"-Wunused-result\"")
+#define NOWARNING _Pragma("GCC diagnostic push")\
+  _Pragma("GCC diagnostic ignored \"-Wunused-result\"")
 #define POPWARNING _Pragma("GCC diagnostic pop")
 
 #define FAILINFO(Y, ...) { \

@@ -277,27 +277,27 @@ EF_relachement_modif (Projet             *p,
  * \param relachement : le relâchement à modifier,
  * \param nom : nouveau nom. mettre NULL pour le nom pour ne pas le modifier,
  * \param rx_debut : relachement de la rotation autour de l'axe x au début,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rx_d_data : paramètre additionnel de la rotation en x si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param ry_debut : relachement de la rotation autour de l'axe y au début,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param ry_d_data : paramètre additionnel de la rotation en y si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param rz_debut : relachement de la rotation autour de l'axe z au début,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rz_d_data : paramètre additionnel de la rotation en z si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param rx_fin : relachement de la rotation autour de l'axe x à la fin,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rx_f_data : paramètre additionnel de la rotation en x si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param ry_fin : relachement de la rotation autour de l'axe y à la fin,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param ry_f_data : paramètre additionnel de la rotation en y si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param rz_fin : relachement de la rotation autour de l'axe z à la fin,
- *                   UINT_MAX pour ne pas modifier,
+ *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rz_f_data : paramètre additionnel de la rotation en z si nécessaire.
  *                    NULL pour ne pas modifier,
  * \return
@@ -313,82 +313,100 @@ EF_relachement_modif (Projet             *p,
   BUGMSG (relachement,
           FALSE,
           gettext ("Paramètre %s incorrect.\n"), "relachement")
-  BUGMSG(!(((rx_debut == UINT_MAX ? relachement->rx_debut : rx_debut) ==
-             EF_RELACHEMENT_LIBRE) &&
-           ((rx_fin == UINT_MAX ? relachement->rx_fin : rx_fin) ==
-             EF_RELACHEMENT_LIBRE)),
-         FALSE,
-         gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
-  BUGMSG (((rx_debut == UINT_MAX ? relachement->rx_debut : rx_debut) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (!(((rx_debut == EF_RELACHEMENT_UNTOUCH ?
+                  relachement->rx_debut : rx_debut) == EF_RELACHEMENT_LIBRE) &&
+            ((rx_fin == EF_RELACHEMENT_UNTOUCH ?
+                       relachement->rx_fin : rx_fin) == EF_RELACHEMENT_LIBRE)),
+          FALSE,
+          gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
+  BUGMSG (((rx_debut == EF_RELACHEMENT_UNTOUCH ?
+              relachement->rx_debut : rx_debut) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((rx_d_data == NULL ? relachement->rx_d_data : rx_d_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
-  BUGMSG (((ry_debut == UINT_MAX ? relachement->ry_debut : ry_debut) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (((ry_debut == EF_RELACHEMENT_UNTOUCH ?
+              relachement->ry_debut : ry_debut) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((ry_d_data == NULL ? relachement->ry_d_data : ry_d_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
-  BUGMSG (((rz_debut == UINT_MAX ? relachement->rz_debut : rz_debut) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (((rz_debut == EF_RELACHEMENT_UNTOUCH ?
+              relachement->rz_debut : rz_debut) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((rz_d_data == NULL ? relachement->rz_d_data : rz_d_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
-  BUGMSG (((rx_fin == UINT_MAX ? relachement->rx_fin : rx_fin) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (((rx_fin == EF_RELACHEMENT_UNTOUCH ?
+              relachement->rx_fin : rx_fin) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((rx_f_data == NULL ? relachement->rx_f_data : rx_f_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
-  BUGMSG (((ry_fin == UINT_MAX ? relachement->ry_fin : ry_fin) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (((ry_fin == EF_RELACHEMENT_UNTOUCH ?
+              relachement->ry_fin : ry_fin) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((ry_f_data == NULL ? relachement->ry_f_data : ry_f_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
-  BUGMSG (((rz_fin == UINT_MAX ? relachement->rz_fin : rz_fin) !=
-            EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
+  BUGMSG (((rz_fin == EF_RELACHEMENT_UNTOUCH ?
+              relachement->rz_fin : rz_fin) !=
+                EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
           ((rz_f_data == NULL ? relachement->rz_f_data : rz_f_data) != NULL),
           FALSE,
           gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres."))
   
-  BUGMSG (!((((rx_debut == UINT_MAX ? relachement->rx_debut : rx_debut) ==
+  BUGMSG (!((((rx_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rx_debut : rx_debut) ==
                EF_RELACHEMENT_BLOQUE) ||
-             ((rx_debut == UINT_MAX ? relachement->rx_debut : rx_debut) ==
-               EF_RELACHEMENT_LIBRE)) &&
+             ((rx_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rx_debut : rx_debut) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (rx_d_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
-  BUGMSG (!((((ry_debut == UINT_MAX ? relachement->ry_debut : ry_debut) ==
-               EF_RELACHEMENT_BLOQUE) ||
-             ((ry_debut == UINT_MAX ? relachement->ry_debut : ry_debut) ==
-               EF_RELACHEMENT_LIBRE)) &&
+  BUGMSG (!((((ry_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->ry_debut : ry_debut) ==
+                   EF_RELACHEMENT_BLOQUE) ||
+             ((ry_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->ry_debut : ry_debut) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (ry_d_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
-  BUGMSG (!((((rz_debut == UINT_MAX ? relachement->rz_debut : rz_debut) ==
-               EF_RELACHEMENT_BLOQUE) ||
-             ((rz_debut == UINT_MAX ? relachement->rz_debut : rz_debut) ==
-               EF_RELACHEMENT_LIBRE)) &&
+  BUGMSG (!((((rz_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rz_debut : rz_debut) ==
+                   EF_RELACHEMENT_BLOQUE) ||
+             ((rz_debut == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rz_debut : rz_debut) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (rz_d_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
-  BUGMSG (!((((rx_fin == UINT_MAX ? relachement->rx_fin : rx_fin) ==
-               EF_RELACHEMENT_BLOQUE) ||
-             ((rx_fin == UINT_MAX ? relachement->rx_fin : rx_fin) ==
-               EF_RELACHEMENT_LIBRE)) &&
+  BUGMSG (!((((rx_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rx_fin : rx_fin) ==
+                   EF_RELACHEMENT_BLOQUE) ||
+             ((rx_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rx_fin : rx_fin) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (rx_f_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
-  BUGMSG (!((((ry_fin == UINT_MAX ? relachement->ry_fin : ry_fin) ==
-               EF_RELACHEMENT_BLOQUE) ||
-             ((ry_fin == UINT_MAX ? relachement->ry_fin : ry_fin) ==
-               EF_RELACHEMENT_LIBRE)) &&
+  BUGMSG (!((((ry_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->ry_fin : ry_fin) ==
+                   EF_RELACHEMENT_BLOQUE) ||
+             ((ry_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->ry_fin : ry_fin) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (ry_f_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
-  BUGMSG (!((((rz_fin == UINT_MAX ? relachement->rz_fin : rz_fin) ==
-               EF_RELACHEMENT_BLOQUE) ||
-             ((rz_fin == UINT_MAX ? relachement->rz_fin : rz_fin) ==
-               EF_RELACHEMENT_LIBRE)) &&
+  BUGMSG (!((((rz_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rz_fin : rz_fin) ==
+                   EF_RELACHEMENT_BLOQUE) ||
+             ((rz_fin == EF_RELACHEMENT_UNTOUCH ?
+                 relachement->rz_fin : rz_fin) ==
+                   EF_RELACHEMENT_LIBRE)) &&
             (rz_f_data != NULL)),
           FALSE,
           gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres."))
@@ -483,7 +501,7 @@ EF_relachement_modif (Projet             *p,
   
 #ifdef ENABLE_GTK
 #define APPLY_REL(RELA, RELA_DATA, COL) \
-  if (RELA != UINT_MAX) \
+  if (RELA != EF_RELACHEMENT_UNTOUCH) \
     relachement->RELA = RELA; \
   switch (relachement->RELA) \
   { \
@@ -519,6 +537,7 @@ EF_relachement_modif (Projet             *p,
       } \
       break; \
     } \
+    case EF_RELACHEMENT_UNTOUCH : \
     default : \
     { \
       BUGMSG (NULL, FALSE, gettext ("Le type de relâchement est inconnu.\n")) \
@@ -527,7 +546,7 @@ EF_relachement_modif (Projet             *p,
   }
 #else
 #define APPLY_REL(RELA, RELA_DATA, COL) \
-  if (RELA != UINT_MAX) \
+  if (RELA != EF_RELACHEMENT_UNTOUCH) \
     relachement->RELA = RELA; \
   switch (relachement->RELA) \
   { \
@@ -553,6 +572,7 @@ EF_relachement_modif (Projet             *p,
       } \
       break; \
     } \
+    case EF_RELACHEMENT_UNTOUCH : \
     default : \
     { \
       BUGMSG (NULL, FALSE, gettext ("Le type de relâchement est inconnu.\n")) \

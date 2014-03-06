@@ -1434,6 +1434,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kAx = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
@@ -1467,6 +1468,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kAy = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
@@ -1500,6 +1502,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kAz = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
@@ -1542,6 +1545,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kBx = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
@@ -1575,6 +1579,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kBy = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
@@ -1608,6 +1613,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
               element->info_EF[j].kBz = 1. / m_g (donnees->raideur);
             break;
           }
+          case EF_RELACHEMENT_UNTOUCH :
           default :
           {
             FAILCRIT (FALSE,
