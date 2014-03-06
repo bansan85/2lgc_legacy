@@ -155,6 +155,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -178,6 +179,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -201,6 +203,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -224,6 +227,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -247,6 +251,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -270,6 +275,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
         g_object_set (cell, "editable", TRUE, NULL);
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -404,17 +410,17 @@ EF_gtk_relachements_edit_nom (GtkCellRendererText *cell,
   BUG (EF_relachement_modif (p,
                              relachement,
                              new_text,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL,
-                             UINT_MAX,
+                             EF_RELACHEMENT_UNTOUCH,
                              NULL),
       )
   
@@ -698,22 +704,23 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL),
             )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL,
@@ -743,22 +750,23 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL),
             )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -786,22 +794,23 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL),
             )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -829,22 +838,23 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL),
             )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -870,22 +880,23 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL),
             )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -913,23 +924,24 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
         BUG (EF_relachement_modif (p,
                                    relachement,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    NULL,
-                                   UINT_MAX,
+                                   EF_RELACHEMENT_UNTOUCH,
                                    &data),
              
              )
         
         break;
       }
+      case EF_RELACHEMENT_UNTOUCH :
       default :
       {
         BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1003,15 +1015,15 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
                                    (type != relachement->rx_debut) ?
                                      &elastique_lineaire :
                                      NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL),
           )
       break;
@@ -1021,20 +1033,20 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
       BUG (EF_relachement_modif (p,
                                  relachement,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
                                  type,
                                  (type == EF_RELACHEMENT_ELASTIQUE_LINEAIRE) &&
                                    (type != relachement->ry_debut) ?
                                      &elastique_lineaire :
                                      NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL),
           )
       break;
@@ -1044,20 +1056,20 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
       BUG (EF_relachement_modif (p,
                                  relachement,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
                                  type,
                                  (type == EF_RELACHEMENT_ELASTIQUE_LINEAIRE) &&
                                    (type != relachement->rz_debut) ?
                                      &elastique_lineaire :
                                      NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL),
           )
       break;
@@ -1067,20 +1079,20 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
       BUG (EF_relachement_modif (p,
                                  relachement,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
                                  type,
                                  (type == EF_RELACHEMENT_ELASTIQUE_LINEAIRE) &&
                                    (type != relachement->rx_fin) ?
                                      &elastique_lineaire :
                                      NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL),
           )
       break;
@@ -1090,20 +1102,20 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
       BUG (EF_relachement_modif (p,
                                  relachement,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
                                  type,
                                  (type == EF_RELACHEMENT_ELASTIQUE_LINEAIRE) &&
                                    (type != relachement->ry_fin) ?
                                      &elastique_lineaire :
                                      NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL),
           )
       break;
@@ -1113,15 +1125,15 @@ EF_gtk_relachements_edit_type (GtkCellRendererText *cell,
       BUG (EF_relachement_modif (p,
                                  relachement,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
-                                 UINT_MAX,
+                                 EF_RELACHEMENT_UNTOUCH,
                                  NULL,
                                  type,
                                  (type == EF_RELACHEMENT_ELASTIQUE_LINEAIRE) &&
@@ -1205,6 +1217,7 @@ EF_gtk_relachements_render_1 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1257,6 +1270,7 @@ EF_gtk_relachements_render_2 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1305,6 +1319,7 @@ EF_gtk_relachements_render_3 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1357,6 +1372,7 @@ EF_gtk_relachements_render_4 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1405,6 +1421,7 @@ EF_gtk_relachements_render_5 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG(NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1457,6 +1474,7 @@ EF_gtk_relachements_render_6 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1505,6 +1523,7 @@ EF_gtk_relachements_render_7 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1557,6 +1576,7 @@ EF_gtk_relachements_render_8 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1605,6 +1625,7 @@ EF_gtk_relachements_render_9 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1657,6 +1678,7 @@ EF_gtk_relachements_render_10 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1705,6 +1727,7 @@ EF_gtk_relachements_render_11 (GtkTreeViewColumn *tree_column,
       g_object_set (cell, "text", gettext ("Linéaire"), NULL);
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
@@ -1757,6 +1780,7 @@ EF_gtk_relachements_render_12 (GtkTreeViewColumn *tree_column,
       
       break;
     }
+    case EF_RELACHEMENT_UNTOUCH :
     default :
     {
       BUGMSG (NULL, , gettext ("Le type de relâchement est inconnu.\n"))
