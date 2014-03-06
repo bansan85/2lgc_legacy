@@ -50,7 +50,7 @@ EF_appuis_init (Projet *p)
   GtkTreeIter iter;
 #endif
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
 
   p->modele.appuis = NULL;
   
@@ -92,7 +92,7 @@ EF_appuis_cherche_nom (Projet     *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, NULL)
   
   list_parcours = p->modele.appuis;
   while (list_parcours != NULL)
@@ -106,7 +106,7 @@ EF_appuis_cherche_nom (Projet     *p,
   }
   
   if (critique)
-    BUGMSG (0, NULL, "Appui '%s' est introuvable.\n", nom)
+    FAILINFO (NULL, (gettext ("Appui '%s' est introuvable.\n"), nom);)
   else
     return NULL;
 }
@@ -143,22 +143,19 @@ EF_appuis_ajout (Projet       *p,
   EF_Appui *appui_nouveau, *appui_parcours;
   GList    *list_parcours;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (strcmp (nom, gettext ("Aucun")),
-          NULL,
-          gettext("Impossible d'utiliser comme nom 'Aucun'.\n"))
+  BUGPARAM (p, "%p", p, NULL)
+  INFO (strcmp (nom, gettext ("Aucun")),
+        NULL,
+        (gettext ("Impossible d'utiliser comme nom 'Aucun'.\n"));)
   
-  BUGMSG (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
-          NULL,
-          gettext ("L'appui '%s' existe déjà.\n"), nom)
+  INFO (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
+        NULL,
+        (gettext ("L'appui '%s' existe déjà.\n"), nom);)
    
-  BUGMSG (appui_nouveau = malloc (sizeof (EF_Appui)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (appui_nouveau = malloc (sizeof (EF_Appui)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
-  BUGMSG (appui_nouveau->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
   appui_nouveau->ux = x;
   switch (x)
   {
@@ -170,7 +167,9 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), x)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), x);
+                  free (appui_nouveau);)
       break;
     }
   }
@@ -185,7 +184,9 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), y)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), y);
+                  free (appui_nouveau);)
       break;
     }
   }
@@ -200,7 +201,9 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), z)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), z);
+                  free (appui_nouveau);)
       break;
     }
   }
@@ -215,7 +218,9 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), rx)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), rx);
+                  free (appui_nouveau);)
       break;
     }
   }
@@ -230,7 +235,9 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), ry)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), ry);
+                  free (appui_nouveau);)
       break;
     }
   }
@@ -245,10 +252,17 @@ EF_appuis_ajout (Projet       *p,
     }
     default:
     {
-      BUGMSG (0, NULL, gettext ("Type d'appui %d inconnu.\n"), rz)
+      FAILINFO (NULL,
+                (gettext ("Type d'appui %d inconnu.\n"), rz);
+                  free (appui_nouveau);)
       break;
     }
   }
+  
+  BUGCRIT (appui_nouveau->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (appui_nouveau);)
   
   list_parcours = p->modele.appuis;
   while (list_parcours != NULL)
@@ -326,11 +340,11 @@ EF_appuis_edit (EF_Appui     *appui,
 {
   GList *list_appuis = NULL, *list_noeuds;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (appui, FALSE, gettext ("Paramètre %s incorrect.\n"), "appui")
-  BUGMSG ((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE),
-          FALSE,
-          gettext ("Type d'appui %d inconnu.\n"), type_x)
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (appui, "%p", appui, FALSE)
+  BUGPARAM ((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE),
+            FALSE,
+            (gettext ("Type d'appui %d inconnu.\n"), type_x);)
   
   switch (x)
   {
@@ -366,9 +380,8 @@ EF_appuis_edit (EF_Appui     *appui,
     }
     default :
     {
-      BUGMSG (0,
-              FALSE,
-              gettext ("Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"))
+      FAILINFO (FALSE,
+                (gettext ("Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"));)
       return FALSE;
     }
   }
@@ -392,13 +405,16 @@ EF_appuis_edit (EF_Appui     *appui,
                                              NULL,
                                              FALSE,
                                              FALSE),
-       FALSE)
+       FALSE,
+       g_list_free (list_appuis);)
+  g_list_free (list_appuis);
   if (list_noeuds != NULL)
   {
-    BUG (EF_calculs_free (p), FALSE)
+    BUG (EF_calculs_free (p),
+         FALSE,
+         g_list_free (list_noeuds);)
     g_list_free (list_noeuds);
   }
-  g_list_free (list_appuis);
   
   return TRUE;
 }
@@ -426,21 +442,21 @@ EF_appuis_renomme (EF_Appui *appui,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (appui, FALSE, gettext ("Paramètre %s incorrect.\n"), "appui")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (appui, "%p", appui, FALSE)
   
   if (critique)
-    BUGMSG (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
-            FALSE,
-            gettext ("L'appui '%s' existe déjà.\n"), nom)
+    INFO (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
+          FALSE,
+          (gettext ("L'appui '%s' existe déjà.\n"), nom);)
   else if (EF_appuis_cherche_nom (p, nom, FALSE) != NULL)
     return FALSE;
   
   free (appui->nom);
-  BUGMSG (appui->nom = g_strdup_printf ("%s", nom),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (appui->nom = g_strdup_printf ("%s", nom),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   // On réinsère l'appui au bon endroit
   p->modele.appuis = g_list_remove (p->modele.appuis, appui);
@@ -546,8 +562,8 @@ EF_appuis_supprime (EF_Appui *appui,
   GList *list_appuis = NULL, *list_parcours;
   GList *noeuds_suppr;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (appui, FALSE, gettext ("Paramètre %s incorrect.\n"), "appui")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (appui, "%p", appui, FALSE)
   
   // On vérifie les dépendances.
   list_appuis = g_list_append (list_appuis, appui);
@@ -563,21 +579,31 @@ EF_appuis_supprime (EF_Appui *appui,
                                              NULL,
                                              FALSE,
                                              FALSE),
-       FALSE)
+       FALSE,
+       g_list_free (list_appuis);)
+  g_list_free (list_appuis);
   
   if ((annule_si_utilise) && (noeuds_suppr != NULL))
   {
     char *liste;
     
-    liste = common_selection_noeuds_en_texte (noeuds_suppr);
+    BUGCRIT (liste = common_selection_noeuds_en_texte (noeuds_suppr),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               g_list_free (noeuds_suppr);)
+
     if (g_list_next (noeuds_suppr) == NULL)
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"),
+                          liste);
+                  free (liste);
+                  g_list_free (noeuds_suppr);)
     else
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"),
+                          liste);
+                  free (liste);
+                  g_list_free (noeuds_suppr);)
   }
   
   // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).
@@ -588,18 +614,23 @@ EF_appuis_supprime (EF_Appui *appui,
     {
       EF_Noeud *noeud = list_parcours->data;
       
-      BUG (EF_noeuds_change_appui (p, noeud, NULL), TRUE)
+      BUG (EF_noeuds_change_appui (p, noeud, NULL),
+           TRUE,
+           g_list_free (noeuds_suppr);)
       
       list_parcours = g_list_next (list_parcours);
     }
   }
   else
-    BUG (_1992_1_1_barres_supprime_liste (p, noeuds_suppr, NULL), TRUE)
+    BUG (_1992_1_1_barres_supprime_liste (p, noeuds_suppr, NULL),
+         TRUE,
+         g_list_free (noeuds_suppr);)
   
-  g_list_free (list_appuis);
   g_list_free (noeuds_suppr);
   
   free (appui->nom);
+  appui->nom = NULL;
+  
   switch (appui->ux)
   {
     case EF_APPUI_LIBRE :
@@ -607,9 +638,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "ux",
+                          appui->ux);)
     }
   }
   switch (appui->uy)
@@ -619,9 +651,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "uy", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "uy",
+                          appui->ux);)
     }
   }
   switch (appui->uz)
@@ -631,9 +664,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "uz", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "uz",
+                          appui->ux);)
     }
   }
   switch (appui->rx)
@@ -643,9 +677,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "rx",
+                          appui->ux);)
     }
   }
   switch (appui->ry)
@@ -655,9 +690,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "ry",
+                          appui->ux);)
     }
   }
   switch (appui->rz)
@@ -667,9 +703,10 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->ux)
+      FAILINFO (FALSE,
+                (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
+                          "rz",
+                          appui->ux);)
     }
   }
   p->modele.appuis = g_list_remove (p->modele.appuis, appui);
@@ -698,7 +735,7 @@ EF_appuis_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   while (p->modele.appuis != NULL)
   {
@@ -708,9 +745,6 @@ EF_appuis_free (Projet *p)
     free (appui->nom);
     free (appui);
   }
-  
-  free (p->modele.appuis);
-  p->modele.appuis = NULL;
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_APP.liste_appuis);
