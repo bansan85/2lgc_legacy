@@ -19,6 +19,8 @@ aclocal -I m4
 libtoolize
 automake --add-missing --copy
 autoconf
+
+Avec gcc :
 ./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 make -j9 && sudo make install && /usr/local/bin/codegui
@@ -26,6 +28,10 @@ sudo make install-data && make check -j9
 make -C doc doc
 NOTA :
     -pg
+
+Avec clang :
+./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
+make -j9 CC=clang CXX=clang++ && sudo make install && /usr/local/bin/codegui
 
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :

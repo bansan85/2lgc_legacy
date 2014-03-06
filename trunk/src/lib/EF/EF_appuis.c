@@ -342,9 +342,9 @@ EF_appuis_edit (EF_Appui     *appui,
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (appui, "%p", appui, FALSE)
-  BUGPARAM ((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE),
-            FALSE,
-            (gettext ("Type d'appui %d inconnu.\n"), type_x);)
+  INFO ((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE),
+        FALSE,
+        (gettext ("Type d'appui %d inconnu.\n"), type_x);)
   
   switch (x)
   {
