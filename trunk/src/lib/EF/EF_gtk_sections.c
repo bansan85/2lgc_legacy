@@ -1965,9 +1965,10 @@ EF_gtk_sections (Projet *p)
       while (list_parcours != NULL)
       {
         GtkWidget *widget = list_parcours->data;
+        GtkWidget *grid = gtk_container_get_children (GTK_CONTAINER (widget))->data;
+        GtkWidget *label = gtk_grid_get_child_at (GTK_GRID (grid), 1, 0);
         
-        if (strcmp (categorie,
-                    gtk_menu_item_get_label (GTK_MENU_ITEM(widget))) == 0)
+        if (strcmp (categorie, gtk_label_get_text (GTK_LABEL (label))) == 0)
         {
           categorie_menu = widget;
           break;
@@ -1975,28 +1976,33 @@ EF_gtk_sections (Projet *p)
         
         list_parcours = g_list_next (list_parcours);
       }
-      if (list_parcours == NULL)
+      if (categorie_menu == NULL)
       {
         Section               section;
         Section_Personnalisee data;
+        GtkWidget            *label;
+        GtkWidget            *image;
+        GtkWidget            *grid;
         
         section.data = &data;
         section.type = SECTION_PERSONNALISEE;
         data.forme = forme;
         
-        categorie_menu = gtk_image_menu_item_new_with_label (categorie);
-        gtk_menu_shell_append (GTK_MENU_SHELL(sous_menu), categorie_menu);
+        categorie_menu = gtk_menu_item_new ();
+        label = gtk_label_new (g_strdup (categorie));
+        image = gtk_image_new_from_pixbuf (EF_gtk_sections_dessin (&section,
+                                                                   32,
+                                                                   32));
+        grid = gtk_grid_new ();
+        gtk_grid_attach (GTK_GRID (grid), image, 0, 0, 1, 1);
+        gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 2, 1);
+        gtk_container_add (GTK_CONTAINER (categorie_menu), grid);
+        
+        gtk_menu_shell_append (GTK_MENU_SHELL (sous_menu), categorie_menu);
         gtk_menu_item_set_submenu (GTK_MENU_ITEM (categorie_menu),
                                    gtk_menu_new ());
+        
         list_categorie = g_list_append (list_categorie, categorie_menu);
-        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (categorie_menu),
-                                       gtk_image_new_from_pixbuf (
-                                         EF_gtk_sections_dessin (&section,
-                                                                 32,
-                                                                 32)));
-        gtk_image_menu_item_set_always_show_image (
-          GTK_IMAGE_MENU_ITEM (categorie_menu),
-          TRUE);
       }
       EF_sections_personnalisee_forme_free (forme);
       
