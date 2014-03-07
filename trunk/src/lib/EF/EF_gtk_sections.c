@@ -1989,7 +1989,7 @@ EF_gtk_sections (Projet *p)
         data.forme = forme;
         
         categorie_menu = gtk_menu_item_new ();
-        label = gtk_label_new (g_strdup (categorie));
+        label = gtk_label_new (categorie);
         image = gtk_image_new_from_pixbuf (EF_gtk_sections_dessin (&section,
                                                                    32,
                                                                    32));
