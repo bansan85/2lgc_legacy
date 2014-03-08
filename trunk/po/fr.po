@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-03-04 09:24+0100\n"
-"PO-Revision-Date: 2014-03-04 09:24+0100\n"
+"POT-Creation-Date: 2014-03-08 16:49+0100\n"
+"PO-Revision-Date: 2014-03-08 16:50+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1722,12 +1722,25 @@ msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
 msgid "Impossible de réaliser un calcul sans barre existante.\n"
 msgstr "Impossible de réaliser un calcul sans barre existante.\n"
 
-msgid "Erreur lors de la résolution de la matrice.\n"
-msgstr "Erreur lors de la résolution de la matrice.\n"
+#, c-format
+msgid "Erreur de calcul : %d\n"
+msgstr "Erreur de calcul : %d\n"
+
+#, c-format
+msgid ""
+"Attention, matrice singulière.\n"
+"Il est possible que la modélisation ne soit pas stable.\n"
+msgstr ""
+"Attention, matrice singulière.\n"
+"Il est possible que la modélisation ne soit pas stable.\n"
 
 #, c-format
 msgid "Type d'élément %d inconnu.\n"
 msgstr "Type d'élément %d inconnu.\n"
+
+#, c-format
+msgid "Appui '%s' est introuvable.\n"
+msgstr "Appui '%s' est introuvable.\n"
 
 msgid "Impossible d'utiliser comme nom 'Aucun'.\n"
 msgstr "Impossible d'utiliser comme nom 'Aucun'.\n"
@@ -2093,6 +2106,9 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid "Erreur lors de la résolution de la matrice.\n"
+#~ msgstr "Erreur lors de la résolution de la matrice.\n"
 
 #~ msgid "Charge '%s' de l'action '%s' introuvable.\n"
 #~ msgstr "Charge '%s' de l'action '%s' introuvable.\n"
