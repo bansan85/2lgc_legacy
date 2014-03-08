@@ -1651,7 +1651,7 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
 {
   FILE    *file;
   wchar_t *ligne_tmp;
-  char    *ligne, *section;
+  char    *section;
   
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   
@@ -1670,6 +1670,8 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
   ligne_tmp = common_text_get_line (file);
   while (ligne_tmp != NULL)
   {
+    char *ligne;
+    
     BUG (ligne = common_text_wcstostr_dup (ligne_tmp), )
     free (ligne_tmp);
     if (strncmp (ligne, section, strlen (section)) == 0)
