@@ -71,7 +71,7 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
   
   BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud")
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG ((0 <= indice) && (indice <= 3),
+  BUGMSG ((0 <= indice) && (indice <= 5),
           FALSE,
           gettext ("Paramètre %s incorrect.\n"), gettext ("Indice hors limite.\n"))
   
