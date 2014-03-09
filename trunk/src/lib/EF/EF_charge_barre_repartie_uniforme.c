@@ -86,51 +86,63 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 {
-  Charge *charge;
-  Charge_Barre_Repartie_Uniforme  *charge_d;
+  Charge                         *charge;
+  Charge_Barre_Repartie_Uniforme *charge_d;
+  GList                          *list_parcours = barres;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (barres, NULL, gettext ("Paramètre %s incorrect.\n"), "barres")
-  BUGMSG ((projection == FALSE) || (repere_local == FALSE),
-          NULL,
-          gettext ("Impossible d'effectuer une projection dans un repère local.\n"))
-  BUGMSG(!((m_g (a) < 0.) && (!(ERR (m_g(a), 0.)))),
-         NULL,
-         gettext ("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), m_g(a))
-  BUGMSG (!((m_g (b) < 0.) && (!(ERR (m_g (b), 0.)))),
-          NULL,
-          gettext ("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), m_g (b))
-  BUGMSG (charge = malloc (sizeof (Charge)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (charge_d = malloc (sizeof (Charge_Barre_Repartie_Uniforme)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  charge->data = charge_d;
-  if (barres != NULL)
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (barres, "%p", barres, NULL)
+  INFO ((projection == FALSE) || (repere_local == FALSE),
+        NULL,
+        (gettext ("Impossible d'effectuer une projection dans un repère local.\n"));)
+  INFO(!((m_g (a) < 0.) && (!(ERR (m_g(a), 0.)))),
+       NULL,
+       (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
+                 m_g (a));)
+  INFO (!((m_g (b) < 0.) && (!(ERR (m_g (b), 0.)))),
+        NULL,
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
+                  m_g (b));)
+  
+  while (list_parcours != NULL)
   {
-    GList *list_parcours = barres;
-    do
-    {
-      EF_Barre *barre = list_parcours->data;
-      double    l = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
-      
-      BUGMSG (!((m_g (a) > l) && (!(ERR (m_g (a), l)))),
-              NULL,
-              gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), m_g (a), barre->numero, l)
-      BUGMSG (!((m_g (b) > l) && (!(ERR (m_g(b), l)))),
-              NULL,
-              gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), m_g (b), barre->numero, l)
-      BUGMSG (!((m_g (a) + m_g (b) > l) && (!(ERR (m_g (a) + m_g (b), l)))),
-              NULL,
-              gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"), m_g (a), m_g (b), barre->numero, l)
-      
-      list_parcours = g_list_next (list_parcours);
-    }
-    while (list_parcours != NULL);
+    EF_Barre *barre = list_parcours->data;
+    double    l = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
+    
+    INFO (!((m_g (a) > l) && (!(ERR (m_g (a), l)))),
+          NULL,
+          (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                    m_g (a),
+                    barre->numero,
+                    l);)
+    INFO (!((m_g (b) > l) && (!(ERR (m_g(b), l)))),
+          NULL,
+          (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                    m_g (b),
+                    barre->numero,
+                    l);)
+    INFO (!((m_g (a) + m_g (b) > l) && (!(ERR (m_g (a) + m_g (b), l)))),
+          NULL,
+          (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"),
+                    m_g (a),
+                    m_g (b),
+                    barre->numero,
+                    l);)
+    
+    list_parcours = g_list_next (list_parcours);
   }
+  while (list_parcours != NULL)
   
+  BUGCRIT (charge = malloc (sizeof (Charge)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (charge_d = malloc (sizeof (Charge_Barre_Repartie_Uniforme)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (charge);)
+  
+  charge->data = charge_d;
   charge->type = CHARGE_BARRE_REPARTIE_UNIFORME;
   charge_d->barres = barres;
   charge_d->repere_local = repere_local;
@@ -144,7 +156,10 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
   charge_d->my = my;
   charge_d->mz = mz;
   
-  BUG (EF_charge_ajout (p, action, charge, nom), NULL);
+  BUG (EF_charge_ajout (p, action, charge, nom),
+       NULL,
+       free (charge);
+         free (charge_d);)
   
   return charge;
 }
@@ -164,16 +179,19 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
  */
 {
   Charge_Barre_Repartie_Uniforme  *charge_d;
+  
   char  txt_debut[30], txt_fin[30];
   char  txt_fx[30], txt_fy[30], txt_fz[30];
   char  txt_mx[30], txt_my[30], txt_mz[30];
   char  *txt_liste_barres, *description;
   
-  BUGMSG (charge, NULL, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, NULL)
+  
   charge_d = charge->data;
   
   BUG (txt_liste_barres = common_selection_barres_en_texte (charge_d->barres),
        NULL)
+  
   conv_f_c (charge_d->a, txt_debut, DECIMAL_DISTANCE);
   conv_f_c (charge_d->b, txt_fin, DECIMAL_DISTANCE);
   conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
@@ -183,30 +201,31 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
   conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
   conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
   
-  BUGMSG (description = g_strdup_printf (
-            "%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m",
-            strstr (txt_liste_barres, ";") == NULL ?
-              gettext ("Barre") :
-              gettext("Barres"),
-            txt_liste_barres,
-            gettext ("début"),
-            txt_debut,
-            gettext ("fin (par rapport à la fin)"),
-            txt_fin,
-            charge_d->projection == TRUE ?
-              gettext ("projection : oui") :
-              gettext ("projection : non"),
-            charge_d->repere_local ?
-              gettext ("repère : local") :
-              gettext ("repère : global"),
-            txt_fx,
-            txt_fy,
-            txt_fz,
-            txt_mx,
-            txt_my,
-            txt_mz),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (description = g_strdup_printf (
+             "%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m",
+             strstr (txt_liste_barres, ";") == NULL ?
+               gettext ("Barre") :
+               gettext("Barres"),
+             txt_liste_barres,
+             gettext ("début"),
+             txt_debut,
+             gettext ("fin (par rapport à la fin)"),
+             txt_fin,
+             charge_d->projection == TRUE ?
+               gettext ("projection : oui") :
+               gettext ("projection : non"),
+             charge_d->repere_local ?
+               gettext ("repère : local") :
+               gettext ("repère : global"),
+             txt_fx,
+             txt_fy,
+             txt_fz,
+             txt_mx,
+             txt_my,
+             txt_mz),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (txt_liste_barres);)
   
   free (txt_liste_barres);
   
@@ -255,22 +274,26 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   EF_Noeud *debut, *fin;
   double    l, G, J;
   
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (infos, FALSE, gettext ("Paramètre %s incorrect.\n"), "infos")
-  BUGMSG (ma, FALSE, gettext ("Paramètre %s incorrect.\n"), "ma")
-  BUGMSG (mb, FALSE, gettext ("Paramètre %s incorrect.\n"), "mb")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
-  BUGMSG (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
-          FALSE,
-          gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (infos, "%p", infos, FALSE)
+  BUGPARAM (ma, "%p", ma, FALSE)
+  BUGPARAM (mb, "%p", mb, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
+  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+        FALSE,
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
   
   // Les moments aux extrémités de la barre sont déterminés par les intégrales
   // de Mohr et valent dans le cas général :\end{verbatim}\begin{center}
@@ -293,15 +316,25 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -364,12 +397,14 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
   double    l;
   double    E, I;
   
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (phia, FALSE, gettext ("Paramètre %s incorrect.\n"), "phia")
-  BUGMSG (phib, FALSE, gettext ("Paramètre %s incorrect.\n"), "phib")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (phia, "%p", phia, FALSE)
+  BUGPARAM (phib, "%p", phib, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr et
   // valent dans le cas général :\end{verbatim}\begin{center}
@@ -420,21 +455,33 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  b,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
@@ -505,12 +552,14 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
   double    l;
   double    E, I;
   
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
-  BUGMSG (phia, FALSE, gettext ("Paramètre %s incorrect.\n"), "phia")
-  BUGMSG (phib, FALSE, gettext ("Paramètre %s incorrect.\n"), "phib")
+  BUGPARAM (barre, "%p", barre, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
+  BUGPARAM (phia, "%p", phia, FALSE)
+  BUGPARAM (phib, "%p", phib, FALSE)
   
   if (discretisation == 0)
     debut = barre->noeud_debut;
@@ -561,21 +610,33 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  b,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
@@ -627,22 +688,31 @@ EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
  *     - a > l-b.
  */
 {
-  BUGMSG (section, NAN, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          NAN,
-          gettext ("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          NAN,
-          gettext ("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          NAN,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"), a, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          NAN,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"), b, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          NAN,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"), a, b, l)
+  BUGPARAM (section, "%p", section, NAN)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        NAN,
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        NAN,
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        NAN,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre est de %f m.\n"),
+                  a,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        NAN,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
+                  b,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        NAN,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"),
+                  a,
+                  b,
+                  l);)
   
   // La position de la résultante de la charge est obtenue en résolvant X dans
   // la formule :\end{verbatim}\begin{center}
@@ -695,15 +765,17 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   double         l;
   double         G, debut_barre, J;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   infos = &(barre->info_EF[discretisation]);
-  BUGMSG(!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
-         FALSE,
-         gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
+  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+        FALSE,
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
   
   // La déformation d'une barre soumise à un effort de torsion est défini par
   // les formules :\end{verbatim}\begin{center}
@@ -748,21 +820,33 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan(l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect. La longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte. La longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -778,11 +862,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            a,
            max * infos->kAx,
            max / (G * J),
-           0.,
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0., 0.,
            debut_barre),
          FALSE)
     BUG (common_fonction_ajout_poly (
@@ -794,10 +874,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            (-2 * a * mbx + 2 * b * max - 2 * l * max) /
              (2. * (a + b - l) * G * J),
            (max + mbx) / (2. * (a + b - l) * G * J),
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0.,
            debut_barre),
          FALSE)
     BUG (common_fonction_ajout_poly (
@@ -806,11 +883,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            l,
            max * infos->kAx + (l + a - b) * (max + mbx) / (2. * G * J),
            (-2 * mbx) / (2. * G * J),
-           0.,
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0., 0.,
            debut_barre),
          FALSE)
   }
@@ -823,11 +896,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            mbx * infos->kBx + ((max + mbx) * (-a + b) - l * (max - mbx)) /
              (2. * G * J),
            (2. * max) / (2. * G * J),
-           0.,
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0., 0.,
            debut_barre),
           FALSE)
     BUG (common_fonction_ajout_poly (
@@ -840,10 +909,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            (-2. * a * mbx + 2. * b * max - 2. * l * max) /
              (2. * (a + b - l) * G * J),
            (max + mbx) / (2. * (a + b - l) * G * J),
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0.,
            debut_barre),
          FALSE)
     BUG (common_fonction_ajout_poly (
@@ -852,11 +918,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
            l,
            mbx *(infos->kBx + l / (G * J)),
            -mbx / (G * J),
-           0.,
-           0.,
-           0.,
-           0.,
-           0.,
+           0., 0., 0., 0., 0.,
            debut_barre),
          FALSE)
   }
@@ -930,14 +992,14 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
   double    l;
   double    E, debut_barre, I;
   
-  BUGMSG (f_rotation,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "f_rotation")
-  BUGMSG (f_deform, FALSE, gettext ("Paramètre %s incorrect.\n"), "f_deform")
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+  BUGPARAM (f_rotation, "%p", f_rotation, FALSE)
+  BUGPARAM (f_deform, "%p", f_deform, FALSE)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // La déformation et la  rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -1062,21 +1124,33 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
@@ -1091,10 +1165,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            / (24. * l * E * I),
          0.,
          fz * (l - a - b) * (l - a + b) * (6.) / (24. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1106,9 +1177,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
          fz * (-12. * a * a * l) / (24. * l * E * I),
          fz * (6. * a * a - 6. * b * b + 6. * l * l) / (24. * l * E * I),
          fz * (-4. * l) / (24. * l * E * I),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1122,10 +1191,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            12. * l * l * l) / (24. * l * E * I),
          fz * (6. * a * a - 6. * b * b + 12. * b * l - 6. * l * l) /
            (24. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1136,10 +1202,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            b * l * l) / (6. * l * E * I),
          0.,
          my * (-3. * a - 3. * b + 3. * l) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1150,10 +1213,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (6. * l * E * I),
          my * (6. * a * l) / (6. * l * E * I),
          my * (-3. * a - 3. * b) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1164,10 +1224,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            5. * b * l *  l + 3. * l * l * l) / (6. * l * E * I),
          my * (6. * a * l + 6. * b * l - 6. * l * l) / (6. * l * E * I),
          my * (-3. * a - 3. * b + 3. * l) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1177,10 +1234,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
          -l / (6. * E * I) * (2. * may - mby),
          may / (E * I),
          -(may + mby) / (2. * E * I * l),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   
@@ -1193,9 +1247,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (l * l - a * a + 2. * a * l - b * b),
          0.,
          fz / (24. * E * I * l) * (l - a - b) * (l - a + b) * (-2.),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1208,8 +1260,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
          fz / (24. * E * I * l) * (6. * a * a * l),
          fz / (24. * E * I * l) * (-2. * a * a + 2. * b * b - 2. * l * l),
          fz / (24. * E * I * l) * (l),
-         0.,
-         0.,
+         0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1222,9 +1273,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (a * a + b * b - 2. * b * l + 5. * l * l),
          fz / (24. * E * I * l) * (l - a - b) * (l + a - b) * (-6. * l),
          fz / (24. * E * I * l) * (l - a - b) * (l + a - b) * (2.),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1236,9 +1285,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (-a * a + a * b + 2. * a * l - b * b - b * l),
          0.,
          -my / (6. * E * I * l) * (l - a - b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1250,9 +1297,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (a * a * a + 2. * a * l * l + b * b * b - b * l * l),
          my / (6. * E * I * l) * (-3. * a * l),
          my / (6. * E * I * l) * (a + b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1265,9 +1310,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
            (-a * a + a * b - a * l - b * b + 2. * b * l - 3. * l * l),
          my / (6. * E * I * l) * (l - a - b) * (3. * l),
          -my / (6. * E * I * l) * (l - a - b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1278,9 +1321,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
          l / (6. * E * I) * (2. * may - mby),
          -may / (2. * E * I),
          (mby + may) / (6. * E * I * l),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   
@@ -1394,14 +1435,14 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
   double    l;
   double    E, debut_barre, I;
   
-  BUGMSG (f_rotation,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "f_rotation")
-  BUGMSG (f_deform, FALSE, gettext ("Paramètre %s incorrect.\n"), "f_deform")
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+  BUGPARAM (f_rotation, "%p", f_rotation, FALSE)
+  BUGPARAM (f_deform, "%p", f_deform, FALSE)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // La déformation et la rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -1425,21 +1466,33 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan(l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
@@ -1454,10 +1507,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (24. * l * E * I),
          0.,
          -fy * (l - a - b) * (l - a + b) * (6.) / (24. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1469,9 +1519,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
          -fy * (-12. * a * a * l) / (24. * l * E * I),
          -fy * (6. * a * a - 6. * b * b + 6. * l * l) / (24. * l * E * I),
          -fy * (-4. * l) / (24. * l * E * I),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1485,10 +1533,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            12. * l * l * l) / (24. * l * E * I),
          -fy * (6. * a * a - 6. * b * b + 12. * b * l - 6. * l * l) /
            (24. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1499,10 +1544,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            b * l * l) / (6. * l * E * I),
          0.,
          mz * (-3. * a - 3. * b + 3. * l) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1513,10 +1555,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (6. * l * E * I),
          mz * (6. * a * l) / (6. * l * E * I),
          mz * (-3. * a - 3. * b) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1527,10 +1566,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            5. * b * l * l + 3. * l * l * l) / (6. * l * E * I),
          mz * (6. * a * l + 6. * b * l - 6. * l * l) / (6. * l * E * I),
          mz * (-3. * a - 3. * b + 3. * l) / (6. * l * E * I),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1540,10 +1576,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
          -l / (6. * E * I) * (2. * maz - mbz),
          maz / (E * I),
          -(maz + mbz) / (2. * E * I * l),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   
@@ -1556,9 +1589,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (l * l - a * a + 2. * a * l - b * b),
          0.,
          fy / (24. * E * I * l) * (l - a - b) * (l - a + b) * (-2.),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1571,8 +1602,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
          fy / (24. * E * I * l) * (6. * a * a * l),
          fy / (24. * E * I * l) * (-2. * a * a + 2. * b * b - 2. * l * l),
          fy / (24. * E * I * l) * (l),
-         0.,
-         0.,
+         0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1585,9 +1615,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (a * a + b * b - 2. * b * l + 5. * l * l),
          fy / (24. * E * I * l) * (l - a - b) * (l + a - b) * (-6. * l),
          fy / (24. * E * I * l) * (l - a - b) * (l + a - b) * (2.),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1599,9 +1627,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (-a * a + a * b + 2. * a * l - b * b - b * l),
          0.,
          mz / (6. * E * I * l) * (l - a - b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1613,9 +1639,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (a * a * a + 2. * a * l * l + b * b * b - b * l * l),
          -mz / (6. * E * I * l) * (-3. * a * l),
          -mz / (6. * E * I * l) * (a + b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1628,9 +1652,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
            (-a * a + a * b - a * l - b * b + 2. * b * l - 3. * l * l),
          -mz / (6. * E * I * l) * (l - a - b) * (3. * l),
          mz / (6. * E * I * l) * (l - a - b),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1641,9 +1663,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
          -l / (6. * E * I) * (2. * maz - mbz),
          maz / (2. * E * I),
          -(mbz + maz) / (6. * E * I * l),
-         0.,
-         0.,
-         0.,
+         0., 0., 0.,
          debut_barre),
        FALSE)
   
@@ -1684,11 +1704,13 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
   double    l, debut_barre;
   double    E, S;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          FALSE,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (barre, "%p", barre, FALSE)
+  INFO (discretisation <= barre->discretisation_element,
+        FALSE,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // La déformation selon l'axe x est par la formule :
   // \end{verbatim}\begin{center}
@@ -1732,21 +1754,33 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  BUGMSG (!((a < 0.) && (!(ERR (a, 0.)))),
-          FALSE,
-          gettext ("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
-  BUGMSG (!((b < 0.) && (!(ERR (b, 0.)))),
-          FALSE,
-          gettext ("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
-  BUGMSG (!((a > l) && (!(ERR (a, l)))),
-          FALSE,
-          gettext ("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
-  BUGMSG (!((b > l) && (!(ERR (b, l)))),
-          FALSE,
-          gettext ("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
-  BUGMSG (!((a + b > l) && (!(ERR (a + b, l)))),
-          FALSE,
-          gettext ("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
+  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+        FALSE,
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
+                  a);)
+  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+        FALSE,
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
+                  b);)
+  INFO (!((a > l) && (!(ERR (a, l)))),
+        FALSE,
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
+                  a,
+                  barre->numero,
+                  l);)
+  INFO (!((b > l) && (!(ERR (b, l)))),
+        FALSE,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  b,
+                  barre->numero,
+                  l);)
+  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+        FALSE,
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
+                  a,
+                  b,
+                  barre->numero,
+                  l);)
   
   E = m_g (EF_materiaux_E (barre->materiau));
   S = m_g (EF_sections_s (barre->section));
@@ -1771,11 +1805,7 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
          a,
          0.,
          (l - a + b) * (fax + fbx) / (2. * l * E * S),
-         0.,
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1786,10 +1816,7 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
          (fax + fbx) / (2. * l * E * S) / (a + b - l) *
            (-a * a + b * b - l * l),
          (fax + fbx) / (2. * l * E * S) / (a + b - l) * (l),
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0.,
          debut_barre),
        FALSE)
   BUG (common_fonction_ajout_poly (
@@ -1798,11 +1825,7 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
          l,
          (fax + fbx) / (2. * l * E * S) * l * (a - b + l),
          -(fax + fbx) / (2. * l * E * S) * (a - b + l),
-         0.,
-         0.,
-         0.,
-         0.,
-         0.,
+         0., 0., 0., 0., 0.,
          debut_barre),
        FALSE)
   
@@ -1831,7 +1854,8 @@ EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
   GList                          *list_parcours = barres;
   Charge_Barre_Repartie_Uniforme *charge_d;
   
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, FALSE)
+  
   charge_d = charge->data;
   
   while (list_parcours != NULL)
@@ -1884,7 +1908,8 @@ EF_charge_barre_repartie_uniforme_free (Charge *charge)
 {
   Charge_Barre_Repartie_Uniforme *charge_d;
   
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, FALSE)
+  
   charge_d = charge->data;
   
   free (charge->nom);
