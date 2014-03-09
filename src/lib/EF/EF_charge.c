@@ -58,18 +58,19 @@ EF_charge_ajout (Projet     *p,
   GtkTreeModel *model_action;
 #endif
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (charge, NULL, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (charge, "%p", charge, NULL)
   
-  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   BUG (_1990_action_charges_change (action,
                           g_list_append (_1990_action_charges_renvoie (action),
                                     charge)),
-       NULL)
+       NULL,
+       free (charge->nom);)
   
   BUG (EF_calculs_free (p), FALSE)
   
@@ -114,8 +115,8 @@ EF_charge_action (Projet *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (charge, "%p", charge, FALSE)
   
   list_parcours = p->actions;
   while (list_parcours != NULL)
@@ -128,7 +129,7 @@ EF_charge_action (Projet *p,
     list_parcours = g_list_next (list_parcours);
   }
   
-  BUGMSG (0, NULL, gettext ("La charge n'est dans aucune action.\n"))
+  FAILINFO (NULL, (gettext ("La charge n'est dans aucune action.\n"));)
 }
 
 
@@ -149,13 +150,13 @@ EF_charge_renomme (Projet     *p,
  *     - erreur d'allocation mémoire.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (charge, "%p", charge, FALSE)
   
   free (charge->nom);
-  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
 #ifdef ENABLE_GTK
   if (UI_ACT.builder != NULL)
@@ -186,22 +187,16 @@ EF_charge_deplace (Projet *p,
  *     - p == NULL,
  *     - action_src == NULL,
  *     - action_dest == NULL,
- *     - charge charge_src dans l'action action_src introuvable.
+ *     - charge_s == NULL,
  */
 {
   Charge *charge_data = NULL;
   GList  *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action_src,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "action_src")
-  BUGMSG (charge_s,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "charge_s")
-  BUGMSG (action_dest,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "action_dest")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action_src, "%p", action_src, FALSE)
+  BUGPARAM (charge_s, "%p", charge_s, FALSE)
+  BUGPARAM (action_dest, "%p", action_dest, FALSE)
   
   if (action_src == action_dest)
     return TRUE;
@@ -245,9 +240,11 @@ EF_charge_deplace (Projet *p,
   //   FinPour
   }
   
-  BUGMSG (charge_data,
-          FALSE,
-          gettext ("Charge '%s' de l'action %s introuvable.\n"), charge_s->nom, _1990_action_nom_renvoie (action_src))
+  INFO (charge_data,
+        FALSE,
+        (gettext ("Charge '%s' de l'action %s introuvable.\n"),
+                  charge_s->nom,
+                  _1990_action_nom_renvoie (action_src));)
   
   // On insère la charge à la fin de la liste des charges dans l'action de
   // destination en modifiant son numéro.
@@ -285,7 +282,7 @@ EF_charge_supprime (Projet *p,
   Charge *charge_data = NULL;
   GList  *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   list_parcours = _1990_action_charges_renvoie (action);
   // Pour chaque charge de l'action en cours Faire
@@ -336,9 +333,9 @@ EF_charge_supprime (Projet *p,
         }
         default :
         {
-          BUGMSG (0,
-                  FALSE,
-                  gettext ("Type de charge %d inconnu.\n"), charge_data->type)
+          FAILINFO (FALSE,
+                    (gettext ("Type de charge %d inconnu.\n"),
+                              charge_data->type);)
           break;
         }
       }
@@ -348,9 +345,11 @@ EF_charge_supprime (Projet *p,
     list_parcours = g_list_next (list_parcours);
   }
   
-  BUGMSG (charge_data,
-          FALSE,
-          gettext("Charge '%s' de l'action %s introuvable.\n"), charge_s->nom, _1990_action_nom_renvoie (action))
+  INFO (charge_data,
+        FALSE,
+        (gettext ("Charge '%s' de l'action %s introuvable.\n"),
+                  charge_s->nom,
+                  _1990_action_nom_renvoie (action));)
   
   BUG (EF_calculs_free (p), FALSE)
   
