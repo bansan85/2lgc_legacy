@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-03-08 16:49+0100\n"
-"PO-Revision-Date: 2014-03-08 16:50+0100\n"
+"POT-Creation-Date: 2014-03-09 18:52+0100\n"
+"PO-Revision-Date: 2014-03-09 18:53+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1628,16 +1628,16 @@ msgid "Le fichier des sections est introuvable.\n"
 msgstr "Le fichier des sections est introuvable.\n"
 
 #, c-format
-msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
+msgid "La position de la charge ponctuelle %f est incorrecte.\n"
+msgstr "La position de la charge ponctuelle %f est incorrecte.\n"
 
 #, c-format
 msgid ""
-"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
-"barre %d est de %f m.\n"
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
 msgstr ""
-"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
-"barre %d est de %f m.\n"
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
 
 msgid "position"
 msgstr "position"
@@ -1657,11 +1657,11 @@ msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n
 
 #, c-format
 msgid ""
-"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
-"barre est de %f m.\n"
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
 msgstr ""
-"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
-"barre est de %f m.\n"
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
 
 msgid "Impossible d'éditer ce type de relâchement.\n"
 msgstr "Impossible d'éditer ce type de relâchement.\n"
@@ -1795,42 +1795,40 @@ msgstr "Impossible d'effectuer une projection dans un repère local.\n"
 
 #, c-format
 msgid ""
-"Le début de la position de la charge répartie uniformément (%f) est "
+"Le début de la position de la charge répartie uniformément %f est "
 "incorrect.\n"
 msgstr ""
-"Le début de la position de la charge répartie uniformément (%f) est "
+"Le début de la position de la charge répartie uniformément %f est "
 "incorrect.\n"
 
 #, c-format
 msgid ""
-"La fin de la position de la charge répartie uniformément (%f) est "
-"incorrecte.\n"
+"La fin de la position de la charge répartie uniformément %f est incorrecte.\n"
 msgstr ""
-"La fin de la position de la charge répartie uniformément (%f) est "
-"incorrecte.\n"
+"La fin de la position de la charge répartie uniformément %f est incorrecte.\n"
 
 #, c-format
 msgid ""
-"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
-"de la barre %d est de %f m.\n"
+"Le début de la charge répartie uniformément %f est incorrect.\n"
+"La longueur de la barre %d est de %f m.\n"
 msgstr ""
-"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
-"de la barre %d est de %f m.\n"
+"Le début de la charge répartie uniformément %f est incorrect.\n"
+"La longueur de la barre %d est de %f m.\n"
 
 #, c-format
 msgid ""
-"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
-"de la barre %d est de %f m.\n"
+"La fin de la charge répartie uniformément %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
 msgstr ""
-"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
-"de la barre %d est de %f m.\n"
+"La fin de la charge répartie uniformément %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
 
 #, c-format
 msgid ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
 msgstr ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
 msgid "début"
@@ -1846,52 +1844,68 @@ msgid "projection : non"
 msgstr "projection : non"
 
 #, c-format
-msgid "Le début de la charge répartie uniformément (%f) est incorrect.\n"
-msgstr "Le début de la charge répartie uniformément (%f) est incorrect.\n"
+msgid "Le début de la charge répartie uniformément %f est incorrect.\n"
+msgstr "Le début de la charge répartie uniformément %f est incorrect.\n"
 
 #, c-format
-msgid "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
-msgstr "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
+msgid "La fin de la charge répartie uniformément %f est incorrecte.\n"
+msgstr "La fin de la charge répartie uniformément %f est incorrecte.\n"
 
 #, c-format
 msgid ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatibles avec la longueur de la barre %d qui est de %f m.\n"
 msgstr ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatibles avec la longueur de la barre %d qui est de %f m.\n"
 
 #, c-format
 msgid ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
-"incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+"Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
+"avec la longueur de la barre %d qui est de %f m.\n"
 msgstr ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
-"incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+"Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
+"avec la longueur de la barre %d qui est de %f m.\n"
 
 #, c-format
 msgid ""
-"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
-"de la barre est de %f m.\n"
+"Le début de la charge répartie uniformément %f est incorrect.\n"
+"La longueur de la barre est de %f m.\n"
 msgstr ""
-"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
-"de la barre est de %f m.\n"
+"Le début de la charge répartie uniformément %f est incorrect.\n"
+"La longueur de la barre est de %f m.\n"
 
 #, c-format
 msgid ""
-"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
-"de la barre est de %f m.\n"
+"La fin de la charge répartie uniformément %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
 msgstr ""
-"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
-"de la barre est de %f m.\n"
+"La fin de la charge répartie uniformément %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
 
 #, c-format
 msgid ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
-"incorrecte avec la longueur de la barre qui est de %f m.\n"
+"Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
+"avec la longueur de la barre qui est de %f m.\n"
 msgstr ""
-"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
-"incorrecte avec la longueur de la barre qui est de %f m.\n"
+"Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
+"avec la longueur de la barre qui est de %f m.\n"
+
+#, c-format
+msgid ""
+"Le début de la charge répartie uniformément %f est incorrect. La longueur de "
+"la barre %d est de %f m.\n"
+msgstr ""
+"Le début de la charge répartie uniformément %f est incorrect. La longueur de "
+"la barre %d est de %f m.\n"
+
+#, c-format
+msgid ""
+"La fin de la charge répartie uniformément %f est incorrecte. La longueur de "
+"la barre %d est de %f m.\n"
+msgstr ""
+"La fin de la charge répartie uniformément %f est incorrecte. La longueur de "
+"la barre %d est de %f m.\n"
 
 #, c-format
 msgid "La section %s existe déjà.\n"
