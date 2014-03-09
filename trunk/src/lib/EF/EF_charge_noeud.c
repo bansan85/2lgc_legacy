@@ -71,21 +71,19 @@ EF_charge_noeud_ajout (Projet     *p,
   Charge       *charge;
   Charge_Noeud *charge_d;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (noeuds, NULL, gettext ("Paramètre %s incorrect.\n"), "noeuds")
-  BUGMSG (charge = malloc (sizeof (Charge)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (charge_d = malloc (sizeof (Charge_Noeud)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (noeuds, "%p", noeuds, NULL)
+  BUGCRIT (charge = malloc (sizeof (Charge)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (charge_d = malloc (sizeof (Charge_Noeud)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (charge);)
   charge->data = charge_d;
   
   charge->type = CHARGE_NOEUD;
-  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
   charge_d->noeuds = noeuds;
   charge_d->fx = fx;
   charge_d->fy = fy;
@@ -94,7 +92,10 @@ EF_charge_noeud_ajout (Projet     *p,
   charge_d->my = my;
   charge_d->mz = mz;
   
-  BUG (EF_charge_ajout (p, action, charge, nom), NULL);
+  BUG (EF_charge_ajout (p, action, charge, nom),
+       NULL,
+       free (charge);
+         free (charge_d);)
   
   return charge;
 }
@@ -117,7 +118,8 @@ EF_charge_noeud_description (Charge *charge)
   char  txt_mx[30], txt_my[30], txt_mz[30];
   char  *txt_liste_noeuds, *description;
   
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, FALSE)
+  
   charge_d = charge->data;
   
   BUG (txt_liste_noeuds = common_selection_noeuds_en_texte (charge_d->noeuds),
@@ -129,20 +131,21 @@ EF_charge_noeud_description (Charge *charge)
   conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
   conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
   
-  BUGMSG (description = g_strdup_printf (
-            "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m",
-            strstr (txt_liste_noeuds, ";") == NULL ?
-              gettext ("Noeud") :
-              gettext ("Noeuds"),
-            txt_liste_noeuds,
-            txt_fx,
-            txt_fy,
-            txt_fz,
-            txt_mx,
-            txt_my,
-            txt_mz),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (description = g_strdup_printf (
+             "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m",
+             strstr (txt_liste_noeuds, ";") == NULL ?
+               gettext ("Noeud") :
+               gettext ("Noeuds"),
+             txt_liste_noeuds,
+             txt_fx,
+             txt_fy,
+             txt_fz,
+             txt_mx,
+             txt_my,
+             txt_mz),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (txt_liste_noeuds);)
   
   free (txt_liste_noeuds);
   
@@ -171,7 +174,8 @@ EF_charge_noeud_enleve_noeuds (Charge *charge,
   GList        *list_parcours = noeuds;
   Charge_Noeud *charge_d;
   
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, FALSE)
+  
   charge_d = charge->data;
   
   while (list_parcours != NULL)
@@ -224,7 +228,7 @@ EF_charge_noeud_free (Charge *charge)
 {
   Charge_Noeud *charge_d;
   
-  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  BUGPARAM (charge, "%p", charge, FALSE)
   charge_d = charge->data;
   
   free (charge->nom);
