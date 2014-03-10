@@ -1335,7 +1335,9 @@ common_fonction_caracteristiques (Fonction *fonction,
 }
 
 
-char *common_fonction_affiche_caract (Fonction *fonction,
+// coverity[+alloc]
+char *
+common_fonction_affiche_caract (Fonction *fonction,
                                       int       decimales_x,
                                       int       decimales_y)
 /**
@@ -1664,6 +1666,7 @@ common_fonction_conversion_combinaisons (Fonction *fonction,
 }
 
 
+// coverity[+alloc]
 char *
 common_fonction_renvoie (Fonction *fonction,
                          GList    *index,

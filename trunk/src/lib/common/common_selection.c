@@ -435,6 +435,7 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
 }
 
 
+// coverity[+alloc]
 char *
 common_selection_noeuds_en_texte (GList *liste_noeuds)
 /**
@@ -485,6 +486,7 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
 }
 
 
+// coverity[+alloc]
 char *
 common_selection_barres_en_texte (GList *liste_barres)
 /**
@@ -535,6 +537,7 @@ common_selection_barres_en_texte (GList *liste_barres)
 }
 
 
+// coverity[+alloc]
 char *
 common_selection_charges_en_texte (GList  *liste_charges,
                                    Projet *p)

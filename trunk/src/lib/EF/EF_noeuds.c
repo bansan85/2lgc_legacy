@@ -126,12 +126,14 @@ EF_noeuds_renvoie_position (EF_Noeud *noeud,
 }
 
 
-EF_Noeud *EF_noeuds_ajout_noeud_libre (Projet   *p,
-                                       Flottant  x,
-                                       Flottant  y,
-                                       Flottant  z,
-                                       EF_Appui *appui,
-                                       EF_Noeud *relatif)
+// coverity[+alloc]
+EF_Noeud *
+EF_noeuds_ajout_noeud_libre (Projet   *p,
+                             Flottant  x,
+                             Flottant  y,
+                             Flottant  z,
+                             EF_Appui *appui,
+                             EF_Noeud *relatif)
 /**
  * \brief Ajouter un noeud à la liste des noeuds en lui attribuant le numéro
  *        suivant le dernier noeud existant.
@@ -197,10 +199,12 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre (Projet   *p,
 }
 
 
-EF_Noeud *EF_noeuds_ajout_noeud_barre (Projet   *p,
-                                       EF_Barre *barre,
-                                       Flottant  position_relative_barre,
-                                       EF_Appui *appui)
+// coverity[+alloc]
+EF_Noeud *
+EF_noeuds_ajout_noeud_barre (Projet   *p,
+                             EF_Barre *barre,
+                             Flottant  position_relative_barre,
+                             EF_Appui *appui)
 /**
  * \brief Ajouter un noeud à la liste des noeuds en lui attribuant le numéro
  *        suivant le dernier noeud existant. Ce noeud se situe à l'intérieur
@@ -290,9 +294,10 @@ EF_Noeud *EF_noeuds_ajout_noeud_barre (Projet   *p,
 }
 
 
-EF_Noeud *EF_noeuds_cherche_numero (Projet      *p,
-                                    unsigned int numero,
-                                    gboolean critique)
+EF_Noeud *
+EF_noeuds_cherche_numero (Projet      *p,
+                          unsigned int numero,
+                          gboolean critique)
 /**
  * \brief Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
  * \param p : la variable projet,
@@ -328,11 +333,12 @@ EF_Noeud *EF_noeuds_cherche_numero (Projet      *p,
 }
 
 
-gboolean EF_noeuds_change_pos_abs (Projet   *p,
-                                   EF_Noeud *noeud,
-                                   Flottant  x,
-                                   Flottant  y,
-                                   Flottant  z)
+gboolean
+EF_noeuds_change_pos_abs (Projet   *p,
+                          EF_Noeud *noeud,
+                          Flottant  x,
+                          Flottant  y,
+                          Flottant  z)
 /**
  * \brief Change les coordonnées d'un noeud libre.
  * \param p : la variable projet,
@@ -380,9 +386,10 @@ gboolean EF_noeuds_change_pos_abs (Projet   *p,
 }
 
 
-gboolean EF_noeuds_change_pos_relat (Projet   *p,
-                                     EF_Noeud *noeud,
-                                     Flottant  pos)
+gboolean
+EF_noeuds_change_pos_relat (Projet   *p,
+                            EF_Noeud *noeud,
+                            Flottant  pos)
 /**
  * \brief Change la coordonnée d'un noeud relatif.
  * \param p : la variable projet,
@@ -485,9 +492,10 @@ gboolean EF_noeuds_change_pos_relat (Projet   *p,
 }
 
 
-gboolean EF_noeuds_change_appui (Projet   *p,
-                                 EF_Noeud *noeud,
-                                 EF_Appui *appui)
+gboolean
+EF_noeuds_change_appui (Projet   *p,
+                        EF_Noeud *noeud,
+                        EF_Appui *appui)
 /**
  * \brief Change l'appui d'un noeud.
  * \param p : la variable projet,
@@ -562,9 +570,10 @@ gboolean EF_noeuds_change_appui (Projet   *p,
 }
 
 
-gboolean EF_noeuds_change_noeud_relatif (Projet   *p,
-                                         EF_Noeud *noeud,
-                                         EF_Noeud *relatif)
+gboolean
+EF_noeuds_change_noeud_relatif (Projet   *p,
+                                EF_Noeud *noeud,
+                                EF_Noeud *relatif)
 /* \brief Change le noeud relatif d'un noeud.
  * \param p : la variable projet,
  * \param noeud : noeud à modifier,
@@ -668,8 +677,9 @@ gboolean EF_noeuds_change_noeud_relatif (Projet   *p,
 }
 
 
-double EF_points_distance (EF_Point *p1,
-                           EF_Point *p2)
+double
+EF_points_distance (EF_Point *p1,
+                    EF_Point *p2)
 /**
  * \brief Renvoie la distance entre deux noeuds.
  * \param p1 : point de départ,
@@ -695,8 +705,9 @@ double EF_points_distance (EF_Point *p1,
 }
 
 
-double EF_noeuds_distance (EF_Noeud *n1,
-                           EF_Noeud *n2)
+double
+EF_noeuds_distance (EF_Noeud *n1,
+                    EF_Noeud *n2)
 /**
  * \brief Renvoie la distance entre deux noeuds.
  * \param n1 : noeud de départ,
@@ -726,11 +737,12 @@ double EF_noeuds_distance (EF_Noeud *n1,
 }
 
 
-double EF_noeuds_distance_x_y_z (EF_Noeud *n1,
-                                 EF_Noeud *n2,
-                                 double   *x,
-                                 double   *y,
-                                 double   *z)
+double
+EF_noeuds_distance_x_y_z (EF_Noeud *n1,
+                          EF_Noeud *n2,
+                          double   *x,
+                          double   *y,
+                          double   *z)
 /**
  * \brief Renvoie la distance entre deux noeuds par retour de fonction et
  *        renvoie la distance entre deux noeuds selon les 3 axes par argument.
@@ -766,8 +778,9 @@ double EF_noeuds_distance_x_y_z (EF_Noeud *n1,
 }
 
 
-void EF_noeuds_free_foreach (EF_Noeud *noeud,
-                             Projet   *p)
+void
+EF_noeuds_free_foreach (EF_Noeud *noeud,
+                        Projet   *p)
 /*\brief Fonction permettant de libérer un noeud contenu dans une liste.
  * \param noeud : le noeud à libérer,
  * \param p : la variable projet.
@@ -837,7 +850,8 @@ void EF_noeuds_free_foreach (EF_Noeud *noeud,
 }
 
 
-gboolean EF_noeuds_free (Projet *p)
+gboolean
+EF_noeuds_free (Projet *p)
 /**
  * \brief Libère l'ensemble des noeuds et la liste les contenant.
  * \param p : la variable projet.

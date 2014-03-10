@@ -280,6 +280,7 @@ EF_materiaux_cherche_nom (Projet     *p,
 }
 
 
+// coverity[+alloc]
 char *
 EF_materiaux_get_description (EF_Materiau *materiau)
 /**

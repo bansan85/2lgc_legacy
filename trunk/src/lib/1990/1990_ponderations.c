@@ -1725,6 +1725,7 @@ _1990_ponderations_genere (Projet *p)
 }
 
 
+// coverity[+alloc]
 char *
 _1990_ponderations_description (GList *ponderation)
 /**

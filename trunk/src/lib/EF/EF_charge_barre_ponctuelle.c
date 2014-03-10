@@ -39,6 +39,8 @@
 #include "EF_materiaux.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"
 
+
+// coverity[+alloc]
 Charge *
 EF_charge_barre_ponctuelle_ajout (Projet     *p,
                                   Action     *action,
@@ -139,6 +141,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
 }
 
 
+// coverity[+alloc]
 char *
 EF_charge_barre_ponctuelle_description (Charge *charge)
 /**

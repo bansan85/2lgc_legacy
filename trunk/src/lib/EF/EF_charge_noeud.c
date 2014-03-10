@@ -35,6 +35,7 @@
 #include "EF_gtk_charge_noeud.h"
 
 
+// coverity[+alloc]
 Charge *
 EF_charge_noeud_ajout (Projet     *p,
                        Action     *action,
@@ -101,6 +102,7 @@ EF_charge_noeud_ajout (Projet     *p,
 }
 
 
+// coverity[+alloc]
 char *
 EF_charge_noeud_description (Charge *charge)
 /**

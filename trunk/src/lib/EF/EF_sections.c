@@ -218,24 +218,25 @@ EF_sections_repositionne (Projet  *p,
   TYPE    *section_data; \
   Section *section_nouvelle; \
   \
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet") \
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom") \
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet") \
+  BUGMSG (nom, NULL, gettext ("Paramètre %s incorrect.\n"), "nom") \
   BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE), \
-          FALSE, \
+          NULL, \
           gettext ("La section %s existe déjà.\n"), nom) \
   BUGMSG (section_nouvelle = malloc (sizeof (Section)), \
-          FALSE, \
+          NULL, \
           gettext ("Erreur d'allocation mémoire.\n")) \
   BUGMSG (section_data = malloc (sizeof (TYPE)), \
-          FALSE, \
+          NULL, \
           gettext ("Erreur d'allocation mémoire.\n")) \
   section_nouvelle->data = section_data; \
   BUGMSG (section_nouvelle->nom = g_strdup (nom), \
-          FALSE, \
+          NULL, \
           gettext ("Erreur d'allocation mémoire.\n"))
 
 
-gboolean
+// coverity[+alloc]
+Section *
 EF_sections_rectangulaire_ajout (Projet     *p,
                                  const char *nom,
                                  Flottant    l,
@@ -262,9 +263,9 @@ EF_sections_rectangulaire_ajout (Projet     *p,
   section_data->largeur_table = l;
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  BUG (EF_sections_insert (p, section_nouvelle), FALSE)
+  BUG (EF_sections_insert (p, section_nouvelle), NULL)
   
-  return TRUE;
+  return section_nouvelle;
 }
 
 
@@ -396,7 +397,8 @@ EF_sections_rectangulaire_modif (Projet     *p,
 }
 
 
-gboolean
+// coverity[+alloc]
+Section *
 EF_sections_T_ajout (Projet     *p,
                      const char *nom,
                      Flottant    lt,
@@ -450,9 +452,9 @@ EF_sections_T_ajout (Projet     *p,
   section_data->hauteur_table = ht;
   section_data->hauteur_retombee = hr;
   
-  BUG (EF_sections_insert (p, section_nouvelle), FALSE)
+  BUG (EF_sections_insert (p, section_nouvelle), NULL)
   
-  return TRUE;
+  return section_nouvelle;
 }
 
 
@@ -525,7 +527,8 @@ gboolean EF_sections_T_modif (Projet     *p,
 }
 
 
-gboolean
+// coverity[+alloc]
+Section *
 EF_sections_carree_ajout (Projet    *p,
                          const char *nom,
                          Flottant    cote)
@@ -549,9 +552,9 @@ EF_sections_carree_ajout (Projet    *p,
   section_data->largeur_table = cote;
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  BUG (EF_sections_insert (p, section_nouvelle), FALSE)
+  BUG (EF_sections_insert (p, section_nouvelle), NULL)
   
-  return TRUE;
+  return section_nouvelle;
 }
 
 
@@ -616,7 +619,8 @@ EF_sections_carree_modif (Projet     *p,
 }
 
 
-gboolean
+// coverity[+alloc]
+Section *
 EF_sections_circulaire_ajout (Projet     *p,
                               const char *nom,
                               Flottant    diametre)
@@ -647,9 +651,9 @@ EF_sections_circulaire_ajout (Projet     *p,
   section_nouvelle->type = SECTION_CIRCULAIRE;
   section_data->diametre = diametre;
   
-  BUG (EF_sections_insert (p, section_nouvelle), FALSE)
+  BUG (EF_sections_insert (p, section_nouvelle), NULL)
   
-  return TRUE;
+  return section_nouvelle;
 }
 
 
@@ -1045,7 +1049,8 @@ EF_sections_personnalisee_verif_forme (GList *forme,
 }
 
 
-gboolean
+// coverity[+alloc]
+Section *
 EF_sections_personnalisee_ajout (Projet     *p,
                                  const char *nom,
                                  const char *description,
@@ -1091,12 +1096,12 @@ EF_sections_personnalisee_ajout (Projet     *p,
   SECTION_AJOUT (Section_Personnalisee)
   
   BUGMSG (EF_sections_personnalisee_verif_forme (forme, TRUE),
-          FALSE,
+          NULL,
           gettext ("La forme est incorrecte.\n"))
   
   section_nouvelle->type = SECTION_PERSONNALISEE;
   BUGMSG (section_data->description = g_strdup (description),
-          FALSE,
+          NULL,
           gettext ("Erreur d'allocation mémoire.\n"))
   section_data->j = j;
   section_data->iy = iy;
@@ -1108,9 +1113,9 @@ EF_sections_personnalisee_ajout (Projet     *p,
   section_data->s = s;
   section_data->forme = forme;
   
-  BUG (EF_sections_insert (p, section_nouvelle), FALSE)
+  BUG (EF_sections_insert (p, section_nouvelle), NULL)
   
-  return TRUE;
+  return section_nouvelle;
 }
 
 

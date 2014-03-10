@@ -34,6 +34,7 @@
 #include "EF_calculs.h"
 
 
+// coverity[+alloc]
 Charge *
 EF_charge_ajout (Projet     *p,
                  Action     *action,

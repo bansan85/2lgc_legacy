@@ -67,6 +67,7 @@ EF_relachement_init (Projet *p)
 }
 
 
+// coverity[+alloc]
 EF_Relachement *
 EF_relachement_ajout (Projet             *p,
                       const char         *nom,
