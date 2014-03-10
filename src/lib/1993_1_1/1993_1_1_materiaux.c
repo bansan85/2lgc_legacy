@@ -37,6 +37,7 @@
 #endif
 
 
+// coverity[+alloc]
 EF_Materiau *
 _1993_1_1_materiaux_ajout (Projet     *p,
                            const char *nom,
@@ -189,6 +190,7 @@ _1993_1_1_materiaux_modif (Projet      *p,
 }
 
 
+// coverity[+alloc]
 char *
 _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
 /**

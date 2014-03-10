@@ -113,6 +113,7 @@ projet_free (Projet *p)
 }
 
 
+// coverity[+alloc]
 Projet *
 projet_init (Norme norme)
 /**

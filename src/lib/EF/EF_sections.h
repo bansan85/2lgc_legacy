@@ -25,7 +25,7 @@
 gboolean EF_sections_init                      (Projet     *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_rectangulaire_ajout       (Projet     *p,
+Section *EF_sections_rectangulaire_ajout       (Projet     *p,
                                                 const char *nom,
                                                 Flottant    l,
                                                 Flottant    h)
@@ -37,7 +37,7 @@ gboolean EF_sections_rectangulaire_modif       (Projet     *p,
                                                 Flottant    h)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_T_ajout                   (Projet     *p,
+Section *EF_sections_T_ajout                   (Projet     *p,
                                                 const char *nom,
                                                 Flottant    lt,
                                                 Flottant    lr,
@@ -53,7 +53,7 @@ gboolean EF_sections_T_modif                   (Projet     *p,
                                                 Flottant    hr)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_carree_ajout              (Projet     *p,
+Section *EF_sections_carree_ajout              (Projet     *p,
                                                 const char *nom,
                                                 Flottant    cote)
                                        __attribute__((__warn_unused_result__));
@@ -63,7 +63,7 @@ gboolean EF_sections_carree_modif              (Projet     *p,
                                                 Flottant    cote)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_circulaire_ajout          (Projet     *p,
+Section *EF_sections_circulaire_ajout          (Projet     *p,
                                                 const char *nom,
                                                 Flottant    diametre)
                                        __attribute__((__warn_unused_result__));
@@ -77,7 +77,7 @@ void     EF_sections_personnalisee_forme_free  (GList      *forme);
 gboolean EF_sections_personnalisee_verif_forme (GList      *forme,
                                                 gboolean    message)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_personnalisee_ajout       (Projet     *p,
+Section *EF_sections_personnalisee_ajout       (Projet     *p,
                                                 const char *nom,
                                                 const char *description,
                                                 Flottant    j,

@@ -369,6 +369,7 @@ _1992_1_1_materiaux_gnu (double ecm,
 }
 
 
+// coverity[+alloc]
 EF_Materiau *
 _1992_1_1_materiaux_ajout (Projet     *p,
                            const char *nom,
@@ -393,7 +394,7 @@ _1992_1_1_materiaux_ajout (Projet     *p,
   Materiau_Beton *data_beton;
   
   BUGPARAM (p, "%p", p, NULL)
-  INFO ((m_g(fck) > ERR_MIN) && (m_g(fck) <= 90. * (1 + ERR_MIN)),
+  INFO ((m_g (fck) > ERR_MIN) && (m_g (fck) <= 90. * (1 + ERR_MIN)),
         NULL,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
@@ -658,6 +659,7 @@ _1992_1_1_materiaux_modif (Projet      *p,
 }
 
 
+// coverity[+alloc]
 char *
 _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
 /**

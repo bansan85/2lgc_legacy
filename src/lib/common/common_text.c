@@ -259,6 +259,7 @@ strcasestr_internal (const wchar_t *haystack,
 }
 
 
+// coverity[+alloc]
 char *
 common_text_dependances (GList  *liste_noeuds,
                          GList  *liste_barres,
@@ -379,6 +380,7 @@ common_text_dependances (GList  *liste_noeuds,
 }
 
 
+// coverity[+alloc]
 wchar_t *
 common_text_get_line (FILE *fichier)
 /**
@@ -441,6 +443,7 @@ common_text_get_line (FILE *fichier)
 }
 
 
+// coverity[+alloc]
 char *
 common_text_wcstostr_dup (const wchar_t *texte)
 /**
@@ -466,6 +469,7 @@ common_text_wcstostr_dup (const wchar_t *texte)
 }
 
 
+// coverity[+alloc]
 wchar_t *
 common_text_strtowcs_dup (const char *texte)
 /**

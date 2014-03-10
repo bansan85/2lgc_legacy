@@ -112,6 +112,7 @@ EF_appuis_cherche_nom (Projet     *p,
 }
 
 
+// coverity[+alloc]
 EF_Appui *
 EF_appuis_ajout (Projet       *p,
                  const char   *nom,

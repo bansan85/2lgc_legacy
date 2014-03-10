@@ -264,7 +264,8 @@ m_f (double        f,
 
 
 Flottant
-m_add_f(Flottant f1, Flottant f2)
+m_add_f (Flottant f1,
+         Flottant f2)
 /* Description : Additionne deux flottants.
  * Paramètres : Flottant f1 : nombre 1,
  *        Flottant f2 : nombre 2.
@@ -284,7 +285,8 @@ m_add_f(Flottant f1, Flottant f2)
 
 
 Flottant
-m_sub_f (Flottant f1, Flottant f2)
+m_sub_f (Flottant f1,
+         Flottant f2)
 /**
  * \brief Soustrait deux flottants.
  * \param f1 : nombre 1,
@@ -305,7 +307,8 @@ m_sub_f (Flottant f1, Flottant f2)
 
 
 Flottant
-m_div_d (Flottant f, double d)
+m_div_d (Flottant f,
+         double   d)
 /**
  * \brief Divise un Flottant par un double.
  * \param f : nombre 1,
@@ -323,7 +326,8 @@ m_div_d (Flottant f, double d)
 
 
 Flottant
-m_dot_f (Flottant f1, Flottant f2)
+m_dot_f (Flottant f1,
+         Flottant f2)
 /**
  * \brief Multiplie deux flottants.
  * \param f1 : nombre 1,
@@ -344,7 +348,8 @@ m_dot_f (Flottant f1, Flottant f2)
 
 
 Flottant
-m_dot_d (Flottant f, double d)
+m_dot_d (Flottant f,
+         double   d)
 /**
  * \brief Multiplie un Flottant avec un double.
  * \param f : nombre 1,

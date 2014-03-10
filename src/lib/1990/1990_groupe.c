@@ -95,6 +95,7 @@ _1990_groupe_ajout_niveau (Projet *p)
 }
 
 
+// coverity[+alloc]
 Groupe *
 _1990_groupe_ajout_groupe (Projet                 *p,
                            Niveau_Groupe          *niveau_groupe,
