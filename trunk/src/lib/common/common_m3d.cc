@@ -640,7 +640,6 @@ m3d_camera_axe_##NOM (Projet *p) \
   return TRUE; \
 }
 /**
- * 
  * \def M3D_CAMERA(NOM, CX, CY, CZ)
  * \brief Positionne la caméra pour voir toute la structure dans le plan xz
  *        vers la direction y.

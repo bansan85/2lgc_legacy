@@ -62,11 +62,11 @@ EF_gtk_appuis_ajouter (GtkButton *button,
   GtkTreePath  *path;
   GtkTreeModel *model;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (EF_appuis_cherche_nom (p, gettext ("Sans nom"), FALSE) == NULL)
     BUG (appui = EF_appuis_ajout (p,
@@ -83,12 +83,16 @@ EF_gtk_appuis_ajouter (GtkButton *button,
     char *nom;
     int   i = 2;
     
-    nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i);
+    BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     while (EF_appuis_cherche_nom (p, nom, FALSE) != NULL)
     {
       i++;
       free (nom);
-      nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i);
+      BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
+               ,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     }
     BUG (appui = EF_appuis_ajout (p,
                                   nom,
@@ -98,7 +102,8 @@ EF_gtk_appuis_ajouter (GtkButton *button,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE),
-         )
+         ,
+         free (nom);)
     free (nom);
   }
   
@@ -134,11 +139,11 @@ EF_gtk_appuis_supprimer (GtkButton *button,
   GtkTreeModel *model;
   EF_Appui     *appui;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
@@ -172,11 +177,11 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
  *  
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGCRIT (UI_APP.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -235,11 +240,11 @@ EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
   GtkTreeModel *model;
   EF_Appui     *appui;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
@@ -275,11 +280,11 @@ EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
   GtkTreeModel *model;
   EF_Appui     *appui;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
@@ -318,11 +323,11 @@ EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
   EF_Appui      *appui;
   int            column;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   
@@ -337,7 +342,8 @@ EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
   else if (strcmp (new_text, gettext ("Bloqué")) == 0)
     BUG (EF_appuis_edit (appui, column - 1, EF_APPUI_BLOQUE, p), )
   else
-    BUGMSG (NULL, , gettext ("Type d'appui %s inconnu.\n"), new_text)
+    FAILINFO ( ,
+              (gettext ("Type d'appui %s inconnu.\n"), new_text);)
   
   return;
 }
@@ -365,11 +371,11 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
   GtkTreePath  *path;
   EF_Appui     *appui;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   model = GTK_TREE_MODEL (UI_APP.appuis);
   path = gtk_tree_path_new_from_string (path_string);
@@ -402,11 +408,11 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer un.
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -504,16 +510,17 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
   GList        *liste_appuis = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_APP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_APP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Appui");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
                                         &model,
                                         &Iter))
-    BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+    FAILINFO ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
   
   gtk_tree_model_get (model, &Iter, 0, &appui, -1);
   
@@ -539,16 +546,26 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
   {
     char *desc;
     
-    desc = common_text_dependances (liste_noeuds_dep,
-                                    liste_barres_dep,
-                                    liste_charges_dep, p);
+    BUGCRIT (desc = common_text_dependances (liste_noeuds_dep,
+                                             liste_barres_dep,
+                                             liste_charges_dep,
+                                             p),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               g_list_free (liste_noeuds_dep);
+               g_list_free (liste_barres_dep);
+               g_list_free (liste_charges_dep);)
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                       UI_APP.builder, "EF_appuis_supprimer_menu_suppr_noeud")),
                              desc);
     free (desc);
   }
   else
-    BUGMSG (NULL, , gettext ("L'élément ne possède aucune dépendance.\n"))
+    FAILINFO ( ,
+              (gettext ("L'élément ne possède aucune dépendance.\n"));
+                g_list_free (liste_noeuds_dep);
+                g_list_free (liste_barres_dep);
+                g_list_free (liste_charges_dep);)
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -582,346 +599,69 @@ EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_appuis_render_1 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
+#define EF_GTK_APPUIS_RENDER(NUM, DATA) void \
+EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
+                            GtkCellRenderer   *cell,        \
+                            GtkTreeModel      *tree_model,  \
+                            GtkTreeIter       *iter,        \
+                            gpointer           data2) \
+{ \
+  EF_Appui *appui; \
+  char     *txt; \
+  \
+  gtk_tree_model_get (tree_model, iter, 0, &appui, -1); \
+  \
+  switch (appui->DATA) \
+  { \
+    case EF_APPUI_LIBRE : \
+    { \
+      txt = gettext ("Libre"); \
+      BUGCRIT (appui->DATA##_donnees == NULL, \
+               , \
+               (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
+                         #DATA, \
+                         gettext ("Libre"));) \
+      break; \
+    } \
+    case EF_APPUI_BLOQUE : \
+    { \
+      txt = gettext ("Bloqué"); \
+      BUGCRIT (appui->DATA##_donnees == NULL, \
+               , \
+               (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
+                         #DATA, \
+                         gettext ("Bloqué"));) \
+      break; \
+    } \
+    default : \
+    { \
+      FAILINFO (, \
+                (gettext("Le type d'appui de %s (%d) est inconnu.\n"), \
+                         #DATA, \
+                         appui->DATA);) \
+    } \
+  } \
+  \
+  g_object_set (cell, "text", txt, NULL); \
+}
 /**
- * \brief Affiche le type d'appui en ux.
- * \param tree_column : composant à l'origine de l'évènement,
+ * \def EF_GTK_APPUIS_RENDER(NUM)
+ * \brief Crée la fonction affichant le type d'appui en fonction de la demande.
+ * \param NUM : numéro de la colonne, conformément au fichier .ui,
  * \param cell : la cellule en cours d'édition,
  * \param tree_model : le mode en cours d'édition,
  * \param iter : la ligne en cours d'édition,
  * \param data2 : la variable projet.
  * \return Rien.
  */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->ux)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->ux_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "ux",
-                       gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->ux_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "ux",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext("Le type d'appui de %s (%d) est inconnu.\n"),
-                      "ux",
-                      appui->ux)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
 
 
-void
-EF_gtk_appuis_render_2 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
-/**
- * \brief Affiche le type d'appui en uy.
- * \param tree_column : composant à l'origine de l'évènement,
- * \param cell : la cellule en cours d'édition,
- * \param tree_model : le mode en cours d'édition,
- * \param iter : la ligne en cours d'édition,
- * \param data2 : la variable projet.
- * \return Rien.
- */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->uy)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->uy_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "uy",
-                       gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->uy_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "uy",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
-                       "ux",
-                       appui->uy)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
-
-
-void
-EF_gtk_appuis_render_3 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
-/**
- * \brief Affiche le type d'appui en uz.
- * \param tree_column : composant à l'origine de l'évènement,
- * \param cell : la cellule en cours d'édition,
- * \param tree_model : le mode en cours d'édition,
- * \param iter : la ligne en cours d'édition,
- * \param data2 : la variable projet.
- * \return Rien.
- */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->uz)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->uz_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "uz",
-                       gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->uz_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "uz",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
-                       "ux",
-                       appui->uz)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
-
-
-void
-EF_gtk_appuis_render_4 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
-/**
- * \brief Affiche le type d'appui en rx.
- * \param tree_column : composant à l'origine de l'évènement,
- * \param cell : la cellule en cours d'édition,
- * \param tree_model : le mode en cours d'édition,
- * \param iter : la ligne en cours d'édition,
- * \param data2 : la variable projet.
- * \return Rien.
- */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->rx)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->rx_donnees == NULL,
-              ,
-              gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                      "rx",
-                      gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->rx_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "rx",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
-                       "rx",
-                       appui->rx)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
-
-
-void
-EF_gtk_appuis_render_5 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
-/**
- * \brief Affiche le type d'appui en ry.
- * \param tree_column : composant à l'origine de l'évènement,
- * \param cell : la cellule en cours d'édition,
- * \param tree_model : le mode en cours d'édition,
- * \param iter : la ligne en cours d'édition,
- * \param data2 : la variable projet.
- * \return Rien.
- */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->ry)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->ry_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "ry",
-                       gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->ry_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "ry",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
-                       "ry",
-                       appui->ry)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
-
-
-void
-EF_gtk_appuis_render_6 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
-/**
- * \brief Affiche le type d'appui en rz.
- * \param tree_column : composant à l'origine de l'évènement,
- * \param cell : la cellule en cours d'édition,
- * \param tree_model : le mode en cours d'édition,
- * \param iter : la ligne en cours d'édition,
- * \param data2 : la variable projet.
- * \return Rien.
- */
-{
-  EF_Appui *appui;
-  char     *txt;
-  
-  gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
-  
-  switch (appui->rz)
-  {
-    case EF_APPUI_LIBRE :
-    {
-      txt = gettext ("Libre");
-      BUGMSG (appui->rz_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "rz",
-                       gettext ("Libre"))
-      break;
-    }
-    case EF_APPUI_BLOQUE :
-    {
-      txt = gettext ("Bloqué");
-      BUGMSG (appui->rz_donnees == NULL,
-              ,
-              gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"),
-                       "rz",
-                       gettext ("Bloqué"))
-      break;
-    }
-    default :
-    {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
-                       "rz",
-                       appui->rz)
-    }
-  }
-  
-  g_object_set (cell, "text", txt, NULL);
-}
+EF_GTK_APPUIS_RENDER (1, ux)
+EF_GTK_APPUIS_RENDER (2, uy)
+EF_GTK_APPUIS_RENDER (3, uz)
+EF_GTK_APPUIS_RENDER (4, rx)
+EF_GTK_APPUIS_RENDER (5, ry)
+EF_GTK_APPUIS_RENDER (6, rz)
 
 
 void
@@ -938,7 +678,7 @@ EF_gtk_appuis (Projet *p)
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   if (UI_APP.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_APP.window));
@@ -946,11 +686,11 @@ EF_gtk_appuis (Projet *p)
   }
   
   UI_APP.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_APP.builder,
-                                         "/org/2lgc/codegui/ui/EF_appuis.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+  INFO (gtk_builder_add_from_resource (UI_APP.builder,
+                                       "/org/2lgc/codegui/ui/EF_appuis.ui",
+                                       NULL) != 0,
+        ,
+        (gettext ("Builder Failed\n"));)
   gtk_builder_connect_signals (UI_APP.builder, p);
   
   UI_APP.window = GTK_WIDGET (gtk_builder_get_object (UI_APP.builder,
