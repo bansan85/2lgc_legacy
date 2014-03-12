@@ -235,7 +235,6 @@ EF_sections_repositionne (Projet  *p,
           gettext ("Erreur d'allocation mémoire.\n"))
 
 
-// coverity[+alloc]
 Section *
 EF_sections_rectangulaire_ajout (Projet     *p,
                                  const char *nom,
@@ -397,7 +396,6 @@ EF_sections_rectangulaire_modif (Projet     *p,
 }
 
 
-// coverity[+alloc]
 Section *
 EF_sections_T_ajout (Projet     *p,
                      const char *nom,
@@ -527,7 +525,6 @@ gboolean EF_sections_T_modif (Projet     *p,
 }
 
 
-// coverity[+alloc]
 Section *
 EF_sections_carree_ajout (Projet    *p,
                          const char *nom,
@@ -619,7 +616,6 @@ EF_sections_carree_modif (Projet     *p,
 }
 
 
-// coverity[+alloc]
 Section *
 EF_sections_circulaire_ajout (Projet     *p,
                               const char *nom,
@@ -1049,7 +1045,6 @@ EF_sections_personnalisee_verif_forme (GList *forme,
 }
 
 
-// coverity[+alloc]
 Section *
 EF_sections_personnalisee_ajout (Projet     *p,
                                  const char *nom,

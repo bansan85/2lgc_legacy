@@ -40,7 +40,6 @@
 #include "EF_gtk_charge_barre_repartie_uniforme.h"
 
 
-// coverity[+alloc]
 Charge *
 EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
                                          Action     *action,

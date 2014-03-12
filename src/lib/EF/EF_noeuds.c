@@ -126,7 +126,6 @@ EF_noeuds_renvoie_position (EF_Noeud *noeud,
 }
 
 
-// coverity[+alloc]
 EF_Noeud *
 EF_noeuds_ajout_noeud_libre (Projet   *p,
                              Flottant  x,
@@ -199,7 +198,6 @@ EF_noeuds_ajout_noeud_libre (Projet   *p,
 }
 
 
-// coverity[+alloc]
 EF_Noeud *
 EF_noeuds_ajout_noeud_barre (Projet   *p,
                              EF_Barre *barre,

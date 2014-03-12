@@ -40,7 +40,6 @@
 #include "EF_gtk_charge_barre_ponctuelle.h"
 
 
-// coverity[+alloc]
 Charge *
 EF_charge_barre_ponctuelle_ajout (Projet     *p,
                                   Action     *action,
