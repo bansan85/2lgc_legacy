@@ -37,7 +37,6 @@
 #endif
 
 
-// coverity[+alloc]
 EF_Materiau *
 _1993_1_1_materiaux_ajout (Projet     *p,
                            const char *nom,

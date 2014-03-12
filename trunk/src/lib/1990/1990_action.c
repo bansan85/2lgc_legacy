@@ -396,7 +396,6 @@ _1990_action_init (Projet *p)
 }
 
 
-// coverity[+alloc]
 Action *
 _1990_action_ajout (Projet      *p,
                     unsigned int type,

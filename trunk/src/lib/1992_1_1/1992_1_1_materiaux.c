@@ -369,7 +369,6 @@ _1992_1_1_materiaux_gnu (double ecm,
 }
 
 
-// coverity[+alloc]
 EF_Materiau *
 _1992_1_1_materiaux_ajout (Projet     *p,
                            const char *nom,
