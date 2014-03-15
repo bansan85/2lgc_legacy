@@ -73,14 +73,14 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   char         *nom_type;
   gint          parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
-  BUGMSG (UI_BAR.liste_types,
-          ,
-          gettext ("La liste des types de barre est indéfinie.\n"))
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
+  BUGCRIT (UI_BAR.liste_types,
+           ,
+           (gettext ("La liste des types de barre est indéfinie.\n"));)
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -89,10 +89,10 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   parcours = 0;
-  BUGMSG (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (UI_BAR.liste_types),
-                                         &iter2) == TRUE,
-          ,
-          gettext ("Aucun type de barre n'est défini.\n"))
+  BUGCRIT (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (UI_BAR.liste_types),
+                                          &iter2) == TRUE,
+           ,
+           (gettext ("Aucun type de barre n'est défini.\n"));)
   gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                       &iter2,
                       0, &nom_type,
@@ -126,7 +126,7 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
       parcours++;
     }
     // Impossible (normalement)
-    BUGMSG (NULL, , gettext ("Impossible de trouver le type de l'élément.\n"))
+    FAILCRIT ( , (gettext ("Impossible de trouver le type de l'élément.\n"));)
   }
   
   return;
@@ -155,14 +155,14 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
   EF_Barre     *barre = NULL;
   Section      *section;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
-  BUGMSG (UI_SEC.liste_sections,
-          ,
-          gettext ("La liste des sections est indéfinie.\n"))
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
+  BUGCRIT (UI_SEC.liste_sections,
+           ,
+           (gettext ("La liste des sections est indéfinie.\n"));)
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -199,14 +199,14 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
   EF_Barre     *barre = NULL;
   EF_Materiau  *materiau;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
-  BUGMSG (UI_MAT.liste_materiaux,
-          ,
-          gettext ("La liste des matériaux est indéfinie.\n"))
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
+  BUGCRIT (UI_MAT.liste_materiaux,
+           ,
+           (gettext ("La liste des matériaux est indéfinie.\n"));)
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -242,14 +242,14 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   GtkTreeIter     iter;
   EF_Barre       *barre = NULL;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
-  BUGMSG (UI_REL.liste_relachements,
-          ,
-          gettext ("La liste des relâchements de barre est indéfinie.\n"))
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
+  BUGCRIT (UI_REL.liste_relachements,
+           ,
+           (gettext ("La liste des relâchements de barre est indéfinie.\n"));)
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -295,14 +295,15 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
   gint          column;
   EF_Barre     *barre;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
+  
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
@@ -316,6 +317,8 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
   {
     EF_Noeud *noeud;
     
+    free (fake);
+    
     BUG (noeud = EF_noeuds_cherche_numero (p, conversion, TRUE), )
     
     if (column == 4)
@@ -323,8 +326,8 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
     else
       BUG (_1992_1_1_barres_change_noeud (barre, noeud, FALSE, p), )
   }
-  
-  free (fake);
+  else
+    free (fake);
    
   return;
 }
@@ -352,11 +355,11 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
   double        conversion;
   EF_Barre     *barre;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -395,17 +398,18 @@ EF_gtk_barres_supprimer (GtkButton *button,
   EF_Barre     *barre;
   GList        *list = NULL;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
   
-  if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
+  BUGCRIT ( gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_BAR.builder, "EF_barres_treeview_select")),
-                                        &model,
-                                        &Iter))
-    BUGMSG (NULL, , gettext ("Aucune barre n'est sélectionnée.\n"))
+                                             &model,
+                                             &Iter),
+           ,
+           (gettext ("Aucune barre n'est sélectionnée.\n"));)
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
@@ -436,11 +440,11 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGCRIT (UI_BAR.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -471,8 +475,12 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
                                                 FALSE,
                                                 FALSE) == FALSE)
       {
-        BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres), FALSE)
-        BUG (m3d_rafraichit (p), FALSE)
+        BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres),
+             FALSE,
+             g_list_free (liste_barres);)
+        BUG (m3d_rafraichit (p),
+             FALSE,
+             g_list_free (liste_barres);)
       }
       
       g_list_free (liste_barres);
@@ -500,11 +508,11 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
   
   // Si aucune barre n'est sélectionnée, il n'est pas possible de supprimer.
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -600,19 +608,21 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
   EF_Barre     *barre;
   GList        *liste_barres = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  char *desc;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BAR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Barres")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BAR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Barres");)
   
   // Si aucune barre n'est sélectionnée, il n'est pas possible de supprimer.
-  if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
+  BUGCRIT (gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_BAR.builder, "EF_barres_treeview_select")),
-                                        &model,
-                                        &Iter))
-    BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+                                            &model,
+                                            &Iter),
+           ,
+           (gettext ("Aucun élément n'est sélectionné.\n"));)
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
@@ -629,26 +639,26 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_charges_dep,
                                              FALSE,
                                              FALSE),
-      )
+      ,
+      g_list_free (liste_barres);)
   g_list_free (liste_barres);
   
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
-  {
-    char *desc;
-    
-    desc = common_text_dependances (liste_noeuds_dep,
-                                    liste_barres_dep,
-                                    liste_charges_dep,
-                                    p);
-    gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
-                           UI_BAR.builder, "EF_barres_supprimer_menu_barres")),
-                             desc);
-    free (desc);
-  }
-  else
-    BUGMSG (NULL, , gettext("L'élément ne possède aucune dépendance.\n"))
+  BUGCRIT (liste_noeuds_dep && liste_barres_dep && liste_charges_dep,
+           ,
+           (gettext ("L'élément ne possède aucune dépendance.\n"));)
+
+  BUG (desc = common_text_dependances (liste_noeuds_dep,
+                                       liste_barres_dep,
+                                       liste_charges_dep,
+                                       p)
+       ,
+       g_list_free (liste_noeuds_dep);
+         g_list_free (liste_barres_dep);
+         g_list_free (liste_charges_dep););
+  gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
+                         UI_BAR.builder, "EF_barres_supprimer_menu_barres")),
+                           desc);
+  free (desc);
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -679,9 +689,9 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   
-  BUGMSG (tmp = g_strdup_printf ("%d", barre->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", barre->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -712,13 +722,13 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
   GtkTreeIter iter2;
   Projet     *p = data2;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   
-  BUGMSG (tmp = g_strdup_printf ("%d", (int) barre->type),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                        &iter2,
                                        tmp);
@@ -811,9 +821,9 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   
-  BUGMSG (tmp = g_strdup_printf ("%d", barre->noeud_debut->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_debut->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -844,9 +854,9 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   
-  BUGMSG (tmp = g_strdup_printf ("%d", barre->noeud_fin->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_fin->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -928,7 +938,7 @@ EF_gtk_barres (Projet *p)
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   if (UI_BAR.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_BAR.window));
@@ -936,11 +946,12 @@ EF_gtk_barres (Projet *p)
   }
   
   UI_BAR.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_BAR.builder,
-                                         "/org/2lgc/codegui/ui/EF_barres.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+  BUGCRIT (gtk_builder_add_from_resource (UI_BAR.builder,
+                                          "/org/2lgc/codegui/ui/EF_barres.ui",
+                                          NULL) != 0,
+           ,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Barres");)
   gtk_builder_connect_signals (UI_BAR.builder, p);
   
   UI_BAR.window = GTK_WIDGET (gtk_builder_get_object (UI_BAR.builder,
@@ -1048,9 +1059,9 @@ EF_gtk_barres (Projet *p)
     GtkTreeIter iter;
     char       *tmp;
     
-    BUGMSG (tmp = g_strdup_printf ("%d", (int) barre->type),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                          &iter,
                                          tmp);

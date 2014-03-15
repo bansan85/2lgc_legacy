@@ -72,11 +72,11 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   GtkTreeModel   *model;
   GtkTreeIter     Iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BARADD.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BARADD.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Appui");)
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
                     UI_BARADD.builder, "EF_gtk_barres_add_section_combobox")));
@@ -86,7 +86,9 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
     return;
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (section = EF_sections_cherche_nom (p, nom, TRUE), )
+  BUG (section = EF_sections_cherche_nom (p, nom, TRUE),
+       ,
+       free (nom);)
   free (nom);
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
@@ -97,7 +99,9 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
     return;
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (materiau = EF_materiaux_cherche_nom (p, nom, TRUE), )
+  BUG (materiau = EF_materiaux_cherche_nom (p, nom, TRUE),
+       ,
+       free (nom);)
   free (nom);
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
@@ -112,7 +116,9 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   {
     gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
     gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-    BUG (relachement = EF_relachement_cherche_nom (p, nom, TRUE), )
+    BUG (relachement = EF_relachement_cherche_nom (p, nom, TRUE),
+         ,
+         free (nom);)
     free (nom);
   }
   
@@ -188,11 +194,11 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   GtkTextIter    start, end;
   GtkTextBuffer *buff;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BARADD.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Appui")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_BARADD.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Appui");)
   
   noeud1 = EF_noeuds_cherche_numero (
              p,
@@ -280,7 +286,7 @@ EF_gtk_barres_ajouter (GtkButton *button,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   if (UI_BARADD.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_BARADD.window));
@@ -288,11 +294,11 @@ EF_gtk_barres_ajouter (GtkButton *button,
   }
   
   UI_BARADD.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_BARADD.builder,
+  INFO (gtk_builder_add_from_resource (UI_BARADD.builder,
                                        "/org/2lgc/codegui/ui/EF_barres_add.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+                                       NULL) != 0,
+        ,
+        (gettext ("Builder Failed\n"));)
   gtk_builder_connect_signals (UI_BARADD.builder, p);
   
   UI_BARADD.window = GTK_WIDGET (gtk_builder_get_object (UI_BARADD.builder,
@@ -319,10 +325,10 @@ EF_gtk_barres_ajouter (GtkButton *button,
   {
     char *nb_barres;
     
-    BUGMSG (nb_barres = g_strdup_printf ("%d",
+    BUGCRIT (nb_barres = g_strdup_printf ("%d",
               ((EF_Barre *) g_list_last (p->modele.barres)->data)->numero + 1),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_numero_label2")),
                         nb_barres);
