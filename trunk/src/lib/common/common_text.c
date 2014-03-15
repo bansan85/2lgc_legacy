@@ -460,7 +460,7 @@ common_text_wcstostr_dup (const wchar_t *texte)
   if (texte == NULL)
     return NULL;
   
-  BUGCRIT (tmp = malloc (sizeof (char *) * (wcstombs (NULL, texte, 0) + 1)),
+  BUGCRIT (tmp = malloc (sizeof (char) * (wcstombs (NULL, texte, 0) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));)
   wcstombs (tmp, texte, wcstombs (NULL, texte, 0) + 1);
@@ -487,7 +487,7 @@ common_text_strtowcs_dup (const char *texte)
   if (texte == NULL)
     return NULL;
   
-  BUGCRIT (tmp = malloc (sizeof (wchar_t *) * (mbstowcs (NULL, texte, 0) + 1)),
+  BUGCRIT (tmp = malloc (sizeof (wchar_t) * (mbstowcs (NULL, texte, 0) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));)
   mbstowcs (tmp, texte, mbstowcs (NULL, texte, 0) + 1);

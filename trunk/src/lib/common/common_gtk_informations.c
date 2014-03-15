@@ -360,7 +360,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                  g_list_free_full (list, common_gtk_informations_free_adresse);
                  free (ville);
                  free (code_postal);)
-      BUGCRIT (adresse->affichage = malloc (sizeof (wchar_t) *
+      BUGCRIT (adresse->affichage = malloc (sizeof (char) *
                                      (wcslen (artmin) + wcslen (nccenr) + 20)),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));

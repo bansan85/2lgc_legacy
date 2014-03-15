@@ -485,8 +485,8 @@ EF_materiaux_supprime (EF_Materiau *materiau,
     gtk_tree_store_remove (UI_MAT.materiaux, &materiau->Iter_fenetre);
 #endif
   
-  EF_materiaux_free_un (materiau);
   p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
+  EF_materiaux_free_un (materiau);
   
   return TRUE;
 }

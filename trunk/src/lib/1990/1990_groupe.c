@@ -632,10 +632,6 @@ _1990_groupe_free_niveau (Projet        *p,
     p->niveaux_groupes = g_list_remove (p->niveaux_groupes, niveau_groupe);
     
     free (niveau_groupe);
-    if (list_parcours != NULL)
-      niveau_groupe = list_parcours->data;
-    else
-      niveau_groupe = NULL;
   }
   while ((p->niveaux_groupes != NULL) && (list_parcours != NULL));
   

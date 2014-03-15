@@ -945,8 +945,6 @@ EF_calculs_resoud_charge (Projet *p,
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
                          cholmod_free_sparse (&s_eff_loc_i, p->calculs.c);)
               cholmod_free_sparse (&s_eff_loc_i, p->calculs.c);
-              ai2 = (int *) t_eff_loc_i->i;
-              aj2 = (int *) t_eff_loc_i->j;
               ax2 = (double *) t_eff_loc_i->x;
             }
             // A ce stade ax2 pointent vers les charges dans le repère local
@@ -1505,8 +1503,6 @@ EF_calculs_resoud_charge (Projet *p,
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
                          cholmod_free_sparse (&s_eff_loc_i, p->calculs.c);)
               cholmod_free_sparse (&(s_eff_loc_i), p->calculs.c);
-              ai2 = (int *) t_eff_loc_i->i;
-              aj2 = (int *) t_eff_loc_i->j;
               ax2 = (double *) t_eff_loc_i->x;
             }
             // A ce stade ax2 pointent vers les charges dans le repère local
@@ -2053,7 +2049,6 @@ EF_calculs_resoud_charge (Projet *p,
                          FREE_ALL)
               cholmod_free_sparse (&s_eff_glo_f, p->calculs.c);
               ai4 = (int *) t_eff_glo_f->i;
-              aj4 = (int *) t_eff_glo_f->j;
               ax4 = (double *) t_eff_glo_f->x;
             
       //     Ajout des moments et les efforts dans le vecteur des forces aux
