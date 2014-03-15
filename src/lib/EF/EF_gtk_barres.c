@@ -71,7 +71,6 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   GtkTreeIter   iter, iter2;
   EF_Barre     *barre = NULL;
   char         *nom_type;
-  gint          parcours;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
@@ -88,7 +87,6 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  parcours = 0;
   BUGCRIT (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (UI_BAR.liste_types),
                                           &iter2) == TRUE,
            ,
@@ -104,6 +102,8 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   }
   else
   {
+    gint parcours;
+    
     free (nom_type);
     parcours = 1;
     while (gtk_tree_model_iter_next (GTK_TREE_MODEL (UI_BAR.liste_types),

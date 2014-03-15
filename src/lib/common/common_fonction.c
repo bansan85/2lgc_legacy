@@ -568,8 +568,6 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   common_fonction_ax2_bx_c (xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
   
-  ecart_x = (xx3_2 - xx1_2) / 4.;
-  
   if (ERR (a, 0.))
   {
     if (ERR (b, 0.))
@@ -662,7 +660,6 @@ common_fonction_cherche_zero (Fonction *fonction,
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (xx3_2 - xx1_2 > ERR_MIN / 10)
     {
-      ecart_x = xx3_2 - xx1_2;
       if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
         xx1_2 = xx2_2;
@@ -1053,7 +1050,6 @@ common_fonction_caracteristiques (Fonction *fonction,
           // La méthode est un peu plus longue mais est moins problématique.
           while (TRUE)
           {
-            ecart_old = xx3_2 - xx1_2;
             if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
               xx1_2 = xx2_2;
@@ -1127,7 +1123,7 @@ common_fonction_caracteristiques (Fonction *fonction,
         if (ecart_x > ecart_old)
         {
           // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à
-          // cause des imprécisions dûes aux virgules flottantes. On passe donc
+          // cause des imprécisions dues aux virgules flottantes. On passe donc
           // en mode recherche dicotomique en calculant le signe aux points
           // xx1_2, xx2_2 et xx3_2. Si le signe de xx1_2 est le même que xx2_2,
           // xx1_2 devient égal à xx2_2. Si le signe de xx3_2 est le même que
@@ -1135,7 +1131,6 @@ common_fonction_caracteristiques (Fonction *fonction,
           // La méthode est un peu plus longue mais est moins problématique.
           while (TRUE)
           {
-            ecart_old = xx3_2 - xx1_2;
             if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
               xx1_2 = xx2_2;
@@ -2095,7 +2090,6 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                    FALSE,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
-          tmp = fonction_moins.troncons[i].fin_troncon;
           BUG (common_fonction_scinde_troncon (fonction_max, zero1),
                FALSE,
                FREE_ALL)
@@ -2272,7 +2266,6 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                    FALSE,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
-          tmp = fonction_moins.troncons[i].fin_troncon;
           BUG (common_fonction_scinde_troncon (fonction_min, zero1),
                FALSE,
                FREE_ALL)

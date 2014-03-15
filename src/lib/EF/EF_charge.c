@@ -211,8 +211,6 @@ EF_charge_deplace (Projet *p,
   //     Si la charge est celle à supprimer Alors
     if (charge == charge_s)
     {
-      GList *list_next = g_list_next (list_parcours);
-      
 #ifdef ENABLE_GTK
   //       On la supprime du tree-view-charge
       if (UI_ACT.builder != NULL)
@@ -229,11 +227,8 @@ EF_charge_deplace (Projet *p,
                                                                    action_src),
                                                  list_parcours)),
            FALSE)
-      list_parcours = list_next;
-      if (list_parcours != NULL)
-        charge = list_parcours->data;
-      else
-        charge = NULL;
+      
+      break;
     }
     
     list_parcours = g_list_next (list_parcours);
@@ -292,7 +287,6 @@ EF_charge_supprime (Projet *p,
   //   Si la charge est celle à supprimer Alors
     if (charge == charge_s)
     {
-      GList *list_next = g_list_next (list_parcours);
 #ifdef ENABLE_GTK
   //     On la supprime du tree-view-charge
        if (UI_ACT.builder != NULL)
@@ -307,11 +301,6 @@ EF_charge_supprime (Projet *p,
                       g_list_delete_link (_1990_action_charges_renvoie(action),
                                         list_parcours)),
            FALSE)
-      list_parcours = list_next;
-      if (list_parcours != NULL)
-        charge = list_parcours->data;
-      else
-        charge = NULL;
   
   //     On libère la charge charge_data
       switch (charge_data->type)
@@ -333,9 +322,9 @@ EF_charge_supprime (Projet *p,
         }
         default :
         {
-          FAILINFO (FALSE,
-                    (gettext ("Type de charge %d inconnu.\n"),
-                              charge_data->type);)
+          FAILCRIT (FALSE,
+                   (gettext ("Type de charge %d inconnu.\n"),
+                             charge_data->type);)
           break;
         }
       }

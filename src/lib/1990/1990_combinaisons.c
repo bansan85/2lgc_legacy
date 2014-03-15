@@ -263,7 +263,6 @@ _1990_combinaisons_genere_xor (Projet        *p,
              FALSE,
              (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
     
-    niveau = list_groupe_n_1->data;
     do
     {
       Groupe *groupe_n_1 = list_parcours->data;
@@ -440,7 +439,6 @@ _1990_combinaisons_genere_and (Projet        *p,
     BUGCRIT (list_groupe_n_1,
              FALSE,
              (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
-    niveau = list_groupe_n_1->data;
     
     while (list_parcours != NULL)
     {
@@ -655,7 +653,6 @@ _1990_combinaisons_genere_or (Projet        *p,
     BUGCRIT (list_groupe_n_1,
              FALSE,
              (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
-    niveau = list_groupe_n_1->data;
     
     for (i = 0; i < boucle; i++)
     {

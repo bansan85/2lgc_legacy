@@ -2223,8 +2223,8 @@ _1992_1_1_barres_supprime_liste (Projet *p,
     
     if (barre != NULL)
     {
-      _1992_1_1_barres_free_foreach (barre, p);
       p->modele.barres = g_list_remove (p->modele.barres, barre);
+      _1992_1_1_barres_free_foreach (barre, p);
     }
     list_parcours = g_list_next (list_parcours);
   }
