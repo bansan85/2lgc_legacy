@@ -650,7 +650,7 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
   BUG (desc = common_text_dependances (liste_noeuds_dep,
                                        liste_barres_dep,
                                        liste_charges_dep,
-                                       p)
+                                       p),
        ,
        g_list_free (liste_noeuds_dep);
          g_list_free (liste_barres_dep);

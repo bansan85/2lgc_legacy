@@ -51,7 +51,7 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   int    erreur;
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   BUG (EF_calculs_free (p), )
   BUG (EF_verif_EF (p, &rapport, &erreur), )

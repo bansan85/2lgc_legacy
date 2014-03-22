@@ -133,7 +133,6 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
     
     list_parcours = g_list_next (list_parcours);
   }
-  while (list_parcours != NULL)
   
   BUGCRIT (charge = malloc (sizeof (Charge)),
            NULL,

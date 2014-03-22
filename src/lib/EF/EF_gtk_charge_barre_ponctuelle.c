@@ -96,24 +96,22 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (barres, FALSE, gettext ("Paramètre %s incorrect.\n"), "barres")
-  BUGMSG (fx, FALSE, gettext ("Paramètre %s incorrect.\n"), "fx")
-  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
-  BUGMSG (fz, FALSE, gettext ("Paramètre %s incorrect.\n"), "fz")
-  BUGMSG (mx, FALSE, gettext ("Paramètre %s incorrect.\n"), "mx")
-  BUGMSG (my, FALSE, gettext ("Paramètre %s incorrect.\n"), "my")
-  BUGMSG (mz, FALSE, gettext ("Paramètre %s incorrect.\n"), "mz")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (repere_local,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "repere_local")
-  BUGMSG (position, FALSE, gettext ("Paramètre %s incorrect.\n"), "position")
-  BUGMSG (UI_CHBARP.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Ponctuelle")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (barres, "%p", barres, FALSE)
+  BUGPARAM (fx, "%p", fx, FALSE)
+  BUGPARAM (fy, "%p", fy, FALSE)
+  BUGPARAM (fz, "%p", fz, FALSE)
+  BUGPARAM (mx, "%p", mx, FALSE)
+  BUGPARAM (my, "%p", my, FALSE)
+  BUGPARAM (mz, "%p", mz, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (repere_local, "%p", repere_local, FALSE)
+  BUGPARAM (position, "%p", position, FALSE)
+  BUGCRIT (UI_CHBARP.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Ponctuelle");)
   
   if (gtk_combo_box_get_active (UI_CHBARP.combobox_charge) < 0)
     ok = FALSE;
@@ -250,11 +248,11 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
   gboolean repere_local;
   double   position;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Ponctuelle")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_CHBARP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Ponctuelle");)
   
   if (!EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -276,7 +274,7 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                   UI_CHBARP.builder, "EF_charge_barre_ponct_button_add_edit")),
                               TRUE);
-    g_list_free(barres);
+    g_list_free (barres);
   }
   free (nom);
   
@@ -303,11 +301,11 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
   GList   *barres;
   gchar   *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Ponctuelle")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_CHBARP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Ponctuelle");)
   
   BUG (EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -336,7 +334,8 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
                                          m_f (my, FLOTTANT_UTILISATEUR),
                                          m_f (mz, FLOTTANT_UTILISATEUR),
                                          texte),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -366,11 +365,11 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
   gchar                   *texte;
   Charge_Barre_Ponctuelle *charge_d;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARP.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Ponctuelle")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_CHBARP.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Ponctuelle");)
   
   BUG (EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -431,7 +430,7 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_CHBARP.builder != NULL)
   {
@@ -440,11 +439,12 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
   }
   
   UI_CHBARP.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_CHBARP.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_CHBARP.builder,
                           "/org/2lgc/codegui/ui/EF_charge_barre_ponctuelle.ui",
-                                         NULL) != 0,
-          FALSE,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           FALSE,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Charge Barre Ponctuelle");)
   gtk_builder_connect_signals (UI_CHBARP.builder, p);
   
   UI_CHBARP.window = GTK_WIDGET (gtk_builder_get_object (UI_CHBARP.builder,
