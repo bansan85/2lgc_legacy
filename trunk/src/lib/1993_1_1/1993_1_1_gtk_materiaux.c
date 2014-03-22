@@ -405,7 +405,7 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
                             check);
   }
   else
-    BUGPARAM (checkmenuitem, "%p", checkmenuitem, NULL)
+    BUGPARAM (checkmenuitem, "%p", checkmenuitem, )
   
   _1993_1_1_gtk_materiaux_check (NULL, p);
   
