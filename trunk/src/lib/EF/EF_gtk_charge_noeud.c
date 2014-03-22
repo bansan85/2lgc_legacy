@@ -80,8 +80,8 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
  *     - my == NULL,
  *     - mz == NULL,
  *     - nom == NULL,
- *      - en cas d'erreur d'allocation mémoire,
- *      - interface graphique non initialisée.
+ *     - en cas d'erreur d'allocation mémoire,
+ *     - interface graphique non initialisée.
  */
 {
   GList         *num_noeuds;
@@ -91,20 +91,20 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
   gint           get_active;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (noeuds, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeuds")
-  BUGMSG (fx, FALSE, gettext ("Paramètre %s incorrect.\n"), "fx")
-  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
-  BUGMSG (fz, FALSE, gettext ("Paramètre %s incorrect.\n"), "fz")
-  BUGMSG (mx, FALSE, gettext ("Paramètre %s incorrect.\n"), "mx")
-  BUGMSG (my, FALSE, gettext ("Paramètre %s incorrect.\n"), "my")
-  BUGMSG (mz, FALSE, gettext ("Paramètre %s incorrect.\n"), "mz")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_CHNO.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Nodale")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (noeuds, "%p", noeuds, FALSE)
+  BUGPARAM (fx, "%p", fx, FALSE)
+  BUGPARAM (fy, "%p", fy, FALSE)
+  BUGPARAM (fz, "%p", fz, FALSE)
+  BUGPARAM (mx, "%p", mx, FALSE)
+  BUGPARAM (my, "%p", my, FALSE)
+  BUGPARAM (mz, "%p", mz, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGCRIT (UI_CHNO.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Nodale");)
   
   get_active = gtk_combo_box_get_active (GTK_COMBO_BOX (
                                                      UI_CHNO.combobox_charge));
@@ -226,11 +226,11 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
   double  fx, fy, fz, mx, my, mz;
   gchar  *nom = NULL;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHNO.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Nodale")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHNO.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Nodale");)
   
   if (!EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -277,11 +277,11 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
   GList  *noeuds;
   gchar  *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHNO.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Nodale")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHNO.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Nodale");)
   
   BUG (EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -306,7 +306,8 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
                               m_f (my, FLOTTANT_UTILISATEUR),
                               m_f (mz, FLOTTANT_UTILISATEUR),
                               texte),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -335,11 +336,11 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
   gchar        *texte;
   Charge_Noeud *charge_d;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHNO.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Nodale")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHNO.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Nodale");)
   
   BUG (EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -396,7 +397,7 @@ EF_gtk_charge_noeud (Projet *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_CHNO.builder != NULL)
   {
@@ -405,11 +406,12 @@ EF_gtk_charge_noeud (Projet *p,
   }
   
   UI_CHNO.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_CHNO.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_CHNO.builder,
                                      "/org/2lgc/codegui/ui/EF_charge_noeud.ui",
-                                         NULL) != 0,
-          FALSE,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           FALSE,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Charge Nodale");)
   gtk_builder_connect_signals (UI_CHNO.builder, p);
   
   UI_CHNO.window = GTK_WIDGET (gtk_builder_get_object (UI_CHNO.builder,

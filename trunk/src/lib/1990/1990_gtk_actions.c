@@ -596,11 +596,11 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
       Action      *action;
       GtkTreePath *path;
       
-      BUGMSG (tmp = g_strdup_printf ("%s %u",
-                                     gettext ("Sans nom"),
-                                     g_list_length (p->actions)),
-              ,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (tmp = g_strdup_printf ("%s %u",
+                                      gettext ("Sans nom"),
+                                      g_list_length (p->actions)),
+               ,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       // On crée l'action en fonction de la catégorie sélectionnée dans le menu
       // déroulant.
       BUG (action = _1990_action_ajout (p, type, tmp), , free (tmp);)

@@ -405,7 +405,7 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
                             check);
   }
   else
-    BUGMSG (NULL, , gettext ("Paramètre %s incorrect.\n"), "checkmenuitem")
+    BUGPARAM (checkmenuitem, "%p", checkmenuitem, NULL)
   
   _1993_1_1_gtk_materiaux_check (NULL, p);
   

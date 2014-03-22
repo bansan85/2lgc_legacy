@@ -65,10 +65,10 @@ pref##_gtk_##nom##_window_key_press (GtkWidget *widget, \
                                      GdkEvent  *event, \
                                      Projet    *p) \
 { \
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect."), "Projet") \
-  BUGMSG (p->ui.pref##_##nom.builder, \
-          FALSE, \
-          gettext ("La fenêtre graphique %s n\'est pas initialisée."), #nom) \
+  BUGPARAM (p, "%p", p, FALSE) \
+  BUGCRIT (p->ui.pref##_##nom.builder, \
+           FALSE, \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
   \
   if (event->key.keyval == GDK_KEY_Escape) \
   { \
@@ -98,10 +98,10 @@ void \
 pref##_gtk_##nom##_window_destroy (GtkWidget *object, \
                                    Projet    *p) \
 { \
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "Projet") \
-  BUGMSG (p->ui.pref##_##nom.builder, \
-          , \
-          gettext ("La fenêtre graphique %s n\'est pas initialisée."), #nom) \
+  BUGPARAM (p, "%p", p, ) \
+  BUGCRIT (p->ui.pref##_##nom.builder, \
+           , \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
   \
   __VA_ARGS__ \
   g_object_unref (G_OBJECT (p->ui.pref##_##nom.builder)); \
@@ -130,10 +130,10 @@ void \
 pref##_gtk_##nom##_window_button_close (GtkButton *button, \
                                         Projet    *p) \
 { \
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "Projet") \
-  BUGMSG (p->ui.pref##_##nom.builder, \
-          , \
-          gettext ("La fenêtre graphique %s n\'est pas initialisée."), #nom) \
+  BUGPARAM (p, "%p", p, ) \
+  BUGCRIT (p->ui.pref##_##nom.builder, \
+           , \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
   \
   gtk_widget_destroy (p->ui.pref##_##nom.window); \
   \

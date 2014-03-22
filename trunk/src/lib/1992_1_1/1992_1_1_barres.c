@@ -296,7 +296,7 @@ _1992_1_1_barres_cherche_numero (Projet      *p,
  * \brief Renvoie la barre en fonction du numéro.
  * \param p : la variable projet,
  * \param numero : le numéro de la barre.
- * \param critique : si TRUE alors BUGMSG, si FALSE alors return NULL.
+ * \param critique : si TRUE alors #FAILINFO, si FALSE alors return NULL.
  * \return
  *   Succès : Pointeur vers la barre.\n
  *   Échec : NULL :

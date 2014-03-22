@@ -102,28 +102,24 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere (Projet  *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (barres, FALSE, gettext ("Paramètre %s incorrect.\n"), "barres")
-  BUGMSG (fx, FALSE, gettext ("Paramètre %s incorrect.\n"), "fx")
-  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
-  BUGMSG (fz, FALSE, gettext ("Paramètre %s incorrect.\n"), "fz")
-  BUGMSG (mx, FALSE, gettext ("Paramètre %s incorrect.\n"), "mx")
-  BUGMSG (my, FALSE, gettext ("Paramètre %s incorrect.\n"), "my")
-  BUGMSG (mz, FALSE, gettext ("Paramètre %s incorrect.\n"), "mz")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (repere_local,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "repere_local")
-  BUGMSG (projection,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "projection")
-  BUGMSG (a, FALSE, gettext ("Paramètre %s incorrect.\n"), "a")
-  BUGMSG (b, FALSE, gettext ("Paramètre %s incorrect.\n"), "b")
-  BUGMSG (UI_CHBARR.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Répartie Uniforme")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (barres, "%p", barres, FALSE)
+  BUGPARAM (fx, "%p", fx, FALSE)
+  BUGPARAM (fy, "%p", fy, FALSE)
+  BUGPARAM (fz, "%p", fz, FALSE)
+  BUGPARAM (mx, "%p", mx, FALSE)
+  BUGPARAM (my, "%p", my, FALSE)
+  BUGPARAM (mz, "%p", mz, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (repere_local, "%p", repere_local, FALSE)
+  BUGPARAM (projection, "%p", projection, FALSE)
+  BUGPARAM (a, "%p", a, FALSE)
+  BUGPARAM (b, "%p", b, FALSE)
+  BUGCRIT (UI_CHBARR.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   
   if (gtk_combo_box_get_active (UI_CHBARR.combobox_charge) < 0)
     ok = FALSE;
@@ -272,11 +268,11 @@ EF_gtk_charge_barre_rep_uni_check (GtkWidget *button,
   gboolean repere_local, projection;
   double   a, b;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-          "Charge Barre Répartie Uniforme")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHBARR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   
   if (!EF_gtk_charge_barre_repartie_uniforme_recupere (p,
                                                        &action,
@@ -327,11 +323,11 @@ EF_gtk_charge_barre_repartie_uniforme_ajouter (GtkButton *button,
   GList   *barres;
   gchar   *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Répartie Uniforme")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHBARR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   
   BUG (EF_gtk_charge_barre_repartie_uniforme_recupere (p,
                                                        &action,
@@ -363,7 +359,9 @@ EF_gtk_charge_barre_repartie_uniforme_ajouter (GtkButton *button,
                                                 m_f (mx, FLOTTANT_UTILISATEUR),
                                                 m_f (my, FLOTTANT_UTILISATEUR),
                                                 m_f (mz, FLOTTANT_UTILISATEUR),
-                                                texte), )
+                                                texte),
+       ,
+       free (texte);)
   
   free (texte);
   
@@ -393,11 +391,11 @@ EF_gtk_charge_barre_repartie_uniforme_editer (GtkButton *button,
   gchar                          *texte;
   Charge_Barre_Repartie_Uniforme *charge_d;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Répartie Uniforme")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHBARR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   
   BUG (EF_gtk_charge_barre_repartie_uniforme_recupere (p,
                                                        &action,
@@ -459,11 +457,11 @@ EF_gtk_charge_barre_repartie_uniforme_toggled (GtkToggleButton *togglebutton,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_CHBARR.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Charge Barre Répartie Uniforme")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_CHBARR.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
                                          UI_CHBARR.check_button_repere_local)))
@@ -506,7 +504,7 @@ EF_gtk_charge_barre_repartie_uniforme (Projet *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   if (UI_CHBARR.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_CHBARR.window));
@@ -514,11 +512,12 @@ EF_gtk_charge_barre_repartie_uniforme (Projet *p,
   }
   
   UI_CHBARR.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_CHBARR.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_CHBARR.builder,
                    "/org/2lgc/codegui/ui/EF_charge_barre_repartie_uniforme.ui",
-                                         NULL) != 0,
-          FALSE,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           FALSE,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Charge Barre Répartie Uniforme");)
   gtk_builder_connect_signals (UI_CHBARR.builder, p);
   
   UI_CHBARR.window = GTK_WIDGET (gtk_builder_get_object (UI_CHBARR.builder,
