@@ -74,16 +74,16 @@ EF_gtk_section_T_recupere_donnees (Projet *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (lt, FALSE, gettext ("Paramètre %s incorrect.\n"), "largeur")
-  BUGMSG (ht, FALSE, gettext ("Paramètre %s incorrect.\n"), "hauteur")
-  BUGMSG (lr, FALSE, gettext ("Paramètre %s incorrect.\n"), "largeur")
-  BUGMSG (hr, FALSE, gettext ("Paramètre %s incorrect.\n"), "hauteur")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_SEC_T.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section T")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (lt, "%p", lt, FALSE)
+  BUGPARAMCRIT (ht, "%p", ht, FALSE)
+  BUGPARAMCRIT (lr, "%p", lr, FALSE)
+  BUGPARAMCRIT (hr, "%p", hr, FALSE)
+  BUGPARAMCRIT (nom, "%p", nom, FALSE)
+  BUGCRIT (UI_SEC_T.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section T");)
   
   *lr = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_T.builder,
                                                     "EF_section_T_buffer_lr")),
@@ -153,7 +153,10 @@ EF_gtk_section_T_recupere_donnees (Projet *p,
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
   
   if (ok == FALSE)
+  {
     free (*nom);
+    *nom = NULL;
+  }
   
   return ok;
 }
@@ -176,11 +179,11 @@ EF_gtk_section_T_check (GtkWidget *button,
   double lt, ht, lr, hr;
   char  *nom;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_T.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section T")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_T.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section T");)
   
   if (!EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &nom))
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -214,11 +217,11 @@ EF_gtk_section_T_ajouter_clicked (GtkButton *button,
   double lr, hr, lt, ht;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_T.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section T")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_T.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section T");)
   
   if (!(EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &texte)))
     return;
@@ -230,7 +233,8 @@ EF_gtk_section_T_ajouter_clicked (GtkButton *button,
                             m_f (lr, FLOTTANT_UTILISATEUR),
                             m_f (ht, FLOTTANT_UTILISATEUR),
                             m_f (hr, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -256,11 +260,11 @@ EF_gtk_section_T_modifier_clicked (GtkButton *button,
   double lt, ht, lr, hr;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_T.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section T")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_T.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section T");)
   
   if (!(EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &texte)))
     return;
@@ -274,7 +278,8 @@ EF_gtk_section_T_modifier_clicked (GtkButton *button,
                             m_f (lr, FLOTTANT_UTILISATEUR),
                             m_f (ht, FLOTTANT_UTILISATEUR),
                             m_f (hr, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -297,7 +302,7 @@ EF_gtk_section_T (Projet  *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_SEC_T.builder != NULL)
   {
@@ -308,11 +313,12 @@ EF_gtk_section_T (Projet  *p,
   else
   {
     UI_SEC_T.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_SEC_T.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_SEC_T.builder,
                                        "/org/2lgc/codegui/ui/EF_sections_T.ui",
-                                           NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Section T");)
     gtk_builder_connect_signals (UI_SEC_T.builder, p);
     UI_SEC_T.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_T.builder,
                                                        "EF_section_T_window"));
@@ -342,9 +348,9 @@ EF_gtk_section_T (Projet  *p,
     gtk_window_set_title (GTK_WINDOW (UI_SEC_T.window),
                           gettext ("Modification d'une section en T"));
     UI_SEC_T.section = section;
-    BUGMSG (UI_SEC_T.section->type == SECTION_T,
-            FALSE,
-            gettext ("La section à modifier n'est pas en T.\n"))
+    BUGCRIT (UI_SEC_T.section->type == SECTION_T,
+             FALSE,
+             (gettext ("La section à modifier n'est pas en T.\n"));)
     data = UI_SEC_T.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

@@ -226,24 +226,24 @@ typedef enum __Colonne_Resultats
   COLRES_BARRES_EQ_MX,      // Equation du moment de torsion
   COLRES_BARRES_EQ_MY,      // Equation du moment fléchissant en y
   COLRES_BARRES_EQ_MZ,      // Equation du moment fléchissant en z
-  COLRES_DEFORMATION_PIXBUF_UX,   // Dessin de la déformation des barres, Ux
-  COLRES_DEFORMATION_PIXBUF_UY,   // Dessin de la déformation des barres, Uy
-  COLRES_DEFORMATION_PIXBUF_UZ,   // Dessin de la déformation des barres, Uz
-  COLRES_DEFORMATION_PIXBUF_RX,   // Dessin de la déformation des barres, Rx
-  COLRES_DEFORMATION_PIXBUF_RY,   // Dessin de la déformation des barres, Rx
-  COLRES_DEFORMATION_PIXBUF_RZ,   // Dessin de la déformation des barres, Rx
-  COLRES_DEFORMATION_DESC_UX,   // Points caractéristiques de la déformation des barres, Ux
-  COLRES_DEFORMATION_DESC_UY,   // Points caractéristiques de la déformation des barres, Uy
-  COLRES_DEFORMATION_DESC_UZ,   // Points caractéristiques de la déformation des barres, Uz
-  COLRES_DEFORMATION_DESC_RX,   // Points caractéristiques de la déformation des barres, Rx
-  COLRES_DEFORMATION_DESC_RY,   // Points caractéristiques de la déformation des barres, Rx
-  COLRES_DEFORMATION_DESC_RZ,   // Points caractéristiques de la déformation des barres, Rx
-  COLRES_DEFORMATION_UX,      // Déformation des barres, Ux
-  COLRES_DEFORMATION_UY,      // Déformation des barres, Uy
-  COLRES_DEFORMATION_UZ,      // Déformation des barres, Uz
-  COLRES_DEFORMATION_RX,      // Déformation des barres, Rx
-  COLRES_DEFORMATION_RY,      // Déformation des barres, Ry
-  COLRES_DEFORMATION_RZ       // Déformation des barres, Rz
+  COLRES_DEF_PIXBUF_UX,   // Dessin de la déformation des barres, Ux
+  COLRES_DEF_PIXBUF_UY,   // Dessin de la déformation des barres, Uy
+  COLRES_DEF_PIXBUF_UZ,   // Dessin de la déformation des barres, Uz
+  COLRES_DEF_PIXBUF_RX,   // Dessin de la déformation des barres, Rx
+  COLRES_DEF_PIXBUF_RY,   // Dessin de la déformation des barres, Rx
+  COLRES_DEF_PIXBUF_RZ,   // Dessin de la déformation des barres, Rx
+  COLRES_DEF_DESC_UX,   // Points caractéristiques de la déformation des barres, Ux
+  COLRES_DEF_DESC_UY,   // Points caractéristiques de la déformation des barres, Uy
+  COLRES_DEF_DESC_UZ,   // Points caractéristiques de la déformation des barres, Uz
+  COLRES_DEF_DESC_RX,   // Points caractéristiques de la déformation des barres, Rx
+  COLRES_DEF_DESC_RY,   // Points caractéristiques de la déformation des barres, Rx
+  COLRES_DEF_DESC_RZ,   // Points caractéristiques de la déformation des barres, Rx
+  COLRES_DEF_UX,      // Déformation des barres, Ux
+  COLRES_DEF_UY,      // Déformation des barres, Uy
+  COLRES_DEF_UZ,      // Déformation des barres, Uz
+  COLRES_DEF_RX,      // Déformation des barres, Rx
+  COLRES_DEF_RY,      // Déformation des barres, Ry
+  COLRES_DEF_RZ       // Déformation des barres, Rz
 } Colonne_Resultats;
 
 
@@ -253,7 +253,8 @@ typedef struct __Gtk_EF_Resultats_Tableau
   GtkTreeView       *treeview;
   GtkListStore      *list_store;
   
-  Colonne_Resultats *col_tab;
+  Colonne_Resultats *col_tab; // La première valeur du tableau est le nombre de
+                              // colonnes à afficher.
   Filtres            filtre;
   char              *nom;
 } Gtk_EF_Resultats_Tableau;

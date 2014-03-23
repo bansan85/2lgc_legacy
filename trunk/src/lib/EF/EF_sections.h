@@ -73,7 +73,6 @@ gboolean EF_sections_circulaire_modif          (Projet     *p,
                                                 Flottant    diametre)
                                        __attribute__((__warn_unused_result__));
 
-void     EF_sections_personnalisee_forme_free  (GList      *forme);
 gboolean EF_sections_personnalisee_verif_forme (GList      *forme,
                                                 gboolean    message)
                                        __attribute__((__warn_unused_result__));
