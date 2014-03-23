@@ -65,13 +65,13 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (cote, FALSE, gettext ("Paramètre %s incorrect.\n"), "cote")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_SEC_CA.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Carrée")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (cote, "%p", cote, FALSE)
+  BUGPARAMCRIT (nom, "%p", nom, FALSE)
+  BUGCRIT (UI_SEC_CA.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Carrée");)
   
   *cote = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                           UI_SEC_CA.builder, "EF_section_carree_buffer_cote")),
@@ -140,11 +140,11 @@ EF_gtk_section_carree_check (GtkWidget *button,
   double cote;
   char  *nom;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CA.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Carrée")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CA.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Carrée");)
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &nom))
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -178,18 +178,20 @@ EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
   double cote;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CA.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Carrée")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CA.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Carrée");)
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &texte))
     return;
   
   gtk_widget_destroy (UI_SEC_CA.window);
   
-  BUG (EF_sections_carree_ajout (p, texte, m_f (cote, FLOTTANT_UTILISATEUR)), )
+  BUG (EF_sections_carree_ajout (p, texte, m_f (cote, FLOTTANT_UTILISATEUR)),
+       ,
+       free (texte);)
   
   free (texte);
   
@@ -213,11 +215,11 @@ EF_gtk_section_carree_modifier_clicked (GtkButton *button,
   double cote;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CA.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Carrée")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CA.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Carrée");)
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &texte))
     return;
@@ -226,7 +228,8 @@ EF_gtk_section_carree_modifier_clicked (GtkButton *button,
                                  UI_SEC_CA.section,
                                  texte,
                                  m_f (cote, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -251,7 +254,7 @@ EF_gtk_section_carree (Projet  *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_SEC_CA.builder != NULL)
   {
@@ -262,11 +265,12 @@ EF_gtk_section_carree (Projet  *p,
   else
   {
     UI_SEC_CA.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_SEC_CA.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_SEC_CA.builder,
                                   "/org/2lgc/codegui/ui/EF_sections_carree.ui",
-                                           NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Section Carrée");)
     gtk_builder_connect_signals (UI_SEC_CA.builder, p);
     UI_SEC_CA.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_CA.builder,
                                                   "EF_section_carree_window"));
@@ -296,9 +300,9 @@ EF_gtk_section_carree (Projet  *p,
     gtk_window_set_title (GTK_WINDOW (UI_SEC_CA.window),
                           gettext ("Modification d'une section carrée"));
     UI_SEC_CA.section = section;
-    BUGMSG (UI_SEC_CA.section->type == SECTION_CARREE,
-            FALSE,
-            gettext ("La section à modifier n'est pas carrée.\n"))
+    BUGCRIT (UI_SEC_CA.section->type == SECTION_CARREE,
+             FALSE,
+             (gettext ("La section à modifier n'est pas carrée.\n"));)
     data = UI_SEC_CA.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

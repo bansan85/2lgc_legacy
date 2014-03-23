@@ -711,27 +711,6 @@ EF_sections_circulaire_modif (Projet     *p,
 }
 
 
-void
-EF_sections_personnalisee_forme_free (GList *forme)
-/**
- * \brief Libère la forme d'une section personnalisée.
- * \param forme : la forme à libérer.
- * \return Rien.
- */
-{
-  GList *list_parcours = forme;
-  
-  while (list_parcours != NULL)
-  {
-    g_list_free_full (list_parcours->data, free);
-    list_parcours = g_list_next (list_parcours);
-  }
-  g_list_free (forme);
-  
-  return;
-}
-
-
 gboolean
 EF_sections_personnalisee_verif_forme (GList *forme,
                                        gboolean message)
@@ -1212,7 +1191,7 @@ EF_sections_personnalisee_modif (Projet     *p,
   
   if (forme != NULL)
   {
-    EF_sections_personnalisee_forme_free (section_data->forme);
+    g_list_free_full (section_data->forme, (GDestroyNotify) g_list_free);
     
     section_data->forme = forme;
   }
@@ -1444,7 +1423,7 @@ EF_sections_free_un (Section *section)
       Section_Personnalisee *section2 = section->data;
       
       free (section2->description);
-      EF_sections_personnalisee_forme_free (section2->forme);
+      g_list_free_full (section2->forme, (GDestroyNotify) g_list_free);
       
       break;
     }

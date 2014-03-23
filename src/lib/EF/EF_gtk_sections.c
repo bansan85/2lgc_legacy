@@ -1608,7 +1608,7 @@ EF_gtk_sections_get_section (char   *ligne,
   
   if (!EF_sections_personnalisee_verif_forme (forme_, TRUE))
   {
-    EF_sections_personnalisee_forme_free (forme_);
+    g_list_free_full (forme_, (GDestroyNotify) g_list_free);
     
     BUGMSG (NULL,
             FALSE,
@@ -1616,7 +1616,7 @@ EF_gtk_sections_get_section (char   *ligne,
                      ligne)
   }
   else if (forme == NULL)
-    EF_sections_personnalisee_forme_free (forme_);
+    g_list_free_full (forme_, (GDestroyNotify) g_list_free);
   else
     *forme = forme_;
   
@@ -2006,7 +2006,7 @@ EF_gtk_sections (Projet *p)
         
         list_categorie = g_list_append (list_categorie, categorie_menu);
       }
-      EF_sections_personnalisee_forme_free (forme);
+      g_list_free_full (forme, (GDestroyNotify) g_list_free);
       
       menu = gtk_menu_item_new_with_label (nom_section);
       gtk_menu_shell_append (GTK_MENU_SHELL (gtk_menu_item_get_submenu (

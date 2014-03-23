@@ -60,7 +60,7 @@ EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
  * \return Rien.
  */
 {
-  if (page_num == gtk_notebook_get_n_pages (notebook)-1)
+  if (page_num == gtk_notebook_get_n_pages (notebook) - 1)
     g_signal_stop_emission_by_name (notebook, "switch-page");
   
   return;
@@ -86,537 +86,545 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
   Action      *action;
   GList       *comb = NULL;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (res, FALSE, gettext ("Paramètre %s incorrect.\n"), "res")
-  BUGMSG (UI_RES.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (res, "%p", res, FALSE)
+  BUGCRIT (UI_RES.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
   
-  // Actions élémentaires
-  if (gtk_combo_box_get_active (UI_RES.combobox) == 0)
+  switch (gtk_combo_box_get_active (UI_RES.combobox))
   {
-    if (gtk_combo_box_get_active (UI_RES.combobox_cas) == -1)
+    // Actions élémentaires
+    case 0 :
     {
-      gtk_list_store_clear (res->list_store);
-      return TRUE;
-    }
-    BUG (action = g_list_nth_data (p->actions,
-                                   gtk_combo_box_get_active (
+      if (gtk_combo_box_get_active (UI_RES.combobox_cas) == -1)
+      {
+        gtk_list_store_clear (res->list_store);
+        return TRUE;
+      }
+      BUG (action = g_list_nth_data (p->actions,
+                                     gtk_combo_box_get_active (
                                                          UI_RES.combobox_cas)),
-         FALSE)
-    actions = g_list_append (actions, action);
-  }
-  // Combinaisons
-  else if (gtk_combo_box_get_active (UI_RES.combobox) == 1)
-  {
-    if ((gtk_combo_box_get_active (UI_RES.combobox_cas) == -1) ||
-        (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == -1))
-    {
-      gtk_list_store_clear (res->list_store);
-      return TRUE;
+           FALSE)
+      actions = g_list_append (actions, action);
+      break;
     }
-    
-    // On cherche la combinaison à afficher.
-    switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
+    // Combinaisons
+    case 1 :
     {
-      case 0 :
+      if ((gtk_combo_box_get_active (UI_RES.combobox_cas) == -1) ||
+          (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == -1))
       {
-        comb = p->combinaisons.elu_equ;
-        break;
+        gtk_list_store_clear (res->list_store);
+        return TRUE;
       }
-      case 1 :
-      {
-        comb = p->combinaisons.elu_str;
-        break;
-      }
-      case 2 :
-      {
-        comb = p->combinaisons.elu_geo;
-        break;
-      }
-      case 3 :
-      {
-        comb = p->combinaisons.elu_fat;
-        break;
-      }
-      case 4 :
-      {
-        comb = p->combinaisons.elu_acc;
-        break;
-      }
-      case 5 :
-      {
-        comb = p->combinaisons.elu_sis;
-        break;
-      }
-      case 6 :
-      {
-        comb = p->combinaisons.els_car;
-        break;
-      }
-      case 7 :
-      {
-        comb = p->combinaisons.els_freq;
-        break;
-      }
-      case 8 :
-      {
-        comb = p->combinaisons.els_perm;
-        break;
-      }
-      default :
-      {
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Paramètre %s incorrect.\n"), "combobox_cas")
-        break;
-      }
-    }
-    comb = g_list_nth (comb,
-                      gtk_combo_box_get_active (UI_RES.combobox_ponderations));
-    
-    BUG (action = _1990_action_ponderation_resultat (comb->data, p), FALSE)
-    actions = g_list_append (actions, action);
-  }
-  else if (gtk_combo_box_get_active (UI_RES.combobox) == 2)
-  {
-    if ((gtk_combo_box_get_active (UI_RES.combobox_cas) == -1) ||
-        (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == -1))
-    {
-      gtk_list_store_clear (res->list_store);
-      return TRUE;
-    }
-    
-    // On cherche la combinaison à afficher.
-    switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
-    {
-      case 0 :
-      {
-        comb = p->combinaisons.elu_equ;
-        break;
-      }
-      case 1 :
-      {
-        comb = p->combinaisons.elu_str;
-        break;
-      }
-      case 2 :
-      {
-        comb = p->combinaisons.elu_geo;
-        break;
-      }
-      case 3 :
-      {
-        comb = p->combinaisons.elu_fat;
-        break;
-      }
-      case 4 :
-      {
-        comb = p->combinaisons.elu_acc;
-        break;
-      }
-      case 5 :
-      {
-        comb = p->combinaisons.elu_sis;
-        break;
-      }
-      case 6 :
-      {
-        comb = p->combinaisons.els_car;
-        break;
-      }
-      case 7 :
-      {
-        comb = p->combinaisons.els_freq;
-        break;
-      }
-      case 8 :
-      {
-        comb = p->combinaisons.els_perm;
-        break;
-      }
-      default :
-      {
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Paramètre %s incorrect.\n"), "combobox_cas")
-        break;
-      }
-    }
-    
-    if (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == 0)
-    {
-      GList *list_parcours;
       
-      list_parcours = comb;
-      while (list_parcours != NULL)
+      // On cherche la combinaison à afficher.
+      switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
       {
-        BUG (action = _1990_action_ponderation_resultat (list_parcours->data,
-                                                         p),
-             FALSE)
-        actions = g_list_append (actions, action);
-        list_parcours = g_list_next (list_parcours);
+        case 0 :
+        {
+          comb = p->combinaisons.elu_equ;
+          break;
+        }
+        case 1 :
+        {
+          comb = p->combinaisons.elu_str;
+          break;
+        }
+        case 2 :
+        {
+          comb = p->combinaisons.elu_geo;
+          break;
+        }
+        case 3 :
+        {
+          comb = p->combinaisons.elu_fat;
+          break;
+        }
+        case 4 :
+        {
+          comb = p->combinaisons.elu_acc;
+          break;
+        }
+        case 5 :
+        {
+          comb = p->combinaisons.elu_sis;
+          break;
+        }
+        case 6 :
+        {
+          comb = p->combinaisons.els_car;
+          break;
+        }
+        case 7 :
+        {
+          comb = p->combinaisons.els_freq;
+          break;
+        }
+        case 8 :
+        {
+          comb = p->combinaisons.els_perm;
+          break;
+        }
+        default :
+        {
+          FAILCRIT (FALSE,
+                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
+          break;
+        }
       }
+      comb = g_list_nth (comb,
+                      gtk_combo_box_get_active (UI_RES.combobox_ponderations));
+      
+      BUG (action = _1990_action_ponderation_resultat (comb->data, p), FALSE)
+      actions = g_list_append (actions, action);
+      break;
     }
+    case 2 :
+    {
+      if ((gtk_combo_box_get_active (UI_RES.combobox_cas) == -1) ||
+          (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == -1))
+      {
+        gtk_list_store_clear (res->list_store);
+        return TRUE;
+      }
+      
+      // On cherche la combinaison à afficher.
+      switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
+      {
+        case 0 :
+        {
+          comb = p->combinaisons.elu_equ;
+          break;
+        }
+        case 1 :
+        {
+          comb = p->combinaisons.elu_str;
+          break;
+        }
+        case 2 :
+        {
+          comb = p->combinaisons.elu_geo;
+          break;
+        }
+        case 3 :
+        {
+          comb = p->combinaisons.elu_fat;
+          break;
+        }
+        case 4 :
+        {
+          comb = p->combinaisons.elu_acc;
+          break;
+        }
+        case 5 :
+        {
+          comb = p->combinaisons.elu_sis;
+          break;
+        }
+        case 6 :
+        {
+          comb = p->combinaisons.els_car;
+          break;
+        }
+        case 7 :
+        {
+          comb = p->combinaisons.els_freq;
+          break;
+        }
+        case 8 :
+        {
+          comb = p->combinaisons.els_perm;
+          break;
+        }
+        default :
+        {
+          FAILCRIT (FALSE,
+                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
+          break;
+        }
+      }
+      
+      if (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == 0)
+      {
+        GList *list_parcours;
+        
+        list_parcours = comb;
+        while (list_parcours != NULL)
+        {
+          BUG (action = _1990_action_ponderation_resultat (list_parcours->data,
+                                                           p),
+               FALSE,
+               g_list_free (actions);)
+          actions = g_list_append (actions, action);
+          list_parcours = g_list_next (list_parcours);
+        }
+      }
+      break;
+    }
+    default :
+    {
+      FAILCRIT (FALSE,
+                (gettext ("Paramètre %s incorrect.\n"), "combobox");)
+      break;
+    }
+  }
+  
+  #define FREE_ALL { \
+    if (gtk_combo_box_get_active (UI_RES.combobox) == 0) \
+      g_list_free (actions); \
+    else \
+    { \
+      GList *list_parcours3 = actions; \
+      \
+      while (list_parcours3 != NULL) \
+      { \
+        action = list_parcours3->data; \
+        BUG (_1990_action_fonction_free (p, action), FALSE) \
+        BUG (_1990_action_ponderation_resultat_free_calculs (action), FALSE) \
+        free (action); \
+        \
+        list_parcours3 = g_list_next (list_parcours3); \
+      } \
+    } \
   }
   
   gtk_list_store_clear (res->list_store);
   
-  if (res->col_tab[1] == COLRES_NUM_NOEUDS)
+  switch (res->col_tab[1])
   {
-    GList *list_parcours = p->modele.noeuds;
-    
-    i = 0;
-    
-    while (list_parcours != NULL)
+    case COLRES_NUM_NOEUDS :
     {
-      EF_Noeud *noeud = list_parcours->data;
-      gboolean  ok;
+      GList *list_parcours = p->modele.noeuds;
       
-      switch (res->filtre)
-      {
-        case FILTRE_AUCUN :
-        {
-          ok = TRUE;
-          break;
-        }
-        case FILTRE_NOEUD_APPUI :
-        {
-          if (noeud->appui == NULL)
-            ok = FALSE;
-          else
-            ok = TRUE;
-          break;
-        }
-        default :
-        {
-          BUGMSG (NULL,
-                  FALSE,
-                  gettext ("Le filtre %d est inconnu.\n"), res->filtre)
-          break;
-        }
-      }
+      i = 0;
       
-      if (ok)
+      while (list_parcours != NULL)
       {
-        GtkTreeIter  Iter;
-        unsigned int j;
-        char        *tmp_double;
-        char         tmp_double30[30];
+        EF_Noeud *noeud = list_parcours->data;
+        gboolean  ok;
         
-        gtk_list_store_append (res->list_store, &Iter);
-        for (j = 1; j <= res->col_tab[0]; j++)
+        switch (res->filtre)
         {
-          switch (res->col_tab[j])
+          case FILTRE_AUCUN :
           {
-            case COLRES_NUM_NOEUDS :
-            {
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, noeud->numero,
-                                  -1);
-              break;
-            }
-            case COLRES_NOEUDS_X :
-            {
-              EF_Point point;
-              
-              BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
-              conv_f_c (point.x, tmp_double30, DECIMAL_DISTANCE);
-              
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1,
-                                  tmp_double30, -1);
-              
-              break;
-            }
-            case COLRES_NOEUDS_Y :
-            {
-              EF_Point point;
-              
-              BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
-              conv_f_c (point.y, tmp_double30, DECIMAL_DISTANCE);
-              
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, tmp_double30,
-                                  -1);
-              
-              break;
-            }
-            case COLRES_NOEUDS_Z :
-            {
-              EF_Point point;
-              
-              BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
-              conv_f_c (point.z, tmp_double30, DECIMAL_DISTANCE);
-              
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, tmp_double30,
-                                  -1);
-              
-              break;
-            }
-            case COLRES_REACTION_APPUI_FX :
-            case COLRES_REACTION_APPUI_FY:
-            case COLRES_REACTION_APPUI_FZ :
-            case COLRES_REACTION_APPUI_MX :
-            case COLRES_REACTION_APPUI_MY :
-            case COLRES_REACTION_APPUI_MZ :
-            {
-              BUG (EF_resultat_noeud_reaction_appui (actions,
-                                                     noeud,
-                                                     res->col_tab[j] -
-                                                      COLRES_REACTION_APPUI_FX,
-                                                     p,
-                                                     &tmp_double,
-                                                     NULL,
-                                                     NULL),
-                   FALSE)
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, tmp_double,
-                                  -1);
-              free (tmp_double);
-              break;
-            }
-            case COLRES_DEPLACEMENT_UX :
-            case COLRES_DEPLACEMENT_UY :
-            case COLRES_DEPLACEMENT_UZ :
-            case COLRES_DEPLACEMENT_RX :
-            case COLRES_DEPLACEMENT_RY :
-            case COLRES_DEPLACEMENT_RZ :
-            {
-              BUG (EF_resultat_noeud_deplacement (actions,
-                                                  noeud,
-                                                  res->col_tab[j] -
-                                                    COLRES_DEPLACEMENT_UX,
-                                                  p,
-                                                  &tmp_double,
-                                                  NULL,
-                                                  NULL),
-                   FALSE)
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, tmp_double,
-                                  -1);
-              free (tmp_double);
-              break;
-            }
-            case COLRES_NUM_BARRES :
-            case COLRES_BARRES_LONGUEUR :
-            case COLRES_BARRES_PIXBUF_N :
-            case COLRES_BARRES_PIXBUF_TY :
-            case COLRES_BARRES_PIXBUF_TZ :
-            case COLRES_BARRES_PIXBUF_MX :
-            case COLRES_BARRES_PIXBUF_MY :
-            case COLRES_BARRES_PIXBUF_MZ :
-            case COLRES_BARRES_DESC_N :
-            case COLRES_BARRES_DESC_TY :
-            case COLRES_BARRES_DESC_TZ :
-            case COLRES_BARRES_DESC_MX :
-            case COLRES_BARRES_DESC_MY :
-            case COLRES_BARRES_DESC_MZ :
-            case COLRES_BARRES_EQ_N :
-            case COLRES_BARRES_EQ_TY :
-            case COLRES_BARRES_EQ_TZ :
-            case COLRES_BARRES_EQ_MX :
-            case COLRES_BARRES_EQ_MY :
-            case COLRES_BARRES_EQ_MZ :
-            case COLRES_DEFORMATION_PIXBUF_UX :
-            case COLRES_DEFORMATION_PIXBUF_UY :
-            case COLRES_DEFORMATION_PIXBUF_UZ :
-            case COLRES_DEFORMATION_PIXBUF_RX :
-            case COLRES_DEFORMATION_PIXBUF_RY :
-            case COLRES_DEFORMATION_PIXBUF_RZ :
-            case COLRES_DEFORMATION_DESC_UX :
-            case COLRES_DEFORMATION_DESC_UY :
-            case COLRES_DEFORMATION_DESC_UZ :
-            case COLRES_DEFORMATION_DESC_RX :
-            case COLRES_DEFORMATION_DESC_RY :
-            case COLRES_DEFORMATION_DESC_RZ :
-            case COLRES_DEFORMATION_UX :
-            case COLRES_DEFORMATION_UY :
-            case COLRES_DEFORMATION_UZ :
-            case COLRES_DEFORMATION_RX :
-            case COLRES_DEFORMATION_RY :
-            case COLRES_DEFORMATION_RZ :
-            {
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("La colonne des résultats %d ne peut être appliquée aux noeuds."),
-                                res->col_tab[j])
-              break;
-            }
-            default :
-            {
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("La colonne des résultats %d est inconnue.\n"),
-                               res->col_tab[j])
-              break;
-            }
+            ok = TRUE;
+            break;
+          }
+          case FILTRE_NOEUD_APPUI :
+          {
+            if (noeud->appui == NULL)
+              ok = FALSE;
+            else
+              ok = TRUE;
+            break;
+          }
+          default :
+          {
+            FAILCRIT (FALSE,
+                      (gettext ("Le filtre %d est inconnu.\n"), res->filtre);
+                        FREE_ALL)
+            break;
           }
         }
-        gtk_list_store_set (res->list_store, &Iter, res->col_tab[0], "", -1);
-      }
-      
-      i++;
-      list_parcours = g_list_next (list_parcours);
-    }
-  }
-  
-  if (res->col_tab[1] == COLRES_NUM_BARRES)
-  {
-    GList *list_parcours = p->modele.barres;
-    
-    i = 0;
-    
-    while (list_parcours != NULL)
-    {
-      EF_Barre *barre = list_parcours->data;
-      gboolean  ok;
-      
-      switch (res->filtre)
-      {
-        case FILTRE_AUCUN :
-        {
-          ok = TRUE;
-          break;
-        }
-        case FILTRE_NOEUD_APPUI :
-        {
-          BUGMSG (NULL,
-                  FALSE,
-                  gettext ("Le filtre %d ne peut être appliqué aux barres.\n"),
-                           res->filtre)
-          break;
-        }
-        default :
-        {
-          BUGMSG (NULL,
-                  FALSE,
-                  gettext ("Le filtre %d est inconnu.\n"),
-                           res->filtre)
-          break;
-        }
-      }
-      
-      if (ok)
-      {
-        GtkTreeIter  Iter;
-        unsigned int j;
         
-        gtk_list_store_append (res->list_store, &Iter);
-        
-        for (j = 1; j <= res->col_tab[0]; j++)
+        if (ok)
         {
-          Fonction comb_min, comb_max;
-          Fonction f_min, f_max;
-          char    *tmp1 = NULL, *tmp2 = NULL;
-          char    *tmp = NULL;
-          GList   *liste = NULL, *list_parcours2;
-          GList   *converti = NULL;
+          GtkTreeIter  Iter;
+          unsigned int j;
+          char        *tmp_double;
+          char         tmp_double30[30];
           
-          comb_min.troncons = NULL;
-          comb_max.troncons = NULL;
-          f_min.troncons = NULL;
-          f_max.troncons = NULL;
-          
-          switch (res->col_tab[j])
+          gtk_list_store_append (res->list_store, &Iter);
+          for (j = 1; j <= res->col_tab[0]; j++)
           {
-            case COLRES_NUM_NOEUDS :
-            case COLRES_NOEUDS_X :
-            case COLRES_NOEUDS_Y :
-            case COLRES_NOEUDS_Z :
-            case COLRES_REACTION_APPUI_FX :
-            case COLRES_REACTION_APPUI_FY:
-            case COLRES_REACTION_APPUI_FZ :
-            case COLRES_REACTION_APPUI_MX :
-            case COLRES_REACTION_APPUI_MY :
-            case COLRES_REACTION_APPUI_MZ :
-            case COLRES_DEPLACEMENT_UX :
-            case COLRES_DEPLACEMENT_UY :
-            case COLRES_DEPLACEMENT_UZ :
-            case COLRES_DEPLACEMENT_RX :
-            case COLRES_DEPLACEMENT_RY :
-            case COLRES_DEPLACEMENT_RZ :
+            switch (res->col_tab[j])
             {
-              BUGMSG (NULL,
-                      FALSE,
-                      gettext ("La colonne des résultats %d ne peut être appliquée aux barres."),
-                               res->col_tab[j])
-              break;
-            }
-            case COLRES_NUM_BARRES :
-            {
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1, barre->numero,
-                                  -1);
-              break;
-            }
-            case COLRES_BARRES_LONGUEUR :
-            {
-              gtk_list_store_set (res->list_store,
-                                  &Iter,
-                                  j - 1,
-                                  EF_noeuds_distance (barre->noeud_debut,
-                                                      barre->noeud_fin),
-                                  -1);
-              break;
-            }
-            case COLRES_BARRES_PIXBUF_N :
-            case COLRES_BARRES_PIXBUF_TY :
-            case COLRES_BARRES_PIXBUF_TZ :
-            case COLRES_BARRES_PIXBUF_MX :
-            case COLRES_BARRES_PIXBUF_MY :
-            case COLRES_BARRES_PIXBUF_MZ :
-            {
-              GdkPixbuf *pixbuf;
-              
-              list_parcours2 = actions;
-              while (list_parcours2 != NULL)
+              case COLRES_NUM_NOEUDS :
               {
-                Action *action2 = list_parcours2->data;
-                
-                liste = g_list_append (
-                          liste,
-                          _1990_action_efforts_renvoie (action2,
-                                                        res->col_tab[j] -
-                                                        COLRES_BARRES_PIXBUF_N,
-                                                        i));
-                
-                list_parcours2 = g_list_next (list_parcours2);
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, noeud->numero,
+                                    -1);
+                break;
               }
-              
-              pixbuf = common_fonction_dessin (
-                         liste,
-                         200,
-                         50,
-                         res->col_tab[j] < COLRES_BARRES_PIXBUF_MX ?
-                           DECIMAL_FORCE :
-                           DECIMAL_MOMENT);
-              gtk_list_store_set (res->list_store, &Iter, j - 1, pixbuf, -1);
-              
-              g_object_unref (pixbuf);
-              
-              break;
-            }
-            case COLRES_BARRES_DESC_N :
-            case COLRES_BARRES_DESC_TY :
-            case COLRES_BARRES_DESC_TZ :
-            case COLRES_BARRES_DESC_MX :
-            case COLRES_BARRES_DESC_MY :
-            case COLRES_BARRES_DESC_MZ :
-            {
-              list_parcours2 = actions;
-              
-              if (g_list_next(actions) != NULL)
+              case COLRES_NOEUDS_X :
               {
+                EF_Point point;
+                
+                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                conv_f_c (point.x, tmp_double30, DECIMAL_DISTANCE);
+                
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, tmp_double30,
+                                    -1);
+                
+                break;
+              }
+              case COLRES_NOEUDS_Y :
+              {
+                EF_Point point;
+                
+                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                conv_f_c (point.y, tmp_double30, DECIMAL_DISTANCE);
+                
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, tmp_double30,
+                                    -1);
+                
+                break;
+              }
+              case COLRES_NOEUDS_Z :
+              {
+                EF_Point point;
+                
+                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                conv_f_c (point.z, tmp_double30, DECIMAL_DISTANCE);
+                
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, tmp_double30,
+                                    -1);
+                
+                break;
+              }
+              case COLRES_REACTION_APPUI_FX :
+              case COLRES_REACTION_APPUI_FY:
+              case COLRES_REACTION_APPUI_FZ :
+              case COLRES_REACTION_APPUI_MX :
+              case COLRES_REACTION_APPUI_MY :
+              case COLRES_REACTION_APPUI_MZ :
+              {
+                BUG (EF_resultat_noeud_reaction_appui (actions,
+                                                       noeud,
+                                                       res->col_tab[j] -
+                                                        COLRES_REACTION_APPUI_FX,
+                                                       p,
+                                                       &tmp_double,
+                                                       NULL,
+                                                       NULL),
+                     FALSE,
+                     FREE_ALL)
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, tmp_double,
+                                    -1);
+                free (tmp_double);
+                break;
+              }
+              case COLRES_DEPLACEMENT_UX :
+              case COLRES_DEPLACEMENT_UY :
+              case COLRES_DEPLACEMENT_UZ :
+              case COLRES_DEPLACEMENT_RX :
+              case COLRES_DEPLACEMENT_RY :
+              case COLRES_DEPLACEMENT_RZ :
+              {
+                BUG (EF_resultat_noeud_deplacement (actions,
+                                                    noeud,
+                                                    res->col_tab[j] -
+                                                      COLRES_DEPLACEMENT_UX,
+                                                    p,
+                                                    &tmp_double,
+                                                    NULL,
+                                                    NULL),
+                     FALSE,
+                     FREE_ALL)
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, tmp_double,
+                                    -1);
+                free (tmp_double);
+                break;
+              }
+              case COLRES_NUM_BARRES :
+              case COLRES_BARRES_LONGUEUR :
+              case COLRES_BARRES_PIXBUF_N :
+              case COLRES_BARRES_PIXBUF_TY :
+              case COLRES_BARRES_PIXBUF_TZ :
+              case COLRES_BARRES_PIXBUF_MX :
+              case COLRES_BARRES_PIXBUF_MY :
+              case COLRES_BARRES_PIXBUF_MZ :
+              case COLRES_BARRES_DESC_N :
+              case COLRES_BARRES_DESC_TY :
+              case COLRES_BARRES_DESC_TZ :
+              case COLRES_BARRES_DESC_MX :
+              case COLRES_BARRES_DESC_MY :
+              case COLRES_BARRES_DESC_MZ :
+              case COLRES_BARRES_EQ_N :
+              case COLRES_BARRES_EQ_TY :
+              case COLRES_BARRES_EQ_TZ :
+              case COLRES_BARRES_EQ_MX :
+              case COLRES_BARRES_EQ_MY :
+              case COLRES_BARRES_EQ_MZ :
+              case COLRES_DEF_PIXBUF_UX :
+              case COLRES_DEF_PIXBUF_UY :
+              case COLRES_DEF_PIXBUF_UZ :
+              case COLRES_DEF_PIXBUF_RX :
+              case COLRES_DEF_PIXBUF_RY :
+              case COLRES_DEF_PIXBUF_RZ :
+              case COLRES_DEF_DESC_UX :
+              case COLRES_DEF_DESC_UY :
+              case COLRES_DEF_DESC_UZ :
+              case COLRES_DEF_DESC_RX :
+              case COLRES_DEF_DESC_RY :
+              case COLRES_DEF_DESC_RZ :
+              case COLRES_DEF_UX :
+              case COLRES_DEF_UY :
+              case COLRES_DEF_UZ :
+              case COLRES_DEF_RX :
+              case COLRES_DEF_RY :
+              case COLRES_DEF_RZ :
+              {
+                FAILCRIT (FALSE,
+                          (gettext ("La colonne des résultats %d ne peut être appliquée aux noeuds."),
+                                    res->col_tab[j]);
+                            FREE_ALL)
+                break;
+              }
+              default :
+              {
+                FAILCRIT (FALSE,
+                          (gettext ("La colonne des résultats %d est inconnue.\n"),
+                                    res->col_tab[j]);
+                            FREE_ALL)
+                break;
+              }
+            }
+          }
+          gtk_list_store_set (res->list_store, &Iter, res->col_tab[0], "", -1);
+        }
+        
+        i++;
+        list_parcours = g_list_next (list_parcours);
+      }
+      break;
+    }
+     
+    case COLRES_NUM_BARRES :
+    {
+      GList *list_parcours = p->modele.barres;
+      
+      i = 0;
+      
+      while (list_parcours != NULL)
+      {
+        EF_Barre *barre = list_parcours->data;
+        gboolean  ok;
+        
+        switch (res->filtre)
+        {
+          case FILTRE_AUCUN :
+          {
+            ok = TRUE;
+            break;
+          }
+          case FILTRE_NOEUD_APPUI :
+          {
+            FAILCRIT (FALSE,
+                      (gettext ("Le filtre %d ne peut être appliqué aux barres.\n"),
+                                res->filtre);
+                        FREE_ALL)
+            break;
+          }
+          default :
+          {
+            FAILCRIT (FALSE,
+                      (gettext ("Le filtre %d est inconnu.\n"),
+                                res->filtre);
+                        FREE_ALL)
+            break;
+          }
+        }
+        
+        if (ok)
+        {
+          GtkTreeIter  Iter;
+          unsigned int j;
+          
+          gtk_list_store_append (res->list_store, &Iter);
+          
+          for (j = 1; j <= res->col_tab[0]; j++)
+          {
+            Fonction comb_min, comb_max;
+            Fonction f_min, f_max;
+            char    *tmp1 = NULL, *tmp2 = NULL;
+            char    *tmp = NULL;
+            GList   *liste = NULL, *list_parcours2;
+            GList   *converti = NULL;
+            
+    #define FREE_ALL2 free (comb_min.troncons); \
+    free (comb_max.troncons); \
+    free (f_min.troncons); \
+    free (f_max.troncons); \
+    free (tmp); \
+    free (tmp1); \
+    free (tmp2); \
+    g_list_free (liste); \
+    g_list_free (converti);
+            
+            comb_min.troncons = NULL;
+            comb_max.troncons = NULL;
+            f_min.troncons = NULL;
+            f_max.troncons = NULL;
+            
+            switch (res->col_tab[j])
+            {
+              case COLRES_NUM_NOEUDS :
+              case COLRES_NOEUDS_X :
+              case COLRES_NOEUDS_Y :
+              case COLRES_NOEUDS_Z :
+              case COLRES_REACTION_APPUI_FX :
+              case COLRES_REACTION_APPUI_FY:
+              case COLRES_REACTION_APPUI_FZ :
+              case COLRES_REACTION_APPUI_MX :
+              case COLRES_REACTION_APPUI_MY :
+              case COLRES_REACTION_APPUI_MZ :
+              case COLRES_DEPLACEMENT_UX :
+              case COLRES_DEPLACEMENT_UY :
+              case COLRES_DEPLACEMENT_UZ :
+              case COLRES_DEPLACEMENT_RX :
+              case COLRES_DEPLACEMENT_RY :
+              case COLRES_DEPLACEMENT_RZ :
+              {
+                FAILCRIT (FALSE,
+                          (gettext ("La colonne des résultats %d ne peut être appliquée aux barres."),
+                                     res->col_tab[j]);
+                            FREE_ALL
+                              FREE_ALL2)
+                break;
+              }
+              case COLRES_NUM_BARRES :
+              {
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1, barre->numero,
+                                    -1);
+                break;
+              }
+              case COLRES_BARRES_LONGUEUR :
+              {
+                gtk_list_store_set (res->list_store,
+                                    &Iter,
+                                    j - 1,
+                                    EF_noeuds_distance (barre->noeud_debut,
+                                                        barre->noeud_fin),
+                                    -1);
+                break;
+              }
+              case COLRES_BARRES_PIXBUF_N :
+              case COLRES_BARRES_PIXBUF_TY :
+              case COLRES_BARRES_PIXBUF_TZ :
+              case COLRES_BARRES_PIXBUF_MX :
+              case COLRES_BARRES_PIXBUF_MY :
+              case COLRES_BARRES_PIXBUF_MZ :
+              {
+                GdkPixbuf *pixbuf;
+                
+                list_parcours2 = actions;
                 while (list_parcours2 != NULL)
                 {
                   Action *action2 = list_parcours2->data;
@@ -625,416 +633,523 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                             liste,
                             _1990_action_efforts_renvoie (action2,
                                                           res->col_tab[j] -
-                                                          COLRES_BARRES_DESC_N,
+                                                          COLRES_BARRES_PIXBUF_N,
                                                           i));
                   
                   list_parcours2 = g_list_next (list_parcours2);
                 }
                 
-                if (common_fonction_renvoie_enveloppe (liste,
-                                                       &f_min,
-                                                       &f_max,
-                                                       &comb_min,
-                                                       &comb_max) == FALSE)
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Erreur")),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
+                pixbuf = common_fonction_dessin (
+                           liste,
+                           200,
+                           50,
+                           res->col_tab[j] < COLRES_BARRES_PIXBUF_MX ?
+                             DECIMAL_FORCE :
+                             DECIMAL_MOMENT);
+                gtk_list_store_set (res->list_store, &Iter, j - 1, pixbuf, -1);
+                
+                g_object_unref (pixbuf);
+                
+                break;
+              }
+              case COLRES_BARRES_DESC_N :
+              case COLRES_BARRES_DESC_TY :
+              case COLRES_BARRES_DESC_TZ :
+              case COLRES_BARRES_DESC_MX :
+              case COLRES_BARRES_DESC_MY :
+              case COLRES_BARRES_DESC_MZ :
+              {
+                list_parcours2 = actions;
+                
+                if (g_list_next(actions) != NULL)
+                {
+                  while (list_parcours2 != NULL)
+                  {
+                    Action *action2 = list_parcours2->data;
+                    
+                    liste = g_list_append (
+                              liste,
+                              _1990_action_efforts_renvoie (action2,
+                                                            res->col_tab[j] -
+                                                            COLRES_BARRES_DESC_N,
+                                                            i));
+                    
+                    list_parcours2 = g_list_next (list_parcours2);
+                  }
+                  
+                  if (common_fonction_renvoie_enveloppe (liste,
+                                                         &f_min,
+                                                         &f_max,
+                                                         &comb_min,
+                                                         &comb_max) == FALSE)
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  else
+                  {
+                    tmp1 = common_fonction_affiche_caract(
+                             &f_min,
+                             DECIMAL_DISTANCE,
+                             res->col_tab[j] < COLRES_BARRES_DESC_MX ?
+                               DECIMAL_FORCE :
+                               DECIMAL_MOMENT);
+                    tmp2 = common_fonction_affiche_caract (
+                             &f_max,
+                             DECIMAL_DISTANCE,
+                             res->col_tab[j] < COLRES_BARRES_DESC_MX ?
+                               DECIMAL_FORCE :
+                               DECIMAL_MOMENT);
+                    
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
+                                                    tmp2,
+                                                    tmp1),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  }
+                }
                 else
                 {
-                  tmp1 = common_fonction_affiche_caract(
-                           &f_min,
-                           DECIMAL_DISTANCE,
-                           res->col_tab[j] < COLRES_BARRES_DESC_MX ?
-                             DECIMAL_FORCE :
-                             DECIMAL_MOMENT);
-                  tmp2 = common_fonction_affiche_caract (
-                           &f_max,
-                           DECIMAL_DISTANCE,
-                           res->col_tab[j] < COLRES_BARRES_DESC_MX ?
-                             DECIMAL_FORCE :
-                             DECIMAL_MOMENT);
+                  Action *action2 = list_parcours2->data;
                   
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
-                                                 tmp2,
-                                                 tmp1),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
+                  tmp = common_fonction_affiche_caract (
+                          _1990_action_efforts_renvoie (
+                            action2,
+                            res->col_tab[j] - COLRES_BARRES_DESC_N,
+                            i),
+                          DECIMAL_DISTANCE,
+                          res->col_tab[j] < COLRES_BARRES_DESC_MX ?
+                            DECIMAL_FORCE :
+                            DECIMAL_MOMENT);
                 }
-              }
-              else
-              {
-                Action *action2 = list_parcours2->data;
+                gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
                 
-                tmp = common_fonction_affiche_caract (
-                        _1990_action_efforts_renvoie (
-                          action2,
-                          res->col_tab[j] - COLRES_BARRES_DESC_N,
-                          i),
-                        DECIMAL_DISTANCE,
-                        res->col_tab[j] < COLRES_BARRES_DESC_MX ?
-                          DECIMAL_FORCE :
-                          DECIMAL_MOMENT);
+                break;
               }
-              gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
-              
-              break;
-            }
-            case COLRES_BARRES_EQ_N :
-            case COLRES_BARRES_EQ_TY :
-            case COLRES_BARRES_EQ_TZ :
-            case COLRES_BARRES_EQ_MX :
-            case COLRES_BARRES_EQ_MY :
-            case COLRES_BARRES_EQ_MZ :
-            {
-              list_parcours2 = actions;
-              
-              if (g_list_next (actions) != NULL)
+              case COLRES_BARRES_EQ_N :
+              case COLRES_BARRES_EQ_TY :
+              case COLRES_BARRES_EQ_TZ :
+              case COLRES_BARRES_EQ_MX :
+              case COLRES_BARRES_EQ_MY :
+              case COLRES_BARRES_EQ_MZ :
               {
+                list_parcours2 = actions;
+                
+                if (g_list_next (actions) != NULL)
+                {
+                  while (list_parcours2 != NULL)
+                  {
+                    Action *action2 = list_parcours2->data;
+                    
+                    liste = g_list_append (
+                              liste,
+                              _1990_action_efforts_renvoie (
+                                action2,
+                                res->col_tab[j] - COLRES_BARRES_EQ_N,
+                                i));
+                    
+                    list_parcours2 = g_list_next (list_parcours2);
+                  }
+                  
+                  if (common_fonction_renvoie_enveloppe (liste,
+                                                         &f_min,
+                                                         &f_max,
+                                                         &comb_min,
+                                                         &comb_max) == FALSE)
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  else
+                  {
+                    BUG (common_fonction_conversion_combinaisons (&comb_min,
+                                                                  comb,
+                                                                  &converti),
+                         FALSE,
+                         FREE_ALL
+                           FREE_ALL2)
+                    tmp1 = common_fonction_renvoie (
+                             &f_min,
+                             converti,
+                             res->col_tab[j] < COLRES_BARRES_EQ_MX ?
+                               DECIMAL_FORCE :
+                               DECIMAL_MOMENT);
+                    g_list_free (converti);
+                    converti = NULL;
+                    BUG (common_fonction_conversion_combinaisons (&comb_max,
+                                                                  comb,
+                                                                  &converti),
+                         FALSE,
+                         FREE_ALL
+                           FREE_ALL2)
+                    tmp2 = common_fonction_renvoie (
+                             &f_max,
+                             converti,
+                             res->col_tab[j] < COLRES_BARRES_EQ_MX ?
+                               DECIMAL_FORCE :
+                               DECIMAL_MOMENT);
+                    
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
+                                                             tmp2,
+                                                             tmp1),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  }
+                }
+                else
+                {
+                  Action *action2 = list_parcours2->data;
+                  tmp = common_fonction_renvoie (
+                          _1990_action_efforts_renvoie (
+                            action2,
+                            res->col_tab[j] - COLRES_BARRES_EQ_N,
+                            i),
+                          NULL,
+                          res->col_tab[j] < COLRES_BARRES_EQ_MX ?
+                            DECIMAL_FORCE :
+                            DECIMAL_MOMENT);
+                }
+                gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
+                
+                break;
+              }
+              case COLRES_DEF_PIXBUF_UX :
+              case COLRES_DEF_PIXBUF_UY :
+              case COLRES_DEF_PIXBUF_UZ :
+              case COLRES_DEF_PIXBUF_RX :
+              case COLRES_DEF_PIXBUF_RY :
+              case COLRES_DEF_PIXBUF_RZ :
+              {
+                GdkPixbuf *pixbuf;
+                
+                list_parcours2 = actions;
+                
                 while (list_parcours2 != NULL)
                 {
                   Action *action2 = list_parcours2->data;
                   
-                  liste = g_list_append (
-                            liste,
-                            _1990_action_efforts_renvoie (
-                              action2,
-                              res->col_tab[j] - COLRES_BARRES_EQ_N,
-                              i));
+                  if (res->col_tab[j] < COLRES_DEF_PIXBUF_RX)
+                    liste = g_list_append (
+                              liste,
+                              _1990_action_deformation_renvoie (
+                                action2,
+                                res->col_tab[j] - COLRES_DEF_PIXBUF_UX,
+                                i));
+                  else
+                    liste = g_list_append (
+                              liste,
+                              _1990_action_rotation_renvoie (
+                                action2,
+                                res->col_tab[j] - COLRES_DEF_PIXBUF_RX,
+                                i));
                   
                   list_parcours2 = g_list_next (list_parcours2);
                 }
                 
-                if (common_fonction_renvoie_enveloppe (liste,
-                                                       &f_min,
-                                                       &f_max,
-                                                       &comb_min,
-                                                       &comb_max) == FALSE)
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Erreur")),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
+                pixbuf = common_fonction_dessin (
+                           liste,
+                           200,
+                           50,
+                           res->col_tab[j] < COLRES_DEF_PIXBUF_RX ?
+                             DECIMAL_DEPLACEMENT :
+                             DECIMAL_ROTATION);
+                gtk_list_store_set (res->list_store, &Iter, j - 1, pixbuf, -1);
+                
+                g_object_unref (pixbuf);
+                
+                break;
+              }
+              case COLRES_DEF_DESC_UX :
+              case COLRES_DEF_DESC_UY :
+              case COLRES_DEF_DESC_UZ :
+              case COLRES_DEF_DESC_RX :
+              case COLRES_DEF_DESC_RY :
+              case COLRES_DEF_DESC_RZ :
+              {
+                list_parcours2 = actions;
+                
+                if (g_list_next (actions) != NULL)
+                {
+                  while (list_parcours2 != NULL)
+                  {
+                    Action *action2 = list_parcours2->data;
+                    
+                    if (res->col_tab[j] < COLRES_DEF_DESC_RX)
+                      liste = g_list_append (
+                                liste,
+                                _1990_action_deformation_renvoie (
+                                  action2,
+                                  res->col_tab[j] - COLRES_DEF_DESC_UX,
+                                  i));
+                    else
+                      liste = g_list_append (
+                                liste,
+                                _1990_action_rotation_renvoie (
+                                  action2,
+                                  res->col_tab[j] - COLRES_DEF_DESC_RX,
+                                  i));
+                    
+                    list_parcours2 = g_list_next (list_parcours2);
+                  }
+                  
+                  if (common_fonction_renvoie_enveloppe (liste,
+                                                         &f_min,
+                                                         &f_max,
+                                                         &comb_min,
+                                                         &comb_max) == FALSE)
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  else
+                  {
+                    tmp1 = common_fonction_affiche_caract (
+                             &f_min,
+                             DECIMAL_DISTANCE,
+                             res->col_tab[j] < COLRES_DEF_DESC_RX ?
+                               DECIMAL_DEPLACEMENT :
+                               DECIMAL_ROTATION);
+                    tmp2 = common_fonction_affiche_caract (
+                             &f_max,
+                             DECIMAL_DISTANCE,
+                             res->col_tab[j] < COLRES_DEF_DESC_RX ?
+                               DECIMAL_DEPLACEMENT :
+                               DECIMAL_ROTATION);
+                    
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
+                                                    tmp2,
+                                                    tmp1),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  }
+                }
                 else
                 {
-                  BUG (common_fonction_conversion_combinaisons (&comb_min,
-                                                                comb,
-                                                                &converti),
-                       FALSE)
-                  tmp1 = common_fonction_renvoie (
-                           &f_min,
-                           converti,
-                           res->col_tab[j] < COLRES_BARRES_EQ_MX ?
-                             DECIMAL_FORCE :
-                             DECIMAL_MOMENT);
-                  g_list_free (converti);
-                  BUG (common_fonction_conversion_combinaisons (&comb_max,
-                                                                comb,
-                                                                &converti),
-                       FALSE)
-                  tmp2 = common_fonction_renvoie (
-                           &f_max,
-                           converti,
-                           res->col_tab[j] < COLRES_BARRES_EQ_MX ?
-                             DECIMAL_FORCE :
-                             DECIMAL_MOMENT);
+                  Action *action2 = list_parcours2->data;
                   
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
-                                                          tmp2,
-                                                          tmp1),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
-                }
-              }
-              else
-              {
-                Action *action2 = list_parcours2->data;
-                tmp = common_fonction_renvoie (
-                        _1990_action_efforts_renvoie (
-                          action2,
-                          res->col_tab[j] - COLRES_BARRES_EQ_N,
-                          i),
-                        NULL,
-                        res->col_tab[j] < COLRES_BARRES_EQ_MX ?
-                          DECIMAL_FORCE :
-                          DECIMAL_MOMENT);
-              }
-              gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
-              
-              break;
-            }
-            case COLRES_DEFORMATION_PIXBUF_UX :
-            case COLRES_DEFORMATION_PIXBUF_UY :
-            case COLRES_DEFORMATION_PIXBUF_UZ :
-            case COLRES_DEFORMATION_PIXBUF_RX :
-            case COLRES_DEFORMATION_PIXBUF_RY :
-            case COLRES_DEFORMATION_PIXBUF_RZ :
-            {
-              GdkPixbuf *pixbuf;
-              
-              list_parcours2 = actions;
-              
-              while (list_parcours2 != NULL)
-              {
-                Action *action2 = list_parcours2->data;
-                
-                if (res->col_tab[j] < COLRES_DEFORMATION_PIXBUF_RX)
-                  liste = g_list_append (
-                            liste,
+                  if (res->col_tab[j] < COLRES_DEF_DESC_RX)
+                    tmp = common_fonction_affiche_caract (
                             _1990_action_deformation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEFORMATION_PIXBUF_UX,
-                              i));
-                else
-                  liste = g_list_append (
-                            liste,
+                              res->col_tab[j] - COLRES_DEF_DESC_UX,
+                              i),
+                            DECIMAL_DISTANCE,
+                            DECIMAL_DEPLACEMENT);
+                  else
+                    tmp = common_fonction_affiche_caract (
                             _1990_action_rotation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEFORMATION_PIXBUF_RX,
-                              i));
+                              res->col_tab[j] - COLRES_DEF_DESC_RX,
+                              i),
+                            DECIMAL_DISTANCE,
+                            DECIMAL_ROTATION);
+                }
+                gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
                 
-                list_parcours2 = g_list_next (list_parcours2);
+                break;
               }
-              
-              pixbuf = common_fonction_dessin (
-                         liste,
-                         200,
-                         50,
-                         res->col_tab[j] < COLRES_DEFORMATION_PIXBUF_RX ?
-                           DECIMAL_DEPLACEMENT :
-                           DECIMAL_ROTATION);
-              gtk_list_store_set (res->list_store, &Iter, j - 1, pixbuf, -1);
-              
-              g_object_unref (pixbuf);
-              
-              break;
-            }
-            case COLRES_DEFORMATION_DESC_UX :
-            case COLRES_DEFORMATION_DESC_UY :
-            case COLRES_DEFORMATION_DESC_UZ :
-            case COLRES_DEFORMATION_DESC_RX :
-            case COLRES_DEFORMATION_DESC_RY :
-            case COLRES_DEFORMATION_DESC_RZ :
-            {
-              list_parcours2 = actions;
-              
-              if (g_list_next (actions) != NULL)
+              case COLRES_DEF_UX :
+              case COLRES_DEF_UY :
+              case COLRES_DEF_UZ :
+              case COLRES_DEF_RX :
+              case COLRES_DEF_RY :
+              case COLRES_DEF_RZ :
               {
-                while (list_parcours2 != NULL)
+                list_parcours2 = actions;
+                
+                if (g_list_next (actions) != NULL)
+                {
+                  while (list_parcours2 != NULL)
+                  {
+                    Action *action2 = list_parcours2->data;
+                    
+                    if (res->col_tab[j] < COLRES_DEF_RX)
+                      liste = g_list_append (
+                                liste,
+                                _1990_action_deformation_renvoie (
+                                  action2,
+                                  res->col_tab[j] - COLRES_DEF_UX,
+                                  i));
+                    else
+                      liste = g_list_append (
+                                liste,
+                                _1990_action_rotation_renvoie (
+                                  action2,
+                                  res->col_tab[j] - COLRES_DEF_RX,
+                                  i));
+                    
+                    list_parcours2 = g_list_next (list_parcours2);
+                  }
+                  
+                  if (common_fonction_renvoie_enveloppe (liste,
+                                                         &f_min,
+                                                         &f_max,
+                                                         &comb_min,
+                                                         &comb_max) == FALSE)
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  else
+                  {
+                    BUG (common_fonction_conversion_combinaisons (&comb_min,
+                                                                  comb,
+                                                                  &converti),
+                         FALSE,
+                         FREE_ALL
+                           FREE_ALL2)
+                    tmp1 = common_fonction_renvoie (
+                             &f_min,
+                             converti,
+                             res->col_tab[j] < COLRES_DEF_RX ?
+                               DECIMAL_DEPLACEMENT :
+                               DECIMAL_ROTATION);
+                    g_list_free (converti);
+                    converti = NULL;
+                    BUG (common_fonction_conversion_combinaisons (&comb_max,
+                                                                  comb,
+                                                                  &converti),
+                         FALSE,
+                         FREE_ALL
+                           FREE_ALL2)
+                    tmp2 = common_fonction_renvoie (
+                             &f_max,
+                             converti,
+                             res->col_tab[j] < COLRES_DEF_RX ?
+                               DECIMAL_DEPLACEMENT :
+                               DECIMAL_ROTATION);
+                    
+                    BUGCRIT (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
+                                                             tmp2,
+                                                             tmp1),
+                             FALSE,
+                             (gettext ("Erreur d'allocation mémoire.\n"));
+                               FREE_ALL
+                               FREE_ALL2)
+                  }
+                }
+                else
                 {
                   Action *action2 = list_parcours2->data;
                   
-                  if (res->col_tab[j] < COLRES_DEFORMATION_DESC_RX)
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_deformation_renvoie (
-                                action2,
-                                res->col_tab[j] - COLRES_DEFORMATION_DESC_UX,
-                                i));
+                  if (res->col_tab[j] < COLRES_DEF_RX)
+                    tmp = common_fonction_renvoie (
+                            _1990_action_deformation_renvoie (
+                              action2,
+                              res->col_tab[j] - COLRES_DEF_UX,
+                              i),
+                            NULL,
+                            DECIMAL_DEPLACEMENT);
                   else
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_rotation_renvoie (
-                                action2,
-                                res->col_tab[j] - COLRES_DEFORMATION_DESC_RX,
-                                i));
-                  
-                  list_parcours2 = g_list_next (list_parcours2);
+                    tmp = common_fonction_renvoie (
+                            _1990_action_rotation_renvoie (
+                              action2,
+                              res->col_tab[j] - COLRES_DEF_RX,
+                              i),
+                            NULL,
+                            DECIMAL_ROTATION);
                 }
+                gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
                 
-                if (common_fonction_renvoie_enveloppe (liste,
-                                                       &f_min,
-                                                       &f_max,
-                                                       &comb_min,
-                                                       &comb_max) == FALSE)
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Erreur")),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
-                else
-                {
-                  tmp1 = common_fonction_affiche_caract (
-                           &f_min,
-                           DECIMAL_DISTANCE,
-                           res->col_tab[j] < COLRES_DEFORMATION_DESC_RX ?
-                             DECIMAL_DEPLACEMENT :
-                             DECIMAL_ROTATION);
-                  tmp2 = common_fonction_affiche_caract (
-                           &f_max,
-                           DECIMAL_DISTANCE,
-                           res->col_tab[j] < COLRES_DEFORMATION_DESC_RX ?
-                             DECIMAL_DEPLACEMENT :
-                             DECIMAL_ROTATION);
-                  
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
-                                                 tmp2,
-                                                 tmp1),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
-                }
+                break;
               }
-              else
+              default :
               {
-                Action *action2 = list_parcours2->data;
-                
-                if (res->col_tab[j] < COLRES_DEFORMATION_DESC_RX)
-                  tmp = common_fonction_affiche_caract (
-                          _1990_action_deformation_renvoie (
-                            action2,
-                            res->col_tab[j] - COLRES_DEFORMATION_DESC_UX,
-                            i),
-                          DECIMAL_DISTANCE,
-                          DECIMAL_DEPLACEMENT);
-                else
-                  tmp = common_fonction_affiche_caract (
-                          _1990_action_rotation_renvoie (
-                            action2,
-                            res->col_tab[j] - COLRES_DEFORMATION_DESC_RX,
-                            i),
-                          DECIMAL_DISTANCE,
-                          DECIMAL_ROTATION);
+                FAILINFO (FALSE,
+                          (gettext("La colonne des résultats %d est inconnue.\n"),
+                                   res->col_tab[j]);
+                            FREE_ALL
+                            FREE_ALL2)
+                break;
               }
-              gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
-              
-              break;
             }
-            case COLRES_DEFORMATION_UX :
-            case COLRES_DEFORMATION_UY :
-            case COLRES_DEFORMATION_UZ :
-            case COLRES_DEFORMATION_RX :
-            case COLRES_DEFORMATION_RY :
-            case COLRES_DEFORMATION_RZ :
-            {
-              list_parcours2 = actions;
-              
-              if (g_list_next (actions) != NULL)
-              {
-                while (list_parcours2 != NULL)
-                {
-                  Action *action2 = list_parcours2->data;
-                  
-                  if (res->col_tab[j] < COLRES_DEFORMATION_RX)
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_deformation_renvoie (
-                                action2,
-                                res->col_tab[j] - COLRES_DEFORMATION_UX,
-                                i));
-                  else
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_rotation_renvoie (
-                                action2,
-                                res->col_tab[j] - COLRES_DEFORMATION_RX,
-                                i));
-                  
-                  list_parcours2 = g_list_next (list_parcours2);
-                }
-                
-                if (common_fonction_renvoie_enveloppe (liste,
-                                                       &f_min,
-                                                       &f_max,
-                                                       &comb_min,
-                                                       &comb_max) == FALSE)
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Erreur")),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
-                else
-                {
-                  BUG (common_fonction_conversion_combinaisons (&comb_min,
-                                                                comb,
-                                                                &converti),
-                       FALSE)
-                  tmp1 = common_fonction_renvoie (
-                           &f_min,
-                           converti,
-                           res->col_tab[j] < COLRES_DEFORMATION_RX ?
-                             DECIMAL_DEPLACEMENT :
-                             DECIMAL_ROTATION);
-                  g_list_free (converti);
-                  BUG (common_fonction_conversion_combinaisons (&comb_max,
-                                                                comb,
-                                                                &converti),
-                       FALSE)
-                  tmp2 = common_fonction_renvoie (
-                           &f_max,
-                           converti,
-                           res->col_tab[j] < COLRES_DEFORMATION_RX ?
-                             DECIMAL_DEPLACEMENT :
-                             DECIMAL_ROTATION);
-                  
-                  BUGMSG (tmp = g_strdup_printf (gettext ("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"),
-                                                          tmp2,
-                                                          tmp1),
-                          FALSE,
-                          gettext ("Erreur d'allocation mémoire.\n"))
-                }
-              }
-              else
-              {
-                Action *action2 = list_parcours2->data;
-                
-                if (res->col_tab[j] < COLRES_DEFORMATION_RX)
-                  tmp = common_fonction_renvoie (
-                          _1990_action_deformation_renvoie (
-                            action2,
-                            res->col_tab[j] - COLRES_DEFORMATION_UX,
-                            i),
-                          NULL,
-                          DECIMAL_DEPLACEMENT);
-                else
-                  tmp = common_fonction_renvoie (
-                          _1990_action_rotation_renvoie (
-                            action2,
-                            res->col_tab[j] - COLRES_DEFORMATION_RX,
-                            i),
-                          NULL,
-                          DECIMAL_ROTATION);
-              }
-              gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
-              
-              break;
-            }
-            default :
-            {
-              BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[j])
-              break;
-            }
+            
+            FREE_ALL2
           }
-          
-          free (comb_min.troncons);
-          free (comb_max.troncons);
-          free (f_min.troncons);
-          free (f_max.troncons);
-          free (tmp);
-          free (tmp1);
-          free (tmp2);
-          g_list_free (liste);
-          g_list_free (converti);
+          gtk_list_store_set (res->list_store, &Iter, res->col_tab[0], "", -1);
         }
-        gtk_list_store_set (res->list_store, &Iter, res->col_tab[0], "", -1);
+        
+        i++;
+        list_parcours = g_list_next (list_parcours);
       }
-      
-      i++;
-      list_parcours = g_list_next (list_parcours);
+      break;
+    }
+    
+    case COLRES_NOEUDS_X :
+    case COLRES_NOEUDS_Y :
+    case COLRES_NOEUDS_Z :
+    case COLRES_REACTION_APPUI_FX :
+    case COLRES_REACTION_APPUI_FY :
+    case COLRES_REACTION_APPUI_FZ :
+    case COLRES_REACTION_APPUI_MX :
+    case COLRES_REACTION_APPUI_MY :
+    case COLRES_REACTION_APPUI_MZ :
+    case COLRES_DEPLACEMENT_UX :
+    case COLRES_DEPLACEMENT_UY :
+    case COLRES_DEPLACEMENT_UZ :
+    case COLRES_DEPLACEMENT_RX :
+    case COLRES_DEPLACEMENT_RY :
+    case COLRES_DEPLACEMENT_RZ :
+    case COLRES_BARRES_LONGUEUR :
+    case COLRES_BARRES_PIXBUF_N :
+    case COLRES_BARRES_PIXBUF_TY :
+    case COLRES_BARRES_PIXBUF_TZ :
+    case COLRES_BARRES_PIXBUF_MX :
+    case COLRES_BARRES_PIXBUF_MY :
+    case COLRES_BARRES_PIXBUF_MZ :
+    case COLRES_BARRES_DESC_N :
+    case COLRES_BARRES_DESC_TY :
+    case COLRES_BARRES_DESC_TZ :
+    case COLRES_BARRES_DESC_MX :
+    case COLRES_BARRES_DESC_MY :
+    case COLRES_BARRES_DESC_MZ :
+    case COLRES_BARRES_EQ_N :
+    case COLRES_BARRES_EQ_TY :
+    case COLRES_BARRES_EQ_TZ :
+    case COLRES_BARRES_EQ_MX :
+    case COLRES_BARRES_EQ_MY :
+    case COLRES_BARRES_EQ_MZ :
+    case COLRES_DEF_PIXBUF_UX :
+    case COLRES_DEF_PIXBUF_UY :
+    case COLRES_DEF_PIXBUF_UZ :
+    case COLRES_DEF_PIXBUF_RX :
+    case COLRES_DEF_PIXBUF_RY :
+    case COLRES_DEF_PIXBUF_RZ :
+    case COLRES_DEF_DESC_UX :
+    case COLRES_DEF_DESC_UY :
+    case COLRES_DEF_DESC_UZ :
+    case COLRES_DEF_DESC_RX :
+    case COLRES_DEF_DESC_RY :
+    case COLRES_DEF_DESC_RZ :
+    case COLRES_DEF_UX :
+    case COLRES_DEF_UY :
+    case COLRES_DEF_UZ :
+    case COLRES_DEF_RX :
+    case COLRES_DEF_RY :
+    case COLRES_DEF_RZ :
+    default :
+    {
+      FAILCRIT (FALSE,
+                (gettext ("La première colonne ne peut contenir que la liste des nœuds ou des barres.\n"));)
+      break;
     }
   }
   
-  if (gtk_combo_box_get_active (UI_RES.combobox) == 0)
-    g_list_free (actions);
-  // On libère l'action générée pour la combinaison
-  else
-  {
-    GList *list_parcours = actions;
-    
-    while (list_parcours != NULL)
-    {
-      action = list_parcours->data;
-      BUG (_1990_action_fonction_free (p, action), FALSE)
-      BUG (_1990_action_ponderation_resultat_free_calculs (action), FALSE)
-      free (action);
-      
-      list_parcours = g_list_next (list_parcours);
-    }
-  }
-
+  FREE_ALL
+  
   return TRUE;
+#undef FREE_ALL2
+#undef FREE_ALL
 }
 
 
@@ -1060,12 +1175,12 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
   GtkTreeViewColumn *column;
   double             xalign;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (res, FALSE, gettext ("Paramètre %s incorrect.\n"), "res")
-  BUGMSG (UI_RES.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (res, "%p", res, FALSE)
+  BUGCRIT (UI_RES.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
   
   p_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (p_scrolled_window),
@@ -1090,9 +1205,9 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
   gtk_container_add (GTK_CONTAINER (p_scrolled_window),
                      GTK_WIDGET (res->treeview));
   
-  BUGMSG (col_type = malloc ((res->col_tab[0] + 1)  *sizeof (GType)),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (col_type = malloc ((res->col_tab[0] + 1) * sizeof (GType)),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   for (i = 1; i <= res->col_tab[0]; i++)
   {
@@ -1100,9 +1215,10 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
     {
       case COLRES_NUM_NOEUDS :
       {
-        BUGMSG (i == 1,
-                FALSE,
-                gettext ("La liste des noeuds doit être spécifiée en tant que première colonne.\n"))
+        BUGCRIT (i == 1,
+                 FALSE,
+                 (gettext ("La liste des noeuds doit être spécifiée en tant que première colonne.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_INT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1115,9 +1231,10 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_NUM_BARRES :
       {
-        BUGMSG (i == 1,
-                FALSE,
-                gettext ("La liste des barres doit être spécifiée en tant que première colonne.\n"))
+        BUGCRIT (i == 1,
+                 FALSE,
+                 (gettext ("La liste des barres doit être spécifiée en tant que première colonne.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_INT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1130,13 +1247,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_NOEUDS_X :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "x")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                          "x");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1149,13 +1268,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_NOEUDS_Y :
       {
-        BUGMSG (i!= 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "y")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "y");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1168,13 +1289,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_NOEUDS_Z :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "z")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "z");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1187,13 +1310,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_FX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Fx")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Fx");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1206,13 +1331,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_FY:
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Fy")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Fy");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1225,13 +1352,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_FZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Fz")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Fz");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1244,13 +1373,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_MX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Mx")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Mx");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1263,13 +1393,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_MY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "My")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "My");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1282,13 +1414,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_REACTION_APPUI_MZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Mz")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Mz");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1301,13 +1435,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_UX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Ux")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Ux");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1320,13 +1456,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_UY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Uy")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Uy");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1339,13 +1477,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_UZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Uz")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Uz");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1358,13 +1498,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_RX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Rx")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Rx");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1377,13 +1519,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_RY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Ry")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Ry");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1395,13 +1539,15 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_DEPLACEMENT_RZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_NOEUDS,
-                FALSE,
-                gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
-                         "Rx")
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
+                 FALSE,
+                 (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
+                           "Rx");
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1414,12 +1560,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_LONGUEUR :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_DOUBLE;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1432,12 +1580,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_N :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1450,12 +1600,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_TY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1468,12 +1620,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_TZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1486,12 +1640,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_MX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1504,12 +1660,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_MY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1522,12 +1680,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_PIXBUF_MZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1540,12 +1700,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_N :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1558,12 +1720,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_TY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1576,12 +1740,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_TZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1594,12 +1760,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_MX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1612,12 +1780,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_MY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1630,12 +1800,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_DESC_MZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1648,12 +1820,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_N :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1666,12 +1840,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_TY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1684,12 +1860,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_TZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1702,12 +1880,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_MX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1720,12 +1900,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_MY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1738,12 +1920,14 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       case COLRES_BARRES_EQ_MZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1754,14 +1938,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_UX :
+      case COLRES_DEF_PIXBUF_UX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1772,14 +1958,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_UY :
+      case COLRES_DEF_PIXBUF_UY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1790,14 +1978,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_UZ :
+      case COLRES_DEF_PIXBUF_UZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1808,14 +1998,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_RX :
+      case COLRES_DEF_PIXBUF_RX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1826,14 +2018,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_RY :
+      case COLRES_DEF_PIXBUF_RY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1844,14 +2038,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_PIXBUF_RZ :
+      case COLRES_DEF_PIXBUF_RZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1862,14 +2058,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_UX :
+      case COLRES_DEF_DESC_UX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1880,14 +2078,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_UY :
+      case COLRES_DEF_DESC_UY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1898,14 +2098,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_UZ :
+      case COLRES_DEF_DESC_UZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1916,14 +2118,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_RX :
+      case COLRES_DEF_DESC_RX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1934,14 +2138,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_RY :
+      case COLRES_DEF_DESC_RY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1952,14 +2158,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_DESC_RZ :
+      case COLRES_DEF_DESC_RZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1970,14 +2178,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_UX :
+      case COLRES_DEF_UX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -1988,14 +2198,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_UY :
+      case COLRES_DEF_UY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -2006,14 +2218,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_UZ :
+      case COLRES_DEF_UZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -2024,14 +2238,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_RX :
+      case COLRES_DEF_RX :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -2042,14 +2258,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_RY :
+      case COLRES_DEF_RY :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -2060,14 +2278,16 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                                    0));
         break;
       }
-      case COLRES_DEFORMATION_RZ :
+      case COLRES_DEF_RZ :
       {
-        BUGMSG (i != 1,
-                FALSE,
-                gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"))
-        BUGMSG (res->col_tab[1] == COLRES_NUM_BARRES,
-                FALSE,
-                gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"))
+        BUGCRIT (i != 1,
+                 FALSE,
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type);)
+        BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
+                 FALSE,
+                 (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                   free (col_type);)
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
@@ -2080,10 +2300,10 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       }
       default :
       {
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("La colonne des résultats %d est inconnue.\n"),
-                         res->col_tab[i])
+        FAILCRIT (FALSE,
+                  (gettext ("La colonne des résultats %d est inconnue.\n"),
+                            res->col_tab[i]);
+                    free (col_type);)
         break;
       }
     }
@@ -2129,11 +2349,11 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
   GList *list_parcours;
   int    indice_combo;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_RES.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_RES.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
   
   indice_combo = gtk_combo_box_get_active (UI_RES.combobox);
   
@@ -2228,9 +2448,10 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
       
       gtk_list_store_append (list_pond, &Iter);
       tmp = _1990_ponderations_description (list_parcours->data);
-      BUGMSG (tmp2 = g_strdup_printf ("%d : %s", i, tmp),
-              ,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (tmp2 = g_strdup_printf ("%d : %s", i, tmp),
+               ,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);)
       free (tmp);
       gtk_list_store_set (list_pond, &Iter, 0, tmp2, -1);
       free (tmp2);
@@ -2278,11 +2499,11 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_RES.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_RES.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
   
   list_parcours = UI_RES.tableaux;
   
@@ -2311,11 +2532,11 @@ EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_RES.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_RES.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
   
   // Pour forcer le combobox cas à être vierge.
   if (gtk_combo_box_get_model (UI_RES.combobox_ponderations) != NULL)
@@ -2367,21 +2588,22 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
 {
   Gtk_EF_Resultats_Tableau *res;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (menuitem, , gettext ("Paramètre %s incorrect.\n"), "menuitem")
-  BUGMSG (UI_RES.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Résultats")
-  BUGMSG (res = malloc (sizeof (Gtk_EF_Resultats_Tableau)),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGPARAMCRIT (menuitem, "%p", menuitem, )
+  BUGCRIT (UI_RES.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Résultats");)
+  BUGCRIT (res = malloc (sizeof (Gtk_EF_Resultats_Tableau)),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   if (strcmp (gtk_menu_item_get_label (menuitem), gettext ("Noeuds")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 5),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 5),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 4;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_NOEUDS_X;
@@ -2390,10 +2612,12 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     res->filtre = FILTRE_AUCUN;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2402,9 +2626,10 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext("Réactions d'appuis (repère global)")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 7;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_REACTION_APPUI_FX;
@@ -2416,10 +2641,12 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     res->filtre = FILTRE_NOEUD_APPUI;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2428,9 +2655,10 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déplacements (repère global)")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 7;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_DEPLACEMENT_UX;
@@ -2442,10 +2670,12 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     res->filtre = FILTRE_AUCUN;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2454,19 +2684,22 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Barres")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 3),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 3),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 2;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
     
     res->filtre = FILTRE_AUCUN;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2475,9 +2708,10 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Efforts dans les barres (repère local)")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"));
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 20;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
@@ -2502,10 +2736,12 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     res->filtre = FILTRE_AUCUN;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2514,37 +2750,40 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déformations des barres (repère local)")) == 0)
   {
-    BUGMSG (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res);)
     res->col_tab[0] = 20;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
-    res->col_tab[3] = COLRES_DEFORMATION_PIXBUF_UX;
-    res->col_tab[4] = COLRES_DEFORMATION_UX;
-    res->col_tab[5] = COLRES_DEFORMATION_DESC_UX;
-    res->col_tab[6] = COLRES_DEFORMATION_PIXBUF_UY;
-    res->col_tab[7] = COLRES_DEFORMATION_UY;
-    res->col_tab[8] = COLRES_DEFORMATION_DESC_UY;
-    res->col_tab[9] = COLRES_DEFORMATION_PIXBUF_UZ;
-    res->col_tab[10] = COLRES_DEFORMATION_UZ;
-    res->col_tab[11] = COLRES_DEFORMATION_DESC_UZ;
-    res->col_tab[12] = COLRES_DEFORMATION_PIXBUF_RX;
-    res->col_tab[13] = COLRES_DEFORMATION_RX;
-    res->col_tab[14] = COLRES_DEFORMATION_DESC_RX;
-    res->col_tab[15] = COLRES_DEFORMATION_PIXBUF_RY;
-    res->col_tab[16] = COLRES_DEFORMATION_RY;
-    res->col_tab[17] = COLRES_DEFORMATION_DESC_RY;
-    res->col_tab[18] = COLRES_DEFORMATION_PIXBUF_RZ;
-    res->col_tab[19] = COLRES_DEFORMATION_RZ;
-    res->col_tab[20] = COLRES_DEFORMATION_DESC_RZ;
+    res->col_tab[3] = COLRES_DEF_PIXBUF_UX;
+    res->col_tab[4] = COLRES_DEF_UX;
+    res->col_tab[5] = COLRES_DEF_DESC_UX;
+    res->col_tab[6] = COLRES_DEF_PIXBUF_UY;
+    res->col_tab[7] = COLRES_DEF_UY;
+    res->col_tab[8] = COLRES_DEF_DESC_UY;
+    res->col_tab[9] = COLRES_DEF_PIXBUF_UZ;
+    res->col_tab[10] = COLRES_DEF_UZ;
+    res->col_tab[11] = COLRES_DEF_DESC_UZ;
+    res->col_tab[12] = COLRES_DEF_PIXBUF_RX;
+    res->col_tab[13] = COLRES_DEF_RX;
+    res->col_tab[14] = COLRES_DEF_DESC_RX;
+    res->col_tab[15] = COLRES_DEF_PIXBUF_RY;
+    res->col_tab[16] = COLRES_DEF_RY;
+    res->col_tab[17] = COLRES_DEF_DESC_RY;
+    res->col_tab[18] = COLRES_DEF_PIXBUF_RZ;
+    res->col_tab[19] = COLRES_DEF_RZ;
+    res->col_tab[20] = COLRES_DEF_DESC_RZ;
     
     res->filtre = FILTRE_AUCUN;
     
-    BUGMSG (res->nom = g_strdup_printf ("%s",
-                                        gtk_menu_item_get_label (menuitem)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (res->nom = g_strdup_printf ("%s",
+                                         gtk_menu_item_get_label (menuitem)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (res->col_tab);
+               free (res);)
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2569,7 +2808,7 @@ EF_gtk_resultats (Projet *p)
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   if (UI_RES.builder != NULL)
   {
@@ -2578,11 +2817,12 @@ EF_gtk_resultats (Projet *p)
   }
   
   UI_RES.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_RES.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_RES.builder,
                                         "/org/2lgc/codegui/ui/EF_resultats.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           ,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Résultats");)
   gtk_builder_connect_signals (UI_RES.builder, p);
   
   UI_RES.window = GTK_WIDGET (gtk_builder_get_object (UI_RES.builder,
@@ -2625,7 +2865,7 @@ EF_gtk_resultats_free (Projet *p)
  *     - p == NULL,
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   while (UI_RES.tableaux != NULL)
   {

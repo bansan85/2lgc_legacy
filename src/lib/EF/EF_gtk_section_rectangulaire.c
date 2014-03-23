@@ -68,14 +68,14 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (largeur, FALSE, gettext ("Paramètre %s incorrect.\n"), "largeur")
-  BUGMSG (hauteur, FALSE, gettext ("Paramètre %s incorrect.\n"), "hauteur")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_SEC_RE.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Rectangulaire")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (largeur, "%p", largeur, FALSE)
+  BUGPARAMCRIT (hauteur, "%p", hauteur, FALSE)
+  BUGPARAMCRIT (nom, "%p", nom, FALSE)
+  BUGCRIT (UI_SEC_RE.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Rectangulaire");)
   
   *largeur = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                 UI_SEC_RE.builder, "EF_section_rectangulaire_buffer_largeur")),
@@ -127,7 +127,10 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
   
   if (ok == FALSE)
+  {
     free (*nom);
+    *nom = NULL;
+  }
   
   return ok;
 }
@@ -150,11 +153,11 @@ EF_gtk_section_rectangulaire_check (GtkWidget *button,
   double largeur, hauteur;
   char  *nom;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_RE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Rectangulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_RE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Rectangulaire");)
   
   if (!EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                       &largeur,
@@ -191,11 +194,11 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
   double largeur, hauteur;
   gchar   *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_RE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Rectangulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_RE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Rectangulaire");)
   
   if (!(EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                        &largeur,
@@ -208,7 +211,8 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
                                         texte,
                                         m_f (largeur, FLOTTANT_UTILISATEUR),
                                         m_f (hauteur, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -234,11 +238,11 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
   double largeur, hauteur;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_RE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Rectangulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_RE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Rectangulaire");)
   
   if (!(EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                        &largeur,
@@ -253,7 +257,8 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
                                         texte,
                                         m_f (largeur, FLOTTANT_UTILISATEUR),
                                         m_f (hauteur, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (texte);)
   
   free (texte);
   
@@ -276,7 +281,7 @@ EF_gtk_section_rectangulaire (Projet  *p,
  *     - interface graphique déjà initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_SEC_RE.builder != NULL)
   {
@@ -287,11 +292,12 @@ EF_gtk_section_rectangulaire (Projet  *p,
   else
   {
     UI_SEC_RE.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_SEC_RE.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_SEC_RE.builder,
                            "/org/2lgc/codegui/ui/EF_sections_rectangulaire.ui",
-                                           NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Section Rectangulaire");)
     gtk_builder_connect_signals (UI_SEC_RE.builder, p);
     UI_SEC_RE.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_RE.builder,
                                            "EF_section_rectangulaire_window"));
@@ -321,9 +327,9 @@ EF_gtk_section_rectangulaire (Projet  *p,
     gtk_window_set_title (GTK_WINDOW (UI_SEC_RE.window),
                           gettext ("Modification d'une section rectangulaire"));
     UI_SEC_RE.section = section;
-    BUGMSG (UI_SEC_RE.section->type == SECTION_RECTANGULAIRE,
-            FALSE,
-            gettext ("La section à modifier n'est pas rectangulaire.\n"))
+    BUGCRIT (UI_SEC_RE.section->type == SECTION_RECTANGULAIRE,
+             FALSE,
+             (gettext ("La section à modifier n'est pas rectangulaire.\n"));)
     data = UI_SEC_RE.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

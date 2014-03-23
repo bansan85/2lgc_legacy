@@ -65,13 +65,13 @@ EF_gtk_section_circulaire_recupere_donnees (Projet *p,
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (diametre, FALSE, gettext ("Paramètre %s incorrect.\n"), "diametre")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_SEC_CI.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Circulaire")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (diametre, "%p", diametre, FALSE)
+  BUGPARAMCRIT (nom, "%p", nom, FALSE)
+  BUGCRIT (UI_SEC_CI.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Circulaire");)
   
   *diametre = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                   UI_SEC_CI.builder, "EF_section_circulaire_buffer_diametre")),
@@ -140,11 +140,11 @@ EF_gtk_section_circulaire_check (GtkWidget *button,
   double diametre;
   char  *nom;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Circulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Circulaire");)
   
   if (!EF_gtk_section_circulaire_recupere_donnees (p, &diametre, &nom))
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -179,11 +179,11 @@ EF_gtk_section_circulaire_ajouter_clicked (GtkButton *button,
   double diametre;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Circulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Circulaire");)
   
   if (!(EF_gtk_section_circulaire_recupere_donnees (p, &diametre, &texte)))
     return;
@@ -217,11 +217,11 @@ EF_gtk_section_circulaire_modifier_clicked (GtkButton *button,
   double diametre;
   gchar *texte;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_CI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Circulaire")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_CI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Circulaire");)
   
   if (!(EF_gtk_section_circulaire_recupere_donnees (p, &diametre, &texte)))
     return;
@@ -255,7 +255,7 @@ EF_gtk_section_circulaire (Projet  *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_SEC_CI.builder != NULL)
   {
@@ -266,11 +266,12 @@ EF_gtk_section_circulaire (Projet  *p,
   else
   {
     UI_SEC_CI.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_SEC_CI.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_SEC_CI.builder,
                               "/org/2lgc/codegui/ui/EF_sections_circulaire.ui",
-                                           NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Section Circulaire");)
     gtk_builder_connect_signals (UI_SEC_CI.builder, p);
     UI_SEC_CI.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_CI.builder,
                                               "EF_section_circulaire_window"));
@@ -300,9 +301,9 @@ EF_gtk_section_circulaire (Projet  *p,
     gtk_window_set_title (GTK_WINDOW (UI_SEC_CI.window),
                           gettext ("Modification d'une section circulaire"));
     UI_SEC_CI.section = section;
-    BUGMSG (UI_SEC_CI.section->type == SECTION_CIRCULAIRE,
-            FALSE,
-            gettext ("La section à modifier n'est pas circulaire.\n"))
+    BUGCRIT (UI_SEC_CI.section->type == SECTION_CIRCULAIRE,
+             FALSE,
+             (gettext ("La section à modifier n'est pas circulaire.\n"));)
     data = UI_SEC_CI.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

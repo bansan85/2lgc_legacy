@@ -129,21 +129,22 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
   gboolean       ok = TRUE;
   GtkTreeIter    iter;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (j, FALSE, gettext ("Paramètre %s incorrect.\n"), "j")
-  BUGMSG (iy, FALSE, gettext ("Paramètre %s incorrect.\n"), "iy")
-  BUGMSG (iz, FALSE, gettext ("Paramètre %s incorrect.\n"), "iz")
-  BUGMSG (vy, FALSE, gettext ("Paramètre %s incorrect.\n"), "vy")
-  BUGMSG (vyp, FALSE, gettext ("Paramètre %s incorrect.\n"), "vyp")
-  BUGMSG (vz, FALSE, gettext ("Paramètre %s incorrect.\n"), "vz")
-  BUGMSG (vzp, FALSE, gettext ("Paramètre %s incorrect.\n"), "vzp")
-  BUGMSG (s, FALSE, gettext ("Paramètre %s incorrect.\n"), "s")
-  BUGMSG (forme, FALSE, gettext ("Paramètre %s incorrect.\n"), "forme")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (UI_SEC_PE.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (j, "%p", j, FALSE)
+  BUGPARAMCRIT (iy, "%p", iy, FALSE)
+  BUGPARAMCRIT (iz, "%p", iz, FALSE)
+  BUGPARAMCRIT (vy, "%p", vy, FALSE)
+  BUGPARAMCRIT (vyp, "%p", vyp, FALSE)
+  BUGPARAMCRIT (vz, "%p", vz, FALSE)
+  BUGPARAMCRIT (vzp, "%p", vzp, FALSE)
+  BUGPARAMCRIT (s, "%p", s, FALSE)
+  BUGPARAMCRIT (forme, "%p", forme, FALSE)
+  BUGPARAMCRIT (nom, "%p", nom, FALSE)
+  BUGPARAMCRIT (description, "%p", description, FALSE)
+  BUGCRIT (UI_SEC_PE.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   *j = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_PE.builder,
                                          "EF_section_personnalisee_buffer_j")),
@@ -297,6 +298,9 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
   {
     free (*nom);
     *nom = NULL;
+    free (*description);
+    *description = NULL;
+    g_list_free_full (*forme, (GDestroyNotify) g_list_free);
   }
   
   return ok;
@@ -326,11 +330,11 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   GdkPixbuf            *pixbuf;
   GtkCssProvider       *cssprovider = gtk_css_provider_new();
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   if (!EF_gtk_section_personnalisee_recupere_donnees (p,
                                                       &j,
@@ -352,6 +356,8 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                UI_SEC_PE.builder, "EF_section_personnalisee_button_add_edit")),
                               TRUE);
+  free (nom);
+  free (description);
   
   if (ok_forme == FALSE)
     gtk_css_provider_load_from_data (cssprovider,
@@ -376,7 +382,9 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   section.data = &data;
   data.forme = forme;
   
-  BUG (pixbuf = EF_gtk_sections_dessin (&section, 32, 32), )
+  BUG (pixbuf = EF_gtk_sections_dessin (&section, 32, 32),
+       ,
+       g_list_free_full (forme, (GDestroyNotify) g_list_free);)
   
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_builder_get_object (
                    UI_SEC_PE.builder, "EF_section_personnalisee_image_forme")),
@@ -384,8 +392,6 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   
   g_object_unref (pixbuf);
   
-  free (nom);
-  free (description);
   g_list_free_full (forme, (GDestroyNotify) g_list_free);
   
   return;
@@ -410,11 +416,11 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
   GList     *forme = NULL;
   gchar     *texte = NULL, *description = NULL;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext("La fenêtre graphique %s n'est pas initialisée.\n"),
-                  "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext("La fenêtre graphique %s n'est pas initialisée.\n"),
+                    "Ajout Section Personnalisee");)
   
   if (!EF_gtk_section_personnalisee_recupere_donnees (p,
                                                       &j,
@@ -429,12 +435,7 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
                                                       &ok_forme,
                                                       &texte,
                                                       &description))
-  {
-    free (texte);
-    free (description);
-    g_list_free_full (forme, (GDestroyNotify) g_list_free);
     return;
-  }
   
   BUG (EF_sections_personnalisee_ajout (p,
                                         texte,
@@ -448,7 +449,10 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
                                         m_f (vzp, FLOTTANT_UTILISATEUR),
                                         m_f (s, FLOTTANT_UTILISATEUR),
                                         forme),
-      )
+      ,
+      free (texte);
+        free (description);
+        g_list_free_full (forme, (GDestroyNotify) g_list_free);)
   
   free (texte);
   free (description);
@@ -478,11 +482,11 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
   GList    *forme;
   gchar    *texte, *description;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   if (!EF_gtk_section_personnalisee_recupere_donnees (p,
                                                       &j,
@@ -512,7 +516,9 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
                                         m_f (vzp, FLOTTANT_UTILISATEUR),
                                         m_f (s, FLOTTANT_UTILISATEUR),
                                         forme),
-      )
+      ,
+      free (texte);
+        free (description);)
   
   free (texte);
   free (description);
@@ -550,13 +556,11 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
   if (!gtk_tree_model_iter_parent (UI_SEC_PE.model, &iter2, iter))
   {
     tmp = gtk_tree_model_get_string_from_iter (UI_SEC_PE.model, iter);
-    BUGMSG (sscanf (tmp, "%d", &nombre) == 1,
-            ,
-            gettext("Erreur impossible.\n"))
+    nombre = atoi (tmp);
     g_free (tmp);
-    BUGMSG (tmp = g_strdup_printf (gettext ("Groupe %d"), nombre + 1),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf (gettext ("Groupe %d"), nombre + 1),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     g_object_set (cell, "text", tmp, NULL);
     g_free (tmp);
   }
@@ -566,12 +570,10 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
     
     tmp = gtk_tree_model_get_string_from_iter (UI_SEC_PE.model, iter);
     tmp2 = strchr (tmp, ':')+1;
-    BUGMSG (sscanf (tmp2, "%d", &nombre) == 1,
-            ,
-            gettext ("Erreur impossible.\n"))
-    BUGMSG (tmp2 = g_strdup_printf (gettext ("Point %d"), nombre + 1),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    nombre = atoi (tmp2);
+    BUGCRIT (tmp2 = g_strdup_printf (gettext ("Point %d"), nombre + 1),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     g_object_set (cell, "text", tmp2, NULL);
     g_free (tmp);
     g_free (tmp2);
@@ -667,11 +669,11 @@ EF_gtk_section_personnalisee_select_change (GtkTreeSelection *treeselection,
 {
   GtkTreeIter iter, iter2;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   if (!gtk_tree_selection_get_selected (treeselection, NULL, &iter))
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -727,11 +729,11 @@ EF_gtk_section_personnalisee_treeview_add (GtkToolButton *widget,
 {
   GtkTreeIter iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   // On ajoute un groupe de points
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -748,9 +750,9 @@ EF_gtk_section_personnalisee_treeview_add (GtkToolButton *widget,
     GtkTreeIter iter3;
     EF_Point   *point;
     
-    BUGMSG (point = malloc (sizeof (EF_Point)),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (point = malloc (sizeof (EF_Point)),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     point->x = m_f (0., FLOTTANT_UTILISATEUR);
     point->y = m_f (0., FLOTTANT_UTILISATEUR);
     point->z = m_f (0., FLOTTANT_UTILISATEUR);
@@ -834,11 +836,11 @@ EF_gtk_section_personnalisee_treeview_remove (GtkToolButton *widget,
   GtkTreeIter iter;
   EF_Point   *point;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
      gtk_builder_get_object (UI_SEC_PE.builder, "EF_section_treeview_select")),
@@ -953,11 +955,11 @@ EF_gtk_section_personnalisee_treeview_key_press (GtkTreeView *treeview,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_SEC_PE.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -997,11 +999,11 @@ EF_gtk_section_personnalisee_edit_x (GtkCellRendererText *cell,
   double      conversion;
   EF_Point   *point;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   gtk_tree_model_get_iter_from_string (UI_SEC_PE.model, &iter, path_string);
   gtk_tree_model_get (UI_SEC_PE.model, &iter, 0, &point, -1);
@@ -1041,11 +1043,11 @@ EF_gtk_section_personnalisee_edit_y (GtkCellRendererText *cell,
   double      conversion;
   EF_Point   *point;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC_PE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Ajout Section Personnalisee")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC_PE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Section Personnalisee");)
   
   gtk_tree_model_get_iter_from_string (UI_SEC_PE.model, &iter, path_string);
   gtk_tree_model_get (UI_SEC_PE.model, &iter, 0, &point, -1);
@@ -1080,7 +1082,7 @@ EF_gtk_section_personnalisee (Projet  *p,
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_SEC_PE.builder != NULL)
   {
@@ -1091,11 +1093,12 @@ EF_gtk_section_personnalisee (Projet  *p,
   else
   {
     UI_SEC_PE.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_SEC_PE.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_SEC_PE.builder,
                            "/org/2lgc/codegui/ui/EF_sections_personnalisee.ui",
-                                           NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Section Personnalisee");)
     gtk_builder_connect_signals (UI_SEC_PE.builder, p);
     UI_SEC_PE.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_PE.builder,
                                            "EF_section_personnalisee_window"));
@@ -1129,9 +1132,9 @@ EF_gtk_section_personnalisee (Projet  *p,
     gtk_window_set_title (GTK_WINDOW (UI_SEC_PE.window),
                           gettext ("Modification d'une section personnalisée"));
     UI_SEC_PE.section = section;
-    BUGMSG (UI_SEC_PE.section->type == SECTION_PERSONNALISEE,
-            FALSE,
-            gettext ("La section à modifier n'est pas personnalisée.\n"))
+    BUGCRIT (UI_SEC_PE.section->type == SECTION_PERSONNALISEE,
+             FALSE,
+             (gettext ("La section à modifier n'est pas personnalisée.\n"));)
     data = UI_SEC_PE.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
@@ -1204,9 +1207,9 @@ EF_gtk_section_personnalisee (Projet  *p,
         gtk_tree_store_append (GTK_TREE_STORE (UI_SEC_PE.model),
                                &iter_last,
                                &iter);
-        BUGMSG (point_bis = malloc (sizeof (EF_Point)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (point_bis = malloc (sizeof (EF_Point)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));)
         memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
                             &iter_last,
@@ -1225,9 +1228,9 @@ EF_gtk_section_personnalisee (Projet  *p,
         // On forme le dernier point à être le même que le premier.
         if (list_parcours2 != list_parcours->data)
         {
-          BUGMSG (point_bis = malloc (sizeof (EF_Point)),
-                  FALSE,
-                  gettext ("Erreur d'allocation mémoire.\n"))
+          BUGCRIT (point_bis = malloc (sizeof (EF_Point)),
+                   FALSE,
+                   (gettext ("Erreur d'allocation mémoire.\n"));)
           memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         }
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
