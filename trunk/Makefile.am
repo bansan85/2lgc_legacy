@@ -112,5 +112,28 @@ endif
 endif
 	rm -Rf codegui
 
-cppcheck :
-	$(MAKE) cppcheck -C src/lib &> cppcheck.log
+checkcode :
+	$(MAKE) clean
+	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
+	$(MAKE) -j9 &> l_gcc_sans_gtk.log
+	
+	$(MAKE) clean
+	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
+	$(MAKE) -j9 &> l_gcc_avec_gtk.log
+	
+	$(MAKE) clean
+	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
+	$(MAKE) -j9 CC=clang CXX=clang++ &> l_clang.log
+	
+	$(MAKE) clean
+	scan-build make -j9 &> l_clang_scan.log
+	
+	$(MAKE) clean
+	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
+	../cov-analysis-*/bin/cov-build --dir cov-int make -j9
+	tar czvf cov-2LGC.tgz cov-int
+	
+	$(MAKE) -C src/lib cppcheck

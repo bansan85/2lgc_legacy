@@ -1353,7 +1353,6 @@ EF_calculs_resoud_charge (Projet *p,
                        cholmod_free_sparse (&(s_eff_glo_f), p->calculs.c);)
             cholmod_free_sparse (&(s_eff_glo_f), p->calculs.c);
             ai2 = (int *) t_eff_glo_f->i;
-            aj2 = (int *) t_eff_glo_f->j;
             ax2 = (double *) t_eff_glo_f->x;
             
       //   Ajout des moments et les efforts dans le vecteur des forces aux
