@@ -67,11 +67,11 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
  *  
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_MATX.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -101,7 +101,9 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               FALSE,
                                               FALSE) == FALSE)
-      BUG (EF_materiaux_supprime (materiau, p), FALSE)
+      BUG (EF_materiaux_supprime (materiau, p),
+           FALSE,
+           g_list_free (liste_materiaux);)
     
     g_list_free (liste_materiaux);
     
@@ -134,11 +136,11 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
   GtkTreePath  *path;
   EF_Materiau  *materiau;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   model = GTK_TREE_MODEL (UI_MATX.materiaux);
   path = gtk_tree_path_new_from_string (path_string);
@@ -190,10 +192,9 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
     }
     default :
     {
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type de matériau %d n'existe pas.\n"),
-                       materiau->type)
+      FAILINFO ( ,
+                (gettext ("Le type de matériau %d n'existe pas.\n"),
+                          materiau->type);)
       break;
     }
   }
@@ -218,11 +219,11 @@ EF_gtk_materiaux_select_changed (GtkTreeSelection *treeselection,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer
   // ou d'en éditer une.
@@ -329,11 +330,11 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
   GList        *liste_materiaux = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer
   // ou d'en éditer une.
@@ -341,7 +342,7 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
      gtk_builder_get_object (UI_MATX.builder, "EF_materiaux_treeview_select")),
                                         &model,
                                         &Iter))
-    BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+    FAILINFO ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
   
   gtk_tree_model_get (model, &Iter, 0, &materiau, -1);
   
@@ -358,7 +359,8 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_charges_dep,
                                              FALSE,
                                              FALSE),
-      )
+      ,
+      g_list_free (liste_materiaux);)
   g_list_free (liste_materiaux);
   
   if ((liste_noeuds_dep != NULL) ||
@@ -367,17 +369,21 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
   {
     char *desc;
     
-    desc = common_text_dependances (liste_noeuds_dep,
-                                    liste_barres_dep,
-                                    liste_charges_dep,
-                                    p);
+    BUG (desc = common_text_dependances (liste_noeuds_dep,
+                                         liste_barres_dep,
+                                         liste_charges_dep,
+                                         p),
+         ,
+         g_list_free (liste_noeuds_dep);
+           g_list_free (liste_barres_dep);
+           g_list_free (liste_charges_dep);)
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                        UI_MATX.builder, "EF_materiaux_supprimer_menu_barres")),
                              desc);
     free (desc);
   }
   else
-    BUGMSG (NULL, , gettext ("L'élément ne possède aucune dépendance.\n"))
+    FAILINFO ( , (gettext ("L'élément ne possède aucune dépendance.\n"));)
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -406,11 +412,11 @@ EF_gtk_materiaux_supprimer_menu_barres (GtkButton *button,
   EF_Materiau  *materiau;
   GList        *liste_materiaux = NULL, *liste_barres_dep;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
                                        gtk_builder_get_object (UI_MATX.builder,
@@ -434,9 +440,12 @@ EF_gtk_materiaux_supprimer_menu_barres (GtkButton *button,
                                              NULL,
                                              FALSE,
                                              FALSE),
-      )
+      ,
+      g_list_free (liste_materiaux);)
   g_list_free (liste_materiaux);
-  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep), )
+  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
+       ,
+       g_list_free (liste_barres_dep);)
   g_list_free (liste_barres_dep);
   BUG (EF_materiaux_supprime (materiau, p), )
   
@@ -463,11 +472,11 @@ EF_gtk_materiaux_supprimer_direct (GtkButton *button,
   GtkTreeModel *model;
   EF_Materiau  *materiau;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériau")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériau");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
                                        gtk_builder_get_object (UI_MATX.builder,
@@ -578,8 +587,11 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
     case MATERIAU_BETON :
     case MATERIAU_ACIER :
     {
-      char *c = EF_materiaux_get_description (materiau);
+      char *c;
       
+      BUG (c = EF_materiaux_get_description (materiau),
+           ,
+           g_object_set (cell, "markup", gettext ("Inconnu"), NULL);)
       g_object_set (cell, "markup", c, NULL);
       free (c);
       
@@ -597,6 +609,120 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
 
 
 void
+EF_gtk_materiaux_edit_clicked (GtkWidget *widget,
+                               Projet    *p)
+/**
+ * \brief Edite les matériaux sélectionnés.
+ * \param widget : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée.
+ */
+{
+  GtkTreeIter   iter;
+  GtkTreeModel *model;
+  GList        *list, *list_parcours;
+  
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_MATX.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériaux");)
+  
+  // On récupère la liste des matériaux à éditer.
+  list = gtk_tree_selection_get_selected_rows (GTK_TREE_SELECTION (
+                            gtk_builder_get_object (UI_MATX.builder,
+                                              "EF_materiaux_treeview_select")),
+                                               &model);
+  list_parcours = g_list_first (list);
+  for ( ; list_parcours != NULL; list_parcours = g_list_next (list_parcours))
+  {
+    if (gtk_tree_model_get_iter (model,
+                                 &iter,
+                                 (GtkTreePath *) list_parcours->data))
+    {
+  // Et on les édite les unes après les autres.
+      EF_Materiau *materiau;
+      
+      gtk_tree_model_get (model, &iter, 0, &materiau, -1);
+      
+      switch (materiau->type)
+      {
+        case MATERIAU_BETON :
+        {
+          BUG (_1992_1_1_gtk_materiaux (p, materiau),
+               ,
+               g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                 g_list_free (list);)
+          break;
+        }
+        case MATERIAU_ACIER :
+        {
+          BUG (_1993_1_1_gtk_materiaux (p, materiau),
+               ,
+               g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                 g_list_free (list);)
+          break;
+        }
+        default :
+        {
+          FAILINFO ( ,
+                    (gettext ("Le type de matériau %d n'existe pas.\n"),
+                              materiau->type);
+                      g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                      g_list_free (list);)
+          break;
+        }
+      }
+    }
+  }
+  g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+  g_list_free (list);
+  
+  return;
+}
+
+
+gboolean
+EF_gtk_materiaux_double_clicked (GtkWidget *widget,
+                                        GdkEvent  *event,
+                                        Projet    *p)
+/**
+ * \brief Lance la fenêtre d'édition du matériau sélectionné en cas de
+ *        double-clique dans le tree-view.
+ * \param widget : composant à l'origine de l'évènement,
+ * \param event : Information sur l'évènement,
+ * \param p : la variable projet.
+ * \return
+ *   Succès : TRUE s'il y a édition via un double-clique, FALSE sinon.\n
+ *   Echec : FALSE :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
+ */
+{
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_MATX.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériaux");)
+  
+  if ((event->type == GDK_2BUTTON_PRESS) &&
+      (gtk_widget_get_sensitive (GTK_WIDGET (gtk_builder_get_object (
+               UI_MATX.builder, "EF_materiaux_boutton_modifier")))))
+  {
+    EF_gtk_materiaux_edit_clicked (widget, p);
+    return TRUE;
+  }
+  else
+    return common_gtk_treeview_button_press_unselect (GTK_TREE_VIEW (widget),
+                                                      (GdkEventButton*) event,
+                                                      p);
+}
+
+
+void
 EF_gtk_materiaux (Projet *p)
 /**
  * \brief Création de la fenêtre permettant d'afficher les matériaux sous forme
@@ -610,7 +736,7 @@ EF_gtk_materiaux (Projet *p)
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   if (UI_MATX.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_MATX.window));
@@ -618,11 +744,12 @@ EF_gtk_materiaux (Projet *p)
   }
   
   UI_MATX.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_MATX.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_MATX.builder,
                                         "/org/2lgc/codegui/ui/EF_materiaux.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           ,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Matériau");)
   gtk_builder_connect_signals (UI_MATX.builder, p);
   
   UI_MATX.window = GTK_WIDGET (gtk_builder_get_object (UI_MATX.builder,
@@ -671,109 +798,6 @@ EF_gtk_materiaux (Projet *p)
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_MATX.window),
                                 GTK_WINDOW (UI_GTK.window));
-}
-
-
-void
-EF_gtk_materiaux_edit_clicked (GtkWidget *widget,
-                               Projet    *p)
-/**
- * \brief Edite les matériaux sélectionnés.
- * \param widget : composant à l'origine de l'évènement,
- * \param p : la variable projet.
- * \return Rien.\n
- * Echec :
- *   - p == NULL,
- *   - interface graphique non initialisée.
- */
-{
-  GtkTreeIter   iter;
-  GtkTreeModel *model;
-  GList        *list, *list_parcours;
-  
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Matériaux")
-  
-  // On récupère la liste des matériaux à éditer.
-  list = gtk_tree_selection_get_selected_rows (GTK_TREE_SELECTION (
-                            gtk_builder_get_object (UI_MATX.builder,
-                                              "EF_materiaux_treeview_select")),
-                                               &model);
-  list_parcours = g_list_first (list);
-  for( ; list_parcours != NULL; list_parcours = g_list_next (list_parcours))
-  {
-    if (gtk_tree_model_get_iter (model,
-                                 &iter,
-                                 (GtkTreePath *) list_parcours->data))
-    {
-  // Et on les édite les unes après les autres.
-      EF_Materiau *materiau;
-      
-      gtk_tree_model_get (model, &iter, 0, &materiau, -1);
-      
-      switch (materiau->type)
-      {
-        case MATERIAU_BETON :
-        {
-          BUG (_1992_1_1_gtk_materiaux (p, materiau), )
-          break;
-        }
-        case MATERIAU_ACIER :
-        {
-          BUG (_1993_1_1_gtk_materiaux (p, materiau), )
-          break;
-        }
-        default :
-        {
-          BUGMSG (NULL, , gettext ("Matériau %d inconnu.\n"), materiau->type)
-          break;
-        }
-      }
-    }
-  }
-  g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
-  g_list_free (list);
-  
-  return;
-}
-
-
-gboolean
-EF_gtk_materiaux_double_clicked (GtkWidget *widget,
-                                        GdkEvent  *event,
-                                        Projet    *p)
-/**
- * \brief Lance la fenêtre d'édition du matériau sélectionné en cas de
- *        double-clique dans le tree-view.
- * \param widget : composant à l'origine de l'évènement,
- * \param event : Information sur l'évènement,
- * \param p : la variable projet.
- * \return
- *   Succès : TRUE s'il y a édition via un double-clique, FALSE sinon.\n
- *   Echec : FALSE :
- *     - p == NULL,
- *     - interface graphique non initialisée.
- */
-{
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_MATX.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
-  
-  if ((event->type == GDK_2BUTTON_PRESS) &&
-      (gtk_widget_get_sensitive (GTK_WIDGET (gtk_builder_get_object (
-               UI_MATX.builder, "EF_materiaux_boutton_modifier")))))
-  {
-    EF_gtk_materiaux_edit_clicked (widget, p);
-    return TRUE;
-  }
-  else
-    return common_gtk_treeview_button_press_unselect (GTK_TREE_VIEW (widget),
-                                                      (GdkEventButton*) event,
-                                                      p);
 }
 
 

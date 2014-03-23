@@ -55,7 +55,7 @@ EF_gtk_rapport (Projet *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   if (UI_RAP.builder != NULL)
   {
@@ -64,13 +64,13 @@ EF_gtk_rapport (Projet *p,
   }
   else
   {
-    
     UI_RAP.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_RAP.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_RAP.builder,
                                           "/org/2lgc/codegui/ui/EF_rapport.ui",
-                                           NULL) != 0,
-            ,
-            gettext ("Builder Failed\n"))
+                                            NULL) != 0,
+             ,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Rapport");)
     gtk_builder_connect_signals (UI_RAP.builder, p);
     
     UI_RAP.window = GTK_WIDGET (gtk_builder_get_object (UI_RAP.builder,
@@ -88,21 +88,26 @@ EF_gtk_rapport (Projet *p,
     GdkPixbuf    *pixbuf;
     
     if (analyse->resultat == 0)
-      pixbuf = gtk_widget_render_icon_pixbuf (UI_RAP.window,
-                                              GTK_STOCK_APPLY,
-                                              GTK_ICON_SIZE_MENU);
+      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                         "gtk-apply",
+                                         16,
+                                         0,
+                                         NULL);
     else if (analyse->resultat == 1)
-      pixbuf = gtk_widget_render_icon_pixbuf (UI_RAP.window,
-                                              GTK_STOCK_DIALOG_WARNING,
-                                              GTK_ICON_SIZE_MENU);
+      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                         "gtk-dialog-warning",
+                                         16,
+                                         0,
+                                         NULL);
     else if (analyse->resultat == 2)
-      pixbuf = gtk_widget_render_icon_pixbuf (UI_RAP.window,
-                                              GTK_STOCK_DIALOG_ERROR,
-                                              GTK_ICON_SIZE_MENU);
+      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                         "gtk-dialog-error",
+                                         16,
+                                         0,
+                                         NULL);
     else
-      BUGMSG (NULL,
-              ,
-              gettext ("Le résultat d'un rapport doit être compris entre 0 et 2.\n"))
+      FAILCRIT (,
+                (gettext ("Le résultat d'un rapport doit être compris entre 0 et 2.\n"));)
     
     gtk_list_store_append (UI_RAP.liste, &Iter);
     gtk_list_store_set (UI_RAP.liste,

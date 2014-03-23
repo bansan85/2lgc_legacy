@@ -60,11 +60,11 @@ EF_gtk_noeud_ajouter (GtkButton *button,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
   
   // On ajoute un noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
@@ -111,11 +111,11 @@ EF_gtk_noeud_supprimer (GtkButton *button,
   EF_Noeud     *noeud;
   GList        *list = NULL;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
   
   // On supprimer un noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
@@ -125,7 +125,7 @@ EF_gtk_noeud_supprimer (GtkButton *button,
                                    "EF_noeuds_treeview_noeuds_libres_select")),
                                           &model,
                                           &Iter))
-      BUGMSG (NULL, , gettext ("Aucun noeud n'est sélectionné.\n"))
+      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n"));)
   }
   // On supprimer un noeud intermédiaire
   else
@@ -135,14 +135,16 @@ EF_gtk_noeud_supprimer (GtkButton *button,
                            "EF_noeuds_treeview_noeuds_intermediaires_select")),
                                           &model,
                                           &Iter))
-      BUGMSG (NULL, , gettext ("Aucun noeud n'est sélectionné.\n"))
+      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n"));)
   }
   
   gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
   
   list = g_list_append (list, noeud);
   
-  BUG (_1992_1_1_barres_supprime_liste (p, list, NULL), )
+  BUG (_1992_1_1_barres_supprime_liste (p, list, NULL),
+       ,
+       g_list_free (list);)
   
   g_list_free (list);
   
@@ -168,11 +170,11 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_NOE.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -203,8 +205,12 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
                                               FALSE,
                                               FALSE) == FALSE)
     {
-      BUG (_1992_1_1_barres_supprime_liste (p, liste_noeuds, NULL), FALSE)
-      BUG (m3d_rafraichit (p), FALSE)
+      BUG (_1992_1_1_barres_supprime_liste (p, liste_noeuds, NULL),
+           FALSE,
+           g_list_free (liste_noeuds);)
+      BUG (m3d_rafraichit (p),
+           FALSE,
+           g_list_free (liste_noeuds);)
     }
     
     g_list_free (liste_noeuds);
@@ -235,11 +241,11 @@ EF_noeuds_set_supprimer_visible (gboolean select,
   GtkTreeIter   Iter;
   EF_Noeud     *noeud;
     
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeud")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeud");)
   
   // Noeud libre
   if (((gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0) &&
@@ -360,11 +366,11 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
   GList        *liste_noeuds = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeud")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeud");)
   
   // Noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
@@ -375,7 +381,7 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                    "EF_noeuds_treeview_noeuds_libres_select")),
                                           &model,
                                           &Iter))
-      BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
     else
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
   }
@@ -387,7 +393,7 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                            "EF_noeuds_treeview_noeuds_intermediaires_select")),
                                           &model,
                                           &Iter))
-      BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
     else
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
   }
@@ -405,7 +411,8 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_charges_dep,
                                              FALSE,
                                              FALSE),
-      )
+      ,
+      g_list_free (liste_noeuds);)
   g_list_free (liste_noeuds);
   
   // Noeud utilisé
@@ -415,16 +422,21 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
   {
     char *desc;
     
-    desc = common_text_dependances (liste_noeuds_dep,
-                                    liste_barres_dep,
-                                    liste_charges_dep, p);
+    BUG (desc = common_text_dependances (liste_noeuds_dep,
+                                         liste_barres_dep,
+                                         liste_charges_dep,
+                                         p),
+         ,
+         g_list_free (liste_noeuds_dep);
+           g_list_free (liste_barres_dep);
+           g_list_free (liste_charges_dep);)
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                            UI_NOE.builder, "EF_noeuds_supprimer_menu_barres")),
                              desc);
     free (desc);
   }
   else
-    BUGMSG (NULL, , gettext ("L'élément ne possède aucune dépendance.\n"))
+    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n"));)
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -450,8 +462,11 @@ EF_noeuds_treeview_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void EF_gtk_noeuds_notebook_change(GtkNotebook *notebook, GtkWidget *page, guint page_num,
-  Projet *p)
+void
+EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
+                               GtkWidget   *page,
+                               guint        page_num,
+                               Projet      *p)
 /* \brief Le changement de la page en cours nécessite l'actualisation de la
  *        disponibilité du bouton supprimer.
  * \param notebook : le composant notebook,
@@ -491,13 +506,13 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
   double        conversion;
   gint          column;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
-  BUGMSG (p->modele.noeuds, , gettext ("Aucun noeud n'est existant.\n"))
-  BUGMSG (new_text, , gettext ("Paramètre %s incorrect.\n"), "new_text")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+  BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   model = GTK_TREE_MODEL (UI_NOE.tree_store_libre);
@@ -554,9 +569,8 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
       }
       default :
       {
-        BUGMSG (NULL,
-                ,
-                gettext ("La colonne d'où provient l'édition est incorrecte.\n"))
+        FAILCRIT ( ,
+                  (gettext ("La colonne d'où provient l'édition est incorrecte.\n"));)
         break;
       }
     }
@@ -590,13 +604,13 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
   double        conversion;
   gint          column;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
-  BUGMSG (p->modele.noeuds, , gettext ("Aucun noeud n'est existant.\n"))
-  BUGMSG (new_text, , gettext ("Paramètre %s incorrect.\n"), "new_text")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+  BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   model = GTK_TREE_MODEL (UI_NOE.tree_store_barre);
@@ -619,9 +633,8 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
                                        m_f (conversion, FLOTTANT_UTILISATEUR)),
           )
     else
-      BUGMSG (NULL,
-              ,
-              gettext ("Le type du noeud ou la colonne d'édition est incorrect.\n"))
+      FAILCRIT ( ,
+                (gettext ("Le type du noeud ou la colonne d'édition est incorrect.\n"));)
   }
   
   return;
@@ -655,18 +668,17 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   unsigned int  conversion;
   EF_Noeud     *noeud;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
-  BUGMSG (p->modele.noeuds,
-          ,
-          gettext ("Aucun noeud n'est existant.\n"))
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (new_text, , gettext ("Paramètre %s incorrect.\n"), "new_text")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+  BUGPARAMCRIT (new_text, "%p", new_text, )
+  
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_libre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -677,14 +689,20 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   
   // On vérifie si le texte contient bien un nombre flottant
   if (strcmp (new_text, "") == 0)
-    BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL), )
+    BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL),
+         ,
+         free (fake);)
   else if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
   {
     EF_Noeud *noeud2;
     
-    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, TRUE), )
+    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, TRUE),
+         ,
+         free (fake);)
     
-    BUG (EF_noeuds_change_noeud_relatif (p, noeud, noeud2), )
+    BUG (EF_noeuds_change_noeud_relatif (p, noeud, noeud2),
+         ,
+         free (fake);)
   }
   
   free (fake);
@@ -717,13 +735,13 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   GtkTreeIter   iter;
   EF_Noeud     *noeud;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (new_text, , gettext ("Paramètre %s incorrect.\n"), "new_text")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
-  BUGMSG (p->modele.noeuds, , gettext ("Aucun noeud n'est existant.\n"))
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGPARAMCRIT (new_text, "%p", new_text, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
   
   if (p->modele.appuis == NULL)
     return;
@@ -741,7 +759,7 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   
   // Si on souhaite que l'appui ne soit plus appuyé.
   if (strcmp (new_text, gettext ("Aucun")) == 0)
-    BUG(EF_noeuds_change_appui (p, noeud, NULL), )
+    BUG (EF_noeuds_change_appui (p, noeud, NULL), )
   else
   {
     EF_Appui *appui;
@@ -782,16 +800,16 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
   GtkTreePath  *path;
   GtkTreeIter   iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_NOE.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Noeuds")
-  BUGMSG (p->modele.noeuds, , gettext ("Aucun noeud n'est existant.\n"))
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (new_text, , gettext ("Paramètre %s incorrect.\n"), "new_text")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_NOE.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Noeuds");)
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+  BUGPARAMCRIT (new_text, "%p", new_text, )
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_barre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -808,29 +826,33 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     
     // On modifie l'action
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
-    BUG(barre = _1992_1_1_barres_cherche_numero (p, conversion, TRUE), )
+    BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, TRUE),
+         ,
+         free (fake);)
     
     if (noeud->type == NOEUD_BARRE)
     {
       EF_Noeud_Barre *info = (EF_Noeud_Barre *) noeud->data;
       GList          *liste;
       
-      BUG (EF_calculs_free (p), )
+      BUG (EF_calculs_free (p), , free (fake);)
       
       info->barre->discretisation_element--;
       info->barre->nds_inter = g_list_remove (info->barre->nds_inter, noeud);
-      BUGMSG (info->barre->info_EF = realloc (
+      BUGCRIT (info->barre->info_EF = realloc (
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1)),
               ,
-              gettext ("Erreur d'allocation mémoire.\n"))
+              (gettext ("Erreur d'allocation mémoire.\n"));
+                free (fake);)
       info->barre = barre;
       info->barre->discretisation_element++;
-      BUGMSG (info->barre->info_EF = realloc(
+      BUGCRIT (info->barre->info_EF = realloc(
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1)),
               ,
-              gettext ("Erreur d'allocation mémoire.\n"))
+              (gettext ("Erreur d'allocation mémoire.\n"));
+                free (fake);)
       memset (barre->info_EF,
               0,
               sizeof (Barre_Info_EF) *
@@ -847,12 +869,20 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
                                                      noeud);
     }
     else
-      BUGMSG (NULL, , gettext ("Le noeud doit être de type intermédiaire.\n"))
+      FAILCRIT ( ,
+                (gettext ("Le noeud doit être de type intermédiaire.\n"));
+                  free (fake);)
     
     liste_noeuds = g_list_append (liste_noeuds, noeud);
     
-    BUG (m3d_actualise_graphique (p, liste_noeuds, NULL), )
-    BUG (m3d_rafraichit (p), )
+    BUG (m3d_actualise_graphique (p, liste_noeuds, NULL),
+         ,
+         free (fake);
+           g_list_free (liste_noeuds);)
+    BUG (m3d_rafraichit (p),
+         ,
+         free (fake);
+           g_list_free (liste_noeuds);)
     
     g_list_free (liste_noeuds);
   }
@@ -886,9 +916,9 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
   char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
-  BUGMSG (tmp = g_strdup_printf ("%d", noeud->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -1060,9 +1090,9 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   data = noeud->data;
   if (data->relatif != NULL)
-    BUGMSG (tmp = g_strdup_printf ("%d", data->relatif->numero),
-            ,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf ("%d", data->relatif->numero),
+             ,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp == NULL ? gettext ("Aucun") : tmp, NULL);
   
@@ -1095,9 +1125,9 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   data = noeud->data;
-  BUGMSG (tmp = g_strdup_printf ("%d", data->barre->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (tmp = g_strdup_printf ("%d", data->barre->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -1145,7 +1175,9 @@ EF_gtk_noeud (Projet *p)
  *     - interface graphique impossible à générer.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  GList *list_parcours = p->modele.noeuds;
+  
+  BUGPARAM (p, "%p", p, )
   
   if (UI_NOE.builder != NULL)
   {
@@ -1154,11 +1186,12 @@ EF_gtk_noeud (Projet *p)
   }
   
   UI_NOE.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_NOE.builder,
-                                         "/org/2lgc/codegui/ui/EF_noeud.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+  BUGCRIT (gtk_builder_add_from_resource (UI_NOE.builder,
+                                          "/org/2lgc/codegui/ui/EF_noeud.ui",
+                                          NULL) != 0,
+           ,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Noeuds");)
   gtk_builder_connect_signals (UI_NOE.builder, p);
   
   UI_NOE.window = GTK_WIDGET (gtk_builder_get_object (UI_NOE.builder,
@@ -1316,35 +1349,29 @@ EF_gtk_noeud (Projet *p)
                 UI_APP.liste_appuis,
                 NULL);
   
-  if (p->modele.noeuds != NULL)
+  while (list_parcours != NULL)
   {
-    GList *list_parcours = p->modele.noeuds;
+    EF_Noeud *noeud = (EF_Noeud *) list_parcours->data;
     
-    do
+    if (noeud->type == NOEUD_LIBRE)
     {
-      EF_Noeud *noeud = (EF_Noeud *) list_parcours->data;
-      
-      if (noeud->type == NOEUD_LIBRE)
-      {
-        gtk_tree_store_append (UI_NOE.tree_store_libre, &noeud->Iter, NULL);
-        gtk_tree_store_set (UI_NOE.tree_store_libre,
-                            &noeud->Iter,
-                            0, noeud,
-                            -1);
-      }
-      else if (noeud->type == NOEUD_BARRE)
-      {
-        gtk_tree_store_append (UI_NOE.tree_store_barre, &noeud->Iter, NULL);
-        gtk_tree_store_set (UI_NOE.tree_store_barre,
-                            &noeud->Iter,
-                            0, noeud,
-                            -1);
-        
-      }
-      
-      list_parcours = g_list_next (list_parcours);
+      gtk_tree_store_append (UI_NOE.tree_store_libre, &noeud->Iter, NULL);
+      gtk_tree_store_set (UI_NOE.tree_store_libre,
+                          &noeud->Iter,
+                          0, noeud,
+                          -1);
     }
-    while (list_parcours != NULL);
+    else if (noeud->type == NOEUD_BARRE)
+    {
+      gtk_tree_store_append (UI_NOE.tree_store_barre, &noeud->Iter, NULL);
+      gtk_tree_store_set (UI_NOE.tree_store_barre,
+                          &noeud->Iter,
+                          0, noeud,
+                          -1);
+      
+    }
+    
+    list_parcours = g_list_next (list_parcours);
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_NOE.window),
