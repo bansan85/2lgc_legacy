@@ -11,7 +11,7 @@ cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
 find files/ui -name "*.ui" -exec intltool-extract --quiet --type=gettext/glade {} \;
-sed -i 's/N_(/gettext(/g' files/ui/*.ui.h
+sed -i 's/N_(/gettext (/g' files/ui/*.ui.h
 find . -name "*.c" -o -name "*.cc" -o -name "*.h" > po/POTFILES.in
 
 autoheader
