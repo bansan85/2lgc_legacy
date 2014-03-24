@@ -68,11 +68,11 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
  *  
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Sections")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_SEC.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Sections");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -103,7 +103,9 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               FALSE,
                                               FALSE) == FALSE)
-      BUG (EF_sections_supprime (section, TRUE, p), FALSE)
+      BUG (EF_sections_supprime (section, TRUE, p),
+           FALSE,
+           g_list_free (liste_sections);)
     
     g_list_free (liste_sections);
     
@@ -130,11 +132,11 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer
   // ou d'en éditer une.
@@ -240,11 +242,11 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   GList        *liste_sections = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   // Si aucune section n'est sélectionnée
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -268,7 +270,8 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_charges_dep,
                                              FALSE,
                                              FALSE),
-      )
+      ,
+      g_list_free (liste_sections);)
   g_list_free (liste_sections);
   
   if ((liste_noeuds_dep != NULL) ||
@@ -277,17 +280,21 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   {
     char *desc;
     
-    desc = common_text_dependances (liste_noeuds_dep,
-                                    liste_barres_dep,
-                                    liste_charges_dep,
-                                    p);
+    BUG (desc = common_text_dependances (liste_noeuds_dep,
+                                         liste_barres_dep,
+                                         liste_charges_dep,
+                                         p),
+         ,
+         g_list_free (liste_noeuds_dep);
+           g_list_free (liste_barres_dep);
+           g_list_free (liste_charges_dep);)
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_supprimer_menu_barres")),
                              desc);
     free (desc);
   }
   else
-    BUGMSG (NULL, , gettext ("L'élément ne possède aucune dépendance.\n"))
+    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n"));)
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -319,11 +326,11 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   GtkTreePath  *path;
   Section      *section;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   model = GTK_TREE_MODEL (UI_SEC.sections);
   path = gtk_tree_path_new_from_string (path_string);
@@ -397,7 +404,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     }
     default :
     {
-      BUGMSG (0, , gettext ("Type de section %d inconnu.\n"), section->type)
+      FAILCRIT ( , (gettext ("Type de section %d inconnu.\n"), section->type);)
       break;
     }
   }
@@ -423,11 +430,11 @@ EF_gtk_sections_supprimer_direct (GtkButton *button,
   GtkTreeModel *model;
   Section      *section;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
@@ -461,11 +468,11 @@ EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
   GtkTreeModel *model;
   Section      *section;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
@@ -510,14 +517,18 @@ EF_gtk_sections_dessin (Section *section,
   double           convert;
   cairo_path_t    *save_path;
   
-  BUGMSG (section, NULL, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (width, NULL, gettext ("La largeur du dessin ne peut être nulle.\n"))
-  BUGMSG (height, NULL, gettext ("La hauteur du dessin ne peut être nulle.\n"))
+  BUGPARAMCRIT (section, "%p", section, NULL)
+  INFO (width,
+        NULL,
+        (gettext ("La largeur du dessin ne peut être nulle.\n"));)
+  INFO (height,
+        NULL,
+        (gettext ("La hauteur du dessin ne peut être nulle.\n"));)
   
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-  BUGMSG (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS,
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS,
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   cr = cairo_create (surface);
   
   a = (double) width / height;
@@ -584,9 +595,6 @@ EF_gtk_sections_dessin (Section *section,
       cairo_stroke (cr);
       
       cairo_path_destroy (save_path);
-      cairo_destroy (cr);
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-      cairo_surface_destroy (surface);
       
       break;
     }
@@ -617,10 +625,6 @@ EF_gtk_sections_dessin (Section *section,
         cairo_rectangle (cr, x_g + 1., 1., x_d - x_g - 1., height - 1.);
       }
       cairo_stroke (cr);
-      
-      cairo_destroy (cr);
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-      cairo_surface_destroy (surface);
       
       break;
     }
@@ -670,10 +674,6 @@ EF_gtk_sections_dessin (Section *section,
                    2. * M_PI);
       }
       cairo_stroke (cr);
-      
-      cairo_destroy (cr);
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-      cairo_surface_destroy (surface);
       
       break;
     }
@@ -768,20 +768,21 @@ EF_gtk_sections_dessin (Section *section,
         cairo_path_destroy (save_path);
         list_parcours = g_list_next (list_parcours);
       }
-      cairo_destroy (cr);
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-      cairo_surface_destroy (surface);
       
       break;
     }
     default :
     {
-      BUGMSG (0,
-              NULL,
-              gettext ("Type de section %d inconnu.\n"), section->type)
+      FAILCRIT (NULL,
+                (gettext ("Type de section %d inconnu.\n"), section->type);
+                  cairo_destroy (cr);
+                  cairo_surface_destroy (surface);)
       break;
     }
   }
+  cairo_destroy (cr);
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+  cairo_surface_destroy (surface);
   
   return pixbuf;
 }
@@ -800,11 +801,11 @@ EF_gtk_sections_ajout_rectangulaire (GtkMenuItem *menuitem,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   BUG (EF_gtk_section_rectangulaire (p, NULL), )
 }
@@ -823,11 +824,11 @@ EF_gtk_sections_ajout_T (GtkMenuItem *menuitem,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   BUG (EF_gtk_section_T (p, NULL), )
 }
@@ -846,11 +847,11 @@ EF_gtk_sections_ajout_carree (GtkMenuItem *menuitem,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   BUG (EF_gtk_section_carree (p, NULL), )
 }
@@ -869,11 +870,11 @@ EF_gtk_sections_ajout_circulaire (GtkMenuItem *menuitem,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   BUG (EF_gtk_section_circulaire (p, NULL), )
 }
@@ -892,11 +893,11 @@ EF_gtk_sections_ajout_personnalisee (GtkMenuItem *menuitem,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   BUG (EF_gtk_section_personnalisee (p, NULL), )
 }
@@ -919,18 +920,18 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
   GtkTreeModel *model;
   GList        *list, *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_SEC.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   // On récupère la liste des charges à éditer.
   list = gtk_tree_selection_get_selected_rows (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
                                                &model);
   list_parcours = g_list_first (list);
-  for (; list_parcours != NULL; list_parcours = g_list_next (list_parcours))
+  for ( ; list_parcours != NULL; list_parcours = g_list_next (list_parcours))
   {
     if (gtk_tree_model_get_iter (model,
                                  &iter,
@@ -970,9 +971,11 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
         }
         default :
         {
-          BUGMSG (0,
-                  ,
-                  gettext ("Type de section %d inconnu.\n"), section->type)
+          FAILCRIT ( ,
+                    (gettext ("Type de section %d inconnu.\n"),
+                              section->type);
+                      g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                      g_list_free (list);)
           break;
         }
       }
@@ -1002,11 +1005,11 @@ EF_gtk_sections_double_clicked (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_SEC.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                   "Section")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_SEC.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Section");)
   
   if ((event->type == GDK_2BUTTON_PRESS) &&
       (gtk_widget_get_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -1445,47 +1448,47 @@ EF_gtk_sections_get_section (char   *ligne,
   GList *forme_, *points;
   double x, y;
   
-  BUGMSG (ligne, FALSE, gettext ("Paramètre %s incorrect.\n"), "ligne")
+  BUGPARAMCRIT (ligne, "%p", ligne, FALSE)
   
   ligne_tmp = &ligne[strchr (ligne, '\t') - ligne + 1];
-  BUGMSG (sscanf (ligne_tmp,
-                  "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
-                  &g_,
-                  &h_,
-                  &b_,
-                  &tw_,
-                  &tf_,
-                  &r1_,
-                  &r2_,
-                  &A_,
-                  &hi_,
-                  &d_,
-                  &phi_,
-                  &pmin_,
-                  &pmax_,
-                  &AL_,
-                  &AG_,
-                  &iiy_,
-                  &Wely_,
-                  &Wply_,
-                  &iy_,
-                  &Avz_,
-                  &iiz_,
-                  &Welz_,
-                  &Wplz_,
-                  &iz_,
-                  &ss_,
-                  &It_,
-                  &Iw_,
-                  &vy_,
-                  &vyp_,
-                  &vz_,
-                  &vzp_,
-                  &vty_,
-                  &vtz_) == 33,
-          FALSE,
-          gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
-                   ligne)
+  INFO (sscanf (ligne_tmp,
+                "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
+                &g_,
+                &h_,
+                &b_,
+                &tw_,
+                &tf_,
+                &r1_,
+                &r2_,
+                &A_,
+                &hi_,
+                &d_,
+                &phi_,
+                &pmin_,
+                &pmax_,
+                &AL_,
+                &AG_,
+                &iiy_,
+                &Wely_,
+                &Wply_,
+                &iy_,
+                &Avz_,
+                &iiz_,
+                &Welz_,
+                &Wplz_,
+                &iz_,
+                &ss_,
+                &It_,
+                &Iw_,
+                &vy_,
+                &vyp_,
+                &vz_,
+                &vzp_,
+                &vty_,
+                &vtz_) == 33,
+        FALSE,
+        (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
+                  ligne);)
   
   if (g != NULL)
     *g = g_;
@@ -1567,10 +1570,13 @@ EF_gtk_sections_get_section (char   *ligne,
   
   while (ligne_tmp[0] != 0)
   {
-    BUGMSG (sscanf (ligne_tmp, "%lf\t%lf", &x, &y) == 2,
-            FALSE,
-            gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
-                     ligne)
+    INFO (sscanf (ligne_tmp, "%lf\t%lf", &x, &y) == 2,
+          FALSE,
+          (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
+                    ligne);
+            g_list_free_full (points, free);
+            g_list_free_full (forme_,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
     
     // Nouveau groupe de points
     if ((isnan (x)) && (isnan (y)))
@@ -1584,9 +1590,12 @@ EF_gtk_sections_get_section (char   *ligne,
     {
       EF_Point *point;
       
-      BUGMSG (point = malloc (sizeof (EF_Point)),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (point = malloc (sizeof (EF_Point)),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 g_list_free_full (points, free);
+                 g_list_free_full (forme_, 
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
       point->x = m_f (x, FLOTTANT_UTILISATEUR);
       point->y = m_f (y, FLOTTANT_UTILISATEUR);
       point->z = m_f (0., FLOTTANT_UTILISATEUR);
@@ -1608,24 +1617,29 @@ EF_gtk_sections_get_section (char   *ligne,
   
   if (!EF_sections_personnalisee_verif_forme (forme_, TRUE))
   {
-    g_list_free_full (forme_, (GDestroyNotify) g_list_free);
+    g_list_free_full (forme_,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
     
-    BUGMSG (NULL,
-            FALSE,
-            gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
-                     ligne)
+    FAILINFO (FALSE,
+              (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
+                        ligne);)
   }
   else if (forme == NULL)
-    g_list_free_full (forme_, (GDestroyNotify) g_list_free);
+    g_list_free_full (forme_,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
   else
     *forme = forme_;
   
   // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
   if (ligne != NULL)
   {
-    BUGMSG (nom_ = malloc (sizeof (char) * (strchr (ligne, '\t') - ligne + 1)),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (nom_ = malloc (sizeof (char) *
+                                           (strchr (ligne, '\t') - ligne + 1)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               g_list_free_full (forme_,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+    
     strncpy (nom_, ligne, strchr (ligne, '\t')-ligne);
     nom_[strchr (ligne, '\t') - ligne] = 0;
     
@@ -1653,16 +1667,17 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
   wchar_t *ligne_tmp;
   char    *section;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, )
   
-  BUGMSG (file = fopen (DATADIR"/profiles_acier.csv", "r"),
-          ,
-          gettext ("Le fichier des sections est introuvable.\n"))
+  INFO (file = fopen (DATADIR"/profiles_acier.csv", "r"),
+        ,
+        (gettext ("Le fichier des sections est introuvable.\n"));)
   
-  BUGMSG (section = g_strdup_printf ("%s\t",
-                                     gtk_menu_item_get_label (menuitem)),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (section = g_strdup_printf ("%s\t",
+                                      gtk_menu_item_get_label (menuitem)),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             fclose (file);)
   
   ligne_tmp = common_text_get_line (file);
   free (ligne_tmp);
@@ -1672,7 +1687,11 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
   {
     char *ligne;
     
-    BUG (ligne = common_text_wcstostr_dup (ligne_tmp), )
+    BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
+         ,
+         fclose (file);
+           free (section);
+           free (ligne_tmp);)
     free (ligne_tmp);
     if (strncmp (ligne, section, strlen (section)) == 0)
     {
@@ -1716,7 +1735,10 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
                                         NULL,
                                         NULL,
                                         &forme),
-          )
+          ,
+          fclose (file);
+            free (section);
+            free (ligne);)
       BUG (EF_sections_personnalisee_ajout (p,
                                             desc,
                                             desc,
@@ -1729,7 +1751,13 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
                                             m_f (vzp, FLOTTANT_ORDINATEUR),
                                             m_f (s, FLOTTANT_ORDINATEUR),
                                             forme),
-          )
+          ,
+          fclose (file);
+            free (section);
+            free (ligne);
+            free (desc);
+            g_list_free_full (forme,
+                              (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
       free (desc);
     }
     free (ligne);
@@ -1758,7 +1786,7 @@ EF_gtk_sections (Projet *p)
   GList *list_parcours;
   FILE  *file;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   if (UI_SEC.builder != NULL)
   {
@@ -1767,11 +1795,12 @@ EF_gtk_sections (Projet *p)
   }
   
   UI_SEC.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_SEC.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_SEC.builder,
                                          "/org/2lgc/codegui/ui/EF_sections.ui",
-                                         NULL) != 0,
-          ,
-          gettext ("Builder Failed\n"))
+                                          NULL) != 0,
+           ,
+           (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                     "Section");)
   gtk_builder_connect_signals (UI_SEC.builder, p);
   
   UI_SEC.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC.builder,
@@ -1912,7 +1941,10 @@ EF_gtk_sections (Projet *p)
       GtkWidget *menu, *categorie_menu = NULL;
       GList     *forme;
       
-      BUG (ligne = common_text_wcstostr_dup (ligne_tmp), )
+      BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
+           ,
+           free (ligne_tmp);
+             fclose (file);)
       free (ligne_tmp);
       
       BUG (EF_gtk_sections_get_section (ligne,
@@ -1952,7 +1984,14 @@ EF_gtk_sections (Projet *p)
                                         NULL,
                                         &forme), 
           )
-      categorie = malloc (sizeof (char) * (strlen (nom_section) + 1));
+      BUGCRIT (categorie = malloc (sizeof (char) * (strlen (nom_section) + 1)),
+               ,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 fclose (file);
+                 free (ligne);
+                 free (nom_section);
+                 g_list_free_full (forme,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
       if (strchr (nom_section, ' ') == NULL)
         strcpy (categorie, nom_section);
       else
@@ -2006,7 +2045,8 @@ EF_gtk_sections (Projet *p)
         
         list_categorie = g_list_append (list_categorie, categorie_menu);
       }
-      g_list_free_full (forme, (GDestroyNotify) g_list_free);
+      g_list_free_full (forme,
+                       (GDestroyNotify) EF_sections_personnalisee_free_forme1);
       
       menu = gtk_menu_item_new_with_label (nom_section);
       gtk_menu_shell_append (GTK_MENU_SHELL (gtk_menu_item_get_submenu (

@@ -103,6 +103,7 @@ gboolean EF_sections_personnalisee_modif       (Projet     *p,
                                                 Flottant    s,
                                                 GList      *forme)
                                        __attribute__((__warn_unused_result__));
+void     EF_sections_personnalisee_free_forme1 (GList      *forme);
 
 Section *EF_sections_cherche_nom               (Projet     *p,
                                                 const char *nom,

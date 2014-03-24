@@ -521,7 +521,6 @@ _1990_gtk_tree_view_actions_psi_edited (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée,
- *     - erreur d'allocation mémoire,
  *     - #_1990_action_nom_change.
  */
 {

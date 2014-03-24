@@ -1191,7 +1191,8 @@ EF_sections_personnalisee_modif (Projet     *p,
   
   if (forme != NULL)
   {
-    g_list_free_full (section_data->forme, (GDestroyNotify) g_list_free);
+    g_list_free_full (section_data->forme,
+                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
     
     section_data->forme = forme;
   }
@@ -1254,6 +1255,19 @@ EF_sections_personnalisee_modif (Projet     *p,
 #endif
   
   return TRUE;
+}
+
+
+void EF_sections_personnalisee_free_forme1 (GList *forme)
+/**
+ * \brief Libère la forme d'une section (liste ET points). Cette fonction doit
+ *        être appelée avec g_list_free_full.
+ *        Pour libérer seulement la liste sans les points, il suffit
+ *        d'appeler g_list_free_full (forme, (GDestroyNotify) g_list_free);
+ * \param forme : la forme à libérer,
+ */
+{
+  g_list_free_full (forme, (GDestroyNotify) free);
 }
 
 
@@ -1423,7 +1437,8 @@ EF_sections_free_un (Section *section)
       Section_Personnalisee *section2 = section->data;
       
       free (section2->description);
-      g_list_free_full (section2->forme, (GDestroyNotify) g_list_free);
+      g_list_free_full (section2->forme,
+                       (GDestroyNotify) EF_sections_personnalisee_free_forme1);
       
       break;
     }
