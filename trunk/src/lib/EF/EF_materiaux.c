@@ -47,7 +47,7 @@ EF_materiaux_init (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->modele.materiaux = NULL;
   
@@ -77,8 +77,8 @@ EF_materiaux_insert (Projet      *p,
   GList       *list_parcours;
   EF_Materiau *materiau_tmp;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (materiau, "%p", materiau, FALSE)
   
   list_parcours = p->modele.materiaux;
   while (list_parcours != NULL)
@@ -152,8 +152,8 @@ EF_materiaux_repositionne (Projet      *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (materiau, "%p", materiau, FALSE)
   
   // On réinsère le matériau au bon endroit
   p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
@@ -222,9 +222,9 @@ EF_materiaux_repositionne (Projet      *p,
     }
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type de matériau %d n'existe pas.\n"), materiau->type)
+      FAILCRIT (FALSE,
+                (gettext ("Le type de matériau %d n'existe pas.\n"),
+                          materiau->type);)
       break;
     }
   }
@@ -259,8 +259,8 @@ EF_materiaux_cherche_nom (Projet     *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (nom, NULL, gettext ("Paramètre %s incorrect.\n"), "nom")
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (nom, "%p", nom, NULL)
   
   list_parcours = p->modele.materiaux;
   while (list_parcours != NULL)
@@ -274,7 +274,7 @@ EF_materiaux_cherche_nom (Projet     *p,
   }
   
   if (critique)
-    BUGMSG (0, NULL, gettext ("Matériau '%s' introuvable.\n"), nom)
+    FAILCRIT (NULL, (gettext ("Matériau '%s' introuvable.\n"), nom);)
   else
     return NULL;
 }
@@ -302,9 +302,9 @@ EF_materiaux_get_description (EF_Materiau *materiau)
       return _1993_1_1_materiaux_get_description (materiau);
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type de matériau %d n'existe pas.\n"), materiau->type)
+      FAILCRIT (FALSE,
+                (gettext ("Le type de matériau %d n'existe pas.\n"),
+                          materiau->type);)
       break;
     }
   }
@@ -323,9 +323,7 @@ EF_materiaux_E (EF_Materiau *materiau)
  *     - materiau inconnu.
  */
 {
-  BUGMSG (materiau,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (materiau, "%p", materiau, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (materiau->type)
   {
@@ -343,9 +341,8 @@ EF_materiaux_E (EF_Materiau *materiau)
     }
     default :
     {
-      BUGMSG (NULL,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Matériau %d inconnu.\n"), materiau->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Matériau %d inconnu.\n"), materiau->type);)
       break;
     }
   }
@@ -369,9 +366,7 @@ EF_materiaux_G (EF_Materiau *materiau,
  *     - materiau inconnu.
  */
 {
-  BUGMSG (materiau,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (materiau, "%p", materiau, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (materiau->type)
   {
@@ -389,17 +384,16 @@ EF_materiaux_G (EF_Materiau *materiau,
     {
       Materiau_Acier *data_acier = materiau->data;
       
-      BUGMSG (!nu_null,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Seul le matériau béton supporte nu à 0.\n"))
+      INFO (!nu_null,
+            m_f (NAN, FLOTTANT_ORDINATEUR),
+            (gettext ("Seul le matériau béton supporte nu à 0.\n"));)
       return m_f (m_g (data_acier->e) / (2. * (1. + m_g (data_acier->nu))),
                   FLOTTANT_ORDINATEUR);
     }
     default :
     {
-      BUGMSG (NULL,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Matériau %d inconnu.\n"), materiau->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Matériau %d inconnu.\n"), materiau->type);)
       break;
     }
   }
@@ -418,7 +412,7 @@ EF_materiaux_free_un (EF_Materiau *materiau)
  *       materiau == NULL,
  */
 {
-  BUGMSG (materiau, , gettext("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (materiau, "%p", materiau, )
   
   free (materiau->nom);
   free (materiau->data);
@@ -445,8 +439,8 @@ EF_materiaux_supprime (EF_Materiau *materiau,
 {
   GList *liste_materiaux = NULL, *liste_barres_dep;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (materiau, "%p", materiau, FALSE)
    
   // On vérifie les dépendances.
   liste_materiaux = g_list_append (liste_materiaux, materiau);
@@ -462,22 +456,29 @@ EF_materiaux_supprime (EF_Materiau *materiau,
                                              NULL,
                                              FALSE,
                                              FALSE),
-       FALSE)
+       FALSE,
+       g_list_free (liste_materiaux);)
   g_list_free (liste_materiaux);
   
   if (liste_barres_dep != NULL)
   {
     char *liste;
     
-    liste = common_selection_barres_en_texte (liste_barres_dep);
+    BUG (liste = common_selection_barres_en_texte (liste_barres_dep), FALSE)
+    
     if (g_list_next (liste_barres_dep) == NULL)
-      BUGMSG (NULL, FALSE, gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"),
+                          liste);
+                  free (liste);
+                  g_list_free (liste_barres_dep);)
     else
-      BUGMSG (NULL, FALSE, gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"),
+                          liste);
+                  free (liste);
+                  g_list_free (liste_barres_dep);)
   }
-  
-  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep), TRUE)
-  g_list_free (liste_barres_dep);
   
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_MAT.liste_materiaux, &materiau->Iter_liste);
@@ -503,14 +504,11 @@ EF_materiaux_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
-  while (p->modele.materiaux != NULL)
-  {
-    g_list_free_full (p->modele.materiaux,
-                      (GDestroyNotify) &EF_materiaux_free_un);
-    p->modele.materiaux = NULL;
-  }
+  g_list_free_full (p->modele.materiaux,
+                    (GDestroyNotify) EF_materiaux_free_un);
+  p->modele.materiaux = NULL;
   
   BUG (EF_calculs_free (p), TRUE)
   

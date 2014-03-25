@@ -157,4 +157,4 @@ CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log
-	sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
+	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
