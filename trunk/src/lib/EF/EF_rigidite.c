@@ -37,7 +37,7 @@ EF_rigidite_init (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->calculs.m_part = NULL;
   p->calculs.m_comp = NULL;
@@ -67,7 +67,7 @@ EF_rigidite_free (Projet *p)
 {
   unsigned int i;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   cholmod_free_triplet (&p->calculs.t_part, p->calculs.c);
   p->calculs.t_part = NULL;

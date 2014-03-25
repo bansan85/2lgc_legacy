@@ -69,22 +69,22 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
   double *x;
   Action *action;
   
-  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud")
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG ((0 <= indice) && (indice <= 5),
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), gettext ("Indice hors limite.\n"))
+  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, FALSE)
+  INFO ((0 <= indice) && (indice <= 5),
+        FALSE,
+        (gettext ("Indice hors limite.\n"));)
   
   if (liste == NULL)
   {
     if (texte != NULL)
-      BUGMSG (*texte = g_strdup_printf ("%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_FORCE :
-                                          DECIMAL_MOMENT,
-                                        0.),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_FORCE :
+                                           DECIMAL_MOMENT,
+                                         0.),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     if (mini != NULL)
       *mini = 0.;
     if (maxi != NULL)
@@ -121,25 +121,25 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
   if (texte != NULL)
   {
     if (!ERR (mi, ma))
-      BUGMSG (*texte = g_strdup_printf ("%.*lf/%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_FORCE :
-                                          DECIMAL_MOMENT,
-                                        mi,
-                                        indice < 3 ?
-                                          DECIMAL_FORCE :
-                                          DECIMAL_MOMENT,
-                                        ma),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_FORCE :
+                                           DECIMAL_MOMENT,
+                                         mi,
+                                         indice < 3 ?
+                                           DECIMAL_FORCE :
+                                           DECIMAL_MOMENT,
+                                         ma),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
-      BUGMSG (*texte = g_strdup_printf ("%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_FORCE :
-                                          DECIMAL_MOMENT,
-                                        mi),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_FORCE :
+                                           DECIMAL_MOMENT,
+                                         mi),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
   }
   
   return TRUE;
@@ -186,23 +186,22 @@ EF_resultat_noeud_deplacement (GList    *liste,
   double *x;
   Action *action;
   
-  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud")
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG ((0 <= indice) && (indice <= 5),
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"),
-                   gettext ("Indice hors limite.\n"))
+  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, FALSE)
+  INFO ((0 <= indice) && (indice <= 5),
+        FALSE,
+        (gettext ("Indice hors limite.\n"));)
   
   if (liste == NULL)
   {
     if (texte != NULL)
-      BUGMSG (*texte = g_strdup_printf ("%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_DEPLACEMENT :
-                                          DECIMAL_ROTATION,
-                                        0.),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_DEPLACEMENT :
+                                           DECIMAL_ROTATION,
+                                         0.),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     if (mini != NULL)
       *mini = 0.;
     if (maxi != NULL)
@@ -239,25 +238,25 @@ EF_resultat_noeud_deplacement (GList    *liste,
   if (texte != NULL)
   {
     if (!ERR (mi, ma))
-      BUGMSG (*texte = g_strdup_printf ("%.*lf/%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_DEPLACEMENT :
-                                          DECIMAL_ROTATION,
-                                        mi,
-                                        indice < 3 ?
-                                          DECIMAL_DEPLACEMENT :
-                                          DECIMAL_ROTATION,
-                                        ma),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_DEPLACEMENT :
+                                           DECIMAL_ROTATION,
+                                         mi,
+                                         indice < 3 ?
+                                           DECIMAL_DEPLACEMENT :
+                                           DECIMAL_ROTATION,
+                                         ma),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
-      BUGMSG (*texte = g_strdup_printf ("%.*lf",
-                                        indice < 3 ?
-                                          DECIMAL_DEPLACEMENT :
-                                          DECIMAL_ROTATION,
-                                        mi),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
+                                         indice < 3 ?
+                                           DECIMAL_DEPLACEMENT :
+                                           DECIMAL_ROTATION,
+                                         mi),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
   }
   
   return TRUE;

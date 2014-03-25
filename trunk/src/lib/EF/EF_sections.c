@@ -50,7 +50,7 @@ EF_sections_init (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->modele.sections = NULL;
   
@@ -79,8 +79,8 @@ EF_sections_insert (Projet  *p,
   GList   *list_parcours;
   Section *section_tmp;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
   
   list_parcours = p->modele.sections;
   while (list_parcours != NULL)
@@ -150,8 +150,8 @@ EF_sections_repositionne (Projet  *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
   
   // On réinsère la section au bon endroit
   p->modele.sections = g_list_remove (p->modele.sections, section);
@@ -218,21 +218,24 @@ EF_sections_repositionne (Projet  *p,
   TYPE    *section_data; \
   Section *section_nouvelle; \
   \
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet") \
-  BUGMSG (nom, NULL, gettext ("Paramètre %s incorrect.\n"), "nom") \
-  BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE), \
-          NULL, \
-          gettext ("La section %s existe déjà.\n"), nom) \
-  BUGMSG (section_nouvelle = malloc (sizeof (Section)), \
-          NULL, \
-          gettext ("Erreur d'allocation mémoire.\n")) \
-  BUGMSG (section_data = malloc (sizeof (TYPE)), \
-          NULL, \
-          gettext ("Erreur d'allocation mémoire.\n")) \
+  BUGPARAM (p, "%p", p, NULL) \
+  BUGPARAM (nom, "%p", nom, NULL) \
+  INFO (!EF_sections_cherche_nom (p, nom, FALSE), \
+        NULL, \
+        (gettext ("La section %s existe déjà.\n"), nom);) \
+  BUGCRIT (section_nouvelle = malloc (sizeof (Section)), \
+           NULL, \
+           (gettext ("Erreur d'allocation mémoire.\n"));) \
+  BUGCRIT (section_data = malloc (sizeof (TYPE)), \
+           NULL, \
+           (gettext ("Erreur d'allocation mémoire.\n")); \
+             free (section_nouvelle);) \
   section_nouvelle->data = section_data; \
-  BUGMSG (section_nouvelle->nom = g_strdup (nom), \
-          NULL, \
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (section_nouvelle->nom = g_strdup (nom), \
+           NULL, \
+           (gettext ("Erreur d'allocation mémoire.\n")); \
+             free (section_data); \
+             free (section_nouvelle);)
 
 
 Section *
@@ -262,7 +265,11 @@ EF_sections_rectangulaire_ajout (Projet     *p,
   section_data->largeur_table = l;
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  BUG (EF_sections_insert (p, section_nouvelle), NULL)
+  BUG (EF_sections_insert (p, section_nouvelle),
+       NULL,
+       free (section_data);
+         free (section_nouvelle->nom);
+         free (section_nouvelle);)
   
   return section_nouvelle;
 }
@@ -296,15 +303,18 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                NULL, \
                                                FALSE, \
                                                FALSE), \
-         FALSE) \
+         FALSE, \
+         g_list_free (liste_sections);) \
     g_list_free (liste_sections); \
     \
     if (liste_barres_dep != NULL) \
     { \
-      BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), FALSE) \
+      BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), \
+           FALSE, \
+           g_list_free (liste_barres_dep);) \
+      g_list_free (liste_barres_dep); \
       BUG (m3d_rafraichit (p), FALSE) \
       BUG (EF_calculs_free (p), FALSE) \
-      g_list_free (liste_barres_dep); \
     } \
   } \
   \
@@ -331,13 +341,14 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                NULL, \
                                                FALSE, \
                                                FALSE), \
-         FALSE) \
+         FALSE, \
+         g_list_free (liste_sections);) \
     g_list_free (liste_sections); \
     \
     if (liste_barres_dep != NULL) \
     { \
-      BUG (EF_calculs_free (p), FALSE) \
       g_list_free (liste_barres_dep); \
+      BUG (EF_calculs_free (p), FALSE) \
     } \
   } \
   \
@@ -368,21 +379,25 @@ EF_sections_rectangulaire_modif (Projet     *p,
 {
   Section_T *section_data = section->data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (section->type == SECTION_RECTANGULAIRE,
-          FALSE,
-          gettext ("La section doit être de type rectangulaire.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
+  INFO (section->type == SECTION_RECTANGULAIRE,
+        FALSE,
+        (gettext ("La section doit être de type rectangulaire.\n"));)
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
-    BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("La section %s existe déjà.\n"), nom)
-    free (section->nom);
-    BUGMSG (section->nom = g_strdup (nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("La section %s existe déjà.\n"), nom);)
+    tmp = section->nom;
+    INFO (section->nom = g_strdup (nom),
+          FALSE,
+          (gettext ("Erreur d'allocation mémoire.\n"));
+            section->nom = tmp;)
+    free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
   }
   
@@ -450,7 +465,11 @@ EF_sections_T_ajout (Projet     *p,
   section_data->hauteur_table = ht;
   section_data->hauteur_retombee = hr;
   
-  BUG (EF_sections_insert (p, section_nouvelle), NULL)
+  BUG (EF_sections_insert (p, section_nouvelle),
+       NULL,
+       free (section_data);
+         free (section_nouvelle->nom);
+         free (section_nouvelle);)
   
   return section_nouvelle;
 }
@@ -482,21 +501,25 @@ gboolean EF_sections_T_modif (Projet     *p,
 {
   Section_T *section_data = section->data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (section->type == SECTION_T,
-          FALSE,
-          gettext ("La section doit être de type en T.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
+  INFO (section->type == SECTION_T,
+        FALSE,
+        (gettext ("La section doit être de type en T.\n"));)
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
-    BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("La section %s existe déjà.\n"), nom)
-    free (section->nom);
-    BUGMSG (section->nom = g_strdup (nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("La section %s existe déjà.\n"), nom);)
+    tmp = section->nom;
+    BUGCRIT (section->nom = g_strdup (nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               section->nom = tmp;)
+    free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
@@ -549,7 +572,11 @@ EF_sections_carree_ajout (Projet    *p,
   section_data->largeur_table = cote;
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  BUG (EF_sections_insert (p, section_nouvelle), NULL)
+  BUG (EF_sections_insert (p, section_nouvelle),
+       NULL,
+       free (section_data);
+         free (section_nouvelle->nom);
+         free (section_nouvelle);)
   
   return section_nouvelle;
 }
@@ -576,21 +603,25 @@ EF_sections_carree_modif (Projet     *p,
 {
   Section_T *section_data = section->data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (section->type == SECTION_CARREE,
-          FALSE,
-          gettext ("La section doit être de type carrée.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
+  INFO (section->type == SECTION_CARREE,
+        FALSE,
+        (gettext ("La section doit être de type carrée.\n"));)
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
-    BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("La section %s existe déjà.\n"), nom)
+    char *tmp;
+    
+    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("La section %s existe déjà.\n"), nom);)
+    tmp = section->nom;
+    BUGCRIT (section->nom = g_strdup (nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               section->nom = tmp;)
     free (section->nom);
-    BUGMSG (section->nom = g_strdup (nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
@@ -647,7 +678,11 @@ EF_sections_circulaire_ajout (Projet     *p,
   section_nouvelle->type = SECTION_CIRCULAIRE;
   section_data->diametre = diametre;
   
-  BUG (EF_sections_insert (p, section_nouvelle), NULL)
+  BUG (EF_sections_insert (p, section_nouvelle),
+       NULL,
+       free (section_data);
+         free (section_nouvelle->nom);
+         free (section_nouvelle);)
   
   return section_nouvelle;
 }
@@ -674,21 +709,25 @@ EF_sections_circulaire_modif (Projet     *p,
 {
   Section_Circulaire *section_data = section->data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (section->type == SECTION_CIRCULAIRE,
-          FALSE,
-          gettext ("La section doit être de type circulaire.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
+  INFO (section->type == SECTION_CIRCULAIRE,
+        FALSE,
+        (gettext ("La section doit être de type circulaire.\n"));)
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
-    BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("La section %s existe déjà.\n"), nom)
-    free (section->nom);
-    BUGMSG (section->nom = g_strdup (nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("La section %s existe déjà.\n"), nom);)
+    tmp = section->nom;
+    BUGCRIT (section->nom = g_strdup (nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               section->nom = tmp;)
+    free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
@@ -738,9 +777,9 @@ EF_sections_personnalisee_verif_forme (GList *forme,
   list_parcours = forme;
   // Il faut un minimum d'un groupe.
   if (message)
-    BUGMSG (list_parcours,
-            FALSE,
-            gettext ("La forme de la section est vide.\n"))
+    INFO (list_parcours,
+          FALSE,
+          (gettext ("La forme de la section est vide.\n"));)
   else if (list_parcours == NULL)
     return FALSE;
   
@@ -753,9 +792,9 @@ EF_sections_personnalisee_verif_forme (GList *forme,
     
     // Il faut un minimum de trois points par groupe.
     if (message)
-      BUGMSG (g_list_next (g_list_next (list_parcours2)),
-              FALSE,
-              gettext ("Un groupe de points doit avoir au minimum 3 points.\n"))
+      INFO (g_list_next (g_list_next (list_parcours2)),
+            FALSE,
+            (gettext ("Un groupe de points doit avoir au minimum 3 points.\n"));)
     else if (g_list_next (g_list_next (list_parcours2)) == NULL)
       return FALSE;
     
@@ -775,10 +814,10 @@ EF_sections_personnalisee_verif_forme (GList *forme,
       
       // On refuse le cas où point1 == point2
       if (message)
-        BUGMSG ((!ERR (m_g (point1->x), m_g (point2->x))) ||
-                (!ERR (m_g (point1->y), m_g (point2->y))),
-                FALSE,
-                gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"))
+        INFO ((!ERR (m_g (point1->x), m_g (point2->x))) ||
+              (!ERR (m_g (point1->y), m_g (point2->y))),
+              FALSE,
+              (gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"));)
       else if ((ERR (m_g (point1->x), m_g (point2->x))) &&
                (ERR (m_g (point1->y), m_g (point2->y))))
         return FALSE;
@@ -862,13 +901,21 @@ EF_sections_personnalisee_verif_forme (GList *forme,
               else
               {
                 if (message)
-                  BUGMSG (!(((ymin2 < ymin1) && (ymin1 < ymax2)) ||
-                            ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
-                            ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
-                            ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
-                            ((ERR (ymin1, ymin2)) && (ERR (ymax1, ymax2)))),
-                          FALSE,
-                          gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"), m_g (point1->x), m_g (point1->y), m_g (point2->x), m_g (point2->y), m_g (point3->x), m_g (point3->y), m_g (point4->x), m_g (point4->y))
+                  INFO (!(((ymin2 < ymin1) && (ymin1 < ymax2)) ||
+                          ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
+                          ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
+                          ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
+                          ((ERR (ymin1, ymin2)) && (ERR (ymax1, ymax2)))),
+                        FALSE,
+                        (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
+                                  m_g (point1->x),
+                                  m_g (point1->y),
+                                  m_g (point2->x),
+                                  m_g (point2->y),
+                                  m_g (point3->x),
+                                  m_g (point3->y),
+                                  m_g (point4->x),
+                                  m_g (point4->y));)
                 else if (((ymin2 < ymin1) && (ymin1 < ymax2)) ||
                   ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
                   ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
@@ -893,12 +940,20 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             else
             {
               if (message)
-                BUGMSG (!((ymin1 < y_b) &&
-                          (y_b < ymax1) &&
-                          (xmin1 < xmin2) &&
-                          (xmin2 < xmax1)),
-                        FALSE,
-                        gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"), m_g (point1->x), m_g (point1->y), m_g (point2->x), m_g (point2->y), m_g (point3->x), m_g (point3->y), m_g (point4->x), m_g (point4->y))
+                INFO (!((ymin1 < y_b) &&
+                        (y_b < ymax1) &&
+                        (xmin1 < xmin2) &&
+                        (xmin2 < xmax1)),
+                      FALSE,
+                      (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
+                                m_g (point1->x),
+                                m_g (point1->y),
+                                m_g (point2->x),
+                                m_g (point2->y),
+                                m_g (point3->x),
+                                m_g (point3->y),
+                                m_g (point4->x),
+                                m_g (point4->y));)
               else if ((ymin1 < y_b) &&
                        (y_b < ymax1) &&
                        (xmin1 < xmin2) &&
@@ -921,12 +976,20 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             else
             {
               if (message)
-                BUGMSG (!((ymin2 < y_b) &&
-                          (y_b < ymax2) &&
-                          (xmin2 < xmin1) &&
-                          (xmin1 < xmax2)),
-                        FALSE,
-                        gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"), m_g (point1->x), m_g (point1->y), m_g (point2->x), m_g (point2->y), m_g (point3->x), m_g (point3->y), m_g (point4->x), m_g (point4->y))
+                INFO (!((ymin2 < y_b) &&
+                        (y_b < ymax2) &&
+                        (xmin2 < xmin1) &&
+                        (xmin1 < xmax2)),
+                      FALSE,
+                      (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
+                                m_g (point1->x),
+                                m_g (point1->y),
+                                m_g (point2->x),
+                                m_g (point2->y),
+                                m_g (point3->x),
+                                m_g (point3->y),
+                                m_g (point4->x),
+                                m_g (point4->y));)
               else if ((ymin2 < y_b) &&
                        (y_b < ymax2) &&
                        (xmin2 < xmin1) &&
@@ -956,12 +1019,20 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                 else
                 {
                   if (message)
-                    BUGMSG (!(((xmin2 < xmin1) && (xmin1 < xmax2)) ||
-                              ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
-                              ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
-                              ((xmin1 < xmax2) && (xmax2 < xmax1))),
-                            FALSE,
-                            gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"), m_g (point1->x), m_g (point1->y), m_g (point2->x), m_g (point2->y), m_g (point3->x), m_g (point3->y), m_g (point4->x), m_g (point4->y))
+                    INFO (!(((xmin2 < xmin1) && (xmin1 < xmax2)) ||
+                            ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
+                            ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
+                            ((xmin1 < xmax2) && (xmax2 < xmax1))),
+                          FALSE,
+                          (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
+                                    m_g (point1->x),
+                                    m_g (point1->y),
+                                    m_g (point2->x),
+                                    m_g (point2->y),
+                                    m_g (point3->x),
+                                    m_g (point3->y),
+                                    m_g (point4->x),
+                                    m_g (point4->y));)
                   else if (((xmin2 < xmin1) && (xmin1 < xmax2)) ||
                            ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
                            ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
@@ -985,12 +1056,20 @@ EF_sections_personnalisee_verif_forme (GList *forme,
               else
               {
                 if (message)
-                  BUGMSG (!((xmin1 < x_inter) &&
-                            (x_inter < xmax1) &&
-                            (xmin2 < x_inter) &&
-                            (x_inter < xmax2)),
-                          FALSE,
-                          gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"), m_g (point1->x), m_g (point1->y), m_g (point2->x), m_g (point2->y), m_g (point3->x), m_g (point3->y), m_g (point4->x), m_g (point4->y))
+                  INFO (!((xmin1 < x_inter) &&
+                          (x_inter < xmax1) &&
+                          (xmin2 < x_inter) &&
+                          (x_inter < xmax2)),
+                        FALSE,
+                        (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
+                                  m_g (point1->x),
+                                  m_g (point1->y),
+                                  m_g (point2->x),
+                                  m_g (point2->y),
+                                  m_g (point3->x),
+                                  m_g (point3->y),
+                                  m_g (point4->x),
+                                  m_g (point4->y));)
                 else if ((xmin1 < x_inter) && (x_inter < xmax1) &&
                          (xmin2 < x_inter) && (x_inter < xmax2))
                   return FALSE;
@@ -1069,14 +1148,20 @@ EF_sections_personnalisee_ajout (Projet     *p,
 {
   SECTION_AJOUT (Section_Personnalisee)
   
-  BUGMSG (EF_sections_personnalisee_verif_forme (forme, TRUE),
-          NULL,
-          gettext ("La forme est incorrecte.\n"))
+  INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
+        NULL,
+        (gettext ("La forme est incorrecte.\n"));
+          free (section_data);
+          free (section_nouvelle->nom);
+          free (section_nouvelle);)
   
   section_nouvelle->type = SECTION_PERSONNALISEE;
-  BUGMSG (section_data->description = g_strdup (description),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (section_data->description = g_strdup (description),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (section_data);
+             free (section_nouvelle->nom);
+             free (section_nouvelle);)
   section_data->j = j;
   section_data->iy = iy;
   section_data->iz = iz;
@@ -1087,7 +1172,12 @@ EF_sections_personnalisee_ajout (Projet     *p,
   section_data->s = s;
   section_data->forme = forme;
   
-  BUG (EF_sections_insert (p, section_nouvelle), NULL)
+  BUG (EF_sections_insert (p, section_nouvelle),
+       NULL,
+       free (section_data->description);
+         free (section_nouvelle->nom);
+         free (section_data);
+         free (section_nouvelle);)
   
   return section_nouvelle;
 }
@@ -1138,24 +1228,28 @@ EF_sections_personnalisee_modif (Projet     *p,
 {
   Section_Personnalisee *section_data = section->data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
-  BUGMSG (section->type == SECTION_PERSONNALISEE,
-          FALSE,
-          gettext ("La section doit être de type personnalisée.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
+  INFO (section->type == SECTION_PERSONNALISEE,
+        FALSE,
+        (gettext ("La section doit être de type personnalisée.\n"));)
   
-  BUGMSG (EF_sections_personnalisee_verif_forme (forme, TRUE),
-          FALSE,
-          gettext ("La forme est incorrecte.\n"))
+  INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
+        FALSE,
+        (gettext ("La forme est incorrecte.\n"));)
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
-    BUGMSG (!EF_sections_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("La section %s existe déjà.\n"), nom)
-    free (section->nom);
-    BUGMSG (section->nom = g_strdup (nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("La section %s existe déjà.\n"), nom);)
+    tmp = section->nom;
+    BUGCRIT (section->nom = g_strdup (nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               section->nom = tmp;)
+    free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
@@ -1174,10 +1268,14 @@ EF_sections_personnalisee_modif (Projet     *p,
   if ((description != NULL) &&
       (strcmp (section_data->description, description) != 0))
   {
-    free (section_data->description);
-    BUGMSG (section_data->description = g_strdup (description),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    tmp = section_data->description;
+    BUGCRIT (section_data->description = g_strdup (description),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               section_data->description = tmp;)
+    free (tmp);
   }
   
   SECTION_MODIF (j, j)
@@ -1223,7 +1321,8 @@ EF_sections_personnalisee_modif (Projet     *p,
                                                NULL,
                                                FALSE,
                                                FALSE),
-         FALSE)
+         FALSE,
+         g_list_free (liste_sections);)
     g_list_free (liste_sections);
     
     if (liste_barres_dep != NULL)
@@ -1231,10 +1330,15 @@ EF_sections_personnalisee_modif (Projet     *p,
 #ifdef ENABLE_GTK
       if (forme != NULL)
       {
-        BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), FALSE)
-        BUG (m3d_rafraichit (p), FALSE)
+        BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep),
+             FALSE,
+             g_list_free (liste_barres_dep);)
+        BUG (m3d_rafraichit (p),
+             FALSE,
+             g_list_free (liste_barres_dep);)
       }
 #endif
+      g_list_free (liste_barres_dep);
       if ((!isnan (m_g (j))) ||
           (!isnan (m_g (iy))) ||
           (!isnan (m_g (iz))) ||
@@ -1244,7 +1348,6 @@ EF_sections_personnalisee_modif (Projet     *p,
           (!isnan (m_g (vzp))) ||
           (!isnan (m_g (s))))
         BUG (EF_calculs_free (p), FALSE)
-      g_list_free (liste_barres_dep);
     }
   }
   
@@ -1290,7 +1393,7 @@ EF_sections_cherche_nom (Projet     *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, NULL)
   
   list_parcours = p->modele.sections;
   while (list_parcours != NULL)
@@ -1304,7 +1407,7 @@ EF_sections_cherche_nom (Projet     *p,
   }
   
   if (critique)
-    BUGMSG (0, NULL, gettext ("Section '%s' introuvable.\n"), nom)
+    FAILINFO (NULL, (gettext ("Section '%s' introuvable.\n"), nom);)
   else
     return NULL;
 }
@@ -1325,7 +1428,7 @@ EF_sections_get_description (Section *sect)
 {
   char *description;
   
-  BUGMSG (sect, NULL, gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, NULL)
   
   switch (sect->type)
   {
@@ -1336,13 +1439,13 @@ EF_sections_get_description (Section *sect)
       
       conv_f_c (section->largeur_retombee, larg, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_retombee, haut, DECIMAL_DISTANCE);
-      BUGMSG (description = g_strdup_printf ("%s : %s m, %s : %s m",
-                                             gettext ("Largeur"),
-                                             larg,
-                                             gettext ("Hauteur"),
-                                             haut),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m",
+                                              gettext ("Largeur"),
+                                              larg,
+                                              gettext ("Hauteur"),
+                                              haut),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       
       return description;
     }
@@ -1355,17 +1458,17 @@ EF_sections_get_description (Section *sect)
       conv_f_c (section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_table, haut_t, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
-      BUGMSG (description = g_strdup_printf ("%s : %s m, %s : %s m, %s : %s m, %s : %s m",
-                                             gettext ("Largeur table"),
-                                             larg_t,
-                                             gettext ("Hauteur table"),
-                                             haut_t,
-                                             gettext ("Largeur retombée"),
-                                             larg_r,
-                                             gettext ("Hauteur retombée"),
-                                             haut_r),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m, %s : %s m, %s : %s m",
+                                              gettext ("Largeur table"),
+                                              larg_t,
+                                              gettext ("Hauteur table"),
+                                              haut_t,
+                                              gettext ("Largeur retombée"),
+                                              larg_r,
+                                              gettext ("Hauteur retombée"),
+                                              haut_r),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       
       return description;
     }
@@ -1375,11 +1478,11 @@ EF_sections_get_description (Section *sect)
       Section_T *section = sect->data;
       
       conv_f_c (section->largeur_table, cote, DECIMAL_DISTANCE);
-      BUGMSG (description = g_strdup_printf ("%s : %s m",
-                                             gettext ("Coté"),
-                                             cote),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (description = g_strdup_printf ("%s : %s m",
+                                              gettext ("Coté"),
+                                              cote),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       
       return description;
     }
@@ -1389,11 +1492,11 @@ EF_sections_get_description (Section *sect)
       Section_Circulaire *section = sect->data;
       
       conv_f_c (section->diametre, diam, DECIMAL_DISTANCE);
-      BUGMSG (description = g_strdup_printf ("%s : %s m",
-                                             gettext ("Diamètre"),
-                                             diam),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (description = g_strdup_printf ("%s : %s m",
+                                              gettext ("Diamètre"),
+                                              diam),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       
       return description;
     }
@@ -1401,15 +1504,15 @@ EF_sections_get_description (Section *sect)
     {
       Section_Personnalisee *section = sect->data;
       
-      BUGMSG (description = g_strdup (section->description),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (description = g_strdup (section->description),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       
       return description;
     }
     default :
     {
-      BUGMSG (0, NULL, gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (NULL, (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1444,7 +1547,7 @@ EF_sections_free_un (Section *section)
     }
     default :
     {
-      BUGMSG (0, , gettext ("Type de section %d inconnu.\n"), section->type)
+      FAILCRIT ( , (gettext ("Type de section %d inconnu.\n"), section->type);)
       break;
     }
   }
@@ -1480,8 +1583,8 @@ EF_sections_supprime (Section *section,
 {
   GList *liste_sections = NULL, *liste_barres_dep;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (section, FALSE, gettext ("Paramètre %s incorrect.\n"), "section")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (section, "%p", section, FALSE)
   
   // On vérifie les dépendances.
   liste_sections = g_list_append (liste_sections, section);
@@ -1497,25 +1600,34 @@ EF_sections_supprime (Section *section,
                                              NULL,
                                              FALSE,
                                              FALSE),
-       FALSE)
+       FALSE,
+       g_list_free (liste_sections);)
+  g_list_free (liste_sections);
   
   if ((annule_si_utilise) && (liste_barres_dep != NULL))
   {
     char *liste;
     
-    liste = common_selection_barres_en_texte (liste_barres_dep);
+    BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
+         FALSE,
+         g_list_free (liste_barres_dep);)
     if (g_list_next (liste_barres_dep) == NULL)
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
+                          liste);
+                  g_list_free (liste_barres_dep);
+                  free (liste);)
     else
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste)
+      FAILINFO (FALSE,
+                (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
+                          liste);
+                  g_list_free (liste_barres_dep);
+                  free (liste);)
   }
   
-  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep), TRUE)
-  g_list_free (liste_sections);
+  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
+       FALSE,
+       g_list_free (liste_barres_dep);)
   g_list_free (liste_barres_dep);
   
   p->modele.sections = g_list_remove (p->modele.sections, section);
@@ -1558,9 +1670,8 @@ EF_sections_supprime (Section *section,
     }
     default :
     {
-      BUGMSG (0,
-              FALSE,
-              gettext ("Type de section %d inconnu.\n"), section->type)
+      FAILCRIT (FALSE,
+                (gettext ("Type de section %d inconnu.\n"), section->type);)
       break;
     }
   }
@@ -1584,9 +1695,7 @@ EF_sections_j (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1650,9 +1759,8 @@ EF_sections_j (Section *sect)
     }
     default :
     {
-      BUGMSG (NULL,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1671,9 +1779,7 @@ EF_sections_iy (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1728,9 +1834,8 @@ EF_sections_iy (Section *sect)
     }
     default :
     {
-      BUGMSG (NULL,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1749,9 +1854,7 @@ EF_sections_iz (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1793,9 +1896,8 @@ EF_sections_iz (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1815,9 +1917,7 @@ EF_sections_vy (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1845,9 +1945,8 @@ EF_sections_vy (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1866,9 +1965,7 @@ EF_sections_vyp (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1896,9 +1993,8 @@ EF_sections_vyp (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1918,9 +2014,7 @@ EF_sections_vz (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -1954,9 +2048,8 @@ EF_sections_vz (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -1976,9 +2069,7 @@ EF_sections_vzp (Section *sect)
  *     - type de section inconnu.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -2012,9 +2103,8 @@ EF_sections_vzp (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -2040,14 +2130,12 @@ EF_sections_ay (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre,
-          NAN,
-          gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2091,12 +2179,12 @@ EF_sections_by (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2140,12 +2228,12 @@ EF_sections_cy (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2189,12 +2277,12 @@ EF_sections_az (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2238,12 +2326,12 @@ EF_sections_bz (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2287,12 +2375,12 @@ EF_sections_cz (EF_Barre    *barre,
   double    ll;
   double    E;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2329,9 +2417,7 @@ EF_sections_s (Section *sect)
  *     - type de section inconnue.
  */
 {
-  BUGMSG (sect,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   switch (sect->type)
   {
@@ -2371,9 +2457,8 @@ EF_sections_s (Section *sect)
     }
     default :
     {
-      BUGMSG (0,
-              m_f (NAN, FLOTTANT_ORDINATEUR),
-              gettext ("Type de section %d inconnu.\n"), sect->type)
+      FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
+                (gettext ("Type de section %d inconnu.\n"), sect->type);)
       break;
     }
   }
@@ -2400,13 +2485,15 @@ EF_sections_es_l (EF_Barre    *barre,
  *     - type de section inconnue.
  */
 {
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
-  BUGMSG (!((d > f) && (!(ERR (d, f)))), NAN, gettext("\n"))
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
+  INFO (!((d > f) && (!(ERR (d, f)))),
+        NAN,
+        (gettext ("La fin doit être après le début.\n"));)
   
   // Le facteur ES/L est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2436,12 +2523,12 @@ EF_sections_gj_l (EF_Barre    *barre,
   EF_Noeud *debut, *fin;
   double    ll;
   
-  BUGMSG (barre, NAN, gettext ("Paramètre %s incorrect.\n"), "barre")
-  BUGMSG (discretisation <= barre->discretisation_element,
-          NAN,
-          gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
-                   discretisation,
-                   barre->discretisation_element)
+  BUGPARAM (barre, "%p", barre, NAN)
+  INFO (discretisation <= barre->discretisation_element,
+        NAN,
+        (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
+                  discretisation,
+                  barre->discretisation_element);)
   
   // Le facteur GJ/L est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2476,7 +2563,7 @@ EF_sections_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (p->modele.sections != NULL)
   {
