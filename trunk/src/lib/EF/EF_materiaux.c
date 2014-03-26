@@ -346,8 +346,6 @@ EF_materiaux_E (EF_Materiau *materiau)
       break;
     }
   }
-  
-  return m_f (NAN, FLOTTANT_ORDINATEUR);
 }
 
 
@@ -397,8 +395,6 @@ EF_materiaux_G (EF_Materiau *materiau,
       break;
     }
   }
-  
-  return m_f (NAN, FLOTTANT_ORDINATEUR);
 }
 
 
