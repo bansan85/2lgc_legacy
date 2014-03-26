@@ -48,7 +48,9 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_sections.h"
 
-int main(int argc, char *argv[])
+int
+main (int   argc,
+      char *argv[])
 {
     /* Variables */
     Projet *projet;
@@ -57,24 +59,26 @@ int main(int argc, char *argv[])
 //    EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
     
     // On charge la localisation
-    setlocale( LC_ALL, "" );
-    bindtextdomain(PACKAGE, LOCALEDIR);
-    bind_textdomain_codeset(PACKAGE, "UTF-8");
-    textdomain(PACKAGE);
+    setlocale ( LC_ALL, "" );
+    bindtextdomain (PACKAGE, LOCALEDIR);
+    bind_textdomain_codeset (PACKAGE, "UTF-8");
+    textdomain (PACKAGE);
     
     // On traite les arguments du programme
     switch (argc)
     {
         case 2:
         {
-            if ((strcmp(argv[1], "-w") == 0) || (strcmp(argv[1], "--warranty") == 0))
+            if ((strcmp (argv[1], "-w") == 0) ||
+                (strcmp (argv[1], "--warranty") == 0))
             {
-                show_warranty();
+                show_warranty ();
                 return 0;
             }
-            else if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
+            else if ((strcmp (argv[1], "-h") == 0) ||
+                     (strcmp (argv[1], "--help") == 0))
             {
-                show_help();
+                show_help ();
                 return 0;
             }
             break;
@@ -86,10 +90,12 @@ int main(int argc, char *argv[])
     }
     
     // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
-    BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"))
+    INFO (gtk_init_check (&argc, &argv) == TRUE,
+          -1,
+          (gettext ("Impossible d'initialiser gtk.\n"));)
     
     // Création d'un projet type
-    BUG(projet = projet_init(NORME_FR), -1)
+    BUG (projet = projet_init (NORME_FR), -1)
     
     // Création des actions
 /*    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1) // Poids propre
@@ -201,8 +207,8 @@ int main(int argc, char *argv[])
     g_list_free(tmp1);*/
     
     // Affichage de l'interface graphique
-    gtk_widget_show_all(projet->ui.comp.window);
-    gtk_main();
+    gtk_widget_show_all (projet->ui.comp.window);
+    gtk_main ();
     
     return 0;
 }

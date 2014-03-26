@@ -47,7 +47,7 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
  *     - Erreur de calcul.
  */
 {
-  GList *rapport = NULL;
+  GList *rapport;
   int    erreur;
   GList *list_parcours;
   
