@@ -2431,9 +2431,8 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
       }
       default :
       {
-        BUGMSG (NULL,
-                ,
-                gettext ("Paramètre %s incorrect.\n"), "combobox_cas")
+        FAILCRIT ( ,
+                  (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
         break;
       }
     }

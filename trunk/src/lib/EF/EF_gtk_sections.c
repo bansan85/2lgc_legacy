@@ -249,11 +249,12 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                      "Section");)
   
   // Si aucune section n'est sélectionnée
-  if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
+  BUGCRIT (gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
                                         &model,
-                                        &Iter))
-    BUGMSG (NULL, , gettext ("Aucun élément n'est sélectionné.\n"))
+                                        &Iter),
+           ,
+           (gettext ("Aucun élément n'est sélectionné.\n"));)
   
   gtk_tree_model_get (model, &Iter, 0, &section, -1);
   

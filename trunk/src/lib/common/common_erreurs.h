@@ -160,16 +160,6 @@
  */
 
 
-#define BUGMSG(X, Y, ...) {if (!(X)) \
-            { \
-              printf(gettext("fichier %s, fonction %s, ligne %d, test : %s, texte : "), __FILE__, __FUNCTION__, __LINE__, #X); \
-              printf(__VA_ARGS__); \
-              return Y; \
-            } \
-          }
-
-
-
 #endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
