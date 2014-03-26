@@ -348,11 +348,11 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
   BUGPARAM (p, "%p", p, FALSE)
   
   tmp = groupe->nom;
-  free (groupe->nom);
   BUGCRIT (groupe->nom = g_strdup_printf ("%s", nom),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
              groupe->nom = tmp;)
+  free (tmp);
   
 #ifdef ENABLE_GTK
   if (UI_GRO.builder != NULL)
