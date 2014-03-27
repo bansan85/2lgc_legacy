@@ -684,7 +684,8 @@ EF_gtk_appuis (Projet *p)
                                        "/org/2lgc/codegui/ui/EF_appuis.ui",
                                        NULL) != 0,
         ,
-        (gettext ("Builder Failed\n"));)
+        (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                  "Appui");)
   gtk_builder_connect_signals (UI_APP.builder, p);
   
   UI_APP.window = GTK_WIDGET (gtk_builder_get_object (UI_APP.builder,

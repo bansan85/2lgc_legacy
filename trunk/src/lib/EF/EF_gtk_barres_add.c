@@ -76,7 +76,7 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   BUGCRIT (UI_BARADD.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Appui");)
+                     "Ajout Barre");)
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
                     UI_BARADD.builder, "EF_gtk_barres_add_section_combobox")));
@@ -198,7 +198,7 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   BUGCRIT (UI_BARADD.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Appui");)
+                     "Ajout Barre");)
   
   noeud1 = EF_noeuds_cherche_numero (
              p,
@@ -298,7 +298,8 @@ EF_gtk_barres_ajouter (GtkButton *button,
                                        "/org/2lgc/codegui/ui/EF_barres_add.ui",
                                        NULL) != 0,
         ,
-        (gettext ("Builder Failed\n"));)
+        (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                  "Ajout Barre");)
   gtk_builder_connect_signals (UI_BARADD.builder, p);
   
   UI_BARADD.window = GTK_WIDGET (gtk_builder_get_object (UI_BARADD.builder,

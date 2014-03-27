@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-03-23 12:54+0100\n"
-"PO-Revision-Date: 2014-03-23 13:03+0100\n"
+"POT-Creation-Date: 2014-03-27 08:18+0100\n"
+"PO-Revision-Date: 2014-03-27 08:18+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1326,6 +1326,11 @@ msgstr ""
 "Enveloppe inférieure :\n"
 "%s"
 
+msgid ""
+"La première colonne ne peut contenir que la liste des nœuds ou des barres.\n"
+msgstr ""
+"La première colonne ne peut contenir que la liste des nœuds ou des barres.\n"
+
 msgid "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 msgstr ""
 "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
@@ -1515,9 +1520,6 @@ msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 msgid "Tout"
 msgstr "Tout"
 
-msgid "Builder Failed\n"
-msgstr "Builder Failed\n"
-
 #, c-format
 msgid "Le type de noeud %d est inconnu.\n"
 msgstr "Le type de noeud %d est inconnu.\n"
@@ -1691,9 +1693,6 @@ msgstr "Modification d'une section carrée"
 
 msgid "La section à modifier n'est pas carrée.\n"
 msgstr "La section à modifier n'est pas carrée.\n"
-
-msgid "Erreur impossible.\n"
-msgstr "Erreur impossible.\n"
 
 #, c-format
 msgid "Groupe %d"
@@ -1983,6 +1982,9 @@ msgid ""
 "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
 msgstr ""
 "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+
+msgid "La fin doit être après le début.\n"
+msgstr "La fin doit être après le début.\n"
 
 msgid "Ajout d'une charge répartie uniforme sur barre"
 msgstr "Ajout d'une charge répartie uniforme sur barre"
