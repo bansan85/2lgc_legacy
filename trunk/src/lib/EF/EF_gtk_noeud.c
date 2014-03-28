@@ -916,6 +916,7 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
   char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
            ,
            (gettext ("Erreur d'allocation mémoire.\n"));)
@@ -949,6 +950,7 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
@@ -986,6 +988,7 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
@@ -1023,6 +1026,7 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
@@ -1057,6 +1061,7 @@ EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
   EF_Noeud *noeud;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   
   g_object_set (cell,
                 "text",
@@ -1088,6 +1093,7 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
   char           *tmp = NULL;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   data = noeud->data;
   if (data->relatif != NULL)
     BUGCRIT (tmp = g_strdup_printf ("%d", data->relatif->numero),
@@ -1124,6 +1130,7 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
   char           *tmp = NULL;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   data = noeud->data;
   BUGCRIT (tmp = g_strdup_printf ("%d", data->barre->numero),
            ,
@@ -1157,6 +1164,7 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
   char            tmp[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
+  BUGPARAM (noeud, "%p", noeud, )
   data = noeud->data;
   conv_f_c (data->position_relative_barre, tmp, DECIMAL_DISTANCE);
   

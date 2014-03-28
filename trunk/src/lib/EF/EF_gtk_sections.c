@@ -1046,6 +1046,7 @@ EF_gtk_sections_render_0 (GtkTreeViewColumn *tree_column,
   GdkPixbuf *pixbuf;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   BUG (pixbuf = EF_gtk_sections_dessin (section, 32, 32), )
   
@@ -1076,6 +1077,7 @@ EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
   Section *section;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   g_object_set (cell, "text", section->nom, NULL);
   
@@ -1103,6 +1105,7 @@ EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
   char    *description;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   BUG (description = EF_sections_get_description (section), )
   
@@ -1134,6 +1137,7 @@ EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_j (section), c, DECIMAL_M4);
   
@@ -1163,6 +1167,7 @@ EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_iy (section), c, DECIMAL_M4);
   
@@ -1192,6 +1197,7 @@ EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_iz (section), c, DECIMAL_M4);
   
@@ -1221,6 +1227,7 @@ EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_s (section), c, DECIMAL_SURFACE);
   
@@ -1250,6 +1257,7 @@ EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_vy (section), c, DECIMAL_DISTANCE);
   
@@ -1279,6 +1287,7 @@ EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_vyp (section), c, DECIMAL_DISTANCE);
   
@@ -1308,6 +1317,7 @@ EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_vz (section), c, DECIMAL_DISTANCE);
   
@@ -1337,6 +1347,7 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
   char     c[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
+  BUGPARAM (section, "%p", section, )
   
   conv_f_c (EF_sections_vzp (section), c, DECIMAL_DISTANCE);
   

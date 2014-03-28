@@ -1176,6 +1176,7 @@ EF_gtk_relachements_render_0 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   g_object_set (cell, "text", relachement->nom, NULL);
   
@@ -1202,6 +1203,7 @@ EF_gtk_relachements_render_1 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rx_debut)
   {
@@ -1252,6 +1254,7 @@ EF_gtk_relachements_render_2 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rx_debut)
   {
@@ -1304,6 +1307,7 @@ EF_gtk_relachements_render_3 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->ry_debut)
   {
@@ -1354,6 +1358,7 @@ EF_gtk_relachements_render_4 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->ry_debut)
   {
@@ -1406,6 +1411,7 @@ EF_gtk_relachements_render_5 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rz_debut)
   {
@@ -1456,6 +1462,7 @@ EF_gtk_relachements_render_6 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rz_debut)
   {
@@ -1508,6 +1515,7 @@ EF_gtk_relachements_render_7 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rx_fin)
   {
@@ -1558,6 +1566,7 @@ EF_gtk_relachements_render_8 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rx_fin)
   {
@@ -1610,6 +1619,7 @@ EF_gtk_relachements_render_9 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->ry_fin)
   {
@@ -1660,6 +1670,7 @@ EF_gtk_relachements_render_10 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->ry_fin)
   {
@@ -1712,6 +1723,7 @@ EF_gtk_relachements_render_11 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rz_fin)
   {
@@ -1762,6 +1774,7 @@ EF_gtk_relachements_render_12 (GtkTreeViewColumn *tree_column,
   EF_Relachement *relachement;
   
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
+  BUGPARAM (relachement, "%p", relachement, )
   
   switch (relachement->rz_fin)
   {
