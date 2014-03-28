@@ -37,7 +37,7 @@
 
 #define FAILPARAM(PARAM, TYPE, Y, ...) { \
   printf ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
-  FAILINFO (Y, (""); __VA_ARGS__) \
+  FAILINFO (Y, ("\n"); __VA_ARGS__) \
 }
 
 #define FAILCRIT(Y, ...) { \

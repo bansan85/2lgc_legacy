@@ -1103,6 +1103,7 @@ _1990_gtk_actions_render_0 (GtkTreeViewColumn *tree_column,
   Action *action;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
+  BUGPARAM (action, "%p", action, )
   
   g_object_set (cell, "text", _1990_action_nom_renvoie (action), NULL);
   
@@ -1130,6 +1131,7 @@ _1990_gtk_actions_render_1 (GtkTreeViewColumn *tree_column,
   Projet *p = data2;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
+  BUGPARAM (action, "%p", action, )
   
   g_object_set (cell,
                 "text",
@@ -1162,6 +1164,7 @@ _1990_gtk_actions_render_2 (GtkTreeViewColumn *tree_column,
   char    tmp[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
+  BUGPARAM (action, "%p", action, )
   
   conv_f_c (_1990_action_psi_renvoie_0 (action), tmp, DECIMAL_SANS_UNITE);
   
@@ -1192,6 +1195,7 @@ _1990_gtk_actions_render_3 (GtkTreeViewColumn *tree_column,
   char    tmp[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
+  BUGPARAM (action, "%p", action, )
   
   conv_f_c (_1990_action_psi_renvoie_1 (action), tmp, DECIMAL_SANS_UNITE);
   
@@ -1222,6 +1226,7 @@ _1990_gtk_actions_render_4 (GtkTreeViewColumn *tree_column,
   char    tmp[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
+  BUGPARAM (action, "%p", action, )
   
   conv_f_c (_1990_action_psi_renvoie_2 (action), tmp, DECIMAL_SANS_UNITE);
   
@@ -1250,6 +1255,7 @@ _1990_gtk_actions_charge_render_0 (GtkTreeViewColumn *tree_column,
   Charge *charge;
   
   gtk_tree_model_get (tree_model, iter, 0, &charge, -1);
+  BUGPARAM (charge, "%p", charge, )
   
   g_object_set (cell, "text", charge->nom, NULL);
   
@@ -1276,6 +1282,7 @@ _1990_gtk_actions_charge_render_1 (GtkTreeViewColumn *tree_column,
   Charge *charge;
   
   gtk_tree_model_get (tree_model, iter, 0, &charge, -1);
+  BUGPARAM (charge, "%p", charge, )
   
   switch (charge->type)
   {
@@ -1327,6 +1334,7 @@ void _1990_gtk_actions_charge_render_2 (GtkTreeViewColumn *tree_column,
   char   *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &charge, -1);
+  BUGPARAM (charge, "%p", charge, )
   
   switch (charge->type)
   {

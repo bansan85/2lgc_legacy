@@ -688,6 +688,7 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
   char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->numero),
            ,
@@ -725,6 +726,7 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
   BUGPARAM (p, "%p", p, )
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
            ,
@@ -766,6 +768,7 @@ EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
   EF_Barre *barre;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   g_object_set (cell, "text", barre->section->nom, NULL);
   
@@ -793,6 +796,7 @@ EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
   EF_Barre *barre;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   g_object_set (cell, "text", barre->materiau->nom, NULL);
   
@@ -820,6 +824,7 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
   char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_debut->numero),
            ,
@@ -853,6 +858,7 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
   char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_fin->numero),
            ,
@@ -886,6 +892,7 @@ EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
   char      tmp[30];
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   conv_f_c (barre->angle, tmp, DECIMAL_ANGLE);
   
@@ -914,6 +921,7 @@ EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
   EF_Barre *barre;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
+  BUGPARAM (barre, "%p", barre, )
   
   if (barre->relachement == NULL)
     g_object_set (cell, "text", gettext ("Aucun"), NULL);

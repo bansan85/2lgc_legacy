@@ -594,6 +594,7 @@ EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
   EF_Appui *appui;
   
   gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
+  BUGPARAM (appui, "%p", appui, )
   
   g_object_set (cell, "text", appui->nom, NULL);
 }
@@ -610,6 +611,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
   char     *txt; \
   \
   gtk_tree_model_get (tree_model, iter, 0, &appui, -1); \
+  BUGPARAM (appui, "%p", appui, ) \
   \
   switch (appui->DATA) \
   { \

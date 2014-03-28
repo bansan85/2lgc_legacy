@@ -1525,6 +1525,7 @@ EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
   Groupe  *groupe;
   
   gtk_tree_model_get (tree_model, iter, 0, &groupe, -1);
+  BUGPARAM (groupe, "%p", groupe, )
   g_object_set (cell, "text", groupe->nom, NULL);
   
   return;
@@ -1550,6 +1551,7 @@ EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
   Groupe  *groupe;
   
   gtk_tree_model_get (tree_model, iter, 0, &groupe, -1);
+  BUGPARAM (groupe, "%p", groupe, )
   g_object_set (cell, "text", groupe->nom, NULL);
   
   return;

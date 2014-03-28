@@ -512,6 +512,7 @@ EF_gtk_materiaux_render_0 (GtkTreeViewColumn *tree_column,
   EF_Materiau *materiau;
   
   gtk_tree_model_get (tree_model, iter, 0, &materiau, -1);
+  BUGPARAM (materiau, "%p", materiau, )
   
   g_object_set (cell, "text", materiau->nom, NULL);
   
@@ -538,6 +539,7 @@ EF_gtk_materiaux_render_1 (GtkTreeViewColumn *tree_column,
   EF_Materiau *materiau;
   
   gtk_tree_model_get (tree_model, iter, 0, &materiau, -1);
+  BUGPARAM (materiau, "%p", materiau, )
   
   switch (materiau->type)
   {
@@ -581,6 +583,7 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
   EF_Materiau *materiau;
   
   gtk_tree_model_get (tree_model, iter, 0, &materiau, -1);
+  BUGPARAM (materiau, "%p", materiau, )
   
   switch (materiau->type)
   {
