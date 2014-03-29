@@ -651,9 +651,9 @@ EF_verif_EF (Projet *p,
              free (ligne->analyse);
              free (ligne);)
       
-      if ((ERR (m_g (point1.x), m_g (point2.x))) &&
-          (ERR (m_g (point1.y), m_g (point2.y))) &&
-          (ERR (m_g (point1.z), m_g (point2.z))))
+      if ((errrel (m_g (point1.x), m_g (point2.x))) &&
+          (errrel (m_g (point1.y), m_g (point2.y))) &&
+          (errrel (m_g (point1.z), m_g (point2.z))))
       {
         ligne->resultat = 1;
         if (*erreur < ligne->resultat)
@@ -717,7 +717,8 @@ EF_verif_EF (Projet *p,
   {
     EF_Barre *barre = list_parcours->data;
     
-    if (ERR (EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin), 0.))
+    if (errmoy (EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin),
+                ERRMOY_DIST))
     {
       ligne->resultat = 2;
       if (*erreur < ligne->resultat)

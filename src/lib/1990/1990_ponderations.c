@@ -73,7 +73,7 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
       elem2 = list_parcours3->data;
       
       if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) ||
-          (!(ERR (elem1->ponderation, elem2->ponderation))))
+          (!(errrel (elem1->ponderation, elem2->ponderation))))
         doublon = 0;
       
       list_parcours2 = g_list_next (list_parcours2);
@@ -272,8 +272,8 @@ _1990_ponderations_genere_un (Projet *p,
           BUG (categorie != ACTION_INCONNUE, FALSE)
           // Vérification si le coefficient min et max de la catégorie vaut 0.
           //  Si oui, pondération ignorée.
-          if ((ERR (0., coef_min[categorie])) &&
-              (ERR (0., coef_max[categorie])))
+          if ((errmax (coef_min[categorie], ERRMAX_POND)) &&
+              (errmax (coef_max[categorie], ERRMAX_POND)))
             suivant = 1;
           else
           {
@@ -285,7 +285,7 @@ _1990_ponderations_genere_un (Projet *p,
             else
               pond = coef_min[categorie];
             
-            if (!(ERR (0., pond)))
+            if (!(errmax (pond, ERRMAX_POND)))
             {
               Ponderation *ponderation_element = malloc (sizeof (Ponderation));
               

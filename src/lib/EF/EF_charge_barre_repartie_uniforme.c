@@ -97,11 +97,11 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
   INFO ((projection == FALSE) || (repere_local == FALSE),
         NULL,
         (gettext ("Impossible d'effectuer une projection dans un repère local.\n"));)
-  INFO(!((m_g (a) < 0.) && (!(ERR (m_g(a), 0.)))),
+  INFO(m_g (a) >= 0.,
        NULL,
        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                  m_g (a));)
-  INFO (!((m_g (b) < 0.) && (!(ERR (m_g (b), 0.)))),
+  INFO (m_g (b) >= 0.,
         NULL,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   m_g (b));)
@@ -111,19 +111,19 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
     EF_Barre *barre = list_parcours->data;
     double    l = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
     
-    INFO (!((m_g (a) > l) && (!(ERR (m_g (a), l)))),
+    INFO (m_g (a) <= l,
           NULL,
           (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                     m_g (a),
                     barre->numero,
                     l);)
-    INFO (!((m_g (b) > l) && (!(ERR (m_g(b), l)))),
+    INFO (m_g (b) <= l,
           NULL,
           (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                     m_g (b),
                     barre->numero,
                     l);)
-    INFO (!((m_g (a) + m_g (b) > l) && (!(ERR (m_g (a) + m_g (b), l)))),
+    INFO (m_g (a) + m_g (b) <= l,
           NULL,
           (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"),
                     m_g (a),
@@ -284,14 +284,15 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+  INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
+          (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
@@ -317,19 +318,19 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
@@ -347,9 +348,9 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   // M_{Bx} =\frac{(L-a-b) \cdot m_x \cdot (a-b+2 \cdot G \cdot J \cdot k_A+l)}
   //   {2 \cdot (G \cdot J \cdot (k_A+k_B)+l)}\end{displaymath}\begin{verbatim}
   
-  if (ERR (infos->kAx, MAXDOUBLE))
+  if (errrel (infos->kAx, MAXDOUBLE))
     *mb = mx * (l - a - b);
-  else if (ERR (infos->kBx, MAXDOUBLE))
+  else if (errrel (infos->kBx, MAXDOUBLE))
     *mb = 0.;
   else
     *mb = (l - a - b) * mx * (a - b + 2. * G * J * infos->kAx + l) /
@@ -456,27 +457,27 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
@@ -611,27 +612,27 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
@@ -690,26 +691,26 @@ EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
  */
 {
   BUGPARAM (section, "%p", section, NAN)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
-        NAN,
+  INFO (a >= 0.,
+        FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
-        NAN,
+  INFO (b >= 0.,
+        FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
-        NAN,
+  INFO (a <= l,
+        FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre est de %f m.\n"),
                   a,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
-        NAN,
+  INFO (b <= l,
+        FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   b,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
-        NAN,
+  INFO (a + b <= l,
+        FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"),
                   a,
                   b,
@@ -774,7 +775,8 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
                   discretisation,
                   barre->discretisation_element);)
   infos = &(barre->info_EF[discretisation]);
-  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+  INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
+          (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
   
@@ -821,29 +823,29 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan(l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
-        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
-        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
-        (gettext ("Le début de la charge répartie uniformément %f est incorrect. La longueur de la barre %d est de %f m.\n"),
+        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
-        (gettext ("La fin de la charge répartie uniformément %f est incorrecte. La longueur de la barre %d est de %f m.\n"),
-                  a,
+        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
+                  b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
-        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
@@ -855,7 +857,7 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   BUG (!isnan (G), FALSE)
   BUG (!isnan (J), FALSE)
   
-  if (ERR (infos->kBx, MAXDOUBLE))
+  if (errrel (infos->kBx, MAXDOUBLE))
   {
     BUG (common_fonction_ajout_poly (
            fonction,
@@ -1125,29 +1127,29 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
-        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
-        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
-                  a,
+                  b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
-        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
@@ -1467,29 +1469,29 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan(l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
-        (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
+        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
-        (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
+        (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
-                  a,
+                  b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
-        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
+        (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
@@ -1755,27 +1757,27 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
   BUG (!isnan (debut_barre), FALSE)
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
                   a);)
-  INFO (!((b < 0.) && (!(ERR (b, 0.)))),
+  INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   b);)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
                   l);)
-  INFO (!((b > l) && (!(ERR (b, l)))),
+  INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
                   l);)
-  INFO (!((a + b > l) && (!(ERR (a + b, l)))),
+  INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,

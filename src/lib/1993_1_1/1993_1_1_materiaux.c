@@ -235,7 +235,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
              free (tmp2);)
   free (tmp2);
   
-  if (!ERR (m_g (data_acier->e), MODULE_YOUNG_ACIER))
+  if (!errrel (m_g (data_acier->e), MODULE_YOUNG_ACIER))
   {
     conv_f_c (m_f (m_g (data_acier->e) / 1000000., data_acier->e.type),
               tmp1,
@@ -248,7 +248,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
     free (tmp2);
   }
   
-  if (!ERR (m_g (data_acier->nu), COEFFICIENT_NU_ACIER))
+  if (!errrel (m_g (data_acier->nu), COEFFICIENT_NU_ACIER))
   {
     conv_f_c (data_acier->nu, tmp1, DECIMAL_SANS_UNITE);
     tmp2 = description;

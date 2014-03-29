@@ -172,7 +172,8 @@ _1992_1_1_barres_ajout (Projet         *p,
         (gettext ("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"));)
   BUGPARAM (materiau, "%p", materiau, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
-  INFO (!ERR (0.0, EF_noeuds_distance (noeud_debut, noeud_fin)),
+  INFO (!errmoy (EF_noeuds_distance (noeud_debut, noeud_fin),
+                 ERRMOY_DIST),
         FALSE,
         (gettext ("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"),
                   noeud_debut->numero,
@@ -858,7 +859,7 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
   ll = EF_noeuds_distance_x_y_z (debut, fin, &xx, &yy, &zz);
   
   BUG (!isnan(ll), FALSE)
-  INFO (!ERR(0.0, ll),
+  INFO (!errmoy (ll, ERRMOY_DIST),
         FALSE,
         (gettext ("La distance entre les noeuds %d et %d est nulle\n"),
                   debut->numero,
@@ -866,7 +867,7 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
   
   // Détermination de l'angle de rotation autour de l'axe Y.
   *y = asin (zz / ll);
-  if (ERR (ll * ll - zz * zz, 0.))
+  if (errmoy (ll * ll - zz * zz, ERRMOY_DIST))
     *z = 0.;
   else
   {
@@ -1024,7 +1025,7 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
   
-  if (ERR (m_g (barre->angle), m_g (angle)))
+  if (errmax (m_g (barre->angle), m_g (angle)))
     return TRUE;
   
   barre->angle = angle;
@@ -1428,7 +1429,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rx_d_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kAx = MAXDOUBLE;
             else
               element->info_EF[j].kAx = 1. / m_g (donnees->raideur);
@@ -1462,7 +1463,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->ry_d_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kAy = MAXDOUBLE;
             else
               element->info_EF[j].kAy = 1. / m_g (donnees->raideur);
@@ -1496,7 +1497,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rz_d_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kAz = MAXDOUBLE;
             else
               element->info_EF[j].kAz = 1. / m_g (donnees->raideur);
@@ -1539,7 +1540,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rx_f_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kBx = MAXDOUBLE;
             else
               element->info_EF[j].kBx = 1. / m_g (donnees->raideur);
@@ -1573,7 +1574,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->ry_f_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kBy = MAXDOUBLE;
             else
               element->info_EF[j].kBy = 1. / m_g (donnees->raideur);
@@ -1607,7 +1608,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rz_f_data;
-            if (ERR (m_g (donnees->raideur), 0.))
+            if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
               element->info_EF[j].kBz = MAXDOUBLE;
             else
               element->info_EF[j].kBz = 1. / m_g (donnees->raideur);
@@ -1710,9 +1711,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phib_iso),
          FALSE,
          cholmod_free_triplet (&triplet, p->calculs.c);)
-    if (ERR (element->info_EF[j].kAz, MAXDOUBLE))
+    if (errrel (element->info_EF[j].kAz, MAXDOUBLE))
       MA = 0.;
-    else if (ERR (element->info_EF[j].kBz, MAXDOUBLE))
+    else if (errrel (element->info_EF[j].kBz, MAXDOUBLE))
       MA = 1. / (element->info_EF[j].kAz + phia_iso);
     else
       MA = 1. / (element->info_EF[j].kAz + phia_iso *
@@ -1763,9 +1764,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phib_iso),
          FALSE,
          cholmod_free_triplet (&triplet, p->calculs.c);)
-    if (ERR (element->info_EF[j].kBz, MAXDOUBLE))
+    if (errrel (element->info_EF[j].kBz, MAXDOUBLE))
       MB = 0.;
-    else if (ERR (element->info_EF[j].kAz, MAXDOUBLE))
+    else if (errrel (element->info_EF[j].kAz, MAXDOUBLE))
       MB = 1. / (element->info_EF[j].kBz + phib_iso);
     else
       MB = 1. / (element->info_EF[j].kBz + phib_iso *
@@ -1824,9 +1825,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phib_iso),
          FALSE,
          cholmod_free_triplet (&triplet, p->calculs.c);)
-    if (ERR (element->info_EF[j].kAy, MAXDOUBLE))
+    if (errrel (element->info_EF[j].kAy, MAXDOUBLE))
       MA = 0.;
-    else if (ERR (element->info_EF[j].kBy, MAXDOUBLE))
+    else if (errrel (element->info_EF[j].kBy, MAXDOUBLE))
       MA = 1. / (element->info_EF[j].kAy - phia_iso);
     else
       MA = 1. / (element->info_EF[j].kAy - phia_iso * (1 - 
@@ -1874,9 +1875,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phib_iso),
          FALSE,
          cholmod_free_triplet (&triplet, p->calculs.c);)
-    if (ERR (element->info_EF[j].kBy, MAXDOUBLE))
+    if (errrel (element->info_EF[j].kBy, MAXDOUBLE))
       MB = 0.;
-    else if (ERR (element->info_EF[j].kAy, MAXDOUBLE))
+    else if (errrel (element->info_EF[j].kAy, MAXDOUBLE))
       MB = 1. / (element->info_EF[j].kBy - phib_iso);
     else
       MB = 1. / (element->info_EF[j].kBy - phib_iso * (1 -

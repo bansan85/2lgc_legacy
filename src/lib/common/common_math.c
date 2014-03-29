@@ -26,20 +26,98 @@
 #include "common_erreurs.h"
 
 
+/**
+ * \brief Détermine si un nombre est plus petit que le nombre minumum err_min.
+ *        Emet un message d'erreur si le nombre est supérieur à err_min * 1e14.
+ * \param calc : le nombre 1 (nombre calculé).
+ * \param err_min : le nombre minimum.
+ * \return TRUE si ABS (calc) <= err_moy * 1e-14.
+ */
+gboolean
+errmin (double calc,
+        double err_min)
+{
+  INFO (ABS (calc) <= err_min * 1e14,
+        TRUE,
+        (gettext ("Comparaison hors limite : %lf > %lf.\n"),
+                  calc,
+                  err_min * 1e14);)
+  return ABS (calc) <= err_min;
+}
+
+
+/**
+ * \brief Détermine si un nombre est plus petit que le nombre maximum err_max
+ *        * 1e-14. Emet un message d'erreur si le nombre est supérieur à
+ *        err_max.
+ * \param calc : le nombre 1 (nombre calculé).
+ * \param err_max : le nombre maximum.
+ * \return TRUE si ABS (calc) <= err_moy * 1e-14.
+ */
+gboolean
+errmax (double calc,
+        double err_max)
+{
+  INFO (ABS (calc) <= err_max,
+        TRUE,
+        (gettext ("Comparaison hors limite : %lf > %lf.\n"),
+                  calc,
+                  err_max);)
+  return ABS (calc) <= err_max * 1e-14;
+}
+
+
+/**
+ * \brief Détermine si un nombre est plus petit que le nombre moyen err_moy
+ *        * 1e-7. Emet un message d'erreur si le nombre est supérieur à
+ *        err_moy * 1e-7.
+ * \param calc : le nombre 1 (nombre calculé).
+ * \param err_moy : le nombre moyen.
+ * \return TRUE si ABS (calc) <= err_moy * 1e-7.
+ */
+gboolean
+errmoy (double calc,
+        double err_moy)
+{
+  INFO (ABS (calc) <= err_moy * 1e7,
+        TRUE,
+        (gettext ("Comparaison hors limite : %lf > %lf.\n"),
+                  calc,
+                  err_moy * 1e7);)
+  return ABS (calc) <= err_moy * 1e-7;
+}
+
+
+/**
+ * \brief Détermine si 2 nombres sont identiques.
+ * \param calc : le nombre 1 (nombre calculé).
+ * \param theo : le nombre 2 (nombre théorique).
+ * \return TRUE si les deux nombres sont identiques à 10^-14 prêt.
+ */
+gboolean
+errrel (double calc,
+        double theo)
+{
+  double err_max = MAX (ABS (calc), ABS (theo));
+  
+  return ABS (calc - theo) <= err_max * 1e-14;
+}
+
+
 double
 common_math_arrondi_nombre (double nombre)
 /**
- * \brief Arrondi un nombre en supprimant la partie négligeable
- *        (#ERR_MIN).  L'algorithme est perfectible puisque lors de
- *        l'arrondi, une nouvelle imprécision apparait et certains nombres
- *        peuvent être arrondi en 1.09999999 ou -23.000000001.
+ * \brief Arrondi un nombre en supprimant la partie négligeable. L'algorithme
+ *        est perfectible puisque lors de l'arrondi, une nouvelle imprécision
+ *        apparait et certains nombres peuvent être arrondi en 1.09999999 ou
+ *        -23.000000001.
  * \param nombre : le nombre à arrondir.
  * \return Le nombre arrondi.
  */
 {
   double puissance;
   
-  if (ERR (nombre, 0.))
+  if (ABS (nombre) < DBL_MIN)
     return 0.;
   puissance = ERREUR_RELATIVE_PUISSANCE - ceil (log10 (ABS (nombre)));
   nombre = nombre * pow (10, puissance);
@@ -52,8 +130,7 @@ common_math_arrondi_nombre (double nombre)
 void
 common_math_arrondi_triplet (cholmod_triplet *triplet)
 /**
- * \brief Arrondi un triplet en supprimant la partie négligeable
- *        (#ERR_MIN).
+ * \brief Arrondi un triplet en supprimant la partie négligeable.
  * \param triplet : la variable triplet à arrondir.
  * \return Rien.
  */
@@ -72,8 +149,7 @@ common_math_arrondi_triplet (cholmod_triplet *triplet)
 void
 common_math_arrondi_sparse (cholmod_sparse *sparse)
 /**
- * \brief Arrondi un sparse en supprimant la partie négligeable
- *        (#ERR_MIN).
+ * \brief Arrondi un sparse en supprimant la partie négligeable.
  * \param sparse : la matrice sparse à arrondir.
  * \return Rien.
  */

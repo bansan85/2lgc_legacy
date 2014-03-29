@@ -532,21 +532,21 @@ EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
   //   M_{By} & = \frac{b_y \cdot \varphi_{Ay}+(a_y+k_{Ay}) \cdot
   //          \varphi_{By}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \end{align*}
   // \begin{verbatim}
-  if ((ERR (infos->kAy, MAXDOUBLE)) && (ERR (infos->kBy, MAXDOUBLE)))
+  if ((errrel (infos->kAy, MAXDOUBLE)) && (errrel (infos->kBy, MAXDOUBLE)))
   {
     if (ma != NULL)
       *ma = 0.;
     if (mb != NULL)
       *mb = 0.;
   }
-  else if (ERR (infos->kAy, MAXDOUBLE))
+  else if (errrel (infos->kAy, MAXDOUBLE))
   {
     if (ma != NULL)
       *ma = 0.;
     if (mb != NULL)
       *mb = phib / (infos->cy + infos->kBy);
   }
-  else if (ERR (infos->kBy, MAXDOUBLE))
+  else if (errrel (infos->kBy, MAXDOUBLE))
   {
     if (ma != NULL)
       *ma = phia / (infos->ay + infos->kAy);
@@ -599,21 +599,21 @@ EF_calculs_moment_hyper_z (Barre_Info_EF *infos,
   //   M_{Bz} & = \frac{b_z \cdot \varphi_{Az}+(a_z+k_{Az}) \cdot
   //   \varphi_{Bz}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2}\end{align*}
   //   \begin{verbatim}
-  if ((ERR (infos->kAz, MAXDOUBLE)) && (ERR (infos->kBz, MAXDOUBLE)))
+  if ((errrel (infos->kAz, MAXDOUBLE)) && (errrel (infos->kBz, MAXDOUBLE)))
   {
     if (ma != NULL)
       *ma = 0.;
     if (mb != NULL)
       *mb = 0.;
   }
-  else if (ERR (infos->kAz, MAXDOUBLE))
+  else if (errrel (infos->kAz, MAXDOUBLE))
   {
     if (ma != NULL)
       *ma = 0.;
     if (mb != NULL)
       *mb = phib / (infos->cz + infos->kBz);
   }
-  else if (ERR (infos->kBz, MAXDOUBLE))
+  else if (errrel (infos->kBz, MAXDOUBLE))
   {
     if (ma != NULL)
       *ma = phia / (infos->az + infos->kAz);

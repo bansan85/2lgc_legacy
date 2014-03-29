@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-03-29 12:52+0100\n"
-"PO-Revision-Date: 2014-03-29 12:50+0100\n"
+"POT-Creation-Date: 2014-03-30 01:16+0100\n"
+"PO-Revision-Date: 2014-03-30 01:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1129,6 +1129,10 @@ msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
+#, c-format
+msgid "Comparaison hors limite : %lf > %lf.\n"
+msgstr "Comparaison hors limite : %lf > %lf.\n"
+
 msgid "Type de nombre est inconnu.\n"
 msgstr "Type de nombre est inconnu.\n"
 
@@ -1141,16 +1145,15 @@ msgid "Le type %d de la liste est inconnu.\n"
 msgstr "Le type %d de la liste est inconnu.\n"
 
 #, c-format
+msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
+msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
+
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, texte : "
 msgstr "fichier %s, fonction %s, ligne %d, texte : "
 
-#, c-format
 msgid "Erreur critique. "
 msgstr "Erreur critique. "
-
-#, c-format
-msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
-msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 
 #, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
@@ -1893,22 +1896,6 @@ msgstr ""
 "avec la longueur de la barre qui est de %f m.\n"
 
 #, c-format
-msgid ""
-"Le début de la charge répartie uniformément %f est incorrect. La longueur de "
-"la barre %d est de %f m.\n"
-msgstr ""
-"Le début de la charge répartie uniformément %f est incorrect. La longueur de "
-"la barre %d est de %f m.\n"
-
-#, c-format
-msgid ""
-"La fin de la charge répartie uniformément %f est incorrecte. La longueur de "
-"la barre %d est de %f m.\n"
-msgstr ""
-"La fin de la charge répartie uniformément %f est incorrecte. La longueur de "
-"la barre %d est de %f m.\n"
-
-#, c-format
 msgid "La section %s existe déjà.\n"
 msgstr "La section %s existe déjà.\n"
 
@@ -2018,6 +2005,10 @@ msgstr "La charge n'est dans aucune action.\n"
 msgid "Charge '%s' de l'action %s introuvable.\n"
 msgstr "Charge '%s' de l'action %s introuvable.\n"
 
+#, c-format
+msgid "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
+msgstr "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
+
 msgid "Le résultat d'un rapport doit être compris entre 0 et 2.\n"
 msgstr ""
 "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
@@ -2124,3 +2115,17 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid ""
+#~ "Le début de la charge répartie uniformément %f est incorrect. La longueur "
+#~ "de la barre %d est de %f m.\n"
+#~ msgstr ""
+#~ "Le début de la charge répartie uniformément %f est incorrect. La longueur "
+#~ "de la barre %d est de %f m.\n"
+
+#~ msgid ""
+#~ "La fin de la charge répartie uniformément %f est incorrecte. La longueur "
+#~ "de la barre %d est de %f m.\n"
+#~ msgstr ""
+#~ "La fin de la charge répartie uniformément %f est incorrecte. La longueur "
+#~ "de la barre %d est de %f m.\n"

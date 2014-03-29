@@ -34,11 +34,19 @@
 
 #define ERREUR_RELATIVE_PUISSANCE 8 // Avec 13, common_fonction_compacte peut ne pas marcher
                    // correctement.
-#define ERR_MIN 1e-8
-#define ERR(x, y) ( \
-   (((ABS (x)) < ERR_MIN) || ((ABS (y)) < ERR_MIN)) ? \
-   ((ABS (MAX (x,y) - MIN (x,y))) < (ERR_MIN)) : \
-   ((ABS ((MAX (x,y) - MIN (x,y)) / (MIN (x,y)))) < (ERR_MIN) ))
+gboolean errmin (double calc,
+                 double err_min);
+gboolean errmax (double calc,
+                 double err_max);
+gboolean errmoy (double calc,
+                 double err_moy);
+gboolean errrel (double calc,
+                 double theo);
+#define ERRMAX_POND 100.
+#define ERRMOY_RAIDEUR 100000.
+#define ERRMOY_DIST 1.
+
+
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 

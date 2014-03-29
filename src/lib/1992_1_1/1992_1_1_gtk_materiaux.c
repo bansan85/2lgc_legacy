@@ -1048,87 +1048,87 @@ _1992_1_1_gtk_materiaux (Projet      *p,
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                            "_1992_1_1_materiaux_personnaliser_menu_fck_cube")),
     beton_data &&
-    !ERR (m_g (beton_data->fckcube),
-          _1992_1_1_materiaux_fckcube (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->fckcube),
+             _1992_1_1_materiaux_fckcube (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                 "_1992_1_1_materiaux_personnaliser_menu_fcm")),
     beton_data &&
-    !ERR (m_g (beton_data->fcm),
-          _1992_1_1_materiaux_fcm (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->fcm),
+             _1992_1_1_materiaux_fcm (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                "_1992_1_1_materiaux_personnaliser_menu_fctm")),
     beton_data &&
-    !ERR (m_g (beton_data->fctm),
-          _1992_1_1_materiaux_fctm (m_g (beton_data->fck) / 1000000.,
-                                    m_g (beton_data->fcm) / 1000000.)));
+    !errrel (m_g (beton_data->fctm),
+             _1992_1_1_materiaux_fctm (m_g (beton_data->fck) / 1000000.,
+                                       m_g (beton_data->fcm) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                           "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")),
     beton_data &&
-    !ERR (m_g (beton_data->fctk_0_05),
-          _1992_1_1_materiaux_fctk_0_05 (m_g (beton_data->fctm) / 1000000.)));
+    !errrel (m_g (beton_data->fctk_0_05),
+           _1992_1_1_materiaux_fctk_0_05 (m_g (beton_data->fctm) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                           "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")),
     beton_data &&
-    !ERR (m_g (beton_data->fctk_0_95),
-          _1992_1_1_materiaux_fctk_0_95 (m_g (beton_data->fctm) / 1000000.)));
+    !errrel (m_g (beton_data->fctk_0_95),
+           _1992_1_1_materiaux_fctk_0_95 (m_g (beton_data->fctm) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                 "_1992_1_1_materiaux_personnaliser_menu_Ecm")),
     beton_data &&
-    !ERR (m_g (beton_data->ecm),
-          _1992_1_1_materiaux_ecm (m_g (beton_data->fcm) / 1000000.)));
+    !errrel (m_g (beton_data->ecm),
+             _1992_1_1_materiaux_ecm (m_g (beton_data->fcm) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                 "_1992_1_1_materiaux_personnaliser_menu_ec1")),
     beton_data &&
-    !ERR (m_g (beton_data->ec1),
-          _1992_1_1_materiaux_ec1 (m_g (beton_data->fcm) / 1000000.)));
+    !errrel (m_g (beton_data->ec1),
+             _1992_1_1_materiaux_ec1 (m_g (beton_data->fcm) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                "_1992_1_1_materiaux_personnaliser_menu_ecu1")),
     beton_data &&
-    !ERR (m_g (beton_data->ecu1),
-          _1992_1_1_materiaux_ecu1 (m_g (beton_data->fcm) / 1000000.,
-                                    m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->ecu1),
+             _1992_1_1_materiaux_ecu1 (m_g (beton_data->fcm) / 1000000.,
+                                       m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                 "_1992_1_1_materiaux_personnaliser_menu_ec2")),
     beton_data &&
-    !ERR (m_g (beton_data->ec2),
-          _1992_1_1_materiaux_ec2 (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->ec2),
+             _1992_1_1_materiaux_ec2 (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                "_1992_1_1_materiaux_personnaliser_menu_ecu2")),
     beton_data &&
-    !ERR (m_g (beton_data->ecu2),
-          _1992_1_1_materiaux_ecu2 (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->ecu2),
+             _1992_1_1_materiaux_ecu2 (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                   "_1992_1_1_materiaux_personnaliser_menu_n")),
     beton_data &&
-    !ERR (m_g (beton_data->n),
-          _1992_1_1_materiaux_n (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->n),
+             _1992_1_1_materiaux_n (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active(
     GTK_CHECK_MENU_ITEM ( gtk_builder_get_object (UI_BET.builder,
                                 "_1992_1_1_materiaux_personnaliser_menu_ec3")),
     beton_data &&
-    !ERR (m_g (beton_data->ec3),
-          _1992_1_1_materiaux_ec3 (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->ec3),
+             _1992_1_1_materiaux_ec3 (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                "_1992_1_1_materiaux_personnaliser_menu_ecu3")),
     beton_data &&
-    !ERR (m_g (beton_data->ecu3),
-          _1992_1_1_materiaux_ecu3 (m_g (beton_data->fck) / 1000000.)));
+    !errrel (m_g (beton_data->ecu3),
+             _1992_1_1_materiaux_ecu3 (m_g (beton_data->fck) / 1000000.)));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
                                  "_1992_1_1_materiaux_personnaliser_menu_nu")),
     beton_data &&
-    !ERR (m_g (beton_data->nu), COEFFICIENT_NU_BETON));
+    !errrel (m_g (beton_data->nu), COEFFICIENT_NU_BETON));
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_BET.window),
                                 GTK_WINDOW (UI_GTK.window));

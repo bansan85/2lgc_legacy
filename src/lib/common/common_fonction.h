@@ -57,7 +57,7 @@ gboolean common_fonction_affiche                 (Fonction    *fonction)
 GdkPixbuf *common_fonction_dessin                (GList       *fonctions,
                                                   unsigned int width,
                                                   unsigned int height,
-                                                  unsigned int decimales)
+                                                  int          decimales)
                                        __attribute__((__warn_unused_result__));
 #endif
 

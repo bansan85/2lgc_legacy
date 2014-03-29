@@ -277,7 +277,7 @@ EF_sections_rectangulaire_ajout (Projet     *p,
 
 #define SECTION_MODIF(QUOI, PAR) \
   if ((!isnan (m_g (PAR))) && \
-      (!ERR (m_g (section_data->QUOI), m_g (PAR)))) \
+      (!errrel (m_g (section_data->QUOI), m_g (PAR)))) \
     section_data->QUOI = PAR; \
   else \
     PAR = m_f (NAN, FLOTTANT_ORDINATEUR);
@@ -814,16 +814,16 @@ EF_sections_personnalisee_verif_forme (GList *forme,
       
       // On refuse le cas où point1 == point2
       if (message)
-        INFO ((!ERR (m_g (point1->x), m_g (point2->x))) ||
-              (!ERR (m_g (point1->y), m_g (point2->y))),
+        INFO ((!errrel (m_g (point1->x), m_g (point2->x))) ||
+              (!errrel (m_g (point1->y), m_g (point2->y))),
               FALSE,
               (gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"));)
-      else if ((ERR (m_g (point1->x), m_g (point2->x))) &&
-               (ERR (m_g (point1->y), m_g (point2->y))))
+      else if ((errrel (m_g (point1->x), m_g (point2->x))) &&
+               (errrel (m_g (point1->y), m_g (point2->y))))
         return FALSE;
       
       // Equation de la droite passant par les deux points.
-      if (ERR (m_g (point1->x), m_g (point2->x)))
+      if (errrel (m_g (point1->x), m_g (point2->x)))
       {
         a = NAN;
         b = m_g (point1->x);
@@ -862,7 +862,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
           // Maintenant, on s'assure qu'il n'y a pas d'intersection
           // entre les deux segments de droite [point1, point2] et
           // [point3, point4].
-          if (ERR (m_g (point3->x), m_g (point4->x)))
+          if (errrel (m_g (point3->x), m_g (point4->x)))
           {
             a2 = NAN;
             b2 = m_g(point3->x);
@@ -885,14 +885,14 @@ EF_sections_personnalisee_verif_forme (GList *forme,
           ymin2 = MIN (m_g (point3->y), m_g (point4->y));
           ymax2 = MAX (m_g (point3->y), m_g (point4->y));
           
-          if ((ERR (xmax1, xmin2)) || (ERR (xmax2, xmin1)))
+          if ((errrel (xmax1, xmin2)) || (errrel (xmax2, xmin1)))
           {
             // Alors, le seul moyen qu'il y ait une collision est que
             // les deux segments soient verticaux.
             if ((isnan (a)) && (isnan (a2)))
             {
               // Si les deux segments se suivent
-              if ((ERR (ymax1, ymin2)) || (ERR (ymax2, ymin1)))
+              if ((errrel (ymax1, ymin2)) || (errrel (ymax2, ymin1)))
               {
                 // OK
               }
@@ -905,7 +905,8 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                           ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
                           ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
                           ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
-                          ((ERR (ymin1, ymin2)) && (ERR (ymax1, ymax2)))),
+                          ((errrel (ymin1, ymin2)) &&
+                           (errrel (ymax1, ymax2)))),
                         FALSE,
                         (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                   m_g (point1->x),
@@ -920,7 +921,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                   ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
                   ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
                   ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
-                  ((ERR (ymin1, ymin2)) && (ERR (ymax1, ymax2))))
+                  ((errrel (ymin1, ymin2)) && (errrel (ymax1, ymax2))))
                   return FALSE;
               }
             }
@@ -933,7 +934,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             // Valeur y du 2ème segment en position x du segment 1
             y_b = a2 * b + b2;
             
-            if ((ERR (y_b, ymin1)) || (ERR (y_b, ymax1)))
+            if ((errrel (y_b, ymin1)) || (errrel (y_b, ymax1)))
             {
               // OK
             }
@@ -969,7 +970,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             // Valeur y du 1er segment en position x du segment 2
             y_b = a * b2 + b;
             
-            if ((ERR (y_b, ymin2)) || (ERR (y_b, ymax2)))
+            if ((errrel (y_b, ymin2)) || (errrel (y_b, ymax2)))
             {
               // OK
             }
@@ -1002,15 +1003,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
           // le x est présent dans les deux segments
           else
           {
-            if (ERR (a, a2))
+            if (errrel (a, a2))
             {
               // La seule possibilité d'une intersection est que les
               // deux b soient identiques.
-              if (ERR (b, b2))
+              if (errrel (b, b2))
               {
                 // On regarde si les deux segments ont un x en
                 // commun
-                if ((ERR (xmax1, xmin2)) || (ERR (xmax2, xmin1)))
+                if ((errrel (xmax1, xmin2)) || (errrel (xmax2, xmin1)))
                 {
                   // OK
                 }
@@ -1046,10 +1047,10 @@ EF_sections_personnalisee_verif_forme (GList *forme,
               // Calcule de l'intersection
               double x_inter = -(b2 - b) / (a2 - a);
               
-              if ((ERR (x_inter, xmin1)) ||
-                (ERR (x_inter, xmin2)) ||
-                (ERR (x_inter, xmax1)) ||
-                (ERR (x_inter, xmax2)))
+              if ((errrel (x_inter, xmin1)) ||
+                (errrel (x_inter, xmin2)) ||
+                (errrel (x_inter, xmax1)) ||
+                (errrel (x_inter, xmax2)))
               {
                 // OK
               }
@@ -2491,7 +2492,7 @@ EF_sections_es_l (EF_Barre    *barre,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((d > f) && (!(ERR (d, f)))),
+  INFO (d <= f,
         NAN,
         (gettext ("La fin doit être après le début.\n"));)
   
