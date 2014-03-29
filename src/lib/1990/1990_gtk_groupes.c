@@ -275,16 +275,17 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
       gtk_tree_path_free (path);
     }
     
-    if (groupe->elements != NULL)
+    if ((groupe->elements != NULL) && (dispos != NULL))
     {
       GList *list_parcours2 = groupe->elements;
       
       do
       {
         Groupe *groupe2 = list_parcours2->data;
+        int     tmp = g_list_index (liste_actions, groupe2);
         
         // On signale que l'élément a déjà été inséré.
-        dispos[g_list_index (liste_actions, groupe2)] = 1;
+        dispos[tmp] = 1;
         
         gtk_tree_store_append (UI_GRO.tree_store_etat,
                                &groupe2->Iter_groupe,

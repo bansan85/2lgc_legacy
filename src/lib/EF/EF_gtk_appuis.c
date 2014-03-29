@@ -646,12 +646,12 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
   \
   g_object_set (cell, "text", txt, NULL); \
 }
-EF_GTK_APPUIS_RENDER (1, ux)
-EF_GTK_APPUIS_RENDER (2, uy)
-EF_GTK_APPUIS_RENDER (3, uz)
-EF_GTK_APPUIS_RENDER (4, rx)
-EF_GTK_APPUIS_RENDER (5, ry)
-EF_GTK_APPUIS_RENDER (6, rz)
+EF_GTK_APPUIS_RENDER (1, ux);
+EF_GTK_APPUIS_RENDER (2, uy);
+EF_GTK_APPUIS_RENDER (3, uz);
+EF_GTK_APPUIS_RENDER (4, rx);
+EF_GTK_APPUIS_RENDER (5, ry);
+EF_GTK_APPUIS_RENDER (6, rz);
 /**
  * \def EF_GTK_APPUIS_RENDER(NUM, DATA)
  * \brief Crée la fonction affichant le type d'appui en fonction de la demande.

@@ -271,6 +271,9 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
       break;
     }
   }
+  BUGCRIT (actions,
+           FALSE,
+           (gettext ("Impossible\n"));)
   
   #define FREE_ALL { \
     if (gtk_combo_box_get_active (UI_RES.combobox) == 0) \
@@ -2788,6 +2791,10 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
   }
+  else
+    FAILCRIT ( ,
+              (gettext ("La page est inconnue.\n"));
+                free (res);)
   
   return;
 }
