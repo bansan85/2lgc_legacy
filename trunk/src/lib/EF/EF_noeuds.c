@@ -445,6 +445,9 @@ EF_noeuds_change_pos_relat (Projet   *p,
   // intermédiaires. On commence par récupérer les bornes qui ne nécessite pas
   // de réorganisation.
   liste = g_list_find (info->barre->nds_inter, noeud);
+  BUGCRIT (liste,
+           FALSE,
+           (gettext ("Impossible\n"));)
   if (g_list_previous (liste) == NULL)
     avant = 0.;
   else
@@ -832,13 +835,15 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
                              p->calculs.c);
     }
     infos->barre->discretisation_element--;
+    BUGPARAM (infos->barre->discretisation_element + 1, "%d", infos->barre->discretisation_element + 1, )
     BUGCRIT (infos->barre->info_EF = realloc (infos->barre->info_EF,
           sizeof (Barre_Info_EF) * (infos->barre->discretisation_element + 1)),
              ,
              (gettext("Erreur d'allocation mémoire.\n"));)
     memset (infos->barre->info_EF,
             0,
-            sizeof (Barre_Info_EF) * (infos->barre->discretisation_element+1));
+            sizeof (Barre_Info_EF) *
+                                   (infos->barre->discretisation_element + 1));
   }
   
   free (noeud->data);

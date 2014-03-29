@@ -1125,6 +1125,10 @@ m3d_barre (void     *donnees_m3d,
             else
               point2 = (EF_Point *) ((GList *) list_parcours->data)->data;
             
+            BUGCRIT (point2,
+                     FALSE,
+                     (gettext ("Impossible\r"));
+                       delete tout;)
             angle = atan2 (m_g (point2->y) - m_g (point1->y),
                            m_g (point2->x) - m_g (point1->x)) / M_PI * 180.;
             angle1 = angle2;
@@ -1168,6 +1172,10 @@ m3d_barre (void     *donnees_m3d,
               point2 = (EF_Point *) list_parcours2->data;
             else
               point2 = (EF_Point *) ((GList *) list_parcours->data)->data;
+            BUGCRIT (point2,
+                     FALSE,
+                     (gettext ("Impossible\r"));
+                       delete tout;)
             
             angle = atan2 (m_g (point2->y) - m_g (point1->y),
                            m_g (point2->x) - m_g (point1->x))

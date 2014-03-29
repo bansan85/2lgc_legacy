@@ -144,14 +144,14 @@ EF_calculs_initialise (Projet *p)
   int    nb_noeuds;
   
   BUGPARAM (p, "%p", p, FALSE)
-  INFO (p->modele.noeuds,
-        FALSE,
-        (gettext ("Impossible de réaliser un calcul sans noeud existant.\n"));)
   INFO (p->modele.barres,
         FALSE,
         (gettext ("Impossible de réaliser un calcul sans barre existante.\n"));)
   
   nb_noeuds = g_list_length (p->modele.noeuds);
+  INFO (nb_noeuds,
+        FALSE,
+        (gettext ("Impossible de réaliser un calcul sans noeud existant.\n"));)
   
   // Allocation de la mémoire nécessaire pour contenir la position de chaque
   // degré de liberté des noeuds (via n_part et

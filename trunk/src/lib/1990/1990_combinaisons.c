@@ -660,6 +660,10 @@ _1990_combinaisons_genere_or (Projet        *p,
       GList       *nouvelles_combinaisons = NULL;
       
       list_parcours = groupe->elements;
+      BUGCRIT (list_parcours,
+               FALSE,
+               (gettext ("Impossible\n"));
+                 _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
       do
       {
         if ((parcours_bits & 1) == 1)

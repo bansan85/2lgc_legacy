@@ -1432,10 +1432,10 @@ common_fonction_affiche (Fonction *fonction)
 
 #ifdef ENABLE_GTK
 GdkPixbuf *
-common_fonction_dessin (GList *fonctions,
-                        int    width,
-                        int    height,
-                        int    decimales)
+common_fonction_dessin (GList       *fonctions,
+                        unsigned int width,
+                        unsigned int height,
+                        unsigned int decimales)
 /**
  * \brief Renvoie un dessin représentant la courbe enveloppe.
  * \param fonctions : la liste contenant les fonctions à dessiner,
@@ -1454,7 +1454,7 @@ common_fonction_dessin (GList *fonctions,
  */
 {
   int              rowstride, n_channels;
-  int              x, y;
+  unsigned int     x, y;
   guchar          *pixels, *p;
   GdkPixbuf       *pixbuf;
   cairo_surface_t *surface;
@@ -1579,8 +1579,8 @@ common_fonction_dessin (GList *fonctions,
     if (g_list_next (fonctions) != NULL)
     {
       cairo_rel_line_to (cr, 0., - (ma[width - 1] - mi[width - 1]) * echelle);
-      for (x = width - 2; x >= 0; x--)
-        cairo_rel_line_to (cr, -1., - (ma[x] - ma[x + 1]) * echelle);
+      for (x = width - 1; x > 0; x--)
+        cairo_rel_line_to (cr, -1., - (ma[x - 1] - ma[x]) * echelle);
     }
     else
     {
