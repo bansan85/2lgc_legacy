@@ -84,7 +84,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (action, "%p", action, NULL)
   BUGPARAM (barres, "%p", barres, NULL)
-  INFO (!((m_g (a) < 0.) && (!(ERR (m_g (a), 0.)))),
+  INFO (m_g (a) >= 0.,
         NULL,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   m_g (a));)
@@ -106,7 +106,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
       double    distance = EF_noeuds_distance (barre->noeud_debut,
                                                barre->noeud_fin);
       
-      INFO (!((m_g (a) > distance) && (!(ERR (m_g (a), distance)))),
+      INFO (!(m_g (a) > distance),
             NULL,
             (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                       m_g (a),
@@ -245,10 +245,11 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+  INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
+          (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (!(a < 0.),
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -272,7 +273,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
@@ -289,9 +290,9 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   // M_{Bx} = \frac{\frac{a}{G \cdot J} +k_{Ax}}{\frac{L}{G \cdot J} + k_{Ax} +
   //          k_{Bx}} \cdot M_x\end{displaymath}\begin{verbatim}
   
-  if (ERR (infos->kAx, MAXDOUBLE))
+  if (errrel (infos->kAx, MAXDOUBLE))
     *mb = mx;
-  else if (ERR (infos->kBx, MAXDOUBLE))
+  else if (errrel (infos->kBx, MAXDOUBLE))
     *mb = 0.;
   else
     *mb = (a / (G * J) + infos->kAx) /
@@ -346,7 +347,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -387,7 +388,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
@@ -459,7 +460,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
                   barre->discretisation_element);)
   BUGPARAM (phia, "%p", phia, FALSE)
   BUGPARAM (phib, "%p", phib, FALSE)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -499,7 +500,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
@@ -570,10 +571,11 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
                   discretisation,
                   barre->discretisation_element);)
   infos = &(barre->info_EF[discretisation]);
-  INFO (!((ERR (infos->kAx, MAXDOUBLE)) && (ERR (infos->kBx, MAXDOUBLE))),
+  INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
+          (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -609,7 +611,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"), a, l);)
   
@@ -618,7 +620,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
   BUG (!isnan (G), FALSE)
   BUG (!isnan (J), FALSE)
   
-  if (ERR (infos->kBx, MAXDOUBLE))
+  if (errrel (infos->kBx, MAXDOUBLE))
   {
     BUG (common_fonction_ajout_poly (
            fonction,
@@ -727,7 +729,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -814,7 +816,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
@@ -1020,7 +1022,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -1046,7 +1048,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
@@ -1206,7 +1208,7 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element);)
-  INFO (!((a < 0.) && (!(ERR (a, 0.)))),
+  INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a);)
@@ -1233,7 +1235,7 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
-  INFO (!((a > l) && (!(ERR (a, l)))),
+  INFO (a <= l,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,

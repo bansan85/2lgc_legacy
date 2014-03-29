@@ -810,7 +810,7 @@ _1990_action_psi_change (Projet      *p,
   
   if (psi_num == 0)
   {
-    if (ERR (m_g (psi), m_g (action->psi0)))
+    if (errrel (m_g (psi), m_g (action->psi0)))
       return TRUE;
     
     action->psi0 = psi;
@@ -821,7 +821,7 @@ _1990_action_psi_change (Projet      *p,
   }
   else if (psi_num == 1)
   {
-    if (ERR (m_g (psi), m_g (action->psi1)))
+    if (errrel (m_g (psi), m_g (action->psi1)))
       return TRUE;
     
     action->psi1 = psi;
@@ -832,7 +832,7 @@ _1990_action_psi_change (Projet      *p,
   }
   else if (psi_num == 2)
   {
-    if (ERR (m_g (psi), m_g (action->psi2)))
+    if (errrel (m_g (psi), m_g (action->psi2)))
       return TRUE;
     
     action->psi2 = psi;

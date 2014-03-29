@@ -449,7 +449,7 @@ m3d_camera_zoom_all (Projet *p)
       // Droite (a*X+b=Y) passant en X=x    et Y = (xmin +xmax )/2
       //                             X=x+dx et Y = (xmin2+xmax2)/2
       // Le nouveau x est obtenu en cherchant f(x)=allocation.width/2.
-      if (!ERR (xmax - xmax2 + xmin - xmin2, 0.))
+      if (!errmax (xmax - xmax2 + xmin - xmin2, ABS (allocation.width)))
       {
         dx = -dx * (allocation.width - xmax - xmin) /
                    (xmax - xmax2 + xmin - xmin2) / 5.;
@@ -482,7 +482,7 @@ m3d_camera_zoom_all (Projet *p)
       vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE)
-      if (!ERR (ymax - ymax2 + ymin - ymin2, 0.))
+      if (!errmax (ymax - ymax2 + ymin - ymin2, ABS (allocation.height)))
       {
         dy = -dy * (allocation.height - ymax - ymin) /
                    (ymax - ymax2 + ymin - ymin2) / 5.;
@@ -528,16 +528,16 @@ m3d_camera_zoom_all (Projet *p)
       // Ainsi, on obtient une valeur optimale de dz = dz*x2*(x1-w)/((x1-x2)*w)
       // On fait le même calcul pour les ordonnées.
       // Ensuite, on retient la valeur de dz minimale.
-      if (((!ERR (xmax - xmin - (xmax2 - xmin2), 0.)) ||
+      if (((!errmax (xmax - xmin - (xmax2 - xmin2), allocation.width)) ||
            ((xmax - xmin < 1.) &&
             (xmax2 - xmin2 < 1.) &&
             (fabs (allocation.width - xmax - xmin) < 1.) &&
             (fabs (allocation.width - xmax2 - xmin2) < 1.))) &&
-          ((!ERR (ymax - ymin - (ymax2 - ymin2), 0.)) ||
+          ((!errrel (ymax - ymin - (ymax2 - ymin2), allocation.height)) ||
            ((ymax - ymin < 1.) &&
             (ymax2 - ymin2 < 1.) &&
-            (fabs (allocation.height - ymax - ymin) < 1.) &&
-            (fabs (allocation.height - ymax2 - ymin2) < 1.))))
+            (ABS (allocation.height - ymax - ymin) < 1.) &&
+            (ABS (allocation.height - ymax2 - ymin2) < 1.))))
       {
         // Ici, les conditions (xmax-xmin < 0.5) && (xmax2-xmin2 < 0.5) &&
         // (fabs(allocation.width-xmax-xmin) < 1.) &&
@@ -545,10 +545,10 @@ m3d_camera_zoom_all (Projet *p)
         // noeuds sont alignés parfaitement à la vertical. Par exemple un
         // schéma 2D en XZ avec la vue en YZ.
         dztmp = NAN;
-        if (!ERR (xmax - xmin - (xmax2 - xmin2), 0.))
+        if (!errrel (xmax - xmin - (xmax2 - xmin2), allocation.width))
           dztmp = dz * (xmax2 - xmin2) * (xmax - xmin - allocation.width) /
                   ((xmax - xmin - (xmax2 - xmin2)) * allocation.width) / 5.;
-        if (!ERR (ymax - ymin - (ymax2 - ymin2), 0.))
+        if (!errrel (ymax - ymin - (ymax2 - ymin2), allocation.height))
         {
           if (isnan (dztmp))
             dztmp = dz * (ymax2 - ymin2) * (ymax - ymin - allocation.height) /
@@ -951,7 +951,7 @@ m3d_barre (void     *donnees_m3d,
   longueur = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
   BUG (!isnan (longueur), FALSE, free (tmp););
   
-  if (ERR (longueur, 0.))
+  if (errmoy (longueur, ERRMOY_DIST))
     return TRUE;
   
   switch (barre->section->type)

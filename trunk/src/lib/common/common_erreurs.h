@@ -22,12 +22,27 @@
 #include "config.h"
 #include <stdio.h>
 
+
+#define PRINTF(...) printf (__VA_ARGS__)
+
+#define NOTE(X, ...) {if (!(X)) \
+  { \
+    PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
+            __FILE__, \
+            __FUNCTION__, \
+            __LINE__, \
+            #X); \
+    PRINTF (__VA_ARGS__); \
+  } \
+}
+
+
 #define NOWARNING _Pragma("GCC diagnostic push")\
   _Pragma("GCC diagnostic ignored \"-Wunused-result\"")
 #define POPWARNING _Pragma("GCC diagnostic pop")
 
 #define FAILINFO(Y, ...) { \
-  printf (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
+  PRINTF (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
           __FILE__, \
           __FUNCTION__, \
           __LINE__); \
@@ -36,18 +51,18 @@
 }
 
 #define FAILPARAM(PARAM, TYPE, Y, ...) { \
-  printf ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
+  PRINTF ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
   FAILINFO (Y, ("\n"); __VA_ARGS__) \
 }
 
 #define FAILCRIT(Y, ...) { \
-  printf (gettext ("Erreur critique. ")); \
+  PRINTF (gettext ("Erreur critique. ")); \
   FAILINFO (Y, __VA_ARGS__) \
 }
 
 #define BUG(X, Y, ...) {if (!(X)) \
   { \
-    printf (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
+    PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
             __FILE__, \
             __FUNCTION__, \
             __LINE__, \
@@ -68,7 +83,7 @@
 
 #define INFO(X, Y, ...) {if (!(X)) \
   { \
-    printf (gettext ("fichier %s, fonction %s, ligne %d, test : %s, texte : "), \
+    PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s, texte : "), \
             __FILE__, \
             __FUNCTION__, \
             __LINE__, \
@@ -124,7 +139,7 @@
 
 #define BUGPARAMCRIT(PARAM, TYPE, X, Y, ...) {if (!(X)) \
   { \
-    printf (gettext ("Erreur critique. ")); \
+    PRINTF (gettext ("Erreur critique. ")); \
     FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
   } \
 }
@@ -143,7 +158,7 @@
 
 #define BUGCRIT(X, Y, ...) {if (!(X)) \
   { \
-    printf (gettext ("Erreur critique. ")); \
+    PRINTF (gettext ("Erreur critique. ")); \
     FAILINFO (Y, __VA_ARGS__) \
   } \
 }

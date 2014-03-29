@@ -58,7 +58,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
   
   // Si la coupure est égale au début du premier tronçon Alors
   //   Fin.
-  if (ERR (fonction->troncons[0].debut_troncon, coupure))
+  if (errrel (fonction->troncons[0].debut_troncon, coupure))
     return TRUE;
   // Sinon Si la coupure est inférieure au début du premier troncon Alors
   //   Insertion d'un tronçon en première position.
@@ -100,7 +100,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
   // FinSi
     for (i = 0; i < fonction->nb_troncons; i++)
     {
-      if (ERR (fonction->troncons[i].fin_troncon, coupure))
+      if (errrel (fonction->troncons[i].fin_troncon, coupure))
         return TRUE;
       else if (fonction->troncons[i].fin_troncon > coupure)
       {
@@ -196,7 +196,7 @@ common_fonction_ajout_poly (Fonction *fonction,
   // Si fin_troncon == debut_troncon Alors
   //   Fin.
   // FinSi
-  if (ERR (fin_troncon, debut_troncon))
+  if (errrel (fin_troncon, debut_troncon))
     return TRUE;
   
   INFO (fin_troncon > debut_troncon,
@@ -275,9 +275,9 @@ common_fonction_ajout_poly (Fonction *fonction,
     BUG (common_fonction_scinde_troncon (fonction, fin_troncon), FALSE)
     while ((i < fonction->nb_troncons))
     {
-      if (ERR (fonction->troncons[i].debut_troncon, fin_troncon))
+      if (errrel (fonction->troncons[i].debut_troncon, fin_troncon))
         return TRUE;
-      else if ((ERR (fonction->troncons[i].debut_troncon, debut_troncon)) ||
+      else if ((errrel (fonction->troncons[i].debut_troncon, debut_troncon)) ||
                (fonction->troncons[i].debut_troncon > debut_troncon))
       {
         fonction->troncons[i].x0 += x0_t;
@@ -363,15 +363,15 @@ common_fonction_compacte (Fonction *fonction,
   k = 0;
   for (i = 1; i < fonction->nb_troncons; i++)
   {
-    if ((ERR (fonction->troncons[i].x0, fonction->troncons[k].x0)) &&
-        (ERR (fonction->troncons[i].x1, fonction->troncons[k].x1)) &&
-        (ERR (fonction->troncons[i].x2, fonction->troncons[k].x2)) &&
-        (ERR (fonction->troncons[i].x3, fonction->troncons[k].x3)) &&
-        (ERR (fonction->troncons[i].x4, fonction->troncons[k].x4)) &&
-        (ERR (fonction->troncons[i].x5, fonction->troncons[k].x5)) &&
-        (ERR (fonction->troncons[i].x6, fonction->troncons[k].x6)) &&
+    if ((errrel (fonction->troncons[i].x0, fonction->troncons[k].x0)) &&
+        (errrel (fonction->troncons[i].x1, fonction->troncons[k].x1)) &&
+        (errrel (fonction->troncons[i].x2, fonction->troncons[k].x2)) &&
+        (errrel (fonction->troncons[i].x3, fonction->troncons[k].x3)) &&
+        (errrel (fonction->troncons[i].x4, fonction->troncons[k].x4)) &&
+        (errrel (fonction->troncons[i].x5, fonction->troncons[k].x5)) &&
+        (errrel (fonction->troncons[i].x6, fonction->troncons[k].x6)) &&
         ((index == NULL) ||
-         (ERR (index->troncons[i].x0, index->troncons[k].x0))))
+         (errrel (index->troncons[i].x0, index->troncons[k].x0))))
     {
       fonction->troncons[j - 1].fin_troncon =
                                              fonction->troncons[i].fin_troncon;
@@ -492,18 +492,20 @@ common_fonction_y (Fonction   *fonction,
   if (fonction->nb_troncons == 0)
     return NAN;
   
-  if ((ERR (fonction->troncons[0].debut_troncon, x)) && (position == -1))
+  if ((errrel (fonction->troncons[0].debut_troncon, x)) &&
+      (position == -1))
     return NAN;
   
   for (i = 0; i < fonction->nb_troncons; i++)
   {
-    if (x <= fonction->troncons[i].fin_troncon * (1 + ERR_MIN))
+    if (x <= fonction->troncons[i].fin_troncon)
     {
       if (x < fonction->troncons[i].debut_troncon)
         return NAN;
       else
       {
-        if ((ERR (fonction->troncons[i].fin_troncon, x)) && (position == 1))
+        if ((errrel (fonction->troncons[i].fin_troncon, x)) &&
+            (position == 1))
         {
           if (i == fonction->nb_troncons  -1)
             return NAN;
@@ -568,9 +570,9 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   common_fonction_ax2_bx_c (xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
   
-  if (ERR (a, 0.))
+  if (errmoy (a, ERRMOY_DIST))
   {
-    if (ERR (b, 0.))
+    if (errmoy (b, ERRMOY_DIST))
     {
       zero1 = NAN;
       zero2 = NAN;
@@ -578,7 +580,7 @@ common_fonction_cherche_zero (Fonction *fonction,
     else
     {
       zero1 = -c/b;
-      if ((zero1 < mini * (1 - ERR_MIN)) || (zero1 > maxi * (1 + ERR_MIN)))
+      if ((zero1 < mini) || (zero1 > maxi))
         zero1 = NAN;
       zero2 = NAN;
     }
@@ -597,9 +599,9 @@ common_fonction_cherche_zero (Fonction *fonction,
     }
   }
   
-  if ((zero1 < mini * (1 - ERR_MIN)) || (zero1 > maxi * (1 + ERR_MIN)))
+  if ((zero1 < mini) || (zero1 > maxi))
     zero1 = NAN;
-  if ((zero2 < mini * (1 - ERR_MIN)) || (zero2 > maxi * (1 + ERR_MIN)))
+  if ((zero2 < mini) || (zero2 > maxi))
     zero2 = NAN;
   // Idéalement, il faudrait faire une boucle ci-dessous mais les limitations
   // de la précision de la virgule flottante va attendre ces limites en
@@ -631,9 +633,9 @@ common_fonction_cherche_zero (Fonction *fonction,
                               &b,
                               &c);
     
-    if (ERR (a, 0.))
+    if (errmoy (a, ERRMOY_DIST))
     {
-      if (ERR (b, 0.))
+      if (errmoy (b, ERRMOY_DIST))
         zero1 = NAN;
       else
         zero1 = - c / b;
@@ -648,17 +650,17 @@ common_fonction_cherche_zero (Fonction *fonction,
     
     ecart_x = ABS (zero1_old - zero1) / 2.;
   }
-  if ((zero1 < mini * (1 - ERR_MIN)) || (zero1 > maxi * (1 + ERR_MIN)))
+  if ((zero1 < mini) || (zero1 > maxi))
     zero1 = NAN;
   
   // Recherche dicotomique du zero1
   // Première vérification d'usage.
-  if ((!isnan (zero1)) && (ecart_x > ERR_MIN))
+  if ((!isnan (zero1)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
     xx1_2 = MAX (zero1 - ecart_x, mini);
     xx3_2 = MIN (zero1 + ecart_x, maxi);
     xx2_2 = (xx1_2 + xx3_2) / 2.;
-    while (xx3_2 - xx1_2 > ERR_MIN / 10)
+    while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
       if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
@@ -696,9 +698,9 @@ common_fonction_cherche_zero (Fonction *fonction,
                               &b,
                               &c);
     
-    if (ERR (a, 0.))
+    if (errmoy (a, ERRMOY_DIST))
     {
-      if (ERR (b, 0.))
+      if (errmoy (b, ERRMOY_DIST))
         zero2 = NAN;
       else
         zero2 = - c / b;
@@ -714,12 +716,12 @@ common_fonction_cherche_zero (Fonction *fonction,
     ecart_x = ABS (zero2_old - zero2) / 2.;
   }
   // Dicotomie
-  if ((!isnan (zero2)) && (ecart_x > ERR_MIN))
+  if ((!isnan (zero2)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
     xx1_2 = MAX (zero2 - ecart_x, mini);
     xx3_2 = MIN (zero2 + ecart_x, maxi);
     xx2_2 = (xx1_2 + xx3_2) / 2.;
-    while (xx3_2 - xx1_2 > ERR_MIN / 10)
+    while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
       if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
@@ -731,7 +733,7 @@ common_fonction_cherche_zero (Fonction *fonction,
     zero2 = (xx3_2 + xx1_2) / 2.;
   }
   
-  if ((zero2 < mini * (1 - ERR_MIN)) || (zero2 > maxi * (1 + ERR_MIN)))
+  if ((zero2 < mini) || (zero2 > maxi))
     zero2 = NAN;
   
   if ((isnan (zero1)) && (isnan (zero2)))
@@ -749,7 +751,7 @@ common_fonction_cherche_zero (Fonction *fonction,
     *zero_1 = zero1;
     *zero_2 = NAN;
   }
-  else if (ERR (zero1, zero2))
+  else if (errrel (zero1, zero2))
   {
     *zero_1 = zero1;
     *zero_2 = NAN;
@@ -823,15 +825,15 @@ common_fonction_caracteristiques (Fonction *fonction,
     else
     {
       // On vérifie si la fonction est discontinue en x
-      if ((!ERR (fonction->troncons[i].debut_troncon,
-                 fonction->troncons[i-1].fin_troncon)) ||
+      if ((!errrel (fonction->troncons[i].debut_troncon,
+                    fonction->troncons[i-1].fin_troncon)) ||
       // ou si elle est discontinue en y
-          (!ERR (common_fonction_y (fonction,
-                                    fonction->troncons[i].debut_troncon,
-                                    -1),
-                 common_fonction_y (fonction,
-                                    fonction->troncons[i].debut_troncon,
-                                    1))))
+          (!errrel (common_fonction_y (fonction,
+                                       fonction->troncons[i].debut_troncon,
+                                       -1),
+                    common_fonction_y (fonction,
+                                       fonction->troncons[i].debut_troncon,
+                                       1))))
       {
         nb++;
         tmp = pos_tmp;
@@ -953,9 +955,9 @@ common_fonction_caracteristiques (Fonction *fonction,
                                 &b,
                                 &c);
       
-      if (ERR (a, 0.))
+      if (errmoy (a, ERRMOY_DIST))
       {
-        if (ERR (b, 0.))
+        if (errmoy (b, ERRMOY_DIST))
         {
           zero1 = NAN;
           zero2 = NAN;
@@ -992,7 +994,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (zero1)) && (ABS (ecart_x) > ERR_MIN / 1000.))
+      while ((!isnan (zero1)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         double zero1_old = zero1;
         
@@ -1016,9 +1018,9 @@ common_fonction_caracteristiques (Fonction *fonction,
                                   &b,
                                   &c);
         
-        if (ERR (a, 0.))
+        if (errmoy (a, ERRMOY_DIST))
         {
-          if (ERR (b, 0.))
+          if (errmoy (b, ERRMOY_DIST))
             zero1 = NAN;
           else
           {
@@ -1054,7 +1056,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
               xx1_2 = xx2_2;
             else xx3_2 = xx2_2;
-            if (ABS (xx3_2 - xx1_2) < ERR_MIN / 1000.)
+            if (errmoy (xx3_2 - xx1_2, ERRMOY_DIST))
             {
               zero1 = (xx3_2 + xx1_2)/2.;
               break;
@@ -1074,7 +1076,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (zero2)) && (ABS (ecart_x) > ERR_MIN / 1000.))
+      while ((!isnan (zero2)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         zero2_old = zero2;
         if (zero2 - ecart_x < xx1)
@@ -1097,9 +1099,9 @@ common_fonction_caracteristiques (Fonction *fonction,
                                   &b,
                                   &c);
         
-        if (ERR (a, 0.))
+        if (errmoy (a, ERRMOY_DIST))
         {
-          if (ERR (b, 0.))
+          if (errmoy (b, ERRMOY_DIST))
             zero2 = NAN;
           else
           {
@@ -1135,7 +1137,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
               xx1_2 = xx2_2;
             else xx3_2 = xx2_2;
-            if (ABS (xx3_2 - xx1_2) < ERR_MIN / 1000.)
+            if (errmoy (xx3_2 - xx1_2, ERRMOY_DIST))
             {
               zero2 = (xx3_2 + xx1_2) / 2.;
               break;
@@ -1154,7 +1156,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (deriv_zero)) && (ABS (ecart_x) > ERR_MIN / 1000.))
+      while ((!isnan (deriv_zero)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         deriv_zero_old = deriv_zero;
         if (deriv_zero - ecart_x < xx1)
@@ -1177,7 +1179,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                                   &b,
                                   &c);
         
-        if (ERR (a, 0.))
+        if (errmoy (a, ERRMOY_DIST))
           deriv_zero = NAN;
         else
           deriv_zero = - b / (2 * a);
@@ -1203,7 +1205,7 @@ common_fonction_caracteristiques (Fonction *fonction,
             if (signbit (a) == signbit (b))
               xx1_2 = xx2_2;
             else xx3_2 = xx2_2;
-            if (ABS (xx3_2 - xx1_2) < ERR_MIN / 1000.)
+            if (errmoy (xx3_2 - xx1_2, ERRMOY_DIST))
             {
               deriv_zero = (xx3_2 + xx1_2) / 2.;
               break;
@@ -1244,7 +1246,7 @@ common_fonction_caracteristiques (Fonction *fonction,
         c = ecart_x;
       }
       
-      if ((!isnan (a)) && (!ERR (pos_tmp [nb - 1] - a, 0.)))
+      if ((!isnan (a)) && (!errmoy (pos_tmp [nb - 1] - a, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -1262,7 +1264,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction, a, 0);
       }
-      if ((!isnan (b)) && (!ERR (pos_tmp[nb - 1] - b, 0.)))
+      if ((!isnan (b)) && (!errmoy (pos_tmp[nb - 1] - b, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -1280,7 +1282,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction, b, 0);
       }
-      if ((!isnan (c)) && (!ERR (pos_tmp [nb - 1] - c, 0.)))
+      if ((!isnan (c)) && (!errmoy (pos_tmp [nb - 1] - c, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -1301,8 +1303,8 @@ common_fonction_caracteristiques (Fonction *fonction,
     }
   }
   
-  if (!ERR (pos_tmp[nb - 1],
-            fonction->troncons[fonction->nb_troncons - 1].fin_troncon))
+  if (!errrel (pos_tmp[nb - 1],
+               fonction->troncons[fonction->nb_troncons - 1].fin_troncon))
   {
     nb++;
     tmp = pos_tmp;
@@ -1435,7 +1437,7 @@ GdkPixbuf *
 common_fonction_dessin (GList       *fonctions,
                         unsigned int width,
                         unsigned int height,
-                        unsigned int decimales)
+                        int          decimales)
 /**
  * \brief Renvoie un dessin représentant la courbe enveloppe.
  * \param fonctions : la liste contenant les fonctions à dessiner,
@@ -1465,6 +1467,7 @@ common_fonction_dessin (GList       *fonctions,
   Fonction        *fonction;
   
   BUGPARAM (fonctions, "%p", fonctions, NULL)
+  BUGPARAM (decimales, "%d", decimales > 0, NULL)
   INFO (width, NULL, (gettext ("La largeur du dessin ne peut être nulle.\n"));)
   INFO (height,
         NULL,
@@ -1512,6 +1515,7 @@ common_fonction_dessin (GList       *fonctions,
         p[3] = 0;
     }
   
+  // On détermine les valeurs de la courbe pour la première fonction.
   list_parcours = fonctions;
   fonction = list_parcours->data;
   for (x = 0; x < width; x++)
@@ -1529,6 +1533,7 @@ common_fonction_dessin (GList       *fonctions,
     if (fy_min > mi[x])
       fy_min = mi[x];
   }
+  
   list_parcours = g_list_next (list_parcours);
   while (list_parcours != NULL)
   {
@@ -2037,7 +2042,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
       // On vérifie en 10 points si la fonction est toujours inférieure à
       // fonction_max. modif = 0 si la fonction en cours d'étude est inférieure
       // à fonction_max. Elle vaut 1 si elle est supérieure.
-      if (ERR (val[0], 0.))
+      if (errmoy (val[0], ERRMOY_DIST))
         modif = -1;
       else if (val[0] < 0.)
         modif = 0;
@@ -2045,9 +2050,13 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         modif = 1;
       for (j = 1; j < 10; j++)
       {
-        if ((val[j] > 0.) && (!ERR (val[j], 0.)) && (modif == -1))
+        if ((val[j] > 0.) &&
+            (!errmoy (val[j], ERRMOY_DIST)) &&
+            (modif == -1))
           modif = 1;
-        else if ((val[j] > 0.) && (!ERR (val[j], 0.)) && (modif == 0))
+        else if ((val[j] > 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                 (modif == 0))
         {
           BUG (common_fonction_cherche_zero (&fonction_moins,
                                              x[j - 1],
@@ -2075,9 +2084,13 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
           x_base = zero1;
           modif = 1;
         }
-        else if ((val[j] < 0.) && (!ERR (val[j], 0.)) && (modif == -1))
+        else if ((val[j] < 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                (modif == -1))
           modif = 0;
-        else if ((val[j] < 0.) && (!ERR (val[j], 0.)) && (modif == 1))
+        else if ((val[j] < 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                 (modif == 1))
         {
           BUG (common_fonction_cherche_zero (&fonction_moins,
                                              x[j - 1],
@@ -2107,7 +2120,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
           {
             if (fonction_max->troncons[k].fin_troncon > zero1)
               break;
-            if (fonction_max->troncons[k].fin_troncon * (1 - ERR_MIN) > x_base)
+            if (fonction_max->troncons[k].fin_troncon > x_base)
             {
               fonction_max->troncons[k].x0 = fonction_bis.troncons[i].x0;
               fonction_max->troncons[k].x1 = fonction_bis.troncons[i].x1;
@@ -2144,7 +2157,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         {
           if (fonction_max->troncons[j].fin_troncon > tmp)
             break;
-          if (fonction_max->troncons[j].fin_troncon * (1 - ERR_MIN) > x_base)
+          if (fonction_max->troncons[j].fin_troncon > x_base)
           {
             fonction_max->troncons[j].x0 = fonction_bis.troncons[i].x0;
             fonction_max->troncons[j].x1 = fonction_bis.troncons[i].x1;
@@ -2213,7 +2226,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
       // On vérifie en 10 points si la fonction est toujours inférieure à
       // fonction_min. modif = 0 si la fonction en cours d'étude est inférieure
       // à fonction_min. Elle vaut 1 si elle est supérieure.
-      if (ERR (val[0], 0.))
+      if (errmoy (val[0], ERRMOY_DIST))
         modif = -1;
       else if (val[0] < 0.)
         modif = 0;
@@ -2221,9 +2234,13 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         modif = 1;
       for (j = 1; j < 10; j++)
       {
-        if ((val[j] > 0.) && (!ERR (val[j], 0.)) && (modif == -1))
+        if ((val[j] > 0.) &&
+            (!errmoy (val[j], ERRMOY_DIST)) &&
+            (modif == -1))
           modif = 1;
-        else if ((val[j] > 0.) && (!ERR (val[j], 0.)) && (modif == 0))
+        else if ((val[j] > 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                 (modif == 0))
         {
           BUG (common_fonction_cherche_zero (&fonction_moins,
                                              x[j - 1],
@@ -2251,9 +2268,13 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
           x_base = zero1;
           modif = 1;
         }
-        else if ((val[j] < 0.) && (!ERR (val[j], 0.)) && (modif == -1))
+        else if ((val[j] < 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                 (modif == -1))
           modif = 0;
-        else if ((val[j] < 0.) && (!ERR (val[j], 0.)) && (modif == 1))
+        else if ((val[j] < 0.) &&
+                 (!errmoy (val[j], ERRMOY_DIST)) &&
+                 (modif == 1))
         {
           BUG (common_fonction_cherche_zero (&fonction_moins,
                                              x[j - 1],
@@ -2283,7 +2304,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
           {
             if (fonction_min->troncons[k].fin_troncon > zero1)
               break;
-            if (fonction_min->troncons[k].fin_troncon * (1 - ERR_MIN) > x_base)
+            if (fonction_min->troncons[k].fin_troncon > x_base)
             {
               fonction_min->troncons[k].x0 = fonction_bis.troncons[i].x0;
               fonction_min->troncons[k].x1 = fonction_bis.troncons[i].x1;
@@ -2318,7 +2339,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         {
           if (fonction_min->troncons[j].fin_troncon > tmp)
             break;
-          if (fonction_min->troncons[j].fin_troncon * (1 - ERR_MIN) > x_base)
+          if (fonction_min->troncons[j].fin_troncon > x_base)
           {
             fonction_min->troncons[j].x0 = fonction_bis.troncons[i].x0;
             fonction_min->troncons[j].x1 = fonction_bis.troncons[i].x1;

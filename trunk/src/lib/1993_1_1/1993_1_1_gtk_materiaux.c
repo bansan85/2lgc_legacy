@@ -529,11 +529,11 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_ACI.builder,
                                   "_1993_1_1_materiaux_personnaliser_menu_e")),
-    acier_data && !ERR (m_g (acier_data->e), MODULE_YOUNG_ACIER));
+    acier_data && !errrel (m_g (acier_data->e), MODULE_YOUNG_ACIER));
   gtk_check_menu_item_set_active (
     GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_ACI.builder,
                                  "_1993_1_1_materiaux_personnaliser_menu_nu")),
-    acier_data && !ERR (m_g (acier_data->nu), COEFFICIENT_NU_ACIER));
+    acier_data && !errrel (m_g (acier_data->nu), COEFFICIENT_NU_ACIER));
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_ACI.window),
                                 GTK_WINDOW (UI_GTK.window));

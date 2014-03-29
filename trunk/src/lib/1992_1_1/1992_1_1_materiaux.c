@@ -48,10 +48,10 @@ _1992_1_1_materiaux_fckcube (double fck)
  *   Succès : le résultat.\n
  *   Échec : NAN :
  *     - fck > 90.,
- *     - fck <= 0.
+ *     - fck < 1.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1. + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -101,10 +101,10 @@ _1992_1_1_materiaux_fcm (double fck)
  *   Succès : le résultat.\n
  *   Échec : NAN :
  *     - fck > 90.,
- *     - fck <= 0.
+ *     - fck < 1.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -129,7 +129,7 @@ _1992_1_1_materiaux_fctm (double fck,
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -215,7 +215,7 @@ _1992_1_1_materiaux_ecu1 (double fcm,
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -239,7 +239,7 @@ _1992_1_1_materiaux_ec2 (double fck)
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -264,7 +264,7 @@ _1992_1_1_materiaux_ecu2 (double fck)
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -288,7 +288,7 @@ _1992_1_1_materiaux_ec3 (double fck)
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -313,7 +313,7 @@ _1992_1_1_materiaux_ecu3 (double fck)
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -337,7 +337,7 @@ _1992_1_1_materiaux_n (double fck)
  *     - fck <= 0.
  */
 {
-  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+  INFO ((fck >= 1.) && (fck <= 90.),
         NAN,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
@@ -362,7 +362,7 @@ _1992_1_1_materiaux_gnu (double ecm,
  *     - nu <= 0.
  */
 {
-  INFO ((nu > ERR_MIN) && (nu <= 0.5 * (1 + ERR_MIN)),
+  INFO ((nu > 0.) && (nu < 0.5),
         NAN,
         (gettext ("Le coefficient de poisson doit être compris entre 0 et 0.5, borne exclues.\n"));)
   return ecm / (2. * (1. + nu)) * 1000000000.;
@@ -393,7 +393,7 @@ _1992_1_1_materiaux_ajout (Projet     *p,
   Materiau_Beton *data_beton;
   
   BUGPARAM (p, "%p", p, NULL)
-  INFO ((m_g (fck) > ERR_MIN) && (m_g (fck) <= 90. * (1 + ERR_MIN)),
+  INFO ((m_g (fck) >= 1.) && (m_g (fck) <= 90.),
         NULL,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
@@ -689,8 +689,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
             DECIMAL_CONTRAINTE);
   
   // On affiche les différences si le matériau a été personnalisé
-  if (!ERR (m_g (data_beton->fckcube),
-            _1992_1_1_materiaux_fckcube (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->fckcube),
+               _1992_1_1_materiaux_fckcube (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fckcube) / 1000000.,
               data_beton->fckcube.type),
@@ -701,8 +701,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n"));)
   }
-  if (!ERR (m_g (data_beton->fcm),
-            _1992_1_1_materiaux_fcm (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->fcm),
+               _1992_1_1_materiaux_fcm (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fcm) / 1000000., data_beton->fcm.type),
               tmp1,
@@ -723,9 +723,9 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->fctm),
-            _1992_1_1_materiaux_fctm (m_g (data_beton->fck) / 1000000.,
-                                      m_g (data_beton->fcm) / 1000000.)))
+  if (!errrel (m_g (data_beton->fctm),
+               _1992_1_1_materiaux_fctm (m_g (data_beton->fck) / 1000000.,
+                                         m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctm) / 1000000., data_beton->fctm.type),
               tmp1,
@@ -746,7 +746,7 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->fctk_0_05),
+  if (!errrel (m_g (data_beton->fctk_0_05),
             _1992_1_1_materiaux_fctk_0_05 (m_g (data_beton->fctm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctk_0_05) / 1000000.,
@@ -770,7 +770,7 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->fctk_0_95),
+  if (!errrel (m_g (data_beton->fctk_0_95),
             _1992_1_1_materiaux_fctk_0_95 (m_g (data_beton->fctm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctk_0_95) / 1000000.,
@@ -794,8 +794,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ecm),
-            _1992_1_1_materiaux_ecm (m_g (data_beton->fcm) / 1000000.)))
+  if (!errrel (m_g (data_beton->ecm),
+               _1992_1_1_materiaux_ecm (m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecm) / 1000000., data_beton->ecm.type),
               tmp1,
@@ -816,8 +816,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ec1),
-            _1992_1_1_materiaux_ec1 (m_g (data_beton->fcm) / 1000000.)))
+  if (!errrel (m_g (data_beton->ec1),
+               _1992_1_1_materiaux_ec1 (m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec1) * 1000., data_beton->ec1.type),
               tmp1,
@@ -839,9 +839,9 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ecu1),
-            _1992_1_1_materiaux_ecu1 (m_g (data_beton->fcm) / 1000000.,
-                                      m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->ecu1),
+               _1992_1_1_materiaux_ecu1 (m_g (data_beton->fcm) / 1000000.,
+                                         m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu1) * 1000., data_beton->ecu1.type),
               tmp1,
@@ -863,8 +863,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ec2),
-            _1992_1_1_materiaux_ec2 (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->ec2),
+               _1992_1_1_materiaux_ec2 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec2) * 1000., data_beton->ec2.type),
               tmp1,
@@ -886,8 +886,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ecu2),
-            _1992_1_1_materiaux_ecu2 (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->ecu2),
+               _1992_1_1_materiaux_ecu2 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu2) * 1000., data_beton->ecu2.type),
               tmp1,
@@ -909,8 +909,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ec3),
-            _1992_1_1_materiaux_ec3 (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->ec3),
+               _1992_1_1_materiaux_ec3 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec3) * 1000., data_beton->ec3.type),
               tmp1,
@@ -932,8 +932,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->ecu3),
-            _1992_1_1_materiaux_ecu3 (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->ecu3),
+               _1992_1_1_materiaux_ecu3 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu3) * 1000., data_beton->ecu3.type),
               tmp1,
@@ -955,8 +955,8 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->n),
-            _1992_1_1_materiaux_n (m_g (data_beton->fck) / 1000000.)))
+  if (!errrel (m_g (data_beton->n),
+               _1992_1_1_materiaux_n (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (data_beton->n, tmp1, DECIMAL_SANS_UNITE);
     if (complement == NULL)
@@ -973,7 +973,7 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
       free (tmp2);
     }
   }
-  if (!ERR (m_g (data_beton->nu), COEFFICIENT_NU_BETON))
+  if (!errrel (m_g (data_beton->nu), COEFFICIENT_NU_BETON))
   {
     conv_f_c (data_beton->nu, tmp1, DECIMAL_SANS_UNITE);
     if (complement == NULL)

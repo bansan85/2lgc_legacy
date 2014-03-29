@@ -158,7 +158,7 @@ common_text_str_to_double (char    *texte,
   {
     if (isinf (val_min) == -1)
       min_check = TRUE;
-    else if ((min_include) && (ERR (nombre, val_min)))
+    else if ((min_include) && (errrel (nombre, val_min)))
       min_check = TRUE;
     else if (nombre > val_min)
       min_check = TRUE;
@@ -167,7 +167,7 @@ common_text_str_to_double (char    *texte,
       
     if (isinf (val_max) == 1)
       max_check = TRUE;
-    else if ((max_include) && (ERR (nombre, val_max)))
+    else if ((max_include) && (errrel (nombre, val_max)))
       max_check = TRUE;
     else if (nombre < val_max)
       max_check = TRUE;

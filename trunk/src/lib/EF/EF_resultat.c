@@ -120,7 +120,7 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
     *maxi = ma;
   if (texte != NULL)
   {
-    if (!ERR (mi, ma))
+    if (!errrel (mi, ma))
       BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
                                          indice < 3 ?
                                            DECIMAL_FORCE :
@@ -237,7 +237,7 @@ EF_resultat_noeud_deplacement (GList    *liste,
     *maxi = ma;
   if (texte != NULL)
   {
-    if (!ERR (mi, ma))
+    if (!errrel (mi, ma))
       BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
                                          indice < 3 ?
                                            DECIMAL_DEPLACEMENT :

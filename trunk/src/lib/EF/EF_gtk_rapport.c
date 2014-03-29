@@ -88,23 +88,29 @@ EF_gtk_rapport (Projet *p,
     GdkPixbuf    *pixbuf;
     
     if (analyse->resultat == 0)
-      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                         "gtk-apply",
-                                         16,
-                                         0,
-                                         NULL);
+      NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                               "gtk-apply",
+                                               16,
+                                               0,
+                                               NULL),
+            gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
+                     "gtk-apply")
     else if (analyse->resultat == 1)
-      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                         "gtk-dialog-warning",
-                                         16,
-                                         0,
-                                         NULL);
+      NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                               "gtk-dialog-warning",
+                                               16,
+                                               0,
+                                               NULL),
+            gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
+                     "gtk-dialog-warning")
     else if (analyse->resultat == 2)
-      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                         "gtk-dialog-error",
-                                         16,
-                                         0,
-                                         NULL);
+      NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                               "gtk-dialog-error",
+                                               16,
+                                               0,
+                                               NULL),
+            gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
+                     "gtk-dialog-error")
     else
       FAILCRIT (,
                 (gettext ("Le résultat d'un rapport doit être compris entre 0 et 2.\n"));)
@@ -116,7 +122,8 @@ EF_gtk_rapport (Projet *p,
                         1, analyse->analyse,
                         2, analyse->commentaire,
                         -1);
-    g_object_unref (pixbuf);
+    if (pixbuf != NULL)
+      g_object_unref (pixbuf);
 
     list_parcours = g_list_next (list_parcours);
   }
