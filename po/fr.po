@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-03-27 08:18+0100\n"
-"PO-Revision-Date: 2014-03-27 08:18+0100\n"
+"POT-Creation-Date: 2014-03-29 12:52+0100\n"
+"PO-Revision-Date: 2014-03-29 12:50+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -550,6 +550,9 @@ msgid ""
 msgstr ""
 "Seuls les groupes possédant un type de combinaison OR peuvent appeler "
 "_1990_combinaisons_genere_or.\n"
+
+msgid "Impossible\n"
+msgstr "Impossible\n"
 
 msgid "ELU équilibre"
 msgstr "ELU équilibre"
@@ -1520,6 +1523,9 @@ msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 msgid "Tout"
 msgstr "Tout"
 
+msgid "La page est inconnue.\n"
+msgstr "La page est inconnue.\n"
+
 #, c-format
 msgid "Le type de noeud %d est inconnu.\n"
 msgstr "Le type de noeud %d est inconnu.\n"
@@ -1711,11 +1717,11 @@ msgstr "Modification d'une section personnalisée"
 msgid "La section à modifier n'est pas personnalisée.\n"
 msgstr "La section à modifier n'est pas personnalisée.\n"
 
-msgid "Impossible de réaliser un calcul sans noeud existant.\n"
-msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
-
 msgid "Impossible de réaliser un calcul sans barre existante.\n"
 msgstr "Impossible de réaliser un calcul sans barre existante.\n"
+
+msgid "Impossible de réaliser un calcul sans noeud existant.\n"
+msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
 
 #, c-format
 msgid "Erreur de calcul : %d\n"
