@@ -72,7 +72,7 @@ EF_charge_ajout (Projet     *p,
        NULL,
        free (charge->nom);)
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), NULL)
   
 #ifdef ENABLE_GTK
   if ((UI_ACT.builder != NULL) &&
@@ -115,8 +115,8 @@ EF_charge_action (Projet *p,
 {
   GList *list_parcours;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (charge, "%p", charge, NULL)
   
   list_parcours = p->actions;
   while (list_parcours != NULL)

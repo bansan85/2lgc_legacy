@@ -119,7 +119,7 @@ EF_charge_noeud_description (Charge *charge)
   char  txt_mx[30], txt_my[30], txt_mz[30];
   char  *txt_liste_noeuds, *description;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, NULL)
   
   charge_d = charge->data;
   
@@ -144,7 +144,7 @@ EF_charge_noeud_description (Charge *charge)
              txt_mx,
              txt_my,
              txt_mz),
-           FALSE,
+           NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (txt_liste_noeuds);)
   

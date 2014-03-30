@@ -302,7 +302,7 @@ EF_materiaux_get_description (EF_Materiau *materiau)
       return _1993_1_1_materiaux_get_description (materiau);
     default :
     {
-      FAILCRIT (FALSE,
+      FAILCRIT (NULL,
                 (gettext ("Le type de matériau %d n'existe pas.\n"),
                           materiau->type);)
       break;

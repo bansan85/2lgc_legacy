@@ -210,7 +210,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   
   BUGPARAM (materiau, "%p", materiau, NULL)
   BUGCRIT (materiau->type == MATERIAU_ACIER,
-           FALSE,
+           NULL,
            (gettext ("Le matériau n'est pas en acier.\n"));)
   
   data_acier = materiau->data;

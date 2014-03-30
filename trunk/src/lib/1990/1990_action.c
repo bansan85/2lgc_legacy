@@ -426,7 +426,7 @@ _1990_action_ajout (Projet      *p,
                                                                ACTION_INCONNUE,
             NULL)
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), NULL)
   
   BUGCRIT (action_nouveau = (Action *) malloc (sizeof (Action)),
            NULL,
