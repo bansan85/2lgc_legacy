@@ -148,7 +148,7 @@ make -j9 && sudo make install && cd .. && \
 tar xvaf gtk+-3.10.7.tar.xz && \
 cd gtk+-3.10.7 && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
-PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency && \
+PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency --enable-debug=yes && \
 make -j9 && sudo make install && cd .. && \
 (test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && \
 tar xvzf icon-naming-utils-0.8.90.tar.gz && \
