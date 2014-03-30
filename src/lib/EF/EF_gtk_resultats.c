@@ -60,8 +60,10 @@ EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
  * \return Rien.
  */
 {
-  if (page_num == gtk_notebook_get_n_pages (notebook) - 1)
-    g_signal_stop_emission_by_name (notebook, "switch-page");
+// En suspend pour le moment afin que les flèches permettant de faire défiler
+// les onglets affichent cette dernière page.
+//  if (page_num == gtk_notebook_get_n_pages (notebook) - 1)
+//    g_signal_stop_emission_by_name (notebook, "switch-page");
   
   return;
 }
@@ -1194,6 +1196,9 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
                             p_scrolled_window,
                             GTK_WIDGET (gtk_label_new (res->nom)),
                             gtk_notebook_get_n_pages (UI_RES.notebook) - 1);
+   gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (UI_RES.notebook),
+                                     p_scrolled_window,
+                                     TRUE);
   
   // La variable xalign n'est utilisée que pour les résultats à virgule
   // flottante. Elle centre le texte si on affiche une enveloppe de résultats

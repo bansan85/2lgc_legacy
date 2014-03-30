@@ -124,6 +124,7 @@
                     <property name="visible">True</property>
                     <property name="tab-pos">top</property>
                     <property name="expand">True</property>
+                    <property name="scrollable">True</property>
                     <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
                     <child>
                       <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
@@ -133,7 +134,7 @@
                       </object>
                     </child>
                     <child type="tab">
-                      <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
+                      <object class="GtkMenuButton" id="EF_resultats_notebook_button_add">
                         <property name="visible">True</property>
                         <property name="popup">EF_resultats_menu</property>
                       </object>
