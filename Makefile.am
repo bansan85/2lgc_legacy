@@ -137,3 +137,4 @@ checkcode :
 	tar czvf cov-2LGC.tgz cov-int
 	
 	$(MAKE) -C src/lib cppcheck
+	$(MAKE) -C src/lib kernel_sparse

@@ -158,3 +158,6 @@ CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log
 	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
+
+kernel_sparse :
+	find . -name "*.c" -exec sparse {} @GTK_CFLAGS@ $(DEFAULT_INCLUDES) \; &> ../../sparse.log

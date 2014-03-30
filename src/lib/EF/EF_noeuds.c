@@ -200,7 +200,7 @@ EF_noeuds_ajout_noeud_libre (Projet   *p,
                         -1);
   }
   BUG (m3d_rafraichit (p),
-       FALSE,
+       NULL,
        free (data);
          free (noeud_nouveau););
 #endif

@@ -159,7 +159,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
   char                     txt_mx[30], txt_my[30], txt_mz[30];
   char                    *txt_liste_barres, *description;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, NULL)
   charge_d = charge->data;
   
   BUG (txt_liste_barres = common_selection_noeuds_en_texte (charge_d->barres),
@@ -190,7 +190,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
              txt_mx,
              txt_my,
              txt_mz),
-           FALSE,
+           NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (txt_liste_barres);)
   
