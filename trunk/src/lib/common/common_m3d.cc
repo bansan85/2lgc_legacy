@@ -275,7 +275,7 @@ m3d_get_rect (double *xmin,
   GList       *list_parcours;
   EF_Noeud    *noeud;
   EF_Point     point;
-  CM3dVertex   v1;     // Vecteur permettant de créer le polygone
+  CM3dVertex   v1, *v2, *v3;     // Vecteur permettant de créer le polygone
   double       x1, y1; // Les coordonnées des vecteurs.
   
   BUGPARAM (p, "%p", p, FALSE)
@@ -294,9 +294,11 @@ m3d_get_rect (double *xmin,
   noeud = (EF_Noeud *) p->modele.noeuds->data;
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-  v1 = vue->camera.convert_vertex_by_camera_view (v1);
-  v1 = vue->camera.convert_vertex_to_2d (v1);
-  v1.get_coordinates (&x1, &y1, NULL);
+  v2 = vue->camera.convert_vertex_by_camera_view (v1);
+  v3 = vue->camera.convert_vertex_to_2d (*v2);
+  delete v2;
+  v3->get_coordinates (&x1, &y1, NULL);
+  delete v3;
   *ymax = y1;
   *ymin = y1;
   *xmax = x1;
@@ -308,9 +310,11 @@ m3d_get_rect (double *xmin,
     noeud = (EF_Noeud *) list_parcours->data;
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-    v1 = vue->camera.convert_vertex_by_camera_view (v1);
-    v1 = vue->camera.convert_vertex_to_2d (v1);
-    v1.get_coordinates (&x1, &y1, NULL);
+    v2 = vue->camera.convert_vertex_by_camera_view (v1);
+    v3 = vue->camera.convert_vertex_to_2d (*v2);
+    delete v2;
+    v3->get_coordinates (&x1, &y1, NULL);
+    delete v3;
     
     if (*xmin > x1)
       *xmin = x1;
@@ -350,7 +354,7 @@ m3d_camera_zoom_all (Projet *p)
   GList        *list_parcours; // Noeud en cours d'étude
   GtkAllocation allocation;    // Dimension de la fenêtre 2D.
   double        cx, cy, cz;    // Le vecteur de la caméra
-  CM3dVertex    v1, v2;
+  CM3dVertex    v1, *v2;
   double        tmpx, tmpy, tmpz;
   double        dx, dy, dz, dztmp;
   double        xmin2, xmax2, ymin2, ymax2;
@@ -384,8 +388,9 @@ m3d_camera_zoom_all (Projet *p)
   // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin
   // de définir la position optimale de la caméra.
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-  v1 = vue->camera.convert_vertex_by_camera_view (v1);
-  v1.get_coordinates (&tmpx, &tmpy, &tmpz);
+  v2 = vue->camera.convert_vertex_by_camera_view (v1);
+  v2->get_coordinates (&tmpx, &tmpy, &tmpz);
+  delete v2;
   xmin = tmpx;
   xmax = tmpx;
   ymax = tmpy;
@@ -398,8 +403,9 @@ m3d_camera_zoom_all (Projet *p)
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-    v1 = vue->camera.convert_vertex_by_camera_view (v1);
-    v1.get_coordinates (&tmpx, &tmpy, &tmpz);
+    v2 = vue->camera.convert_vertex_by_camera_view (v1);
+    v2->get_coordinates (&tmpx, &tmpy, &tmpz);
+    delete v2;
     if (xmin > tmpx)
       xmin = tmpx;
     if (xmax < tmpx)
@@ -1164,8 +1170,8 @@ m3d_barre (void     *donnees_m3d,
             point2 = (EF_Point *) list_parcours2->data;
           else
           {
-            GList   *list_poly;
-            CM3dPlan object_tmp;
+            std::vector<CM3dPolygon*>::iterator it;
+            CM3dPlan                            object_tmp;
             
             point1 = point2;
             if (list_parcours2 != GINT_TO_POINTER (1))
@@ -1192,14 +1198,13 @@ m3d_barre (void     *donnees_m3d,
                                      (m_g (point2->y) + m_g (point1->y)) / 2.,
                                      (m_g (point2->x) + m_g (point1->x)) / 2.);
             
-            list_poly = object_tmp.get_list_of_polygons ();
-            while (list_poly != NULL)
+            for (it = object_tmp.get_list_of_polygons ().begin ();
+                 it != object_tmp.get_list_of_polygons ().end ();
+                 it++)
             {
-              CM3dPolygon polygon;
+              CM3dPolygon *polygon = *it;
               
-              polygon = CM3dPolygon (*(CM3dPolygon *) (list_poly->data));
-              tout->add_polygon (polygon);
-              list_poly = g_list_next (list_poly);
+              tout->add_polygon (*polygon);
             }
           }
           
