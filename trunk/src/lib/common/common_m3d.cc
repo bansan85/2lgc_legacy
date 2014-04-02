@@ -1200,7 +1200,7 @@ m3d_barre (void     *donnees_m3d,
             
             for (it = object_tmp.get_list_of_polygons ().begin ();
                  it != object_tmp.get_list_of_polygons ().end ();
-                 it++)
+                 ++it)
             {
               CM3dPolygon *polygon = *it;
               
