@@ -30,8 +30,8 @@
 #include "common_text.h"
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
-#endif
 #include "common_gtk_informations.h"
+#endif
 
 gboolean
 common_ville_init (Projet *p)

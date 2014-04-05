@@ -10,19 +10,19 @@ AUTOMAKE_OPTIONS = subdir-objects
 lib_LTLIBRARIES = libeurocodes.la
 
 libeurocodes_la_LIBADD		=	@BLAS_LIBS@ -lgfortran @XML_LIBS@
-libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
-libeurocodes_la_LIBADD		+=	@GTK_LIBS@
-libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@
+libeurocodes_la_CFLAGS		=	$(AM_CFLAGS) @GTK_CFLAGS@
 else
-libeurocodes_la_CFLAGS      +=  @GLIB_CFLAGS@
+libeurocodes_la_CFLAGS		=	$(AM_CFLAGS) @GLIB_CFLAGS@
 endif
-
-libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
-
+libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
+if ENABLE_GTK
+libeurocodes_la_CPPFLAGS	+=	@GTK_CFLAGS@
+endif
+libeurocodes_ladir = $(includedir)/2lgc
 
-libeurocodes_la_SOURCES =	1990/1990_action.c \
+libeurocodes_la_SOURCES 	=	1990/1990_action.c \
 							1990/1990_coef_psi.c \
 							1990/1990_combinaisons.c \
 							1990/1990_duree.c \
@@ -52,38 +52,6 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							EF/EF_sections.c \
 							EF/EF_verif.c
 
-if ENABLE_GTK
-libeurocodes_la_SOURCES +=	common/common_m3d.cc \
-							1990/1990_gtk_groupes.c \
-							1990/1990_gtk_groupes_options.c \
-							1990/1990_gtk_actions.c \
-							1992_1_1/1992_1_1_gtk_materiaux.c \
-							1993_1_1/1993_1_1_gtk_materiaux.c \
-							common/common_gtk.c \
-							common/common_gtk_informations.c \
-							common/ressources.c \
-							EF/EF_gtk_charge_noeud.c \
-							EF/EF_gtk_charge_barre_ponctuelle.c \
-							EF/EF_gtk_charge_barre_repartie_uniforme.c \
-							EF/EF_gtk_noeud.c \
-							EF/EF_gtk_appuis.c \
-							EF/EF_gtk_barres.c \
-							EF/EF_gtk_barres_add.c \
-							EF/EF_gtk_calculs.c \
-							EF/EF_gtk_sections.c \
-							EF/EF_gtk_materiaux.c \
-							EF/EF_gtk_section_rectangulaire.c \
-							EF/EF_gtk_section_T.c \
-							EF/EF_gtk_section_carree.c \
-							EF/EF_gtk_section_circulaire.c \
-							EF/EF_gtk_section_personnalisee.c \
-							EF/EF_gtk_rapport.c \
-							EF/EF_gtk_relachement.c \
-							EF/EF_gtk_resultats.c
-
-endif
-
-libeurocodes_ladir = $(includedir)/2lgc
 libeurocodes_la_HEADERS =	1990/1990_action.h \
 							1990/1990_action_private.h \
 							1990/1990_coef_psi.h \
@@ -117,46 +85,84 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							EF/EF_verif.h
 
 if ENABLE_GTK
-libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
-							1990/1990_gtk_groupes.h \
-							1990/1990_gtk_groupes_options.h \
-							1990/1990_gtk_actions.h \
-							1992_1_1/1992_1_1_gtk_materiaux.h \
-							1993_1_1/1993_1_1_gtk_materiaux.h \
-							common/common_gtk.h \
-							common/common_gtk_informations.h \
-							common/ressources.h \
-							EF/EF_gtk_charge_noeud.h \
-							EF/EF_gtk_charge_barre_ponctuelle.h \
-							EF/EF_gtk_charge_barre_repartie_uniforme.h \
-							EF/EF_gtk_noeud.h \
-							EF/EF_gtk_appuis.h \
-							EF/EF_gtk_barres.h \
-							EF/EF_gtk_barres_add.h \
-							EF/EF_gtk_calculs.h \
-							EF/EF_gtk_sections.h \
-							EF/EF_gtk_materiaux.h \
-							EF/EF_gtk_section_rectangulaire.h \
-							EF/EF_gtk_section_T.h \
-							EF/EF_gtk_section_carree.h \
-							EF/EF_gtk_section_circulaire.h \
-							EF/EF_gtk_section_personnalisee.h \
-							EF/EF_gtk_rapport.h \
-							EF/EF_gtk_relachement.h \
-							EF/EF_gtk_resultats.h
+DEFAULT_INCLUDES	+=	-Igtk
+lib_LTLIBRARIES += libeurocodes-gtk.la
+libeurocodes_gtk_la_LIBADD		=	@GTK_LIBS@
+libeurocodes_gtk_la_CFLAGS		=	$(AM_CFLAGS) @GTK_CFLAGS@
+libeurocodes_gtk_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
+libeurocodes_gtk_la_CPPFLAGS	=	@XML_CPPFLAGS@ @GTK_CFLAGS@
+libeurocodes_gtk_ladir = $(includedir)/2lgc
+
+libeurocodes_gtk_la_SOURCES 	=	gtk/common_m3d.cc \
+							gtk/1990_gtk_groupes.c \
+							gtk/1990_gtk_groupes_options.c \
+							gtk/1990_gtk_actions.c \
+							gtk/1992_1_1_gtk_materiaux.c \
+							gtk/1993_1_1_gtk_materiaux.c \
+							gtk/common_gtk.c \
+							gtk/common_gtk_informations.c \
+							gtk/ressources.c \
+							gtk/EF_gtk_charge_noeud.c \
+							gtk/EF_gtk_charge_barre_ponctuelle.c \
+							gtk/EF_gtk_charge_barre_repartie_uniforme.c \
+							gtk/EF_gtk_noeud.c \
+							gtk/EF_gtk_appuis.c \
+							gtk/EF_gtk_barres.c \
+							gtk/EF_gtk_barres_add.c \
+							gtk/EF_gtk_calculs.c \
+							gtk/EF_gtk_sections.c \
+							gtk/EF_gtk_materiaux.c \
+							gtk/EF_gtk_section_rectangulaire.c \
+							gtk/EF_gtk_section_T.c \
+							gtk/EF_gtk_section_carree.c \
+							gtk/EF_gtk_section_circulaire.c \
+							gtk/EF_gtk_section_personnalisee.c \
+							gtk/EF_gtk_rapport.c \
+							gtk/EF_gtk_relachement.c \
+							gtk/EF_gtk_resultats.c
+
+libeurocodes_gtk_la_HEADERS =	gtk/common_m3d.hpp \
+							gtk/1990_gtk_groupes.h \
+							gtk/1990_gtk_groupes_options.h \
+							gtk/1990_gtk_actions.h \
+							gtk/1992_1_1_gtk_materiaux.h \
+							gtk/1993_1_1_gtk_materiaux.h \
+							gtk/common_gtk.h \
+							gtk/common_gtk_informations.h \
+							gtk/ressources.h \
+							gtk/EF_gtk_charge_noeud.h \
+							gtk/EF_gtk_charge_barre_ponctuelle.h \
+							gtk/EF_gtk_charge_barre_repartie_uniforme.h \
+							gtk/EF_gtk_noeud.h \
+							gtk/EF_gtk_appuis.h \
+							gtk/EF_gtk_barres.h \
+							gtk/EF_gtk_barres_add.h \
+							gtk/EF_gtk_calculs.h \
+							gtk/EF_gtk_sections.h \
+							gtk/EF_gtk_materiaux.h \
+							gtk/EF_gtk_section_rectangulaire.h \
+							gtk/EF_gtk_section_T.h \
+							gtk/EF_gtk_section_carree.h \
+							gtk/EF_gtk_section_circulaire.h \
+							gtk/EF_gtk_section_personnalisee.h \
+							gtk/EF_gtk_rapport.h \
+							gtk/EF_gtk_relachement.h \
+							gtk/EF_gtk_resultats.h
 endif
 
-common/common_projet.c: common/ressources.h common/ressources.c
+if ENABLE_GTK
+common/common_projet.c: gtk/ressources.h gtk/ressources.c
 
-common/ressources.h: ../../files/ressources.xml common/ressources.c
+gtk/ressources.h: ../../files/ressources.xml gtk/ressources.c
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
-common/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
+gtk/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
+endif
 
-CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
+CLEANFILES = *.gcno *.gcda gtk/ressources.c gtk/ressources.h
 
 cppcheck :
-	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log
+	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) $(libeurocodes_gtk_la_SOURCES) &> ../../cppcheck.log
 	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
 
 kernel_sparse :

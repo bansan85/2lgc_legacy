@@ -29,6 +29,7 @@
 #include "common_math.h"
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
+#include "EF_gtk_charge_barre_repartie_uniforme.h"
 #endif
 #include "common_selection.h"
 #include "common_fonction.h"
@@ -37,7 +38,6 @@
 #include "EF_sections.h"
 #include "EF_materiaux.h"
 #include "EF_charge.h"
-#include "EF_gtk_charge_barre_repartie_uniforme.h"
 
 
 Charge *

@@ -40,10 +40,6 @@ AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
 
 AM_CXXFLAGS		  = $(CUSTOM_CFLAGS) -std=gnu++11 -Wold-style-cast
 AM_CXXFLAGS		 += -D__STRICT_ANSI__
-if ENABLE_GTK
-AM_CFLAGS      += @GTK_CFLAGS@
-AM_CXXFLAGS    += @GTK_CFLAGS@
-endif
 
 export AM_CFLAGS AM_CXXFLAGS
 
@@ -77,7 +73,10 @@ endif
 
 	rm -Rf codegui
 	cp -R $(PREFIX) codegui
-	cp $(prefix)/bin/{codegui.exe,libeurocodes-0.dll} codegui/
+	cp $(prefix)/bin/libeurocodes-0.dll codegui/
+if ENABLE_GTK
+	cp $(prefix)/bin/{libeurocodes-gtk-0.dll} codegui/
+endif
 	cp files/xml/*.xml codegui/files
 	cp files/formules/*.svg codegui/files
 	cp files/csv/*.csv codegui/files
