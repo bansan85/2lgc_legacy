@@ -28,9 +28,14 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
-#include "common_m3d.hpp"
 #ifdef ENABLE_GTK
+#include "common_m3d.hpp"
 #include "common_gtk.h"
+#include "EF_gtk_appuis.h"
+#include "EF_gtk_noeud.h"
+#include "EF_gtk_sections.h"
+#include "EF_gtk_materiaux.h"
+#include "EF_gtk_relachement.h"
 #endif
 #include "common_selection.h"
 #include "EF_charge_barre_ponctuelle.h"
@@ -40,11 +45,6 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_charge_noeud.h"
-#include "EF_gtk_appuis.h"
-#include "EF_gtk_noeud.h"
-#include "EF_gtk_sections.h"
-#include "EF_gtk_materiaux.h"
-#include "EF_gtk_relachement.h"
 
 gboolean
 _1992_1_1_barres_init (Projet *p)

@@ -39,11 +39,11 @@
 #include "EF_gtk_materiaux.h"
 #include "EF_gtk_relachement.h"
 #include "EF_gtk_resultats.h"
+#include "ressources.h"
+#include "common_gtk_informations.h"
 #endif
 
-#include "ressources.h"
 #include "common_ville.h"
-#include "common_gtk_informations.h"
 #include "EF_appuis.h"
 #include "EF_materiaux.h"
 #include "EF_noeuds.h"
@@ -101,13 +101,13 @@ projet_free (Projet *p)
   if (UI_M3D.data != NULL)
     BUG (m3d_free (p), FALSE)
   EF_gtk_resultats_free (p);
+  
+  _2lgc_unregister_resource ();
 #endif
   
   cholmod_finish (p->calculs.c);
   
   free (p);
-  
-  _2lgc_unregister_resource ();
   
   return TRUE;
 }
@@ -130,9 +130,9 @@ projet_init (Norme norme)
   GtkCssProvider *provider = gtk_css_provider_new ();
   GdkDisplay     *display;
   GdkScreen      *screen;
-#endif
   
   _2lgc_register_resource ();
+#endif
   
   // Alloue toutes les zones mémoires du projet à savoir (par module) :
   BUGCRIT (p = (Projet *) malloc (sizeof (Projet)),

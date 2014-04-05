@@ -29,10 +29,10 @@
 #include "common_math.h"
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
+#include "EF_gtk_charge_noeud.h"
 #endif
 #include "EF_calculs.h"
 #include "EF_charge.h"
-#include "EF_gtk_charge_noeud.h"
 
 
 Charge *
