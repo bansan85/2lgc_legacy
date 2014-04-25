@@ -31,6 +31,7 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "EF_sections.h"
+#include "EF_gtk_section_carree.h"
 
 
 GTK_WINDOW_KEY_PRESS (ef, section_carree);

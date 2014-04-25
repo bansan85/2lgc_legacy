@@ -37,6 +37,7 @@
 #include "EF_gtk_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_gtk_charge_barre_repartie_uniforme.h"
+#include "1990_gtk_actions.h"
 
 
 void _1990_gtk_menu_suppr_action_activate (GtkWidget   *toolbutton, Projet *p);

@@ -33,6 +33,7 @@
 #include "EF_rigidite.h"
 #include "EF_calculs.h"
 #include "EF_verif.h"
+#include "EF_gtk_calculs.h"
 
 
 /**

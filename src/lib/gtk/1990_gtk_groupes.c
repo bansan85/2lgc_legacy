@@ -31,6 +31,7 @@
 #include "common_projet.h"
 #include "common_tooltip.h"
 #include "common_gtk.h"
+#include "1990_gtk_groupes.h"
 
 const GtkTargetEntry drag_targets_groupes_1[] = {{(gchar*)PACKAGE"1_SAME_PROC",
                                                   GTK_TARGET_SAME_APP,

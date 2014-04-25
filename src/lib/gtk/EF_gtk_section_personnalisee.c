@@ -33,6 +33,7 @@
 #include "common_selection.h"
 #include "EF_sections.h"
 #include "EF_gtk_sections.h"
+#include "EF_gtk_section_personnalisee.h"
 
 GTK_WINDOW_KEY_PRESS (ef, section_personnalisee);
 

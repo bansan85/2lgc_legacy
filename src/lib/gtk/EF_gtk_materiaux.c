@@ -39,6 +39,7 @@
 #include "EF_materiaux.h"
 #include "1992_1_1_gtk_materiaux.h"
 #include "1993_1_1_gtk_materiaux.h"
+#include "EF_gtk_materiaux.h"
 
 
 GTK_WINDOW_CLOSE (ef, materiaux);

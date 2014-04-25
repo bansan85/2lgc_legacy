@@ -35,6 +35,7 @@
 #include "EF_appuis.h"
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
+#include "EF_gtk_noeud.h"
 
 
 GTK_WINDOW_CLOSE (ef, noeud);

@@ -33,6 +33,7 @@
 #include "common_text.h"
 #include "EF_appuis.h"
 #include "1992_1_1_barres.h"
+#include "EF_gtk_appuis.h"
 
 
 GTK_WINDOW_CLOSE (ef, appuis);

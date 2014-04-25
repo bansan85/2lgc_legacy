@@ -36,6 +36,7 @@
 #include "EF_sections.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
+#include "EF_gtk_barres_add.h"
 
 
 GTK_WINDOW_CLOSE(ef, barres_add);

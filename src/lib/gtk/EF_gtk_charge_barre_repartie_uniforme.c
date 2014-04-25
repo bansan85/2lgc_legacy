@@ -33,6 +33,7 @@
 #include "EF_charge.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_calculs.h"
+#include "EF_gtk_charge_barre_repartie_uniforme.h"
 
 
 GTK_WINDOW_CLOSE (ef, charge_barre_repartie_uniforme);

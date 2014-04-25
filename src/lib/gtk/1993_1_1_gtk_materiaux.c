@@ -32,6 +32,7 @@
 #include "common_selection.h"
 #include "1993_1_1_materiaux.h"
 #include "EF_materiaux.h"
+#include "1993_1_1_gtk_materiaux.h"
 
 
 GTK_WINDOW_KEY_PRESS (_1993_1_1, materiaux);
