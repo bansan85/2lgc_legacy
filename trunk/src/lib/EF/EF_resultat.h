@@ -25,7 +25,7 @@
 
 gboolean EF_resultat_noeud_reaction_appui (GList    *liste,
                                            EF_Noeud *noeud,
-                                           int       indice,
+                                           uint8_t   indice,
                                            Projet   *p,
                                            char    **texte,
                                            double   *mini,
@@ -33,7 +33,7 @@ gboolean EF_resultat_noeud_reaction_appui (GList    *liste,
                                        __attribute__((__warn_unused_result__));
 gboolean EF_resultat_noeud_deplacement    (GList    *liste,
                                            EF_Noeud *noeud,
-                                           int       indice,
+                                           uint8_t   indice,
                                            Projet   *p,
                                            char    **texte,
                                            double   *mini,

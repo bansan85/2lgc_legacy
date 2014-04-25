@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.h"
 
-#define COEFFICIENT_NU_BETON  0.2
+#define COEFFICIENT_NU_BETON 0.2
 
 double _1992_1_1_materiaux_fckcube   (double fck)
                                        __attribute__((__warn_unused_result__));

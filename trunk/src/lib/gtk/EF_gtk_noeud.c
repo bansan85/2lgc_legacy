@@ -46,9 +46,6 @@ GTK_WINDOW_KEY_PRESS (ef, noeud);
 GTK_WINDOW_DESTROY (ef, noeud, );
 
 
-void
-EF_gtk_noeud_ajouter (GtkButton *button,
-                      Projet    *p)
 /**
  * \brief Ajoute un nouveau noeud libre ou intermédiaire en fonction de
  *        l'onglet en cours d'affichage.
@@ -59,15 +56,19 @@ EF_gtk_noeud_ajouter (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_noeud_ajouter (GtkButton *button,
+                      Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
+                     "Noeuds"); )
   
   // On ajoute un noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
+  {
     BUG (EF_noeuds_ajout_noeud_libre (p,
                                       m_f (0., FLOTTANT_UTILISATEUR),
                                       m_f (0., FLOTTANT_UTILISATEUR),
@@ -75,11 +76,14 @@ EF_gtk_noeud_ajouter (GtkButton *button,
                                       NULL,
                                       NULL),
         )
+  }
   // On ajoute un noeud intermédiaire
   else
   {
     if (p->modele.barres == NULL)
+    {
       return;
+    }
     
     BUG (EF_noeuds_ajout_noeud_barre (p,
                                       (EF_Barre *) p->modele.barres->data,
@@ -92,9 +96,6 @@ EF_gtk_noeud_ajouter (GtkButton *button,
 }
 
 
-void
-EF_gtk_noeud_supprimer (GtkButton *button,
-                        Projet    *p)
 /**
  * \brief Supprime le noeud sélectionné en fonction de l'onglet en cours
  *        d'affichage.
@@ -105,6 +106,9 @@ EF_gtk_noeud_supprimer (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_noeud_supprimer (GtkButton *button,
+                        Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -115,7 +119,7 @@ EF_gtk_noeud_supprimer (GtkButton *button,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
+                     "Noeuds"); )
   
   // On supprimer un noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
@@ -125,7 +129,9 @@ EF_gtk_noeud_supprimer (GtkButton *button,
                                    "EF_noeuds_treeview_noeuds_libres_select")),
                                           &model,
                                           &Iter))
-      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n"));)
+    {
+      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n")); )
+    }
   }
   // On supprimer un noeud intermédiaire
   else
@@ -135,7 +141,9 @@ EF_gtk_noeud_supprimer (GtkButton *button,
                            "EF_noeuds_treeview_noeuds_intermediaires_select")),
                                           &model,
                                           &Iter))
-      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n"));)
+    {
+      FAILCRIT ( , (gettext ("Aucun noeud n'est sélectionné.\n")); )
+    }
   }
   
   gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
@@ -144,7 +152,7 @@ EF_gtk_noeud_supprimer (GtkButton *button,
   
   BUG (_1992_1_1_barres_supprime_liste (p, list, NULL),
        ,
-       g_list_free (list);)
+       g_list_free (list); )
   
   g_list_free (list);
   
@@ -154,10 +162,6 @@ EF_gtk_noeud_supprimer (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
-                                 GdkEvent    *event,
-                                 Projet      *p)
 /**
  * \brief Supprime un noeud sans dépendance si la touche SUPPR est appuyée.
  * \param treeview : composant à l'origine de l'évènement,
@@ -169,12 +173,16 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
+                                 GdkEvent    *event,
+                                 Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGCRIT (UI_NOE.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
+                     "Noeuds"); )
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -187,7 +195,9 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
                                                                      treeview),
                                           &model,
                                           &Iter))
+    {
       return FALSE;
+    }
     
     gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
     
@@ -207,10 +217,10 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
     {
       BUG (_1992_1_1_barres_supprime_liste (p, liste_noeuds, NULL),
            FALSE,
-           g_list_free (liste_noeuds);)
+           g_list_free (liste_noeuds); )
       BUG (m3d_rafraichit (p),
            FALSE,
-           g_list_free (liste_noeuds);)
+           g_list_free (liste_noeuds); )
     }
     
     g_list_free (liste_noeuds);
@@ -218,13 +228,12 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
     return TRUE;
   }
   else
+  {
     return FALSE;
+  }
 }
 
 
-void
-EF_noeuds_set_supprimer_visible (gboolean select,
-                                 Projet  *p)
 /**
  * \brief En fonction de la sélection, active ou désactive les boutons
  *        supprimer.
@@ -236,6 +245,9 @@ EF_noeuds_set_supprimer_visible (gboolean select,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_noeuds_set_supprimer_visible (gboolean select,
+                                 Projet  *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -245,7 +257,7 @@ EF_noeuds_set_supprimer_visible (gboolean select,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeud");)
+                     "Noeud"); )
   
   // Noeud libre
   if (((gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0) &&
@@ -259,9 +271,13 @@ EF_noeuds_set_supprimer_visible (gboolean select,
                                    "EF_noeuds_treeview_noeuds_libres_select")),
                                           &model,
                                           &Iter))
+    {
       noeud = NULL;
+    }
     else
+    {
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
+    }
   }
   // Noeud intermédiaire
   else
@@ -271,9 +287,13 @@ EF_noeuds_set_supprimer_visible (gboolean select,
                            "EF_noeuds_treeview_noeuds_intermediaires_select")),
                                           &model,
                                           &Iter))
+    {
       noeud = NULL;
+    }
     else
+    {
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
+    }
   }
   
   // Aucune sélection
@@ -346,9 +366,6 @@ EF_noeuds_set_supprimer_visible (gboolean select,
 }
 
 
-void
-EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
-                                      Projet    *p)
 /**
  * \brief Affiche la liste des dépendances dans le menu lorsqu'on clique sur le
  *        bouton Supprimer.
@@ -359,6 +376,9 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
+                                      Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -370,7 +390,7 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeud");)
+                     "Noeud"); )
   
   // Noeud libre
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
@@ -381,9 +401,13 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                    "EF_noeuds_treeview_noeuds_libres_select")),
                                           &model,
                                           &Iter))
-      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
+    {
+      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n")); )
+    }
     else
+    {
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
+    }
   }
   // Noeud intermédiaire
   else
@@ -393,9 +417,13 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                            "EF_noeuds_treeview_noeuds_intermediaires_select")),
                                           &model,
                                           &Iter))
-      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
+    {
+      FAILCRIT ( , (gettext ("Aucun élément n'est sélectionné.\n")); )
+    }
     else
+    {
       gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
+    }
   }
   
   liste_noeuds = g_list_append (liste_noeuds, noeud);
@@ -412,7 +440,7 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                              FALSE,
                                              FALSE),
       ,
-      g_list_free (liste_noeuds);)
+      g_list_free (liste_noeuds); )
   g_list_free (liste_noeuds);
   
   // Noeud utilisé
@@ -429,14 +457,16 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
          ,
          g_list_free (liste_noeuds_dep);
            g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep);)
+           g_list_free (liste_charges_dep); )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                            UI_NOE.builder, "EF_noeuds_supprimer_menu_barres")),
                              desc);
     free (desc);
   }
   else
-    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n"));)
+  {
+    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
+  }
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -446,15 +476,15 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
 }
 
 
-void
-EF_noeuds_treeview_select_changed (GtkTreeSelection *treeselection,
-                                   Projet           *p)
 /**
  * \brief En fonction de la sélection, active ou désactive le bouton supprimer.
  * \param treeselection : composant à l'origine de l'évènement,
  * \param p : la variable projet.
  * \return Rien.
  */
+void
+EF_noeuds_treeview_select_changed (GtkTreeSelection *treeselection,
+                                   Projet           *p)
 {
   EF_noeuds_set_supprimer_visible (TRUE, p);
   
@@ -462,12 +492,8 @@ EF_noeuds_treeview_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void
-EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
-                               GtkWidget   *page,
-                               guint        page_num,
-                               Projet      *p)
-/* \brief Le changement de la page en cours nécessite l'actualisation de la
+/**
+ * \brief Le changement de la page en cours nécessite l'actualisation de la
  *        disponibilité du bouton supprimer.
  * \param notebook : le composant notebook,
  * \param page : page affichée,
@@ -475,6 +501,11 @@ EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
  * \param p : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
+                               GtkWidget   *page,
+                               guint        page_num,
+                               Projet      *p)
 {
   EF_noeuds_set_supprimer_visible (FALSE, p);
   
@@ -482,12 +513,8 @@ EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
 }
 
 
-void
-EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
-                           gchar               *path_string,
-                           gchar               *new_text,
-                           Projet              *p)
-/* \brief Changement de la position absolue d'un noeud.
+/**
+ * \brief Changement de la position absolue d'un noeud.
  * \param cell : cellule en cours,
  * \param path_string : path de la ligne en cours,
  * \param new_text : nouvelle valeur,
@@ -499,6 +526,11 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
  *     - interface graphique non initialisée,
  *     - liste des noeuds vide.
  */
+void
+EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
+                           gchar               *path_string,
+                           gchar               *new_text,
+                           Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreePath  *path;
@@ -510,8 +542,8 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+                     "Noeuds"); )
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
@@ -570,7 +602,7 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
       default :
       {
         FAILCRIT ( ,
-                  (gettext ("La colonne d'où provient l'édition est incorrecte.\n"));)
+                  (gettext ("La colonne d'où provient l'édition est incorrecte.\n")); )
         break;
       }
     }
@@ -580,12 +612,8 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
-                             gchar               *path_string,
-                             gchar               *new_text,
-                             Projet              *p)
-/* \brief Changement de la position relative d'un noeud de type barre.
+/**
+ * \brief Changement de la position relative d'un noeud de type barre.
  * \param cell : cellule en cours,
  * \param path_string : path de la ligne en cours,
  * \param new_text : nouvelle valeur,
@@ -597,6 +625,11 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
  *     - interface graphique non initialisée,
  *     - liste des noeuds vide.
  */
+void
+EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
+                             gchar               *path_string,
+                             gchar               *new_text,
+                             Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreePath  *path;
@@ -608,8 +641,8 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+                     "Noeuds"); )
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
@@ -628,24 +661,23 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
     
     if ((noeud->type == NOEUD_BARRE) && (column == 6))
+    {
       BUG (EF_noeuds_change_pos_relat (p,
                                        noeud,
                                        m_f (conversion, FLOTTANT_UTILISATEUR)),
           )
+    }
     else
+    {
       FAILCRIT ( ,
-                (gettext ("Le type du noeud ou la colonne d'édition est incorrect.\n"));)
+                (gettext ("Le type du noeud ou la colonne d'édition est incorrect.\n")); )
+    }
   }
   
   return;
 }
 
 
-void
-EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
-                                 gchar               *path_string,
-                                 gchar               *new_text,
-                                 Projet              *p)
 /**
  * \brief Changement du noeud relatif d'un noeud.
  * \param cell : cellule en cours,
@@ -660,25 +692,30 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
  *     - liste des noeuds vide,
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
+                                 gchar               *path_string,
+                                 gchar               *new_text,
+                                 Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreePath  *path;
   GtkTreeIter   iter;
   char         *fake;
-  unsigned int  conversion;
+  uint32_t      conversion;
   EF_Noeud     *noeud;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+                     "Noeuds"); )
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_libre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -689,20 +726,22 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   
   // On vérifie si le texte contient bien un nombre flottant
   if (strcmp (new_text, "") == 0)
+  {
     BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL),
          ,
-         free (fake);)
+         free (fake); )
+  }
   else if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
   {
     EF_Noeud *noeud2;
     
     BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, TRUE),
          ,
-         free (fake);)
+         free (fake); )
     
     BUG (EF_noeuds_change_noeud_relatif (p, noeud, noeud2),
          ,
-         free (fake);)
+         free (fake); )
   }
   
   free (fake);
@@ -711,11 +750,6 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
-                               const gchar         *path_string,
-                               const gchar         *new_text,
-                               Projet              *p)
 /**
  * \brief Changement du type d'appui d'un noeud.
  * \param cell : cellule en cours,
@@ -728,7 +762,12 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
  *     - new_text == NULL,
  *     - interface graphique non initialisée,
  *     - liste des noeuds vide.
-*/
+ */
+void
+EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
+                               const gchar         *path_string,
+                               const gchar         *new_text,
+                               Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreePath  *path;
@@ -740,17 +779,23 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+                     "Noeuds"); )
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
   
   if (p->modele.appuis == NULL)
+  {
     return;
+  }
   
   // On récupère le model du treeview en cours d'édition.
   if (gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0)
+  {
     model = GTK_TREE_MODEL (UI_NOE.tree_store_libre);
+  }
   else
+  {
     model = GTK_TREE_MODEL (UI_NOE.tree_store_barre);
+  }
   path = gtk_tree_path_new_from_string (path_string);
   
   gtk_tree_model_get_iter (model, &iter, path);
@@ -759,7 +804,9 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   
   // Si on souhaite que l'appui ne soit plus appuyé.
   if (strcmp (new_text, gettext ("Aucun")) == 0)
+  {
     BUG (EF_noeuds_change_appui (p, noeud, NULL), )
+  }
   else
   {
     EF_Appui *appui;
@@ -774,11 +821,6 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
-                                     const gchar         *path_string,
-                                     const gchar         *new_text,
-                                     Projet              *p)
 /**
  * \brief Changement de barre d'un noeud intermédiaire.
  * \param cell : cellule en cours,
@@ -792,10 +834,15 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
  *     - interface graphique non initialisée,
  *     - liste des noeuds vide,
  *     - en cas d'erreur d'allocation mémoire.
-*/
+ */
+void
+EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
+                                     const gchar         *path_string,
+                                     const gchar         *new_text,
+                                     Projet              *p)
 {
   char         *fake;
-  unsigned int  conversion;
+  uint32_t      conversion;
   GtkTreeModel *model;
   GtkTreePath  *path;
   GtkTreeIter   iter;
@@ -804,12 +851,12 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
   BUGCRIT (UI_NOE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Noeuds");)
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n"));)
+                     "Noeuds"); )
+  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_barre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -828,61 +875,65 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
     BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, TRUE),
          ,
-         free (fake);)
+         free (fake); )
     
     if (noeud->type == NOEUD_BARRE)
     {
       EF_Noeud_Barre *info = (EF_Noeud_Barre *) noeud->data;
       GList          *liste;
       
-      BUG (EF_calculs_free (p), , free (fake);)
+      BUG (EF_calculs_free (p), , free (fake); )
       
       info->barre->discretisation_element--;
       info->barre->nds_inter = g_list_remove (info->barre->nds_inter, noeud);
       BUGCRIT (info->barre->info_EF = realloc (
         info->barre->info_EF,
-        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1)),
+        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
               (gettext ("Erreur d'allocation mémoire.\n"));
-                free (fake);)
+                free (fake); )
       info->barre = barre;
       info->barre->discretisation_element++;
-      BUGCRIT (info->barre->info_EF = realloc(
+      BUGCRIT (info->barre->info_EF = realloc (
         info->barre->info_EF,
-        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1)),
+        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
               (gettext ("Erreur d'allocation mémoire.\n"));
-                free (fake);)
+                free (fake); )
       memset (barre->info_EF,
               0,
               sizeof (Barre_Info_EF) *
-                                    (info->barre->discretisation_element + 1));
+                                   (info->barre->discretisation_element + 1U));
       
       liste = info->barre->nds_inter;
       while ((liste != NULL) &&
              (m_g (((EF_Noeud_Barre *) liste->data)->position_relative_barre) <
                                           m_g (info->position_relative_barre)))
+      {
         liste = g_list_next (liste);
+      }
       
       info->barre->nds_inter = g_list_insert_before (info->barre->nds_inter,
                                                      liste,
                                                      noeud);
     }
     else
+    {
       FAILCRIT ( ,
                 (gettext ("Le noeud doit être de type intermédiaire.\n"));
-                  free (fake);)
+                  free (fake); )
+    }
     
     liste_noeuds = g_list_append (liste_noeuds, noeud);
     
     BUG (m3d_actualise_graphique (p, liste_noeuds, NULL),
          ,
          free (fake);
-           g_list_free (liste_noeuds);)
+           g_list_free (liste_noeuds); )
     BUG (m3d_rafraichit (p),
          ,
          free (fake);
-           g_list_free (liste_noeuds);)
+           g_list_free (liste_noeuds); )
     
     g_list_free (liste_noeuds);
   }
@@ -893,12 +944,6 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche le numéro des noeuds dans les deux treeviews noeuds libre et
  *        intermédiaire.
@@ -911,6 +956,12 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
  *   Echec :
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Noeud *noeud;
   char     *tmp;
@@ -919,7 +970,7 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
   BUGPARAM (noeud, "%p", noeud, )
   BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -927,12 +978,6 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la coordonnée x des noeuds dans les deux treeviews noeuds
  *        libre et intermédiaire.
@@ -943,6 +988,12 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Point        point;
@@ -954,7 +1005,9 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+  {
     conv_f_c (data->x, tmp, DECIMAL_DISTANCE);
+  }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
@@ -965,12 +1018,6 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la coordonnée y des noeuds dans les deux treeviews noeuds
  *        libre et intermédiaire.
@@ -981,6 +1028,12 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Point        point;
@@ -992,7 +1045,9 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+  {
     conv_f_c (data->y, tmp, DECIMAL_DISTANCE);
+  }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
@@ -1003,12 +1058,6 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la coordonnée z des noeuds dans les deux treeviews noeuds
  *        libre et intermédiaire.
@@ -1019,6 +1068,12 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Point        point;
@@ -1030,7 +1085,9 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
   
   data = noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+  {
     conv_f_c (data->z, tmp, DECIMAL_DISTANCE);
+  }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
@@ -1041,12 +1098,6 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche l'appui des noeuds dans les deux treeviews noeuds libre et
  *        ntermédiaire.
@@ -1057,6 +1108,12 @@ EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Noeud *noeud;
   
@@ -1070,12 +1127,6 @@ EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
-                             GtkCellRenderer   *cell,
-                             GtkTreeModel      *tree_model,
-                             GtkTreeIter       *iter,
-                             gpointer           data2)
 /**
  * \brief Affiche le noeud relatif des noeuds dans le treeview noeud libre.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1087,6 +1138,12 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
  *   Echec :
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
+                             GtkCellRenderer   *cell,
+                             GtkTreeModel      *tree_model,
+                             GtkTreeIter       *iter,
+                             gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Noeud_Libre *data;
@@ -1096,9 +1153,11 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
   BUGPARAM (noeud, "%p", noeud, )
   data = noeud->data;
   if (data->relatif != NULL)
+  {
     BUGCRIT (tmp = g_strdup_printf ("%d", data->relatif->numero),
              ,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
+  }
   
   g_object_set (cell, "text", tmp == NULL ? gettext ("Aucun") : tmp, NULL);
   
@@ -1106,12 +1165,6 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
-                                     GtkCellRenderer   *cell,
-                                     GtkTreeModel      *tree_model,
-                                     GtkTreeIter       *iter,
-                                     gpointer           data2)
 /**
  * \brief Affiche la barre où est le noeud dans le treeview noeud
  *        intermédiaire.
@@ -1124,6 +1177,12 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
  *   Echec :
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
+                                     GtkCellRenderer   *cell,
+                                     GtkTreeModel      *tree_model,
+                                     GtkTreeIter       *iter,
+                                     gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Noeud_Barre *data;
@@ -1134,7 +1193,7 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
   data = noeud->data;
   BUGCRIT (tmp = g_strdup_printf ("%d", data->barre->numero),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -1142,12 +1201,6 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
-                                     GtkCellRenderer   *cell,
-                                     GtkTreeModel      *tree_model,
-                                     GtkTreeIter       *iter,
-                                     gpointer           data2)
 /**
  * \brief Affiche la position relative du noeud dans la barre dans le treeview
  *        noeud intermédiaire.
@@ -1158,6 +1211,12 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
+                                     GtkCellRenderer   *cell,
+                                     GtkTreeModel      *tree_model,
+                                     GtkTreeIter       *iter,
+                                     gpointer           data2)
 {
   EF_Noeud       *noeud;
   EF_Noeud_Barre *data;
@@ -1172,8 +1231,6 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeud (Projet *p)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier des noeuds.
  * \param p : la variable projet.
@@ -1182,6 +1239,8 @@ EF_gtk_noeud (Projet *p)
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_noeud (Projet *p)
 {
   GList *list_parcours = p->modele.noeuds;
   
@@ -1199,7 +1258,7 @@ EF_gtk_noeud (Projet *p)
                                           NULL) != 0,
            ,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Noeuds");)
+                     "Noeuds"); )
   gtk_builder_connect_signals (UI_NOE.builder, p);
   
   UI_NOE.window = GTK_WIDGET (gtk_builder_get_object (UI_NOE.builder,

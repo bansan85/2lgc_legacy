@@ -40,19 +40,6 @@
 #include "EF_materiaux.h"
 
 
-Charge *
-EF_charge_barre_ponctuelle_ajout (Projet     *p,
-                                  Action     *action,
-                                  GList      *barres,
-                                  gboolean    repere_local,
-                                  Flottant    a,
-                                  Flottant    fx,
-                                  Flottant    fy,
-                                  Flottant    fz,
-                                  Flottant    mx,
-                                  Flottant    my,
-                                  Flottant    mz,
-                                  const char *nom)
 /**
  * \brief Ajoute une charge ponctuelle à une action à l'intérieur d'une barre.
  * \param p : la variable projet,
@@ -77,6 +64,19 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
  *     - a < 0 ou a > l,
  *     - en cas d'erreur d'allocation mémoire
  */
+Charge *
+EF_charge_barre_ponctuelle_ajout (Projet     *p,
+                                  Action     *action,
+                                  GList      *barres,
+                                  gboolean    repere_local,
+                                  Flottant    a,
+                                  Flottant    fx,
+                                  Flottant    fy,
+                                  Flottant    fz,
+                                  Flottant    mx,
+                                  Flottant    my,
+                                  Flottant    mz,
+                                  const char *nom)
 {
   Charge                  *charge;
   Charge_Barre_Ponctuelle *charge_d;
@@ -87,14 +87,14 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
   INFO (m_g (a) >= 0.,
         NULL,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  m_g (a));)
+                  m_g (a)); )
   BUGCRIT (charge = malloc (sizeof (Charge)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (charge_d = malloc (sizeof (Charge_Barre_Ponctuelle)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (charge);)
+             free (charge); )
   charge->data = charge_d;
   if (barres != NULL)
   {
@@ -113,7 +113,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
                       barre->numero,
                       distance);
               free (charge_d);
-              free (charge);)
+              free (charge); )
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -122,7 +122,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
   
   charge->type = CHARGE_BARRE_PONCTUELLE;
   charge_d->barres = barres;
-  charge_d->repere_local = repere_local;
+  charge_d->repere_local = repere_local == TRUE;
   charge_d->position = a;
   charge_d->fx = fx;
   charge_d->fy = fy;
@@ -134,15 +134,12 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
   BUG (EF_charge_ajout (p, action, charge, nom),
        NULL,
        free (charge_d);
-         free (charge);)
+         free (charge); )
   
   return charge;
 }
 
 
-// coverity[+alloc]
-char *
-EF_charge_barre_ponctuelle_description (Charge *charge)
 /**
  * \brief Renvoie la description d'une charge de type ponctuelle sur noeud.
  * \param charge : la charge à décrire.
@@ -152,6 +149,9 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+EF_charge_barre_ponctuelle_description (Charge *charge)
 {
   Charge_Barre_Ponctuelle *charge_d;
   char                     txt_pos[30];
@@ -174,7 +174,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
   conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
   
   BUGCRIT (description = g_strdup_printf (
-             "%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m",
+             "%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", // NS
              strstr (txt_liste_barres, ";") == NULL ?
                gettext ("Barre") :
                gettext ("Barres"),
@@ -192,7 +192,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
              txt_mz),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_barres);)
+             free (txt_liste_barres); )
   
   free (txt_liste_barres);
   
@@ -200,14 +200,6 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
-                               unsigned int   discretisation,
-                               double         a,
-                               Barre_Info_EF *infos,
-                               double         mx,
-                               double        *ma,
-                               double        *mb)
 /**
  * \brief Calcule l'opposé aux moments d'encastrement pour l'élément spécifié
  *        soumis au moment de torsion mx dans le repère local. Les résultats
@@ -232,6 +224,14 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l
  */
+gboolean
+EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
+                               uint16_t       discretisation,
+                               double         a,
+                               Barre_Info_EF *infos,
+                               double         mx,
+                               double        *ma,
+                               double        *mb)
 {
   EF_Noeud *debut, *fin;
   double    l, G, J;
@@ -244,15 +244,15 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
-        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (!(a < 0.),
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
 
   // Les moments aux extrémités de la barre sont déterminés par les intégrales
   // de Mohr et valent dans le cas général :\end{verbatim}\begin{center}
@@ -263,13 +263,21 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   // M_{Ax} = & M_x - M_{Bx}\end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
@@ -277,7 +285,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -291,26 +299,24 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   //          k_{Bx}} \cdot M_x\end{displaymath}\begin{verbatim}
   
   if (errrel (infos->kAx, MAXDOUBLE))
+  {
     *mb = mx;
+  }
   else if (errrel (infos->kBx, MAXDOUBLE))
+  {
     *mb = 0.;
+  }
   else
+  {
     *mb = (a / (G * J) + infos->kAx) /
             (l / (G * J) + infos->kAx + infos->kBx) * mx;
+  }
   *ma = mx - *mb;
   
   return TRUE;
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
-                                          unsigned int discretisation,
-                                          double       a,
-                                          double       fz,
-                                          double       my,
-                                          double      *phia,
-                                          double      *phib)
 /**
  * \brief Calcule les angles de rotation autour de l'axe y pour un élément
  *        bi-articulé soumis au chargement fz, my dans le repère local. Les
@@ -335,6 +341,14 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - a < 0. ou a > l.
  */
+gboolean
+EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
+                                          uint16_t  discretisation,
+                                          double    a,
+                                          double    fz,
+                                          double    my,
+                                          double   *phia,
+                                          double   *phib)
 {
   EF_Noeud *debut, *fin;
   double    l, b, E, I;
@@ -346,11 +360,11 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // Les rotations aux extrémités de la barre sont déterminées par les
   // intégrales de Mohr et valent dans le cas général :\end{verbatim}
@@ -378,21 +392,30 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
   // Mf_3 = & -\frac{x}{L}\end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
   INFO (a <= l,
         FALSE,
-        (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
+        (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
+                  "La longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   b = l - a;
   
   E = m_g (EF_materiaux_E (barre->materiau));
@@ -418,14 +441,6 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
-                                          unsigned int discretisation,
-                                          double       a,
-                                          double       fy,
-                                          double       mz,
-                                          double      *phia,
-                                          double      *phib)
 /**
  * \brief Calcule les angles de rotation autour de l'axe z pour un élément
  *        bi-articulé soumis au chargement fy, mz dans le repère local. Les
@@ -448,6 +463,14 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - a < 0. ou a > l.
  */
+gboolean
+EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
+                                          uint16_t  discretisation,
+                                          double    a,
+                                          double    fy,
+                                          double    mz,
+                                          double   *phia,
+                                          double   *phib)
 {
   EF_Noeud *debut, *fin;
   double    l, b, E, I;
@@ -457,13 +480,13 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   BUGPARAM (phia, "%p", phia, FALSE)
   BUGPARAM (phib, "%p", phib, FALSE)
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // Les rotations aux extrémités de la barre sont déterminées par les
   // intégrales de Mohr et valent dans le cas général :\end{verbatim}
@@ -490,21 +513,30 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
   // Mf_3 = & -\frac{x}{L}\end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
   INFO (a <= l,
         FALSE,
-        (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
+        (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
+                  "La longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   b = l - a;
   
   E = m_g (EF_materiaux_E (barre->materiau));
@@ -530,13 +562,6 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
-                                    EF_Barre    *barre,
-                                    unsigned int discretisation,
-                                    double       a,
-                                    double       max,
-                                    double       mbx)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe x en
  *        fonction des efforts aux extrémités de la poutre soumise à un moment
@@ -557,6 +582,13 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l.
  */
+gboolean
+EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
+                                    EF_Barre *barre,
+                                    uint16_t  discretisation,
+                                    double    a,
+                                    double    max,
+                                    double    mbx)
 {
   EF_Noeud      *debut, *fin;
   Barre_Info_EF *infos;
@@ -569,16 +601,16 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   infos = &(barre->info_EF[discretisation]);
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
-        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // La déformation d'une barre soumise à un effort de torsion est défini par
   // les formules :\end{verbatim}\begin{center}
@@ -600,20 +632,31 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
   // FinSi
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
   INFO (a <= l,
         FALSE,
-        (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"), a, l);)
+        (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
+                  "La longueur de la barre est de %f m.\n"),
+                  a,
+                  l); )
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -682,16 +725,6 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction    *fonction,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
-                                    Fonction    *f_deform,
-                                    EF_Barre    *barre,
-                                    unsigned int discretisation,
-                                    double       a,
-                                    double       fz,
-                                    double       my,
-                                    double       may,
-                                    double       mby)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe y et
  *        en déformation selon l'axe z en fonction de la charge ponctuelle (fz
@@ -716,6 +749,16 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
+gboolean
+EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
+                                    Fonction *f_deform,
+                                    EF_Barre *barre,
+                                    uint16_t  discretisation,
+                                    double    a,
+                                    double    fz,
+                                    double    my,
+                                    double    may,
+                                    double    mby)
 {
   EF_Noeud *debut, *fin;
   double    l, b;
@@ -728,11 +771,11 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // La déformation en rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -805,22 +848,31 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
   //         & & \end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
   INFO (a <= l,
         FALSE,
-        (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
+        (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
+                  "La longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
@@ -975,16 +1027,6 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction    *f_rotation,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
-                                    Fonction    *f_deform,
-                                    EF_Barre    *barre,
-                                    unsigned int discretisation,
-                                    double       a,
-                                    double       fy,
-                                    double       mz,
-                                    double       maz,
-                                    double       mbz)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe z et
  *        en déformation selon l'axe y en fonction de la charge ponctuelle (fy
@@ -1009,6 +1051,16 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
+gboolean
+EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
+                                    Fonction *f_deform,
+                                    EF_Barre *barre,
+                                    uint16_t  discretisation,
+                                    double    a,
+                                    double    fy,
+                                    double    mz,
+                                    double    maz,
+                                    double    mbz)
 {
   EF_Noeud *debut, *fin;
   double    l, b;
@@ -1021,11 +1073,11 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // La déformation en rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -1037,13 +1089,21 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
   // déformations toujours dû au changement de repère) et Iy par Iz.
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
@@ -1052,7 +1112,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
@@ -1171,13 +1231,6 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction    *f_rotation,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_n (Fonction    *fonction,
-                              EF_Barre    *barre,
-                              unsigned int discretisation,
-                              double       a,
-                              double       fax,
-                              double       fbx)
 /**
  * \brief Calcule les déplacements d'une barre selon l'axe x en fonction de
  *        l'effort normal ponctuel n et des réactions d'appuis fax et fbx.
@@ -1196,6 +1249,13 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
+gboolean
+EF_charge_barre_ponctuelle_n (Fonction *fonction,
+                              EF_Barre *barre,
+                              uint16_t  discretisation,
+                              double    a,
+                              double    fax,
+                              double    fbx)
 {
   EF_Noeud *debut, *fin;
   double    l, debut_barre;
@@ -1207,11 +1267,11 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
-                  a);)
+                  a); )
   
   // La déformation selon l'axe x est par la formule :\end{verbatim}
   // \begin{center}
@@ -1224,13 +1284,21 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
   //          & \textrm{ pour x variant de a à l} \end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
@@ -1239,7 +1307,7 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
         FALSE,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   S = m_g (EF_sections_s (barre->section));
@@ -1276,10 +1344,6 @@ EF_charge_barre_ponctuelle_n (Fonction    *fonction,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_enleve_barres (Charge *charge,
-                                          GList  *barres,
-                                          Projet *p)
 /**
  * \brief Enlève à la charge une liste de barres pouvant être utilisées. Dans
  *        le cas où une barre de la liste n'est pas dans la charge, ce point ne
@@ -1293,6 +1357,10 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge *charge,
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_barre_ponctuelle_enleve_barres (Charge *charge,
+                                          GList  *barres,
+                                          Projet *p)
 {
   GList                   *list_parcours = barres;
   Charge_Barre_Ponctuelle *charge_d;
@@ -1326,7 +1394,9 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge *charge,
       gtk_tree_model_get (model, &Iter, 0, &action, -1);
       
       if (g_list_find (_1990_action_charges_renvoie (action), charge))
+      {
         gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+      }
     }
   }
 #endif
@@ -1337,8 +1407,6 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge *charge,
 }
 
 
-gboolean
-EF_charge_barre_ponctuelle_free (Charge *charge)
 /**
  * \brief Libère une charge ponctuelle sur barre.
  * \param charge : la charge à libérer.
@@ -1347,6 +1415,8 @@ EF_charge_barre_ponctuelle_free (Charge *charge)
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_barre_ponctuelle_free (Charge *charge)
 {
   Charge_Barre_Ponctuelle *charge_d;
   

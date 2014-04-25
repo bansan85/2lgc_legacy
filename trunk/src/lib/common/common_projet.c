@@ -59,8 +59,6 @@
 #include "1992_1_1_materiaux.h"
 
 
-gboolean
-projet_free (Projet *p)
 /**
  * \brief Libère les allocations mémoires de l'ensemble de la variable projet.
  * \param p : la variable projet.
@@ -69,6 +67,8 @@ projet_free (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+projet_free (Projet *p)
 {
   // Action doit être libéré avant p->modele.barres
   
@@ -76,30 +76,50 @@ projet_free (Projet *p)
   
   BUG (common_ville_free (p), FALSE)
   if (p->actions != NULL)
+  {
     BUG (_1990_action_free (p), FALSE)
+  }
   if (p->niveaux_groupes != NULL)
+  {
     BUG (_1990_groupe_free (p), FALSE)
+  }
   if (p->combinaisons.elu_equ != NULL)
+  {
     BUG (_1990_combinaisons_free (p), FALSE)
+  }
   // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
   // il est nécessaire d'avoir accès aux informations contenues dans les
   // noeuds.
   BUG (EF_calculs_free (p), FALSE)
   if (p->modele.sections != NULL)
+  {
     BUG (EF_sections_free (p), FALSE)
+  }
   if (p->modele.noeuds != NULL)
+  {
     BUG (EF_noeuds_free (p), FALSE)
+  }
   if (p->modele.barres != NULL)
+  {
     BUG (_1992_1_1_barres_free (p), FALSE)
+  }
   if (p->modele.appuis != NULL)
+  {
     BUG (EF_appuis_free (p), FALSE)
+  }
   if (p->modele.materiaux != NULL)
+  {
     BUG (EF_materiaux_free (p), FALSE)
+  }
   if (p->modele.relachements != NULL)
+  {
     BUG (EF_relachement_free (p), FALSE)
+  }
 #ifdef ENABLE_GTK
   if (UI_M3D.data != NULL)
+  {
     BUG (m3d_free (p), FALSE)
+  }
   EF_gtk_resultats_free (p);
   
   _2lgc_unregister_resource ();
@@ -113,9 +133,6 @@ projet_free (Projet *p)
 }
 
 
-// coverity[+alloc]
-Projet *
-projet_init (Norme norme)
 /**
  * \brief Initialise la variable projet.
  * \param norme : norme de calcul.
@@ -124,6 +141,9 @@ projet_init (Norme norme)
  *   Échec : NULL :
  *     - en cas d'erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+Projet *
+projet_init (Norme norme)
 {
   Projet         *p;
 #ifdef ENABLE_GTK
@@ -137,31 +157,31 @@ projet_init (Norme norme)
   // Alloue toutes les zones mémoires du projet à savoir (par module) :
   BUGCRIT (p = (Projet *) malloc (sizeof (Projet)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   memset (p, 0, sizeof (Projet));
   
   p->parametres.norme = norme;
   
-  BUG (common_ville_init (p), NULL, free (p);)
+  BUG (common_ville_init (p), NULL, free (p); )
   
   NOWARNING
   //   - 1990 : la liste des actions, des groupes et des combinaisons,
-  BUG (_1990_action_init (p), NULL, projet_free (p);)
-  BUG (_1990_groupe_init (p), NULL, projet_free (p);)
-  BUG (_1990_combinaisons_init (p), NULL, projet_free (p);)
+  BUG (_1990_action_init (p), NULL, projet_free (p); )
+  BUG (_1990_groupe_init (p), NULL, projet_free (p); )
+  BUG (_1990_combinaisons_init (p), NULL, projet_free (p); )
   //   - 1992-1-1 : la liste des sections, des barres et des matériaux
-  BUG (EF_sections_init (p), NULL, projet_free (p);)
-  BUG (_1992_1_1_barres_init (p), NULL, projet_free (p);)
-  BUG (EF_materiaux_init (p), NULL, projet_free (p);)
+  BUG (EF_sections_init (p), NULL, projet_free (p); )
+  BUG (_1992_1_1_barres_init (p), NULL, projet_free (p); )
+  BUG (EF_materiaux_init (p), NULL, projet_free (p); )
   //   - EF : la liste des appuis, des relâchements et des noeuds ainsi que les
   //          éléments nécessaire pour les calculs aux éléments finis.
-  BUG (EF_appuis_init (p), NULL, projet_free (p);)
-  BUG (EF_rigidite_init (p), NULL, projet_free (p);)
-  BUG (EF_relachement_init (p), NULL, projet_free (p);)
-  BUG (EF_noeuds_init (p), NULL, projet_free (p);)
+  BUG (EF_appuis_init (p), NULL, projet_free (p); )
+  BUG (EF_rigidite_init (p), NULL, projet_free (p); )
+  BUG (EF_relachement_init (p), NULL, projet_free (p); )
+  BUG (EF_noeuds_init (p), NULL, projet_free (p); )
   
 #ifdef ENABLE_GTK
-  BUG (m3d_init (p), NULL, projet_free (p);)
+  BUG (m3d_init (p), NULL, projet_free (p); )
   UI_GRO.builder = NULL;
   UI_GROOP.builder = NULL;
   UI_CHNO.builder = NULL;
@@ -204,7 +224,7 @@ projet_init (Norme norme)
   
   BUG (common_ville_set (p, L"37", L"Joué-lès-Tours", FALSE),
        NULL,
-       projet_free (p);)
+       projet_free (p); )
   POPWARNING
   
   p->calculs.c = &(p->calculs.Common);
@@ -215,9 +235,6 @@ projet_init (Norme norme)
 
 
 #ifdef ENABLE_GTK
-void
-gui_window_destroy_event (GtkWidget *pWidget,
-                          Projet    *p)
 /**
  * \brief Évenement lors de la fermeture de la fenêtre principale.
  * \param pWidget : composant à l'origine de la demande,
@@ -226,6 +243,9 @@ gui_window_destroy_event (GtkWidget *pWidget,
  *   Échec :
  *     - p == NULL.
  */
+void
+gui_window_destroy_event (GtkWidget *pWidget,
+                          Projet    *p)
 {
   BUGPARAM (p, "%p", p, )
   
@@ -237,14 +257,14 @@ gui_window_destroy_event (GtkWidget *pWidget,
 }
 
 
-void
-gui_window_option_destroy_button (GtkWidget *fenetre)
 /**
  * \brief Bouton de fermeture de la fenêtre.
  * \param fenetre : composant à détruire,
  * \param fenetre : la fenêtre d'options.
  * \return Rien.
  */
+void
+gui_window_option_destroy_button (GtkWidget *fenetre)
 {
   gtk_widget_destroy (fenetre);
   
@@ -252,8 +272,6 @@ gui_window_option_destroy_button (GtkWidget *fenetre)
 }
 
 
-gboolean
-projet_init_graphique (Projet *p)
 /**
  * \brief Crée une fenêtre graphique avec toute l'interface (menu, vue 3D,
  *        ...).
@@ -263,6 +281,8 @@ projet_init_graphique (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+projet_init_graphique (Projet *p)
 {
   GtkWidget *menu_separator;
   

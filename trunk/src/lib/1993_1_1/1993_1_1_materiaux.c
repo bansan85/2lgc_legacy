@@ -37,11 +37,6 @@
 #endif
 
 
-EF_Materiau *
-_1993_1_1_materiaux_ajout (Projet     *p,
-                           const char *nom,
-                           Flottant    fy,
-                           Flottant    fu)
 /**
  * \brief Ajoute un matériau en acier.
  * \param p : la variable projet,
@@ -54,6 +49,11 @@ _1993_1_1_materiaux_ajout (Projet     *p,
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+EF_Materiau *
+_1993_1_1_materiaux_ajout (Projet     *p,
+                           const char *nom,
+                           Flottant    fy,
+                           Flottant    fu)
 {
   EF_Materiau    *materiau_nouveau;
   Materiau_Acier *data_acier;
@@ -61,11 +61,11 @@ _1993_1_1_materiaux_ajout (Projet     *p,
   BUGPARAM (p, "%p", p, NULL)
   BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (data_acier = malloc (sizeof (Materiau_Acier)),
            NULL,
            (gettext("Erreur d'allocation mémoire.\n"));
-             free (materiau_nouveau);)
+             free (materiau_nouveau); )
   
   materiau_nouveau->type = MATERIAU_ACIER;
   materiau_nouveau->data = data_acier;
@@ -74,7 +74,7 @@ _1993_1_1_materiaux_ajout (Projet     *p,
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (materiau_nouveau);
-             free (data_acier);)
+             free (data_acier); )
   
   data_acier->fy = m_f (m_g (fy) * 1000000., fy.type);
   data_acier->fu = m_f (m_g (fu) * 1000000., fu.type);
@@ -85,20 +85,12 @@ _1993_1_1_materiaux_ajout (Projet     *p,
        NULL,
        free (materiau_nouveau->nom);
          free (data_acier);
-         free (materiau_nouveau);)
+         free (materiau_nouveau); )
   
   return materiau_nouveau;
 }
 
 
-gboolean
-_1993_1_1_materiaux_modif (Projet      *p,
-                           EF_Materiau *materiau,
-                           char        *nom,
-                           Flottant     fy,
-                           Flottant     fu,
-                           Flottant     e,
-                           Flottant     nu)
 /**
  * \brief Modifie un matériau acier.
  * \param p : la variable projet,
@@ -114,6 +106,14 @@ _1993_1_1_materiaux_modif (Projet      *p,
  *     - p == NULL,
  *     - materiau == NULL.
  */
+gboolean
+_1993_1_1_materiaux_modif (Projet      *p,
+                           EF_Materiau *materiau,
+                           char        *nom,
+                           Flottant     fy,
+                           Flottant     fu,
+                           Flottant     e,
+                           Flottant     nu)
 {
   Materiau_Acier *data_acier;
   
@@ -121,7 +121,7 @@ _1993_1_1_materiaux_modif (Projet      *p,
   BUGPARAM (materiau, "%p", materiau, FALSE)
   BUGCRIT (materiau->type == MATERIAU_ACIER,
            FALSE,
-           (gettext ("Le matériau n'est pas en acier.\n"));)
+           (gettext ("Le matériau n'est pas en acier.\n")); )
   
   data_acier = materiau->data;
   
@@ -131,24 +131,32 @@ _1993_1_1_materiaux_modif (Projet      *p,
     
     INFO (!EF_materiaux_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("Le matériau %s existe déjà.\n"), nom);)
+          (gettext ("Le matériau %s existe déjà.\n"), nom); )
     tmp = materiau->nom;
     BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               materiau->nom = tmp;)
+               materiau->nom = tmp; )
     free (tmp);
     BUG (EF_materiaux_repositionne (p, materiau), FALSE)
   }
   
   if (!isnan (m_g (fy)))
+  {
     data_acier->fy = fy;
+  }
   if (!isnan (m_g (fu)))
+  {
     data_acier->fu = fu;
+  }
   if (!isnan (m_g (e)))
+  {
     data_acier->e = e;
+  }
   if (!isnan (m_g (nu)))
+  {
     data_acier->nu = nu;
+  }
   
   if ((!isnan (m_g (fy))) || (!isnan (m_g (fu))) ||
       (!isnan (m_g (e))) || (!isnan (m_g (nu))))
@@ -170,28 +178,29 @@ _1993_1_1_materiaux_modif (Projet      *p,
                                                FALSE,
                                                FALSE),
          FALSE,
-         g_list_free (liste_materiaux);)
+         g_list_free (liste_materiaux); )
     g_list_free (liste_materiaux);
     
     if (liste_barres_dep != NULL)
-      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep);)
+    {
+      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep); )
+    }
     
     g_list_free (liste_barres_dep);
   }
   
 #ifdef ENABLE_GTK
   if (UI_MAT.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                         UI_MAT.builder, "EF_materiaux_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-// coverity[+alloc]
-char *
-_1993_1_1_materiaux_get_description (EF_Materiau* materiau)
 /**
  * \brief Renvoie la description d'un matériau acier sous forme d'un texte.
  *        Il convient de libérer le texte renvoyée par la fonction free.
@@ -202,6 +211,9 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
  *     - materiau == NULL,
  *     - erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+_1993_1_1_materiaux_get_description (EF_Materiau* materiau)
 {
   char           *description = NULL;
   char            tmp1[30];
@@ -211,7 +223,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   BUGPARAM (materiau, "%p", materiau, NULL)
   BUGCRIT (materiau->type == MATERIAU_ACIER,
            NULL,
-           (gettext ("Le matériau n'est pas en acier.\n"));)
+           (gettext ("Le matériau n'est pas en acier.\n")); )
   
   data_acier = materiau->data;
   
@@ -220,7 +232,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
             DECIMAL_CONTRAINTE);
   BUGCRIT (description = g_strdup_printf ("f<sub>y</sub> : %s MPa", tmp1),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // On affiche les différences si le matériau a été personnalisé
   conv_f_c (m_f (m_g (data_acier->fu) / 1000000., data_acier->fu.type),
@@ -232,7 +244,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
                                           tmp1),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (tmp2);)
+             free (tmp2); )
   free (tmp2);
   
   if (!errrel (m_g (data_acier->e), MODULE_YOUNG_ACIER))
@@ -244,7 +256,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
     BUGCRIT (description = g_strdup_printf ("%s, E : %s MPa", tmp2, tmp1),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp2);)
+               free (tmp2); )
     free (tmp2);
   }
   
@@ -255,7 +267,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
     BUGCRIT (description = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp2);)
+               free (tmp2); )
     free (tmp2);
   }
   

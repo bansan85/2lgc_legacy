@@ -37,9 +37,6 @@ GTK_WINDOW_DESTROY (_1990, groupes_options, );
 GTK_WINDOW_CLOSE (_1990, groupes_options);
 
 
-void
-_1990_gtk_groupes_button_options_clicked (GtkWidget *button,
-                                          Projet    *p)
 /**
  * \brief Création de la fenêtre des options des Groupes.
  * \param button : composant à l'origine de l'évènement,
@@ -49,6 +46,9 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+_1990_gtk_groupes_button_options_clicked (GtkWidget *button,
+                                          Projet    *p)
 {
   GtkSettings *settings;
   
@@ -56,7 +56,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   if (UI_GROOP.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_GROOP.window));
@@ -69,29 +69,37 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
                                          NULL) != 0,
           ,
           (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                    "Actions_Option");)
+                    "Actions_Option"); )
   gtk_builder_connect_signals (UI_GROOP.builder, p);
   
   UI_GROOP.window = GTK_WIDGET (gtk_builder_get_object (
                              UI_GROOP.builder, "1990_groupes_options_window"));
   
   if (p->combinaisons.elu_equ_methode == 0)
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                    UI_GROOP.builder, "1990_groupes_options_radio_button_EQU")),
                                   TRUE);
+  }
   else
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                UI_GROOP.builder, "1990_groupes_options_radio_button_EQU_RES")),
                                   TRUE);
+  }
   
   if (p->combinaisons.form_6_10 == 0)
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")),
                                   TRUE);
+  }
   else
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_6_10")),
                                   TRUE);
+  }
   gtk_widget_set_tooltip_window (GTK_WIDGET (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_6_10")),
                          GTK_WINDOW (common_tooltip_generation ("1990_6_10")));
@@ -106,26 +114,36 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   g_object_set (settings, "gtk-tooltip-timeout", 0, NULL);
   
   if (p->combinaisons.elu_geo_str_methode == 2)
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr3")),
                                   TRUE);
+  }
   else if (p->combinaisons.elu_geo_str_methode == 1)
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr2")),
                                   TRUE);
+  }
   else
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr1")),
                                   TRUE);
+  }
   
   if (p->combinaisons.elu_acc_psi == 0)
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_freq")),
                                   TRUE);
+  }
   else
+  {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
             UI_GROOP.builder, "1990_groupes_options_radio_button_quasi_perm")),
                                   TRUE);
+  }
   
   gtk_window_set_transient_for (GTK_WINDOW (gtk_builder_get_object (
                              UI_GROOP.builder, "1990_groupes_options_window")),

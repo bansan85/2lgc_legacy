@@ -22,8 +22,8 @@
 #include "config.h"
 #include "common_projet.h"
 
-#define COEFFICIENT_NU_ACIER  0.3
-#define MODULE_YOUNG_ACIER    210000000000.
+#define COEFFICIENT_NU_ACIER 0.3
+#define MODULE_YOUNG_ACIER 210000000000.
 
 EF_Materiau *_1993_1_1_materiaux_ajout (Projet      *p,
                                         const char  *nom,

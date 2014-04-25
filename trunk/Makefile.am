@@ -5,7 +5,6 @@ SUBDIRS =	po \
 			files \
 			docs
 
-#-Wconversion
 if PLATFORM_WIN32
 CUSTOM_CFLAGS 	= @CFLAGS@ -march=i686 -mms-bitfields
 else
@@ -23,7 +22,7 @@ CUSTOM_CFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CFLAGS 	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wno-error=conversion -Wno-error=sign-conversion -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length
+CUSTOM_CFLAGS 	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length -fsanitize=address -Wconversion
 #-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
 
 if PLATFORM_WIN32
@@ -124,7 +123,7 @@ checkcode :
 	
 	$(MAKE) clean
 	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
-	$(MAKE) -j9 CC=clang CXX=clang++ &> l_clang.log
+	$(MAKE) -j9 &> l_clang.log
 	
 	$(MAKE) clean
 	scan-build make -j9 &> l_clang_scan.log
@@ -137,3 +136,4 @@ checkcode :
 	
 	$(MAKE) -C src/lib cppcheck
 	$(MAKE) -C src/lib kernel_sparse
+	../nsiqcppstyle/nsiqcppstyle . > coding_style.log

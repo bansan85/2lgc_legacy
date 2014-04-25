@@ -40,21 +40,6 @@
 #include "EF_charge.h"
 
 
-Charge *
-EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
-                                         Action     *action,
-                                         GList      *barres,
-                                         gboolean    repere_local,
-                                         gboolean    projection,
-                                         Flottant    a,
-                                         Flottant    b,
-                                         Flottant    fx,
-                                         Flottant    fy,
-                                         Flottant    fz,
-                                         Flottant    mx,
-                                         Flottant    my,
-                                         Flottant    mz,
-                                         const char *nom)
 /**
  * \brief Ajoute une charge répartie uniforme à une action le long d'une barre.
  * \param p : la variable projet,
@@ -86,6 +71,21 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
  *     - a > l - b,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Charge *
+EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
+                                         Action     *action,
+                                         GList      *barres,
+                                         gboolean    repere_local,
+                                         gboolean    projection,
+                                         Flottant    a,
+                                         Flottant    b,
+                                         Flottant    fx,
+                                         Flottant    fy,
+                                         Flottant    fz,
+                                         Flottant    mx,
+                                         Flottant    my,
+                                         Flottant    mz,
+                                         const char *nom)
 {
   Charge                         *charge;
   Charge_Barre_Repartie_Uniforme *charge_d;
@@ -96,15 +96,15 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
   BUGPARAM (barres, "%p", barres, NULL)
   INFO ((projection == FALSE) || (repere_local == FALSE),
         NULL,
-        (gettext ("Impossible d'effectuer une projection dans un repère local.\n"));)
+        (gettext ("Impossible d'effectuer une projection dans un repère local.\n")); )
   INFO(m_g (a) >= 0.,
        NULL,
        (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                 m_g (a));)
+                 m_g (a)); )
   INFO (m_g (b) >= 0.,
         NULL,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  m_g (b));)
+                  m_g (b)); )
   
   while (list_parcours != NULL)
   {
@@ -116,37 +116,37 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
           (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                     m_g (a),
                     barre->numero,
-                    l);)
+                    l); )
     INFO (m_g (b) <= l,
           NULL,
           (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                     m_g (b),
                     barre->numero,
-                    l);)
+                    l); )
     INFO (m_g (a) + m_g (b) <= l,
           NULL,
           (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"),
                     m_g (a),
                     m_g (b),
                     barre->numero,
-                    l);)
+                    l); )
     
     list_parcours = g_list_next (list_parcours);
   }
   
   BUGCRIT (charge = malloc (sizeof (Charge)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (charge_d = malloc (sizeof (Charge_Barre_Repartie_Uniforme)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (charge);)
+             free (charge); )
   
   charge->data = charge_d;
   charge->type = CHARGE_BARRE_REPARTIE_UNIFORME;
   charge_d->barres = barres;
-  charge_d->repere_local = repere_local;
-  charge_d->projection = projection;
+  charge_d->repere_local = (repere_local == TRUE);
+  charge_d->projection = (projection == TRUE);
   charge_d->a = a;
   charge_d->b = b;
   charge_d->fx = fx;
@@ -159,15 +159,12 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
   BUG (EF_charge_ajout (p, action, charge, nom),
        NULL,
        free (charge);
-         free (charge_d);)
+         free (charge_d); )
   
   return charge;
 }
 
 
-// coverity[+alloc]
-char *
-EF_charge_barre_repartie_uniforme_description (Charge *charge)
 /**
  * \brief Renvoie la description d'une charge de type répartie uniforme sur
  *        barre.
@@ -178,6 +175,9 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+EF_charge_barre_repartie_uniforme_description (Charge *charge)
 {
   Charge_Barre_Repartie_Uniforme  *charge_d;
   
@@ -203,7 +203,7 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
   conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
   
   BUGCRIT (description = g_strdup_printf (
-             "%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m",
+             "%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", //NS
              strstr (txt_liste_barres, ";") == NULL ?
                gettext ("Barre") :
                gettext("Barres"),
@@ -226,7 +226,7 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
              txt_mz),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_barres);)
+             free (txt_liste_barres); )
   
   free (txt_liste_barres);
   
@@ -234,15 +234,6 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
-                                      unsigned int   discretisation,
-                                      double         a,
-                                      double         b,
-                                      Barre_Info_EF *infos,
-                                      double         mx,
-                                      double        *ma,
-                                      double        *mb)
 /**
  * \brief Calcule l'opposé aux moments d'encastrement pour l'élément spécifié
  *        soumis au moment de torsion uniformément répartie mx dans le repère
@@ -271,6 +262,15 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
+                                      uint16_t       discretisation,
+                                      double         a,
+                                      double         b,
+                                      Barre_Info_EF *infos,
+                                      double         mx,
+                                      double        *ma,
+                                      double        *mb)
 {
   EF_Noeud *debut, *fin;
   double    l, G, J;
@@ -283,19 +283,19 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
-        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   
   // Les moments aux extrémités de la barre sont déterminés par les intégrales
   // de Mohr et valent dans le cas général :\end{verbatim}\begin{center}
@@ -308,13 +308,21 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   // M_{Ax} = & m_x \cdot (L-a-b) - M_{Bx}\end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
@@ -323,20 +331,20 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -349,27 +357,24 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   //   {2 \cdot (G \cdot J \cdot (k_A+k_B)+l)}\end{displaymath}\begin{verbatim}
   
   if (errrel (infos->kAx, MAXDOUBLE))
+  {
     *mb = mx * (l - a - b);
+  }
   else if (errrel (infos->kBx, MAXDOUBLE))
+  {
     *mb = 0.;
+  }
   else
+  {
     *mb = (l - a - b) * mx * (a - b + 2. * G * J * infos->kAx + l) /
             (2. * (G * J * (infos->kAx + infos->kBx) + l));
+  }
   *ma = mx * (l - a - b) - *mb;
   
   return TRUE;
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
-                                                 unsigned int discretisation,
-                                                 double       a,
-                                                 double       b,
-                                                 double       fz,
-                                                 double       my,
-                                                 double      *phia,
-                                                 double      *phib)
 /**
  * \brief Calcule les angles de rotation pour un élément bi-articulé soumis à
  *        une charge uniformément répartie fz, my dans le repère local. Les
@@ -394,6 +399,15 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
+                                                 uint16_t  discretisation,
+                                                 double    a,
+                                                 double    b,
+                                                 double    fz,
+                                                 double    my,
+                                                 double   *phia,
+                                                 double   *phib)
 {
   EF_Noeud *debut, *fin;
   double    l;
@@ -406,7 +420,7 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr et
   // valent dans le cas général :\end{verbatim}\begin{center}
@@ -447,43 +461,51 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
   // \end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   l = EF_noeuds_distance (debut, fin);
   BUG (!isnan (l), FALSE)
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
@@ -514,15 +536,6 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre    *barre,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
-                                                 unsigned int discretisation,
-                                                 double       a,
-                                                 double       b,
-                                                 double       fy,
-                                                 double       mz,
-                                                 double      *phia,
-                                                 double      *phib)
 /**
  * \brief Calcule les angles de rotation pour un élément bi-articulé soumis au
  *        chargement fy et mz dans le repère local. Les résultats sont renvoyés
@@ -549,6 +562,15 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre *barre,
+                                                 uint16_t  discretisation,
+                                                 double    a,
+                                                 double    b,
+                                                 double    fy,
+                                                 double    mz,
+                                                 double   *phia,
+                                                 double   *phib)
 {
   EF_Noeud *debut, *fin;
   double    l;
@@ -559,18 +581,26 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   BUGPARAM (phia, "%p", phia, FALSE)
   BUGPARAM (phib, "%p", phib, FALSE)
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr et
   // valent dans le cas général :\end{verbatim}\begin{center}
@@ -615,30 +645,30 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
@@ -669,11 +699,6 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre    *barre,
 }
 
 
-double
-EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
-                                                         double   a,
-                                                         double   b,
-                                                         double   l)
 /**
  * \brief Renvoie la position de la résultante pour une charge uniformément
  *        répartie vers l'axe x.
@@ -689,32 +714,38 @@ EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+double
+EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
+                                                         double   a,
+                                                         double   b,
+                                                         double   l)
 {
   BUGPARAM (section, "%p", section, NAN)
+  
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre est de %f m.\n"),
                   a,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   b,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"),
                   a,
                   b,
-                  l);)
+                  l); )
   
   // La position de la résultante de la charge est obtenue en résolvant X dans
   // la formule :\end{verbatim}\begin{center}
@@ -731,14 +762,6 @@ EF_charge_barre_repartie_uniforme_position_resultante_x (Section *section,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
-                                           EF_Barre    *barre,
-                                           unsigned int discretisation,
-                                           double       a,
-                                           double       b,
-                                           double       max,
-                                           double       mbx)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe x en
  *        fonction des efforts aux extrémités de la poutre.
@@ -761,6 +784,14 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
  *     - a > l-b,
  *     - en cas d'erreur due à une fonction interne.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
+                                           EF_Barre *barre,
+                                           uint16_t  discretisation,
+                                           double    a,
+                                           double    b,
+                                           double    max,
+                                           double    mbx)
 {
   EF_Noeud      *debut, *fin;
   Barre_Info_EF *infos;
@@ -773,12 +804,12 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   infos = &(barre->info_EF[discretisation]);
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
         FALSE,
-        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));)
+        (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   
   // La déformation d'une barre soumise à un effort de torsion est défini par
   // les formules :\end{verbatim}\begin{center}
@@ -811,13 +842,21 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   //           (L-b)}{-L+b+a}\end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
   BUG (!isnan (debut_barre), FALSE)
@@ -826,30 +865,30 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   G = m_g (EF_materiaux_G (barre->materiau, FALSE));
   J = m_g (EF_sections_j (barre->section));
@@ -954,17 +993,6 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction    *fonction,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
-                                           Fonction    *f_deform,
-                                           EF_Barre    *barre,
-                                           unsigned int discretisation,
-                                           double       a,
-                                           double       b,
-                                           double       fz,
-                                           double       my,
-                                           double       may,
-                                           double       mby)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe y et
  *        en déformation selon l'axe z en fonction de la charge linéaire (fz et
@@ -990,6 +1018,17 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
+                                           Fonction *f_deform,
+                                           EF_Barre *barre,
+                                           uint16_t  discretisation,
+                                           double    a,
+                                           double    b,
+                                           double    fz,
+                                           double    my,
+                                           double    may,
+                                           double    mby)
 {
   EF_Noeud *debut, *fin;
   double    l;
@@ -1002,7 +1041,7 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // La déformation et la  rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -1115,13 +1154,21 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
   //          {L} \end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
   BUG (!isnan (debut_barre), FALSE)
@@ -1130,30 +1177,30 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
@@ -1397,17 +1444,6 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction    *f_rotation,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
-                                           Fonction    *f_deform,
-                                           EF_Barre    *barre,
-                                           unsigned int discretisation,
-                                           double       a,
-                                           double       b,
-                                           double       fy,
-                                           double       mz,
-                                           double       maz,
-                                           double       mbz)
 /**
  * \brief Calcule les déplacements d'une barre en rotation autour de l'axe z et
  *        en déformation selon l'axe y en fonction de la charge linéaire (fy et
@@ -1433,6 +1469,17 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
+                                           Fonction *f_deform,
+                                           EF_Barre *barre,
+                                           uint16_t  discretisation,
+                                           double    a,
+                                           double    b,
+                                           double    fy,
+                                           double    mz,
+                                           double    maz,
+                                           double    mbz)
 {
   EF_Noeud *debut, *fin;
   double    l;
@@ -1445,7 +1492,7 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // La déformation et la rotation d'une barre soumise à un effort de flexion
   // autour de l'axe y est calculée selon le principe des intégrales de Mohr et
@@ -1457,13 +1504,21 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
   // calcul des déformations toujours dû au changement de repère) et Iy par Iz.
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
   BUG (!isnan (debut_barre), FALSE)
@@ -1472,30 +1527,30 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
@@ -1674,14 +1729,6 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction    *f_rotation,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
-                                     EF_Barre    *barre,
-                                     unsigned int discretisation,
-                                     double       a,
-                                     double       b,
-                                     double       fax,
-                                     double       fbx)
 /**
  * \brief Calcule les déplacements d'une barre selon l'axe x en fonction de
  *        l'effort normal ponctuel n et des réactions d'appuis fax et fbx.
@@ -1702,6 +1749,14 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
  *     - b < 0 ou b > l,
  *     - a > l-b.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
+                                     EF_Barre *barre,
+                                     uint16_t  discretisation,
+                                     double    a,
+                                     double    b,
+                                     double    fax,
+                                     double    fbx)
 {
   EF_Noeud *debut, *fin;
   double    l, debut_barre;
@@ -1713,7 +1768,7 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
         FALSE,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // La déformation selon l'axe x est par la formule :
   // \end{verbatim}\begin{center}
@@ -1745,13 +1800,21 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
   // F_{A2} = & \frac{x}{L} \end{align*}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation-1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
   BUG (!isnan (debut_barre), FALSE)
@@ -1760,30 +1823,30 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
   INFO (a >= 0.,
         FALSE,
         (gettext ("Le début de la position de la charge répartie uniformément %f est incorrect.\n"),
-                  a);)
+                  a); )
   INFO (b >= 0.,
         FALSE,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
-                  b);)
+                  b); )
   INFO (a <= l,
         FALSE,
         (gettext ("Le début de la charge répartie uniformément %f est incorrect.\nLa longueur de la barre %d est de %f m.\n"),
                   a,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (b <= l,
         FALSE,
         (gettext ("La fin de la charge répartie uniformément %f est incorrecte.\nLa longueur de la barre %d est de %f m.\n"),
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   INFO (a + b <= l,
         FALSE,
         (gettext ("Le début %f et la fin %f de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"),
                   a,
                   b,
                   barre->numero,
-                  l);)
+                  l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   S = m_g (EF_sections_s (barre->section));
@@ -1836,10 +1899,6 @@ EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
-                                                 GList  *barres,
-                                                 Projet *p)
 /**
  * \brief Enlève à la charge une liste de barres pouvant être utilisées. Dans
  *        le cas où une barre de la liste n'est pas dans la charge, ce point ne
@@ -1853,6 +1912,10 @@ EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
+                                                 GList  *barres,
+                                                 Projet *p)
 {
   GList                          *list_parcours = barres;
   Charge_Barre_Repartie_Uniforme *charge_d;
@@ -1887,7 +1950,9 @@ EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
       gtk_tree_model_get (model, &Iter, 0, &action, -1);
       
       if (g_list_find (_1990_action_charges_renvoie (action), charge))
+      {
         gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+      }
     }
   }
 #endif
@@ -1898,8 +1963,6 @@ EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
 }
 
 
-gboolean
-EF_charge_barre_repartie_uniforme_free (Charge *charge)
 /**
  * \brief Libère le contenu alloué dans une charge répartie uniforme sur barre.
  * \param charge : la charge à libérer.
@@ -1908,6 +1971,8 @@ EF_charge_barre_repartie_uniforme_free (Charge *charge)
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_barre_repartie_uniforme_free (Charge *charge)
 {
   Charge_Barre_Repartie_Uniforme *charge_d;
   

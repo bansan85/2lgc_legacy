@@ -23,25 +23,26 @@
 #include "common_projet.h"
 
 
-int    common_selection_ajout_nombre               (void       *data,
-                                                    GList     **liste,
-                                                    Type_Liste  type,
-                                                    Projet     *p)
+gboolean common_selection_ajout_nombre               (void       *data,
+                                                      GList     **liste,
+                                                      Type_Liste  type,
+                                                      Projet     *p)
                                        __attribute__((__warn_unused_result__));
-GList *common_selection_renvoie_numeros            (const char *texte)
+GList   *common_selection_renvoie_numeros            (const char *texte)
                                        __attribute__((__warn_unused_result__));
-GList *common_selection_numeros_en_noeuds (GList      *liste_numeros,
-                                                    Projet     *p)
+
+GList   *common_selection_numeros_en_noeuds (GList      *liste_numeros,
+                                             Projet     *p)
                                        __attribute__((__warn_unused_result__));
-GList *common_selection_numeros_en_barres (GList      *liste_numeros,
-                                                    Projet     *p)
+GList   *common_selection_numeros_en_barres (GList      *liste_numeros,
+                                             Projet     *p)
                                        __attribute__((__warn_unused_result__));
-char  *common_selection_noeuds_en_texte   (GList      *liste_noeuds)
+char    *common_selection_noeuds_en_texte   (GList      *liste_noeuds)
                                        __attribute__((__warn_unused_result__));
-char  *common_selection_barres_en_texte   (GList      *liste_barres)
+char    *common_selection_barres_en_texte   (GList      *liste_barres)
                                        __attribute__((__warn_unused_result__));
-char  *common_selection_charges_en_texte  (GList      *liste_charges,
-                                                    Projet     *p)
+char    *common_selection_charges_en_texte  (GList      *liste_charges,
+                                             Projet     *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

@@ -28,8 +28,6 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-GtkWidget *
-common_tooltip_generation (const char *nom)
 /**
  * \brief Génère une fenêtre de type tooltip contenant les informations
  *        spécifiées par 'nom'. Les informations sont contenues dans le fichier
@@ -41,19 +39,21 @@ common_tooltip_generation (const char *nom)
  *     - en cas d'erreur d'allocation mémoire,
  *     - si le fichier n'est pas correct.
  */
+GtkWidget *
+common_tooltip_generation (const char *nom)
 {
   xmlDocPtr  doc;
   xmlNodePtr racine;
   xmlNodePtr n0;
   xmlChar   *nom1;
-  int        i = 0;
   
   // Ouverture et vérification du fichier DATADIR"/tooltips.xml" par rapport au
   // format XML.
   doc = xmlParseFile (DATADIR"/tooltips.xml");
   INFO (doc,
         NULL,
-        (gettext ("Le fichier '%s' est introuvable ou corrompu.\n"), DATADIR"/tooltips.xml");)
+        (gettext ("Le fichier '%s' est introuvable ou corrompu.\n"),
+                  DATADIR"/tooltips.xml"); )
   
   // Récupération du noeud racine.
   racine = xmlDocGetRootElement (doc);
@@ -61,7 +61,7 @@ common_tooltip_generation (const char *nom)
         NULL,
         (gettext ("Le fichier '%s' est vide.\n"), DATADIR"/tooltips.xml");
           xmlFreeDoc (doc);
-          xmlCleanupParser ();)
+          xmlCleanupParser (); )
   
   for (n0 = racine; n0 != NULL; n0 = n0->next)
   {
@@ -117,7 +117,7 @@ common_tooltip_generation (const char *nom)
                       (gettext ("Le fichier '%s' est corrompu.\n"),
                                DATADIR"/tooltips.xml");
                         xmlFreeDoc (doc);
-                        xmlCleanupParser ();)
+                        xmlCleanupParser (); )
                 //     Si le nom du noeud est "image" Alors
                 //       Insertion de l'image dans la fenêtre tooltip.
                 //     FinSi
@@ -135,7 +135,7 @@ common_tooltip_generation (const char *nom)
                            (gettext ("Erreur d'allocation mémoire.\n"));
                              xmlFree (contenu);
                              xmlFreeDoc (doc);
-                             xmlCleanupParser ();)
+                             xmlCleanupParser (); )
                   BUGCRIT (image = gdk_pixbuf_new_from_file (nom_fichier,
                                                              &error),
                            NULL,
@@ -145,23 +145,26 @@ common_tooltip_generation (const char *nom)
                              xmlFree (contenu);
                              xmlFreeDoc (doc);
                              xmlCleanupParser ();
-                             free (nom_fichier);)
+                             free (nom_fichier); )
                   element = gtk_image_new_from_pixbuf (image);
                   g_object_unref (image);
                   free (nom_fichier);
                   gtk_misc_set_alignment (GTK_MISC (element), 0., 0.5);
                   if (w_prev == NULL)
+                  {
                     gtk_grid_attach (GTK_GRID (pgrid), element, 0, 0, 1, 1);
+                  }
                   else
+                  {
                     gtk_grid_attach_next_to (GTK_GRID (pgrid),
                                              element,
                                              w_prev,
                                              GTK_POS_BOTTOM,
                                              1,
                                              1);
+                  }
                   w_prev = element;
                   gtk_widget_show (element);
-                  i++;
                 }
                 //     Si le nom du noeud est "texte" Alors
                 //       Insertion du texte dans la fenêtre tooltip.
@@ -177,25 +180,28 @@ common_tooltip_generation (const char *nom)
                                          GTK_JUSTIFY_FILL);
                   gtk_misc_set_alignment (GTK_MISC (element), 0., 0.5);
                   if (w_prev == NULL)
+                  {
                     gtk_grid_attach (GTK_GRID (pgrid), element, 0, 0, 1, 1);
+                  }
                   else
+                  {
                     gtk_grid_attach_next_to (GTK_GRID (pgrid),
                                              element,
                                              w_prev,
                                              GTK_POS_BOTTOM,
                                              1,
                                              1);
+                  }
                   w_prev = element;
                   gtk_widget_show (element);
-                  i++;
                 }
                 //     Si le nom du noeud est "dimensions" Alors
                 //       Attribution des nouvelles dimensions de la fenêtre tooltip.
                 //     FinSi
                 else if (strcmp ((char *) n2->name, "dimensions") == 0)
                 {
-                  char *fake;
-                  int   largeur, hauteur;
+                  char   *fake;
+                  int16_t largeur, hauteur;
                   
                   BUGCRIT (fake = malloc (sizeof (char) *
                                               (strlen ((char *) contenu) + 1)),
@@ -203,24 +209,28 @@ common_tooltip_generation (const char *nom)
                            (gettext ("Erreur d'allocation mémoire.\n"));
                              xmlFree (contenu);
                              xmlFreeDoc (doc);
-                             xmlCleanupParser ();)
+                             xmlCleanupParser (); )
                   
                   if (sscanf ((char *) contenu,
-                              "%dx%d %s",
+                              "%hdx%hd %s",
                               &largeur,
                               &hauteur,
                               fake) != 2)
+                  {
                     FAILINFO (NULL,
                               (gettext ("'%s' n'est pas de la forme 'largeurxhauteur'.\n"),
                                         (char *) contenu);
                                 xmlFree (contenu);
                                 xmlFreeDoc (doc);
                                 xmlCleanupParser ();
-                                free (fake);)
+                                free (fake); )
+                  }
                   else
+                  {
                     gtk_window_set_default_size (GTK_WINDOW (pwindow),
                                                  largeur,
                                                  hauteur);
+                  }
                   free (fake);
                 }
                 xmlFree (contenu);
@@ -241,7 +251,7 @@ common_tooltip_generation (const char *nom)
   xmlCleanupParser ();
   FAILINFO (NULL,
             (gettext ("Le fichier '%s' est corrompu.\n"),
-                     DATADIR"/tooltips.xml");)
+                     DATADIR"/tooltips.xml"); )
 }
 
 #endif

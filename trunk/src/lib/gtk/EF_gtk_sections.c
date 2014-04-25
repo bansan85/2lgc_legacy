@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <math.h>
+#include <inttypes.h>
 
 #include "common_m3d.hpp"
 
@@ -51,10 +52,6 @@ GTK_WINDOW_DESTROY (ef, sections, );
 GTK_WINDOW_KEY_PRESS (ef, sections);
 
 
-gboolean
-EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
-                                    GdkEvent    *event,
-                                    Projet      *p)
 /**
  * \brief Supprime une section sans dépendance si la touche SUPPR est appuyée.
  * \param treeview : composant à l'origine de l'évènement,
@@ -67,12 +64,16 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
  *     - interface graphique non initialisée.
  *  
  */
+gboolean
+EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
+                                    GdkEvent    *event,
+                                    Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGCRIT (UI_SEC.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Sections");)
+                     "Sections"); )
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -85,7 +86,9 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
            gtk_tree_view_get_selection (treeview),
            &model,
            &Iter))
+    {
       return FALSE;
+    }
     
     gtk_tree_model_get (model, &Iter, 0, &section, -1);
     
@@ -103,22 +106,23 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               FALSE,
                                               FALSE) == FALSE)
+    {
       BUG (EF_sections_supprime (section, TRUE, p),
            FALSE,
-           g_list_free (liste_sections);)
+           g_list_free (liste_sections); )
+    }
     
     g_list_free (liste_sections);
     
     return TRUE;
   }
   else
+  {
     return FALSE;
+  }
 }
 
 
-void
-EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
-                                Projet           *p)
 /**
  * \brief En fonction de la sélection, active ou désactive le bouton supprimer.
  * \param treeselection : composant à l'origine de l'évènement,
@@ -128,6 +132,9 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
+                                Projet           *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -136,7 +143,7 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer
   // ou d'en éditer une.
@@ -222,9 +229,6 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void
-EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
-                                        Projet    *p)
 /**
  * \brief Affiche la liste des dépendances dans le menu lorsqu'on clique sur le
  *        bouton.
@@ -235,6 +239,9 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
+                                        Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -246,7 +253,7 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   // Si aucune section n'est sélectionnée
   BUGCRIT (gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -254,7 +261,7 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                                         &model,
                                         &Iter),
            ,
-           (gettext ("Aucun élément n'est sélectionné.\n"));)
+           (gettext ("Aucun élément n'est sélectionné.\n")); )
   
   gtk_tree_model_get (model, &Iter, 0, &section, -1);
   
@@ -272,7 +279,7 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                                              FALSE,
                                              FALSE),
       ,
-      g_list_free (liste_sections);)
+      g_list_free (liste_sections); )
   g_list_free (liste_sections);
   
   if ((liste_noeuds_dep != NULL) ||
@@ -288,14 +295,16 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
          ,
          g_list_free (liste_noeuds_dep);
            g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep);)
+           g_list_free (liste_charges_dep); )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_supprimer_menu_barres")),
                              desc);
     free (desc);
   }
   else
-    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n"));)
+  {
+    FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
+  }
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -305,11 +314,6 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
 }
 
 
-void
-EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
-                          gchar               *path_string,
-                          gchar               *new_text,
-                          Projet              *p)
 /**
  * \brief Modification du nom d'une section.
  * \param cell : cellule en cours,
@@ -320,7 +324,12 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée.
-*/
+ */
+void
+EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
+                          gchar               *path_string,
+                          gchar               *new_text,
+                          Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -331,7 +340,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   model = GTK_TREE_MODEL (UI_SEC.sections);
   path = gtk_tree_path_new_from_string (path_string);
@@ -339,9 +348,13 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &section, -1);
   if ((strcmp (section->nom, new_text) == 0) || (strcmp (new_text, "") == 0))
+  {
     return;
+  }
   if (EF_sections_cherche_nom (p, new_text, FALSE))
+  {
     return;
+  }
 
   switch (section->type)
   {
@@ -405,7 +418,9 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     }
     default :
     {
-      FAILCRIT ( , (gettext ("Type de section %d inconnu.\n"), section->type);)
+      FAILCRIT ( ,
+                (gettext ("Type de section %d inconnu.\n"),
+                          section->type); )
       break;
     }
   }
@@ -414,9 +429,6 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_sections_supprimer_direct (GtkButton *button,
-                                  Projet    *p)
 /**
  * \brief Supprime la section sélectionnée dans le treeview.
  * \param button : composant à l'origine de l'évènement,
@@ -426,6 +438,9 @@ EF_gtk_sections_supprimer_direct (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_supprimer_direct (GtkButton *button,
+                                  Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -435,13 +450,15 @@ EF_gtk_sections_supprimer_direct (GtkButton *button,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   gtk_tree_model_get (model, &iter, 0, &section, -1);
   
@@ -451,9 +468,6 @@ EF_gtk_sections_supprimer_direct (GtkButton *button,
 }
 
 
-void
-EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
-                                       Projet    *p)
 /**
  * \brief Supprime la section sélectionnée dans le treeview, y compris les
  *        barres l'utilisant.
@@ -464,6 +478,9 @@ EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
+                                       Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -473,13 +490,15 @@ EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
        gtk_builder_get_object (UI_SEC.builder, "EF_sections_treeview_select")),
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   gtk_tree_model_get (model, &iter, 0, &section, -1);
   
@@ -491,10 +510,6 @@ EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
 }
 
 
-GdkPixbuf *
-EF_gtk_sections_dessin (Section *section,
-                        int      width,
-                        int      height)
 /**
  * \brief Renvoie un dessin représentant la section.
  * \param section : la section à dessiner,
@@ -507,9 +522,14 @@ EF_gtk_sections_dessin (Section *section,
  *     - height == 0,
  *     - en cas d'erreur d'allocation mémoire.
  */
+GdkPixbuf *
+EF_gtk_sections_dessin (Section *section,
+                        uint16_t width,
+                        uint16_t height)
 {
-  int              rowstride, n_channels;
-  int              x, y;
+  uint16_t         rowstride;
+  uint8_t          n_channels;
+  uint16_t         x, y;
   guchar          *pixels, *p;
   GdkPixbuf       *pixbuf;
   double           a;
@@ -521,22 +541,22 @@ EF_gtk_sections_dessin (Section *section,
   BUGPARAMCRIT (section, "%p", section, NULL)
   INFO (width,
         NULL,
-        (gettext ("La largeur du dessin ne peut être nulle.\n"));)
+        (gettext ("La largeur du dessin ne peut être nulle.\n")); )
   INFO (height,
         NULL,
-        (gettext ("La hauteur du dessin ne peut être nulle.\n"));)
+        (gettext ("La hauteur du dessin ne peut être nulle.\n")); )
   
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
   BUGCRIT (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS,
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   cr = cairo_create (surface);
   
   a = (double) width / height;
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+  rowstride = (uint16_t) gdk_pixbuf_get_rowstride (pixbuf);
+  n_channels = (uint8_t) gdk_pixbuf_get_n_channels (pixbuf);
   
   cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
   cairo_set_source_rgba (cr, 1., 1., 1., 0.);
@@ -545,6 +565,7 @@ EF_gtk_sections_dessin (Section *section,
     
   // On replie tout avec un fond blanc
   for (y = 0; y < height; y++)
+  {
     for (x = 0; x < width; x++)
     {
       p = pixels + y * rowstride + x * n_channels;
@@ -552,8 +573,11 @@ EF_gtk_sections_dessin (Section *section,
       p[1] = 255;
       p[2] = 255;
       if (n_channels == 4)
+      {
         p[3] = 0;
+      }
     }
+  }
   
   switch (section->type)
   {
@@ -573,9 +597,13 @@ EF_gtk_sections_dessin (Section *section,
       
       // Le schéma prend toute la largeur
       if (aa > a)
+      {
         convert = (width - 1) / MAX (lt, lr);
+      }
       else
+      {
         convert = (height - 1) / (ht + hr);
+      }
       cairo_move_to (cr,
                      width / 2. - lt / 2. * convert,
                      height / 2. - (ht + hr) / 2. * convert);
@@ -682,11 +710,11 @@ EF_gtk_sections_dessin (Section *section,
     {
       Section_Personnalisee *data = section->data;
       
-      double  aa;
-      GList   *list_parcours;
-      GList   *list_parcours2;
-      double  xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
-      double  decalagex, decalagey;
+      double aa;
+      GList  *list_parcours;
+      GList  *list_parcours2;
+      double xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
+      double decalagex, decalagey;
       
       // On commence par calculer la largeur et la hauteur de la section.
       list_parcours = data->forme;
@@ -708,13 +736,21 @@ EF_gtk_sections_dessin (Section *section,
           else
           {
             if (m_g (point->x) < xmin)
+            {
               xmin = m_g (point->x);
+            }
             if (m_g (point->x) > xmax)
+            {
               xmax = m_g (point->x);
+            }
             if (m_g (point->y) < ymin)
+            {
               ymin = m_g (point->y);
+            }
             if (m_g (point->y) > ymax)
+            {
               ymax = m_g (point->y);
+            }
           }
           
           list_parcours2 = g_list_next (list_parcours2);
@@ -727,9 +763,13 @@ EF_gtk_sections_dessin (Section *section,
       
       // Le schéma prend toute la largeur
       if (aa > a)
+      {
         convert = (width - 1) / (xmax - xmin);
+      }
       else
+      {
         convert = (height - 1) / (ymax - ymin);
+      }
       decalagex = (width - (xmax - xmin) * convert) / 2.;
       decalagey = (height - (ymax - ymin) * convert) / 2.;
       
@@ -747,13 +787,17 @@ EF_gtk_sections_dessin (Section *section,
           EF_Point *point = list_parcours2->data;
           
           if (list_parcours2 == list_parcours->data)
+          {
             cairo_move_to (cr,
                            decalagex + ((m_g (point->x) - xmin) * convert),
                            decalagey + ((ymax - m_g (point->y)) * convert));
+          }
           else
+          {
             cairo_line_to (cr,
                            decalagex + ((m_g (point->x) - xmin) * convert),
                            decalagey + ((ymax - m_g (point->y)) * convert));
+          }
           
           list_parcours2 = g_list_next (list_parcours2);
         }
@@ -777,7 +821,7 @@ EF_gtk_sections_dessin (Section *section,
       FAILCRIT (NULL,
                 (gettext ("Type de section %d inconnu.\n"), section->type);
                   cairo_destroy (cr);
-                  cairo_surface_destroy (surface);)
+                  cairo_surface_destroy (surface); )
       break;
     }
   }
@@ -789,9 +833,6 @@ EF_gtk_sections_dessin (Section *section,
 }
 
 
-void
-EF_gtk_sections_ajout_rectangulaire (GtkMenuItem *menuitem,
-                                     Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter une section rectangulaire.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -801,20 +842,20 @@ EF_gtk_sections_ajout_rectangulaire (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_ajout_rectangulaire (GtkMenuItem *menuitem,
+                                     Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   BUG (EF_gtk_section_rectangulaire (p, NULL), )
 }
 
 
-void
-EF_gtk_sections_ajout_T (GtkMenuItem *menuitem,
-                         Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter une section en T.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -824,20 +865,20 @@ EF_gtk_sections_ajout_T (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_ajout_T (GtkMenuItem *menuitem,
+                         Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   BUG (EF_gtk_section_T (p, NULL), )
 }
 
 
-void
-EF_gtk_sections_ajout_carree (GtkMenuItem *menuitem,
-                              Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter une section carrée.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -847,20 +888,20 @@ EF_gtk_sections_ajout_carree (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_ajout_carree (GtkMenuItem *menuitem,
+                              Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   BUG (EF_gtk_section_carree (p, NULL), )
 }
 
 
-void
-EF_gtk_sections_ajout_circulaire (GtkMenuItem *menuitem,
-                                  Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter une section circulaire.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -870,20 +911,20 @@ EF_gtk_sections_ajout_circulaire (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_ajout_circulaire (GtkMenuItem *menuitem,
+                                  Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   BUG (EF_gtk_section_circulaire (p, NULL), )
 }
 
 
-void
-EF_gtk_sections_ajout_personnalisee (GtkMenuItem *menuitem,
-                                     Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter une section personnalisée.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -893,20 +934,20 @@ EF_gtk_sections_ajout_personnalisee (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_ajout_personnalisee (GtkMenuItem *menuitem,
+                                     Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   BUG (EF_gtk_section_personnalisee (p, NULL), )
 }
 
 
-void
-EF_gtk_sections_edit_clicked (GtkWidget *widget,
-                              Projet    *p)
 /**
  * \brief Edite les sections sélectionnées.
  * \param widget : composant à l'origine de l'évènement,
@@ -916,6 +957,9 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_sections_edit_clicked (GtkWidget *widget,
+                              Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -925,7 +969,7 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
   BUGCRIT (UI_SEC.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   // On récupère la liste des charges à éditer.
   list = gtk_tree_selection_get_selected_rows (GTK_TREE_SELECTION (
@@ -976,7 +1020,7 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
                     (gettext ("Type de section %d inconnu.\n"),
                               section->type);
                       g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
-                      g_list_free (list);)
+                      g_list_free (list); )
           break;
         }
       }
@@ -990,10 +1034,6 @@ EF_gtk_sections_edit_clicked (GtkWidget *widget,
 }
 
 
-gboolean
-EF_gtk_sections_double_clicked (GtkWidget *widget,
-                                GdkEvent  *event,
-                                Projet    *p)
 /**
  * \brief Lance la fenêtre d'édition de la section sélectionnée en cas de
  *        double-clique dans le tree-view.
@@ -1005,12 +1045,16 @@ EF_gtk_sections_double_clicked (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+EF_gtk_sections_double_clicked (GtkWidget *widget,
+                                GdkEvent  *event,
+                                Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGCRIT (UI_SEC.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Section");)
+                     "Section"); )
   
   if ((event->type == GDK_2BUTTON_PRESS) &&
       (gtk_widget_get_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -1020,18 +1064,14 @@ EF_gtk_sections_double_clicked (GtkWidget *widget,
     return TRUE;
   }
   else
+  {
     return common_gtk_treeview_button_press_unselect (GTK_TREE_VIEW (widget),
                                                       (GdkEventButton *) event,
                                                       p);
+  }
 }
 
 
-void
-EF_gtk_sections_render_0 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la section dans le graphique.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1041,6 +1081,12 @@ EF_gtk_sections_render_0 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_0 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section   *section;
   GdkPixbuf *pixbuf;
@@ -1058,12 +1104,6 @@ EF_gtk_sections_render_0 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche le nom de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1073,6 +1113,12 @@ EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   
@@ -1085,12 +1131,6 @@ EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la description de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1100,6 +1140,12 @@ EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char    *description;
@@ -1117,12 +1163,6 @@ EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche le module de torsion de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1132,6 +1172,12 @@ EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1147,12 +1193,6 @@ EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche le module de flexion selon l'axe y de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1162,6 +1202,12 @@ EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1177,12 +1223,6 @@ EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche le module de flexion selon l'axe z de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1192,6 +1232,12 @@ EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1207,12 +1253,6 @@ EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la surface de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1222,6 +1262,12 @@ EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1237,12 +1283,6 @@ EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la distance v<sub>y</sub> de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1252,6 +1292,12 @@ EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1267,12 +1313,6 @@ EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la distance v<sub>y</sub>' de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1282,6 +1322,12 @@ EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1297,12 +1343,6 @@ EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data2)
 /**
  * \brief Affiche la distance v<sub>z</sub> de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1312,6 +1352,12 @@ EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1327,12 +1373,6 @@ EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
-                           GtkCellRenderer   *cell,
-                           GtkTreeModel      *tree_model,
-                           GtkTreeIter       *iter,
-                           gpointer           data2)
 /**
  * \brief Affiche la distance v<sub>z</sub>' de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1342,6 +1382,12 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
+                           GtkCellRenderer   *cell,
+                           GtkTreeModel      *tree_model,
+                           GtkTreeIter       *iter,
+                           gpointer           data2)
 {
   Section *section;
   char     c[30];
@@ -1357,43 +1403,6 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
 }
 
 
-gboolean
-EF_gtk_sections_get_section (char   *ligne,
-                             char  **nom,
-                             double *g,
-                             double *h,
-                             double *b,
-                             double *tw,
-                             double *tf,
-                             double *r1,
-                             double *r2,
-                             double *A,
-                             double *hi,
-                             double *d,
-                             int    *phi,
-                             double *pmin,
-                             double *pmax,
-                             double *AL,
-                             double *AG,
-                             double *iiy,
-                             double *Wely,
-                             double *Wply,
-                             double *iy,
-                             double *Avz,
-                             double *iiz,
-                             double *Welz,
-                             double *Wplz,
-                             double *iz,
-                             double *ss,
-                             double *It,
-                             double *Iw,
-                             double *vy,
-                             double *vyp,
-                             double *vz,
-                             double *vzp,
-                             double *vty,
-                             double *vtz,
-                             GList **forme)
 /**
  * \brief Renvoie sous forme de variables la ligne en cours d'analyse du
  *        fichier d'import de section.
@@ -1449,22 +1458,59 @@ EF_gtk_sections_get_section (char   *ligne,
  *     - ligne == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+EF_gtk_sections_get_section (char    *ligne,
+                             char   **nom,
+                             double  *g,
+                             double  *h,
+                             double  *b,
+                             double  *tw,
+                             double  *tf,
+                             double  *r1,
+                             double  *r2,
+                             double  *A,
+                             double  *hi,
+                             double  *d,
+                             uint8_t *phi,
+                             double  *pmin,
+                             double  *pmax,
+                             double  *AL,
+                             double  *AG,
+                             double  *iiy,
+                             double  *Wely,
+                             double  *Wply,
+                             double  *iy,
+                             double  *Avz,
+                             double  *iiz,
+                             double  *Welz,
+                             double  *Wplz,
+                             double  *iz,
+                             double  *ss,
+                             double  *It,
+                             double  *Iw,
+                             double  *vy,
+                             double  *vyp,
+                             double  *vz,
+                             double  *vzp,
+                             double  *vty,
+                             double  *vtz,
+                             GList  **forme)
 {
-  char  *nom_, *ligne_tmp;
-  double g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_;
-  double iiy_, Wely_, Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_, Iw_;
-  double vy_, vyp_, vz_, vzp_, vty_, vtz_;
-  int    phi_;
+  char    *nom_, *ligne_tmp;
+  double   g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_;
+  double   iiy_, Wely_, Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_;
+  double   Iw_, vy_, vyp_, vz_, vzp_, vty_, vtz_;
+  uint8_t  phi_;
   
-  int    i;
-  GList *forme_, *points;
-  double x, y;
+  uint16_t i;
+  GList   *forme_, *points;
+  double   x, y;
   
   BUGPARAMCRIT (ligne, "%p", ligne, FALSE)
   
   ligne_tmp = &ligne[strchr (ligne, '\t') - ligne + 1];
   INFO (sscanf (ligne_tmp,
-                "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
+                "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%" SCNu8 "\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", //NS
                 &g_,
                 &h_,
                 &b_,
@@ -1500,81 +1546,50 @@ EF_gtk_sections_get_section (char   *ligne,
                 &vtz_) == 33,
         FALSE,
         (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
-                  ligne);)
+                  ligne); )
   
-  if (g != NULL)
-    *g = g_;
-  if (h != NULL)
-    *h = h_;
-  if (b != NULL)
-    *b = b_;
-  if (tw != NULL)
-    *tw = tw_;
-  if (tf != NULL)
-    *tf = tf_;
-  if (r1 != NULL)
-    *r1 = r1_;
-  if (r2 != NULL)
-    *r2 = r2_;
-  if (A != NULL)
-    *A = A_;
-  if (hi != NULL)
-    *hi = hi_;
-  if (d != NULL)
-    *d = d_;
-  if (phi != NULL)
-    *phi = phi_;
-  if (pmin != NULL)
-    *pmin = pmin_;
-  if (pmax != NULL)
-    *pmax = pmax_;
-  if (AL != NULL)
-    *AL = AL_;
-  if (AG != NULL)
-    *AG = AG_;
-  if (iiy != NULL)
-    *iiy = iiy_;
-  if (Wely != NULL)
-    *Wely = Wely_;
-  if (Wply != NULL)
-    *Wply = Wply_;
-  if (iy != NULL)
-    *iy = iy_;
-  if (Avz != NULL)
-    *Avz = Avz_;
-  if (iiz != NULL)
-    *iiz = iiz_;
-  if (Welz != NULL)
-    *Welz = Welz_;
-  if (Wplz != NULL)
-    *Wplz = Wplz_;
-  if (iz != NULL)
-    *iz = iz_;
-  if (ss != NULL)
-    *ss = ss_;
-  if (It != NULL)
-    *It = It_;
-  if (Iw != NULL)
-    *Iw = Iw_;
-  if (vy != NULL)
-    *vy = vy_;
-  if (vyp != NULL)
-    *vyp = vyp_;
-  if (vz != NULL)
-    *vz = vz_;
-  if (vzp != NULL)
-    *vzp = vzp_;
-  if (vty != NULL)
-    *vty = vty_;
-  if (vtz != NULL)
-    *vtz = vtz_;
+  if (g != NULL) { *g = g_; }
+  if (h != NULL) { *h = h_; }
+  if (b != NULL) { *b = b_; }
+  if (tw != NULL) { *tw = tw_; }
+  if (tf != NULL) { *tf = tf_; }
+  if (r1 != NULL) { *r1 = r1_; }
+  if (r2 != NULL) { *r2 = r2_; }
+  if (A != NULL) { *A = A_; }
+  if (hi != NULL) { *hi = hi_; }
+  if (d != NULL) { *d = d_; }
+  if (phi != NULL) { *phi = phi_; }
+  if (pmin != NULL) { *pmin = pmin_; }
+  if (pmax != NULL) { *pmax = pmax_; }
+  if (AL != NULL) { *AL = AL_; }
+  if (AG != NULL) { *AG = AG_; }
+  if (iiy != NULL) { *iiy = iiy_; }
+  if (Wely != NULL) { *Wely = Wely_; }
+  if (Wply != NULL) { *Wply = Wply_; }
+  if (iy != NULL) { *iy = iy_; }
+  if (Avz != NULL) { *Avz = Avz_; }
+  if (iiz != NULL) { *iiz = iiz_; }
+  if (Welz != NULL) { *Welz = Welz_; }
+  if (Wplz != NULL) { *Wplz = Wplz_; }
+  if (iz != NULL) { *iz = iz_; }
+  if (ss != NULL) { *ss = ss_; }
+  if (It != NULL) { *It = It_; }
+  if (Iw != NULL) { *Iw = Iw_; }
+  if (vy != NULL) { *vy = vy_; }
+  if (vyp != NULL) { *vyp = vyp_; }
+  if (vz != NULL) { *vz = vz_; }
+  if (vzp != NULL) { *vzp = vzp_; }
+  if (vty != NULL) { *vty = vty_; }
+  if (vtz != NULL) { *vtz = vtz_; }
   
   ligne_tmp = ligne;
   i = 0;
   while ((i != 34) && (ligne_tmp[0] != 0))
   {
     if (ligne_tmp[0] == '\t')
+    {
       i++;
+    }
     ligne_tmp++;
   }
   forme_ = NULL;
@@ -1587,15 +1602,18 @@ EF_gtk_sections_get_section (char   *ligne,
           (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
                     ligne);
             g_list_free_full (points, free);
-            g_list_free_full (forme_,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+            g_list_free_full (
+              forme_,
+              (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
     
     // Nouveau groupe de points
     if ((isnan (x)) && (isnan (y)))
     {
       // On ajoute pas un groupe de point vide
       if (points != NULL)
+      {
         forme_ = g_list_append (forme_, points);
+      }
       points = NULL;
     }
     else
@@ -1606,8 +1624,9 @@ EF_gtk_sections_get_section (char   *ligne,
                FALSE,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  g_list_free_full (points, free);
-                 g_list_free_full (forme_, 
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+                 g_list_free_full (
+                   forme_,
+                   (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
       point->x = m_f (x, FLOTTANT_UTILISATEUR);
       point->y = m_f (y, FLOTTANT_UTILISATEUR);
       point->z = m_f (0., FLOTTANT_UTILISATEUR);
@@ -1620,12 +1639,16 @@ EF_gtk_sections_get_section (char   *ligne,
     while ((i != 2) && (ligne_tmp[0] != 0))
     {
       if (ligne_tmp[0] == '\t')
+      {
         i++;
+      }
       ligne_tmp++;
     }
   }
   if (points != NULL)
+  {
     forme_ = g_list_append (forme_, points);
+  }
   
   if (!EF_sections_personnalisee_verif_forme (forme_, TRUE))
   {
@@ -1634,25 +1657,30 @@ EF_gtk_sections_get_section (char   *ligne,
     
     FAILINFO (FALSE,
               (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
-                        ligne);)
+                        ligne); )
   }
   else if (forme == NULL)
+  {
     g_list_free_full (forme_,
                       (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+  }
   else
+  {
     *forme = forme_;
+  }
   
   // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
   if (ligne != NULL)
   {
     BUGCRIT (nom_ = malloc (sizeof (char) *
-                                           (strchr (ligne, '\t') - ligne + 1)),
+                       (long unsigned int) (strchr (ligne, '\t') - ligne + 1)),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               g_list_free_full (forme_,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+               g_list_free_full (
+                 forme_,
+                 (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
     
-    strncpy (nom_, ligne, strchr (ligne, '\t')-ligne);
+    strncpy (nom_, ligne, (size_t) (strchr (ligne, '\t') - ligne));
     nom_[strchr (ligne, '\t') - ligne] = 0;
     
     *nom = nom_;
@@ -1662,9 +1690,6 @@ EF_gtk_sections_get_section (char   *ligne,
 }
 
 
-void
-EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
-                                 Projet      *p)
 /**
  * \brief Permet d'importer une section depuis les menus.
  * \param menuitem : l'item dont le nom contient la section à importer,
@@ -1674,6 +1699,9 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - Le fichier profiles_acier.csv est introuvable.
  */
+void
+EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
+                                 Projet      *p)
 {
   FILE    *file;
   wchar_t *ligne_tmp;
@@ -1683,13 +1711,13 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
   
   INFO (file = fopen (DATADIR"/profiles_acier.csv", "r"),
         ,
-        (gettext ("Le fichier des sections est introuvable.\n"));)
+        (gettext ("Le fichier des sections est introuvable.\n")); )
   
   BUGCRIT (section = g_strdup_printf ("%s\t",
                                       gtk_menu_item_get_label (menuitem)),
            ,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             fclose (file);)
+             fclose (file); )
   
   ligne_tmp = common_text_get_line (file);
   free (ligne_tmp);
@@ -1703,7 +1731,7 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
          ,
          fclose (file);
            free (section);
-           free (ligne_tmp);)
+           free (ligne_tmp); )
     free (ligne_tmp);
     if (strncmp (ligne, section, strlen (section)) == 0)
     {
@@ -1750,7 +1778,7 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
           ,
           fclose (file);
             free (section);
-            free (ligne);)
+            free (ligne); )
       BUG (EF_sections_personnalisee_ajout (p,
                                             desc,
                                             desc,
@@ -1768,8 +1796,9 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
             free (section);
             free (ligne);
             free (desc);
-            g_list_free_full (forme,
-                              (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+            g_list_free_full (
+              forme,
+              (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
       free (desc);
     }
     free (ligne);
@@ -1783,8 +1812,6 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
 }
 
 
-void
-EF_gtk_sections (Projet *p)
 /**
  * \brief Création de la fenêtre permettant d'afficher les sections sous forme
  *        d'un tableau.
@@ -1794,6 +1821,8 @@ EF_gtk_sections (Projet *p)
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_sections (Projet *p)
 {
   GList *list_parcours;
   FILE  *file;
@@ -1812,7 +1841,7 @@ EF_gtk_sections (Projet *p)
                                           NULL) != 0,
            ,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Section");)
+                     "Section"); )
   gtk_builder_connect_signals (UI_SEC.builder, p);
   
   UI_SEC.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC.builder,
@@ -1956,7 +1985,7 @@ EF_gtk_sections (Projet *p)
       BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
            ,
            free (ligne_tmp);
-             fclose (file);)
+             fclose (file); )
       free (ligne_tmp);
       
       BUG (EF_gtk_sections_get_section (ligne,
@@ -2002,15 +2031,18 @@ EF_gtk_sections (Projet *p)
                  fclose (file);
                  free (ligne);
                  free (nom_section);
-                 g_list_free_full (forme,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);)
+                 g_list_free_full (
+                   forme,
+                   (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
       if (strchr (nom_section, ' ') == NULL)
+      {
         strcpy (categorie, nom_section);
+      }
       else
       {
         strncpy (categorie,
                  nom_section,
-                 strchr (nom_section, ' ') - nom_section);
+                 (size_t) (strchr (nom_section, ' ') - nom_section));
         categorie[strchr (nom_section, ' ') - nom_section] = 0;
       }
       
@@ -2018,8 +2050,11 @@ EF_gtk_sections (Projet *p)
       while (list_parcours != NULL)
       {
         GtkWidget *widget = list_parcours->data;
-        GtkWidget *grid = gtk_container_get_children (GTK_CONTAINER (widget))->data;
-        GtkWidget *label = gtk_grid_get_child_at (GTK_GRID (grid), 1, 0);
+        GtkWidget *grid;
+        GtkWidget *label;
+        
+        grid = gtk_container_get_children (GTK_CONTAINER (widget))->data;
+        label = gtk_grid_get_child_at (GTK_GRID (grid), 1, 0);
         
         if (strcmp (categorie, gtk_label_get_text (GTK_LABEL (label))) == 0)
         {
@@ -2081,9 +2116,11 @@ EF_gtk_sections (Projet *p)
     fclose (file);
   }
   else
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_ajouter_menu_importee")),
                               FALSE);
+  }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_SEC.window),
                                 GTK_WINDOW (UI_GTK.window));

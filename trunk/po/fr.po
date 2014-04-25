@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-04-05 07:09+0200\n"
+"POT-Creation-Date: 2014-04-09 21:43+0200\n"
 "PO-Revision-Date: 2014-03-30 01:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -766,6 +766,122 @@ msgstr "Le matériau n'est pas en béton.\n"
 msgid "Le matériau %s existe déjà.\n"
 msgstr "Le matériau %s existe déjà.\n"
 
+#, c-format
+msgid "f<sub>ck,cube</sub> : %s MPa"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "f<sub>cm</sub> : %s MPa"
+msgstr "r<sub>x</sub> [rad]"
+
+#, c-format
+msgid "%s, f<sub>cm</sub> : %s MPa"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "f<sub>ctm</sub> : %s MPa"
+msgstr "r<sub>x</sub> [rad]"
+
+#, c-format
+msgid "%s, f<sub>ctm</sub> : %s MPa"
+msgstr ""
+
+#, c-format
+msgid "f<sub>ctk,0.05</sub> : %s MPa"
+msgstr ""
+
+#, c-format
+msgid "%s, f<sub>ctk,0.05</sub> : %s MPa"
+msgstr ""
+
+#, c-format
+msgid "f<sub>ctk,0.95</sub> : %s MPa"
+msgstr ""
+
+#, c-format
+msgid "%s, f<sub>ctk,0.95</sub> : %s MPa"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "E<sub>cm</sub> : %s MPa"
+msgstr "r<sub>x</sub> [rad]"
+
+#, c-format
+msgid "%s, E<sub>cm</sub> : %s MPa"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>c1</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>c1</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>cu1</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>cu1</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>c2</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>c2</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>cu2</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>cu2</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>c3</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>c3</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "&#949;<sub>cu3</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "%s, &#949;<sub>cu3</sub> : %s ‰"
+msgstr ""
+
+#, c-format
+msgid "n : %s"
+msgstr ""
+
+#, c-format
+msgid "%s, n : %s"
+msgstr ""
+
+#, c-format
+msgid "&#957; : %s"
+msgstr ""
+
+#, c-format
+msgid "%s, &#957; : %s"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "f<sub>ck</sub> : %s MPa"
+msgstr "r<sub>x</sub> [rad]"
+
+#, c-format
+msgid "f<sub>ck</sub> : %s MPa avec %s"
+msgstr ""
+
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
 
@@ -825,6 +941,13 @@ msgstr "Borne [%lf,%lf] incorrecte.\n"
 
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
+
+#, c-format
+msgid ""
+"debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f"
+"\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f"
+"\tf(%.5f) = %.20f\n"
+msgstr ""
 
 msgid "La largeur du dessin ne peut être nulle.\n"
 msgstr "La largeur du dessin ne peut être nulle.\n"

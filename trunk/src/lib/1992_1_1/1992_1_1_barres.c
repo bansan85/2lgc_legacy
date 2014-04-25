@@ -46,8 +46,6 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_charge_noeud.h"
 
-gboolean
-_1992_1_1_barres_init (Projet *p)
 /**
  * \brief Initialise la liste des éléments en béton.
  * \param p : la variable projet.
@@ -56,6 +54,8 @@ _1992_1_1_barres_init (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1992_1_1_barres_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter iter;
@@ -83,9 +83,6 @@ _1992_1_1_barres_init (Projet *p)
 }
 
 
-void
-_1992_1_1_barres_free_foreach (EF_Barre *barre,
-                               Projet   *p)
 /**
  * \brief Fonction permettant de libérer une barre contenue dans une liste.
  * \param barre : la barre à libérer,
@@ -95,6 +92,9 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
  *     - barre == NULL,
  *     - p == NULL.
  */
+void
+_1992_1_1_barres_free_foreach (EF_Barre *barre,
+                               Projet   *p)
 {
   BUGPARAM (p, "%p", p, )
   BUGPARAM (barre, "%p", barre, )
@@ -107,9 +107,13 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
     p->modele.noeuds = g_list_remove (p->modele.noeuds, tmp);
   }
   if (barre->m_rot != NULL)
+  {
     cholmod_free_sparse (&barre->m_rot, p->calculs.c);
+  }
   if (barre->m_rot_t != NULL)
+  {
     cholmod_free_sparse (&barre->m_rot_t, p->calculs.c);
+  }
   free (barre->info_EF);
   
 #ifdef ENABLE_GTK
@@ -128,16 +132,6 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
 }
 
 
-gboolean
-_1992_1_1_barres_ajout (Projet         *p,
-                        Type_Element    type,
-                        Section        *section,
-                        EF_Materiau    *materiau,
-                        EF_Noeud       *noeud_debut,
-                        EF_Noeud       *noeud_fin,
-                        Flottant        angle,
-                        EF_Relachement *relachement,
-                        unsigned int    discretisation_element)
 /**
  * \brief Ajoute une barre.
  * \param p : la variable projet,
@@ -160,6 +154,16 @@ _1992_1_1_barres_ajout (Projet         *p,
  *     - materiau == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+_1992_1_1_barres_ajout (Projet         *p,
+                        Type_Element    type,
+                        Section        *section,
+                        EF_Materiau    *materiau,
+                        EF_Noeud       *noeud_debut,
+                        EF_Noeud       *noeud_fin,
+                        Flottant        angle,
+                        EF_Relachement *relachement,
+                        uint16_t        discretisation_element)
 {
   EF_Barre *element_nouveau;
   
@@ -169,7 +173,7 @@ _1992_1_1_barres_ajout (Projet         *p,
   BUGPARAM (noeud_fin, "%p", noeud_fin, FALSE)
   INFO (noeud_debut != noeud_fin,
         FALSE,
-        (gettext ("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"));)
+        (gettext ("La création d'une barre nécessite l'utilisation de des noeuds différents.\n")); )
   BUGPARAM (materiau, "%p", materiau, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
   INFO (!errmoy (EF_noeuds_distance (noeud_debut, noeud_fin),
@@ -177,10 +181,10 @@ _1992_1_1_barres_ajout (Projet         *p,
         FALSE,
         (gettext ("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"),
                   noeud_debut->numero,
-                  noeud_fin->numero);)
+                  noeud_fin->numero); )
   BUGCRIT (element_nouveau = malloc (sizeof (EF_Barre)),
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   element_nouveau->type = type;
   
@@ -196,22 +200,26 @@ _1992_1_1_barres_ajout (Projet         *p,
                                                                Barre_Info_EF)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (element_nouveau);)
+             free (element_nouveau); )
   memset (element_nouveau->info_EF, 0, sizeof (Barre_Info_EF));
   
   element_nouveau->m_rot = NULL;
   element_nouveau->m_rot_t = NULL;
   
   if (p->modele.barres == NULL)
+  {
     element_nouveau->numero = 0;
+  }
   else
-    element_nouveau->numero = ((EF_Barre *) g_list_last (p->modele.barres)
-                                                           ->data)->numero + 1;
+  {
+    element_nouveau->numero =
+      (((EF_Barre *) (g_list_last (p->modele.barres)->data))->numero + 1U);
+  }
   
   BUG (EF_calculs_free (p),
        FALSE,
        free (element_nouveau->info_EF);
-         free (element_nouveau);)
+         free (element_nouveau); )
   
   element_nouveau->nds_inter = NULL;
   
@@ -225,7 +233,7 @@ _1992_1_1_barres_ajout (Projet         *p,
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (element_nouveau->info_EF);
-               free (element_nouveau);)
+               free (element_nouveau); )
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_numero_label2")),
                         nb_barres);
@@ -242,7 +250,7 @@ _1992_1_1_barres_ajout (Projet         *p,
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (element_nouveau->info_EF);
-               free (element_nouveau);)
+               free (element_nouveau); )
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL ( UI_BAR.liste_types),
                                          &iter,
                                          tmp);
@@ -269,10 +277,11 @@ _1992_1_1_barres_ajout (Projet         *p,
   
   if (discretisation_element != 0)
   {
-    unsigned int i;
+    uint16_t i;
     
     /* Création des noeuds intermédiaires */
     for (i = 0; i < discretisation_element; i++)
+    {
       BUG (EF_noeuds_ajout_noeud_barre (
              p,
              element_nouveau,
@@ -280,7 +289,8 @@ _1992_1_1_barres_ajout (Projet         *p,
                   FLOTTANT_ORDINATEUR),
              NULL),
            FALSE,
-           _1992_1_1_barres_free_foreach (element_nouveau, p);)
+           _1992_1_1_barres_free_foreach (element_nouveau, p); )
+    }
   }
   
   p->modele.barres = g_list_append (p->modele.barres, element_nouveau);
@@ -289,10 +299,6 @@ _1992_1_1_barres_ajout (Projet         *p,
 }
 
 
-EF_Barre *
-_1992_1_1_barres_cherche_numero (Projet      *p,
-                                 unsigned int numero,
-                                 gboolean     critique)
 /**
  * \brief Renvoie la barre en fonction du numéro.
  * \param p : la variable projet,
@@ -304,6 +310,10 @@ _1992_1_1_barres_cherche_numero (Projet      *p,
  *     - p == NULL,
  *     - Barre en béton introuvable.
  */
+EF_Barre *
+_1992_1_1_barres_cherche_numero (Projet  *p,
+                                 uint32_t numero,
+                                 gboolean critique)
 {
   GList *list_parcours;
   
@@ -316,31 +326,24 @@ _1992_1_1_barres_cherche_numero (Projet      *p,
     EF_Barre *element = list_parcours->data;
     
     if (element->numero == numero)
+    {
       return element;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
   
   if (critique)
-    FAILINFO (NULL, (gettext ("Barre en béton %u introuvable.\n"), numero);)
+  {
+    FAILINFO (NULL, (gettext ("Barre en béton %u introuvable.\n"), numero); )
+  }
   else
+  {
     return NULL;
+  }
 }
 
 
-gboolean
-_1992_1_1_barres_cherche_dependances (Projet  *p,
-                                      GList   *appuis,
-                                      GList   *noeuds,
-                                      GList   *sections,
-                                      GList   *materiaux,
-                                      GList   *relachements,
-                                      GList   *barres,
-                                      GList  **noeuds_dep,
-                                      GList  **barres_dep,
-                                      GList  **charges_dep,
-                                      gboolean numero,
-                                      gboolean origine)
 /**
  * \brief Renvoie, sous forme d'une liste de noeuds, d'une liste de barres et
  *        d'une liste de charges l'ensemble des éléments dépendants des appuis,
@@ -376,6 +379,19 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
  *      - p == NULL,
  *      - #common_selection_ajout_nombre
  */
+gboolean
+_1992_1_1_barres_cherche_dependances (Projet  *p,
+                                      GList   *appuis,
+                                      GList   *noeuds,
+                                      GList   *sections,
+                                      GList   *materiaux,
+                                      GList   *relachements,
+                                      GList   *barres,
+                                      GList  **noeuds_dep,
+                                      GList  **barres_dep,
+                                      GList  **charges_dep,
+                                      gboolean numero,
+                                      gboolean origine)
 {
   GList   *list_parcours;
   GList   *noeuds_todo = NULL, *noeuds_done = NULL, *barres_todo = NULL;
@@ -384,16 +400,26 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
   BUGPARAM (p, "%p", p, FALSE)
   
   if ((noeuds_dep == NULL) && (barres_dep == NULL) && (charges_dep == NULL))
+  {
     verif = TRUE;
+  }
   else
+  {
     verif = FALSE;
+  }
   
   if (noeuds_dep != NULL)
+  {
     *noeuds_dep = NULL;
+  }
   if (barres_dep != NULL)
+  {
     *barres_dep = NULL;
+  }
   if (charges_dep != NULL)
+  {
     *charges_dep = NULL;
+  }
   
   // On ajoute les noeuds utilisant les appuis
   if (appuis != NULL)
@@ -408,9 +434,13 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
           (g_list_find (appuis, noeud->appui) != NULL))
       {
         if (verif == FALSE)
+        {
           noeuds_todo = g_list_append (noeuds_todo, noeud);
+        }
         else
+        {
           return TRUE;
+        }
       }
       
       list_parcours = g_list_next (list_parcours);
@@ -430,7 +460,9 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
       
       if ((data->relatif != NULL) &&
           (g_list_find (noeuds, data->relatif) != NULL))
+      {
         noeuds_todo = g_list_append (noeuds_todo, noeud);
+      }
     }
     
     list_parcours = g_list_next (list_parcours);
@@ -449,9 +481,13 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
           (g_list_find (relachements, barre->relachement) != NULL)))
     {
       if (verif == FALSE)
+      {
         barres_todo = g_list_append (barres_todo, barre);
+      }
       else
+      {
         return TRUE;
+      }
     }
     
     list_parcours = g_list_next (list_parcours);
@@ -465,7 +501,9 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
     EF_Barre *barre = list_parcours->data;
     
     if (g_list_find (barres_todo, barre) == NULL)
+    {
       barres_todo = g_list_append (barres_todo, barre);
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
@@ -484,6 +522,7 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
         ((origine) || (g_list_find (barres, barre) == NULL)))
     {
       if (numero)
+      {
         BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (barre->numero),
                                             barres_dep,
                                             LISTE_UINT,
@@ -491,8 +530,10 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
              FALSE,
              g_list_free (barres_todo);
                g_list_free (noeuds_todo);
-               g_list_free (*barres_dep);)
+               g_list_free (*barres_dep); )
+      }
       else
+      {
         BUG (common_selection_ajout_nombre (barre,
                                             barres_dep,
                                             LISTE_BARRES,
@@ -500,7 +541,8 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
              FALSE,
              g_list_free (barres_todo);
                g_list_free (noeuds_todo);
-               g_list_free (*barres_dep);)
+               g_list_free (*barres_dep); )
+      }
     }
     // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout
     // ce qui est dans barres_todo ne sont que les barres à analyser.
@@ -555,15 +597,20 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
            g_list_free (noeuds_todo);
            g_list_free (noeuds_done);
            if (barres_dep != NULL)
+           {
              g_list_free (*barres_dep);
+           }
            if (noeuds_dep != NULL)
-             g_list_free (*noeuds_dep);)
+           {
+             g_list_free (*noeuds_dep);
+           })
     
     // On ajoute le noeud à la liste des noeuds dépendants.
     if ((noeuds_dep != NULL) &&
         ((origine) || (g_list_find (noeuds, dataa) == NULL)))
     {
       if (numero)
+      {
         BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (((EF_Noeud *) 
                                                                dataa)->numero),
                                             noeuds_dep,
@@ -574,9 +621,13 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                g_list_free (noeuds_todo);
                g_list_free (noeuds_done);
                if (barres_dep != NULL)
+               {
                  g_list_free (*barres_dep);
-               g_list_free (*noeuds_dep);)
+               }
+               g_list_free (*noeuds_dep); )
+      }
       else
+      {
         BUG (common_selection_ajout_nombre (dataa,
                                             noeuds_dep,
                                             LISTE_NOEUDS,
@@ -586,8 +637,11 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                g_list_free (noeuds_todo);
                g_list_free (noeuds_done);
                if (barres_dep != NULL)
+               {
                  g_list_free (*barres_dep);
-               g_list_free (*noeuds_dep);)
+               }
+               g_list_free (*noeuds_dep); )
+      }
     }
     // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est
     // pas une dépendance suffisante pour justifier une impossibilité de
@@ -599,6 +653,7 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
       g_list_free (noeuds_todo);
       g_list_free (noeuds_done);
       g_list_free (barres_todo);
+      
       return TRUE;
     }
     
@@ -622,6 +677,7 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
             ((origine) || (g_list_find (barres, barre) == NULL)))
         {
           if (numero)
+          {
             BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (
                                                                 barre->numero),
                                                 barres_dep,
@@ -633,8 +689,12 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                    g_list_free (noeuds_done);
                    g_list_free (*barres_dep);
                    if (noeuds_dep != NULL)
-                     g_list_free (*noeuds_dep);)
+                   {
+                     g_list_free (*noeuds_dep);
+                   })
+          }
           else
+          {
             BUG (common_selection_ajout_nombre (barre,
                                                 barres_dep,
                                                 LISTE_BARRES,
@@ -645,17 +705,23 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                    g_list_free (noeuds_done);
                    g_list_free (*barres_dep);
                    if (noeuds_dep != NULL)
-                     g_list_free (*noeuds_dep);)
+                   {
+                     g_list_free (*noeuds_dep);
+                   })
+          }
         }
         else if (verif == TRUE)
         {
           g_list_free (noeuds_todo);
           g_list_free (noeuds_done);
           g_list_free (barres_todo);
+          
           return TRUE;
         }
         if (g_list_find (barres_todo, barre) == NULL)
+        {
           barres_todo = g_list_append (barres_todo, barre);
+        }
         
         // Puis on ajoute l'ensemble des noeuds intermédiaires.
         list_parcours2 = barre->nds_inter;
@@ -666,7 +732,9 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
           
           noeud = list_parcours2->data;
           if (g_list_find (noeuds_done, noeud) == NULL)
+          {
             noeuds_todo = g_list_append (noeuds_todo, noeud);
+          }
           
           list_parcours2 = g_list_next (list_parcours2);
         }
@@ -690,7 +758,9 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
             
             if ((data->relatif != NULL) &&
                 (g_list_find (noeuds_done, data->relatif) != NULL))
+            {
               noeuds_todo = g_list_append (noeuds_todo, noeud);
+            }
           }
           list_parcours2 = g_list_next (list_parcours2);
         }
@@ -733,10 +803,14 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                      g_list_free (barres_todo);
                        g_list_free (noeuds_done);
                        if (barres_dep != NULL)
+                       {
                          g_list_free (*barres_dep);
+                       }
                        if (noeuds_dep != NULL)
+                       {
                          g_list_free (*noeuds_dep);
-                       g_list_free (*charges_dep);)
+                       }
+                       g_list_free (*charges_dep); )
                 liste_parcours3 = NULL;
               }
             }
@@ -774,10 +848,14 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                      g_list_free (barres_todo);
                        g_list_free (noeuds_done);
                        if (barres_dep != NULL)
+                       {
                          g_list_free (*barres_dep);
+                       }
                        if (noeuds_dep != NULL)
+                       {
                          g_list_free (*noeuds_dep);
-                       g_list_free (*charges_dep);)
+                       }
+                       g_list_free (*charges_dep); )
                 liste_parcours3 = NULL;
               }
             }
@@ -800,11 +878,17 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
                       g_list_free (barres_todo);
                       g_list_free (noeuds_done);
                       if (barres_dep != NULL)
+                      {
                         g_list_free (*barres_dep);
+                      }
                       if (noeuds_dep != NULL)
+                      {
                         g_list_free (*noeuds_dep);
+                      }
                       if (charges_dep != NULL)
-                        g_list_free (*charges_dep);)
+                      {
+                        g_list_free (*charges_dep);
+                      })
           break;
         }
       }
@@ -819,17 +903,16 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
   g_list_free (barres_todo);
   
   if (verif == FALSE)
+  {
     return TRUE;
+  }
   else
+  {
     return FALSE;
+  }
 }
 
 
-gboolean
-_1992_1_1_barres_angle_rotation (EF_Noeud *debut,
-                                 EF_Noeud *fin,
-                                 double   *y,
-                                 double   *z)
 /**
  * \brief Calcule les deux angles de rotation pour faire tourner une barre
  *        horizontale en une barre parallèle à une droite passant par les
@@ -848,6 +931,11 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
  *     - z == NULL,
  *     - #EF_noeuds_distance_x_y_z.
  */
+gboolean
+_1992_1_1_barres_angle_rotation (EF_Noeud *debut,
+                                 EF_Noeud *fin,
+                                 double   *y,
+                                 double   *z)
 {
   double xx, yy, zz, ll;
   
@@ -863,28 +951,30 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
         FALSE,
         (gettext ("La distance entre les noeuds %d et %d est nulle\n"),
                   debut->numero,
-                  fin->numero);)
+                  fin->numero); )
   
   // Détermination de l'angle de rotation autour de l'axe Y.
   *y = asin (zz / ll);
   if (errmoy (ll * ll - zz * zz, ERRMOY_DIST))
+  {
     *z = 0.;
+  }
   else
   {
     if (xx > 0.)
+    {
       *z = asin (yy / sqrt (ll * ll - zz * zz));
+    }
     else
+    {
       *z = M_PI - asin(yy / sqrt(ll * ll - zz * zz));
+    }
   }
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_change_type (EF_Barre    *barre,
-                              Type_Element type,
-                              Projet      *p)
 /**
  * \brief Change le type d'une barre.
  * \param barre : barre à modifier,
@@ -897,6 +987,10 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
  *     - p == NULL,
  *     - type inconnu.
  */
+gboolean
+_1992_1_1_barres_change_type (EF_Barre    *barre,
+                              Type_Element type,
+                              Projet      *p)
 {
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
@@ -915,7 +1009,7 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
     }
     default :
     {
-      FAILCRIT (FALSE, ("Le type de l'élément %d est inconnu.\n", type);)
+      FAILCRIT (FALSE, ("Le type de l'élément %d est inconnu.\n", type); )
       break;
     }
   }
@@ -924,10 +1018,6 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
 }
 
 
-gboolean
-_1992_1_1_barres_change_section (EF_Barre   *barre,
-                                 Section    *section,
-                                 Projet     *p)
 /**
  * \brief Change la section d'une barre.
  * \param barre : barre à modifier,
@@ -940,13 +1030,19 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
  *     - p == NULL,
  *     - section == NULL.
  */
+gboolean
+_1992_1_1_barres_change_section (EF_Barre   *barre,
+                                 Section    *section,
+                                 Projet     *p)
 {
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
   
   if (barre->section == section)
+  {
     return TRUE;
+  }
   
   barre->section = section;
   
@@ -957,18 +1053,16 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
   BUG (m3d_rafraichit (p), FALSE)
   
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_change_materiau (EF_Barre    *barre,
-                                  EF_Materiau *materiau,
-                                  Projet      *p)
 /**
  * \brief Change le matériau d'une barre.
  * \param barre : barre à modifier,
@@ -981,12 +1075,18 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
  *     - p == NULL,
  *     - #EF_calculs_free;
  */
+gboolean
+_1992_1_1_barres_change_materiau (EF_Barre    *barre,
+                                  EF_Materiau *materiau,
+                                  Projet      *p)
 {
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
   
   if (barre->materiau == materiau)
+  {
     return TRUE;
+  }
   
   barre->materiau = materiau;
   
@@ -994,18 +1094,16 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_change_angle (EF_Barre *barre,
-                               Flottant  angle,
-                               Projet   *p)
 /**
  * \brief Change l'angle d'une barre autour de son axe x.
  * \param barre : barre à modifier,
@@ -1017,6 +1115,10 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
  *     - barre == NULL,
  *     - p == NULL.
  */
+gboolean
+_1992_1_1_barres_change_angle (EF_Barre *barre,
+                               Flottant  angle,
+                               Projet   *p)
 {
 #ifdef ENABLE_GTK
   GList *liste_barre = NULL;
@@ -1026,7 +1128,9 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   BUGPARAM (p, "%p", p, FALSE)
   
   if (errmax (m_g (barre->angle), m_g (angle)))
+  {
     return TRUE;
+  }
   
   barre->angle = angle;
   
@@ -1039,19 +1143,16 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   g_list_free (liste_barre);
   
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_change_noeud (EF_Barre *barre,
-                               EF_Noeud *noeud,
-                               gboolean noeud_1,
-                               Projet *p)
 /**
  * \brief Change un des deux noeuds d'extrémité d'une barre.
  * \param barre : barre à modifier,
@@ -1071,6 +1172,11 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
  *     - le noeud est dépendant de la barre,
  *     - #EF_calculs_free.
  */
+gboolean
+_1992_1_1_barres_change_noeud (EF_Barre *barre,
+                               EF_Noeud *noeud,
+                               gboolean noeud_1,
+                               Projet *p)
 {
   GList *liste_barre = NULL;
   GList *liste_noeuds_dep;
@@ -1080,15 +1186,19 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   BUGPARAM (p, "%p", p, FALSE)
   INFO (!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)),
         FALSE,
-        (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));)
+        (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n")); )
   INFO (!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)),
         FALSE,
-        (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));)
+        (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n")); )
   
   if ((noeud_1) && (barre->noeud_debut == noeud))
+  {
     return TRUE;
+  }
   if ((!noeud_1) && (barre->noeud_fin == noeud))
+  {
     return TRUE;
+  }
   liste_barre = g_list_append (liste_barre, barre);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
@@ -1107,13 +1217,17 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
         FALSE,
         (gettext ("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"),
                   noeud->numero,
-                  barre->numero);)
+                  barre->numero); )
   g_list_free (liste_noeuds_dep);
   
   if (noeud_1 == TRUE)
+  {
     barre->noeud_debut = noeud;
+  }
   else
+  {
     barre->noeud_fin = noeud;
+  }
   
   BUG (EF_calculs_free (p), FALSE)
   
@@ -1126,18 +1240,16 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_change_relachement (EF_Barre       *barre,
-                                     EF_Relachement *relachement,
-                                     Projet         *p)
 /**
  * \brief Change le relâchement d'une barre.
  * \param barre : barre à modifier,
@@ -1150,12 +1262,18 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
  *     - p == NULL,
  *     - #EF_calculs_free.
  */
+gboolean
+_1992_1_1_barres_change_relachement (EF_Barre       *barre,
+                                     EF_Relachement *relachement,
+                                     Projet         *p)
 {
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
   
   if (barre->relachement == relachement)
+  {
     return TRUE;
+  }
   
   barre->relachement = relachement;
   
@@ -1163,17 +1281,16 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-_1992_1_1_barres_rigidite_ajout (Projet   *p,
-                                 EF_Barre *element)
 /**
  * \brief Ajouter un élément à la matrice de rigidité partielle et complète.
  * \param p : la variable projet,
@@ -1190,23 +1307,26 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
  *     - en cas d'erreur d'allocation mémoire,
  *     - en cas d'erreur due à une fonction interne.
  */
+gboolean
+_1992_1_1_barres_rigidite_ajout (Projet   *p,
+                                 EF_Barre *element)
 {
   EF_Noeud        *noeud1, *noeud2;
-  int             *ai, *aj;
+  uint32_t        *ai, *aj;
   double          *ax;
   double           x, y, z;
-  int              k;
+  uint8_t          k;
   cholmod_triplet *triplet;
-  unsigned int     j;
+  uint16_t         j;
   
   BUGPARAM (p, "%p", p, FALSE)
   INFO (p->calculs.t_part,
         FALSE,
-        (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"));)
-  BUGPARAM (element, "%p", element, FALSE,)
+        (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n")); )
+  BUGPARAM (element, "%p", element, FALSE)
   INFO (p->calculs.t_comp,
         FALSE,
-        (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"));)
+        (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n")); )
   
   // Calcul de la matrice de rotation 3D qui permet de passer du repère local
   // au repère global. Elle est déterminée par le calcul de deux angles :
@@ -1298,29 +1418,29 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                       0,
                                       CHOLMOD_REAL,
                                       p->calculs.c);
-  BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n"));)
-  ai = (int *) triplet->i;
-  aj = (int *) triplet->j;
+  BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n")); )
+  ai = (uint32_t *) triplet->i;
+  aj = (uint32_t *) triplet->j;
   ax = (double *) triplet->x;
   for (k = 0; k < 4; k++)
   {
-    ai[k * 9 + 0] = k * 3 + 0; aj[k * 9 + 0] = k * 3 + 0;
+    ai[k * 9 + 0] = k * 3U + 0U; aj[k * 9 + 0] = k * 3U + 0U;
     ax[k * 9 + 0] = cos (y) * cos (z);
-    ai[k * 9 + 1] = k * 3 + 0; aj[k * 9 + 1] = k * 3 + 1;
+    ai[k * 9 + 1] = k * 3U + 0U; aj[k * 9 + 1] = k * 3U + 1U;
     ax[k * 9 + 1] = -sin (z);
-    ai[k * 9 + 2] = k * 3 + 0; aj[k * 9 + 2] = k * 3 + 2;
+    ai[k * 9 + 2] = k * 3U + 0U; aj[k * 9 + 2] = k * 3U + 2U;
     ax[k * 9 + 2] = -sin (y) * cos (z);
-    ai[k * 9 + 3] = k * 3 + 1; aj[k * 9 + 3] = k * 3 + 0;
+    ai[k * 9 + 3] = k * 3U + 1U; aj[k * 9 + 3] = k * 3U + 0U;
     ax[k * 9 + 3] = cos (x) * cos (y) * sin (z) - sin (x) * sin (y);
-    ai[k * 9 + 4] = k * 3 + 1; aj[k * 9 + 4] = k * 3 + 1;
+    ai[k * 9 + 4] = k * 3U + 1U; aj[k * 9 + 4] = k * 3U + 1U;
     ax[k * 9 + 4] = cos (x) * cos(z);
-    ai[k * 9 + 5] = k * 3 + 1; aj[k * 9 + 5] = k * 3 + 2;
+    ai[k * 9 + 5] = k * 3U + 1U; aj[k * 9 + 5] = k * 3U + 2U;
     ax[k * 9 + 5] = -cos (x) * sin (y) * sin (z) - sin (x) * cos (y);
-    ai[k * 9 + 6] = k * 3 + 2; aj[k * 9 + 6] = k * 3 + 0;
+    ai[k * 9 + 6] = k * 3U + 2U; aj[k * 9 + 6] = k * 3U + 0U;
     ax[k * 9 + 6] = sin (x) * cos (y) * sin (z) + cos (x) * sin (y);
-    ai[k * 9 + 7] = k * 3 + 2; aj[k * 9 + 7] = k * 3 + 1;
+    ai[k * 9 + 7] = k * 3U + 2U; aj[k * 9 + 7] = k * 3U + 1U;
     ax[k * 9 + 7] = sin (x) * cos (z);
-    ai[k * 9 + 8] = k * 3 + 2; aj[k * 9 + 8] = k * 3 + 2;
+    ai[k * 9 + 8] = k * 3U + 2U; aj[k * 9 + 8] = k * 3U + 2U;
     ax[k * 9 + 8] = cos (x) * cos (y) - sin (x) * sin (y) * sin (z);
   }
   triplet->nnz = 36;
@@ -1328,12 +1448,12 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   BUGCRIT (element->m_rot,
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             cholmod_free_triplet (&triplet, p->calculs.c);)
+             cholmod_free_triplet (&triplet, p->calculs.c); )
   cholmod_free_triplet (&triplet, p->calculs.c);
   element->m_rot_t = cholmod_transpose ( element->m_rot, 1, p->calculs.c);
   BUGCRIT (element->m_rot_t,
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // Une fois la matrice de rotation déterminée, il est nécessaire de calculer
   // la matrice de rigidité élémentaire dans le repère local. La poutre pouvant
@@ -1344,13 +1464,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     double          MA, MB;
     double          phia_iso, phib_iso;
     double          es_l;
-    int             num1, num2;
+    uint32_t        num1, num2;
     cholmod_sparse *sparse_tmp, *matrice_rigidite_globale;
     double          ll;
-    unsigned int    i;
-    int            *ai2, *aj2;
+    uint32_t        i;
+    uint32_t       *ai2, *aj2;
     double         *ax2;
-    int            *ai3, *aj3;
+    uint32_t       *ai3, *aj3;
     double         *ax3;
     
     // Détermination du noeud de départ et de fin
@@ -1358,23 +1478,27 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     {
       noeud1 = element->noeud_debut;
       if (element->discretisation_element != 0)
+      {
         noeud2 = g_list_first (element->nds_inter)->data;
+      }
       else
+      {
         noeud2 = element->noeud_fin;
+      }
     }
     else if (j == element->discretisation_element)
     {
-      noeud1 = g_list_nth_data (element->nds_inter, j - 1);
+      noeud1 = g_list_nth_data (element->nds_inter, j - 1U);
       noeud2 = element->noeud_fin;
     }
     else
     {
-      noeud1 = g_list_nth_data (element->nds_inter, j - 1);
+      noeud1 = g_list_nth_data (element->nds_inter, j - 1U);
       noeud2 = g_list_nth_data (element->nds_inter, j);
     }
     
-    num1 = g_list_index (p->modele.noeuds, noeud1);
-    num2 = g_list_index (p->modele.noeuds, noeud2);
+    num1 = (uint32_t) g_list_index (p->modele.noeuds, noeud1);
+    num2 = (uint32_t) g_list_index (p->modele.noeuds, noeud2);
     
     // Calcul des L_x, L_y, L_z et L.
     ll = EF_noeuds_distance (noeud2, noeud1);
@@ -1430,9 +1554,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rx_d_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kAx = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kAx = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1440,7 +1568,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->rx_debut);)
+                                element->relachement->rx_debut); )
             break;
           }
         }
@@ -1464,9 +1592,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->ry_d_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kAy = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kAy = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1474,7 +1606,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->ry_debut);)
+                                element->relachement->ry_debut); )
             break;
           }
         }
@@ -1498,9 +1630,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rz_d_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kAz = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kAz = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1508,7 +1644,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->rz_debut);)
+                                element->relachement->rz_debut); )
             break;
           }
         }
@@ -1541,9 +1677,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rx_f_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kBx = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kBx = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1551,7 +1691,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->rx_fin);)
+                                element->relachement->rx_fin); )
             break;
           }
         }
@@ -1575,9 +1715,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->ry_f_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kBy = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kBy = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1585,7 +1729,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->ry_fin);)
+                                element->relachement->ry_fin); )
             break;
           }
         }
@@ -1609,9 +1753,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
             donnees = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                element->relachement->rz_f_data;
             if (errmoy (m_g (donnees->raideur), ERRMOY_RAIDEUR))
+            {
               element->info_EF[j].kBz = MAXDOUBLE;
+            }
             else
+            {
               element->info_EF[j].kBz = 1. / m_g (donnees->raideur);
+            }
             break;
           }
           case EF_RELACHEMENT_UNTOUCH :
@@ -1619,7 +1767,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           {
             FAILCRIT (FALSE,
                       (gettext ("Relachement %d inconnu."),
-                                element->relachement->rx_debut);)
+                                element->relachement->rx_debut); )
             break;
           }
         }
@@ -1633,9 +1781,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                         0,
                                         CHOLMOD_REAL,
                                         p->calculs.c);
-    BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n"));)
-    ai = (int *) triplet->i;
-    aj = (int *) triplet->j;
+    BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n")); )
+    ai = (uint32_t *) triplet->i;
+    aj = (uint32_t *) triplet->j;
     ax = (double *) triplet->x;
     triplet->nnz = 40;
     i = 0;
@@ -1647,7 +1795,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
     es_l = EF_sections_es_l (element, j, 0., ll);
-    BUG (!isnan (es_l), FALSE, cholmod_free_triplet (&triplet, p->calculs.c);)
+    BUG (!isnan (es_l), FALSE, cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
     ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
     ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;
@@ -1687,7 +1835,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     &MA,
                                     &MB),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 1;  aj[i] = 1;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 5;  aj[i] = 1;  ax[i] =  MA;                i++;
     ai[i] = 7;  aj[i] = 1;  ax[i] = -MA / ll - MB / ll; i++;
@@ -1710,15 +1858,21 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phia_iso,
                                                    &phib_iso),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kAz, MAXDOUBLE))
+    {
       MA = 0.;
+    }
     else if (errrel (element->info_EF[j].kBz, MAXDOUBLE))
+    {
       MA = 1. / (element->info_EF[j].kAz + phia_iso);
+    }
     else
+    {
       MA = 1. / (element->info_EF[j].kAz + phia_iso *
            (1 - element->info_EF[j].bz / (2 * (element->info_EF[j].cz +
            element->info_EF[j].kBz))));
+    }
     MB = MA * phib_iso / (element->info_EF[j].cz + element->info_EF[j].kBz);
     ai[i] = 1;  aj[i] = 5;  ax[i] =  MA / ll - MB / ll; i++;
     ai[i] = 5;  aj[i] = 5;  ax[i] =  MA;                i++;
@@ -1737,7 +1891,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     &MA,
                                     &MB),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 1;  aj[i] = 7;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;                i++;
     ai[i] = 7;  aj[i] = 7;  ax[i] = -MA / ll - MB / ll; i++;
@@ -1763,21 +1917,27 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phia_iso,
                                                    &phib_iso),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kBz, MAXDOUBLE))
+    {
       MB = 0.;
+    }
     else if (errrel (element->info_EF[j].kAz, MAXDOUBLE))
+    {
       MB = 1. / (element->info_EF[j].kBz + phib_iso);
+    }
     else
+    {
       MB = 1. / (element->info_EF[j].kBz + phib_iso *
            (1 - element->info_EF[j].bz / (2 * (element->info_EF[j].cz +
            element->info_EF[j].kAz))));
+    }
     MA = MB * phia_iso / (element->info_EF[j].cz + element->info_EF[j].kAz);
     
     ai[i] = 1;  aj[i] = 11; ax[i] = -MA / ll + MB / ll; i++;
     ai[i] = 5;  aj[i] = 11; ax[i] = -MA;                i++;
-    ai[i] = 7;  aj[i] = 11; ax[i] = +MA / ll - MB / ll; i++;
-    ai[i] = 11; aj[i] = 11; ax[i] = +MB;                i++;
+    ai[i] = 7;  aj[i] = 11; ax[i] =  MA / ll - MB / ll; i++;
+    ai[i] = 11; aj[i] = 11; ax[i] =  MB;                i++;
     // \begin{bmatrix}K_e\end{bmatrix} = 
     // \begin{bmatrix}  a & e & i & m\\
     //                  b & f & j & n\\
@@ -1801,7 +1961,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     &MA,
                                     &MB),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 2;  aj[i] = 2;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 4;  aj[i] = 2;  ax[i] = -MA;                i++;
     ai[i] = 8;  aj[i] = 2;  ax[i] = -MA / ll - MB / ll; i++;
@@ -1824,15 +1984,22 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phia_iso,
                                                    &phib_iso),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kAy, MAXDOUBLE))
+    {
       MA = 0.;
+    }
     else if (errrel (element->info_EF[j].kBy, MAXDOUBLE))
+    {
       MA = 1. / (element->info_EF[j].kAy - phia_iso);
+    }
     else
-      MA = 1. / (element->info_EF[j].kAy - phia_iso * (1 - 
-           element->info_EF[j].by / (2 * (element->info_EF[j].cy +
-           element->info_EF[j].kBy))));
+    {
+      MA = 1. / (element->info_EF[j].kAy -
+           phia_iso * (1 - element->info_EF[j].by /
+                       (2 * (element->info_EF[j].cy +
+                             element->info_EF[j].kBy))));
+    }
     MB = MA * phib_iso / (element->info_EF[j].cy + element->info_EF[j].kBy);
     ai[i] = 2;  aj[i] = 4;  ax[i] =  MA / ll - MB / ll; i++;
     ai[i] = 4;  aj[i] = 4;  ax[i] = -MA;                i++;
@@ -1851,7 +2018,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     &MA,
                                     &MB),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 2;  aj[i] = 8;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 4;  aj[i] = 8;  ax[i] = -MA;                i++;
     ai[i] = 8;  aj[i] = 8;  ax[i] = -MA / ll - MB / ll; i++;
@@ -1874,15 +2041,21 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    &phia_iso,
                                                    &phib_iso),
          FALSE,
-         cholmod_free_triplet (&triplet, p->calculs.c);)
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kBy, MAXDOUBLE))
+    {
       MB = 0.;
+    }
     else if (errrel (element->info_EF[j].kAy, MAXDOUBLE))
+    {
       MB = 1. / (element->info_EF[j].kBy - phib_iso);
+    }
     else
+    {
       MB = 1. / (element->info_EF[j].kBy - phib_iso * (1 -
            element->info_EF[j].by / (2 * (element->info_EF[j].cy +
            element->info_EF[j].kAy))));
+    }
     MA = MB * phia_iso / (element->info_EF[j].cy + element->info_EF[j].kAy);
     ai[i] = 2;  aj[i] = 10; ax[i] = -MA / ll + MB / ll; i++;
     ai[i] = 4;  aj[i] = 10; ax[i] =  MA;                i++;
@@ -1896,7 +2069,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
     if (((j == 0) && (element->relachement != NULL) &&
         (element->relachement->rx_debut == EF_RELACHEMENT_LIBRE)) ||
-        ((j==element->discretisation_element) &&
+        ((j == element->discretisation_element) &&
          (element->relachement != NULL) &&
          (element->relachement->rx_fin == EF_RELACHEMENT_LIBRE)))
     {
@@ -1913,6 +2086,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     else
     {
       double gj_l = EF_sections_gj_l (element, j);
+      
       ai[i] = 3;  aj[i] = 3;  ax[i] =  gj_l; i++;
       ai[i] = 3;  aj[i] = 9;  ax[i] = -gj_l; i++;
       ai[i] = 9;  aj[i] = 3;  ax[i] = -gj_l; i++;
@@ -1927,7 +2101,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     cholmod_free_triplet (&triplet, p->calculs.c);
     BUGCRIT (element->info_EF[j].m_rig_loc,
              FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     
     // Calcule la matrice locale dans le repère globale :\end{verbatim}
     // \begin{displaymath}
@@ -1942,7 +2116,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                  p->calculs.c);
     BUGCRIT (sparse_tmp,
              FALSE,
-             (gettext( "Erreur d'allocation mémoire.\n"));)
+             (gettext( "Erreur d'allocation mémoire.\n")); )
     matrice_rigidite_globale = cholmod_ssmult (sparse_tmp,
                                                element->m_rot_t,
                                                0,
@@ -1952,21 +2126,21 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     cholmod_free_sparse (&(sparse_tmp), p->calculs.c);
     BUGCRIT (matrice_rigidite_globale,
              FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     triplet = cholmod_sparse_to_triplet (matrice_rigidite_globale,
                                          p->calculs.c);
     cholmod_free_sparse (&(matrice_rigidite_globale), p->calculs.c);
     BUGCRIT (triplet,
              FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
-    ai = (int *)     triplet->i;
-    aj = (int *)     triplet->j;
+             (gettext ("Erreur d'allocation mémoire.\n")); )
+    ai = (uint32_t *)     triplet->i;
+    aj = (uint32_t *)     triplet->j;
     ax = (double *)  triplet->x;
-    ai2 = (int *)    p->calculs.t_part->i;
-    aj2 = (int *)    p->calculs.t_part->j;
+    ai2 = (uint32_t *)    p->calculs.t_part->i;
+    aj2 = (uint32_t *)    p->calculs.t_part->j;
     ax2 = (double *) p->calculs.t_part->x;
-    ai3 = (int *)    p->calculs.t_comp->i;
-    aj3 = (int *)    p->calculs.t_comp->j;
+    ai3 = (uint32_t *)    p->calculs.t_comp->i;
+    aj3 = (uint32_t *)    p->calculs.t_comp->j;
     ax3 = (double *) p->calculs.t_comp->x;
     
     // Insertion de la matrice de rigidité élémentaire dans la matrice de
@@ -1975,8 +2149,8 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     {
       if ((ai[i] < 6) &&
           (aj[i] < 6) &&
-          (p->calculs.n_part[num1][ai[i]] != -1) &&
-          (p->calculs.n_part[num1][aj[i]] != -1))
+          (p->calculs.n_part[num1][ai[i]] != UINT32_MAX) &&
+          (p->calculs.n_part[num1][aj[i]] != UINT32_MAX))
       {
         ai2[p->calculs.t_part_en_cours] = p->calculs.n_part[num1][ai[i]];
         aj2[p->calculs.t_part_en_cours] = p->calculs.n_part[num1][aj[i]];
@@ -1985,8 +2159,8 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
       }
       else if ((ai[i] < 6) &&
                (aj[i] >= 6) &&
-               (p->calculs.n_part[num1][ai[i]] != -1) &&
-               (p->calculs.n_part[num2][aj[i]-6] != -1))
+               (p->calculs.n_part[num1][ai[i]] != UINT32_MAX) &&
+               (p->calculs.n_part[num2][aj[i]-6] != UINT32_MAX))
       {
         ai2[p->calculs.t_part_en_cours] = p->calculs.n_part[num1][ai[i]];
         aj2[p->calculs.t_part_en_cours] = p->calculs.n_part[num2][aj[i]-6];
@@ -1995,8 +2169,8 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
       }
       else if ((ai[i] >= 6) &&
                (aj[i] < 6) &&
-               (p->calculs.n_part[num2][ai[i]-6] != -1) &&
-               (p->calculs.n_part[num1][aj[i]] != -1))
+               (p->calculs.n_part[num2][ai[i]-6] != UINT32_MAX) &&
+               (p->calculs.n_part[num1][aj[i]] != UINT32_MAX))
       {
         ai2[p->calculs.t_part_en_cours] = p->calculs.n_part[num2][ai[i]-6];
         aj2[p->calculs.t_part_en_cours] = p->calculs.n_part[num1][aj[i]];
@@ -2005,8 +2179,8 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
       }
       else if ((ai[i] >= 6) &&
                (aj[i] >= 6) &&
-               (p->calculs.n_part[num2][ai[i]-6] != -1) &&
-               (p->calculs.n_part[num2][aj[i]-6] != -1))
+               (p->calculs.n_part[num2][ai[i]-6] != UINT32_MAX) &&
+               (p->calculs.n_part[num2][aj[i]-6] != UINT32_MAX))
       {
         ai2[p->calculs.t_part_en_cours] = p->calculs.n_part[num2][ai[i]-6];
         aj2[p->calculs.t_part_en_cours] = p->calculs.n_part[num2][aj[i]-6];
@@ -2051,8 +2225,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
 }
 
 
-gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *p)
-/**h
+/**
  * \brief Ajoute à la matrice de rigidité toutes les barres.
  * \param p : la variable projet.
  * \return
@@ -2061,6 +2234,8 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *p)
  *     - p == NULL,
  *     - #_1992_1_1_barres_rigidite_ajout.
  */
+gboolean
+_1992_1_1_barres_rigidite_ajout_tout (Projet *p)
 {
   GList *list_parcours;
   
@@ -2068,7 +2243,9 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *p)
   
   // Trivial
   if (p->modele.barres == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = p->modele.barres;
   do
@@ -2085,10 +2262,6 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *p)
 }
 
 
-gboolean
-_1992_1_1_barres_supprime_liste (Projet *p,
-                                 GList  *liste_noeuds,
-                                 GList  *liste_barres)
 /**
  * \brief Supprime une liste de barres.
  * \param p : la variable projet,
@@ -2103,6 +2276,10 @@ _1992_1_1_barres_supprime_liste (Projet *p,
  *     - #EF_charge_barre_ponctuelle_enleve_barres,
  *     - #EF_charge_barre_repartie_uniforme_enleve_barres.
  */
+gboolean
+_1992_1_1_barres_supprime_liste (Projet *p,
+                                 GList  *liste_noeuds,
+                                 GList  *liste_barres)
 {
   GList *noeuds_suppr, *barres_suppr, *charges_suppr;
   GList *list_parcours;
@@ -2137,7 +2314,7 @@ _1992_1_1_barres_supprime_liste (Projet *p,
              FALSE,
              g_list_free (noeuds_suppr);
                g_list_free (barres_suppr);
-               g_list_free (charges_suppr);)
+               g_list_free (charges_suppr); )
         break;
       }
       case CHARGE_BARRE_PONCTUELLE :
@@ -2148,7 +2325,7 @@ _1992_1_1_barres_supprime_liste (Projet *p,
              FALSE,
              g_list_free (noeuds_suppr);
                g_list_free (barres_suppr);
-               g_list_free (charges_suppr);)
+               g_list_free (charges_suppr); )
         break;
       }
       case CHARGE_BARRE_REPARTIE_UNIFORME :
@@ -2159,7 +2336,7 @@ _1992_1_1_barres_supprime_liste (Projet *p,
              FALSE,
              g_list_free (noeuds_suppr);
                g_list_free (barres_suppr);
-               g_list_free (charges_suppr);)
+               g_list_free (charges_suppr); )
         break;
       }
       default :
@@ -2168,7 +2345,7 @@ _1992_1_1_barres_supprime_liste (Projet *p,
                   (gettext ("Type de charge %d inconnu.\n"), charge->type);
                     g_list_free (noeuds_suppr);
                     g_list_free (barres_suppr);
-                    g_list_free (charges_suppr);)
+                    g_list_free (charges_suppr); )
         break;
       }
     }
@@ -2194,10 +2371,12 @@ _1992_1_1_barres_supprime_liste (Projet *p,
        FALSE)
   
   if ((noeuds_suppr != NULL) || (barres_suppr != NULL))
+  {
     BUG (EF_calculs_free (p),
          FALSE,
          g_list_free (noeuds_suppr);
-           g_list_free (barres_suppr);)
+           g_list_free (barres_suppr); )
+  }
   
   // On supprime les noeuds
   list_parcours = noeuds_suppr;
@@ -2232,15 +2411,25 @@ _1992_1_1_barres_supprime_liste (Projet *p,
   
 #ifdef ENABLE_GTK
   if ((UI_APP.builder != NULL) && (noeuds_suppr != NULL))
+  {
     EF_gtk_appuis_select_changed (NULL, p);
+  }
   if ((UI_NOE.builder != NULL) && (noeuds_suppr != NULL))
+  {
     EF_noeuds_set_supprimer_visible (TRUE, p);
+  }
   if ((UI_SEC.builder != NULL) && (barres_suppr != NULL))
+  {
     EF_gtk_sections_select_changed (NULL, p);
+  }
   if ((UI_MAT.builder != NULL) && (barres_suppr != NULL))
+  {
     EF_gtk_materiaux_select_changed (NULL, p);
+  }
   if ((UI_REL.builder != NULL) && (barres_suppr != NULL))
+  {
     EF_gtk_relachements_select_changed (NULL, p);
+  }
 #endif
   g_list_free (noeuds_suppr);
   g_list_free (barres_suppr);
@@ -2249,8 +2438,6 @@ _1992_1_1_barres_supprime_liste (Projet *p,
 }
 
 
-gboolean
-_1992_1_1_barres_free (Projet *p)
 /**
  * \brief Libère l'ensemble des barres.
  * \param p : la variable projet.
@@ -2260,6 +2447,8 @@ _1992_1_1_barres_free (Projet *p)
  *     - p == NULL,
  *     - #EF_calculs_free.
  */
+gboolean
+_1992_1_1_barres_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   

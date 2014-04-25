@@ -47,9 +47,6 @@ GTK_WINDOW_DESTROY (ef, barres_add, );
 GTK_WINDOW_KEY_PRESS (ef, barres_add);
 
 
-void
-EF_gtk_barres_add_add_clicked (GtkButton *button,
-                               Projet    *p)
 /**
  * \brief Aoute une nouvelle barre.
  * \param button : composant à l'origine de l'évènement,
@@ -59,16 +56,19 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_add_add_clicked (GtkButton *button,
+                               Projet    *p)
 {
-  int             type;
+  int32_t         type;
   char           *nom;
   Section        *section;
   EF_Materiau    *materiau;
-  unsigned int    noeud_debut;
-  unsigned int    noeud_fin;
+  uint32_t        noeud_debut;
+  uint32_t        noeud_fin;
   double          angle;
   EF_Relachement *relachement;
-  unsigned int    nb_noeuds;
+  uint16_t        nb_noeuds;
   GtkTreeModel   *model;
   GtkTreeIter     Iter;
   
@@ -76,19 +76,21 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   BUGCRIT (UI_BARADD.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Barre");)
+                     "Ajout Barre"); )
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
                     UI_BARADD.builder, "EF_gtk_barres_add_section_combobox")));
   type = gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
                     UI_BARADD.builder, "EF_gtk_barres_add_section_combobox")));
   if (type == -1)
+  {
     return;
+  }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
   BUG (section = EF_sections_cherche_nom (p, nom, TRUE),
        ,
-       free (nom);)
+       free (nom); )
   free (nom);
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
@@ -96,12 +98,14 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   type = gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
                    UI_BARADD.builder, "EF_gtk_barres_add_materiau_combobox")));
   if (type == -1)
+  {
     return;
+  }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
   BUG (materiau = EF_materiaux_cherche_nom (p, nom, TRUE),
        ,
-       free (nom);)
+       free (nom); )
   free (nom);
   
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (gtk_builder_get_object (
@@ -109,16 +113,20 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   type = gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
                 UI_BARADD.builder, "EF_gtk_barres_add_relachement_combobox")));
   if (type == -1)
+  {
     return;
+  }
   else if (type == 0)
+  {
     relachement = NULL;
+  }
   else
   {
     gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
     gtk_tree_model_get (model, &Iter, 0, &nom, -1);
     BUG (relachement = EF_relachement_cherche_nom (p, nom, TRUE),
          ,
-         free (nom);)
+         free (nom); )
     free (nom);
   }
   
@@ -136,7 +144,9 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
                            FALSE);
   if ((EF_noeuds_cherche_numero (p, noeud_debut, TRUE) == NULL) ||
       (EF_noeuds_cherche_numero (p, noeud_fin, TRUE) == NULL))
+  {
     return;
+  }
   
   angle = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
@@ -145,18 +155,20 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
                        360.,
                        FALSE);
   if (isnan (angle))
+  {
     return;
+  }
   
   type = gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
                        UI_BARADD.builder, "EF_gtk_barres_add_type_combobox")));
   
-  nb_noeuds = conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
+  nb_noeuds = conv_buff_hu (GTK_TEXT_BUFFER (gtk_builder_get_object (
        UI_BARADD.builder, "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")),
-                           0,
-                           TRUE,
-                           UINT_MAX,
-                           FALSE);
-  BUG (nb_noeuds != UINT_MAX, )
+                            0,
+                            TRUE,
+                            UINT16_MAX,
+                            FALSE);
+  BUG (nb_noeuds != UINT16_MAX, )
   
   BUG (_1992_1_1_barres_ajout (p,
                                (Type_Element) type,
@@ -174,9 +186,6 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
 }
 
 
-void
-EF_gtk_barres_add_check_add (GtkWidget *widget,
-                             Projet    *p)
 /**
  * \brief Vérifie à chaque modification d'un champ si la fenêtre possède toutes
  *        les informations correctes pour créer une barre et active / désactive
@@ -188,6 +197,9 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_add_check_add (GtkWidget *widget,
+                             Projet    *p)
 {
   gboolean       ok = FALSE;
   EF_Noeud      *noeud1, *noeud2;
@@ -198,7 +210,7 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   BUGCRIT (UI_BARADD.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Barre");)
+                     "Ajout Barre"); )
   
   noeud1 = EF_noeuds_cherche_numero (
              p,
@@ -215,9 +227,13 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   gtk_text_buffer_get_iter_at_offset (buff, &end, -1);
   gtk_text_buffer_remove_all_tags (buff, &start, &end);
   if (noeud1 == NULL)
+  {
     gtk_text_buffer_apply_tag_by_name (buff, "mauvais", &start, &end);
+  }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (buff, "OK", &start, &end);
+  }
   noeud2 = EF_noeuds_cherche_numero (
              p,
              conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
@@ -233,9 +249,13 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   gtk_text_buffer_get_iter_at_offset (buff, &end, -1);
   gtk_text_buffer_remove_all_tags (buff, &start, &end);
   if (noeud2 == NULL)
+  {
     gtk_text_buffer_apply_tag_by_name (buff, "mauvais", &start, &end);
+  }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (buff, "OK", &start, &end);
+  }
   
   if ((gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
               UI_BARADD.builder, "EF_gtk_barres_add_type_combobox"))) != -1) &&
@@ -248,7 +268,9 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
       (noeud1 != NULL) &&
       (noeud2 != NULL) &&
       (noeud1 != noeud2))
+  {
     ok = TRUE;
+  }
   
   if (conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_BARADD.builder,
                           "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")),
@@ -256,14 +278,18 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
                    TRUE,
                    UINT_MAX,
                    FALSE) == UINT_MAX)
+  {
     ok = FALSE;
+  }
   if (isnan (conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
              -360.,
              FALSE,
              360.,
              FALSE)))
+  {
     ok = FALSE;
+  }
   
   gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                            UI_BARADD.builder, "EF_gtk_barres_add_button_add")),
@@ -273,9 +299,6 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
 }
 
 
-void
-EF_gtk_barres_ajouter (GtkButton *button,
-                       Projet    *p)
 /**
  * \brief Création de la fenêtre permettant d'ajouter des barres.
  * \param button : composant à l'origine de l'évènement,
@@ -285,6 +308,9 @@ EF_gtk_barres_ajouter (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_barres_ajouter (GtkButton *button,
+                       Projet    *p)
 {
   BUGPARAM (p, "%p", p, )
   if (UI_BARADD.builder != NULL)
@@ -299,7 +325,7 @@ EF_gtk_barres_ajouter (GtkButton *button,
                                        NULL) != 0,
         ,
         (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                  "Ajout Barre");)
+                  "Ajout Barre"); )
   gtk_builder_connect_signals (UI_BARADD.builder, p);
   
   UI_BARADD.window = GTK_WIDGET (gtk_builder_get_object (UI_BARADD.builder,
@@ -329,16 +355,18 @@ EF_gtk_barres_ajouter (GtkButton *button,
     BUGCRIT (nb_barres = g_strdup_printf ("%d",
               ((EF_Barre *) g_list_last (p->modele.barres)->data)->numero + 1),
              ,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_numero_label2")),
                         nb_barres);
     free (nb_barres);
   }
   else
+  {
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_numero_label2")),
                         "0");
+  }
   
   gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                            UI_BARADD.builder, "EF_gtk_barres_add_button_add")),

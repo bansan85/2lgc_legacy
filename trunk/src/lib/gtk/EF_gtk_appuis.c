@@ -44,9 +44,6 @@ GTK_WINDOW_DESTROY (ef, appuis, );
 GTK_WINDOW_KEY_PRESS (ef, appuis);
 
 
-void
-EF_gtk_appuis_ajouter (GtkButton *button,
-                       Projet    *p)
 /**
  * \brief Ajoute un nouvel appui.
  * \param button : composant à l'origine de l'évènement,
@@ -57,6 +54,9 @@ EF_gtk_appuis_ajouter (GtkButton *button,
  *     - interface graphique non initialisée,
  *     - erreur d'allocation mémoire.
  */
+void
+EF_gtk_appuis_ajouter (GtkButton *button,
+                       Projet    *p)
 {
   EF_Appui     *appui;
   GtkTreePath  *path;
@@ -66,9 +66,10 @@ EF_gtk_appuis_ajouter (GtkButton *button,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (EF_appuis_cherche_nom (p, gettext ("Sans nom"), FALSE) == NULL)
+  {
     BUG (appui = EF_appuis_ajout (p,
                                   gettext ("Sans nom"),
                                   EF_APPUI_LIBRE,
@@ -78,21 +79,22 @@ EF_gtk_appuis_ajouter (GtkButton *button,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE),
          )
+  }
   else
   {
-    char *nom;
-    int   i = 2;
+    char    *nom;
+    uint16_t i = 2;
     
     BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
              ,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     while (EF_appuis_cherche_nom (p, nom, FALSE) != NULL)
     {
       i++;
       free (nom);
       BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
                ,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
     }
     BUG (appui = EF_appuis_ajout (p,
                                   nom,
@@ -103,7 +105,7 @@ EF_gtk_appuis_ajouter (GtkButton *button,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE),
          ,
-         free (nom);)
+         free (nom); )
     free (nom);
   }
   
@@ -122,9 +124,6 @@ EF_gtk_appuis_ajouter (GtkButton *button,
 }
 
 
-void
-EF_gtk_appuis_supprimer (GtkButton *button,
-                         Projet    *p)
 /**
  * \brief Supprime l'appui sélectionné dans le treeview.
  * \param button : composant à l'origine de l'évènement,
@@ -134,6 +133,9 @@ EF_gtk_appuis_supprimer (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_appuis_supprimer (GtkButton *button,
+                         Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -143,13 +145,15 @@ EF_gtk_appuis_supprimer (GtkButton *button,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
@@ -161,10 +165,6 @@ EF_gtk_appuis_supprimer (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
-                                  GdkEvent  *event,
-                                  Projet    *p)
 /**
  * \brief Supprime un appui sans dépendance si la touche SUPPR est appuyée.
  * \param widget : composant à l'origine de l'évènement,
@@ -176,12 +176,16 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
  *     - interface graphique non initialisée.
  *  
  */
+gboolean
+EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
+                                  GdkEvent  *event,
+                                  Projet    *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   BUGCRIT (UI_APP.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -211,20 +215,21 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
                                                 NULL,
                                                 FALSE,
                                                 FALSE) == FALSE)
+      {
         EF_gtk_appuis_supprimer (NULL, p);
+      }
       
       g_list_free (liste_appuis);
     }
     return TRUE;
   }
   else
+  {
     return FALSE;
+  }
 }
 
 
-void
-EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
-                                          Projet    *p)
 /**
  * \brief Supprime l'appui sélectionné dans le treeview et ainsi que les noeuds
  *        utilisant l'appui.
@@ -235,6 +240,9 @@ EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
+                                          Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -244,13 +252,15 @@ EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
@@ -262,9 +272,6 @@ EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
 }
 
 
-void
-EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
-                                          Projet    *p)
 /**
  * \brief Supprime l'appui sélectionné dans le treeview et les noeuds le
  *        possédant deviennent sans appui.
@@ -275,6 +282,9 @@ EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
+                                          Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -284,13 +294,15 @@ EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
@@ -300,11 +312,6 @@ EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
 }
 
 
-void
-EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
-                         gchar               *path_string,
-                         gchar               *new_text,
-                         Projet              *p)
 /**
  * \brief Modification d'un appui.
  * \param cell : cellule en cours,
@@ -316,20 +323,26 @@ EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
  *     - p == NULL,
  *     - interface graphique non initialisée.
 */
+void
+EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
+                         gchar               *path_string,
+                         gchar               *new_text,
+                         Projet              *p)
 {
   GtkTreeModel  *model;
   GtkTreeIter    iter;
   GtkTreePath   *path;
   EF_Appui      *appui;
-  int            column;
+  uint8_t        column;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
-  column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+  column = (uint8_t) (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell),
+                                                          "column")) - 1);
   
   model = GTK_TREE_MODEL (UI_APP.appuis);
   path = gtk_tree_path_new_from_string (path_string);
@@ -338,22 +351,23 @@ EF_gtk_appuis_edit_type (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
 
   if (strcmp (new_text, gettext ("Libre")) == 0)
-    BUG (EF_appuis_edit (appui, column - 1, EF_APPUI_LIBRE, p), )
+  {
+    BUG (EF_appuis_edit (appui, column, EF_APPUI_LIBRE, p), )
+  }
   else if (strcmp (new_text, gettext ("Bloqué")) == 0)
-    BUG (EF_appuis_edit (appui, column - 1, EF_APPUI_BLOQUE, p), )
+  {
+    BUG (EF_appuis_edit (appui, column, EF_APPUI_BLOQUE, p), )
+  }
   else
+  {
     FAILINFO ( ,
-              (gettext ("Type d'appui %s inconnu.\n"), new_text);)
+              (gettext ("Type d'appui %s inconnu.\n"), new_text); )
+  }
   
   return;
 }
 
 
-void
-EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
-                        gchar               *path_string,
-                        gchar               *new_text,
-                        Projet              *p)
 /**
  * \brief Modification du nom d'un appui.
  * \param cell : cellule en cours,
@@ -365,6 +379,11 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
  *     - p == NULL,
  *     - interface graphique non initialisée.
 */
+void
+EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
+                        gchar               *path_string,
+                        gchar               *new_text,
+                        Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -375,7 +394,7 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   model = GTK_TREE_MODEL (UI_APP.appuis);
   path = gtk_tree_path_new_from_string (path_string);
@@ -383,18 +402,19 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   if (strcmp (appui->nom, new_text) == 0)
+  {
     return;
+  }
 
   if (EF_appuis_renomme (appui, new_text, p, FALSE))
+  {
     return;
+  }
   
   return;
 }
 
 
-void
-EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
-                              Projet           *p)
 /**
  * \brief En fonction de la sélection, active ou désactive le bouton supprimer.
  * \param treeselection : composant à l'origine de l'évènement,
@@ -404,6 +424,9 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
+                              Projet           *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -412,7 +435,7 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer un.
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -490,9 +513,6 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void
-EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
-                                      Projet    *p)
 /**
  * \brief Affiche la liste des dépendances dans le menu lorsqu'on clique sur le
  *        bouton.
@@ -503,6 +523,9 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
+                                      Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -514,13 +537,15 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Appui");)
+                     "Appui"); )
   
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_APP.builder, "EF_appuis_treeview_select")),
                                         &model,
                                         &Iter))
-    FAILINFO ( , (gettext ("Aucun élément n'est sélectionné.\n"));)
+  {
+    FAILINFO ( , (gettext ("Aucun élément n'est sélectionné.\n")); )
+  }
   
   gtk_tree_model_get (model, &Iter, 0, &appui, -1);
   
@@ -554,18 +579,20 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
              (gettext ("Erreur d'allocation mémoire.\n"));
                g_list_free (liste_noeuds_dep);
                g_list_free (liste_barres_dep);
-               g_list_free (liste_charges_dep);)
+               g_list_free (liste_charges_dep); )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                       UI_APP.builder, "EF_appuis_supprimer_menu_suppr_noeud")),
                              desc);
     free (desc);
   }
   else
+  {
     FAILINFO ( ,
               (gettext ("L'élément ne possède aucune dépendance.\n"));
                 g_list_free (liste_noeuds_dep);
                 g_list_free (liste_barres_dep);
-                g_list_free (liste_charges_dep);)
+                g_list_free (liste_charges_dep); )
+  }
   
   g_list_free (liste_noeuds_dep);
   g_list_free (liste_barres_dep);
@@ -575,12 +602,6 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
 }
 
 
-void
-EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche le nom de l'appui.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -590,6 +611,12 @@ EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Appui *appui;
   
@@ -622,7 +649,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
                , \
                (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
                          #DATA, \
-                         gettext ("Libre"));) \
+                         gettext ("Libre")); ) \
       break; \
     } \
     case EF_APPUI_BLOQUE : \
@@ -632,7 +659,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
                , \
                (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
                          #DATA, \
-                         gettext ("Bloqué"));) \
+                         gettext ("Bloqué")); ) \
       break; \
     } \
     default : \
@@ -640,7 +667,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
       FAILINFO (, \
                 (gettext("Le type d'appui de %s (%d) est inconnu.\n"), \
                          #DATA, \
-                         appui->DATA);) \
+                         appui->DATA); ) \
     } \
   } \
   \
@@ -660,8 +687,6 @@ EF_GTK_APPUIS_RENDER (6, rz);
  */
 
 
-void
-EF_gtk_appuis (Projet *p)
 /**
  * \brief Création de la fenêtre permettant d'afficher les appuis sous forme
  *        d'un tableau.
@@ -671,6 +696,8 @@ EF_gtk_appuis (Projet *p)
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_appuis (Projet *p)
 {
   GList *list_parcours;
   
@@ -687,7 +714,7 @@ EF_gtk_appuis (Projet *p)
                                        NULL) != 0,
         ,
         (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                  "Appui");)
+                  "Appui"); )
   gtk_builder_connect_signals (UI_APP.builder, p);
   
   UI_APP.window = GTK_WIDGET (gtk_builder_get_object (UI_APP.builder,

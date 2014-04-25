@@ -34,6 +34,7 @@
 #include "EF_noeuds.h"
 #include "EF_resultat.h"
 #include "EF_gtk_sections.h"
+#include "EF_gtk_resultats.h"
 
 
 GTK_WINDOW_CLOSE (ef, resultats);
@@ -45,11 +46,6 @@ GTK_WINDOW_DESTROY (ef, resultats, );
 GTK_WINDOW_KEY_PRESS (ef, resultats);
 
 
-void
-EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
-                                  GtkWidget   *page,
-                                  gint         page_num,
-                                  Projet      *p)
 /**
  * \brief Empêche le changement de page si on clique sur le dernier onglet sans
  *        cliquer sur le bouton d'ajout d'onglet.
@@ -59,6 +55,11 @@ EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
  * \param p : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
+                                  GtkWidget   *page,
+                                  gint         page_num,
+                                  Projet      *p)
 {
 // En suspend pour le moment afin que les flèches permettant de faire défiler
 // les onglets affichent cette dernière page.
@@ -69,9 +70,6 @@ EF_gtk_resultats_notebook_switch (GtkNotebook *notebook,
 }
 
 
-gboolean
-EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
-                               Projet                   *p)
 /**
  * \brief Remplit/actualise la page du treeview via la variable res.
  * \param res : caractéristiques de la page à remplir,
@@ -82,18 +80,21 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
  *     - res == FALSE,
  *     - interface graphique non initialisée.
  */
+gboolean
+EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
+                               Projet                   *p)
 {
-  unsigned int i;
-  GList       *actions = NULL;
-  Action      *action;
-  GList       *comb = NULL;
+  uint8_t i;
+  GList  *actions = NULL;
+  Action *action;
+  GList  *comb = NULL;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGPARAMCRIT (res, "%p", res, FALSE)
   BUGCRIT (UI_RES.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   
   switch (gtk_combo_box_get_active (UI_RES.combobox))
   {
@@ -106,7 +107,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         return TRUE;
       }
       BUG (action = g_list_nth_data (p->actions,
-                                     gtk_combo_box_get_active (
+                                     (guint) gtk_combo_box_get_active (
                                                          UI_RES.combobox_cas)),
            FALSE)
       actions = g_list_append (actions, action);
@@ -173,12 +174,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         default :
         {
           FAILCRIT (FALSE,
-                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
+                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas"); )
           break;
         }
       }
       comb = g_list_nth (comb,
-                      gtk_combo_box_get_active (UI_RES.combobox_ponderations));
+                         (guint) gtk_combo_box_get_active (
+                                                UI_RES.combobox_ponderations));
       
       BUG (action = _1990_action_ponderation_resultat (comb->data, p), FALSE)
       actions = g_list_append (actions, action);
@@ -244,7 +246,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         default :
         {
           FAILCRIT (FALSE,
-                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
+                    (gettext ("Paramètre %s incorrect.\n"), "combobox_cas"); )
           break;
         }
       }
@@ -259,7 +261,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
           BUG (action = _1990_action_ponderation_resultat (list_parcours->data,
                                                            p),
                FALSE,
-               g_list_free (actions);)
+               g_list_free (actions); )
           actions = g_list_append (actions, action);
           list_parcours = g_list_next (list_parcours);
         }
@@ -269,13 +271,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
     default :
     {
       FAILCRIT (FALSE,
-                (gettext ("Paramètre %s incorrect.\n"), "combobox");)
+                (gettext ("Paramètre %s incorrect.\n"), "combobox"); )
       break;
     }
   }
   BUGCRIT (actions,
            FALSE,
-           (gettext ("Impossible\n"));)
+           (gettext ("Impossible\n")); )
   
   #define FREE_ALL { \
     if (gtk_combo_box_get_active (UI_RES.combobox) == 0) \
@@ -321,9 +323,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
           case FILTRE_NOEUD_APPUI :
           {
             if (noeud->appui == NULL)
+            {
               ok = FALSE;
+            }
             else
+            {
               ok = TRUE;
+            }
             break;
           }
           default :
@@ -337,10 +343,10 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         
         if (ok)
         {
-          GtkTreeIter  Iter;
-          unsigned int j;
-          char        *tmp_double;
-          char         tmp_double30[30];
+          GtkTreeIter Iter;
+          uint8_t     j;
+          char       *tmp_double;
+          char        tmp_double30[30];
           
           gtk_list_store_append (res->list_store, &Iter);
           for (j = 1; j <= res->col_tab[0]; j++)
@@ -359,7 +365,9 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               {
                 EF_Point point;
                 
-                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                BUG (EF_noeuds_renvoie_position (noeud, &point),
+                     FALSE,
+                     FREE_ALL)
                 conv_f_c (point.x, tmp_double30, DECIMAL_DISTANCE);
                 
                 gtk_list_store_set (res->list_store,
@@ -373,7 +381,9 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               {
                 EF_Point point;
                 
-                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                BUG (EF_noeuds_renvoie_position (noeud, &point),
+                     FALSE,
+                     FREE_ALL)
                 conv_f_c (point.y, tmp_double30, DECIMAL_DISTANCE);
                 
                 gtk_list_store_set (res->list_store,
@@ -387,7 +397,9 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               {
                 EF_Point point;
                 
-                BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE, FREE_ALL)
+                BUG (EF_noeuds_renvoie_position (noeud, &point),
+                     FALSE,
+                     FREE_ALL)
                 conv_f_c (point.z, tmp_double30, DECIMAL_DISTANCE);
                 
                 gtk_list_store_set (res->list_store,
@@ -404,14 +416,14 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_REACTION_APPUI_MY :
               case COLRES_REACTION_APPUI_MZ :
               {
-                BUG (EF_resultat_noeud_reaction_appui (actions,
-                                                       noeud,
-                                                       res->col_tab[j] -
-                                                        COLRES_REACTION_APPUI_FX,
-                                                       p,
-                                                       &tmp_double,
-                                                       NULL,
-                                                       NULL),
+                BUG (EF_resultat_noeud_reaction_appui (
+                       actions,
+                       noeud,
+                       (uint8_t) (res->col_tab[j] - COLRES_REACTION_APPUI_FX),
+                       p,
+                       &tmp_double,
+                       NULL,
+                       NULL),
                      FALSE,
                      FREE_ALL)
                 gtk_list_store_set (res->list_store,
@@ -428,14 +440,14 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_DEPLACEMENT_RY :
               case COLRES_DEPLACEMENT_RZ :
               {
-                BUG (EF_resultat_noeud_deplacement (actions,
-                                                    noeud,
-                                                    res->col_tab[j] -
-                                                      COLRES_DEPLACEMENT_UX,
-                                                    p,
-                                                    &tmp_double,
-                                                    NULL,
-                                                    NULL),
+                BUG (EF_resultat_noeud_deplacement (
+                       actions,
+                       noeud,
+                       (uint8_t) (res->col_tab[j] - COLRES_DEPLACEMENT_UX),
+                       p,
+                       &tmp_double,
+                       NULL,
+                       NULL),
                      FALSE,
                      FREE_ALL)
                 gtk_list_store_set (res->list_store,
@@ -547,8 +559,8 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         
         if (ok)
         {
-          GtkTreeIter  Iter;
-          unsigned int j;
+          GtkTreeIter Iter;
+          uint8_t     j;
           
           gtk_list_store_append (res->list_store, &Iter);
           
@@ -636,10 +648,11 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   
                   liste = g_list_append (
                             liste,
-                            _1990_action_efforts_renvoie (action2,
-                                                          res->col_tab[j] -
-                                                          COLRES_BARRES_PIXBUF_N,
-                                                          i));
+                            _1990_action_efforts_renvoie (
+                              action2,
+                              (uint8_t) (res->col_tab[j] -
+                                                       COLRES_BARRES_PIXBUF_N),
+                              i));
                   
                   list_parcours2 = g_list_next (list_parcours2);
                 }
@@ -674,10 +687,11 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                     
                     liste = g_list_append (
                               liste,
-                              _1990_action_efforts_renvoie (action2,
-                                                            res->col_tab[j] -
-                                                            COLRES_BARRES_DESC_N,
-                                                            i));
+                              _1990_action_efforts_renvoie (
+                                action2,
+                                (uint8_t) (res->col_tab[j] -
+                                                         COLRES_BARRES_DESC_N),
+                                i));
                     
                     list_parcours2 = g_list_next (list_parcours2);
                   }
@@ -687,11 +701,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                                                          &f_max,
                                                          &comb_min,
                                                          &comb_max) == FALSE)
+                  {
                     BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
                              FALSE,
                              (gettext ("Erreur d'allocation mémoire.\n"));
                                FREE_ALL
                                FREE_ALL2)
+                  }
                   else
                   {
                     tmp1 = common_fonction_affiche_caract(
@@ -723,7 +739,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   tmp = common_fonction_affiche_caract (
                           _1990_action_efforts_renvoie (
                             action2,
-                            res->col_tab[j] - COLRES_BARRES_DESC_N,
+                            (uint8_t) (res->col_tab[j] - COLRES_BARRES_DESC_N),
                             i),
                           DECIMAL_DISTANCE,
                           res->col_tab[j] < COLRES_BARRES_DESC_MX ?
@@ -753,7 +769,8 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                               liste,
                               _1990_action_efforts_renvoie (
                                 action2,
-                                res->col_tab[j] - COLRES_BARRES_EQ_N,
+                                (uint8_t) (res->col_tab[j] -
+                                                           COLRES_BARRES_EQ_N),
                                 i));
                     
                     list_parcours2 = g_list_next (list_parcours2);
@@ -764,11 +781,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                                                          &f_max,
                                                          &comb_min,
                                                          &comb_max) == FALSE)
+                  {
                     BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
                              FALSE,
                              (gettext ("Erreur d'allocation mémoire.\n"));
                                FREE_ALL
                                FREE_ALL2)
+                  }
                   else
                   {
                     BUG (common_fonction_conversion_combinaisons (&comb_min,
@@ -813,7 +832,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   tmp = common_fonction_renvoie (
                           _1990_action_efforts_renvoie (
                             action2,
-                            res->col_tab[j] - COLRES_BARRES_EQ_N,
+                            (uint8_t) (res->col_tab[j] - COLRES_BARRES_EQ_N),
                             i),
                           NULL,
                           res->col_tab[j] < COLRES_BARRES_EQ_MX ?
@@ -840,19 +859,25 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   Action *action2 = list_parcours2->data;
                   
                   if (res->col_tab[j] < COLRES_DEF_PIXBUF_RX)
+                  {
                     liste = g_list_append (
                               liste,
                               _1990_action_deformation_renvoie (
                                 action2,
-                                res->col_tab[j] - COLRES_DEF_PIXBUF_UX,
+                                (uint8_t) (res->col_tab[j] -
+                                                         COLRES_DEF_PIXBUF_UX),
                                 i));
+                  }
                   else
+                  {
                     liste = g_list_append (
                               liste,
                               _1990_action_rotation_renvoie (
                                 action2,
-                                res->col_tab[j] - COLRES_DEF_PIXBUF_RX,
+                                (uint8_t) (res->col_tab[j] -
+                                                         COLRES_DEF_PIXBUF_RX),
                                 i));
+                  }
                   
                   list_parcours2 = g_list_next (list_parcours2);
                 }
@@ -886,19 +911,25 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                     Action *action2 = list_parcours2->data;
                     
                     if (res->col_tab[j] < COLRES_DEF_DESC_RX)
+                    {
                       liste = g_list_append (
                                 liste,
                                 _1990_action_deformation_renvoie (
                                   action2,
-                                  res->col_tab[j] - COLRES_DEF_DESC_UX,
+                                  (uint8_t) (res->col_tab[j] -
+                                                           COLRES_DEF_DESC_UX),
                                   i));
+                    }
                     else
+                    {
                       liste = g_list_append (
                                 liste,
                                 _1990_action_rotation_renvoie (
                                   action2,
-                                  res->col_tab[j] - COLRES_DEF_DESC_RX,
+                                  (uint8_t) (res->col_tab[j] -
+                                                           COLRES_DEF_DESC_RX),
                                   i));
+                    }
                     
                     list_parcours2 = g_list_next (list_parcours2);
                   }
@@ -908,11 +939,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                                                          &f_max,
                                                          &comb_min,
                                                          &comb_max) == FALSE)
+                  {
                     BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
                              FALSE,
                              (gettext ("Erreur d'allocation mémoire.\n"));
                                FREE_ALL
                                FREE_ALL2)
+                  }
                   else
                   {
                     tmp1 = common_fonction_affiche_caract (
@@ -942,21 +975,25 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   Action *action2 = list_parcours2->data;
                   
                   if (res->col_tab[j] < COLRES_DEF_DESC_RX)
+                  {
                     tmp = common_fonction_affiche_caract (
                             _1990_action_deformation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEF_DESC_UX,
+                              (uint8_t) (res->col_tab[j] - COLRES_DEF_DESC_UX),
                               i),
                             DECIMAL_DISTANCE,
                             DECIMAL_DEPLACEMENT);
+                  }
                   else
+                  {
                     tmp = common_fonction_affiche_caract (
                             _1990_action_rotation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEF_DESC_RX,
+                              (uint8_t) (res->col_tab[j] - COLRES_DEF_DESC_RX),
                               i),
                             DECIMAL_DISTANCE,
                             DECIMAL_ROTATION);
+                  }
                 }
                 gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
                 
@@ -978,19 +1015,23 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                     Action *action2 = list_parcours2->data;
                     
                     if (res->col_tab[j] < COLRES_DEF_RX)
+                    {
                       liste = g_list_append (
                                 liste,
                                 _1990_action_deformation_renvoie (
                                   action2,
-                                  res->col_tab[j] - COLRES_DEF_UX,
+                                  (uint8_t) (res->col_tab[j] - COLRES_DEF_UX),
                                   i));
+                    }
                     else
+                    {
                       liste = g_list_append (
                                 liste,
                                 _1990_action_rotation_renvoie (
                                   action2,
-                                  res->col_tab[j] - COLRES_DEF_RX,
+                                  (uint8_t) (res->col_tab[j] - COLRES_DEF_RX),
                                   i));
+                    }
                     
                     list_parcours2 = g_list_next (list_parcours2);
                   }
@@ -1000,11 +1041,13 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                                                          &f_max,
                                                          &comb_min,
                                                          &comb_max) == FALSE)
+                  {
                     BUGCRIT (tmp = g_strdup_printf (gettext ("Erreur")),
                              FALSE,
                              (gettext ("Erreur d'allocation mémoire.\n"));
                                FREE_ALL
                                FREE_ALL2)
+                  }
                   else
                   {
                     BUG (common_fonction_conversion_combinaisons (&comb_min,
@@ -1048,21 +1091,25 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                   Action *action2 = list_parcours2->data;
                   
                   if (res->col_tab[j] < COLRES_DEF_RX)
+                  {
                     tmp = common_fonction_renvoie (
                             _1990_action_deformation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEF_UX,
+                              (uint8_t) (res->col_tab[j] - COLRES_DEF_UX),
                               i),
                             NULL,
                             DECIMAL_DEPLACEMENT);
+                  }
                   else
+                  {
                     tmp = common_fonction_renvoie (
                             _1990_action_rotation_renvoie (
                               action2,
-                              res->col_tab[j] - COLRES_DEF_RX,
+                              (uint8_t) (res->col_tab[j] - COLRES_DEF_RX),
                               i),
                             NULL,
                             DECIMAL_ROTATION);
+                  }
                 }
                 gtk_list_store_set (res->list_store, &Iter, j - 1, tmp, -1);
                 
@@ -1145,7 +1192,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
     default :
     {
       FAILCRIT (FALSE,
-                (gettext ("La première colonne ne peut contenir que la liste des nœuds ou des barres.\n"));)
+                (gettext ("La première colonne ne peut contenir que la liste des nœuds ou des barres.\n")); )
       break;
     }
   }
@@ -1158,9 +1205,6 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
 }
 
 
-gboolean
-EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
-                           Projet                   *p)
 /**
  * \brief Ajoute une page au treeview de la fenêtre affichant les résultats en
  *        fonction de la description fournie via la variable res.
@@ -1172,20 +1216,23 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
  *     - res == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
+                           Projet                   *p)
 {
   GtkWidget         *p_scrolled_window; 
-  unsigned int       i;
+  uint8_t            i;
   GType             *col_type;
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *column;
-  double             xalign;
+  float              xalign;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGPARAMCRIT (res, "%p", res, FALSE)
   BUGCRIT (UI_RES.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   
   p_scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (p_scrolled_window),
@@ -1205,9 +1252,13 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
   // (affichage sous forme ***/***) ou aligne à droite si elle affiche un
   // nombre à virgule flottante (pour aligner les virgules)
   if (gtk_combo_box_get_active (UI_RES.combobox) == 2)
+  {
     xalign = 0.5;
+  }
   else
+  {
     xalign = 1.;
+  }
   
   res->treeview = GTK_TREE_VIEW (gtk_tree_view_new ());
   gtk_container_add (GTK_CONTAINER (p_scrolled_window),
@@ -1215,7 +1266,7 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
   
   BUGCRIT (col_type = malloc ((res->col_tab[0] + 1) * sizeof (GType)),
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   for (i = 1; i <= res->col_tab[0]; i++)
   {
@@ -1226,13 +1277,13 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i == 1,
                  FALSE,
                  (gettext ("La liste des noeuds doit être spécifiée en tant que première colonne.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_INT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Noeuds"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1242,13 +1293,13 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i == 1,
                  FALSE,
                  (gettext ("La liste des barres doit être spécifiée en tant que première colonne.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_INT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Barres"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1258,18 +1309,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                           "x");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("x [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    1.,
                                    0));
         break;
@@ -1279,18 +1330,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "y");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("y [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    1.,
                                    0));
         break;
@@ -1300,18 +1351,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "z");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("z [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    1.,
                                    0));
         break;
@@ -1321,18 +1372,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Fx");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("F<sub>x</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1342,18 +1393,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Fy");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("F<sub>y</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1363,18 +1414,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Fz");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("F<sub>z</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1383,18 +1434,19 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
       {
         BUGCRIT (i != 1,
                  FALSE,
-                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));free (col_type);)
+                 (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Mx");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>x</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1404,18 +1456,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "My");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>y</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1425,18 +1477,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Mz");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>z</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1446,18 +1498,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Ux");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>x</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1467,18 +1519,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Uy");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>y</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1488,18 +1540,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Uz");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>z</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1509,18 +1561,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Rx");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>x</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1530,19 +1582,20 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Ry");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>y</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
-                                   xalign,  0));
+                                   i - 1U,
+                                   xalign,
+                                   0));
         break;
       }
       case COLRES_DEPLACEMENT_RZ :
@@ -1550,18 +1603,18 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_NOEUDS,
                  FALSE,
                  (gettext ("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"),
                            "Rx");
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>z</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    xalign,
                                    0));
         break;
@@ -1571,17 +1624,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_DOUBLE;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("L [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    1.,
                                    DECIMAL_DISTANCE));
         break;
@@ -1591,17 +1644,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Effort normal"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1611,17 +1664,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Effort tranchant selon Y"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1631,17 +1684,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Effort tranchant selon Z"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1651,17 +1704,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Moment de torsion"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1671,17 +1724,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Moment fléchissant selon y"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1691,17 +1744,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Moment fléchissant selon z"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1711,17 +1764,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de N [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1731,17 +1784,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de T<sub>y</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1751,17 +1804,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de T<sub>z</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1771,17 +1824,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de M<sub>x</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1791,17 +1844,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de M<sub>y</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1811,17 +1864,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de M<sub>z</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1831,17 +1884,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("N [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1851,17 +1904,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("T<sub>y</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1871,17 +1924,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("T<sub>z</sub> [N]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1891,17 +1944,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>x</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1911,17 +1964,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>y</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1931,17 +1984,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("M<sub>z</sub> [N.m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -1951,17 +2004,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Déformation de la barre selon x"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1971,17 +2024,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Déformation de la barre selon y"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -1991,17 +2044,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Déformation de la barre selon z"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -2011,17 +2064,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Rotation de la barre selon x"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -2031,17 +2084,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Rotation de la barre selon y"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -2051,17 +2104,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_OBJECT;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Rotation de la barre selon z"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.5,
                                    0));
         break;
@@ -2071,17 +2124,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de u<sub>x</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2091,17 +2144,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de u<sub>y</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2111,17 +2164,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de u<sub>z</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2131,17 +2184,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de r<sub>x</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2151,17 +2204,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de r<sub>y</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2171,17 +2224,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("Points caractéristiques de r<sub>z</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2191,17 +2244,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>x</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2211,17 +2264,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>y</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2231,17 +2284,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("u<sub>z</sub> [m]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2251,17 +2304,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>x</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2271,17 +2324,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>y</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2291,17 +2344,17 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         BUGCRIT (i != 1,
                  FALSE,
                  (gettext ("La première colonne est réservée à la liste des noeuds et des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         BUGCRIT (res->col_tab[1] == COLRES_NUM_BARRES,
                  FALSE,
                  (gettext ("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
-                   free (col_type);)
+                   free (col_type); )
         col_type[i - 1] = G_TYPE_STRING;
         gtk_tree_view_append_column (
           res->treeview,
           common_gtk_cree_colonne (gettext ("r<sub>z</sub> [rad]"),
                                    col_type[i - 1],
-                                   i - 1,
+                                   i - 1U,
                                    0.,
                                    0));
         break;
@@ -2311,7 +2364,7 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
         FAILCRIT (FALSE,
                   (gettext ("La colonne des résultats %d est inconnue.\n"),
                             res->col_tab[i]);
-                    free (col_type);)
+                    free (col_type); )
         break;
       }
     }
@@ -2343,7 +2396,9 @@ EF_gtk_resultats_add_page (Gtk_EF_Resultats_Tableau *res,
 }
 
 
-void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
+void
+EF_gtk_resultats_cas_change (GtkWidget *widget,
+                             Projet    *p)
 /**
  * \brief Met à jour l'affichage des résultats en cas de changement de cas.
  * \param widget : le composant à l'origine de l'évènement,
@@ -2354,16 +2409,16 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
  *     - interface graphique non initialisée.
  */
 {
-  GList *list_parcours;
-  int    indice_combo;
+  GList  *list_parcours;
+  uint8_t indice_combo;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_RES.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   
-  indice_combo = gtk_combo_box_get_active (UI_RES.combobox);
+  indice_combo = (uint8_t) gtk_combo_box_get_active (UI_RES.combobox);
   
   // Pour forcer le combobox ponderation à être vierge.
   if (gtk_combo_box_get_model (UI_RES.combobox_ponderations) != NULL)
@@ -2386,7 +2441,7 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
     GtkListStore *list_pond;
     GtkTreeIter   Iter;
     GList        *comb;
-    int           i;
+    uint16_t      i;
     
     switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
     {
@@ -2440,7 +2495,7 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
       default :
       {
         FAILCRIT ( ,
-                  (gettext ("Paramètre %s incorrect.\n"), "combobox_cas");)
+                  (gettext ("Paramètre %s incorrect.\n"), "combobox_cas"); )
         break;
       }
     }
@@ -2458,7 +2513,7 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
       BUGCRIT (tmp2 = g_strdup_printf ("%d : %s", i, tmp),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);)
+                 free (tmp); )
       free (tmp);
       gtk_list_store_set (list_pond, &Iter, 0, tmp2, -1);
       free (tmp2);
@@ -2490,9 +2545,6 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
 }
 
 
-void
-EF_gtk_resultats_ponderations_change (GtkWidget *widget,
-                                      Projet    *p)
 /**
  * \brief Met à jour l'affichage des résultats en cas de changement de
  *        combinaisons.
@@ -2503,6 +2555,9 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_resultats_ponderations_change (GtkWidget *widget,
+                                      Projet    *p)
 {
   GList *list_parcours;
   
@@ -2510,7 +2565,7 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
   BUGCRIT (UI_RES.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   
   list_parcours = UI_RES.tableaux;
   
@@ -2525,9 +2580,6 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
 }
 
 
-void
-EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
-                                   Projet      *p)
 /**
  * \brief Met à jour l'affichage des résultats en cas de changement de cas /
  *        combinaison.
@@ -2538,12 +2590,15 @@ EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
+                                   Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_RES.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   
   // Pour forcer le combobox cas à être vierge.
   if (gtk_combo_box_get_model (UI_RES.combobox_ponderations) != NULL)
@@ -2580,9 +2635,6 @@ EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
 }
 
 
-void
-EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
-                                Projet      *p)
 /**
  * \brief Ajoute une page au Notebook sur la base de divers tableaux "de base".
  * \param menuitem : le composant à l'origine de l'évènement,
@@ -2592,6 +2644,9 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
+                                Projet      *p)
 {
   Gtk_EF_Resultats_Tableau *res;
   
@@ -2600,17 +2655,17 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
   BUGCRIT (UI_RES.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   BUGCRIT (res = malloc (sizeof (Gtk_EF_Resultats_Tableau)),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   if (strcmp (gtk_menu_item_get_label (menuitem), gettext ("Noeuds")) == 0)
   {
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 5),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 4;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_NOEUDS_X;
@@ -2624,7 +2679,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2636,7 +2691,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 7;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_REACTION_APPUI_FX;
@@ -2653,7 +2708,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2665,7 +2720,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 8),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 7;
     res->col_tab[1] = COLRES_NUM_NOEUDS;
     res->col_tab[2] = COLRES_DEPLACEMENT_UX;
@@ -2682,7 +2737,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2694,7 +2749,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 3),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 2;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
@@ -2706,7 +2761,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2718,7 +2773,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 20;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
@@ -2748,7 +2803,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
@@ -2760,7 +2815,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     BUGCRIT (res->col_tab = malloc (sizeof (Colonne_Resultats) * 21),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (res);)
+               free (res); )
     res->col_tab[0] = 20;
     res->col_tab[1] = COLRES_NUM_BARRES;
     res->col_tab[2] = COLRES_BARRES_LONGUEUR;
@@ -2790,23 +2845,23 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (res->col_tab);
-               free (res);)
+               free (res); )
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
     UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
   }
   else
+  {
     FAILCRIT ( ,
               (gettext ("La page est inconnue.\n"));
-                free (res);)
+                free (res); )
+  }
   
   return;
 }
 
 
-void
-EF_gtk_resultats (Projet *p)
 /**
  * \brief Création de la fenêtre permettant d'afficher les résultats sous forme
  *        d'un tableau.
@@ -2816,6 +2871,8 @@ EF_gtk_resultats (Projet *p)
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_resultats (Projet *p)
 {
   GList *list_parcours;
   
@@ -2833,7 +2890,7 @@ EF_gtk_resultats (Projet *p)
                                           NULL) != 0,
            ,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Résultats");)
+                     "Résultats"); )
   gtk_builder_connect_signals (UI_RES.builder, p);
   
   UI_RES.window = GTK_WIDGET (gtk_builder_get_object (UI_RES.builder,
@@ -2865,8 +2922,6 @@ EF_gtk_resultats (Projet *p)
 }
 
 
-void
-EF_gtk_resultats_free (Projet *p)
 /**
  * \brief Libère l'ensemble des éléments utilisés pour l'affichage des
  *        résultats.
@@ -2875,6 +2930,8 @@ EF_gtk_resultats_free (Projet *p)
  *   Echec :
  *     - p == NULL,
  */
+void
+EF_gtk_resultats_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, )
   

@@ -43,13 +43,6 @@ GTK_WINDOW_DESTROY (_1993_1_1, materiaux, );
 GTK_WINDOW_CLOSE (_1993_1_1, materiaux);
 
 
-gboolean
-_1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
-                                          char  **nom,
-                                          double *fy,
-                                          double *fu,
-                                          double *e,
-                                          double *nu)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer un matériau de type acier.
@@ -66,6 +59,13 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
  *     - interface graphique non initialisée,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+_1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
+                                          char  **nom,
+                                          double *fy,
+                                          double *fu,
+                                          double *e,
+                                          double *nu)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -81,7 +81,7 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   BUGCRIT (UI_ACI.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Acier");)
+                     "Ajout Matériau Acier"); )
   
   builder = UI_ACI.builder;
   
@@ -92,7 +92,9 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                      INFINITY,
                      FALSE) * 1000000.;
   if (isnan (*fy))
+  {
     ok = FALSE;
+  }
   
   if (ok)
   {
@@ -103,7 +105,9 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                        INFINITY,
                        FALSE) * 1000000.;
     if (isnan (*fu))
+    {
       ok = FALSE;
+    }
   }
   
   if (ok)
@@ -118,10 +122,14 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                         INFINITY,
                         FALSE) * 1000000000.;
       if (isnan (*e))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *e = MODULE_YOUNG_ACIER;
+    }
   }
   
   if (ok)
@@ -136,10 +144,14 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                          0.5,
                          FALSE);
       if (isnan (*nu))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *nu = COEFFICIENT_NU_ACIER;
+    }
   }
   
   // Si tous les paramètres sont corrects
@@ -162,7 +174,9 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       ok = FALSE;
     }
     else
+    {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+    }
   }
   else if ((strcmp (*nom, "") == 0) || 
     ((strcmp (UI_ACI.materiau->nom, *nom) != 0) &&
@@ -172,18 +186,19 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     ok = FALSE;
   }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
   
   if (ok == FALSE)
+  {
     free (*nom);
+  }
   
   return ok;
 }
 
 
-void
-_1993_1_1_gtk_materiaux_check (GtkWidget *object,
-                               Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -194,6 +209,9 @@ _1993_1_1_gtk_materiaux_check (GtkWidget *object,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1993_1_1_gtk_materiaux_check (GtkWidget *object,
+                               Projet    *p)
 {
   char  *nom;
   double fy, fu, e, nu;
@@ -202,12 +220,14 @@ _1993_1_1_gtk_materiaux_check (GtkWidget *object,
   BUGCRIT (UI_ACI.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Acier");)
+                     "Ajout Matériau Acier"); )
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                        UI_ACI.builder, "_1993_1_1_materiaux_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -220,9 +240,6 @@ _1993_1_1_gtk_materiaux_check (GtkWidget *object,
 }
 
 
-void
-_1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
-                                         Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la charge.
  * \param button : composant à l'origine de l'évènement,
@@ -234,6 +251,9 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
  *   - #_1993_1_1_materiaux_ajout,
  *   - #_1993_1_1_materiaux_modif.
  */
+void
+_1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
+                                         Projet    *p)
 {
   char        *nom;
   double       fy, fu, e, nu;
@@ -243,10 +263,12 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   BUGCRIT (UI_ACI.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Acier");)
+                     "Ajout Matériau Acier"); )
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
+  {
     return;
+  }
   
   // Création de la nouvelle charge ponctuelle au noeud
   BUG (materiau = _1993_1_1_materiaux_ajout (
@@ -255,7 +277,7 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
          m_f (fy / 1000000., FLOTTANT_UTILISATEUR),
          m_f (fu / 1000000., FLOTTANT_UTILISATEUR)),
       ,
-      free (nom);)
+      free (nom); )
   free (nom);
   BUG (_1993_1_1_materiaux_modif (p,
                                   materiau,
@@ -272,9 +294,6 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
 }
 
 
-void
-_1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
-                                          Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -285,6 +304,9 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
  *   - interface graphique non initialisée,
  *   - #_1993_1_1_materiaux_modif.
  */
+void
+_1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
+                                          Projet    *p)
 {
   char  *nom;
   double fy, fu, e, nu;
@@ -293,10 +315,12 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   BUGCRIT (UI_ACI.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Acier");)
+                     "Ajout Matériau Acier"); )
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
+  {
     return;
+  }
   
   BUG (_1993_1_1_materiaux_modif (p,
                                   UI_ACI.materiau,
@@ -306,7 +330,7 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
                                   m_f (e, FLOTTANT_UTILISATEUR),
                                   m_f (nu, FLOTTANT_UTILISATEUR)),
        ,
-       free (nom);)
+       free (nom); )
   
   free (nom);
   
@@ -316,9 +340,6 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
 }
 
 
-void
-_1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
-                                 Projet           *p)
 /**
  * \brief Evènement pour (dés)activer la personnalisation d'une propriété de
  *        l'acier.
@@ -329,6 +350,9 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
+                                 Projet           *p)
 {
   GtkBuilder     *builder;
   gboolean        check = gtk_check_menu_item_get_active(checkmenuitem);
@@ -341,9 +365,13 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   builder = UI_ACI.builder;
   mat = UI_ACI.materiau;
   if (mat != NULL)
+  {
     acier_data = UI_ACI.materiau->data;
+  }
   else
+  {
     acier_data = NULL;
+  }
   
   if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (builder,
                                  "_1993_1_1_materiaux_personnaliser_menu_fu")))
@@ -405,7 +433,9 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
                             check);
   }
   else
+  {
     BUGPARAM (checkmenuitem, "%p", checkmenuitem, )
+  }
   
   _1993_1_1_gtk_materiaux_check (NULL, p);
   
@@ -413,9 +443,6 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
 }
 
 
-gboolean
-_1993_1_1_gtk_materiaux (Projet      *p,
-                         EF_Materiau *materiau)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier un matériau
  *        de type béton.
@@ -426,6 +453,9 @@ _1993_1_1_gtk_materiaux (Projet      *p,
  *   Echec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1993_1_1_gtk_materiaux (Projet      *p,
+                         EF_Materiau *materiau)
 {
   Materiau_Acier *acier_data;
   
@@ -435,7 +465,9 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   {
     gtk_window_present (GTK_WINDOW (UI_ACI.window));
     if (UI_ACI.materiau == materiau)
+    {
       return TRUE;
+    }
   }
   else
   {
@@ -445,7 +477,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
                                            NULL) != 0,
              FALSE,
              (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                       "Ajout Matériau Acier");)
+                       "Ajout Matériau Acier"); )
     gtk_builder_connect_signals (UI_ACI.builder, p);
     UI_ACI.window = GTK_WIDGET (gtk_builder_get_object (UI_ACI.builder,
                                                 "_1993_1_1_materiaux_window"));
@@ -489,7 +521,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
     
     BUGCRIT (materiau->type == MATERIAU_ACIER,
              FALSE,
-             (gettext ("Le matériau n'est pas en acier.\n"));)
+             (gettext ("Le matériau n'est pas en acier.\n")); )
     gtk_window_set_title (GTK_WINDOW (UI_ACI.window),
                           gettext ("Modification d'un matériau acier"));
     UI_ACI.materiau = materiau;
@@ -542,9 +574,6 @@ _1993_1_1_gtk_materiaux (Projet      *p,
 }
 
 
-void
-_1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
-                               Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter un matériau acier.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -554,12 +583,15 @@ _1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
+                               Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_MAT.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Acier");)
+                     "Ajout Matériau Acier"); )
   
   BUG (_1993_1_1_gtk_materiaux (p, NULL), )
 }

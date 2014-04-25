@@ -56,6 +56,9 @@
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) \
   ((unsigned int) round (gtk_spin_button_get_value (spinbutton)))
 
+#define GTK_COMMON_SPINBUTTON_AS_UINT16(spinbutton) \
+  ((uint16_t) round (gtk_spin_button_get_value (spinbutton)))
+
 #define GTK_COMMON_SPINBUTTON_AS_INT(spinbutton) \
   ((int) round (gtk_spin_button_get_value (spinbutton)))
 
@@ -68,7 +71,7 @@ pref##_gtk_##nom##_window_key_press (GtkWidget *widget, \
   BUGPARAM (p, "%p", p, FALSE) \
   BUGCRIT (p->ui.pref##_##nom.builder, \
            FALSE, \
-           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom); ) \
   \
   if (event->key.keyval == GDK_KEY_Escape) \
   { \
@@ -101,7 +104,7 @@ pref##_gtk_##nom##_window_destroy (GtkWidget *object, \
   BUGPARAM (p, "%p", p, ) \
   BUGCRIT (p->ui.pref##_##nom.builder, \
            , \
-           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom); ) \
   \
   __VA_ARGS__ \
   g_object_unref (G_OBJECT (p->ui.pref##_##nom.builder)); \
@@ -133,7 +136,7 @@ pref##_gtk_##nom##_window_button_close (GtkButton *button, \
   BUGPARAM (p, "%p", p, ) \
   BUGCRIT (p->ui.pref##_##nom.builder, \
            , \
-           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom);) \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée."), #nom); ) \
   \
   gtk_widget_destroy (p->ui.pref##_##nom.window); \
   \
@@ -157,20 +160,25 @@ gboolean common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
                                                     GdkEventButton *event,
                                                     Projet         *p);
 
-double conv_buff_d                 (GtkTextBuffer *textbuffer,
+double       conv_buff_d           (GtkTextBuffer *textbuffer,
                                     double         val_min,
                                     gboolean       min_include,
                                     double         val_max,
                                     gboolean       max_include);
-unsigned int conv_buff_u           (GtkTextBuffer *textbuffer,
-                                    unsigned int   val_min,
+uint32_t     conv_buff_u           (GtkTextBuffer *textbuffer,
+                                    uint32_t       val_min,
                                     gboolean       min_include,
-                                    unsigned int   val_max,
+                                    uint32_t       val_max,
                                     gboolean       max_include);
-unsigned int common_gtk_entry_uint (GtkEntry      *entry,
-                                    unsigned int   val_min,
+uint16_t     conv_buff_hu          (GtkTextBuffer *textbuffer,
+                                    uint16_t       val_min,
                                     gboolean       min_include,
-                                    unsigned int   val_max,
+                                    uint16_t       val_max,
+                                    gboolean       max_include);
+uint32_t common_gtk_entry_uint     (GtkEntry      *entry,
+                                    uint32_t       val_min,
+                                    gboolean       min_include,
+                                    uint32_t       val_max,
                                     gboolean       max_include);
 
 void common_gtk_render_double   (GtkTreeViewColumn *tree_column,
@@ -184,11 +192,11 @@ void common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
                                  GtkTreeIter       *iter,
                                  gpointer           data);
 
-GtkTreeViewColumn *common_gtk_cree_colonne (char  *nom,
-                                            GType  type,
-                                            int    num_colonne,
-                                            double xalign,
-                                            int    num_decimales);
+GtkTreeViewColumn *common_gtk_cree_colonne (char    *nom,
+                                            GType    type,
+                                            uint32_t num_colonne,
+                                            float    xalign,
+                                            int8_t   num_decimales);
 
 #endif
 

@@ -34,9 +34,7 @@
 #include "EF_calculs.h"
 #include "EF_verif.h"
 
-void
-EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
-                         Projet      *p)
+
 /**
  * \brief Exécute le calcul de la structure.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -46,10 +44,13 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
  *     - p == NULL,
  *     - Erreur de calcul.
  */
+void
+EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
+                         Projet      *p)
 {
-  GList *rapport;
-  int    erreur;
-  GList *list_parcours;
+  GList   *rapport;
+  uint16_t erreur;
+  GList   *list_parcours;
   
   BUGPARAM (p, "%p", p, )
   
@@ -59,7 +60,9 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   EF_verif_rapport_free (rapport);
   
   if (erreur != 0)
+  {
     return;
+  }
   
   BUG (EF_calculs_initialise (p), )
   BUG (_1992_1_1_barres_rigidite_ajout_tout (p), )

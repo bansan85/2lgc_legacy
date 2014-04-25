@@ -22,9 +22,9 @@
 #include "config.h"
 #include "common_projet.h"
 
-gboolean EF_verif_EF           (Projet *p,
-                                GList **rapport,
-                                int    *erreur)
+gboolean EF_verif_EF           (Projet   *p,
+                                GList   **rapport,
+                                uint16_t *erreur)
                                        __attribute__((__warn_unused_result__));
 void     EF_verif_rapport_free (GList  *rapport);
 

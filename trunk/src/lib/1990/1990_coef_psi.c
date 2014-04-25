@@ -27,8 +27,6 @@
 #include "common_projet.h"
 
 
-double
-_1990_coef_psi0_bat_eu (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>0</sub> indiqué par la norme
  *        européenne pour les bâtiments. Le type d'une action est défini par
@@ -60,6 +58,8 @@ _1990_coef_psi0_bat_eu (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi0_bat.
  */
+double
+_1990_coef_psi0_bat_eu (uint8_t type)
 {
   switch (type)
   {
@@ -85,8 +85,6 @@ _1990_coef_psi0_bat_eu (unsigned int type)
 }
 
 
-double
-_1990_coef_psi1_bat_eu (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>1</sub> indiqué par la norme
  *        européenne pour les bâtiments. Le type d'une action est défini par
@@ -118,6 +116,8 @@ _1990_coef_psi1_bat_eu (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi1_bat.
  */
+double
+_1990_coef_psi1_bat_eu (uint8_t type)
 {
   switch (type)
   {
@@ -143,8 +143,6 @@ _1990_coef_psi1_bat_eu (unsigned int type)
 }
 
 
-double
-_1990_coef_psi2_bat_eu (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>2</sub> indiqué par la norme
  *        européenne pour les bâtiments. Le type d'une action est défini par
@@ -176,6 +174,8 @@ _1990_coef_psi2_bat_eu (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi2_bat.
  */
+double
+_1990_coef_psi2_bat_eu (uint8_t type)
 {
   switch (type)
   {
@@ -201,8 +201,6 @@ _1990_coef_psi2_bat_eu (unsigned int type)
 }
 
 
-double
-_1990_coef_psi0_bat_fr (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>0</sub> indiqué par la norme
  *        française pour les bâtiments. Le type d'une action est défini par
@@ -243,6 +241,8 @@ _1990_coef_psi0_bat_fr (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi0_bat.
  */
+double
+_1990_coef_psi0_bat_fr (uint8_t type)
 {
   switch (type)
   {
@@ -273,8 +273,6 @@ _1990_coef_psi0_bat_fr (unsigned int type)
 }
 
 
-double
-_1990_coef_psi1_bat_fr (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>1</sub> indiqué par la norme
  *        française pour les bâtiments. Le type d'une action est défini par
@@ -315,6 +313,8 @@ _1990_coef_psi1_bat_fr (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi1_bat.
  */
+double
+_1990_coef_psi1_bat_fr (uint8_t type)
 {
   switch (type)
   {
@@ -345,8 +345,6 @@ _1990_coef_psi1_bat_fr (unsigned int type)
 }
 
 
-double
-_1990_coef_psi2_bat_fr (unsigned int type)
 /**
  * \brief Renvoie le coefficient &psi;<sub>2</sub> indiqué par la norme
  *        française pour les bâtiments. Le type d'une action est défini par
@@ -387,6 +385,8 @@ _1990_coef_psi2_bat_fr (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_coef_psi2_bat.
  */
+double
+_1990_coef_psi2_bat_fr (uint8_t type)
 {
   switch (type)
   {
@@ -417,9 +417,6 @@ _1990_coef_psi2_bat_fr (unsigned int type)
 }
 
 
-double
-_1990_coef_psi0_bat (unsigned int type,
-                     Norme        norme)
 /**
  * \brief Renvoie le coefficient &psi;<sub>0</sub> en fonction de la norme
  *        spécifiée pour les bâtiments.
@@ -430,6 +427,9 @@ _1990_coef_psi0_bat (unsigned int type,
  *   Échec : NAN :
  *     - La norme ou le type de l'action n'existe pas.
  */
+double
+_1990_coef_psi0_bat (uint8_t type,
+                     Norme   norme)
 {
   switch (norme)
   {
@@ -440,9 +440,6 @@ _1990_coef_psi0_bat (unsigned int type,
 }
 
 
-double
-_1990_coef_psi1_bat (unsigned int type,
-                     Norme        norme)
 /**
  * \brief Renvoie le coefficient &psi;<sub>1</sub> en fonction de la norme
  *        spécifiée pour les bâtiments.
@@ -453,6 +450,9 @@ _1990_coef_psi1_bat (unsigned int type,
  *   Échec : NAN :
  *     - La norme ou le type de l'action n'existe pas.
  */
+double
+_1990_coef_psi1_bat (uint8_t type,
+                     Norme   norme)
 {
   switch (norme)
   {
@@ -463,9 +463,6 @@ _1990_coef_psi1_bat (unsigned int type,
 }
 
 
-double
-_1990_coef_psi2_bat (unsigned int type,
-                     Norme        norme)
 /**
  * \brief Renvoie le coefficient &psi;<sub>1</sub> en fonction de la norme
  *        spécifiée pour les bâtiments.
@@ -476,6 +473,9 @@ _1990_coef_psi2_bat (unsigned int type,
  *   Échec : NAN :
  *     - La norme ou le type de l'action n'existe pas.
  */
+double
+_1990_coef_psi2_bat (uint8_t type,
+                     Norme   norme)
 {
   switch (norme)
   {

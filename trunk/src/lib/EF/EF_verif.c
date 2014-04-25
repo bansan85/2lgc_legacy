@@ -31,12 +31,6 @@
 #include "EF_verif.h"
 
 
-gboolean
-EF_verif_bloc (GList  *noeuds,
-               GList  *barres,
-               GList **noeuds_dep,
-               GList **barres_dep,
-               Projet *p)
 /**
  * \brief Renvoie l'ensemble des noeuds et barres étant connectés aux noeuds et
  *        barres.
@@ -52,6 +46,12 @@ EF_verif_bloc (GList  *noeuds,
  *     - barres_dep = NULL,
  *     - p = NULL.
  */
+gboolean
+EF_verif_bloc (GList  *noeuds,
+               GList  *barres,
+               GList **noeuds_dep,
+               GList **barres_dep,
+               Projet *p)
 {
   GList *noeuds_todo = NULL, *barres_todo = NULL;
   GList *list_parcours;
@@ -67,7 +67,9 @@ EF_verif_bloc (GList  *noeuds,
   while (list_parcours != NULL)
   {
     if (g_list_find (noeuds_todo, list_parcours->data) == NULL)
+    {
       noeuds_todo = g_list_append (noeuds_todo, list_parcours->data);
+    }
     list_parcours = g_list_next (list_parcours);
   }
   
@@ -75,7 +77,9 @@ EF_verif_bloc (GList  *noeuds,
   while (list_parcours != NULL)
   {
     if (g_list_find (barres_todo, list_parcours->data) == NULL)
+    {
       barres_todo = g_list_append (barres_todo, list_parcours->data);
+    }
     list_parcours = g_list_next (list_parcours);
   }
   
@@ -84,7 +88,9 @@ EF_verif_bloc (GList  *noeuds,
     while (noeuds_todo != NULL)
     {
       if (g_list_find (*noeuds_dep, noeuds_todo->data) == NULL)
+      {
         *noeuds_dep = g_list_append (*noeuds_dep, noeuds_todo->data);
+      }
       
       list_parcours = p->modele.barres;
       while (list_parcours != NULL)
@@ -97,7 +103,9 @@ EF_verif_bloc (GList  *noeuds,
         {
           if ((g_list_find (*barres_dep, barre) == NULL) &&
               (g_list_find (barres_todo, barre) == NULL))
+          {
             barres_todo = g_list_append (barres_todo, barre);
+          }
         }
         
         list_parcours = g_list_next (list_parcours);
@@ -110,21 +118,29 @@ EF_verif_bloc (GList  *noeuds,
       EF_Barre *barre_parcours = barres_todo->data;
       
       if (g_list_find (*barres_dep, barres_todo->data) == NULL)
+      {
         *barres_dep = g_list_append (*barres_dep, barres_todo->data);
+      }
       
       if ((g_list_find (*noeuds_dep, barre_parcours->noeud_debut) == NULL) &&
           (g_list_find (noeuds_todo, barre_parcours->noeud_debut) == NULL))
+      {
         noeuds_todo = g_list_append (noeuds_todo, barre_parcours->noeud_debut);
+      }
       if ((g_list_find (*noeuds_dep, barre_parcours->noeud_fin) == NULL) &&
           (g_list_find (noeuds_todo, barre_parcours->noeud_fin) == NULL))
+      {
         noeuds_todo = g_list_append (noeuds_todo, barre_parcours->noeud_fin);
+      }
       
       list_parcours = barre_parcours->nds_inter;
       while (list_parcours != NULL)
       {
         if ((g_list_find (*noeuds_dep, list_parcours->data) == NULL) &&
             (g_list_find (noeuds_todo, list_parcours->data) == NULL))
+        {
           noeuds_todo = g_list_append (noeuds_todo, list_parcours->data);
+        }
         
         list_parcours = g_list_next (list_parcours);
       }
@@ -137,10 +153,6 @@ EF_verif_bloc (GList  *noeuds,
 }
 
 
-gboolean
-EF_verif_EF (Projet *p,
-             GList **rapport,
-             int    *erreur)
 /**
  * \brief Vérifie toutes les données utilisées dans les calculs :
  *          - Structure non vide (minimum 2 noeuds et une barre),
@@ -159,6 +171,10 @@ EF_verif_EF (Projet *p,
  *     - erreur == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+EF_verif_EF (Projet   *p,
+             GList   **rapport,
+             uint16_t *erreur)
 {
   Analyse_Comm *ligne;
   GList        *list_parcours;
@@ -174,39 +190,45 @@ EF_verif_EF (Projet *p,
   // noeuds).
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (ligne->analyse = g_strdup_printf ("%s",
              gettext ("Structure non vide (minimum 2 noeuds et une barre)")),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (ligne);)
+             free (ligne); )
   ligne->resultat = 0;
   ligne->commentaire = NULL;
   if ((p->modele.noeuds == NULL) || (g_list_next (p->modele.noeuds) == NULL))
   {
     ligne->resultat = 2;
     if (*erreur < ligne->resultat)
+    {
       *erreur = ligne->resultat;
+    }
     BUGCRIT (ligne->commentaire = g_strdup_printf ("%s (%d).",
                                     gettext ("Nombre de noeuds insuffisant"),
                                     g_list_length (p->modele.noeuds)),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (ligne->analyse);
-               free (ligne);)
+               free (ligne); )
   }
   if (p->modele.barres == NULL)
   {
     ligne->resultat = 2;
     if (*erreur < ligne->resultat)
+    {
       *erreur = ligne->resultat;
+    }
     if (ligne->commentaire == NULL)
+    {
       BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                  gettext ("Aucune barre n'est existante.")),
                FALSE,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (ligne->analyse);
-                 free (ligne);)
+                 free (ligne); )
+    }
     else
     {
       char *tmp = ligne->commentaire;
@@ -218,7 +240,7 @@ EF_verif_EF (Projet *p,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (ligne->analyse);
                  free (ligne);
-                 free (tmp);)
+                 free (tmp); )
       free (tmp);
     }
   }
@@ -228,20 +250,20 @@ EF_verif_EF (Projet *p,
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             EF_verif_rapport_free (*rapport);)
+             EF_verif_rapport_free (*rapport); )
   BUGCRIT (ligne->analyse = g_strdup_printf ("%s",
              gettext ("Structure en un seul bloc")),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_verif_rapport_free (*rapport);
-             free (ligne);)
+             free (ligne); )
   ligne->resultat = 0;
   ligne->commentaire = NULL;
   if (p->modele.noeuds != NULL)
   {
-    int    i = 1;
-    GList *noeuds, *barres, *tmp = NULL;
-    GList *noeuds_tout = NULL, *barres_tout = NULL;
+    uint32_t i = 1;
+    GList   *noeuds, *barres, *tmp = NULL;
+    GList   *noeuds_tout = NULL, *barres_tout = NULL;
     
     tmp = g_list_append (tmp, p->modele.noeuds->data);
     BUG (EF_verif_bloc (tmp, NULL, &noeuds, &barres, p),
@@ -251,7 +273,7 @@ EF_verif_EF (Projet *p,
          free (ligne->analyse);
          free (ligne);
          g_list_free (noeuds);
-         g_list_free (barres);)
+         g_list_free (barres); )
     g_list_free (tmp);
     
     // Structure disjointe
@@ -264,11 +286,17 @@ EF_verif_EF (Projet *p,
       barres_tout = g_list_concat (barres_tout, barres);
     
       if (i == 1)
+      {
         ligne->resultat = 0;
+      }
       else
+      {
         ligne->resultat = 2;
+      }
       if (*erreur < ligne->resultat)
+      {
         *erreur = ligne->resultat;
+      }
       tmp2 = ligne->commentaire;
       BUGCRIT (ligne->commentaire = g_strdup_printf (gettext("%s%sBloc %d :"),
                                       tmp2 != NULL ? ligne->commentaire : "",
@@ -281,7 +309,7 @@ EF_verif_EF (Projet *p,
                  free (ligne);
                  g_list_free (noeuds_tout);
                  g_list_free (barres_tout);
-                 free (tmp2);)
+                 free (tmp2); )
       free (tmp2);
       
       if (noeuds != NULL)
@@ -295,11 +323,13 @@ EF_verif_EF (Projet *p,
                free (ligne->analyse);
                free (ligne);
                g_list_free (noeuds_tout);
-               g_list_free (barres_tout);)
+               g_list_free (barres_tout); )
         tmp2 = ligne->commentaire;
         BUGCRIT (ligne->commentaire = g_strdup_printf ("%s %s : %s%s",
                                         tmp2,
-                                        g_list_next (noeuds) == NULL ? gettext ("noeud") : gettext ("noeuds"),
+                                        g_list_next (noeuds) == NULL ?
+                                          gettext ("noeud") :
+                                          gettext ("noeuds"),
                                         noeuds_tmp,
                                         barres != NULL ? "," : ""),
                  FALSE,
@@ -310,7 +340,7 @@ EF_verif_EF (Projet *p,
                    free (ligne);
                    g_list_free (noeuds_tout);
                    g_list_free (barres_tout);
-                   free (noeuds_tmp);)
+                   free (noeuds_tmp); )
         free (tmp2);
         free (noeuds_tmp);
       }
@@ -325,11 +355,13 @@ EF_verif_EF (Projet *p,
                free (ligne->analyse);
                free (ligne);
                g_list_free (noeuds_tout);
-               g_list_free (barres_tout);)
+               g_list_free (barres_tout); )
         tmp2 = ligne->commentaire;
         BUGCRIT (ligne->commentaire = g_strdup_printf ("%s %s : %s",
                                         tmp2,
-                                        g_list_next (barres) == NULL ? gettext ("barre") : gettext ("barres"),
+                                        g_list_next (barres) == NULL ?
+                                          gettext ("barre") :
+                                          gettext ("barres"),
                                         barres_tmp),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -339,7 +371,7 @@ EF_verif_EF (Projet *p,
                    free (ligne);
                    g_list_free (noeuds_tout);
                    g_list_free (barres_tout);
-                   free (barres_tmp);)
+                   free (barres_tmp); )
         free (tmp2);
         free (barres_tmp);
       }
@@ -363,7 +395,7 @@ EF_verif_EF (Projet *p,
                    free (ligne);
                    g_list_free (noeuds_tout);
                    g_list_free (barres_tout);
-                   g_list_free (tmp);)
+                   g_list_free (tmp); )
             g_list_free (tmp);
             break;
           }
@@ -391,13 +423,13 @@ EF_verif_EF (Projet *p,
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             EF_verif_rapport_free (*rapport);)
+             EF_verif_rapport_free (*rapport); )
   BUGCRIT (ligne->analyse = g_strdup_printf ("%s",
              gettext ("Structure bloquée en déplacement")),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_verif_rapport_free (*rapport);
-             free (ligne);)
+             free (ligne); )
   ligne->resultat = 0;
   ligne->commentaire = NULL;
   {
@@ -410,11 +442,17 @@ EF_verif_EF (Projet *p,
       EF_Appui *appui = list_parcours->data;
       
       if (appui->ux != EF_APPUI_LIBRE)
+      {
         ux = TRUE;
+      }
       if (appui->uy != EF_APPUI_LIBRE)
+      {
         uy = TRUE;
+      }
       if (appui->uz != EF_APPUI_LIBRE)
+      {
         uz = TRUE;
+      }
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -422,13 +460,15 @@ EF_verif_EF (Projet *p,
     if (ux == FALSE)
     {
       if (ligne->commentaire == NULL)
+      {
         BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                    gettext ("Aucun appui ne permet de bloquer le déplacement vers x.")),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    EF_verif_rapport_free (*rapport);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
+      }
       else
       {
         tmp = ligne->commentaire;
@@ -440,20 +480,22 @@ EF_verif_EF (Projet *p,
                    EF_verif_rapport_free (*rapport);
                    free (tmp);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
         free (tmp);
       }
     }
     if (uy == FALSE)
     {
       if (ligne->commentaire == NULL)
+      {
         BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                    gettext("Aucun appui ne permet de bloquer le déplacement vers y.")),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    EF_verif_rapport_free (*rapport);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
+      }
       else
       {
         tmp = ligne->commentaire;
@@ -465,20 +507,22 @@ EF_verif_EF (Projet *p,
                    EF_verif_rapport_free (*rapport);
                    free (tmp);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
         free (tmp);
       }
     }
     if (uz == FALSE)
     {
       if (ligne->commentaire == NULL)
+      {
         BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                    gettext ("Aucun appui ne permet de bloquer le déplacement vers z.")),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    EF_verif_rapport_free (*rapport);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
+      }
       else
       {
         tmp = ligne->commentaire;
@@ -490,7 +534,7 @@ EF_verif_EF (Projet *p,
                    EF_verif_rapport_free (*rapport);
                    free (tmp);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
         free (tmp);
       }
     }
@@ -512,11 +556,17 @@ EF_verif_EF (Projet *p,
         if (noeud->appui != NULL)
         {
           if (noeud->appui->ux != EF_APPUI_LIBRE)
+          {
             ux = TRUE;
+          }
           if (noeud->appui->uy != EF_APPUI_LIBRE)
+          {
             uy = TRUE;
+          }
           if (noeud->appui->uz != EF_APPUI_LIBRE)
+          {
             uz = TRUE;
+          }
         }
         
         list_parcours = g_list_next (list_parcours);
@@ -525,13 +575,15 @@ EF_verif_EF (Projet *p,
       if (ux == FALSE)
       {
         if (ligne->commentaire == NULL)
+        {
           BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                      gettext ("Aucun noeud ne permet de bloquer le déplacement vers x.")),
                    FALSE,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      EF_verif_rapport_free (*rapport);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
+        }
         else
         {
           tmp = ligne->commentaire;
@@ -543,20 +595,22 @@ EF_verif_EF (Projet *p,
                      EF_verif_rapport_free (*rapport);
                      free (tmp);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
           free (tmp);
         }
       }
       if (uy == FALSE)
       {
         if (ligne->commentaire == NULL)
+        {
           BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                      gettext ("Aucun noeud ne permet de bloquer le déplacement vers y.")),
                    FALSE,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      EF_verif_rapport_free (*rapport);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
+        }
         else
         {
           tmp = ligne->commentaire;
@@ -568,20 +622,22 @@ EF_verif_EF (Projet *p,
                      EF_verif_rapport_free (*rapport);
                      free (tmp);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
           free (tmp);
         }
       }
       if (uz == FALSE)
       {
         if (ligne->commentaire == NULL)
+        {
           BUGCRIT (ligne->commentaire = g_strdup_printf ("%s",
                      gettext ("Aucun noeud ne permet de bloquer le déplacement vers z.")),
                    FALSE,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      EF_verif_rapport_free (*rapport);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
+        }
         else
         {
           tmp = ligne->commentaire;
@@ -593,7 +649,7 @@ EF_verif_EF (Projet *p,
                      EF_verif_rapport_free (*rapport);
                      free (tmp);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
           free (tmp);
         }
       }
@@ -602,14 +658,18 @@ EF_verif_EF (Projet *p,
       {
         ligne->resultat = 2;
         if (*erreur < ligne->resultat)
+        {
           *erreur = ligne->resultat;
+        }
       }
     }
     else
     {
       ligne->resultat = 2;
       if (*erreur < ligne->resultat)
+      {
         *erreur = ligne->resultat;
+      }
     }
   }
   *rapport = g_list_append(*rapport, ligne);
@@ -618,13 +678,13 @@ EF_verif_EF (Projet *p,
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             EF_verif_rapport_free (*rapport);)
+             EF_verif_rapport_free (*rapport); )
   BUGCRIT (ligne->analyse = g_strdup_printf ("%s",
              gettext ("Vérification des noeuds :\n\t- Noeuds ayant les mêmes coordonnées.")),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_verif_rapport_free (*rapport);
-             free (ligne);)
+             free (ligne); )
   ligne->resultat = 0;
   ligne->commentaire = NULL;
   list_parcours = p->modele.noeuds;
@@ -638,7 +698,7 @@ EF_verif_EF (Projet *p,
          FALSE,
          EF_verif_rapport_free (*rapport);
            free (ligne->analyse);
-           free (ligne);)
+           free (ligne); )
     
     while (list_parcours2 != NULL)
     {
@@ -649,7 +709,7 @@ EF_verif_EF (Projet *p,
            FALSE,
            EF_verif_rapport_free (*rapport);
              free (ligne->analyse);
-             free (ligne);)
+             free (ligne); )
       
       if ((errrel (m_g (point1.x), m_g (point2.x))) &&
           (errrel (m_g (point1.y), m_g (point2.y))) &&
@@ -657,9 +717,12 @@ EF_verif_EF (Projet *p,
       {
         ligne->resultat = 1;
         if (*erreur < ligne->resultat)
+        {
           *erreur = ligne->resultat;
+        }
         
         if (ligne->commentaire == NULL)
+        {
           BUGCRIT (ligne->commentaire = g_strdup_printf (
                      gettext ("Les noeuds %d et %d ont les mêmes coordonnées."),
                      noeud1->numero,
@@ -668,7 +731,8 @@ EF_verif_EF (Projet *p,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      EF_verif_rapport_free (*rapport);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
+        }
         else
         {
           char *tmp = ligne->commentaire;
@@ -683,7 +747,7 @@ EF_verif_EF (Projet *p,
                      EF_verif_rapport_free (*rapport);
                      free (tmp);
                      free (ligne->analyse);
-                     free (ligne);)
+                     free (ligne); )
           free (tmp);
         }
         
@@ -702,13 +766,13 @@ EF_verif_EF (Projet *p,
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             EF_verif_rapport_free (*rapport);)
+             EF_verif_rapport_free (*rapport); )
   BUGCRIT (ligne->analyse = g_strdup_printf ("%s",
              gettext ("Vérification des barres :\n\t- Longueur nulle.")),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_verif_rapport_free (*rapport);
-             free (ligne);)
+             free (ligne); )
   ligne->resultat = 0;
   ligne->commentaire = NULL;
   // Détection des barres de longueur nulle.
@@ -722,9 +786,12 @@ EF_verif_EF (Projet *p,
     {
       ligne->resultat = 2;
       if (*erreur < ligne->resultat)
+      {
         *erreur = ligne->resultat;
+      }
       
       if (ligne->commentaire == NULL)
+      {
         BUGCRIT (ligne->commentaire = g_strdup_printf (
                    gettext ("La longueur de la barre %d est nulle."),
                    barre->numero),
@@ -732,7 +799,8 @@ EF_verif_EF (Projet *p,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    EF_verif_rapport_free (*rapport);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
+      }
       else
       {
         char *tmp = ligne->commentaire;
@@ -746,7 +814,7 @@ EF_verif_EF (Projet *p,
                    EF_verif_rapport_free (*rapport);
                    free (tmp);
                    free (ligne->analyse);
-                   free (ligne);)
+                   free (ligne); )
         free (tmp);
       }
     }
@@ -759,13 +827,13 @@ EF_verif_EF (Projet *p,
 }
 
 
-void
-EF_verif_rapport_free (GList *rapport)
 /**
  * \brief Libère la mémoire utilisée pour un rapport.
  * \param rapport : le rapport à libérer.
  * \return Rien.
  */
+void
+EF_verif_rapport_free (GList *rapport)
 {
   GList *list_parcours = rapport;
   

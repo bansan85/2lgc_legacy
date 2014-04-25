@@ -41,7 +41,7 @@ char *EF_charge_barre_repartie_uniforme_description (Charge     *charge)
                                        __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_repartie_uniforme_mx     (EF_Barre    *barre,
-                                                   unsigned int discretisation,
+                                                   uint16_t     discretisation,
                                                    double       a,
                                                    double       b,
                                                    Barre_Info_EF *infos,
@@ -51,7 +51,7 @@ gboolean EF_charge_barre_repartie_uniforme_mx     (EF_Barre    *barre,
                                        __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
-                                                   unsigned int discretisation,
+                                                       uint16_t discretisation,
                                                           double    a,
                                                           double    b,
                                                           double    fz,
@@ -60,7 +60,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
                                                           double   *phib)
                                        __attribute__((__warn_unused_result__));
 gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre *barre,
-                                                   unsigned int discretisation,
+                                                       uint16_t discretisation,
                                                           double    a,
                                                           double    b,
                                                           double    fy,
@@ -78,7 +78,7 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x (
 
 gboolean EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
                                                     EF_Barre *barre,
-                                                   unsigned int discretisation,
+                                                    uint16_t  discretisation,
                                                     double    a,
                                                     double    b,
                                                     double    max,
@@ -87,7 +87,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
 gboolean EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
                                                     Fonction *f_deform,
                                                     EF_Barre *barre,
-                                                   unsigned int discretisation,
+                                                    uint16_t  discretisation,
                                                     double    a,
                                                     double    b,
                                                     double    fz,
@@ -98,7 +98,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
 gboolean EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
                                                     Fonction *f_deform,
                                                     EF_Barre *barre,
-                                                   unsigned int discretisation,
+                                                    uint16_t  discretisation,
                                                     double    a,
                                                     double    b,
                                                     double    fy,
@@ -107,13 +107,13 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
                                                     double    mbz)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
-                                              EF_Barre    *barre,
-                                              unsigned int discretisation,
-                                              double       a,
-                                              double       b,
-                                              double       fax,
-                                              double       fbx)
+gboolean EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
+                                              EF_Barre *barre,
+                                              uint16_t  discretisation,
+                                              double    a,
+                                              double    b,
+                                              double    fax,
+                                              double    fbx)
                                        __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,

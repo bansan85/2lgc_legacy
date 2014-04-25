@@ -42,11 +42,6 @@ GTK_WINDOW_DESTROY (ef, section_rectangulaire, );
 GTK_WINDOW_CLOSE (ef, section_rectangulaire);
 
 
-gboolean
-EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
-                                               double *largeur,
-                                               double *hauteur,
-                                               gchar **nom)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer une section rectangulaire.
@@ -63,6 +58,11 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
  *   - nom == NULL,
  *   - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
+                                               double *largeur,
+                                               double *hauteur,
+                                               gchar **nom)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -75,7 +75,7 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
   BUGCRIT (UI_SEC_RE.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Rectangulaire");)
+                     "Ajout Section Rectangulaire"); )
   
   *largeur = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                 UI_SEC_RE.builder, "EF_section_rectangulaire_buffer_largeur")),
@@ -84,7 +84,9 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
                           INFINITY,
                           FALSE);
   if (isnan (*largeur))
+  {
     ok = FALSE;
+  }
   
   *hauteur = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                 UI_SEC_RE.builder, "EF_section_rectangulaire_buffer_hauteur")),
@@ -93,7 +95,9 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
                           INFINITY,
                           FALSE);
   if (isnan (*hauteur))
+  {
     ok = FALSE;
+  }
   
   // Si tous les paramètres sont corrects
   textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
@@ -114,7 +118,9 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
       ok = FALSE;
     }
     else
+    {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+    }
   }
   else if ((strcmp (*nom, "") == 0) ||
            ((strcmp (UI_SEC_RE.section->nom, *nom) != 0) &&
@@ -124,7 +130,9 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
     ok = FALSE;
   }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
   
   if (ok == FALSE)
   {
@@ -136,9 +144,6 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet *p,
 }
 
 
-void
-EF_gtk_section_rectangulaire_check (GtkWidget *button,
-                                    Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -149,6 +154,9 @@ EF_gtk_section_rectangulaire_check (GtkWidget *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_rectangulaire_check (GtkWidget *button,
+                                    Projet    *p)
 {
   double largeur, hauteur;
   char  *nom;
@@ -157,15 +165,17 @@ EF_gtk_section_rectangulaire_check (GtkWidget *button,
   BUGCRIT (UI_SEC_RE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Rectangulaire");)
+                     "Ajout Section Rectangulaire"); )
   
   if (!EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                       &largeur,
                                                       &hauteur,
                                                       &nom))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                UI_SEC_RE.builder, "EF_section_rectangulaire_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -178,9 +188,6 @@ EF_gtk_section_rectangulaire_check (GtkWidget *button,
 }
 
 
-void
-EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
-                                              Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la section.
  * \param button : composant à l'origine de l'évènement,
@@ -190,6 +197,9 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
+                                              Projet    *p)
 {
   double largeur, hauteur;
   gchar   *texte;
@@ -198,13 +208,15 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
   BUGCRIT (UI_SEC_RE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Rectangulaire");)
+                     "Ajout Section Rectangulaire"); )
   
   if (!(EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                        &largeur,
                                                        &hauteur,
                                                        &texte)))
+  {
     return;
+  }
   
   // Création de la nouvelle charge ponctuelle au noeud
   BUG (EF_sections_rectangulaire_ajout (p,
@@ -212,7 +224,7 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
                                         m_f (largeur, FLOTTANT_UTILISATEUR),
                                         m_f (hauteur, FLOTTANT_UTILISATEUR)),
       ,
-      free (texte);)
+      free (texte); )
   
   free (texte);
   
@@ -222,9 +234,6 @@ EF_gtk_section_rectangulaire_ajouter_clicked (GtkButton *button,
 }
 
 
-void
-EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
-                                               Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -234,6 +243,9 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
+                                               Projet    *p)
 {
   double largeur, hauteur;
   gchar *texte;
@@ -242,13 +254,15 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
   BUGCRIT (UI_SEC_RE.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Rectangulaire");)
+                     "Ajout Section Rectangulaire"); )
   
   if (!(EF_gtk_section_rectangulaire_recupere_donnees (p,
                                                        &largeur,
                                                        &hauteur,
                                                        &texte)))
+  {
     return;
+  }
   
   gtk_widget_destroy (UI_SEC_RE.window);
   
@@ -258,7 +272,7 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
                                         m_f (largeur, FLOTTANT_UTILISATEUR),
                                         m_f (hauteur, FLOTTANT_UTILISATEUR)),
       ,
-      free (texte);)
+      free (texte); )
   
   free (texte);
   
@@ -266,9 +280,6 @@ EF_gtk_section_rectangulaire_modifier_clicked (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_section_rectangulaire (Projet  *p,
-                              Section *section)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier une section
  *        de type rectangulaire.
@@ -280,6 +291,9 @@ EF_gtk_section_rectangulaire (Projet  *p,
  *     - p == NULL,
  *     - interface graphique déjà initialisée.
  */
+gboolean
+EF_gtk_section_rectangulaire (Projet  *p,
+                              Section *section)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -287,7 +301,9 @@ EF_gtk_section_rectangulaire (Projet  *p,
   {
     gtk_window_present (GTK_WINDOW (UI_SEC_RE.window));
     if (UI_SEC_RE.section == section)
+    {
       return TRUE;
+    }
   }
   else
   {
@@ -297,7 +313,7 @@ EF_gtk_section_rectangulaire (Projet  *p,
                                             NULL) != 0,
              FALSE,
              (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                       "Ajout Section Rectangulaire");)
+                       "Ajout Section Rectangulaire"); )
     gtk_builder_connect_signals (UI_SEC_RE.builder, p);
     UI_SEC_RE.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_RE.builder,
                                            "EF_section_rectangulaire_window"));
@@ -329,7 +345,7 @@ EF_gtk_section_rectangulaire (Projet  *p,
     UI_SEC_RE.section = section;
     BUGCRIT (UI_SEC_RE.section->type == SECTION_RECTANGULAIRE,
              FALSE,
-             (gettext ("La section à modifier n'est pas rectangulaire.\n"));)
+             (gettext ("La section à modifier n'est pas rectangulaire.\n")); )
     data = UI_SEC_RE.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

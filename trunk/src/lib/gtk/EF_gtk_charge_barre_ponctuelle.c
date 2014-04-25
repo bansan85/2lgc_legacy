@@ -44,18 +44,6 @@ GTK_WINDOW_KEY_PRESS (ef, charge_barre_ponctuelle);
 GTK_WINDOW_DESTROY (ef, charge_barre_ponctuelle, );
 
 
-gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
-                                                  Action  **action,
-                                                  GList   **barres,
-                                                  double   *fx,
-                                                  double   *fy,
-                                                  double   *fz,
-                                                  double   *mx,
-                                                  double   *my,
-                                                  double   *mz,
-                                                  gchar   **nom,
-                                                  gboolean *repere_local,
-                                                  double   *position)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer une charge ponctuelle sur barre.
@@ -89,6 +77,18 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
  *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
+gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
+                                                  Action  **action,
+                                                  GList   **barres,
+                                                  double   *fx,
+                                                  double   *fy,
+                                                  double   *fz,
+                                                  double   *mx,
+                                                  double   *my,
+                                                  double   *mz,
+                                                  gchar   **nom,
+                                                  gboolean *repere_local,
+                                                  double   *position)
 {
   GList         *num_barres;
   GtkTextIter    start, end;
@@ -111,14 +111,18 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
   BUGCRIT (UI_CHBARP.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Barre Ponctuelle");)
+                     "Charge Barre Ponctuelle"); )
   
   if (gtk_combo_box_get_active (UI_CHBARP.combobox_charge) < 0)
+  {
     ok = FALSE;
+  }
   else
+  {
     *action = g_list_nth_data (p->actions,
                                (unsigned int) gtk_combo_box_get_active (
                                                    UI_CHBARP.combobox_charge));
+  }
   
   *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_fx")),
@@ -127,7 +131,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fx))
+  {
     ok = FALSE;
+  }
   
   *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_fy")),
@@ -136,7 +142,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fy))
+  {
     ok = FALSE;
+  }
   
   *fz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_fz")),
@@ -145,7 +153,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fz))
+  {
     ok = FALSE;
+  }
   
   *mx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_mx")),
@@ -154,7 +164,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*mx))
+  {
     ok = FALSE;
+  }
   
   *my = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_my")),
@@ -163,7 +175,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*my))
+  {
     ok = FALSE;
+  }
   
   *mz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_mz")),
@@ -172,7 +186,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                      INFINITY,
                      FALSE);
   if (isnan (*mz))
+  {
     ok = FALSE;
+  }
   
   *position = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                        UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_pos")),
@@ -181,7 +197,9 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
                            INFINITY,
                            FALSE);
   if (isnan (*position))
+  {
     ok = FALSE;
+  }
   
   *repere_local = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
                                      gtk_builder_get_object (UI_CHBARP.builder,
@@ -194,13 +212,17 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
   texte_tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
   num_barres = common_selection_renvoie_numeros (texte_tmp);
   if (num_barres == NULL)
+  {
     ok = FALSE;
+  }
   else
   {
     *barres = common_selection_numeros_en_barres (num_barres, p);
     g_list_free (num_barres);
     if (*barres == NULL)
+    {
       ok = FALSE;
+    }
     else
     {
       // Si tous les paramètres sont corrects
@@ -227,9 +249,6 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
 }
 
 
-void
-EF_gtk_charge_barre_ponct_check (GtkWidget *button,
-                                 Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -240,6 +259,9 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_barre_ponct_check (GtkWidget *button,
+                                 Projet    *p)
 {
   Action  *action;
   GList   *barres;
@@ -252,7 +274,7 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
   BUGCRIT (UI_CHBARP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Barre Ponctuelle");)
+                     "Charge Barre Ponctuelle"); )
   
   if (!EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -266,9 +288,11 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
                                                 &nom,
                                                 &repere_local,
                                                 &position))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                   UI_CHBARP.builder, "EF_charge_barre_ponct_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -282,9 +306,6 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
 }
 
 
-void
-EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
-                                        Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la charge.
  * \param button : composant à l'origine de l'évènement,
@@ -294,6 +315,9 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
+                                        Projet    *p)
 {
   double   fx, fy, fz, mx, my, mz, position;
   Action  *action;
@@ -305,7 +329,7 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
   BUGCRIT (UI_CHBARP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Barre Ponctuelle");)
+                     "Charge Barre Ponctuelle"); )
   
   BUG (EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -335,7 +359,7 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
                                          m_f (mz, FLOTTANT_UTILISATEUR),
                                          texte),
       ,
-      free (texte);)
+      free (texte); )
   
   free (texte);
   
@@ -345,9 +369,6 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
 }
 
 
-void
-EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
-                                       Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -357,6 +378,9 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
+                                       Projet    *p)
 {
   double                   fx, fy, fz, mx, my, mz, position;
   gboolean                 repere_local;
@@ -369,7 +393,7 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
   BUGCRIT (UI_CHBARP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Barre Ponctuelle");)
+                     "Charge Barre Ponctuelle"); )
   
   BUG (EF_gtk_charge_barre_ponctuelle_recupere (p,
                                                 &action,
@@ -398,11 +422,15 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
   g_list_free (charge_d->barres);
   charge_d->barres = barres;
   charge_d->position = m_f (position, FLOTTANT_UTILISATEUR);
-  charge_d->repere_local = repere_local;
+  charge_d->repere_local = repere_local == TRUE;
   if (action != UI_CHBARP.action)
+  {
     BUG (EF_charge_deplace (p, UI_CHBARP.action, UI_CHBARP.charge, action), )
+  }
   else
+  {
     gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+  }
   
   gtk_widget_destroy (UI_CHBARP.window);
   
@@ -412,10 +440,6 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_charge_barre_ponctuelle (Projet *p,
-                                Action *action_defaut,
-                                Charge *charge)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier une action de
  *        type charge ponctuelle sur barre.
@@ -429,6 +453,10 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+gboolean
+EF_gtk_charge_barre_ponctuelle (Projet *p,
+                                Action *action_defaut,
+                                Charge *charge)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -444,7 +472,7 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
                                           NULL) != 0,
            FALSE,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Charge Barre Ponctuelle");)
+                     "Charge Barre Ponctuelle"); )
   gtk_builder_connect_signals (UI_CHBARP.builder, p);
   
   UI_CHBARP.window = GTK_WIDGET (gtk_builder_get_object (UI_CHBARP.builder,
@@ -519,13 +547,17 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
                               tmp,
                               -1);
     if (charge_d->repere_local)
+    {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                       UI_CHBARP.builder, "EF_charge_barre_ponct_radio_local")),
                                     TRUE);
+    }
     else
+    {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                      UI_CHBARP.builder, "EF_charge_barre_ponct_radio_global")),
                                     TRUE);
+    }
     BUG (tmp2 = common_selection_barres_en_texte (charge_d->barres), FALSE)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                     UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_barres")),
@@ -560,11 +592,16 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
   EF_gtk_charge_barre_ponct_check (NULL, p);
   
   if (UI_ACT.window == NULL)
+  {
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHBARP.window),
                                   GTK_WINDOW (UI_GTK.window));
+  }
   else
+  {
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHBARP.window),
                                   GTK_WINDOW (UI_ACT.window));
+  }
+  
   return TRUE;
 }
 

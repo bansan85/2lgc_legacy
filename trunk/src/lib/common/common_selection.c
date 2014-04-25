@@ -29,11 +29,6 @@
 #include "1992_1_1_barres.h"
 #include "common_erreurs.h"
 
-gboolean
-common_selection_ajout_nombre (void      *data,
-                               GList    **liste,
-                               Type_Liste type,
-                               Projet    *p)
 /**
  * \brief Ajoute un nombre à la liste chainée.
  * \param data : donnée à ajouter,
@@ -47,6 +42,11 @@ common_selection_ajout_nombre (void      *data,
  *     - liste == NULL,
  *     - p == NULL && type == LISTE_CHARGES
  */
+gboolean
+common_selection_ajout_nombre (void      *data,
+                               GList    **liste,
+                               Type_Liste type,
+                               Projet    *p)
 {
   GList  *list_parcours;
   Action *action = NULL;
@@ -55,7 +55,9 @@ common_selection_ajout_nombre (void      *data,
   BUGPARAM (type, "%d", (p) || (type != LISTE_CHARGES), FALSE)
   
   if (type == LISTE_CHARGES)
+  {
     BUG (action = EF_charge_action (p, data), FALSE)
+  }
   
   if (*liste == NULL)
   {
@@ -72,7 +74,7 @@ common_selection_ajout_nombre (void      *data,
       default :
       {
         FAILCRIT (FALSE,
-                  (gettext ("Le type %d de la liste est inconnu.\n"), type);)
+                  (gettext ("Le type %d de la liste est inconnu.\n"), type); )
       }
     }
   }
@@ -84,13 +86,15 @@ common_selection_ajout_nombre (void      *data,
     {
       case LISTE_UINT :
       {
-        unsigned int nombre_liste, nombre;
+        uint32_t nombre_liste, nombre;
         
         nombre_liste = GPOINTER_TO_UINT (list_parcours->data);
         nombre = GPOINTER_TO_UINT (data);
         
         if (nombre_liste == nombre)
+        {
           return TRUE;
+        }
         else if (nombre_liste > nombre)
         {
           *liste = g_list_insert_before (*liste, list_parcours, data);
@@ -106,7 +110,9 @@ common_selection_ajout_nombre (void      *data,
         noeud = data;
         
         if (noeud_liste->numero == noeud->numero)
+        {
           return TRUE;
+        }
         else if (noeud_liste->numero > noeud->numero)
         {
           *liste = g_list_insert_before (*liste, list_parcours, data);
@@ -122,7 +128,9 @@ common_selection_ajout_nombre (void      *data,
         barre = data;
         
         if (barre_liste->numero == barre->numero)
+        {
           return TRUE;
+        }
         else if (barre_liste->numero > barre->numero)
         {
           *liste = g_list_insert_before (*liste, list_parcours, data);
@@ -140,7 +148,9 @@ common_selection_ajout_nombre (void      *data,
         charge = data;
         
         if ((action_en_cours == action) && (charge_liste == charge))
+        {
           return TRUE;
+        }
         else if ((g_list_index (p->actions, action_en_cours) >
                                           g_list_index (p->actions, action)) ||
                  ((action_en_cours == action) &&
@@ -157,7 +167,7 @@ common_selection_ajout_nombre (void      *data,
       default :
       {
         FAILCRIT (FALSE,
-                  (gettext ("Le type %d de la liste est inconnu.\n"), type);)
+                  (gettext ("Le type %d de la liste est inconnu.\n"), type); )
       }
     }
     list_parcours = g_list_next (list_parcours);
@@ -180,14 +190,12 @@ common_selection_ajout_nombre (void      *data,
     default :
     {
       FAILCRIT (FALSE,
-                (gettext ("Le type %d de la liste est inconnu.\n"), type);)
+                (gettext ("Le type %d de la liste est inconnu.\n"), type); )
     }
   }
 }
 
 
-GList *
-common_selection_renvoie_numeros (const char *texte)
 /**
  * \brief Renvoie une liste de numéros sous forme de texte. Par exemple, le
  *        texte "1;2;3-4;6-9;10-20/2" donne les numéros
@@ -201,17 +209,21 @@ common_selection_renvoie_numeros (const char *texte)
  *     - Erreur d'allocation mémoire,
  *     - Format de texte illisible.
  */
+GList *
+common_selection_renvoie_numeros (const char *texte)
 {
-  char        *texte_clean;
-  GList       *list;
-  unsigned int i, j;
+  char    *texte_clean;
+  GList   *list;
+  uint32_t i, j;
   
   if (texte == NULL)
+  {
     return NULL;
+  }
   
   BUGCRIT (texte_clean = malloc (sizeof (char) * (strlen (texte) + 1)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // On vérifie si le texte contient bien une liste correcte de numéros
   i = 0;
@@ -259,39 +271,44 @@ common_selection_renvoie_numeros (const char *texte)
   do
   {
     while ((texte_clean[i] == ';') && (texte_clean[i] != 0))
+    {
       i++;
+    }
     if (texte_clean[i] != 0)
     {
-      j = i + 1;
+      j = i + 1U;
       while ((texte_clean[j] != ';') && (texte_clean[j] != 0))
+      {
         j++;
+      }
       j--;
       // Il y a quelque chose à faire
       if ((j > i) || (texte_clean[i] != ';'))
       {
-        char        *tmp;
-        char        *fake;
-        unsigned int debut, fin, pas;
+        char    *tmp;
+        char    *fake;
+        uint32_t debut, fin, pas;
         
-        BUGCRIT (tmp = malloc (sizeof (char) * (j - i + 2)),
+        BUGCRIT (tmp = malloc (sizeof (char) * (j - i + 2U)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (texte_clean);
-                   g_list_free (list);)
-        BUGCRIT (fake = malloc (sizeof (char) * (j - i + 2)),
+                   g_list_free (list); )
+        BUGCRIT (fake = malloc (sizeof (char) * (j - i + 2U)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (texte_clean);
                    free (tmp);
-                   g_list_free (list);)
+                   g_list_free (list); )
         
-        strncpy (tmp, texte_clean + i, j - i + 1);
+        strncpy (tmp, texte_clean + i, j - i + 1U);
         tmp[j - i + 1] = 0;
         
         // Si c'est du format debut-fin/pas
         if (sscanf (tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
         {
           for (i = debut; i <= fin; i = i + pas)
+          {
             BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (i),
                                                 &list,
                                                 LISTE_UINT,
@@ -300,12 +317,14 @@ common_selection_renvoie_numeros (const char *texte)
                  free (texte_clean);
                    free (tmp);
                    free (fake);
-                   g_list_free (list);)
+                   g_list_free (list); )
+          }
         }
         // Si c'est du format debut-fin
         else if (sscanf (tmp, "%u-%u%s", &debut, &fin, fake) == 2)
         {
           for (i = debut; i <= fin; i++)
+          {
             BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (i),
                                                 &list,
                                                 LISTE_UINT,
@@ -314,10 +333,12 @@ common_selection_renvoie_numeros (const char *texte)
                  free (texte_clean);
                    free (tmp);
                    free (fake);
-                   g_list_free (list);)
+                   g_list_free (list); )
+          }
         }
         // Si c'est du format nombre simple
         else if (sscanf (tmp, "%u%s", &debut, fake) == 1)
+        {
           BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (debut),
                                               &list,
                                               LISTE_UINT,
@@ -326,7 +347,8 @@ common_selection_renvoie_numeros (const char *texte)
                free (texte_clean);
                  free (tmp);
                  free (fake);
-                 g_list_free (list);)
+                 g_list_free (list); )
+        }
         // Le format est inconnu.
         else
         {
@@ -351,9 +373,6 @@ common_selection_renvoie_numeros (const char *texte)
 }
 
 
-GList *
-common_selection_numeros_en_noeuds (GList  *liste_numeros,
-                                    Projet *p)
 /**
  * \brief Renvoie sous forme d'une liste de noeuds la liste des numéros.
  * \param liste_numeros : liste des numéros (sous format GPOINTER_TO_UINT) à
@@ -364,6 +383,9 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
  *   Échec : NULL :
  *     - un des noeuds est introuvable.
  */
+GList *
+common_selection_numeros_en_noeuds (GList  *liste_numeros,
+                                    Projet *p)
 {
   GList *liste_noeuds = NULL;
   
@@ -373,8 +395,8 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
     
     do
     {
-      unsigned int numero = GPOINTER_TO_UINT (list_parcours->data);
-      EF_Noeud    *noeud = EF_noeuds_cherche_numero (p, numero, FALSE);
+      uint32_t  numero = GPOINTER_TO_UINT (list_parcours->data);
+      EF_Noeud *noeud = EF_noeuds_cherche_numero (p, numero, FALSE);
       
       if (noeud == NULL)
       {
@@ -382,7 +404,9 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
         return NULL;
       }
       else
+      {
         liste_noeuds = g_list_append (liste_noeuds, noeud);
+      }
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -393,9 +417,6 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
 }
 
 
-GList *
-common_selection_numeros_en_barres (GList  *liste_numeros,
-                                    Projet *p)
 /**
  * \brief Renvoie sous forme d'une liste de barres la liste des numéros.
  * \param liste_numeros : la liste des numéros (sous format GPOINTER_TO_UINT) à
@@ -406,6 +427,9 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
  *   Échec : NULL :
  *     - une des barres est introuvable.
  */
+GList *
+common_selection_numeros_en_barres (GList  *liste_numeros,
+                                    Projet *p)
 {
   GList *liste_barres = NULL;
   
@@ -415,8 +439,8 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
     
     do
     {
-      unsigned int numero = GPOINTER_TO_UINT (list_parcours->data);
-      EF_Barre    *barre = _1992_1_1_barres_cherche_numero (p, numero, FALSE);
+      uint32_t  numero = GPOINTER_TO_UINT (list_parcours->data);
+      EF_Barre *barre = _1992_1_1_barres_cherche_numero (p, numero, FALSE);
       
       if (barre == NULL)
       {
@@ -424,7 +448,9 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
         return NULL;
       }
       else
+      {
         liste_barres = g_list_append (liste_barres, barre);
+      }
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -435,9 +461,6 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
 }
 
 
-// coverity[+alloc]
-char *
-common_selection_noeuds_en_texte (GList *liste_noeuds)
 /**
  * \brief Renvoie sous forme de texte une liste de noeuds.
  * \param liste_noeuds : la liste des noeuds à convertir en texte.
@@ -446,6 +469,9 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire,
  */
+// coverity[+alloc]
+char *
+common_selection_noeuds_en_texte (GList *liste_noeuds)
 {
   char *tmp = NULL, *tmp2 = NULL;
   
@@ -458,7 +484,7 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
     noeud = list_parcours->data;
     BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
@@ -468,7 +494,7 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
         BUGCRIT (tmp2 = g_strdup_printf ("%s;%d", tmp, noeud->numero),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                  free (tmp);)
+                  free (tmp); )
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -478,17 +504,16 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
     }
   }
   else
+  {
     BUGCRIT (tmp = g_strdup_printf (" "),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
+  }
   
   return tmp;
 }
 
 
-// coverity[+alloc]
-char *
-common_selection_barres_en_texte (GList *liste_barres)
 /**
  * \brief Renvoie sous forme de texte une liste de barres.
  * \param liste_barres : la liste des barres à convertir en texte.
@@ -497,6 +522,9 @@ common_selection_barres_en_texte (GList *liste_barres)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+common_selection_barres_en_texte (GList *liste_barres)
 {
   char *tmp, *tmp2;
   
@@ -509,7 +537,7 @@ common_selection_barres_en_texte (GList *liste_barres)
     barre = list_parcours->data;
     BUGCRIT (tmp = g_strdup_printf ("%u", barre->numero),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
@@ -519,7 +547,7 @@ common_selection_barres_en_texte (GList *liste_barres)
         BUGCRIT (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp);)
+                   free (tmp); )
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -529,18 +557,16 @@ common_selection_barres_en_texte (GList *liste_barres)
     }
   }
   else
+  {
     BUGCRIT (tmp = g_strdup_printf (" "),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
+  }
   
   return tmp;
 }
 
 
-// coverity[+alloc]
-char *
-common_selection_charges_en_texte (GList  *liste_charges,
-                                   Projet *p)
 /**
  * \brief Renvoie sous forme de texte une liste de charges.
  * \param liste_charges : la liste des charges à convertir en texte,
@@ -550,6 +576,10 @@ common_selection_charges_en_texte (GList  *liste_charges,
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+common_selection_charges_en_texte (GList  *liste_charges,
+                                   Projet *p)
 {
   char *tmp, *tmp2;
   
@@ -568,7 +598,7 @@ common_selection_charges_en_texte (GList  *liste_charges,
                                     g_list_index (p->actions, action),
                  g_list_index (_1990_action_charges_renvoie (action), charge)),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
@@ -583,7 +613,9 @@ common_selection_charges_en_texte (GList  *liste_charges,
           
           if (g_list_find (_1990_action_charges_renvoie(action), charge) !=
                                                                           NULL)
+          {
             list_parcours2 = NULL;
+          }
            
           list_parcours2 = g_list_next (list_parcours2);
         }
@@ -593,7 +625,7 @@ common_selection_charges_en_texte (GList  *liste_charges,
                  g_list_index (_1990_action_charges_renvoie (action), charge)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp);)
+                   free (tmp); )
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -603,9 +635,11 @@ common_selection_charges_en_texte (GList  *liste_charges,
     }
   }
   else
+  {
     BUGCRIT (tmp = g_strdup_printf (" "),
              NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
+  }
   
   return tmp;
 }

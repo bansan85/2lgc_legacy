@@ -27,9 +27,6 @@
 #include "1990_groupe.h"
 #include "1990_ponderations.h"
 
-gboolean
-_1990_combinaisons_verifie_double (GList *liste_combinaisons,
-                                   GList *comb_a_verifier)
 /**
  * \brief Vérifie si une combinaison est déjà présente dans une liste de
  *        combinaisons.
@@ -40,13 +37,20 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
  *    - TRUE si la combinaison est présente,
  *    - TRUE si la combinaison est vide (afin de ne pas l'ajouter).
  */
+gboolean
+_1990_combinaisons_verifie_double (GList *liste_combinaisons,
+                                   GList *comb_a_verifier)
 {
   GList *list_parcours;
   
   if (liste_combinaisons == NULL)
+  {
     return FALSE;
+  }
   if (comb_a_verifier == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = liste_combinaisons;
   do
@@ -69,17 +73,23 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
       /* On vérifie que chaque élément pointe vers la même action
        *  et que les flags (paramètres de calculs) sont les mêmes */
       if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags))
+      {
         doublon = FALSE;
+      }
       
       list_1 = g_list_next (list_1);
       list_2 = g_list_next (list_2);
       
       if ((list_1) || (list_2))
+      {
         doublon = FALSE;
+      }
     }
     
     if (doublon == TRUE)
+    {
       return TRUE;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
@@ -89,10 +99,6 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
 }
 
 
-gboolean
-_1990_combinaisons_duplique (GList  **liste_comb_destination,
-                             GList   *liste_comb_source,
-                             gboolean sans_double)
 /**
  * \brief Ajoute à une liste de combinaisons existante une liste de
  *        combinaisons.
@@ -107,13 +113,19 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
  *     - liste_comb_destination == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_combinaisons_duplique (GList  **liste_comb_destination,
+                             GList   *liste_comb_source,
+                             gboolean sans_double)
 {
   GList *list_parcours;
   
   BUGPARAMCRIT (liste_comb_destination, "%p", liste_comb_destination, FALSE)
   
   if (liste_comb_source == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = liste_comb_source;
   while (list_parcours != NULL)
@@ -122,10 +134,14 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
     gboolean verifie_double;
     
     if (sans_double == TRUE)
+    {
       verifie_double = _1990_combinaisons_verifie_double (
                                   *liste_comb_destination, combinaison_source);
+    }
     else
+    {
       verifie_double = FALSE;
+    }
     
     if (verifie_double == FALSE)
     {
@@ -142,7 +158,7 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
         
         BUGCRIT (element_destination = malloc (sizeof (Combinaison)),
                  FALSE,
-                 (gettext ("Erreur d'allocation mémoire.\n"));)
+                 (gettext ("Erreur d'allocation mémoire.\n")); )
         
         element_destination->action = element_source->action;
         element_destination->flags = element_source->flags;
@@ -166,10 +182,6 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
 }
 
 
-gboolean
-_1990_combinaisons_genere_xor (Projet        *p,
-                               Niveau_Groupe *niveau,
-                               Groupe        *groupe)
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
  *        combinaison GROUPE_COMBINAISON_XOR dans le champ tmp_combinaison.
@@ -187,29 +199,35 @@ _1990_combinaisons_genere_xor (Projet        *p,
  *     - erreur d'allocation mémoire,
  *     - _1990_combinaisons_duplique.
  */
+gboolean
+_1990_combinaisons_genere_xor (Projet        *p,
+                               Niveau_Groupe *niveau,
+                               Groupe        *groupe)
 {
   GList *list_parcours;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
         (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"),
-                  g_list_index (p->niveaux_groupes, niveau));)
+                  g_list_index (p->niveaux_groupes, niveau)); )
   BUGPARAMCRIT (groupe->type_combinaison,
                 "%d",
                 groupe->type_combinaison == GROUPE_COMBINAISON_XOR,
                 FALSE,
-                (gettext ("Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n"));)
+                (gettext ("Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n")); )
   
   // Si le nombre d'éléments est 0 Alors
   //   Fin.
   // FinSi
   if (groupe->elements == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = groupe->elements;
   
@@ -233,10 +251,10 @@ _1990_combinaisons_genere_xor (Projet        *p,
         BUGCRIT (element = malloc (sizeof (Combinaison)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);)
+                   _1990_groupe_free_combinaisons (&groupe->tmp_combinaison); )
         element->action = action;
         element->flags = _1990_action_flags_action_predominante_renvoie (
-                                                              element->action);
+                                                         element->action) & 1U;
         nouvelle_combinaison = g_list_append (nouvelle_combinaison, element);
         groupe->tmp_combinaison = g_list_append (groupe->tmp_combinaison,
                                                  nouvelle_combinaison);
@@ -257,11 +275,11 @@ _1990_combinaisons_genere_xor (Projet        *p,
     list_groupe_n_1 = g_list_find (p->niveaux_groupes, niveau);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n"));)
+             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     list_groupe_n_1 = g_list_previous (list_groupe_n_1);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
+             (gettext ("Impossible de trouver le niveau précédent le niveau.\n")); )
     
     do
     {
@@ -270,7 +288,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
       BUG (_1990_combinaisons_duplique (&(groupe->tmp_combinaison),
                                         groupe_n_1->tmp_combinaison, TRUE),
            FALSE,
-           _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);)
+           _1990_groupe_free_combinaisons (&groupe->tmp_combinaison); )
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -282,9 +300,6 @@ _1990_combinaisons_genere_xor (Projet        *p,
 }
 
 
-gboolean
-_1990_combinaisons_fusion (GList *destination,
-                           GList *source)
 /**
  * \brief Fusionne deux combinaisons. La liste des combinaisons source est
  *        copiée à la fin de la liste des combinaisons destination. Il est donc
@@ -297,6 +312,9 @@ _1990_combinaisons_fusion (GList *destination,
  *     - destination == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_combinaisons_fusion (GList *destination,
+                           GList *source)
 {
   GList   *list_parcours;
   
@@ -310,7 +328,7 @@ _1990_combinaisons_fusion (GList *destination,
     
     BUGCRIT (element_destination = malloc (sizeof (Combinaison)),
              FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     element_destination->action = element_source->action;
     element_destination->flags = element_source->flags;
     destination = g_list_append (destination, element_destination);
@@ -322,10 +340,6 @@ _1990_combinaisons_fusion (GList *destination,
 }
 
 
-gboolean
-_1990_combinaisons_genere_and (Projet        *p,
-                               Niveau_Groupe *niveau,
-                               Groupe        *groupe)
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
  *        combinaison GROUPE_COMBINAISON_AND.
@@ -345,6 +359,10 @@ _1990_combinaisons_genere_and (Projet        *p,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
+gboolean
+_1990_combinaisons_genere_and (Projet        *p,
+                               Niveau_Groupe *niveau,
+                               Groupe        *groupe)
 {
   GList  *list_parcours;
   Groupe *groupe_n_1;
@@ -352,18 +370,20 @@ _1990_combinaisons_genere_and (Projet        *p,
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
-        (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau));)
+        (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau)); )
   BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_AND,
         FALSE,
-        (gettext ("Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"));)
+        (gettext ("Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n")); )
   
   if (groupe->elements == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = groupe->elements;
   
@@ -389,10 +409,10 @@ _1990_combinaisons_genere_and (Projet        *p,
         BUGCRIT (element = malloc (sizeof (Combinaison)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   g_list_free_full (comb, free);)
+                   g_list_free_full (comb, free); )
         element->action = action;
         element->flags = _1990_action_flags_action_predominante_renvoie (
-                                                              element->action);
+                                                         element->action) & 1U;
         comb = g_list_append (comb, element);
       }
       
@@ -401,8 +421,10 @@ _1990_combinaisons_genere_and (Projet        *p,
     while (list_parcours != NULL);
     
     if (comb != NULL)
+    {
       groupe->tmp_combinaison = g_list_append (groupe->tmp_combinaison,
                                                comb);
+    }
   }
   // Sinon
   //   La génération consiste à créer un nombre de combinaisons égal au produit
@@ -434,11 +456,11 @@ _1990_combinaisons_genere_and (Projet        *p,
     list_groupe_n_1 = g_list_find (p->niveaux_groupes, niveau);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n"));)
+             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     list_groupe_n_1 = g_list_previous (list_groupe_n_1);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
+             (gettext ("Impossible de trouver le niveau précédent le niveau.\n")); )
     
     while (list_parcours != NULL)
     {
@@ -447,18 +469,20 @@ _1990_combinaisons_genere_and (Projet        *p,
       
       // Alors, il s'agit de la première passe. On duplique donc simplement.
       if (groupe->elements->data == groupe_n_1)
+      {
         BUG (_1990_combinaisons_duplique (&nouvelles_combinaisons,
                                           groupe_n_1->tmp_combinaison,
                                           FALSE),
              FALSE,
-             _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+             _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
+      }
       else
       {
         // transition est utilisée de façon temporaire pour dupliquer
         // nouvelles_combinaisons en cas de besoin.
-        GList       *transition = NULL;
-        GList       *list_parcours2, *list_parcours3;
-        unsigned int j, i, nbboucle;
+        GList   *transition = NULL;
+        GList   *list_parcours2, *list_parcours3;
+        uint32_t j, i, nbboucle;
         
         // On duplique les combinaisons actuellement
         // dans nouvelles_combinaisons autant de fois (moins 1) qu'il y a
@@ -469,15 +493,17 @@ _1990_combinaisons_genere_and (Projet        *p,
                                           FALSE),
              FALSE,
              _1990_groupe_free_combinaisons (&transition);
-               _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+               _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
         nbboucle = g_list_length (groupe_n_1->tmp_combinaison);
         for (i = 2; i <= nbboucle; i++)
+        {
           BUG (_1990_combinaisons_duplique (&nouvelles_combinaisons,
                                             transition,
                                             FALSE),
                FALSE,
                _1990_groupe_free_combinaisons (&transition);
-                 _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+                 _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
+        }
         
         // On ajoute à la fin de toutes les combinaisons dupliquées les
         // combinaisons contenues dans le groupe en cours (deuxième partie de
@@ -497,7 +523,7 @@ _1990_combinaisons_genere_and (Projet        *p,
             BUG (_1990_combinaisons_fusion (combinaison1, combinaison2),
                  FALSE,
                  _1990_groupe_free_combinaisons (&transition);
-                   _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+                   _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
             list_parcours3 = g_list_next (list_parcours3);
           }
           
@@ -515,7 +541,7 @@ _1990_combinaisons_genere_and (Projet        *p,
                                       nouvelles_combinaisons,
                                       TRUE),
          FALSE,
-         _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+         _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
     _1990_groupe_free_combinaisons (&nouvelles_combinaisons);
   }
   // FinSi
@@ -524,10 +550,6 @@ _1990_combinaisons_genere_and (Projet        *p,
 }
 
 
-gboolean
-_1990_combinaisons_genere_or (Projet        *p,
-                              Niveau_Groupe *niveau,
-                              Groupe        *groupe)
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
  *        combinaison GROUPE_COMBINAISON_OR.
@@ -547,27 +569,33 @@ _1990_combinaisons_genere_or (Projet        *p,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
+gboolean
+_1990_combinaisons_genere_or (Projet        *p,
+                              Niveau_Groupe *niveau,
+                              Groupe        *groupe)
 {
-  GList       *list_parcours;
-  unsigned int boucle, i;
+  GList   *list_parcours;
+  uint32_t boucle, i;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
-        (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau));)
+        (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau)); )
   BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_OR,
         FALSE,
-        (gettext ("Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"));)
+        (gettext ("Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n")); )
   
   if (groupe == NULL)
+  {
     return TRUE;
+  }
   
-  boucle = 1 << g_list_length (groupe->elements);
+  boucle = (uint32_t) 1 << g_list_length (groupe->elements);
   
   // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
   //   Afin de générer l'ensemble des combinaisons, il va être nécessaire de
@@ -586,8 +614,8 @@ _1990_combinaisons_genere_or (Projet        *p,
   {
     for (i = 0; i < boucle; i++)
     {
-      unsigned int parcours_bits = i;
-      GList       *nouvelle_combinaison = NULL;
+      uint32_t parcours_bits = i;
+      GList   *nouvelle_combinaison = NULL;
       
       list_parcours = groupe->elements;
       
@@ -605,10 +633,10 @@ _1990_combinaisons_genere_or (Projet        *p,
             BUGCRIT (element = malloc (sizeof (Combinaison)),
                      FALSE,
                      (gettext ("Erreur d'allocation mémoire.\n"));
-                       g_list_free_full (nouvelle_combinaison, free);)
+                       g_list_free_full (nouvelle_combinaison, free); )
             element->action = action;
             element->flags = _1990_action_flags_action_predominante_renvoie (
-                                                              element->action);
+                                                         element->action) & 1U;
             nouvelle_combinaison = g_list_append (nouvelle_combinaison,
                                                   element);
           }
@@ -619,8 +647,10 @@ _1990_combinaisons_genere_or (Projet        *p,
       while (parcours_bits != 0);
       
       if (nouvelle_combinaison != NULL)
+      {
         groupe->tmp_combinaison = g_list_append (groupe->tmp_combinaison,
                                                  nouvelle_combinaison);
+      }
     }
   }
   // Sinon
@@ -648,22 +678,22 @@ _1990_combinaisons_genere_or (Projet        *p,
     list_groupe_n_1 = g_list_find (p->niveaux_groupes, niveau);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n"));)
+             (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     list_groupe_n_1 = g_list_previous (list_groupe_n_1);
     BUGCRIT (list_groupe_n_1,
              FALSE,
-             (gettext ("Impossible de trouver le niveau précédent le niveau.\n"));)
+             (gettext ("Impossible de trouver le niveau précédent le niveau.\n")); )
     
     for (i = 0; i < boucle; i++)
     {
-      unsigned int parcours_bits = i;
-      GList       *nouvelles_combinaisons = NULL;
+      uint32_t parcours_bits = i;
+      GList   *nouvelles_combinaisons = NULL;
       
       list_parcours = groupe->elements;
       BUGCRIT (list_parcours,
                FALSE,
                (gettext ("Impossible\n"));
-                 _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+                 _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
       do
       {
         if ((parcours_bits & 1) == 1)
@@ -674,36 +704,42 @@ _1990_combinaisons_genere_or (Projet        *p,
           {
             // Il s'agit de la première passe. On duplique donc simplement.
             if (nouvelles_combinaisons == NULL)
+            {
               BUG (_1990_combinaisons_duplique (&nouvelles_combinaisons,
                                                 groupe_n_1->tmp_combinaison,
                                                 FALSE),
                    FALSE,
-                   _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+                   _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
+            }
             else
             {
               // transition est utilisée de façon temporaire pour dupliquer
               // nouvelles_combinaisons en cas de besoin.
-              GList       *transition = NULL;
-              GList       *list_parcours2, *list_parcours3;
-              unsigned int j;
+              GList   *transition = NULL;
+              GList   *list_parcours2, *list_parcours3;
+              uint32_t j;
               
               BUG (_1990_combinaisons_duplique (&transition,
                                                 nouvelles_combinaisons,
                                                 FALSE),
                    FALSE,
                    _1990_groupe_free_combinaisons (&nouvelles_combinaisons);
-                     _1990_groupe_free_combinaisons (&transition);)
+                     _1990_groupe_free_combinaisons (&transition); )
               
               // On duplique les combinaisons actuellement dans
               // nouvelles_combinaisons autant de fois (moins 1) qu'il y a
               // d'éléments dans le groupe de la passe actuelle.
-              for (j = 2; j <= g_list_length (groupe_n_1->tmp_combinaison); j++)
+              for (j = 2;
+                   j <= g_list_length (groupe_n_1->tmp_combinaison);
+                   j++)
+              {
                 BUG (_1990_combinaisons_duplique (&nouvelles_combinaisons,
                                                   transition,
                                                   FALSE),
                      FALSE,
                      _1990_groupe_free_combinaisons (&nouvelles_combinaisons);
-                       _1990_groupe_free_combinaisons (&transition);)
+                       _1990_groupe_free_combinaisons (&transition); )
+              }
               
               // Ensuite on fusionne chaque série de doublon créée avec une
               // combinaison provenant de groupe_n_1.
@@ -713,8 +749,8 @@ _1990_combinaisons_genere_or (Projet        *p,
                    j <= g_list_length (groupe_n_1->tmp_combinaison);
                    j++)
               {
-                GList       *combinaison2 = list_parcours2->data;
-                unsigned int k;
+                GList   *combinaison2 = list_parcours2->data;
+                uint32_t k;
                 
                 for (k = 1; k <= g_list_length (transition); k++)
                 {
@@ -725,7 +761,7 @@ _1990_combinaisons_genere_or (Projet        *p,
                        FALSE,
                        _1990_groupe_free_combinaisons (
                                                       &nouvelles_combinaisons);
-                         _1990_groupe_free_combinaisons (&transition);)
+                         _1990_groupe_free_combinaisons (&transition); )
                   list_parcours3 = g_list_next (list_parcours3);
                 }
                 list_parcours2 = g_list_next (list_parcours2);
@@ -743,7 +779,7 @@ _1990_combinaisons_genere_or (Projet        *p,
                                         nouvelles_combinaisons,
                                         TRUE),
            FALSE,
-           _1990_groupe_free_combinaisons (&nouvelles_combinaisons);)
+           _1990_groupe_free_combinaisons (&nouvelles_combinaisons); )
       _1990_groupe_free_combinaisons (&nouvelles_combinaisons);
     }
   }
@@ -752,8 +788,6 @@ _1990_combinaisons_genere_or (Projet        *p,
 }
 
 
-gboolean
-_1990_combinaisons_init (Projet *p)
 /**
  * \brief Initialise la mémoire pour les combinaisons à l'ELU et l'ELS.
  * \param p : la variable projet.
@@ -762,6 +796,8 @@ _1990_combinaisons_init (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter Iter;
@@ -836,14 +872,14 @@ _1990_combinaisons_init (Projet *p)
 }
 
 
-void
-_1990_combinaisons_free_1 (void *data)
 /**
  * \brief Fonction à utiliser avec g_list_free_full pour libérer une
  *        combinaison.
  * \param data : une pondération à libérer.
  * \return void.
  */
+void
+_1990_combinaisons_free_1 (void *data)
 {
   GList *pond = data;
   
@@ -853,8 +889,6 @@ _1990_combinaisons_free_1 (void *data)
 }
 
 
-gboolean
-_1990_combinaisons_free (Projet *p)
 /**
  * \brief Libère l'ensemble des combinaisons à l'ELU et l'ELS.
  * \param p : la variable projet.
@@ -863,6 +897,8 @@ _1990_combinaisons_free (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -920,8 +956,6 @@ _1990_combinaisons_free (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_eluequ_equ_seul (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre seulement.
@@ -930,6 +964,8 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_eluequ_equ_seul (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -939,8 +975,6 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_eluequ_equ_resist (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre et à la résistance structurelle.
@@ -949,6 +983,8 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_eluequ_equ_resist (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -958,8 +994,6 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_elustrgeo_1 (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 1.
@@ -968,6 +1002,8 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_elustrgeo_1 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -977,8 +1013,6 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_elustrgeo_2 (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 2.
@@ -987,6 +1021,8 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_elustrgeo_2 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -996,8 +1032,6 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_elustrgeo_3 (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 3.
@@ -1006,6 +1040,8 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_elustrgeo_3 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -1015,8 +1051,6 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_elustrgeo_6_10ab (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 (a) et (b) de l'EN 1990.
@@ -1025,6 +1059,8 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_elustrgeo_6_10ab (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -1034,8 +1070,6 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_elustrgeo_6_10 (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 de l'EN 1990.
@@ -1044,6 +1078,8 @@ _1990_combinaisons_elustrgeo_6_10 (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_elustrgeo_6_10 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -1053,8 +1089,6 @@ _1990_combinaisons_elustrgeo_6_10 (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_eluacc_frequente (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs fréquentes des actions variables.
@@ -1063,6 +1097,8 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_eluacc_frequente (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -1072,8 +1108,6 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_eluacc_quasi_permanente (Projet *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs quasi permanente des actions variables.
@@ -1082,6 +1116,8 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_combinaisons_eluacc_quasi_permanente (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -1091,8 +1127,6 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
 }
 
 
-gboolean
-_1990_combinaisons_genere (Projet *p)
 /**
  * \brief Génère l'ensemble des combinaisons et pondérations du projet.
  * \param p : la variable projet.
@@ -1108,13 +1142,15 @@ _1990_combinaisons_genere (Projet *p)
  *     - _1990_combinaisons_genere_and,
  *     - _1990_ponderations_genere.
  */
+gboolean
+_1990_combinaisons_genere (Projet *p)
 {
-  unsigned int i;
+  uint32_t i;
   
   BUGPARAM (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
 #ifdef ENABLE_GTK
   g_object_ref (p->combinaisons.list_el_desc);
@@ -1125,10 +1161,10 @@ _1990_combinaisons_genere (Projet *p)
   //   Cette boucle permet de générer toutes les combinaisons en prenant en
   //   compte le principe d'action prédominante. Ainsi, à chaque passage de la
   //   boucle, l'action numéro i est considérée comme action prédominante.
-  for (i = 0; i < g_list_length (p->actions);i++)
+  for (i = 0; i < g_list_length (p->actions); i++)
   {
     GList           *list_parcours;
-    unsigned int     j;
+    uint32_t         j;
     Action_Categorie categorie;
     
     // On supprime les combinaisons temporaires générées lors du passage de la
@@ -1171,11 +1207,15 @@ _1990_combinaisons_genere (Projet *p)
                                                 p->parametres.norme);
         BUG (categorie != ACTION_INCONNUE, FALSE)
         if (categorie == ACTION_VARIABLE)
+        {
           BUG (_1990_action_flags_action_predominante_change (action, 1),
                FALSE)
+        }
         else
+        {
           BUG (_1990_action_flags_action_predominante_change (action, 0),
                FALSE)
+        }
       }
       list_parcours = g_list_next (list_parcours);
     }
@@ -1219,7 +1259,7 @@ _1990_combinaisons_genere (Projet *p)
           {
             FAILCRIT (FALSE,
                       (gettext ("Le type de combinaison %d est inconnu.\n"),
-                                groupe->type_combinaison);)
+                                groupe->type_combinaison); )
             break;
           }
         }

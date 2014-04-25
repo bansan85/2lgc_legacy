@@ -28,8 +28,8 @@
 void       EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
                                            Projet           *p);
 GdkPixbuf *EF_gtk_sections_dessin         (Section          *section,
-                                           int               width,
-                                           int               height);
+                                           uint16_t          width,
+                                           uint16_t          height);
 void       EF_gtk_sections                (Projet           *p);
 
 #endif

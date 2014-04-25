@@ -31,8 +31,6 @@
 #include "common_gtk.h"
 #endif
 
-gboolean
-_1990_groupe_init (Projet *p)
 /**
  * \brief Initialise la liste des groupes.
  * \param p : variable projet.
@@ -41,6 +39,8 @@ _1990_groupe_init (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_groupe_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -50,8 +50,6 @@ _1990_groupe_init (Projet *p)
 }
 
 
-gboolean
-_1990_groupe_ajout_niveau (Projet *p)
 /**
  * \brief Ajoute un niveau au projet en lui attribuant le numéro suivant le
  *        dernier niveau existant.
@@ -62,13 +60,15 @@ _1990_groupe_ajout_niveau (Projet *p)
  *     - p == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_groupe_ajout_niveau (Projet *p)
 {
   Niveau_Groupe *niveau_nouveau;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGCRIT (niveau_nouveau = malloc (sizeof (Niveau_Groupe)),
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   niveau_nouveau->groupes = NULL;
   
@@ -95,11 +95,6 @@ _1990_groupe_ajout_niveau (Projet *p)
 }
 
 
-Groupe *
-_1990_groupe_ajout_groupe (Projet                 *p,
-                           Niveau_Groupe          *niveau_groupe,
-                           Type_Groupe_Combinaison type_combinaison,
-                           const char             *nom)
 /**
  * \brief Ajoute un groupe au niveau choisi avec le type de combinaison
  *        spécifié.
@@ -114,6 +109,11 @@ _1990_groupe_ajout_groupe (Projet                 *p,
  *     - niveau_groupe == NULL,
  *     - erreur d'allocation mémoire,
  */
+Groupe *
+_1990_groupe_ajout_groupe (Projet                 *p,
+                           Niveau_Groupe          *niveau_groupe,
+                           Type_Groupe_Combinaison type_combinaison,
+                           const char             *nom)
 {
   Groupe *groupe_nouveau;
   
@@ -121,12 +121,12 @@ _1990_groupe_ajout_groupe (Projet                 *p,
   BUGPARAM (niveau_groupe, "%p", niveau_groupe, NULL)
   BUGCRIT (groupe_nouveau = malloc (sizeof (Groupe)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   BUGCRIT (groupe_nouveau->nom = g_strdup_printf ("%s", nom),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (groupe_nouveau);)
+             free (groupe_nouveau); )
   groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
   groupe_nouveau->Iter_expand = 1;
@@ -170,11 +170,6 @@ _1990_groupe_ajout_groupe (Projet                 *p,
 }
 
 
-gboolean
-_1990_groupe_ajout_element (Projet        *p,
-                            Niveau_Groupe *niveau_groupe,
-                            Groupe        *groupe,
-                            void          *element_add)
 /**
  * \brief Ajoute l'élément 'element_add' au groupe 'groupe' du niveau
  *        'niveau_groupe'. L'élément appartient au niveau directement inférieur
@@ -198,18 +193,25 @@ _1990_groupe_ajout_element (Projet        *p,
  *     - si l'élément num_element, est déjà présentant dans le groupe groupe_n,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_groupe_ajout_element (Projet        *p,
+                            Niveau_Groupe *niveau_groupe,
+                            Groupe        *groupe,
+                            void          *element_add)
 {
   BUGPARAM (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n")); )
   BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
   BUGPARAM (groupe, "%p", groupe, FALSE)
   BUGPARAM (element_add, "%p", element_add, FALSE)
   
   // On ajoute le nouvel élément au groupe.
   if (groupe->elements == NULL)
+  {
     groupe->elements = g_list_append (groupe->elements, element_add);
+  }
   else
   {
     GList *list_parcours;
@@ -286,9 +288,6 @@ _1990_groupe_ajout_element (Projet        *p,
 }
 
 
-gboolean
-_1990_groupe_modifie_combinaison (Groupe                 *groupe,
-                                  Type_Groupe_Combinaison type_combinaison)
 /**
  * \brief Modifie le type d'une combinaison (OR, XOR ou AND).
  * \param groupe : le groupe à modifier,
@@ -299,6 +298,9 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
  *     - groupe == NULL,
  *     - type_combinaison inconnu.
  */
+gboolean
+_1990_groupe_modifie_combinaison (Groupe                 *groupe,
+                                  Type_Groupe_Combinaison type_combinaison)
 {
   BUGPARAM (groupe, "%p", groupe, FALSE)
   
@@ -322,11 +324,6 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
 }
 
 
-gboolean
-_1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
-                          Groupe        *groupe,
-                          const char    *nom,
-                          Projet        *p)
 /**
  * \brief Modifie le nom d'un groupe. L'ancienne valeur est libérée.
  * \param groupe_niveau : niveau où se trouve le groupe,
@@ -339,6 +336,11 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
  *     - groupe == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
+                          Groupe        *groupe,
+                          const char    *nom,
+                          Projet        *p)
 {
   char *tmp;
   
@@ -351,7 +353,7 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
   BUGCRIT (groupe->nom = g_strdup_printf ("%s", nom),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             groupe->nom = tmp;)
+             groupe->nom = tmp; )
   free (tmp);
   
 #ifdef ENABLE_GTK
@@ -362,7 +364,9 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
     if (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
           g_list_index (p->niveaux_groupes, groupe_niveau))
+    {
       gtk_widget_queue_resize (GTK_WIDGET (UI_GRO.tree_view_etat));
+    }
     // Si on se trouve dans le niveau supérieur, il y a la ligne de l'élément
     // du groupe qui contient le groupe en cours et, à défaut, la ligne dans la
     // liste des éléments disponibles.
@@ -380,8 +384,6 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
 }
 
 
-gboolean
-_1990_groupe_affiche_tout (Projet *p)
 /**
  * \brief Affiche tous les groupes y compris les combinaisons temporaires de
  *        tous les niveaux. La valeur entre parenthèses 0 ou 1 représente si
@@ -392,9 +394,11 @@ _1990_groupe_affiche_tout (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_groupe_affiche_tout (Projet *p)
 {
-  GList       *list_parcours;
-  unsigned int nniveau = 0;
+  GList  *list_parcours;
+  uint8_t nniveau = 0;
   
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -433,14 +437,19 @@ _1990_groupe_affiche_tout (Projet *p)
         {
           FAILCRIT (FALSE,
                     (gettext ("Combinaison %d inconnue"),
-                              groupe->type_combinaison);)
+                              groupe->type_combinaison); )
           break;
         }
       }
       if (p->niveaux_groupes->data == list_parcours->data)
+      {
         printf (gettext ("\t\tActions contenus dans ce groupe : "));
+      }
       else
-        printf (gettext ("\t\tGroupes du niveau %d contenus dans ce groupe : "), nniveau-1);
+      {
+        printf (gettext ("\t\tGroupes du niveau %d contenus dans ce groupe : "),
+                nniveau - 1);
+      }
       
       while (list_parcours3 != NULL)
       {
@@ -501,11 +510,6 @@ _1990_groupe_affiche_tout (Projet *p)
 }
 
 
-gboolean
-_1990_groupe_retire_element (Projet        *p,
-                             Niveau_Groupe *niveau_groupe,
-                             Groupe        *groupe,
-                             void          *element)
 /**
  * \brief Libère l'élément désigné par les paramètres.
  * \param p : variable projet,
@@ -520,6 +524,11 @@ _1990_groupe_retire_element (Projet        *p,
  *     - element == NULL,
  *     - groupe == NULL.
  */
+gboolean
+_1990_groupe_retire_element (Projet        *p,
+                             Niveau_Groupe *niveau_groupe,
+                             Groupe        *groupe,
+                             void          *element)
 {
 #ifdef ENABLE_GTK
   Groupe  *groupe2 = element;
@@ -554,7 +563,9 @@ _1990_groupe_retire_element (Projet        *p,
       {
         gtk_tree_path_prev (path);
         if (gtk_tree_path_prev (path))
+        {
           gtk_tree_selection_select_path (UI_GRO.tree_select_etat, path);
+        }
       }
       gtk_tree_path_free (path);
     }
@@ -568,10 +579,6 @@ _1990_groupe_retire_element (Projet        *p,
 }
 
 
-gboolean
-_1990_groupe_free_niveau (Projet        *p,
-                          Niveau_Groupe *niveau_groupe,
-                          gboolean       accept_vide)
 /**
  * \brief Libère le niveau ainsi que tous les niveaux supérieurs.
  * \param p : la variable projet,
@@ -583,6 +590,10 @@ _1990_groupe_free_niveau (Projet        *p,
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_groupe_free_niveau (Projet        *p,
+                          Niveau_Groupe *niveau_groupe,
+                          gboolean       accept_vide)
 {
   GList *list_parcours;
   
@@ -604,7 +615,9 @@ _1990_groupe_free_niveau (Projet        *p,
       
       // On libère tous les éléments contenus dans le groupe
       if (groupe->elements != NULL)
+      {
         g_list_free (groupe->elements);
+      }
       
       // On libère toutes les combinaisons temporaires
       if (groupe->tmp_combinaison != NULL)
@@ -614,7 +627,9 @@ _1990_groupe_free_niveau (Projet        *p,
           GList *combinaison = groupe->tmp_combinaison->data;
           
           if (combinaison != NULL)
+          {
             g_list_free_full (combinaison, free);
+          }
           groupe->tmp_combinaison = g_list_delete_link (
                              groupe->tmp_combinaison, groupe->tmp_combinaison);
         }
@@ -662,8 +677,6 @@ _1990_groupe_free_niveau (Projet        *p,
 }
 
 
-gboolean
-_1990_groupe_free_combinaisons (GList **liste)
 /**
  * \brief Libère les combinaisons temporaires d'un groupe.
  * \param liste : liste contenant les combinaisons à libérer.
@@ -672,6 +685,8 @@ _1990_groupe_free_combinaisons (GList **liste)
  *   Échec : FALSE :
  *     - groupe == NULL,
  */
+gboolean
+_1990_groupe_free_combinaisons (GList **liste)
 {
   BUGPARAM (liste, "%p", liste, FALSE)
   
@@ -688,10 +703,6 @@ _1990_groupe_free_combinaisons (GList **liste)
 }
 
 
-gboolean
-_1990_groupe_free_groupe (Projet        *p,
-                          Niveau_Groupe *niveau_groupe,
-                          Groupe        *groupe)
 /**
  * \brief Libère le groupe demandé. La suppression d'un groupe entraine sa
  *        suppression dans le niveau supérieur (si existant) lorsqu'il est
@@ -704,6 +715,10 @@ _1990_groupe_free_groupe (Projet        *p,
  *   Échec : FALSE :
  *     - p == NULL,
  */
+gboolean
+_1990_groupe_free_groupe (Projet        *p,
+                          Niveau_Groupe *niveau_groupe,
+                          Groupe        *groupe)
 {
   GList *list_parcours;
   
@@ -727,7 +742,9 @@ _1990_groupe_free_groupe (Projet        *p,
     {
       gtk_tree_path_prev (path);
       if (gtk_tree_path_prev (path))
+      {
         gtk_tree_selection_select_path (UI_GRO.tree_select_etat, path);
+      }
     }
     gtk_tree_path_free (path);
     
@@ -753,7 +770,9 @@ _1990_groupe_free_groupe (Projet        *p,
   
   // On libère tous les éléments contenus dans le groupe.
   if (groupe->elements != NULL)
+  {
     g_list_free (groupe->elements);
+  }
   
   // On libère toutes les combinaisons temporaires.
   _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);
@@ -790,7 +809,9 @@ _1990_groupe_free_groupe (Projet        *p,
             list_parcours3 = g_list_next (list_parcours3);
             
             if (element == groupe)
+            {
               groupe->elements = g_list_remove (groupe->elements, element);
+            }
           }
           while (list_parcours3 != NULL);
         }
@@ -804,8 +825,6 @@ _1990_groupe_free_groupe (Projet        *p,
 }
 
 
-gboolean
-_1990_groupe_free (Projet *p)
 /**
  * \brief Libère l'ensemble des groupes et niveaux.
  * \param p : la variable projet.
@@ -815,11 +834,15 @@ _1990_groupe_free (Projet *p)
  *     - p == NULL,
  *     - #_1990_groupe_free_niveau.
  */
+gboolean
+_1990_groupe_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
   if (p->niveaux_groupes != NULL)
+  {
     BUG (_1990_groupe_free_niveau (p, p->niveaux_groupes->data, TRUE), FALSE)
+  }
   
   return TRUE;
 }

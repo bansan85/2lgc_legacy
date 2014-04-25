@@ -22,18 +22,18 @@
 #include "config.h"
 #include "common_projet.h"
 
-char            *_1990_action_bat_txt_type  (unsigned int type,
-                                             Norme        norme)
+char            *_1990_action_bat_txt_type  (uint8_t type,
+                                             Norme   norme)
                                        __attribute__((__warn_unused_result__));
-Action_Categorie _1990_action_categorie_bat (unsigned int type,
-                                             Norme norme)
+Action_Categorie _1990_action_categorie_bat (uint8_t type,
+                                             Norme   norme)
                                        __attribute__((__warn_unused_result__));
-unsigned int     _1990_action_num_bat_txt   (Norme norme)
+int8_t           _1990_action_num_bat_txt   (Norme  norme)
                                        __attribute__((__warn_unused_result__));
 
-Action *_1990_action_ajout (Projet      *p,
-                            unsigned int categorie,
-                            const char  *description)
+Action *_1990_action_ajout (Projet     *p,
+                            uint8_t     type,
+                            const char *description)
                                        __attribute__((__warn_unused_result__));
 
 const char *_1990_action_nom_renvoie (Action     *action)
@@ -43,11 +43,11 @@ gboolean    _1990_action_nom_change  (Projet     *p,
                                       const char *nom)
                                        __attribute__((__warn_unused_result__));
 
-unsigned int _1990_action_type_renvoie (Action      *action)
+uint8_t  _1990_action_type_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean     _1990_action_type_change  (Projet      *p,
-                                        Action      *action,
-                                        unsigned int type)
+gboolean _1990_action_type_change  (Projet *p,
+                                    Action *action,
+                                    uint8_t type)
                                        __attribute__((__warn_unused_result__));
 
 gboolean _1990_action_charges_vide    (Action *action)
@@ -58,10 +58,10 @@ gboolean _1990_action_charges_change  (Action *action,
                                        GList  *charges)
                                        __attribute__((__warn_unused_result__));
 
-unsigned int _1990_action_flags_action_predominante_renvoie (Action    *action)
+uint8_t  _1990_action_flags_action_predominante_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_flags_action_predominante_change      (Action    *action,
-                                                             unsigned int flag)
+gboolean _1990_action_flags_action_predominante_change  (Action *action,
+                                                         uint8_t flag)
                                        __attribute__((__warn_unused_result__));
 
 Flottant _1990_action_psi_renvoie_0 (Action      *action)
@@ -70,10 +70,10 @@ Flottant _1990_action_psi_renvoie_1 (Action      *action)
                                        __attribute__((__warn_unused_result__));
 Flottant _1990_action_psi_renvoie_2 (Action      *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_psi_change    (Projet      *p,
-                                     Action      *action,
-                                     unsigned int psi_num,
-                                     Flottant     psi)
+gboolean _1990_action_psi_change    (Projet  *p,
+                                     Action  *action,
+                                     uint8_t  psi_num,
+                                     Flottant psi)
                                        __attribute__((__warn_unused_result__));
 
 cholmod_sparse *_1990_action_deplacement_renvoie    (Action         *action)
@@ -97,17 +97,17 @@ GtkTreeIter *_1990_action_Iter_fenetre_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
 #endif
 
-Fonction *_1990_action_efforts_renvoie     (Action *action,
-                                            int     effort,
-                                            int     barre)
+Fonction *_1990_action_efforts_renvoie     (Action  *action,
+                                            uint8_t  effort,
+                                            uint32_t barre)
                                        __attribute__((__warn_unused_result__));
-Fonction *_1990_action_rotation_renvoie    (Action *action,
-                                            int     effort,
-                                            int     barre)
+Fonction *_1990_action_rotation_renvoie    (Action  *action,
+                                            uint8_t  effort,
+                                            uint32_t barre)
                                        __attribute__((__warn_unused_result__));
-Fonction *_1990_action_deformation_renvoie (Action *action,
-                                            int     effort,
-                                            int     barre)
+Fonction *_1990_action_deformation_renvoie (Action  *action,
+                                            uint8_t  effort,
+                                            uint32_t barre)
                                        __attribute__((__warn_unused_result__));
 
 gboolean _1990_action_fonction_init (Projet *p,

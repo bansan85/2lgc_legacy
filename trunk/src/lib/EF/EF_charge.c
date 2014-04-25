@@ -34,11 +34,6 @@
 #include "EF_calculs.h"
 
 
-Charge *
-EF_charge_ajout (Projet     *p,
-                 Action     *action,
-                 Charge     *charge,
-                 const char *nom)
 /**
  * \brief Ajoute une charge ponctuelle à une action à l'intérieur d'une barre.
  * \param p : la variable projet,
@@ -52,6 +47,11 @@ EF_charge_ajout (Projet     *p,
  *     - action == NULL,
  *     - charge == NULL.
  */
+Charge *
+EF_charge_ajout (Projet     *p,
+                 Action     *action,
+                 Charge     *charge,
+                 const char *nom)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter   iter_action;
@@ -64,13 +64,13 @@ EF_charge_ajout (Projet     *p,
   
   BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   BUG (_1990_action_charges_change (action,
                           g_list_append (_1990_action_charges_renvoie (action),
                                     charge)),
        NULL,
-       free (charge->nom);)
+       free (charge->nom); )
   
   BUG (EF_calculs_free (p), NULL)
   
@@ -98,9 +98,6 @@ EF_charge_ajout (Projet     *p,
 }
 
 
-Action *
-EF_charge_action (Projet *p,
-                  Charge *charge)
 /**
  * \brief Envoie l'action possédant la charge.
  * \param p : la variable projet,
@@ -112,6 +109,9 @@ EF_charge_action (Projet *p,
  *     - charge == NULL,
  *     - la charge n'est pas dans une action.
  */
+Action *
+EF_charge_action (Projet *p,
+                  Charge *charge)
 {
   GList *list_parcours;
   
@@ -124,19 +124,17 @@ EF_charge_action (Projet *p,
     Action *action = list_parcours->data;
     
     if (g_list_find (_1990_action_charges_renvoie (action), charge) != NULL)
+    {
       return action;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
   
-  FAILINFO (NULL, (gettext ("La charge n'est dans aucune action.\n"));)
+  FAILINFO (NULL, (gettext ("La charge n'est dans aucune action.\n")); )
 }
 
 
-gboolean
-EF_charge_renomme (Projet     *p,
-                   Charge     *charge,
-                   const char *nom)
 /**
  * \brief Renomme une charge.
  * \param p : la variable projet,
@@ -149,6 +147,10 @@ EF_charge_renomme (Projet     *p,
  *     - charge == NULL,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+EF_charge_renomme (Projet     *p,
+                   Charge     *charge,
+                   const char *nom)
 {
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (charge, "%p", charge, FALSE)
@@ -156,22 +158,19 @@ EF_charge_renomme (Projet     *p,
   free (charge->nom);
   BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
            FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
 #ifdef ENABLE_GTK
   if (UI_ACT.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-EF_charge_deplace (Projet *p,
-                   Action *action_src,
-                   Charge *charge_s,
-                   Action *action_dest)
 /**
  * \brief Déplace une charge d'une action à l'autre. La charge une fois
  *        déplacée sera en fin de la liste et les numéros des charges dans
@@ -189,6 +188,11 @@ EF_charge_deplace (Projet *p,
  *     - action_dest == NULL,
  *     - charge_s == NULL,
  */
+gboolean
+EF_charge_deplace (Projet *p,
+                   Action *action_src,
+                   Charge *charge_s,
+                   Action *action_dest)
 {
   Charge *charge_data = NULL;
   GList  *list_parcours;
@@ -199,7 +203,9 @@ EF_charge_deplace (Projet *p,
   BUGPARAM (action_dest, "%p", action_dest, FALSE)
   
   if (action_src == action_dest)
+  {
     return TRUE;
+  }
   
   // Lorsqu'elle est trouvée,
   list_parcours = _1990_action_charges_renvoie (action_src);
@@ -214,9 +220,11 @@ EF_charge_deplace (Projet *p,
 #ifdef ENABLE_GTK
   //       On la supprime du tree-view-charge
       if (UI_ACT.builder != NULL)
+      {
         gtk_tree_store_remove (GTK_TREE_STORE (gtk_builder_get_object (
                             UI_ACT.builder, "1990_actions_tree_store_charge")),
                                &charge->Iter);
+      }
 #endif
   //       et de la liste des charges tout en conservant les données
   //         de la charge dans charge_data.
@@ -239,7 +247,7 @@ EF_charge_deplace (Projet *p,
         FALSE,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
                   charge_s->nom,
-                  _1990_action_nom_renvoie (action_src));)
+                  _1990_action_nom_renvoie (action_src)); )
   
   // On insère la charge à la fin de la liste des charges dans l'action de
   // destination en modifiant son numéro.
@@ -255,10 +263,6 @@ EF_charge_deplace (Projet *p,
 }
 
 
-gboolean
-EF_charge_supprime (Projet *p,
-                    Action *action,
-                    Charge *charge_s)
 /**
  * \brief Supprime une charge. Décrémente également le numéro des charges
  *        possédant un numéro supérieur à la charge supprimée afin que la liste
@@ -273,6 +277,10 @@ EF_charge_supprime (Projet *p,
  *     - action == NULL,
  *     - charge_s == NULL.
  */
+gboolean
+EF_charge_supprime (Projet *p,
+                    Action *action,
+                    Charge *charge_s)
 {
   Charge *charge_data = NULL;
   GList  *list_parcours;
@@ -289,10 +297,13 @@ EF_charge_supprime (Projet *p,
     {
 #ifdef ENABLE_GTK
   //     On la supprime du tree-view-charge
-       if (UI_ACT.builder != NULL)
-         gtk_tree_store_remove (GTK_TREE_STORE (gtk_builder_get_object (
-                            UI_ACT.builder, "1990_actions_tree_store_charge")),
-                                &charge->Iter);
+      if (UI_ACT.builder != NULL)
+      {
+        gtk_tree_store_remove (GTK_TREE_STORE (gtk_builder_get_object (
+                                 UI_ACT.builder,
+                                 "1990_actions_tree_store_charge")),
+                               &charge->Iter);
+      }
 #endif
   //     et de la liste des charges tout en conservant les données
   //       de la charge dans charge_data
@@ -324,7 +335,7 @@ EF_charge_supprime (Projet *p,
         {
           FAILCRIT (FALSE,
                    (gettext ("Type de charge %d inconnu.\n"),
-                             charge_data->type);)
+                             charge_data->type); )
           break;
         }
       }
@@ -338,7 +349,7 @@ EF_charge_supprime (Projet *p,
         FALSE,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
                   charge_s->nom,
-                  _1990_action_nom_renvoie (action));)
+                  _1990_action_nom_renvoie (action)); )
   
   BUG (EF_calculs_free (p), FALSE)
   

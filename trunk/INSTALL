@@ -31,7 +31,7 @@ NOTA :
 
 Avec clang :
 ./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
-make -j9 CC=clang CXX=clang++ && sudo make install && /usr/local/bin/codegui
+make -j9 && sudo make install && /usr/local/bin/codegui
 
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :

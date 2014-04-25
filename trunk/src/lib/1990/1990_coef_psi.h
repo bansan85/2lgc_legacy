@@ -22,14 +22,14 @@
 #include "config.h"
 #include "common_projet.h"
 
-double _1990_coef_psi0_bat (unsigned int type,
-                            Norme        norme)
+double _1990_coef_psi0_bat (uint8_t type,
+                            Norme   norme)
                                        __attribute__((__warn_unused_result__));
-double _1990_coef_psi1_bat (unsigned int type,
-                            Norme        norme)
+double _1990_coef_psi1_bat (uint8_t type,
+                            Norme   norme)
                                        __attribute__((__warn_unused_result__));
-double _1990_coef_psi2_bat (unsigned int type,
-                            Norme        norme)
+double _1990_coef_psi2_bat (uint8_t type,
+                            Norme   norme)
                                        __attribute__((__warn_unused_result__));
 
 #endif

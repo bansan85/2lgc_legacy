@@ -27,9 +27,6 @@
 #include "common_math.h"
 #include "1990_action.h"
 
-int
-_1990_ponderations_verifie_double (GList *liste_ponderations,
-                                   GList *pond_a_verifier)
 /**
  * \brief Vérifie dans la liste des ponderations si la ponderation à vérifier
  *        est déjà présente.
@@ -40,32 +37,36 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
  *     - FALSE si la pondération n'existe pas,
  *     - TRUE si la pondération existe.
  */
+gboolean
+_1990_ponderations_verifie_double (GList *liste_ponderations,
+                                   GList *pond_a_verifier)
 {
   GList *list_parcours;
   
   if (liste_ponderations == NULL)
+  {
     return FALSE;
+  }
   
   // En renvoyant ici 1, la fonction fait croire que la pondération existe.
   // En vérité, c'est surtout qu'une pondération sans élément n'est pas
   // intéressante à conserver, à la différence des combinaisons vides qui
   // peuvent être utilisées par les niveaux supérieurs.
   if (pond_a_verifier == NULL)
+  {
     return TRUE;
+  }
   
   list_parcours = liste_ponderations;
   do
   {
-    int    doublon;
-    GList *ponderation = list_parcours->data;
-    GList *list_parcours2 = ponderation;
-    GList *list_parcours3 = pond_a_verifier;
-    
     // On pense que la pondération est identique jusqu'à preuve du contraire
-    doublon = 1;
+    gboolean doublon = TRUE;
+    GList   *ponderation = list_parcours->data;
+    GList   *list_parcours2 = ponderation;
+    GList   *list_parcours3 = pond_a_verifier;
     
-    while ((list_parcours2 != NULL) && (list_parcours3 != NULL) &&
-           (doublon == 1))
+    while ((list_parcours2 != NULL) && (list_parcours3 != NULL) && (doublon))
     {
       Ponderation *elem1, *elem2;
       
@@ -74,14 +75,18 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
       
       if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) ||
           (!(errrel (elem1->ponderation, elem2->ponderation))))
-        doublon = 0;
+      {
+        doublon = FALSE;
+      }
       
       list_parcours2 = g_list_next (list_parcours2);
       list_parcours3 = g_list_next (list_parcours3);
     }
     
-    if (doublon == 1)
+    if (doublon)
+    {
       return TRUE;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
@@ -91,9 +96,6 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
 }
 
 
-gboolean
-_1990_ponderations_duplique_sans_double (GList **liste_dest,
-                                         GList  *liste_source)
 /**
  * \brief Ajoute à une liste de pondérations existante une liste de
  *        pondérations. Une vérification est effectuée pour s'assurer que la
@@ -108,13 +110,18 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
  *     - liste_dest == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+_1990_ponderations_duplique_sans_double (GList **liste_dest,
+                                         GList  *liste_source)
 {
   GList *list_parcours;
   
   BUGPARAM (liste_dest, "%p", liste_dest, FALSE)
   
   if (liste_source == NULL)
+  {
     return 0;
+  }
   
   list_parcours = liste_source;
   do
@@ -139,7 +146,7 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
         BUGCRIT (element_destination,
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   g_list_free_full (ponderation_destination, free);)
+                   g_list_free_full (ponderation_destination, free); )
         element_source = list_parcours2->data;
         element_destination->action = element_source->action;
         element_destination->flags = element_source->flags;
@@ -162,14 +169,6 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
 }
 
 
-gboolean
-_1990_ponderations_genere_un (Projet *p,
-                              GList **ponderations_destination,
-                              double *coef_min,
-                              double *coef_max,
-                              int     dim_coef,
-                              int     psi_dominante,
-                              int     psi_accompagnement)
 /**
  * \brief Génère l'ensemble des pondérations en fonction des paramètres
  *        d'entrées. Pour une génération exaustive conformément à une norme, il
@@ -191,7 +190,7 @@ _1990_ponderations_genere_un (Projet *p,
  *        variable prédominante: 0 = psi0, 1 = psi1, 2 = psi et -1 = prendre la
  *        valeur 1.0,
  * \param psi_accompagnement : indice du coefficient psi à utiliser pour les
- *        actions variables d'accompagnement : 0 = psi0, 1 = psi1, 2 = psi et
+ *        actions variables d'accompagnement : 0 = psi0, 1 = psi1, 2 = psi2 et
  *        -1 = prendre la valeur 1.0,
  * \return
  *   Succès : TRUE.\n
@@ -200,15 +199,23 @@ _1990_ponderations_genere_un (Projet *p,
  *     - p->niveaux_groupes == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+_1990_ponderations_genere_un (Projet *p,
+                              GList **ponderations_destination,
+                              double *coef_min,
+                              double *coef_max,
+                              uint8_t dim_coef,
+                              int8_t  psi_dominante,
+                              int8_t  psi_accompagnement)
 {
-  int            nbboucle, j;
+  uint32_t       nbboucle, j;
   Groupe        *groupe;
   Niveau_Groupe *niveau;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
   // Si le dernier niveau ne possède pas un seul et unique groupe Alors
   //   Fin.
@@ -216,7 +223,7 @@ _1990_ponderations_genere_un (Projet *p,
   niveau = g_list_last (p->niveaux_groupes)->data;
   INFO (g_list_length (niveau->groupes) == 1,
         FALSE,
-        (gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n"));)
+        (gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n")); )
   groupe = niveau->groupes->data;
   
   // Si le groupe du dernier niveau ne possède pas de combinaison Alors
@@ -224,7 +231,7 @@ _1990_ponderations_genere_un (Projet *p,
   // FinSi
   INFO (groupe->tmp_combinaison,
         FALSE,
-        (gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));)
+        (gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n")); )
   
   // Génération d'une boucle contenant 2^dim_coef permettant ainsi à chaque
   // passage de déterminer si le coefficient min ou max doit être pris.
@@ -233,7 +240,7 @@ _1990_ponderations_genere_un (Projet *p,
   // Lorsqu'un bit vaut 1, il est utilisé coef_max dans la pondération.
   // Pour chaque itération j, définissant chacune une combinaison différente
   // des coefficients coef_min et coef_max.
-  nbboucle = 1 << dim_coef;
+  nbboucle = (uint32_t) 1 << dim_coef;
   for (j = 0; j < nbboucle; j++)
   {
     GList *list_parcours = groupe->tmp_combinaison;
@@ -249,7 +256,8 @@ _1990_ponderations_genere_un (Projet *p,
       //     compte. Par exemple, lorsque les actions à ELU STR sont en cours
       //     de génération, il convient de ne pas prendre les pondérations
       //     possédant des actions accidentelles.
-      int    suivant = 0, variable_accompagnement = 0, variable_dominante = 0;
+      gboolean suivant = FALSE;
+      gboolean variable_accompagnement = FALSE, variable_dominante = FALSE;
       GList *combinaison;
       GList *ponderation;
       
@@ -262,8 +270,8 @@ _1990_ponderations_genere_un (Projet *p,
         // Pour chaque élément de la combinaison Faire
         do
         {
-          Combinaison *combinaison_element;
-          unsigned int categorie;
+          Combinaison     *combinaison_element;
+          Action_Categorie categorie;
           
           combinaison_element = list_parcours2->data;
           categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
@@ -274,16 +282,22 @@ _1990_ponderations_genere_un (Projet *p,
           //  Si oui, pondération ignorée.
           if ((errmax (coef_min[categorie], ERRMAX_POND)) &&
               (errmax (coef_max[categorie], ERRMAX_POND)))
-            suivant = 1;
+          {
+            suivant = TRUE;
+          }
           else
           {
             double pond;
           // On affecte le coefficient min/max à la combinaison pour obtenir la
           // pondération
-            if ((j & (1 << categorie)) != 0)
+            if ((j & ((uint32_t) 1 << categorie)) != 0)
+            {
               pond = coef_max[categorie];
+            }
             else
+            {
               pond = coef_min[categorie];
+            }
             
             if (!(errmax (pond, ERRMAX_POND)))
             {
@@ -292,7 +306,7 @@ _1990_ponderations_genere_un (Projet *p,
               BUGCRIT (ponderation_element,
                        FALSE,
                        (gettext ("Erreur d'allocation mémoire.\n"));
-                       g_list_free_full (ponderation, free);)
+                       g_list_free_full (ponderation, free); )
               ponderation_element->action = combinaison_element->action;
               ponderation_element->flags = combinaison_element->flags;
               
@@ -301,18 +315,22 @@ _1990_ponderations_genere_un (Projet *p,
               // ignorée.
               if (categorie == ACTION_VARIABLE)
               {
-                variable_accompagnement = 1;
+                variable_accompagnement = TRUE;
                 if ((ponderation_element->flags & 1) != 0)
                 {
-                  variable_dominante = 1;
+                  variable_dominante = TRUE;
                   ponderation_element->psi = psi_dominante;
                 }
                 else
+                {
                   ponderation_element->psi = psi_accompagnement;
+                }
               }
               // psi vaut toujours -1 s'il ne s'agit pas d'une action variable.
               else
+              {
                 ponderation_element->psi = -1;
+              }
               
               ponderation_element->ponderation = pond;
           
@@ -321,21 +339,27 @@ _1990_ponderations_genere_un (Projet *p,
           }
           list_parcours2 = g_list_next (list_parcours2);
         }
-        while ((list_parcours2 != NULL) && (suivant != 1));
+        while ((list_parcours2 != NULL) && (suivant == FALSE));
         // FinPour
       }
   // Si la pondération n'est pas ignorée Alors
   //   Ajout à la liste des pondérations existante.
   // FinSi
-      if ((variable_accompagnement == 1) && (variable_dominante == 0))
-        suivant = 1;
-      if ((suivant == 0) &&
+      if ((variable_accompagnement) && (!variable_dominante))
+      {
+        suivant = TRUE;
+      }
+      if ((suivant == FALSE) &&
           (_1990_ponderations_verifie_double (*ponderations_destination,
                                               ponderation) == FALSE))
+      {
         *ponderations_destination = g_list_append (*ponderations_destination,
                                                    ponderation);
+      }
       else
+      {
         g_list_free_full (ponderation, g_free);
+      }
       
       list_parcours = g_list_next (list_parcours);
     }
@@ -348,8 +372,6 @@ _1990_ponderations_genere_un (Projet *p,
 }
 
 
-gboolean
-_1990_ponderations_genere_eu (Projet *p)
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme européenne.
  *        La fonction #_1990_ponderations_genere_un est appelée autant de fois
@@ -365,6 +387,8 @@ _1990_ponderations_genere_eu (Projet *p)
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
+gboolean
+_1990_ponderations_genere_eu (Projet *p)
 {
   double coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
   
@@ -673,7 +697,7 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode);)
+                            p->combinaisons.elu_geo_str_methode); )
         break;
       }
     }
@@ -826,7 +850,7 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode);)
+                            p->combinaisons.elu_geo_str_methode); )
         break;
       }
     }
@@ -855,6 +879,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
   if (p->combinaisons.elu_acc_psi == 0)
+  {
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
@@ -863,7 +888,9 @@ _1990_ponderations_genere_eu (Projet *p)
                                        1,
                                        2),
          FALSE)
+  }
   else
+  {
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
@@ -872,6 +899,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        2,
                                        2),
          FALSE)
+  }
   
   // Pour ELU_SIS, générer les pondérations suivantes :
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0,
@@ -977,8 +1005,6 @@ _1990_ponderations_genere_eu (Projet *p)
 }
 
 
-gboolean
-_1990_ponderations_genere_fr (Projet *p)
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme française.
  *        La fonction #_1990_ponderations_genere_un est appelé autant de fois
@@ -994,6 +1020,8 @@ _1990_ponderations_genere_fr (Projet *p)
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
+gboolean
+_1990_ponderations_genere_fr (Projet *p)
 {
   double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
   
@@ -1349,7 +1377,7 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode);)
+                            p->combinaisons.elu_geo_str_methode); )
         break;
       }
     }
@@ -1525,7 +1553,7 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode);)
+                            p->combinaisons.elu_geo_str_methode); )
         break;
       }
     }
@@ -1557,6 +1585,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
   if (p->combinaisons.elu_acc_psi == 0)
+  {
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
@@ -1565,7 +1594,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                        1,
                                        2),
          FALSE)
+  }
   else
+  {
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
@@ -1574,6 +1605,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        2,
                                        2),
          FALSE)
+  }
   
   // Pour ELU_SIS, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : psi2,
@@ -1695,8 +1727,6 @@ _1990_ponderations_genere_fr (Projet *p)
 }
 
 
-gboolean
-_1990_ponderations_genere (Projet *p)
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme spécifiée.
  *        Cf. _1990_ponderations_genere_PAYS.
@@ -1709,6 +1739,8 @@ _1990_ponderations_genere (Projet *p)
  *     - #_1990_ponderations_genere_eu,
  *     - #_1990_ponderations_genere_fr.
  */
+gboolean
+_1990_ponderations_genere (Projet *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   
@@ -1716,18 +1748,16 @@ _1990_ponderations_genere (Projet *p)
   {
     case NORME_EU : return _1990_ponderations_genere_eu (p);
     case NORME_FR : return _1990_ponderations_genere_fr (p);
-    default : { FAILCRIT (FALSE,
+    default : {
+                FAILCRIT (FALSE,
                           (gettext ("Norme %d inconnue.\n"),
-                                    p->parametres.norme);)
+                                    p->parametres.norme); )
                 break;
               }
   }
 }
 
 
-// coverity[+alloc]
-char *
-_1990_ponderations_description (GList *ponderation)
 /**
  * \brief Renvoie sous forme de texte une pondération.
  * \param ponderation : une pondération.
@@ -1736,12 +1766,15 @@ _1990_ponderations_description (GList *ponderation)
  *   Échec : NULL :
  *     - en cas d'erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+_1990_ponderations_description (GList *ponderation)
 {
   char *retour = NULL;
   
   BUGCRIT (retour = malloc (sizeof (char)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   retour[0] = 0;
   
   if (ponderation != NULL)
@@ -1755,20 +1788,29 @@ _1990_ponderations_description (GList *ponderation)
       char        *tmp = retour;
       
       if (ponderation_element->psi == 0)
+      {
         conv_f_c (_1990_action_psi_renvoie_0 (ponderation_element->action),
                   psi,
                   DECIMAL_SANS_UNITE);
+      }
       else if (ponderation_element->psi == 1)
+      {
         conv_f_c (_1990_action_psi_renvoie_1 (ponderation_element->action),
                   psi,
                   DECIMAL_SANS_UNITE);
+      }
       else if (ponderation_element->psi == 2)
+      {
         conv_f_c (_1990_action_psi_renvoie_2 (ponderation_element->action),
                   psi,
                   DECIMAL_SANS_UNITE);
+      }
       else
+      {
         psi[0] = '\0';
+      }
       if (ponderation_element->psi != -1)
+      {
         BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s*%s", 
                                           tmp,
                                           tmp[0] != 0 ? "+" : "",
@@ -1779,8 +1821,10 @@ _1990_ponderations_description (GList *ponderation)
                                                  ponderation_element->action)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp);)
+                   free (tmp); )
+      }
       else
+      {
         BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s",
                                           tmp,
                                           tmp[0] != 0 ? "+" : "",
@@ -1790,7 +1834,8 @@ _1990_ponderations_description (GList *ponderation)
                                                 (ponderation_element->action)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp);)
+                   free (tmp); )
+      }
       
       free (tmp);
       
@@ -1803,13 +1848,13 @@ _1990_ponderations_description (GList *ponderation)
 }
 
 
-void
-_1990_ponderations_affiche (GList *ponderations)
 /**
  * \brief Affiche les pondérations de la liste fournie en argument.
  * \param ponderations : la liste des pondérations.
  * \return Valeur renvoyée : Aucun.
  */
+void
+_1990_ponderations_affiche (GList *ponderations)
 {
   GList *list_parcours = ponderations;
   
@@ -1826,15 +1871,19 @@ _1990_ponderations_affiche (GList *ponderations)
         Ponderation *ponderation_element = list_parcours2->data;
         
         if (g_list_next (list_parcours2) != NULL)
+        {
           printf ("'%s'*%f(%d)+",
                   _1990_action_nom_renvoie (ponderation_element->action),
                   ponderation_element->ponderation,
                   ponderation_element->psi);
+        }
         else
+        {
           printf ("'%s'*%f(%d)",
                   _1990_action_nom_renvoie (ponderation_element->action),
                   ponderation_element->ponderation,
                   ponderation_element->psi);
+        }
         
         list_parcours2 = g_list_next (list_parcours2);
       }
@@ -1848,8 +1897,6 @@ _1990_ponderations_affiche (GList *ponderations)
 }
 
 
-gboolean
-_1990_ponderations_affiche_tout (Projet *p)
 /**
  * \brief Affiche toutes les pondérations du projet.
  * \param p : la variable projet.
@@ -1858,6 +1905,8 @@ _1990_ponderations_affiche_tout (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1990_ponderations_affiche_tout (Projet *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   

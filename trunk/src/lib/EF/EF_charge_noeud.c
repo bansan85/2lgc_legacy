@@ -35,17 +35,6 @@
 #include "EF_charge.h"
 
 
-Charge *
-EF_charge_noeud_ajout (Projet     *p,
-                       Action     *action,
-                       GList      *noeuds,
-                       Flottant    fx,
-                       Flottant    fy,
-                       Flottant    fz,
-                       Flottant    mx,
-                       Flottant    my,
-                       Flottant    mz,
-                       const char *nom)
 /**
  * \brief Ajoute une charge ponctuelle à une action et à un noeud de la
  *        structure.
@@ -67,6 +56,17 @@ EF_charge_noeud_ajout (Projet     *p,
  *     - noeuds == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Charge *
+EF_charge_noeud_ajout (Projet     *p,
+                       Action     *action,
+                       GList      *noeuds,
+                       Flottant    fx,
+                       Flottant    fy,
+                       Flottant    fz,
+                       Flottant    mx,
+                       Flottant    my,
+                       Flottant    mz,
+                       const char *nom)
 {
   Charge       *charge;
   Charge_Noeud *charge_d;
@@ -76,11 +76,11 @@ EF_charge_noeud_ajout (Projet     *p,
   BUGPARAM (noeuds, "%p", noeuds, NULL)
   BUGCRIT (charge = malloc (sizeof (Charge)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (charge_d = malloc (sizeof (Charge_Noeud)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (charge);)
+             free (charge); )
   charge->data = charge_d;
   
   charge->type = CHARGE_NOEUD;
@@ -95,15 +95,12 @@ EF_charge_noeud_ajout (Projet     *p,
   BUG (EF_charge_ajout (p, action, charge, nom),
        NULL,
        free (charge);
-         free (charge_d);)
+         free (charge_d); )
   
   return charge;
 }
 
 
-// coverity[+alloc]
-char *
-EF_charge_noeud_description (Charge *charge)
 /**
  * \brief Renvoie la description d'une charge de type ponctuelle sur noeud.
  * \param charge : la charge à décrire.
@@ -113,6 +110,9 @@ EF_charge_noeud_description (Charge *charge)
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+EF_charge_noeud_description (Charge *charge)
 {
   Charge_Noeud *charge_d;
   char  txt_fx[30], txt_fy[30], txt_fz[30];
@@ -133,7 +133,7 @@ EF_charge_noeud_description (Charge *charge)
   conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
   
   BUGCRIT (description = g_strdup_printf (
-             "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m",
+             "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", // NS
              strstr (txt_liste_noeuds, ";") == NULL ?
                gettext ("Noeud") :
                gettext ("Noeuds"),
@@ -146,7 +146,7 @@ EF_charge_noeud_description (Charge *charge)
              txt_mz),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_noeuds);)
+             free (txt_liste_noeuds); )
   
   free (txt_liste_noeuds);
   
@@ -154,10 +154,6 @@ EF_charge_noeud_description (Charge *charge)
 }
 
 
-gboolean
-EF_charge_noeud_enleve_noeuds (Charge *charge,
-                               GList  *noeuds,
-                               Projet *p)
 /**
  * \brief Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le
  *        cas où un noeud de la liste n'est pas dans la charge, ce point ne
@@ -171,6 +167,10 @@ EF_charge_noeud_enleve_noeuds (Charge *charge,
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_noeud_enleve_noeuds (Charge *charge,
+                               GList  *noeuds,
+                               Projet *p)
 {
   GList        *list_parcours = noeuds;
   Charge_Noeud *charge_d;
@@ -205,7 +205,9 @@ EF_charge_noeud_enleve_noeuds (Charge *charge,
       gtk_tree_model_get (model, &Iter, 0, &action, -1);
       
       if (g_list_find (_1990_action_charges_renvoie (action), charge))
+      {
         gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+      }
     }
   }
 #endif
@@ -216,8 +218,6 @@ EF_charge_noeud_enleve_noeuds (Charge *charge,
 }
 
 
-gboolean
-EF_charge_noeud_free (Charge *charge)
 /**
  * \brief Libère une charge nodale.
  * \param charge : la charge à libérer.
@@ -226,6 +226,8 @@ EF_charge_noeud_free (Charge *charge)
  *   Échec : FALSE :
  *     - charge == NULL.
  */
+gboolean
+EF_charge_noeud_free (Charge *charge)
 {
   Charge_Noeud *charge_d;
   

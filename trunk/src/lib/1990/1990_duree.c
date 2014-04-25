@@ -25,8 +25,6 @@
 #include "common_projet.h"
 
 
-int
-_1990_duree_norme_eu (unsigned int type)
 /**
  * \brief Renvoie la durée (en année) indicative de la norme européenne. Dans
  *        le cas où la durée indiquée par la norme européenne est un intervalle
@@ -46,6 +44,8 @@ _1990_duree_norme_eu (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
+uint16_t
+_1990_duree_norme_eu (uint8_t type)
 {
   switch (type)
   {
@@ -59,8 +59,6 @@ _1990_duree_norme_eu (unsigned int type)
 }
 
 
-int
-_1990_duree_norme_fr (unsigned int type)
 /**
  * \brief Renvoie la durée (en année) indicative de la norme française. La
  *        description de type est donnée par #_1990_duree_norme_txt_fr.
@@ -78,6 +76,8 @@ _1990_duree_norme_fr (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
+uint16_t
+_1990_duree_norme_fr (uint8_t type)
 {
   switch (type)
   {
@@ -91,8 +91,6 @@ _1990_duree_norme_fr (unsigned int type)
 }
 
 
-char *
-_1990_duree_norme_txt_eu (unsigned int type)
 /**
  * \brief Renvoie la description des catérogies des durées indicatives de la
  *        norme européenne.
@@ -112,6 +110,8 @@ _1990_duree_norme_txt_eu (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
+char *
+_1990_duree_norme_txt_eu (uint8_t type)
 {
   switch (type)
   {
@@ -125,8 +125,6 @@ _1990_duree_norme_txt_eu (unsigned int type)
 }
 
 
-char *
-_1990_duree_norme_txt_fr (unsigned int type)
 /**
  * \brief Renvoie la description des catérogies des durées indicative de la
  *        norme française.
@@ -146,6 +144,8 @@ _1990_duree_norme_txt_fr (unsigned int type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
+char *
+_1990_duree_norme_txt_fr (uint8_t type)
 {
   switch (type)
   {
@@ -159,9 +159,6 @@ _1990_duree_norme_txt_fr (unsigned int type)
 }
 
 
-int
-_1990_duree_norme (unsigned int type,
-                   Norme        norme)
 /**
  * \brief Renvoie la durée (en année) indicative de la norme spécifiée.
  * \param type : categorie de durée d'utilisation de projet,
@@ -172,6 +169,9 @@ _1990_duree_norme (unsigned int type,
  *     - Pays inconnu,
  *     - erreur dans l'une des fonctions _1990_duree_norme_PAYS.
  */
+uint16_t
+_1990_duree_norme (uint8_t type,
+                   Norme   norme)
 {
   switch (norme)
   {
@@ -182,9 +182,6 @@ _1990_duree_norme (unsigned int type,
 }
 
 
-char *
-_1990_duree_norme_txt (unsigned int type,
-                       Norme        norme)
 /**
  * \brief Renvoie la description des catérogies des durées indicatives de la
  *        norme spécifiée.
@@ -196,6 +193,9 @@ _1990_duree_norme_txt (unsigned int type,
  *     - Pays inconnu,
  *     - erreur dans l'une des fonctions _1990_duree_norme_txt_PAYS.
  */
+char *
+_1990_duree_norme_txt (uint8_t type,
+                       Norme   norme)
 {
   switch (norme)
   {
