@@ -26,6 +26,7 @@
 #include "common_gtk.h"
 #include "common_projet.h"
 #include "common_tooltip.h"
+#include "1990_gtk_groupes_options.h"
 
 
 GTK_WINDOW_KEY_PRESS (_1990, groupes_options);

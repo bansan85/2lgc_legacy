@@ -33,6 +33,7 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge.h"
 #include "EF_calculs.h"
+#include "EF_gtk_charge_noeud.h"
 
 
 GTK_WINDOW_CLOSE (ef, charge_noeud);

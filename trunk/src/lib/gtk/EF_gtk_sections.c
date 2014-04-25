@@ -41,6 +41,7 @@
 #include "EF_gtk_section_circulaire.h"
 #include "EF_gtk_section_personnalisee.h"
 #include "1992_1_1_barres.h"
+#include "EF_gtk_sections.h"
 
 
 GTK_WINDOW_CLOSE (ef, sections);

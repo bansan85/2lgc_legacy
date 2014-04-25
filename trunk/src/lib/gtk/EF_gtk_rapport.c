@@ -29,6 +29,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
+#include "EF_gtk_rapport.h"
 
 
 GTK_WINDOW_CLOSE (ef, rapport);
