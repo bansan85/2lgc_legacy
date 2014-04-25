@@ -44,24 +44,6 @@ GTK_WINDOW_DESTROY (_1992_1_1, materiaux, );
 GTK_WINDOW_CLOSE (_1992_1_1, materiaux);
 
 
-gboolean
-_1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
-                                          char  **nom,
-                                          double *fck,
-                                          double *fckcube,
-                                          double *fcm,
-                                          double *fctm,
-                                          double *fctk_0_05,
-                                          double *fctk_0_95,
-                                          double *ecm,
-                                          double *ec1,
-                                          double *ecu1,
-                                          double *ec2,
-                                          double *ecu2,
-                                          double *n,
-                                          double *ec3,
-                                          double *ecu3,
-                                          double *nu)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer un matériau de type béton.
@@ -99,6 +81,24 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
  *     - interface graphique non initialisée,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+_1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
+                                          char  **nom,
+                                          double *fck,
+                                          double *fckcube,
+                                          double *fcm,
+                                          double *fctm,
+                                          double *fctk_0_05,
+                                          double *fctk_0_95,
+                                          double *ecm,
+                                          double *ec1,
+                                          double *ecu1,
+                                          double *ec2,
+                                          double *ecu2,
+                                          double *n,
+                                          double *ec3,
+                                          double *ecu3,
+                                          double *nu)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -125,7 +125,7 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   BUGCRIT (UI_BET.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Béton");)
+                     "Ajout Matériau Béton"); )
   
   builder = UI_BET.builder;
   
@@ -134,7 +134,9 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                         0., FALSE,
                                         90., TRUE);
   if (isnan (*fck))
+  {
     ok = FALSE;
+  }
   
   if (ok)
   {
@@ -147,10 +149,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                                 INFINITY, FALSE)
                  * 1000000.;
       if (isnan (*fckcube))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *fckcube = _1992_1_1_materiaux_fckcube (*fck);
+    }
   }
   
   if (ok)
@@ -164,10 +170,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                             INFINITY, FALSE)
              * 1000000.;
       if (isnan (*fcm))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *fcm = _1992_1_1_materiaux_fcm (*fck);
+    }
   }
   
   if (ok)
@@ -181,10 +191,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                              INFINITY, FALSE)
               * 1000000.;
       if (isnan (*fctm))
+      {
         ok = FALSE;
+      }
     }
     else
-      *fctm = _1992_1_1_materiaux_fctm (*fck, *fcm/1000000.);
+    {
+      *fctm = _1992_1_1_materiaux_fctm (*fck, *fcm / 1000000.);
+    }
   }
   
   if (ok)
@@ -199,10 +213,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                                   INFINITY, FALSE)
                    * 1000000.;
       if (isnan (*fctk_0_05))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *fctk_0_05 = _1992_1_1_materiaux_fctk_0_05 (*fctm / 1000000.);
+    }
   }
   
   if (ok)
@@ -217,10 +235,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                                   INFINITY, FALSE)
                    * 1000000.;
       if (isnan (*fctk_0_95))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *fctk_0_95 = _1992_1_1_materiaux_fctk_0_95 (*fctm / 1000000.);
+    }
   }
   
   if (ok)
@@ -234,10 +256,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                             INFINITY, FALSE)
              * 1000000000.;
       if (isnan (*ecm))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ecm = _1992_1_1_materiaux_ecm (*fcm / 1000000.);
+    }
   }
   
   if (ok)
@@ -251,10 +277,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                             INFINITY, FALSE)
              / 1000.;
       if (isnan (*ec1))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ec1 = _1992_1_1_materiaux_ec1 (*fcm / 1000000.);
+    }
   }
   
   if (ok)
@@ -268,10 +298,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                              INFINITY, FALSE)
               / 1000.;
       if (isnan (*ecu1))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ecu1 = _1992_1_1_materiaux_ecu1 (*fcm / 1000000., *fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -285,10 +319,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                             INFINITY, FALSE)
              / 1000.;
       if (isnan (*ec2))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ec2 = _1992_1_1_materiaux_ec2 (*fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -302,10 +340,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                              INFINITY, FALSE)
               / 1000.;
       if (isnan (*ecu2))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ecu2 = _1992_1_1_materiaux_ecu2 (*fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -318,10 +360,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                           0., FALSE,
                                           INFINITY, FALSE);
       if (isnan (*n))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *n = _1992_1_1_materiaux_n (*fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -335,10 +381,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                             INFINITY, FALSE)
              / 1000.;
       if (isnan (*ec3))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ec3 = _1992_1_1_materiaux_ec3 (*fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -352,10 +402,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                              INFINITY, FALSE)
               / 1000.;
       if (isnan (*ecu3))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *ecu3 = _1992_1_1_materiaux_ecu3 (*fck / 1000000.);
+    }
   }
   
   if (ok)
@@ -368,10 +422,14 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                            0., TRUE,
                                            0.5, FALSE);
       if (isnan (*nu))
+      {
         ok = FALSE;
+      }
     }
     else
+    {
       *nu = COEFFICIENT_NU_BETON;
+    }
   }
   
   // Si tous les paramètres sont corrects
@@ -394,7 +452,9 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       ok = FALSE;
     }
     else
+    {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+    }
   }
   else if ((strcmp(*nom, "") == 0) || 
     ((strcmp (UI_BET.materiau->nom, *nom) != 0) &&
@@ -404,18 +464,19 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     ok = FALSE;
   }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
   
   if (ok == FALSE)
+  {
     free (*nom);
+  }
   
   return ok;
 }
 
 
-void
-_1992_1_1_gtk_materiaux_check (GtkWidget *object,
-                               Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -426,6 +487,9 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1992_1_1_gtk_materiaux_check (GtkWidget *object,
+                               Projet    *p)
 {
   char  *nom;
   double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
@@ -436,7 +500,7 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
   BUGCRIT (UI_BET.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Béton");)
+                     "Ajout Matériau Béton"); )
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -455,9 +519,11 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
                                                  &ec3,
                                                  &ecu3,
                                                  &nu))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                        UI_BET.builder, "_1992_1_1_materiaux_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -470,9 +536,6 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
 }
 
 
-void
-_1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
-                                         Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la charge.
  * \param button : composant à l'origine de l'évènement,
@@ -484,6 +547,9 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
  *   - #_1992_1_1_materiaux_ajout,
  *   - #_1992_1_1_materiaux_modif.
  */
+void
+_1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
+                                         Projet    *p)
 {
   char        *nom;
   double       fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
@@ -495,7 +561,7 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   BUGCRIT (UI_BET.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Béton");)
+                     "Ajout Matériau Béton"); )
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -514,14 +580,16 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
                                                  &ec3,
                                                  &ecu3,
                                                  &nu))
+  {
     return;
+  }
   
   // Création de la nouvelle charge ponctuelle au noeud
   BUG (materiau = _1992_1_1_materiaux_ajout (p,
                                              nom,
                                              m_f (fck, FLOTTANT_UTILISATEUR)),
       ,
-      free (nom);)
+      free (nom); )
   free (nom);
   
   BUG (_1992_1_1_materiaux_modif (
@@ -551,9 +619,6 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
 }
 
 
-void
-_1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
-                                          Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -564,6 +629,9 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
  *   - interface graphique non initialisée,
  *   - #_1992_1_1_materiaux_modif.
  */
+void
+_1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
+                                          Projet    *p)
 {
   char  *nom;
   double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
@@ -574,7 +642,7 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   BUGCRIT (UI_BET.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Béton");)
+                     "Ajout Matériau Béton"); )
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -593,7 +661,9 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
                                                  &ec3,
                                                  &ecu3,
                                                  &nu))
+  {
     return;
+  }
   
   BUG (_1992_1_1_materiaux_modif (
          p,
@@ -614,7 +684,7 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
          m_f (ec3,            FLOTTANT_UTILISATEUR),
          m_f (ecu3,           FLOTTANT_UTILISATEUR),
          m_f (nu,             FLOTTANT_UTILISATEUR)),
-      free (nom);)
+      free (nom); )
   
   free (nom);
   
@@ -624,9 +694,6 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
 }
 
 
-void
-_1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
-                                 Projet           *p)
 /**
  * \brief Evènement pour (dés)activer la personnalisation d'une propriété du
  *        béton.
@@ -637,6 +704,9 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
+                                 Projet           *p)
 {
   GtkBuilder     *builder;
   gboolean        check = gtk_check_menu_item_get_active (checkmenuitem);
@@ -649,9 +719,13 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   builder = UI_BET.builder;
   mat = UI_BET.materiau;
   if (mat != NULL)
+  {
     beton_data = UI_BET.materiau->data;
+  }
   else
+  {
     beton_data = NULL;
+  }
   
   if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (builder,
                            "_1992_1_1_materiaux_personnaliser_menu_fck_cube")))
@@ -935,7 +1009,9 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
                             check);
   }
   else
+  {
     FAILPARAM (checkmenuitem, "%p", )
+  }
   
   _1992_1_1_gtk_materiaux_check (NULL, p);
   
@@ -943,9 +1019,6 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
 }
 
 
-gboolean
-_1992_1_1_gtk_materiaux (Projet      *p,
-                         EF_Materiau *materiau)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier un matériau
  *        de type béton.
@@ -956,6 +1029,9 @@ _1992_1_1_gtk_materiaux (Projet      *p,
  *   Echec : FALSE :
  *     - p == NULL.
  */
+gboolean
+_1992_1_1_gtk_materiaux (Projet      *p,
+                         EF_Materiau *materiau)
 {
   Materiau_Beton *beton_data;
   
@@ -965,7 +1041,9 @@ _1992_1_1_gtk_materiaux (Projet      *p,
   {
     gtk_window_present (GTK_WINDOW (UI_BET.window));
     if (UI_BET.materiau == materiau)
+    {
       return TRUE;
+    }
   }
   else
   {
@@ -975,7 +1053,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
                                            NULL) != 0,
             FALSE,
             (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                      "Ajout Matériau Béton");)
+                      "Ajout Matériau Béton"); )
     gtk_builder_connect_signals (UI_BET.builder, p);
     UI_BET.window = GTK_WIDGET (gtk_builder_get_object (UI_BET.builder,
                                                 "_1992_1_1_materiaux_window"));
@@ -1014,7 +1092,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
     
     BUGCRIT (materiau->type == MATERIAU_BETON,
              FALSE,
-             (gettext ("Le matériau n'est pas en béton.\n"));)
+             (gettext ("Le matériau n'est pas en béton.\n")); )
     gtk_window_set_title (GTK_WINDOW (UI_BET.window),
                           gettext ("Modification d'un matériau béton"));
     UI_BET.materiau = materiau;
@@ -1137,9 +1215,6 @@ _1992_1_1_gtk_materiaux (Projet      *p,
 }
 
 
-void
-_1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
-                               Projet      *p)
 /**
  * \brief Lance la fenêtre permettant d'ajouter un matériau béton.
  * \param menuitem : composant à l'origine de l'évènement,
@@ -1149,12 +1224,15 @@ _1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
  *   - p == NULL,
  *   - interface graphique non initialisée.
  */
+void
+_1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
+                               Projet      *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_MAT.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Matériau Béton");)
+                     "Ajout Matériau Béton"); )
   
   BUG (_1992_1_1_gtk_materiaux (p, NULL), )
 }

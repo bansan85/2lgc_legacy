@@ -52,30 +52,32 @@ GTK_WINDOW_KEY_PRESS (_1990, groupes);
 GTK_WINDOW_CLOSE(_1990, groupes);
 
 
-void *
-_1990_gtk_get_groupe (GtkTreeModel *tree_model, GtkTreeIter *iter)
 /**
  * \brief Renvoie le groupe de l'élément iter.
  * \param tree_model : tree_model contenant la liste des éléments,
  * \param iter : contient la ligne à étudier.
  * \return Le groupe.
  */
+void *
+_1990_gtk_get_groupe (GtkTreeModel *tree_model,
+                      GtkTreeIter  *iter)
 {
   void       *retour;
   GtkTreeIter iter_parent;
   
   if (gtk_tree_model_iter_parent (tree_model, &iter_parent, iter))
+  {
     gtk_tree_model_get (tree_model, &iter_parent, 0, &retour, -1);
+  }
   else
+  {
     gtk_tree_model_get (tree_model, iter, 0, &retour, -1);
+  }
   
   return retour;
 }
 
 
-void
-_1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
-                                                 Projet      *p)
 /**
  * \brief Evènement lorsqu'il y a un changement de ligne sélectionnée. Il
  *        permet de mettre à jour si le groupe sélectionné est de type OR, XOR
@@ -89,6 +91,9 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
  *   - interface graphique non initialisée,
  *   - la combinaison n'est ni or ni xor ni and.
  */
+void
+_1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
+                                                 Projet      *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -97,17 +102,19 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   // Si aucune sélection.
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   groupe = _1990_gtk_get_groupe (model, &iter);
   
@@ -139,7 +146,7 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
     {
       FAILCRIT ( ,
                 (gettext ("Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"),
-                       groupe->nom);)
+                          groupe->nom); )
       break;
     }
   }
@@ -163,9 +170,6 @@ GTK_WINDOW_DESTROY (
 );
 
 
-gboolean
-_1990_gtk_groupes_affiche_niveau (Projet      *p,
-                                  unsigned int niveau)
 /**
  * \brief Affiche le niveau souhaité dans l'interface graphique.
  * \param p : variable projet,
@@ -179,9 +183,12 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
  *     - niveau introuvable,
  *     - erreur d'allocation mémoire.
  */
+gboolean
+_1990_gtk_groupes_affiche_niveau (Projet  *p,
+                                  uint16_t niveau)
 {
   Niveau_Groupe *niveau_groupe;
-  unsigned int   dispo_max, i;
+  uint32_t       dispo_max, i;
   char          *dispos;
   gboolean       premier = TRUE;
   GtkTreePath   *path;
@@ -190,11 +197,11 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   
   // Il convient de bloquer le signal. Sinon, des erreurs peuvent apparaitre
@@ -224,14 +231,16 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
   // dispo_max contient le nombre d'éléments maximum pouvant être disponible
   // depuis le niveau 'niveau'-1.
   if (niveau == 0)
+  {
     liste_actions = p->actions;
+  }
   else
   {
-    BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau - 1),
+    BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau - 1U),
          FALSE)
     liste_actions = niveau_groupe->groupes;
   }
-  dispo_max = g_list_length (liste_actions);
+  dispo_max = (uint32_t) g_list_length (liste_actions);
   
   // Ensuite, on initialise un tableau contenant une liste de boolean pour
   // déterminer au fur et à mesure de l'avancement de l'algorithme quels
@@ -240,16 +249,20 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
   {
     BUGCRIT (dispos = (char *) malloc (sizeof (char) * dispo_max),
              FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     for (i = 0; i < dispo_max; i++)
+    {
       dispos[i] = 0;
+    }
   }
   else
+  {
     dispos = NULL;
+  }
   
   BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau),
        FALSE,
-       free (dispos);)
+       free (dispos); )
   list_parcours = niveau_groupe->groupes;
   
   // Parcours le niveau à afficher.
@@ -282,10 +295,9 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
       do
       {
         Groupe *groupe2 = list_parcours2->data;
-        int     tmp = g_list_index (liste_actions, groupe2);
         
         // On signale que l'élément a déjà été inséré.
-        dispos[tmp] = 1;
+        dispos[g_list_index (liste_actions, groupe2)] = 1;
         
         gtk_tree_store_append (UI_GRO.tree_store_etat,
                                &groupe2->Iter_groupe,
@@ -337,13 +349,15 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
       }
       
       if (niveau == 0)
+      {
         gtk_tree_store_set (UI_GRO.tree_store_dispo,
                             &Iter,
                             0, g_list_nth_data(p->actions, i),
                             -1);
+      }
       else
       {
-        niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau-1);
+        niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau - 1U);
         gtk_tree_store_set (UI_GRO.tree_store_dispo,
                             &Iter,
                             0, g_list_nth_data (niveau_groupe->groupes, i),
@@ -358,9 +372,6 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
 }
 
 
-void
-_1990_gtk_spin_button_niveau_change (GtkWidget *button,
-                                     Projet    *p)
 /**
  * \brief Met à jour l'affichage graphique en fonction de la valeur du
  *        spin_button.
@@ -372,23 +383,23 @@ _1990_gtk_spin_button_niveau_change (GtkWidget *button,
  *   - interface graphique non initialisée,
  *   - #_1990_gtk_groupes_affiche_niveau.
  */
+void
+_1990_gtk_spin_button_niveau_change (GtkWidget *button,
+                                     Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
-  BUG (_1990_gtk_groupes_affiche_niveau (p, GTK_COMMON_SPINBUTTON_AS_UINT(
+  BUG (_1990_gtk_groupes_affiche_niveau (p, GTK_COMMON_SPINBUTTON_AS_UINT16 (
                                  GTK_SPIN_BUTTON (UI_GRO.spin_button_niveau))),
       )
   return;
 }
 
 
-void
-_1990_gtk_button_niveau_suppr_clicked (GtkWidget *button,
-                                       Projet    *p)
 /**
  * \brief Supprime le niveau en cours.
  * \param button : button ayant réalisé l'évènement,
@@ -399,12 +410,15 @@ _1990_gtk_button_niveau_suppr_clicked (GtkWidget *button,
  *   - interface graphique non initialisée,
  *   - #_1990_groupe_free_niveau.
  */
+void
+_1990_gtk_button_niveau_suppr_clicked (GtkWidget *button,
+                                       Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   BUG (_1990_groupe_free_niveau (
          p,
@@ -417,9 +431,6 @@ _1990_gtk_button_niveau_suppr_clicked (GtkWidget *button,
 }
 
 
-void
-_1990_gtk_button_niveau_ajout_clicked (GtkWidget *button,
-                                       Projet *p)
 /**
  * \brief Ajoute un niveau de groupe.
  * \param button : button ayant réalisé l'évènement,
@@ -430,12 +441,15 @@ _1990_gtk_button_niveau_ajout_clicked (GtkWidget *button,
  *   - interface graphique non initialisée,
  *   - #_1990_groupe_ajout_niveau.
  */
+void
+_1990_gtk_button_niveau_ajout_clicked (GtkWidget *button,
+                                       Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   BUG (_1990_groupe_ajout_niveau (p), )
   
@@ -443,9 +457,6 @@ _1990_gtk_button_niveau_ajout_clicked (GtkWidget *button,
 }
 
 
-void
-_1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
-                                       Projet    *p)
 /**
  * \brief Ajoute un groupe dans le niveau en cours.
  * \param button : button ayant réalisé l'évènement,
@@ -456,6 +467,9 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
  *   - interface graphique non initialisée,
  *   - #_1990_groupe_ajout_groupe.
  */
+void
+_1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
+                                       Projet    *p)
 {
   Niveau_Groupe *niveau_groupe;
   
@@ -463,7 +477,7 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes,
                                GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
@@ -478,10 +492,6 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
 }
 
 
-gboolean
-_1990_gtk_insert_dispo (Projet        *p,
-                        void          *data,
-                        Niveau_Groupe *niveau)
 /**
  * \brief Ajoute dans le tree_view_dispo le numéro de l'élément disponible.
  *        Cette fonction ne gère que l'interface graphique de tree_view_dispo.
@@ -494,6 +504,10 @@ _1990_gtk_insert_dispo (Projet        *p,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+_1990_gtk_insert_dispo (Projet        *p,
+                        void          *data,
+                        Niveau_Groupe *niveau)
 {
   GtkTreeIter       iter;
   GtkTreePath      *path;
@@ -502,7 +516,7 @@ _1990_gtk_insert_dispo (Projet        *p,
   BUGCRIT (UI_GRO.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   gtk_tree_store_append (UI_GRO.tree_store_dispo, &iter, NULL);
   
@@ -517,8 +531,6 @@ _1990_gtk_insert_dispo (Projet        *p,
 }
 
 
-void
-_1990_gtk_button_groupe_suppr_clicked (GtkWidget *button, Projet *p)
 /**
  * \brief Supprime le groupe sélectionné dans le niveau en cours.
  * \param button : composant spin_button ayant réalisé l'évènement,
@@ -531,6 +543,9 @@ _1990_gtk_button_groupe_suppr_clicked (GtkWidget *button, Projet *p)
  *       élément d'un groupe,
  *     - #_1990_groupe_free_groupe si c'est un groupe.
  */
+void
+_1990_gtk_button_groupe_suppr_clicked (GtkWidget *button,
+                                       Projet    *p)
 {
   GtkTreeModel  *model;
   GtkTreeIter    iter, iter_tmp;
@@ -541,12 +556,14 @@ _1990_gtk_button_groupe_suppr_clicked (GtkWidget *button, Projet *p)
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   niveau_groupe = g_list_nth_data (p->niveaux_groupes,
                                GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
@@ -563,16 +580,14 @@ _1990_gtk_button_groupe_suppr_clicked (GtkWidget *button, Projet *p)
     BUG (_1990_groupe_retire_element (p, niveau_groupe, groupe2, groupe), )
   }
   else
+  {
     BUG (_1990_groupe_free_groupe (p, niveau_groupe, groupe), )
+  }
   
   return;
 }
 
 
-void
-_1990_gtk_tree_view_drag_begin (GtkWidget      *widget,
-                                GdkDragContext *drag_context,
-                                Projet         *p)
 /**
  * \brief Défini le composant à l'origine de DnD
  * \param widget : composant à l'origine de l'évènement,
@@ -582,6 +597,10 @@ _1990_gtk_tree_view_drag_begin (GtkWidget      *widget,
  *   Échec :
  *     - p == NULL.
  */
+void
+_1990_gtk_tree_view_drag_begin (GtkWidget      *widget,
+                                GdkDragContext *drag_context,
+                                Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -591,13 +610,6 @@ _1990_gtk_tree_view_drag_begin (GtkWidget      *widget,
 }
 
 
-gboolean
-_1990_gtk_tree_view_dispo_drag (GtkWidget      *widget,
-                                GdkDragContext *drag_context,
-                                gint            x,
-                                gint            y,
-                                guint           tim,
-                                Projet         *p)
 /**
  * \brief Supprimer les éléments sélectionnées du tree_view_etat.
  * \param widget : composant spin_button ayant réalisé l'évènement,
@@ -608,6 +620,13 @@ _1990_gtk_tree_view_dispo_drag (GtkWidget      *widget,
  * \param p : la variable projet.
  * \return FALSE.
  */
+gboolean
+_1990_gtk_tree_view_dispo_drag (GtkWidget      *widget,
+                                GdkDragContext *drag_context,
+                                gint            x,
+                                gint            y,
+                                guint           tim,
+                                Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   
@@ -617,9 +636,6 @@ _1990_gtk_tree_view_dispo_drag (GtkWidget      *widget,
 }
 
 
-gboolean
-_1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
-                                   Projet *p)
 /**
  * \brief Ajoute les éléments disponibles sélectionnés dans le tree_view 
  *        "dispo" dans le groupe du niveau en cours.
@@ -634,6 +650,9 @@ _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
  *     - interface graphique non initialisée,
  *     - #_1990_groupe_ajout_element.
  */
+gboolean
+_1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
+                                   Projet *p)
 {
   GtkTreeModel  *model1;
   GtkTreeIter  	 iter1;
@@ -643,11 +662,11 @@ _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes,
                                GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
@@ -669,7 +688,7 @@ _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
     // On ajoute l'élément au groupe
     BUG (_1990_groupe_ajout_element (p, niveau_groupe, groupe, groupe2),
          FALSE,
-         g_list_foreach (list_orig, (GFunc) gtk_tree_path_free, NULL);)
+         g_list_foreach (list_orig, (GFunc) gtk_tree_path_free, NULL); )
   }
   
   g_list_foreach (list_orig, (GFunc) gtk_tree_path_free, NULL);
@@ -678,9 +697,6 @@ _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
 }
 
 
-void
-_1990_gtk_button_ajout_dispo_clicked (GtkWidget *button,
-                                      Projet    *p)
 /**
  * \brief Ajoute les éléments disponibles sélectionnés dans le groupe
  *        sélectionné.
@@ -693,6 +709,9 @@ _1990_gtk_button_ajout_dispo_clicked (GtkWidget *button,
  *     - interface graphique non initialisée,
  *     - #_1990_gtk_button_ajout_dispo_proc.
  */
+void
+_1990_gtk_button_ajout_dispo_clicked (GtkWidget *button,
+                                      Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -701,17 +720,19 @@ _1990_gtk_button_ajout_dispo_clicked (GtkWidget *button,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   /* On vérifie s'il y a des éléments sélectionnés */
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                         &model,
                                         &iter))
+  {
     return;
+  }
   
   groupe = _1990_gtk_get_groupe (model, &iter);
   
@@ -721,9 +742,6 @@ _1990_gtk_button_ajout_dispo_clicked (GtkWidget *button,
 }
 
 
-void
-_1990_gtk_button_ajout_tout_dispo_clicked (GtkWidget *button,
-                                           Projet *p)
 /**
  * \brief Ajoute tous les éléments disponibles dans le groupe sélectionné.
  * \param button : composant spin_button ayant réalisé l'évènement,
@@ -735,6 +753,9 @@ _1990_gtk_button_ajout_tout_dispo_clicked (GtkWidget *button,
  *     - interface graphique non initialisée,
  *     - #_1990_gtk_button_ajout_dispo_proc.
  */
+void
+_1990_gtk_button_ajout_tout_dispo_clicked (GtkWidget *button,
+                                           Projet    *p)
 {
   GtkTreeIter   iter;
   GtkTreeModel *model;
@@ -743,18 +764,20 @@ _1990_gtk_button_ajout_tout_dispo_clicked (GtkWidget *button,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   gtk_tree_selection_select_all (UI_GRO.tree_select_dispo);
   
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                         &model,
                                         &iter))
+  {
     return;
+  }
   groupe = _1990_gtk_get_groupe (model, &iter);
   
   BUG (_1990_gtk_button_ajout_dispo_proc (groupe, p), )
@@ -763,13 +786,6 @@ _1990_gtk_button_ajout_tout_dispo_clicked (GtkWidget *button,
 }
 
 
-void
-_1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
-                               GdkDragContext *drag_context,
-                               gint x,
-                               gint y,
-                               guint tim,
-                               Projet *p)
 /**
  * \brief Modifie le groupe d'un élément via le DnD.
  * \param widget : composant ayant réalisé l'évènement,
@@ -787,6 +803,13 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
  *     - #_1990_groupe_retire_element ou _1990_groupe_ajout_element si
  *       l'élément est déjà dans un groupe.
  */
+void
+_1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
+                               GdkDragContext *drag_context,
+                               gint            x,
+                               gint            y,
+                               guint           tim,
+                               Projet         *p)
 {
   gint              cx, cy;
   GtkTreePath      *path;
@@ -795,11 +818,11 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   gdk_window_get_geometry (gtk_tree_view_get_bin_window (GTK_TREE_VIEW (
                                                        UI_GRO.tree_view_etat)),
@@ -808,8 +831,8 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
                            NULL,
                            NULL);
   gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                 x -=cx,
-                                 y -=cy,
+                                 x -= cx,
+                                 y -= cy,
                                  &path,
                                  NULL,
                                  &cx,
@@ -825,7 +848,9 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
     groupe_dest = _1990_gtk_get_groupe (list_store, &iter);
     // Ajoute les éléments disponibles sélectionnées dans le groupe souhaité.
     if (UI_GRO.drag_from == GTK_WIDGET (UI_GRO.tree_view_dispo))
+    {
       BUG (_1990_gtk_button_ajout_dispo_proc (groupe_dest, p), )
+    }
     // Déplace l'élément sélectionné dans un autre groupe.
     else
     {
@@ -866,11 +891,6 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
 }
 
 
-void
-_1990_gtk_tree_view_etat_row_expanded (GtkTreeView *tree_view,
-                                       GtkTreeIter *iter,
-                                       GtkTreePath *path,
-                                       Projet      *p)
 /**
  * \brief Évènement lorsqu'on ouvre une ligne contenant un enfant. Est utilisé
  *        pour se souvenir des lignes qui sont ouvertes et fermées et les
@@ -885,6 +905,11 @@ _1990_gtk_tree_view_etat_row_expanded (GtkTreeView *tree_view,
  *     - aucun niveau de groupes,
  *     - interface graphique non initialisée.
  */
+void
+_1990_gtk_tree_view_etat_row_expanded (GtkTreeView *tree_view,
+                                       GtkTreeIter *iter,
+                                       GtkTreePath *path,
+                                       Projet      *p)
 {
   GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
   Groupe       *groupe;
@@ -892,11 +917,11 @@ _1990_gtk_tree_view_etat_row_expanded (GtkTreeView *tree_view,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   // On détermine le groupe ayant entraîné une ouverture. En effet, seul un
   // groupe dans le tree_view_etat peut entraîner une ouverture.
@@ -909,11 +934,6 @@ _1990_gtk_tree_view_etat_row_expanded (GtkTreeView *tree_view,
 }
 
 
-void
-_1990_gtk_tree_view_etat_row_collapsed (GtkTreeView *tree_view,
-                                        GtkTreeIter *iter,
-                                        GtkTreePath *path,
-                                        Projet      *p)
 /**
  * \brief Évènement lorsqu'on ferme une ligne contenant un enfant. Est utilisé
  *        pour se souvenir des lignes qui sont ouvertes et fermées et les
@@ -928,6 +948,11 @@ _1990_gtk_tree_view_etat_row_collapsed (GtkTreeView *tree_view,
  *     - aucun niveau de groupes,
  *     - interface graphique non initialisée.
  */
+void
+_1990_gtk_tree_view_etat_row_collapsed (GtkTreeView *tree_view,
+                                        GtkTreeIter *iter,
+                                        GtkTreePath *path,
+                                        Projet      *p)
 {
   GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
   Groupe       *groupe;
@@ -935,11 +960,11 @@ _1990_gtk_tree_view_etat_row_collapsed (GtkTreeView *tree_view,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   // On détermine le groupe ayant entraîné une fermeture. En effet, seul un
   // groupe dans le tree_view_etat peut entraîner une fermeture
@@ -952,9 +977,6 @@ _1990_gtk_tree_view_etat_row_collapsed (GtkTreeView *tree_view,
 }
 
 
-void
-_1990_gtk_button_groupe_toggled (GtkRadioToolButton *radiobutton,
-                                 Projet             *p)
 /**
  * \brief Évènement lorsqu'il y a un changement de type de combinaison (OR, XOR
  *        ou AND).
@@ -968,6 +990,9 @@ _1990_gtk_button_groupe_toggled (GtkRadioToolButton *radiobutton,
  *     - #_1990_groupe_modifie_combinaison,
  *     - type de combinaison inconnu.
  */
+void
+_1990_gtk_button_groupe_toggled (GtkRadioToolButton *radiobutton,
+                                 Projet             *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -976,37 +1001,44 @@ _1990_gtk_button_groupe_toggled (GtkRadioToolButton *radiobutton,
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   /* On détermine le groupe sélectionné */
   if (!gtk_tree_selection_get_selected(UI_GRO.tree_select_etat,
                                        &model,
                                        &iter))
+  {
     return;
+  }
   
   groupe = _1990_gtk_get_groupe (model, &iter);
   
   /* On attribue le nouveau type de combinaison */
   if (radiobutton == (void *) UI_GRO.item_groupe_and)
+  {
     BUG (_1990_groupe_modifie_combinaison (groupe, GROUPE_COMBINAISON_AND), )
+  }
   else if (radiobutton == (void *) UI_GRO.item_groupe_or)
+  {
     BUG (_1990_groupe_modifie_combinaison (groupe, GROUPE_COMBINAISON_OR), )
+  }
   else if (radiobutton == (void *) UI_GRO.item_groupe_xor)
+  {
     BUG (_1990_groupe_modifie_combinaison (groupe, GROUPE_COMBINAISON_XOR), )
+  }
   else
-    FAILINFO (, (gettext ("Le type de combinaison est inconnu.\n"));)
+  {
+    FAILINFO (, (gettext ("Le type de combinaison est inconnu.\n")); )
+  }
   
   return;
 }
 
 
-void
-_1990_gtk_groupes_button_generer_clicked (GtkWidget *button,
-                                          Projet    *p)
 /**
  * \brief Génère les pondérations.
  * \param button : composant à l'origine de l'évènement,
@@ -1019,11 +1051,14 @@ _1990_gtk_groupes_button_generer_clicked (GtkWidget *button,
  *     - #_1990_groupe_affiche_tout,
  *     - #_1990_ponderations_affiche_tout.
  */
+void
+_1990_gtk_groupes_button_generer_clicked (GtkWidget *button,
+                                          Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   INFO (p->niveaux_groupes,
         ,
-        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
   BUG (_1990_combinaisons_genere (p), )
   BUG (_1990_ponderations_affiche_tout (p), )
@@ -1032,9 +1067,6 @@ _1990_gtk_groupes_button_generer_clicked (GtkWidget *button,
 }
 
 
-void
-_1990_gtk_radio_button_eluequ_equ_seul (GtkRadioButton *radiobutton,
-                                        Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre seulement.
@@ -1045,6 +1077,9 @@ _1990_gtk_radio_button_eluequ_equ_seul (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_eluequ_equ_seul.
  */
+void
+_1990_gtk_radio_button_eluequ_equ_seul (GtkRadioButton *radiobutton,
+                                        Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1054,9 +1089,6 @@ _1990_gtk_radio_button_eluequ_equ_seul (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_eluequ_equ_resist (GtkRadioButton *radiobutton,
-                                          Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre et à la résistance structurelle.
@@ -1067,6 +1099,9 @@ _1990_gtk_radio_button_eluequ_equ_resist (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_eluequ_equ_resist.
  */
+void
+_1990_gtk_radio_button_eluequ_equ_resist (GtkRadioButton *radiobutton,
+                                          Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1076,9 +1111,6 @@ _1990_gtk_radio_button_eluequ_equ_resist (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_elustrgeo_1 (GtkRadioButton *radiobutton,
-                                    Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 1.
@@ -1089,6 +1121,9 @@ _1990_gtk_radio_button_elustrgeo_1 (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_elustrgeo_1.
  */
+void
+_1990_gtk_radio_button_elustrgeo_1 (GtkRadioButton *radiobutton,
+                                    Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1098,9 +1133,6 @@ _1990_gtk_radio_button_elustrgeo_1 (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_elustrgeo_2 (GtkRadioButton *radiobutton,
-                                    Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 2.
@@ -1111,6 +1143,9 @@ _1990_gtk_radio_button_elustrgeo_2 (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_elustrgeo_2.
  */
+void
+_1990_gtk_radio_button_elustrgeo_2 (GtkRadioButton *radiobutton,
+                                    Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1120,9 +1155,6 @@ _1990_gtk_radio_button_elustrgeo_2 (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_elustrgeo_3 (GtkRadioButton *radiobutton,
-                                    Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 3.
@@ -1133,6 +1165,9 @@ _1990_gtk_radio_button_elustrgeo_3 (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_elustrgeo_3.
  */
+void
+_1990_gtk_radio_button_elustrgeo_3 (GtkRadioButton *radiobutton,
+                                    Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1142,9 +1177,6 @@ _1990_gtk_radio_button_elustrgeo_3 (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_elustrgeo_6_10 (GtkRadioButton *radiobutton,
-                                       Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 de l'EN 1990.
@@ -1155,6 +1187,9 @@ _1990_gtk_radio_button_elustrgeo_6_10 (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_elustrgeo_6_10.
  */
+void
+_1990_gtk_radio_button_elustrgeo_6_10 (GtkRadioButton *radiobutton,
+                                       Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1164,9 +1199,6 @@ _1990_gtk_radio_button_elustrgeo_6_10 (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_elustrgeo_6_10ab (GtkRadioButton *radiobutton,
-                                         Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 (a) et (b) de l'EN 1990.
@@ -1177,6 +1209,9 @@ _1990_gtk_radio_button_elustrgeo_6_10ab (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_elustrgeo_6_10ab.
  */
+void
+_1990_gtk_radio_button_elustrgeo_6_10ab (GtkRadioButton *radiobutton,
+                                         Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1186,9 +1221,6 @@ _1990_gtk_radio_button_elustrgeo_6_10ab (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_eluacc_frequente (GtkRadioButton *radiobutton,
-                                         Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs fréquentes des actions variables.
@@ -1199,6 +1231,9 @@ _1990_gtk_radio_button_eluacc_frequente (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_eluacc_frequente.
  */
+void
+_1990_gtk_radio_button_eluacc_frequente (GtkRadioButton *radiobutton,
+                                         Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1208,9 +1243,6 @@ _1990_gtk_radio_button_eluacc_frequente (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_radio_button_eluacc_quasi_permanente (GtkRadioButton *radiobutton,
-                                                Projet         *p)
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs quasi_permanente des actions variables.
@@ -1221,6 +1253,9 @@ _1990_gtk_radio_button_eluacc_quasi_permanente (GtkRadioButton *radiobutton,
  *     - p == NULL,
  *     - #_1990_combinaisons_eluacc_quasi_permanente.
  */
+void
+_1990_gtk_radio_button_eluacc_quasi_permanente (GtkRadioButton *radiobutton,
+                                                Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1230,13 +1265,6 @@ _1990_gtk_radio_button_eluacc_quasi_permanente (GtkRadioButton *radiobutton,
 }
 
 
-void
-_1990_gtk_tooltip (GtkWidget  *widget,
-                   gint        x,
-                   gint        y,
-                   gboolean    keyboard_mode,
-                   GtkTooltip *tooltip,
-                   gpointer    user_data)
 /**
  * \brief Cette fonction doit obligatoirement être relié à l'évènement
  *        "query-tooltip" pour qu'apparaisse la fenêtre tooltip.
@@ -1248,16 +1276,18 @@ _1990_gtk_tooltip (GtkWidget  *widget,
  * \param user_data : la variable projet.
  * \return Rien.
  */
+void
+_1990_gtk_tooltip (GtkWidget  *widget,
+                   gint        x,
+                   gint        y,
+                   gboolean    keyboard_mode,
+                   GtkTooltip *tooltip,
+                   gpointer    user_data)
 {
   return;
 }
 
 
-void
-_1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
-                                      gchar               *path_string,
-                                      gchar               *new_text,
-                                      Projet              *p)
 /**
  * \brief Édition du nom dans le tree-view-etat. On édite donc soit le nom d'un
  *        groupe, soit le nom d'une action.
@@ -1271,18 +1301,23 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
  *     - interface graphique non initialisée,
  *     - #_1990_groupe_modifie_nom ou #_1990_action_nom_change.
  */
+void
+_1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
+                                      gchar               *path_string,
+                                      gchar               *new_text,
+                                      Projet              *p)
 {
   GtkTreePath  *path;
   GtkTreeIter   iter;
   GtkTreeModel *model;
-  unsigned int  niveau;
+  uint32_t      niveau;
   GtkTreeIter   iter_parent;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   path = gtk_tree_path_new_from_string (path_string);
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (UI_GRO.tree_view_etat));
@@ -1332,11 +1367,6 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
 }
 
 
-void
-_1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
-                                       gchar               *path_string,
-                                       gchar               *new_text,
-                                       Projet              *p)
 /**
  * \brief Édition du nom dans le tree-view-dispo. On édite donc soit le nom
  *        d'un groupe, soit le nom d'une action.
@@ -1351,17 +1381,22 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
  *     - #_1990_action_nom_change,
  *     - #_1990_groupe_modifie_nom.
  */
+void
+_1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
+                                       gchar               *path_string,
+                                       gchar               *new_text,
+                                       Projet              *p)
 {
   GtkTreePath  *path;
   GtkTreeIter   iter;
   GtkTreeModel *model;
-  unsigned int  niveau;
+  uint32_t      niveau;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   path = gtk_tree_path_new_from_string (path_string);
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (UI_GRO.tree_view_dispo));
@@ -1386,7 +1421,7 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
     
     gtk_tree_model_get (model, &iter, 0, &groupe, -1);
     BUG (_1990_groupe_modifie_nom (g_list_nth_data (p->niveaux_groupes,
-                                                    niveau - 1),
+                                                    niveau - 1U),
                                    groupe,
                                    new_text,
                                    p),
@@ -1395,10 +1430,6 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
 }
 
 
-gboolean
-_1990_gtk_tree_view_etat_key_press_event (GtkWidget *widget,
-                                          GdkEvent  *event,
-                                          Projet    *p)
 /**
  * \brief Gère les touches appuyées du treeview etat.
  * \param widget : composant à l'origine de l'évènement,
@@ -1409,24 +1440,27 @@ _1990_gtk_tree_view_etat_key_press_event (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+_1990_gtk_tree_view_etat_key_press_event (GtkWidget *widget,
+                                          GdkEvent  *event,
+                                          Projet    *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGCRIT (UI_GRO.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   if (event->key.keyval == GDK_KEY_Delete)
+  {
     _1990_gtk_button_groupe_suppr_clicked (widget, p);
+  }
   
   // Pour permettre aux autres touches d'être fonctionnelles.
   return FALSE;
 }
 
 
-void
-_1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
-                               Projet           *p)
 /**
  * \brief Permet de activer/désactiver les boutons ajout en fonction de la
  *        selection.
@@ -1437,6 +1471,9 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+_1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
+                               Projet           *p)
 {
   GtkTreeIter       iter;
   
@@ -1444,7 +1481,7 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Groupes");)
+                     "Groupes"); )
   
   // Si le tree_view est vide ou qu'aucun groupe n'est sélectionné
   if ((!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (
@@ -1453,41 +1490,35 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
       (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                          NULL,
                                          NULL)))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_tout_dispo),
                               FALSE);
+  }
   else
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_tout_dispo),
-                              TRUE);
+  {
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_tout_dispo), TRUE);
+  }
   
   // Si aucun groupe n'est sélectionné
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
                                         NULL,
                                         NULL))
   {
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo),
-                              FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_suppr),
-                              FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_and),
-                              FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_or),
-                              FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_xor),
-                              FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_suppr), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_and), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_or), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_xor), FALSE);
   }
   else
   {
     GList *list_orig;
     GList *list;
     
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_suppr),
-                              TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_and),
-                              TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_or),
-                              TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_xor),
-                              TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_suppr), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_and), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_or), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_xor), TRUE);
     
     // Si aucune sélection dans la liste des éléments disponibles
     list_orig = gtk_tree_selection_get_selected_rows (UI_GRO.tree_select_dispo,
@@ -1495,11 +1526,13 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
     list = g_list_last (list_orig);
     
     if (list == NULL)
-      gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo),
-                                FALSE);
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo), FALSE);
+    }
     else
-      gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo),
-                                TRUE);
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_ajout_dispo), TRUE);
+    }
     
     g_list_foreach (list_orig, (GFunc) gtk_tree_path_free, NULL);
     g_list_free (list_orig);
@@ -1507,12 +1540,6 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void
-EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
-                           GtkCellRenderer   *cell,
-                           GtkTreeModel      *tree_model,
-                           GtkTreeIter       *iter,
-                           gpointer           data)
 /**
  * \return Affiche le nom d'un groupe ou d'une action dans le treeview_etat.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1522,6 +1549,12 @@ EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
  * \param data : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
+                           GtkCellRenderer   *cell,
+                           GtkTreeModel      *tree_model,
+                           GtkTreeIter       *iter,
+                           gpointer           data)
 {
   Groupe  *groupe;
   
@@ -1533,12 +1566,6 @@ EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
-                            GtkCellRenderer   *cell,
-                            GtkTreeModel      *tree_model,
-                            GtkTreeIter       *iter,
-                            gpointer data)
 /**
  * \brief Affiche le nom d'un groupe ou d'une action dans le treeview_dispo.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -1548,6 +1575,12 @@ EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
  * \param data : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
+                            GtkCellRenderer   *cell,
+                            GtkTreeModel      *tree_model,
+                            GtkTreeIter       *iter,
+                            gpointer data)
 {
   Groupe  *groupe;
   
@@ -1559,8 +1592,6 @@ EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-_1990_gtk_groupes (Projet *p)
 /**
  * \brief Création de la fenêtre Groupes.
  * \param p : la variable projet.
@@ -1570,6 +1601,8 @@ _1990_gtk_groupes (Projet *p)
  *     - interface graphique impossible à générer,
  *     - _1990_groupe_ajout_niveau si aucun niveau n'est existant.
  */
+void
+_1990_gtk_groupes (Projet *p)
 {
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1580,15 +1613,18 @@ _1990_gtk_groupes (Projet *p)
   }
   
   if (p->niveaux_groupes == NULL)
+  {
     BUG (_1990_groupe_ajout_niveau (p), )
+  }
   
   UI_GRO.builder = gtk_builder_new ();
-  BUGCRIT (gtk_builder_add_from_resource (UI_GRO.builder,
-                                         "/org/2lgc/codegui/ui/1990_groupes.ui",
-                                         NULL) != 0,
+  BUGCRIT (gtk_builder_add_from_resource (
+             UI_GRO.builder,
+             "/org/2lgc/codegui/ui/1990_groupes.ui",
+             NULL) != 0,
           ,
           (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                    "Groupes");)
+                    "Groupes"); )
   gtk_builder_connect_signals (UI_GRO.builder, p);
   
   UI_GRO.window = GTK_WIDGET (gtk_builder_get_object (
@@ -1666,8 +1702,9 @@ _1990_gtk_groupes (Projet *p)
   
   BUG (_1990_gtk_groupes_affiche_niveau (
          p,
-         GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (gtk_builder_get_object
-                       (UI_GRO.builder, "1990_groupes_spin_button_niveaux")))),
+         GTK_COMMON_SPINBUTTON_AS_UINT16 (GTK_SPIN_BUTTON (
+           gtk_builder_get_object (UI_GRO.builder,
+                                   "1990_groupes_spin_button_niveaux")))),
       )
   gtk_window_set_transient_for (GTK_WINDOW (UI_GRO.window),
                                 GTK_WINDOW (UI_GTK.window));

@@ -41,7 +41,7 @@ errmin (double calc,
         TRUE,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
-                  err_min * 1e14);)
+                  err_min * 1e14); )
   return ABS (calc) <= err_min;
 }
 
@@ -62,7 +62,7 @@ errmax (double calc,
         TRUE,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
-                  err_max);)
+                  err_max); )
   return ABS (calc) <= err_max * 1e-14;
 }
 
@@ -83,7 +83,7 @@ errmoy (double calc,
         TRUE,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
-                  err_moy * 1e7);)
+                  err_moy * 1e7); )
   return ABS (calc) <= err_moy * 1e-7;
 }
 
@@ -104,8 +104,6 @@ errrel (double calc,
 }
 
 
-double
-common_math_arrondi_nombre (double nombre)
 /**
  * \brief Arrondi un nombre en supprimant la partie négligeable. L'algorithme
  *        est perfectible puisque lors de l'arrondi, une nouvelle imprécision
@@ -114,11 +112,15 @@ common_math_arrondi_nombre (double nombre)
  * \param nombre : le nombre à arrondir.
  * \return Le nombre arrondi.
  */
+double
+common_math_arrondi_nombre (double nombre)
 {
   double puissance;
   
   if (ABS (nombre) < DBL_MIN)
+  {
     return 0.;
+  }
   puissance = ERREUR_RELATIVE_PUISSANCE - ceil (log10 (ABS (nombre)));
   nombre = nombre * pow (10, puissance);
   modf (nombre, &nombre);
@@ -127,48 +129,48 @@ common_math_arrondi_nombre (double nombre)
 }
 
 
-void
-common_math_arrondi_triplet (cholmod_triplet *triplet)
 /**
  * \brief Arrondi un triplet en supprimant la partie négligeable.
  * \param triplet : la variable triplet à arrondir.
  * \return Rien.
  */
+void
+common_math_arrondi_triplet (cholmod_triplet *triplet)
 {
-  double       *ax;
-  unsigned int  i;
+  double *ax;
+  size_t  i;
   
   ax = (double *) triplet->x;
   for (i = 0; i < triplet->nnz; i++)
+  {
     ax[i] = common_math_arrondi_nombre (ax[i]);
+  }
   
   return;
 }
 
 
-void
-common_math_arrondi_sparse (cholmod_sparse *sparse)
 /**
  * \brief Arrondi un sparse en supprimant la partie négligeable.
  * \param sparse : la matrice sparse à arrondir.
  * \return Rien.
  */
+void
+common_math_arrondi_sparse (cholmod_sparse *sparse)
 {
-  double      *ax;
-  unsigned int i;
+  double *ax;
+  size_t  i;
   
   ax = (double *) sparse->x;
   for (i = 0; i < sparse->nzmax; i++)
+  {
     ax[i] = common_math_arrondi_nombre (ax[i]);
+  }
   
   return;
 }
 
 
-void
-common_math_double_to_char (double nombre,
-                            char  *dest,
-                            int    decimales)
 /**
  * \brief Converti un nombre double en char *.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
@@ -177,12 +179,18 @@ common_math_double_to_char (double nombre,
  * \param decimales : nombre de décimales au maximum.
  * \return Rien.
  */
+void
+common_math_double_to_char (double nombre,
+                            char  *dest,
+                            int8_t decimales)
 {
 /*  double  test;
   int   width;*/
   
   if (decimales > 15)
+  {
     decimales = 15;
+  }
   
 /*  // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
   if (ABS(nombre) > 1e15)
@@ -212,10 +220,6 @@ common_math_double_to_char (double nombre,
 }
 
 
-void
-conv_f_c (Flottant nombre,
-          char    *dest,
-          int      decimales)
 /**
  * \brief Converti un nombre double en char *.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
@@ -224,11 +228,17 @@ conv_f_c (Flottant nombre,
  * \param decimales : nombre de décimales au maximum.
  * \return Rien.
  */
+void
+conv_f_c (Flottant nombre,
+          char    *dest,
+          uint8_t  decimales)
 {
   double test, f;
   
   if (decimales > 15)
+  {
     decimales = 15;
+  }
   f = m_g (nombre);
   
   // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
@@ -244,7 +254,7 @@ conv_f_c (Flottant nombre,
     // que des informations ont été tronquées.
     case FLOTTANT_UTILISATEUR :
     {
-      int width;
+      uint8_t width;
       
       if (ABS (f) > 1e15)
       {
@@ -254,7 +264,9 @@ conv_f_c (Flottant nombre,
           sscanf (dest, "%le", &test);
           if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
               (fabs (test) <= fabs (f) * 1.000000000000001))
+          {
             break;
+          }
         }
       }
       // Sinon on affiche sous forme normale
@@ -266,7 +278,9 @@ conv_f_c (Flottant nombre,
           sscanf (dest, "%lf", &test);
           if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
               (fabs (test) <= fabs (f) * 1.000000000000001))
+          {
             break;
+          }
         }
       }
       sprintf (dest, "%.*lf", MAX (width, decimales), f);
@@ -274,7 +288,7 @@ conv_f_c (Flottant nombre,
     }
     default :
     {
-      FAILCRIT ( , (gettext ("Type de nombre est inconnu.\n"));)
+      FAILCRIT ( , (gettext ("Type de nombre est inconnu.\n")); )
       break;
     }
   }
@@ -283,8 +297,6 @@ conv_f_c (Flottant nombre,
 }
 
 
-double
-m_g (Flottant f)
 /**
  * \brief Renvoie la valeur d'un flottant.
  * \param f : le nombre.
@@ -293,6 +305,8 @@ m_g (Flottant f)
  *   Échec : NAN si
  *     - le type de f est inconnu.
  */
+double
+m_g (Flottant f)
 {
   switch (f.type)
   {
@@ -301,22 +315,22 @@ m_g (Flottant f)
       return f.d;
     default :
     {
-      FAILCRIT (NAN, (gettext("Type de nombre est inconnu.\n"));)
+      FAILCRIT (NAN, (gettext("Type de nombre est inconnu.\n")); )
       break;
     }
   }
 }
 
 
-Flottant
-m_f (double        f,
-     Type_Flottant type)
 /**
  * \brief Crée un nombre flottant.
  * \param f : nombre flottant,
  * \param type : type du flottant.
  * \return Le résultat.
  */
+Flottant
+m_f (double        f,
+     Type_Flottant type)
 {
   Flottant retour;
   
@@ -332,65 +346,73 @@ m_f (double        f,
     default :
     {
       retour.d = NAN;
-      FAILCRIT (retour, (gettext ("Type de nombre est inconnu.\n"));)
+      FAILCRIT (retour, (gettext ("Type de nombre est inconnu.\n")); )
       break;
     }
   }
 }
 
 
-Flottant
-m_add_f (Flottant f1,
-         Flottant f2)
-/* Description : Additionne deux flottants.
+/** Description : Additionne deux flottants.
  * Paramètres : Flottant f1 : nombre 1,
  *        Flottant f2 : nombre 2.
  * Valeur renvoyée : Le résultat.
  */
+Flottant
+m_add_f (Flottant f1,
+         Flottant f2)
 {
   Flottant retour;
   
   if ((f1.type == FLOTTANT_UTILISATEUR) && (f2.type == FLOTTANT_UTILISATEUR))
+  {
     retour.type = FLOTTANT_UTILISATEUR;
+  }
   else
+  {
     retour.type = FLOTTANT_ORDINATEUR;
+  }
   retour.d = m_g (f1) + m_g (f2);
   
   return retour;
 }
 
 
-Flottant
-m_sub_f (Flottant f1,
-         Flottant f2)
 /**
  * \brief Soustrait deux flottants.
  * \param f1 : nombre 1,
  * \param f2 : nombre 2.
  * \return Le résultat,
  */
+Flottant
+m_sub_f (Flottant f1,
+         Flottant f2)
 {
   Flottant   retour;
   
   if ((f1.type == FLOTTANT_UTILISATEUR) && (f2.type == FLOTTANT_UTILISATEUR))
+  {
     retour.type = FLOTTANT_UTILISATEUR;
+  }
   else
+  {
     retour.type = FLOTTANT_ORDINATEUR;
+  }
   retour.d = m_g (f1) - m_g (f2);
   
   return retour;
 }
 
 
-Flottant
-m_div_d (Flottant f,
-         double   d)
 /**
  * \brief Divise un Flottant par un double.
  * \param f : nombre 1,
  * \param d : nombre 2.
  * \return Le résultat.
  */
+Flottant
+m_div_d (Flottant f,
+         double   d)
 {
   Flottant retour;
   
@@ -401,37 +423,41 @@ m_div_d (Flottant f,
 }
 
 
-Flottant
-m_dot_f (Flottant f1,
-         Flottant f2)
 /**
  * \brief Multiplie deux flottants.
  * \param f1 : nombre 1,
  * \param f2 : nombre 2.
  * \return Le résultat,
  */
+Flottant
+m_dot_f (Flottant f1,
+         Flottant f2)
 {
   Flottant retour;
   
   if ((f1.type == FLOTTANT_UTILISATEUR) && (f2.type == FLOTTANT_UTILISATEUR))
+  {
     retour.type = FLOTTANT_UTILISATEUR;
+  }
   else
+  {
     retour.type = FLOTTANT_ORDINATEUR;
+  }
   retour.d = m_g (f1) * m_g (f2);
   
   return retour;
 }
 
 
-Flottant
-m_dot_d (Flottant f,
-         double   d)
 /**
  * \brief Multiplie un Flottant avec un double.
  * \param f : nombre 1,
  * \param d : nombre 2.
  * \return Le résultat.
  */
+Flottant
+m_dot_d (Flottant f,
+         double   d)
 {
   Flottant retour;
   

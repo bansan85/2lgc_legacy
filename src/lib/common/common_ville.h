@@ -25,28 +25,28 @@
 gboolean common_ville_init      (Projet   *p)
                                        __attribute__((__warn_unused_result__));
 gboolean common_ville_get_ville (wchar_t  *ligne,
-                                 int      *cdc,
-                                 int      *cheflieu,
-                                 int      *reg,
+                                 uint16_t *cdc,
+                                 uint16_t *cheflieu,
+                                 uint16_t *reg,
                                  wchar_t  *dep,
-                                 int      *com,
-                                 int      *ar,
-                                 int      *ct,
-                                 int      *tncc,
+                                 uint32_t *com,
+                                 uint16_t *ar,
+                                 uint16_t *ct,
+                                 uint16_t *tncc,
                                  wchar_t **artmaj,
                                  wchar_t **ncc,
                                  wchar_t **artmin,
                                  wchar_t **nccenr,
-                                 int      *code_postal,
-                                 int      *altitude,
-                                 int      *population)
+                                 uint32_t *code_postal,
+                                 uint32_t *altitude,
+                                 uint32_t *population)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_set       (Projet   *p,
-                                 wchar_t  *departement,
-                                 wchar_t  *ville,
+gboolean common_ville_set       (Projet       *p,
+                                 wchar_t      *departement,
+                                 wchar_t      *ville,
                                  gboolean  graphique_seul)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_free      (Projet   *p)
+gboolean common_ville_free      (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

@@ -42,7 +42,7 @@ EF_Appui *EF_appuis_ajout       (Projet       *p,
                                        __attribute__((__warn_unused_result__));
 
 gboolean EF_appuis_edit         (EF_Appui     *appui,
-                                 int           x,
+                                 uint8_t       x,
                                  Type_EF_Appui type_x,
                                  Projet       *p)
                                        __attribute__((__warn_unused_result__));

@@ -25,6 +25,28 @@
 
 #include "common_projet.h"
 
+
+/**
+ * \struct Ligne_Adresse
+ * \brief Une ligne du fichier france_villes.csv.
+ */
+typedef struct
+{
+  /// Le nom de la ville avec l'éventuel article.
+  char    *affichage;
+  /// La population.
+  uint32_t population;
+  /// Le département.
+  char     departement[4];
+  /// Le numéro de la commune.
+  uint32_t commune;
+  /// Son code postal.
+  uint32_t code_postal;
+  /// Le nom brut de la ville.
+  wchar_t *ville;
+} Ligne_Adresse;
+
+
 void common_gtk_informations_entry_add_char (GtkEntryBuffer *buffer,
                                              guint           position,
                                              gchar          *chars,

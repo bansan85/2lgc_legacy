@@ -29,14 +29,6 @@
 #include "common_fonction.h"
 
 
-gboolean
-EF_resultat_noeud_reaction_appui (GList    *liste,
-                                  EF_Noeud *noeud,
-                                  int       indice,
-                                  Projet   *p,
-                                  char    **texte,
-                                  double   *mini,
-                                  double   *maxi)
 /**
  * \brief Renvoie la réaction d'appui d'un noeud en fonction d'une liste de
  *        pondérations.
@@ -62,37 +54,51 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
  *     - noeud == NULL,
  *     - p == NULL.
  */
+gboolean
+EF_resultat_noeud_reaction_appui (GList    *liste,
+                                  EF_Noeud *noeud,
+                                  uint8_t   indice,
+                                  Projet   *p,
+                                  char    **texte,
+                                  double   *mini,
+                                  double   *maxi)
 {
-  GList  *list_parcours;
-  int     i;
-  double  mi, ma;
-  double *x;
-  Action *action;
+  GList   *list_parcours;
+  uint32_t i;
+  double   mi, ma;
+  double  *x;
+  Action  *action;
   
   BUGPARAM (noeud, "%p", noeud, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
-  INFO ((0 <= indice) && (indice <= 5),
+  INFO (indice <= 5,
         FALSE,
-        (gettext ("Indice hors limite.\n"));)
+        (gettext ("Indice hors limite.\n")); )
   
   if (liste == NULL)
   {
     if (texte != NULL)
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf",
                                          indice < 3 ?
                                            DECIMAL_FORCE :
                                            DECIMAL_MOMENT,
                                          0.),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
     if (mini != NULL)
+    {
       *mini = 0.;
+    }
     if (maxi != NULL)
+    {
       *maxi = 0.;
+    }
     return TRUE;
   }
   
-  i = g_list_index (p->modele.noeuds, noeud);
+  i = (uint32_t) g_list_index (p->modele.noeuds, noeud);
   
   list_parcours = liste;
   action = list_parcours->data;
@@ -107,20 +113,29 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
     x = _1990_action_efforts_noeuds_renvoie (action)->x;
     
     if (x[i * 6 + indice] < mi)
+    {
       mi = x[i * 6 + indice];
+    }
     if (x[i * 6 + indice] > ma)
+    {
       ma = x[i * 6 + indice];
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
   
   if (mini != NULL)
+  {
     *mini = mi;
+  }
   if (maxi != NULL)
+  {
     *maxi = ma;
+  }
   if (texte != NULL)
   {
     if (!errrel (mi, ma))
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
                                          indice < 3 ?
                                            DECIMAL_FORCE :
@@ -131,29 +146,24 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
                                            DECIMAL_MOMENT,
                                          ma),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
     else
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf",
                                          indice < 3 ?
                                            DECIMAL_FORCE :
                                            DECIMAL_MOMENT,
                                          mi),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
   }
   
   return TRUE;
 }
 
 
-gboolean
-EF_resultat_noeud_deplacement (GList    *liste,
-                               EF_Noeud *noeud,
-                               int       indice,
-                               Projet   *p,
-                               char    **texte,
-                               double   *mini,
-                               double   *maxi)
 /**
  * \brief Renvoie le déplacement d'un noeud en fonction d'une liste de
  *        pondérations.
@@ -179,37 +189,51 @@ EF_resultat_noeud_deplacement (GList    *liste,
  *     - noeud == NULL,
  *     - p == NULL.
  */
+gboolean
+EF_resultat_noeud_deplacement (GList    *liste,
+                               EF_Noeud *noeud,
+                               uint8_t   indice,
+                               Projet   *p,
+                               char    **texte,
+                               double   *mini,
+                               double   *maxi)
 {
-  GList  *list_parcours;
-  int     i;
-  double  mi, ma;
-  double *x;
-  Action *action;
+  GList   *list_parcours;
+  uint32_t i;
+  double   mi, ma;
+  double  *x;
+  Action  *action;
   
   BUGPARAM (noeud, "%p", noeud, FALSE)
   BUGPARAM (p, "%p", p, FALSE)
-  INFO ((0 <= indice) && (indice <= 5),
+  INFO (indice <= 5,
         FALSE,
-        (gettext ("Indice hors limite.\n"));)
+        (gettext ("Indice hors limite.\n")); )
   
   if (liste == NULL)
   {
     if (texte != NULL)
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf",
                                          indice < 3 ?
                                            DECIMAL_DEPLACEMENT :
                                            DECIMAL_ROTATION,
                                          0.),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
     if (mini != NULL)
+    {
       *mini = 0.;
+    }
     if (maxi != NULL)
+    {
       *maxi = 0.;
+    }
     return TRUE;
   }
   
-  i = g_list_index (p->modele.noeuds, noeud);
+  i = (uint32_t) g_list_index (p->modele.noeuds, noeud);
   
   list_parcours = liste;
   action = list_parcours->data;
@@ -224,20 +248,29 @@ EF_resultat_noeud_deplacement (GList    *liste,
     x = _1990_action_deplacement_renvoie (action)->x;
     
     if (x[i * 6 + indice] < mi)
+    {
       mi = x[i * 6 + indice];
+    }
     if (x[i * 6 + indice] > ma)
+    {
       ma = x[i * 6 + indice];
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
   
   if (mini != NULL)
+  {
     *mini = mi;
+  }
   if (maxi != NULL)
+  {
     *maxi = ma;
+  }
   if (texte != NULL)
   {
     if (!errrel (mi, ma))
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
                                          indice < 3 ?
                                            DECIMAL_DEPLACEMENT :
@@ -248,15 +281,18 @@ EF_resultat_noeud_deplacement (GList    *liste,
                                            DECIMAL_ROTATION,
                                          ma),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
     else
+    {
       BUGCRIT (*texte = g_strdup_printf ("%.*lf",
                                          indice < 3 ?
                                            DECIMAL_DEPLACEMENT :
                                            DECIMAL_ROTATION,
                                          mi),
                FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
+    }
   }
   
   return TRUE;

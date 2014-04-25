@@ -44,16 +44,6 @@ GTK_WINDOW_KEY_PRESS (ef, charge_noeud);
 GTK_WINDOW_DESTROY (ef, charge_noeud, );
 
 
-gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
-                                       Action **action,
-                                       GList  **noeuds,
-                                       double  *fx,
-                                       double  *fy,
-                                       double  *fz,
-                                       double  *mx,
-                                       double  *my,
-                                       double  *mz,
-                                       gchar  **nom)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer une charge nodale.
@@ -83,6 +73,16 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
  *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
+gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
+                                       Action **action,
+                                       GList  **noeuds,
+                                       double  *fx,
+                                       double  *fy,
+                                       double  *fz,
+                                       double  *mx,
+                                       double  *my,
+                                       double  *mz,
+                                       gchar  **nom)
 {
   GList         *num_noeuds;
   GtkTextIter    start, end;
@@ -104,14 +104,18 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
   BUGCRIT (UI_CHNO.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Nodale");)
+                     "Charge Nodale"); )
   
   get_active = gtk_combo_box_get_active (GTK_COMBO_BOX (
                                                      UI_CHNO.combobox_charge));
   if (get_active < 0)
+  {
     ok = FALSE;
+  }
   else
+  {
     *action = g_list_nth_data (p->actions, (unsigned int) get_active);
+  }
   
   *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fx")),
@@ -120,7 +124,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fx))
+  {
     ok = FALSE;
+  }
   
   *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fy")),
@@ -129,7 +135,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fy))
+  {
     ok = FALSE;
+  }
   
   *fz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fz")),
@@ -138,7 +146,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*fz))
+  {
     ok = FALSE;
+  }
   
   *mx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_mx")),
@@ -147,7 +157,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*mx))
+  {
     ok = FALSE;
+  }
   
   *my = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_my")),
@@ -156,7 +168,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*my))
+  {
     ok = FALSE;
+  }
   
   *mz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_mz")),
@@ -165,7 +179,9 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
                      INFINITY,
                      FALSE);
   if (isnan (*mz))
+  {
     ok = FALSE;
+  }
   
   textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                              "EF_charge_noeud_buffer_noeuds"));
@@ -174,13 +190,17 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
   texte_tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
   num_noeuds = common_selection_renvoie_numeros (texte_tmp);
   if (num_noeuds == NULL)
+  {
     ok = FALSE;
+  }
   else
   {
     *noeuds = common_selection_numeros_en_noeuds (num_noeuds, p);
     g_list_free (num_noeuds);
     if (*noeuds == NULL)
+    {
       ok = FALSE;
+    }
     else
     {
       // Si tous les paramètres sont corrects
@@ -207,9 +227,6 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
 }
 
 
-void
-EF_gtk_charge_noeud_check (GtkWidget *button,
-                           Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -220,6 +237,9 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_noeud_check (GtkWidget *button,
+                           Projet    *p)
 {
   Action *action;
   GList  *noeuds;
@@ -230,7 +250,7 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
   BUGCRIT (UI_CHNO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Nodale");)
+                     "Charge Nodale"); )
   
   if (!EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -242,9 +262,11 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
                                      &my,
                                      &mz,
                                      &nom))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                           UI_CHNO.builder, "EF_charge_noeud_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -259,9 +281,6 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
 }
 
 
-void
-EF_gtk_charge_noeud_ajouter (GtkButton *button,
-                             Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la charge.
  * \param button : composant à l'origine de l'évènement,
@@ -271,6 +290,9 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_noeud_ajouter (GtkButton *button,
+                             Projet    *p)
 {
   double  fx, fy, fz, mx, my, mz;
   Action *action;
@@ -281,7 +303,7 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
   BUGCRIT (UI_CHNO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Nodale");)
+                     "Charge Nodale"); )
   
   BUG (EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -307,7 +329,7 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
                               m_f (mz, FLOTTANT_UTILISATEUR),
                               texte),
       ,
-      free (texte);)
+      free (texte); )
   
   free (texte);
   
@@ -317,9 +339,6 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
 }
 
 
-void
-EF_gtk_charge_noeud_editer (GtkButton *button,
-                            Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -329,6 +348,9 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_charge_noeud_editer (GtkButton *button,
+                            Projet    *p)
 {
   double        fx, fy, fz, mx, my, mz;
   Action       *action;
@@ -340,7 +362,7 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
   BUGCRIT (UI_CHNO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Charge Nodale");)
+                     "Charge Nodale"); )
   
   BUG (EF_gtk_charge_noeud_recupere (p,
                                      &action,
@@ -367,9 +389,13 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
   g_list_free (charge_d->noeuds);
   charge_d->noeuds = noeuds;
   if (action != UI_CHNO.action)
+  {
     BUG (EF_charge_deplace (p, UI_CHNO.action, UI_CHNO.charge, action), )
+  }
   else
+  {
     gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+  }
   
   gtk_widget_destroy (UI_CHNO.window);
   
@@ -379,10 +405,6 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_charge_noeud (Projet *p,
-                     Action *action_defaut,
-                     Charge *charge)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier une action de
  *        type charge nodale.
@@ -396,6 +418,10 @@ EF_gtk_charge_noeud (Projet *p,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+gboolean
+EF_gtk_charge_noeud (Projet *p,
+                     Action *action_defaut,
+                     Charge *charge)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -411,7 +437,7 @@ EF_gtk_charge_noeud (Projet *p,
                                           NULL) != 0,
            FALSE,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Charge Nodale");)
+                     "Charge Nodale"); )
   gtk_builder_connect_signals (UI_CHNO.builder, p);
   
   UI_CHNO.window = GTK_WIDGET (gtk_builder_get_object (UI_CHNO.builder,
@@ -514,11 +540,15 @@ EF_gtk_charge_noeud (Projet *p,
   EF_gtk_charge_noeud_check (NULL, p);
   
   if (UI_ACT.window == NULL)
+  {
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
                                   GTK_WINDOW (UI_GTK.window));
+  }
   else
+  {
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
                                   GTK_WINDOW (UI_ACT.window));
+  }
   
   return TRUE;
 }

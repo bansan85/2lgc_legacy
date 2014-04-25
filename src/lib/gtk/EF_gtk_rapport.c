@@ -40,9 +40,6 @@ GTK_WINDOW_DESTROY (ef, rapport, );
 GTK_WINDOW_KEY_PRESS (ef, rapport);
 
 
-void
-EF_gtk_rapport (Projet *p,
-                GList  *rapport)
 /**
  * \brief Création de la fenêtre permettant d'afficher un rapport.
  * \param p : la variable projet,
@@ -52,6 +49,9 @@ EF_gtk_rapport (Projet *p,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_rapport (Projet *p,
+                GList  *rapport)
 {
   GList *list_parcours;
   
@@ -70,7 +70,7 @@ EF_gtk_rapport (Projet *p,
                                             NULL) != 0,
              ,
              (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                       "Rapport");)
+                       "Rapport"); )
     gtk_builder_connect_signals (UI_RAP.builder, p);
     
     UI_RAP.window = GTK_WIDGET (gtk_builder_get_object (UI_RAP.builder,
@@ -88,6 +88,7 @@ EF_gtk_rapport (Projet *p,
     GdkPixbuf    *pixbuf;
     
     if (analyse->resultat == 0)
+    {
       NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
                                                "gtk-apply",
                                                16,
@@ -95,7 +96,9 @@ EF_gtk_rapport (Projet *p,
                                                NULL),
             gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
                      "gtk-apply")
+    }
     else if (analyse->resultat == 1)
+    {
       NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
                                                "gtk-dialog-warning",
                                                16,
@@ -103,7 +106,9 @@ EF_gtk_rapport (Projet *p,
                                                NULL),
             gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
                      "gtk-dialog-warning")
+    }
     else if (analyse->resultat == 2)
+    {
       NOTE (pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
                                                "gtk-dialog-error",
                                                16,
@@ -111,9 +116,12 @@ EF_gtk_rapport (Projet *p,
                                                NULL),
             gettext ("Erreur lors de l'ouverture de l'image (%s) du thème.\n"),
                      "gtk-dialog-error")
+    }
     else
+    {
       FAILCRIT (,
-                (gettext ("Le résultat d'un rapport doit être compris entre 0 et 2.\n"));)
+                (gettext ("Le résultat d'un rapport doit être compris entre 0 et 2.\n")); )
+    }
     
     gtk_list_store_append (UI_RAP.liste, &Iter);
     gtk_list_store_set (UI_RAP.liste,
@@ -123,7 +131,9 @@ EF_gtk_rapport (Projet *p,
                         2, analyse->commentaire,
                         -1);
     if (pixbuf != NULL)
+    {
       g_object_unref (pixbuf);
+    }
 
     list_parcours = g_list_next (list_parcours);
   }

@@ -39,8 +39,6 @@
 #include "common_gtk.h"
 #endif
 
-gboolean
-EF_sections_init (Projet *p)
 /**
  * \brief Initialise la liste des sections.
  * \param p : la variable projet.
@@ -49,6 +47,8 @@ EF_sections_init (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+EF_sections_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -62,9 +62,6 @@ EF_sections_init (Projet *p)
 }
 
 
-gboolean
-EF_sections_insert (Projet  *p,
-                    Section *section)
 /**
  * \brief Insère une section. Procédure commune à toutes les sections.
  * \param p : la variable projet,
@@ -75,6 +72,9 @@ EF_sections_insert (Projet  *p,
  *     - p == NULL,
  *     - section == NULL.
  */
+gboolean
+EF_sections_insert (Projet  *p,
+                    Section *section)
 {
   GList   *list_parcours;
   Section *section_tmp;
@@ -88,7 +88,9 @@ EF_sections_insert (Projet  *p,
     section_tmp = list_parcours->data;
     
     if (strcmp (section->nom, section_tmp->nom) < 0)
+    {
       break;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
@@ -98,7 +100,9 @@ EF_sections_insert (Projet  *p,
 #ifdef ENABLE_GTK
     gtk_list_store_append (UI_SEC.liste_sections, &section->Iter_liste);
     if (UI_SEC.builder != NULL)
+    {
       gtk_tree_store_append (UI_SEC.sections, &section->Iter_fenetre, NULL);
+    }
 #endif
   }
   else
@@ -110,10 +114,12 @@ EF_sections_insert (Projet  *p,
                                   &section->Iter_liste,
                                   &section_tmp->Iter_liste);
     if (UI_SEC.builder != NULL)
+    {
       gtk_tree_store_insert_before (UI_SEC.sections,
                                     &section->Iter_fenetre,
                                     NULL,
                                     &section_tmp->Iter_fenetre);
+    }
 #endif
   }
   
@@ -123,19 +129,18 @@ EF_sections_insert (Projet  *p,
                       0, section->nom,
                       -1);
   if (UI_SEC.builder != NULL)
+  {
     gtk_tree_store_set (UI_SEC.sections,
                         &section->Iter_fenetre,
                         0, section,
                         -1);
+  }
 #endif
   
   return TRUE;
 }
 
 
-gboolean
-EF_sections_repositionne (Projet  *p,
-                          Section *section)
 /**
  * \brief Repositionne une section après un renommage. Procédure commune à
  *        toutes les sections.
@@ -147,6 +152,9 @@ EF_sections_repositionne (Projet  *p,
  *     - p == NULL,
  *     - section == NULL.
  */
+gboolean
+EF_sections_repositionne (Projet  *p,
+                          Section *section)
 {
   GList *list_parcours;
   
@@ -171,9 +179,11 @@ EF_sections_repositionne (Projet  *p,
                                   &section->Iter_liste,
                                   &section_parcours->Iter_liste);
       if (UI_SEC.builder != NULL)
+      {
         gtk_tree_store_move_before (UI_SEC.sections,
                                     &section->Iter_fenetre,
                                     &section_parcours->Iter_fenetre);
+      }
       break;
 #endif
     }
@@ -189,25 +199,31 @@ EF_sections_repositionne (Projet  *p,
                                 &section->Iter_liste,
                                 NULL);
     if (UI_SEC.builder != NULL)
+    {
       gtk_tree_store_move_before (UI_SEC.sections,
                                   &section->Iter_fenetre,
                                   NULL);
+    }
 #endif
   }
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treeview")));
+  }
   gtk_list_store_set (UI_SEC.liste_sections,
                       &section->Iter_liste,
                       0, section->nom,
                       -1);
   if ((UI_SEC_RE.builder != NULL) && (UI_SEC_RE.section == section))
+  {
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_RE.builder,
                                     "EF_section_rectangulaire_textview_nom"))),
                               section->nom, -1);
+  }
 #endif
   
   return TRUE;
@@ -222,28 +238,24 @@ EF_sections_repositionne (Projet  *p,
   BUGPARAM (nom, "%p", nom, NULL) \
   INFO (!EF_sections_cherche_nom (p, nom, FALSE), \
         NULL, \
-        (gettext ("La section %s existe déjà.\n"), nom);) \
+        (gettext ("La section %s existe déjà.\n"), nom); ) \
   BUGCRIT (section_nouvelle = malloc (sizeof (Section)), \
            NULL, \
-           (gettext ("Erreur d'allocation mémoire.\n"));) \
+           (gettext ("Erreur d'allocation mémoire.\n")); ) \
   BUGCRIT (section_data = malloc (sizeof (TYPE)), \
            NULL, \
            (gettext ("Erreur d'allocation mémoire.\n")); \
-             free (section_nouvelle);) \
+             free (section_nouvelle); ) \
   section_nouvelle->data = section_data; \
   BUGCRIT (section_nouvelle->nom = g_strdup (nom), \
            NULL, \
            (gettext ("Erreur d'allocation mémoire.\n")); \
              free (section_data); \
-             free (section_nouvelle);)
+             free (section_nouvelle); )
 
 
-Section *
-EF_sections_rectangulaire_ajout (Projet     *p,
-                                 const char *nom,
-                                 Flottant    l,
-                                 Flottant    h)
-/* \brief Ajouter une nouvelle section rectangulaire à la liste des sections.
+/**
+ * \brief Ajouter une nouvelle section rectangulaire à la liste des sections.
  * \param p : la variable projet,
  * \param nom : le nom de la section,
  * \param l : la largeur,
@@ -256,6 +268,11 @@ EF_sections_rectangulaire_ajout (Projet     *p,
  *     - le nom de la section est déjà existant,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Section *
+EF_sections_rectangulaire_ajout (Projet     *p,
+                                 const char *nom,
+                                 Flottant    l,
+                                 Flottant    h)
 {
   SECTION_AJOUT (Section_T)
   
@@ -269,7 +286,7 @@ EF_sections_rectangulaire_ajout (Projet     *p,
        NULL,
        free (section_data);
          free (section_nouvelle->nom);
-         free (section_nouvelle);)
+         free (section_nouvelle); )
   
   return section_nouvelle;
 }
@@ -304,14 +321,14 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                FALSE, \
                                                FALSE), \
          FALSE, \
-         g_list_free (liste_sections);) \
+         g_list_free (liste_sections); ) \
     g_list_free (liste_sections); \
     \
     if (liste_barres_dep != NULL) \
     { \
       BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), \
            FALSE, \
-           g_list_free (liste_barres_dep);) \
+           g_list_free (liste_barres_dep); ) \
       g_list_free (liste_barres_dep); \
       BUG (m3d_rafraichit (p), FALSE) \
       BUG (EF_calculs_free (p), FALSE) \
@@ -320,9 +337,7 @@ EF_sections_rectangulaire_ajout (Projet     *p,
   \
   if (UI_SEC.builder != NULL) \
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object ( \
-                                   UI_SEC.builder, "EF_sections_treeview"))); \
-  \
-  return TRUE;
+                                   UI_SEC.builder, "EF_sections_treeview")));
 #else
 #define SECTION_MODIF2 \
   { \
@@ -342,7 +357,7 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                FALSE, \
                                                FALSE), \
          FALSE, \
-         g_list_free (liste_sections);) \
+         g_list_free (liste_sections); ) \
     g_list_free (liste_sections); \
     \
     if (liste_barres_dep != NULL) \
@@ -350,18 +365,10 @@ EF_sections_rectangulaire_ajout (Projet     *p,
       g_list_free (liste_barres_dep); \
       BUG (EF_calculs_free (p), FALSE) \
     } \
-  } \
-  \
-  return TRUE;
+  }
 #endif
 
 
-gboolean
-EF_sections_rectangulaire_modif (Projet     *p,
-                                 Section    *section,
-                                 const char *nom,
-                                 Flottant    l,
-                                 Flottant    h)
 /**
  * \brief Modifie une section rectangulaire.
  * \param p : la variable projet,
@@ -376,6 +383,12 @@ EF_sections_rectangulaire_modif (Projet     *p,
  *     - section == NULL,
  *     - section->type != RECTANGULAIRE.
  */
+gboolean
+EF_sections_rectangulaire_modif (Projet     *p,
+                                 Section    *section,
+                                 const char *nom,
+                                 Flottant    l,
+                                 Flottant    h)
 {
   Section_T *section_data = section->data;
   
@@ -383,7 +396,7 @@ EF_sections_rectangulaire_modif (Projet     *p,
   BUGPARAM (section, "%p", section, FALSE)
   INFO (section->type == SECTION_RECTANGULAIRE,
         FALSE,
-        (gettext ("La section doit être de type rectangulaire.\n"));)
+        (gettext ("La section doit être de type rectangulaire.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
@@ -391,12 +404,12 @@ EF_sections_rectangulaire_modif (Projet     *p,
     
     INFO (!EF_sections_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("La section %s existe déjà.\n"), nom);)
+          (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     INFO (section->nom = g_strdup (nom),
           FALSE,
           (gettext ("Erreur d'allocation mémoire.\n"));
-            section->nom = tmp;)
+            section->nom = tmp; )
     free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
   }
@@ -407,17 +420,14 @@ EF_sections_rectangulaire_modif (Projet     *p,
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
   if ((!isnan (m_g (l))) || (!isnan (m_g (h))))
-  SECTION_MODIF2
+  {
+    SECTION_MODIF2
+  }
+  
+  return TRUE;
 }
 
 
-Section *
-EF_sections_T_ajout (Projet     *p,
-                     const char *nom,
-                     Flottant    lt,
-                     Flottant    lr,
-                     Flottant    ht,
-                     Flottant    hr)
 /**
  * \brief Ajouter une nouvelle section en T à la liste des sections.
  * \param p : la variable projet,
@@ -433,6 +443,13 @@ EF_sections_T_ajout (Projet     *p,
  *     - nom == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Section *
+EF_sections_T_ajout (Projet     *p,
+                     const char *nom,
+                     Flottant    lt,
+                     Flottant    lr,
+                     Flottant    ht,
+                     Flottant    hr)
 {
   SECTION_AJOUT (Section_T)
   
@@ -469,19 +486,12 @@ EF_sections_T_ajout (Projet     *p,
        NULL,
        free (section_data);
          free (section_nouvelle->nom);
-         free (section_nouvelle);)
+         free (section_nouvelle); )
   
   return section_nouvelle;
 }
 
 
-gboolean EF_sections_T_modif (Projet     *p,
-                              Section    *section,
-                              const char *nom,
-                              Flottant    lt,
-                              Flottant    lr,
-                              Flottant    ht,
-                              Flottant    hr)
 /**
  * \brief Modifie une section en T.
  * \param p : la variable projet,
@@ -498,6 +508,13 @@ gboolean EF_sections_T_modif (Projet     *p,
  *     - section == NULL, 
  *     - section->type != T.
  */
+gboolean EF_sections_T_modif (Projet     *p,
+                              Section    *section,
+                              const char *nom,
+                              Flottant    lt,
+                              Flottant    lr,
+                              Flottant    ht,
+                              Flottant    hr)
 {
   Section_T *section_data = section->data;
   
@@ -505,7 +522,7 @@ gboolean EF_sections_T_modif (Projet     *p,
   BUGPARAM (section, "%p", section, FALSE)
   INFO (section->type == SECTION_T,
         FALSE,
-        (gettext ("La section doit être de type en T.\n"));)
+        (gettext ("La section doit être de type en T.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
@@ -513,12 +530,12 @@ gboolean EF_sections_T_modif (Projet     *p,
     
     INFO (!EF_sections_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("La section %s existe déjà.\n"), nom);)
+          (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp;)
+               section->nom = tmp; )
     free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
@@ -527,11 +544,13 @@ gboolean EF_sections_T_modif (Projet     *p,
                         0, section->nom,
                         -1);
     if ((UI_SEC_T.builder != NULL) && (UI_SEC_T.section == section))
+    {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                       gtk_builder_get_object (UI_SEC_T.builder,
                                                 "EF_section_T_textview_nom"))),
                                 nom,
                                 -1);
+    }
 #endif
   }
   
@@ -544,14 +563,14 @@ gboolean EF_sections_T_modif (Projet     *p,
       (!isnan (m_g (lr))) ||
       (!isnan (m_g (ht))) ||
       (!isnan (m_g (hr))))
-  SECTION_MODIF2
+  {
+    SECTION_MODIF2
+  }
+  
+  return TRUE;
 }
 
 
-Section *
-EF_sections_carree_ajout (Projet    *p,
-                         const char *nom,
-                         Flottant    cote)
 /**
  * \brief Ajouter une nouvelle section carrée à la liste des sections.
  * \param p : la variable projet,
@@ -563,6 +582,10 @@ EF_sections_carree_ajout (Projet    *p,
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Section *
+EF_sections_carree_ajout (Projet    *p,
+                          const char *nom,
+                          Flottant    cote)
 {
   SECTION_AJOUT (Section_T)
   
@@ -576,17 +599,12 @@ EF_sections_carree_ajout (Projet    *p,
        NULL,
        free (section_data);
          free (section_nouvelle->nom);
-         free (section_nouvelle);)
+         free (section_nouvelle); )
   
   return section_nouvelle;
 }
 
 
-gboolean
-EF_sections_carree_modif (Projet     *p,
-                          Section    *section,
-                          const char *nom,
-                          Flottant    cote)
 /**
  * \brief Modifie une section carrée.
  * \param p : la variable projet,
@@ -600,6 +618,11 @@ EF_sections_carree_modif (Projet     *p,
  *     - section == NULL,
  *     - section->type != CARREE.
  */
+gboolean
+EF_sections_carree_modif (Projet     *p,
+                          Section    *section,
+                          const char *nom,
+                          Flottant    cote)
 {
   Section_T *section_data = section->data;
   
@@ -607,7 +630,7 @@ EF_sections_carree_modif (Projet     *p,
   BUGPARAM (section, "%p", section, FALSE)
   INFO (section->type == SECTION_CARREE,
         FALSE,
-        (gettext ("La section doit être de type carrée.\n"));)
+        (gettext ("La section doit être de type carrée.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
@@ -615,12 +638,12 @@ EF_sections_carree_modif (Projet     *p,
     
     INFO (!EF_sections_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("La section %s existe déjà.\n"), nom);)
+          (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp;)
+               section->nom = tmp; )
     free (section->nom);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
@@ -629,11 +652,13 @@ EF_sections_carree_modif (Projet     *p,
                         0, section->nom,
                         -1);
     if ((UI_SEC_CA.builder != NULL) && (UI_SEC_CA.section == section))
+    {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_CA.builder,
                                            "EF_section_carree_textview_nom"))),
                                 nom,
                                 -1);
+    }
 #endif
   }
   
@@ -643,14 +668,14 @@ EF_sections_carree_modif (Projet     *p,
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
   if (!isnan (m_g (cote)))
-  SECTION_MODIF2
+  {
+    SECTION_MODIF2
+  }
+  
+  return TRUE;
 }
 
 
-Section *
-EF_sections_circulaire_ajout (Projet     *p,
-                              const char *nom,
-                              Flottant    diametre)
 /**
  * \brief Ajouter une nouvelle section circulaire à la liste des sections.
  * \param p : la variable projet,
@@ -662,6 +687,10 @@ EF_sections_circulaire_ajout (Projet     *p,
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Section *
+EF_sections_circulaire_ajout (Projet     *p,
+                              const char *nom,
+                              Flottant    diametre)
 {
   SECTION_AJOUT (Section_Circulaire)
   
@@ -682,17 +711,12 @@ EF_sections_circulaire_ajout (Projet     *p,
        NULL,
        free (section_data);
          free (section_nouvelle->nom);
-         free (section_nouvelle);)
+         free (section_nouvelle); )
   
   return section_nouvelle;
 }
 
 
-gboolean
-EF_sections_circulaire_modif (Projet     *p,
-                              Section    *section,
-                              const char *nom,
-                              Flottant    diametre)
 /**
  * \brief Modifie une section circulaire.
  * \param p : la variable projet,
@@ -706,6 +730,11 @@ EF_sections_circulaire_modif (Projet     *p,
  *     - section == NULL,
  *     - section->type != CIRCULAIRE.
  */
+gboolean
+EF_sections_circulaire_modif (Projet     *p,
+                              Section    *section,
+                              const char *nom,
+                              Flottant    diametre)
 {
   Section_Circulaire *section_data = section->data;
   
@@ -713,7 +742,7 @@ EF_sections_circulaire_modif (Projet     *p,
   BUGPARAM (section, "%p", section, FALSE)
   INFO (section->type == SECTION_CIRCULAIRE,
         FALSE,
-        (gettext ("La section doit être de type circulaire.\n"));)
+        (gettext ("La section doit être de type circulaire.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
@@ -721,12 +750,12 @@ EF_sections_circulaire_modif (Projet     *p,
     
     INFO (!EF_sections_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("La section %s existe déjà.\n"), nom);)
+          (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp;)
+               section->nom = tmp; )
     free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
@@ -735,24 +764,27 @@ EF_sections_circulaire_modif (Projet     *p,
                         0, section->nom,
                         -1);
     if ((UI_SEC_CI.builder != NULL) && (UI_SEC_CI.section == section))
+    {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_CI.builder,
                                        "EF_section_circulaire_textview_nom"))),
                                 nom,
                                 -1);
+    }
 #endif
   }
   
   SECTION_MODIF (diametre, diametre)
   
   if (!isnan (m_g (diametre)))
-  SECTION_MODIF2
+  {
+    SECTION_MODIF2
+  }
+  
+  return TRUE;
 }
 
 
-gboolean
-EF_sections_personnalisee_verif_forme (GList *forme,
-                                       gboolean message)
 /**
  * \brief Vérifie la forme d'une section personnalisée.
  * \param forme : la forme à vérifier. Pour mémoire, la liste contient une
@@ -770,6 +802,9 @@ EF_sections_personnalisee_verif_forme (GList *forme,
  *     - deux points se suivant ne peuvent être identiques.
  *     - les segments de droite ne doivent pas se couper entre elles.
  */
+gboolean
+EF_sections_personnalisee_verif_forme (GList *forme,
+                                       gboolean message)
 {
   GList *list_parcours;
   
@@ -777,11 +812,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
   list_parcours = forme;
   // Il faut un minimum d'un groupe.
   if (message)
+  {
     INFO (list_parcours,
           FALSE,
-          (gettext ("La forme de la section est vide.\n"));)
+          (gettext ("La forme de la section est vide.\n")); )
+  }
   else if (list_parcours == NULL)
+  {
     return FALSE;
+  }
   
   while (list_parcours != NULL)
   {
@@ -792,11 +831,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
     
     // Il faut un minimum de trois points par groupe.
     if (message)
+    {
       INFO (g_list_next (g_list_next (list_parcours2)),
             FALSE,
-            (gettext ("Un groupe de points doit avoir au minimum 3 points.\n"));)
+            (gettext ("Un groupe de points doit avoir au minimum 3 points.\n")); )
+    }
     else if (g_list_next (g_list_next (list_parcours2)) == NULL)
+    {
       return FALSE;
+    }
     
     point2 = list_parcours2->data;
     
@@ -808,19 +851,27 @@ EF_sections_personnalisee_verif_forme (GList *forme,
       
       point1 = point2;
       if (g_list_next (list_parcours2) != NULL)
+      {
         point2 = g_list_next (list_parcours2)->data;
+      }
       else // On vérifie que le premier noeud est compatible avec le premier.
+      {
         point2 = ((GList *) list_parcours->data)->data;
+      }
       
       // On refuse le cas où point1 == point2
       if (message)
+      {
         INFO ((!errrel (m_g (point1->x), m_g (point2->x))) ||
               (!errrel (m_g (point1->y), m_g (point2->y))),
               FALSE,
-              (gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"));)
+              (gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n")); )
+      }
       else if ((errrel (m_g (point1->x), m_g (point2->x))) &&
                (errrel (m_g (point1->y), m_g (point2->y))))
+      {
         return FALSE;
+      }
       
       // Equation de la droite passant par les deux points.
       if (errrel (m_g (point1->x), m_g (point2->x)))
@@ -855,9 +906,13 @@ EF_sections_personnalisee_verif_forme (GList *forme,
           
           point3 = point4;
           if (g_list_next (list_parcours4) == NULL)
+          {
             point4 = ((GList *) list_parcours3->data)->data;
+          }
           else
+          {
             point4 = g_list_next (list_parcours4)->data;
+          }
           
           // Maintenant, on s'assure qu'il n'y a pas d'intersection
           // entre les deux segments de droite [point1, point2] et
@@ -901,6 +956,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
               else
               {
                 if (message)
+                {
                   INFO (!(((ymin2 < ymin1) && (ymin1 < ymax2)) ||
                           ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
                           ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
@@ -916,13 +972,16 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                                   m_g (point3->x),
                                   m_g (point3->y),
                                   m_g (point4->x),
-                                  m_g (point4->y));)
+                                  m_g (point4->y)); )
+                }
                 else if (((ymin2 < ymin1) && (ymin1 < ymax2)) ||
                   ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
                   ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
                   ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
                   ((errrel (ymin1, ymin2)) && (errrel (ymax1, ymax2))))
+                {
                   return FALSE;
+                }
               }
             }
           }
@@ -941,6 +1000,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             else
             {
               if (message)
+              {
                 INFO (!((ymin1 < y_b) &&
                         (y_b < ymax1) &&
                         (xmin1 < xmin2) &&
@@ -954,12 +1014,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                                 m_g (point3->x),
                                 m_g (point3->y),
                                 m_g (point4->x),
-                                m_g (point4->y));)
+                                m_g (point4->y)); )
+              }
               else if ((ymin1 < y_b) &&
                        (y_b < ymax1) &&
                        (xmin1 < xmin2) &&
                        (xmin2 < xmax1))
+              {
                 return FALSE;
+              }
             }
           }
           // si le segment 2 est vertical et que le premier non
@@ -977,6 +1040,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             else
             {
               if (message)
+              {
                 INFO (!((ymin2 < y_b) &&
                         (y_b < ymax2) &&
                         (xmin2 < xmin1) &&
@@ -990,12 +1054,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                                 m_g (point3->x),
                                 m_g (point3->y),
                                 m_g (point4->x),
-                                m_g (point4->y));)
+                                m_g (point4->y)); )
+              }
               else if ((ymin2 < y_b) &&
                        (y_b < ymax2) &&
                        (xmin2 < xmin1) &&
                        (xmin1 < xmax2))
+              {
                 return FALSE;
+              }
             }
           }
           // Si les deux segments ne sont pas verticaux, on recherche
@@ -1020,6 +1087,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                 else
                 {
                   if (message)
+                  {
                     INFO (!(((xmin2 < xmin1) && (xmin1 < xmax2)) ||
                             ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
                             ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
@@ -1033,12 +1101,15 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                                     m_g (point3->x),
                                     m_g (point3->y),
                                     m_g (point4->x),
-                                    m_g (point4->y));)
+                                    m_g (point4->y)); )
+                  }
                   else if (((xmin2 < xmin1) && (xmin1 < xmax2)) ||
                            ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
                            ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
                            ((xmin1 < xmax2) && (xmax2 < xmax1)))
+                  {
                     return FALSE;
+                  }
                 }
               }
             }
@@ -1057,6 +1128,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
               else
               {
                 if (message)
+                {
                   INFO (!((xmin1 < x_inter) &&
                           (x_inter < xmax1) &&
                           (xmin2 < x_inter) &&
@@ -1070,10 +1142,13 @@ EF_sections_personnalisee_verif_forme (GList *forme,
                                   m_g (point3->x),
                                   m_g (point3->y),
                                   m_g (point4->x),
-                                  m_g (point4->y));)
+                                  m_g (point4->y)); )
+                }
                 else if ((xmin1 < x_inter) && (x_inter < xmax1) &&
                          (xmin2 < x_inter) && (x_inter < xmax2))
+                {
                   return FALSE;
+                }
               }
             }
           }
@@ -1085,12 +1160,16 @@ EF_sections_personnalisee_verif_forme (GList *forme,
         point3 = NULL;
         point4 = NULL;
         if (list_parcours3 == NULL)
+        {
           list_parcours4 = NULL;
+        }
         else
         {
           list_parcours4 = list_parcours3->data;
           if (list_parcours4 != NULL)
+          {
             point4 = list_parcours4->data;
+          }
         }
       }
       
@@ -1104,19 +1183,6 @@ EF_sections_personnalisee_verif_forme (GList *forme,
 }
 
 
-Section *
-EF_sections_personnalisee_ajout (Projet     *p,
-                                 const char *nom,
-                                 const char *description,
-                                 Flottant    j,
-                                 Flottant    iy,
-                                 Flottant    iz,
-                                 Flottant    vy,
-                                 Flottant    vyp,
-                                 Flottant    vz,
-                                 Flottant    vzp,
-                                 Flottant    s,
-                                 GList      *forme)
 /**
  * \brief Ajouter une nouvelle section personnalisée à la liste des sections.
  * \param p : la variable projet,
@@ -1146,6 +1212,19 @@ EF_sections_personnalisee_ajout (Projet     *p,
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+Section *
+EF_sections_personnalisee_ajout (Projet     *p,
+                                 const char *nom,
+                                 const char *description,
+                                 Flottant    j,
+                                 Flottant    iy,
+                                 Flottant    iz,
+                                 Flottant    vy,
+                                 Flottant    vyp,
+                                 Flottant    vz,
+                                 Flottant    vzp,
+                                 Flottant    s,
+                                 GList      *forme)
 {
   SECTION_AJOUT (Section_Personnalisee)
   
@@ -1154,7 +1233,7 @@ EF_sections_personnalisee_ajout (Projet     *p,
         (gettext ("La forme est incorrecte.\n"));
           free (section_data);
           free (section_nouvelle->nom);
-          free (section_nouvelle);)
+          free (section_nouvelle); )
   
   section_nouvelle->type = SECTION_PERSONNALISEE;
   BUGCRIT (section_data->description = g_strdup (description),
@@ -1162,7 +1241,7 @@ EF_sections_personnalisee_ajout (Projet     *p,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (section_data);
              free (section_nouvelle->nom);
-             free (section_nouvelle);)
+             free (section_nouvelle); )
   section_data->j = j;
   section_data->iy = iy;
   section_data->iz = iz;
@@ -1178,26 +1257,12 @@ EF_sections_personnalisee_ajout (Projet     *p,
        free (section_data->description);
          free (section_nouvelle->nom);
          free (section_data);
-         free (section_nouvelle);)
+         free (section_nouvelle); )
   
   return section_nouvelle;
 }
 
 
-gboolean
-EF_sections_personnalisee_modif (Projet     *p,
-                                 Section    *section,
-                                 const char *nom,
-                                 const char *description,
-                                 Flottant    j,
-                                 Flottant    iy,
-                                 Flottant    iz,
-                                 Flottant    vy,
-                                 Flottant    vyp,
-                                 Flottant    vz,
-                                 Flottant    vzp,
-                                 Flottant    s,
-                                 GList      *forme)
 /**
  * \brief Modifie une section personnalisée.
  * \param p : la variable projet,
@@ -1226,6 +1291,20 @@ EF_sections_personnalisee_modif (Projet     *p,
  *     - section == NULL,
  *     - section->type != SECTION_PERSONNALISEE.
  */
+gboolean
+EF_sections_personnalisee_modif (Projet     *p,
+                                 Section    *section,
+                                 const char *nom,
+                                 const char *description,
+                                 Flottant    j,
+                                 Flottant    iy,
+                                 Flottant    iz,
+                                 Flottant    vy,
+                                 Flottant    vyp,
+                                 Flottant    vz,
+                                 Flottant    vzp,
+                                 Flottant    s,
+                                 GList      *forme)
 {
   Section_Personnalisee *section_data = section->data;
   
@@ -1233,23 +1312,23 @@ EF_sections_personnalisee_modif (Projet     *p,
   BUGPARAM (section, "%p", section, FALSE)
   INFO (section->type == SECTION_PERSONNALISEE,
         FALSE,
-        (gettext ("La section doit être de type personnalisée.\n"));)
+        (gettext ("La section doit être de type personnalisée.\n")); )
   
   INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
         FALSE,
-        (gettext ("La forme est incorrecte.\n"));)
+        (gettext ("La forme est incorrecte.\n")); )
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
     INFO (!EF_sections_cherche_nom (p, nom, FALSE),
           FALSE,
-          (gettext ("La section %s existe déjà.\n"), nom);)
+          (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp;)
+               section->nom = tmp; )
     free (tmp);
     BUG (EF_sections_repositionne (p, section), FALSE)
 #ifdef ENABLE_GTK
@@ -1258,11 +1337,13 @@ EF_sections_personnalisee_modif (Projet     *p,
                         0, section->nom,
                         -1);
     if ((UI_SEC_PE.builder != NULL) && (UI_SEC_PE.section == section))
+    {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW
                                     (gtk_builder_get_object (UI_SEC_PE.builder,
                                     "EF_section_personnalisee_textview_nom"))),
                                 nom,
                                 -1);
+    }
 #endif
   }
   
@@ -1275,7 +1356,7 @@ EF_sections_personnalisee_modif (Projet     *p,
     BUGCRIT (section_data->description = g_strdup (description),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               section_data->description = tmp;)
+               section_data->description = tmp; )
     free (tmp);
   }
   
@@ -1323,7 +1404,7 @@ EF_sections_personnalisee_modif (Projet     *p,
                                                FALSE,
                                                FALSE),
          FALSE,
-         g_list_free (liste_sections);)
+         g_list_free (liste_sections); )
     g_list_free (liste_sections);
     
     if (liste_barres_dep != NULL)
@@ -1333,10 +1414,10 @@ EF_sections_personnalisee_modif (Projet     *p,
       {
         BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep),
              FALSE,
-             g_list_free (liste_barres_dep);)
+             g_list_free (liste_barres_dep); )
         BUG (m3d_rafraichit (p),
              FALSE,
-             g_list_free (liste_barres_dep);)
+             g_list_free (liste_barres_dep); )
       }
 #endif
       g_list_free (liste_barres_dep);
@@ -1348,21 +1429,24 @@ EF_sections_personnalisee_modif (Projet     *p,
           (!isnan (m_g (vz))) ||
           (!isnan (m_g (vzp))) ||
           (!isnan (m_g (s))))
-        BUG (EF_calculs_free (p), FALSE)
+        {
+          BUG (EF_calculs_free (p), FALSE)
+        }
     }
   }
   
 #ifdef ENABLE_GTK
   if (UI_SEC.builder != NULL)
+  {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
                                      UI_SEC.builder, "EF_sections_treeview")));
+  }
 #endif
   
   return TRUE;
 }
 
 
-void EF_sections_personnalisee_free_forme1 (GList *forme)
 /**
  * \brief Libère la forme d'une section (liste ET points). Cette fonction doit
  *        être appelée avec g_list_free_full.
@@ -1370,15 +1454,12 @@ void EF_sections_personnalisee_free_forme1 (GList *forme)
  *        d'appeler g_list_free_full (forme, (GDestroyNotify) g_list_free);
  * \param forme : la forme à libérer,
  */
+void EF_sections_personnalisee_free_forme1 (GList *forme)
 {
   g_list_free_full (forme, (GDestroyNotify) free);
 }
 
 
-Section *
-EF_sections_cherche_nom (Projet     *p,
-                         const char *nom,
-                         gboolean    critique)
 /**
  * \brief Positionne dans la liste des sections l'élément courant au numéro
  *        souhaité.
@@ -1391,6 +1472,10 @@ EF_sections_cherche_nom (Projet     *p,
  *     - p == NULL,
  *     - section introuvable.
  */
+Section *
+EF_sections_cherche_nom (Projet     *p,
+                         const char *nom,
+                         gboolean    critique)
 {
   GList *list_parcours;
   
@@ -1402,20 +1487,24 @@ EF_sections_cherche_nom (Projet     *p,
     Section *section = list_parcours->data;
     
     if (strcmp (section->nom, nom) == 0)
+    {
       return section;
+    }
     
     list_parcours = g_list_next (list_parcours);
   }
   
   if (critique)
-    FAILINFO (NULL, (gettext ("Section '%s' introuvable.\n"), nom);)
+  {
+    FAILINFO (NULL, (gettext ("Section '%s' introuvable.\n"), nom); )
+  }
   else
+  {
     return NULL;
+  }
 }
 
 
-char *
-EF_sections_get_description (Section *sect)
 /**
  * \brief Renvoie la description d'une section sous forme d'un texte.
  *        Il convient de libérer le texte renvoyée par la fonction free.
@@ -1426,6 +1515,8 @@ EF_sections_get_description (Section *sect)
  *     - sect == NULL,
  *     - erreur d'allocation mémoire.
  */
+char *
+EF_sections_get_description (Section *sect)
 {
   char *description;
   
@@ -1446,7 +1537,7 @@ EF_sections_get_description (Section *sect)
                                               gettext ("Hauteur"),
                                               haut),
                NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
       
       return description;
     }
@@ -1459,7 +1550,7 @@ EF_sections_get_description (Section *sect)
       conv_f_c (section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_table, haut_t, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
-      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m, %s : %s m, %s : %s m",
+      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m, %s : %s m, %s : %s m", //NS
                                               gettext ("Largeur table"),
                                               larg_t,
                                               gettext ("Hauteur table"),
@@ -1469,7 +1560,7 @@ EF_sections_get_description (Section *sect)
                                               gettext ("Hauteur retombée"),
                                               haut_r),
                NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
       
       return description;
     }
@@ -1483,7 +1574,7 @@ EF_sections_get_description (Section *sect)
                                               gettext ("Coté"),
                                               cote),
                NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
       
       return description;
     }
@@ -1497,7 +1588,7 @@ EF_sections_get_description (Section *sect)
                                               gettext ("Diamètre"),
                                               diam),
                NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
       
       return description;
     }
@@ -1507,27 +1598,29 @@ EF_sections_get_description (Section *sect)
       
       BUGCRIT (description = g_strdup (section->description),
                NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));)
+               (gettext ("Erreur d'allocation mémoire.\n")); )
       
       return description;
     }
     default :
     {
-      FAILCRIT (NULL, (gettext ("Type de section %d inconnu.\n"), sect->type);)
+      FAILCRIT (NULL,
+                (gettext ("Type de section %d inconnu.\n"),
+                          sect->type); )
       break;
     }
   }
 }
 
 
-void
-EF_sections_free_un (Section *section)
 /**
  * \brief Fonction permettant de libérer une section. Doit être utilisée avec
  *        g_list_free_full.
  * \param section : section à libérer.
  * \return Rien.
  */
+void
+EF_sections_free_un (Section *section)
 {
   switch (section->type)
   {
@@ -1548,7 +1641,9 @@ EF_sections_free_un (Section *section)
     }
     default :
     {
-      FAILCRIT ( , (gettext ("Type de section %d inconnu.\n"), section->type);)
+      FAILCRIT ( ,
+                (gettext ("Type de section %d inconnu.\n"),
+                          section->type); )
       break;
     }
   }
@@ -1562,10 +1657,6 @@ EF_sections_free_un (Section *section)
 
 
 
-gboolean
-EF_sections_supprime (Section *section,
-                      gboolean annule_si_utilise,
-                      Projet  *p)
 /**
  * \brief Supprime la section spécifiée.
  * \param section : la section à supprimer,
@@ -1581,6 +1672,10 @@ EF_sections_supprime (Section *section,
  *     - p == NULL,
  *     - section == NULL.
  */
+gboolean
+EF_sections_supprime (Section *section,
+                      gboolean annule_si_utilise,
+                      Projet  *p)
 {
   GList *liste_sections = NULL, *liste_barres_dep;
   
@@ -1602,7 +1697,7 @@ EF_sections_supprime (Section *section,
                                              FALSE,
                                              FALSE),
        FALSE,
-       g_list_free (liste_sections);)
+       g_list_free (liste_sections); )
   g_list_free (liste_sections);
   
   if ((annule_si_utilise) && (liste_barres_dep != NULL))
@@ -1611,24 +1706,28 @@ EF_sections_supprime (Section *section,
     
     BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
          FALSE,
-         g_list_free (liste_barres_dep);)
+         g_list_free (liste_barres_dep); )
     if (g_list_next (liste_barres_dep) == NULL)
+    {
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
                           liste);
                   g_list_free (liste_barres_dep);
-                  free (liste);)
+                  free (liste); )
+    }
     else
+    {
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
                           liste);
                   g_list_free (liste_barres_dep);
-                  free (liste);)
+                  free (liste); )
+    }
   }
   
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
        FALSE,
-       g_list_free (liste_barres_dep);)
+       g_list_free (liste_barres_dep); )
   g_list_free (liste_barres_dep);
   
   p->modele.sections = g_list_remove (p->modele.sections, section);
@@ -1636,43 +1735,55 @@ EF_sections_supprime (Section *section,
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_SEC.liste_sections, &section->Iter_liste);
   if (UI_SEC.builder != NULL)
+  {
     gtk_tree_store_remove (UI_SEC.sections, &section->Iter_fenetre);
+  }
   switch (section->type)
   {
     case SECTION_RECTANGULAIRE :
     {
       if ((UI_SEC_RE.builder != NULL) && (UI_SEC_RE.section == section))
+      {
         gtk_widget_destroy (UI_SEC_RE.window);
+      }
       break;
     }
     case SECTION_T :
     {
       if ((UI_SEC_T.builder != NULL) && (UI_SEC_T.section == section))
+      {
         gtk_widget_destroy (UI_SEC_T.window);
+      }
       break;
     }
     case SECTION_CARREE :
     {
       if ((UI_SEC_CA.builder != NULL) && (UI_SEC_CA.section == section))
+      {
         gtk_widget_destroy (UI_SEC_CA.window);
+      }
       break;
     }
     case SECTION_CIRCULAIRE :
     {
       if ((UI_SEC_CI.builder != NULL) && (UI_SEC_CI.section == section))
+      {
         gtk_widget_destroy (UI_SEC_CI.window);
+      }
       break;
     }
     case SECTION_PERSONNALISEE :
     {
       if ((UI_SEC_PE.builder != NULL) && (UI_SEC_PE.section == section))
+      {
         gtk_widget_destroy (UI_SEC_PE.window);
+      }
       break;
     }
     default :
     {
       FAILCRIT (FALSE,
-                (gettext ("Type de section %d inconnu.\n"), section->type);)
+                (gettext ("Type de section %d inconnu.\n"), section->type); )
       break;
     }
   }
@@ -1684,8 +1795,6 @@ EF_sections_supprime (Section *section,
 }
 
 
-Flottant
-EF_sections_j (Section *sect)
 /**
  * \brief Renvoie l'inertie de torsion J pour la section étudiée.
  * \param sect : section à étudier.
@@ -1695,6 +1804,8 @@ EF_sections_j (Section *sect)
  *     - sect == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_j (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -1712,23 +1823,39 @@ EF_sections_j (Section *sect)
       double     a, b, aa, bb;
       
       if (lt > ht)
-        { a = lt; b = ht; }
+      {
+        a = lt;
+        b = ht;
+      }
       else
-        { a = ht; b = lt; }
+      {
+        a = ht;
+        b = lt;
+      }
       if (lr > hr)
-        { aa = lr; bb = hr; }
+      {
+        aa = lr;
+        bb = hr;
+      }
       else
-        { aa = hr; bb = lr; }
+      {
+        aa = hr;
+        bb = lr;
+      }
       if (sect->type == SECTION_RECTANGULAIRE)
+      {
         return m_f (aa * bb * bb * bb / 16. * (16. / 3. - 3.364 * bb / aa *
                          (1. - bb * bb * bb * bb / (12. * aa * aa * aa * aa))),
                     FLOTTANT_ORDINATEUR);
+      }
       else
+      {
         return m_f (a * b * b * b / 16. * (16. / 3. - 3.364 * b / a *
                       (1. - b * b * b * b / (12. * a * a * a * a))) +
                       aa * bb * bb * bb / 16. * (16. / 3. - 3.364 * bb / aa *
                       (1 - bb * bb * bb * bb / (12. * aa * aa * aa * aa))),
                     FLOTTANT_ORDINATEUR);
+      }
       
   // Pour une section en T de section constante (lt : largeur de la table,
   // lr : largeur de la retombée, ht : hauteur de la table, hr : hauteur de la
@@ -1761,15 +1888,13 @@ EF_sections_j (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_iy (Section *sect)
 /**
  * \brief Renvoie l'inertie I selon l'axe y lorsque la section est constante.
  * \param sect : section à étudier,
@@ -1779,6 +1904,8 @@ EF_sections_iy (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_iy (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -1836,15 +1963,13 @@ EF_sections_iy (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_iz (Section *sect)
 /**
  * \brief Renvoie l'inertie I selon l'axe z lorsque la section est constante.
  * \param sect : section à étudier.
@@ -1854,6 +1979,8 @@ EF_sections_iz (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_iz (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -1898,15 +2025,13 @@ EF_sections_iz (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_vy (Section *sect)
 /**
  * \brief Renvoie la distance entre le centre de gravité et la partie la plus à
  *        droite de la section.
@@ -1917,6 +2042,8 @@ EF_sections_vy (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_vy (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -1947,16 +2074,15 @@ EF_sections_vy (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_vyp (Section *sect)
-/* brief Renvoie la distance entre le centre de gravité et la partie la plus à
+/**
+ * brief Renvoie la distance entre le centre de gravité et la partie la plus à
  *      gauche de la section.
  * \param sect : section à étudier.
  * \return
@@ -1965,6 +2091,8 @@ EF_sections_vyp (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_vyp (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -1995,15 +2123,13 @@ EF_sections_vyp (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_vz (Section *sect)
 /**
  * \brief Renvoie la distance entre le centre de gravité et la partie la plus
  *        haute de la section.
@@ -2014,6 +2140,8 @@ EF_sections_vz (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_vz (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -2050,15 +2178,13 @@ EF_sections_vz (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-Flottant
-EF_sections_vzp (Section *sect)
 /**
  * \brief Renvoie la distance entre le centre de gravité et la partie la plus
  *        basse de la section.
@@ -2069,6 +2195,8 @@ EF_sections_vzp (Section *sect)
  *     - section == NULL,
  *     - type de section inconnu.
  */
+Flottant
+EF_sections_vzp (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -2080,14 +2208,14 @@ EF_sections_vzp (Section *sect)
     {
       Section_T *section = sect->data;
       
-      return m_f ( (m_g (section->largeur_table) *
-                    m_g (section->hauteur_table) *
-                    (m_g (section->hauteur_retombee) +
-                     m_g (section->hauteur_table) / 2.) +
-                    m_g (section->largeur_retombee) *
-                    m_g (section->hauteur_retombee) *
-                    (m_g (section->hauteur_retombee) / 2.))
-                    / m_g (EF_sections_s (sect)),
+      return m_f ((m_g (section->largeur_table) *
+                   m_g (section->hauteur_table) *
+                   (m_g (section->hauteur_retombee) +
+                    m_g (section->hauteur_table) / 2.) +
+                   m_g (section->largeur_retombee) *
+                   m_g (section->hauteur_retombee) *
+                   (m_g (section->hauteur_retombee) / 2.))
+                   / m_g (EF_sections_s (sect)),
                   FLOTTANT_ORDINATEUR);
     }
     case SECTION_CIRCULAIRE :
@@ -2105,16 +2233,13 @@ EF_sections_vzp (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-double
-EF_sections_ay (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse a de la poutre selon l'axe y.
  * \param barre : la barre à étudier,
@@ -2126,6 +2251,9 @@ EF_sections_ay (EF_Barre    *barre,
  *     - discretisation <= barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_ay (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2136,7 +2264,7 @@ EF_sections_ay (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2144,13 +2272,21 @@ EF_sections_ay (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2161,9 +2297,6 @@ EF_sections_ay (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_by (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse b de la poutre selon l'axe y.
  * \param barre : la barre à étudier,
@@ -2175,6 +2308,9 @@ EF_sections_by (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_by (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2185,7 +2321,7 @@ EF_sections_by (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2193,13 +2329,21 @@ EF_sections_by (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data(barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2210,9 +2354,6 @@ EF_sections_by (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_cy (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse c de la poutre selon l'axe y.
  * \param barre : la barre à étudier,
@@ -2224,6 +2365,9 @@ EF_sections_cy (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_cy (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2234,7 +2378,7 @@ EF_sections_cy (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2242,13 +2386,21 @@ EF_sections_cy (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2259,9 +2411,6 @@ EF_sections_cy (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_az (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse a de la poutre selon l'axe z.
  * \param barre : la barre à étudier,
@@ -2273,6 +2422,9 @@ EF_sections_az (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_az (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2283,7 +2435,7 @@ EF_sections_az (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2291,13 +2443,21 @@ EF_sections_az (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2308,9 +2468,6 @@ EF_sections_az (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_bz (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse b de la poutre selon l'axe z.
  * \param barre : la barre à étudier,
@@ -2322,6 +2479,9 @@ EF_sections_bz (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_bz (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2332,7 +2492,7 @@ EF_sections_bz (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2340,13 +2500,21 @@ EF_sections_bz (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2357,9 +2525,6 @@ EF_sections_bz (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_cz (EF_Barre    *barre,
-                unsigned int discretisation)
 /**
  * \brief Renvoie le paramètre de souplesse c de la poutre selon l'axe z.
  * \param barre : la barre à étudier,
@@ -2371,6 +2536,9 @@ EF_sections_cz (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnu.
  */
+double
+EF_sections_cz (EF_Barre *barre,
+                uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2381,7 +2549,7 @@ EF_sections_cz (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2389,13 +2557,21 @@ EF_sections_cz (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
@@ -2406,8 +2582,6 @@ EF_sections_cz (EF_Barre    *barre,
 }
 
 
-Flottant
-EF_sections_s (Section *sect)
 /**
  * \brief Renvoie la surface de la section étudiée.
  * \param sect : section à étudier.
@@ -2417,6 +2591,8 @@ EF_sections_s (Section *sect)
  *     - sect == NULL,
  *     - type de section inconnue.
  */
+Flottant
+EF_sections_s (Section *sect)
 {
   BUGPARAM (sect, "%p", sect, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -2459,18 +2635,13 @@ EF_sections_s (Section *sect)
     default :
     {
       FAILCRIT (m_f (NAN, FLOTTANT_ORDINATEUR),
-                (gettext ("Type de section %d inconnu.\n"), sect->type);)
+                (gettext ("Type de section %d inconnu.\n"), sect->type); )
       break;
     }
   }
 }
 
 
-double
-EF_sections_es_l (EF_Barre    *barre,
-                  unsigned int discretisation,
-                  double       d,
-                  double       f)
 /**
  * \brief Renvoie l'équivalent du rapport ES/L pour la barre étudiée.
  * \param barre : la barre à étudier,
@@ -2485,16 +2656,21 @@ EF_sections_es_l (EF_Barre    *barre,
  *     - debut>fin,
  *     - type de section inconnue.
  */
+double
+EF_sections_es_l (EF_Barre *barre,
+                  uint16_t  discretisation,
+                  double    d,
+                  double    f)
 {
   BUGPARAM (barre, "%p", barre, NAN)
   INFO (discretisation <= barre->discretisation_element,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   INFO (d <= f,
         NAN,
-        (gettext ("La fin doit être après le début.\n"));)
+        (gettext ("La fin doit être après le début.\n")); )
   
   // Le facteur ES/L est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2506,9 +2682,6 @@ EF_sections_es_l (EF_Barre    *barre,
 }
 
 
-double
-EF_sections_gj_l (EF_Barre    *barre,
-                  unsigned int discretisation)
 /**
  * \brief Renvoie l'équivalent du rapport GJ/L pour la barre étudiée.
  * \param barre : la barre à étudier,
@@ -2520,6 +2693,9 @@ EF_sections_gj_l (EF_Barre    *barre,
  *     - discretisation>barre->discretisation_element,
  *     - type de section inconnue.
  */
+double
+EF_sections_gj_l (EF_Barre *barre,
+                  uint16_t  discretisation)
 {
   EF_Noeud *debut, *fin;
   double    ll;
@@ -2529,7 +2705,7 @@ EF_sections_gj_l (EF_Barre    *barre,
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element);)
+                  barre->discretisation_element); )
   
   // Le facteur GJ/L est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2537,24 +2713,30 @@ EF_sections_gj_l (EF_Barre    *barre,
   // \end{displaymath}\begin{verbatim}
   
   if (discretisation == 0)
+  {
     debut = barre->noeud_debut;
+  }
   else
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1);
+  {
+    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+  }
   if (discretisation == barre->discretisation_element)
+  {
     fin = barre->noeud_fin;
+  }
   else
+  {
     fin = g_list_nth_data (barre->nds_inter, discretisation);
+  }
   
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
   
   return m_g (EF_materiaux_G (barre->materiau, FALSE)) *
-         m_g (EF_sections_j (barre->section))/ll;
+         m_g (EF_sections_j (barre->section)) / ll;
 }
 
 
-gboolean
-EF_sections_free (Projet *p)
 /**
  * \brief Libère l'ensemble des sections.
  * \param p : la variable projet.
@@ -2563,6 +2745,8 @@ EF_sections_free (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+EF_sections_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   

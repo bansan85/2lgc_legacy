@@ -21,42 +21,43 @@
 
 #include "common_projet.h"
 
-struct __Action
 /**
  * \brief Objet définissant une action avec sa liste de charges.
  */
+struct __Action
 {
+  /// Le nom plus si nécessaire un Iter_groupe pour l'affichage graphique.
   ENTETE_ACTION_ET_GROUPE;
-  /** La description de type est donnée par #_1990_action_bat_txt_type.*/
-  unsigned int     type;
+  /// La description de type est donnée par #_1990_action_bat_txt_type.
+  uint8_t         type;
   /// Liste des charges (ponctuelle, répartie, …).
-  GList           *charges;
+  GList          *charges;
   /// Flag utilisé temporairement.
-  unsigned int     action_predominante : 1;
+  uint8_t         action_predominante : 1;
   /// Valeur de combinaison d'une charge variable.
-  Flottant         psi0;
+  Flottant        psi0;
   /// Valeur fréquente d'une action variable.
-  Flottant         psi1;
+  Flottant        psi1;
   /// Valeur quasi-permanente d'une action variable.
-  Flottant         psi2;
+  Flottant        psi2;
   /// Déplacement des nœuds de la structure sous l'effet de l'action.
-  cholmod_sparse  *deplacement;
+  cholmod_sparse *deplacement;
   /// Efforts équivalents des charges dans les nœuds de la structure.
-  cholmod_sparse  *forces;
+  cholmod_sparse *forces;
   /// Efforts (y compris les réactions d'appui) dans les nœuds.
-  cholmod_sparse  *efforts_noeuds;
+  cholmod_sparse *efforts_noeuds;
 #ifdef ENABLE_GTK
   /// Iter utilisé par le treeview dans la fenêtre Action. 
-  GtkTreeIter      Iter_fenetre;
+  GtkTreeIter     Iter_fenetre;
   /// Iter utilisé par les menus des fenêtres Charges.
-  GtkTreeIter      Iter_liste;
+  GtkTreeIter     Iter_liste;
 #endif
   /// Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
-  Fonction       **efforts[6];
+  Fonction      **efforts[6];
   /// Les 3 déformations x, y, z pour chaque barre dans le repère local.
-  Fonction       **deformation[3]; 
+  Fonction      **deformation[3]; 
   /// Les 3 rotations rx, ry, rz pour chaque barre dans le repère local.
-  Fonction       **rotation[3];
+  Fonction      **rotation[3];
 };
 
 

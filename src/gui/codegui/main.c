@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <libintl.h>
 #include <locale.h>
 #include <string.h>
@@ -49,8 +50,8 @@
 #include "EF_sections.h"
 
 int
-main (int   argc,
-      char *argv[])
+main (int32_t   argc,
+      char     *argv[])
 {
     /* Variables */
     Projet *projet;
@@ -92,7 +93,7 @@ main (int   argc,
     // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
     INFO (gtk_init_check (&argc, &argv) == TRUE,
           -1,
-          (gettext ("Impossible d'initialiser gtk.\n"));)
+          (gettext ("Impossible d'initialiser gtk.\n")); )
     
     // Création d'un projet type
     BUG (projet = projet_init (NORME_FR), -1)

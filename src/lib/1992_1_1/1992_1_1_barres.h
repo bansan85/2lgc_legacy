@@ -34,30 +34,30 @@ gboolean _1992_1_1_barres_ajout (Projet *p,
                                  EF_Noeud       *noeud_fin,
                                  Flottant        angle,
                                  EF_Relachement *relachement,
-                                 unsigned int    discretisation_element)
+                                 uint16_t        discretisation_element)
                                        __attribute__((__warn_unused_result__));
 
-EF_Barre *_1992_1_1_barres_cherche_numero     (Projet        *p,
-                                               unsigned int   numero,
-                                               gboolean       critique)
+EF_Barre *_1992_1_1_barres_cherche_numero     (Projet   *p,
+                                               uint32_t  numero,
+                                               gboolean  critique)
                                        __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_cherche_dependances (Projet        *p,
-                                               GList         *appuis,
-                                               GList         *noeuds,
-                                               GList         *sections,
-                                               GList         *materiaux,
-                                               GList         *relachements,
-                                               GList         *barres,
-                                               GList        **noeuds_dep,
-                                               GList        **barres_dep,
-                                               GList        **charges_dep,
-                                               gboolean       numero,
-                                               gboolean       origine)
+gboolean _1992_1_1_barres_cherche_dependances (Projet   *p,
+                                               GList    *appuis,
+                                               GList    *noeuds,
+                                               GList    *sections,
+                                               GList    *materiaux,
+                                               GList    *relachements,
+                                               GList    *barres,
+                                               GList   **noeuds_dep,
+                                               GList   **barres_dep,
+                                               GList   **charges_dep,
+                                               gboolean  numero,
+                                               gboolean  origine)
                                        __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_angle_rotation      (EF_Noeud      *debut,
-                                               EF_Noeud      *fin,
-                                               double        *y,
-                                               double        *z)
+gboolean _1992_1_1_barres_angle_rotation      (EF_Noeud *debut,
+                                               EF_Noeud *fin,
+                                               double   *y,
+                                               double   *z)
                                        __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_barres_change_type        (EF_Barre       *barre,
@@ -83,7 +83,8 @@ gboolean _1992_1_1_barres_change_noeud       (EF_Barre       *barre,
                                        __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_change_relachement (EF_Barre       *barre,
                                               EF_Relachement *relachement,
-                                              Projet         *p) __attribute__((__warn_unused_result__));
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_barres_rigidite_ajout     (Projet         *p,
                                               EF_Barre       *element)

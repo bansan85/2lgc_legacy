@@ -26,8 +26,6 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 
-gboolean
-EF_rigidite_init (Projet *p)
 /**
  * \brief Initialise à NULL les différentes matrices de rigidité.
  * \param p : la variable projet.
@@ -36,6 +34,8 @@ EF_rigidite_init (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+EF_rigidite_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -54,8 +54,6 @@ EF_rigidite_init (Projet *p)
 }
 
 
-gboolean
-EF_rigidite_free (Projet *p)
 /**
  * \brief Libère la liste contenant la matrice de rigidité.
  * \param p : la variable projet.
@@ -64,8 +62,10 @@ EF_rigidite_free (Projet *p)
  *   Échec : FALSE :
  *     - p == NULL.
  */
+gboolean
+EF_rigidite_free (Projet *p)
 {
-  unsigned int i;
+  uint32_t i;
   
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -92,14 +92,18 @@ EF_rigidite_free (Projet *p)
   if (p->calculs.n_comp != NULL)
   {
     for (i = 0; i < g_list_length (p->modele.noeuds); i++)
+    {
       free (p->calculs.n_comp[i]);
+    }
     free (p->calculs.n_comp);
     p->calculs.n_comp = NULL;
   }
   if (p->calculs.n_part != NULL)
   {
     for (i = 0; i < g_list_length (p->modele.noeuds); i++)
+    {
       free (p->calculs.n_part[i]);
+    }
     free (p->calculs.n_part);
     p->calculs.n_part = NULL;
   }

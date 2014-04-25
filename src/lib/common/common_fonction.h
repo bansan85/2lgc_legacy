@@ -45,9 +45,9 @@ gboolean common_fonction_ajout_fonction          (Fonction    *fonction,
                                                   double       multi)
                                        __attribute__((__warn_unused_result__));
 
-long double common_fonction_y                    (Fonction    *fonction,
-                                                  long double  x,
-                                                  int          position)
+double   common_fonction_y                       (Fonction    *fonction,
+                                                  double       x_,
+                                                  int8_t       position)
                                        __attribute__((__warn_unused_result__));
 
 gboolean common_fonction_affiche                 (Fonction    *fonction)
@@ -55,15 +55,15 @@ gboolean common_fonction_affiche                 (Fonction    *fonction)
 
 #ifdef ENABLE_GTK
 GdkPixbuf *common_fonction_dessin                (GList       *fonctions,
-                                                  unsigned int width,
-                                                  unsigned int height,
-                                                  int          decimales)
+                                                  uint16_t     width,
+                                                  uint16_t     height,
+                                                  int8_t       decimales)
                                        __attribute__((__warn_unused_result__));
 #endif
 
 char *common_fonction_affiche_caract             (Fonction    *fonction,
-                                                  int          decimales_x,
-                                                  int          decimales_y)
+                                                  uint8_t      decimales_x,
+                                                  uint8_t      decimales_y)
                                        __attribute__((__warn_unused_result__));
 
 gboolean common_fonction_conversion_combinaisons (Fonction    *fonction,
@@ -73,7 +73,7 @@ gboolean common_fonction_conversion_combinaisons (Fonction    *fonction,
 
 char *common_fonction_renvoie                    (Fonction    *fonction,
                                                   GList       *index,
-                                                  int          decimales)
+                                                  int8_t       decimales)
                                        __attribute__((__warn_unused_result__));
 
 gboolean common_fonction_renvoie_enveloppe       (GList       *fonctions,

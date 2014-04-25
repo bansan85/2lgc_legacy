@@ -28,10 +28,6 @@
 #include "common_gtk.h"
 #include "common_text.h"
 
-gboolean
-common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
-                                           GdkEventButton *event,
-                                           Projet         *p)
 /**
  * \brief Déselectionne la ligne sélectionnée si on clique sur une zone vide du
  *        treeview.
@@ -43,6 +39,10 @@ common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
  *     - p == NULL.
  *  
  */
+gboolean
+common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
+                                           GdkEventButton *event,
+                                           Projet         *p)
 {
   BUGPARAMCRIT (p, "%p", p, FALSE)
   
@@ -61,9 +61,13 @@ common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
       
       select = gtk_tree_view_get_selection (widget);
       if (gtk_tree_selection_get_mode (select) == GTK_SELECTION_MULTIPLE)
+      {
         gtk_tree_selection_unselect_all (select);
+      }
       else if (gtk_tree_selection_get_selected (select, NULL, &Iter))
+      {
         gtk_tree_selection_unselect_iter (select, &Iter);
+      }
     }
   }
   
@@ -71,12 +75,6 @@ common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
 }
 
 
-double
-conv_buff_d (GtkTextBuffer *textbuffer,
-             double         val_min,
-             gboolean       min_include,
-             double         val_max,
-             gboolean       max_include)
 /**
  * \brief Vérifie en temps réel si le GtkTextBuffer contient bien un nombre
  *        flottant compris entre les valeurs val_min et val_max.
@@ -93,6 +91,12 @@ conv_buff_d (GtkTextBuffer *textbuffer,
  *     - textbuffer == NULL,
  *     - textbuffer ne contient pas de nombre flottant.
  */
+double
+conv_buff_d (GtkTextBuffer *textbuffer,
+             double         val_min,
+             gboolean       min_include,
+             double         val_max,
+             gboolean       max_include)
 {
   char       *texte;
   GtkTextIter start, end;
@@ -115,20 +119,18 @@ conv_buff_d (GtkTextBuffer *textbuffer,
   free (texte);
   
   if (!isnan (nombre))
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+  }
   
   return nombre;
 }
 
 
-unsigned int
-conv_buff_u (GtkTextBuffer *textbuffer,
-             unsigned int   val_min,
-             gboolean       min_include,
-             unsigned int   val_max,
-             gboolean       max_include)
 /**
  * \brief Vérifie en temps réel si le GtkTextBuffer contient bien un nombre
  *        entier non signé compris entre les valeurs val_min et val_max.
@@ -145,13 +147,19 @@ conv_buff_u (GtkTextBuffer *textbuffer,
  *     - textbuffer == NULL,
  *     - textbuffer ne contient pas de nombre entier non signé.
  */
+uint32_t
+conv_buff_u (GtkTextBuffer *textbuffer,
+             uint32_t       val_min,
+             gboolean       min_include,
+             uint32_t       val_max,
+             gboolean       max_include)
 {
-  char        *texte;
-  GtkTextIter  start, end;
-  unsigned int nombre;
-  char        *fake;
-  gboolean     min_check;
-  gboolean     max_check;
+  char       *texte;
+  GtkTextIter start, end;
+  uint32_t    nombre;
+  char       *fake;
+  gboolean    min_check;
+  gboolean    max_check;
   
   BUGPARAMCRIT (textbuffer, "%p", textbuffer, UINT_MAX)
   
@@ -161,7 +169,7 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
            UINT_MAX,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (texte);)
+             free (texte); )
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
@@ -172,14 +180,22 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   else
   {
     if (min_include)
+    {
       min_check = nombre >= val_min;
+    }
     else
+    {
       min_check = nombre > val_min;
+    }
       
     if (max_include)
+    {
       max_check = nombre <= val_max;
+    }
     else
+    {
       max_check = nombre < val_max;
+    }
   }
   
   free (texte);
@@ -198,12 +214,89 @@ conv_buff_u (GtkTextBuffer *textbuffer,
 }
 
 
-unsigned int
-common_gtk_entry_uint (GtkEntry    *entry,
-                       unsigned int val_min,
-                       gboolean     min_include,
-                       unsigned int val_max,
-                       gboolean     max_include)
+/**
+ * \brief Vérifie en temps réel si le GtkTextBuffer contient bien un nombre
+ *        entier non signé en 16 bits compris entre les valeurs val_min et
+ *        val_max. S'il ne contient pas de nombre ou hors domaine, le texte
+ *        passe en rouge.
+ * \param textbuffer : composant à l'origine de l'évènement,
+ * \param val_min : borne inférieure,
+ * \param min_include : borne inférieure autorisée ? (min 0),
+ * \param val_max : borne supérieure,
+ * \param max_include : borne supérieure autorisée ? (max UINT_MAX).
+ * \return
+ *   Succès : la valeur du nombre.\n
+ *   Echec : UINT16_MAX :
+ *     - textbuffer == NULL,
+ *     - textbuffer ne contient pas de nombre entier non signé en 16 bits.
+ */
+uint16_t
+conv_buff_hu (GtkTextBuffer *textbuffer,
+              uint16_t       val_min,
+              gboolean       min_include,
+              uint16_t       val_max,
+              gboolean       max_include)
+{
+  char       *texte;
+  GtkTextIter start, end;
+  uint16_t    nombre;
+  char       *fake;
+  gboolean    min_check;
+  gboolean    max_check;
+  
+  BUGPARAMCRIT (textbuffer, "%p", textbuffer, UINT16_MAX)
+  
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+  texte = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
+           UINT16_MAX,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (texte); )
+  
+  gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
+  if (sscanf (texte, "%hu%s", &nombre, fake) != 1)
+  {
+    min_check = FALSE;
+    max_check = FALSE;
+  }
+  else
+  {
+    if (min_include)
+    {
+      min_check = nombre >= val_min;
+    }
+    else
+    {
+      min_check = nombre > val_min;
+    }
+      
+    if (max_include)
+    {
+      max_check = nombre <= val_max;
+    }
+    else
+    {
+      max_check = nombre < val_max;
+    }
+  }
+  
+  free (texte);
+  free (fake);
+  
+  if ((min_check) && (max_check))
+  {
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+    return nombre;
+  }
+  else
+  {
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+    return UINT16_MAX;
+  }
+}
+
+
 /**
  * \brief Renvoie le nombre entier non signé de l'entry, valeur comprise entre
  *        les valeurs val_min et val_max.
@@ -218,9 +311,15 @@ common_gtk_entry_uint (GtkEntry    *entry,
  *     - entry == NULL,
  *     - entry ne contient pas de nombre entier non signé.
  */
+uint32_t
+common_gtk_entry_uint (GtkEntry *entry,
+                       uint32_t  val_min,
+                       gboolean  min_include,
+                       uint32_t  val_max,
+                       gboolean  max_include)
 {
   const char  *texte;
-  unsigned int nombre;
+  uint32_t     nombre;
   char        *fake;
   gboolean     min_check;
   gboolean     max_check;
@@ -230,7 +329,7 @@ common_gtk_entry_uint (GtkEntry    *entry,
   texte = gtk_entry_get_text (entry);
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
            UINT_MAX,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
   {
@@ -240,31 +339,37 @@ common_gtk_entry_uint (GtkEntry    *entry,
   else
   {
     if (min_include)
+    {
       min_check = nombre >= val_min;
+    }
     else
+    {
       min_check = nombre > val_min;
+    }
       
     if (max_include)
+    {
       max_check = nombre <= val_max;
+    }
     else
+    {
       max_check = nombre < val_max;
+    }
   }
   
   free (fake);
   
   if ((min_check) && (max_check))
+  {
     return nombre;
+  }
   else
+  {
     return UINT_MAX;
+  }
 }
 
 
-void
-common_gtk_render_double (GtkTreeViewColumn *tree_column,
-                          GtkCellRenderer   *cell,
-                          GtkTreeModel      *tree_model,
-                          GtkTreeIter       *iter,
-                          gpointer           data)
 /**
  * \brief Personnalise l'affichage des nombres de type double dans un treeview.
  * \param tree_column : la colonne,
@@ -278,11 +383,17 @@ common_gtk_render_double (GtkTreeViewColumn *tree_column,
  *     - tree_model == NULL,
  *     - iter == NULL.
  */
+void
+common_gtk_render_double (GtkTreeViewColumn *tree_column,
+                          GtkCellRenderer   *cell,
+                          GtkTreeModel      *tree_model,
+                          GtkTreeIter       *iter,
+                          gpointer           data)
 {
   gchar  texte[30];
   gint   colonne;
   double nombre;
-  gint   decimales = GPOINTER_TO_INT (data);
+  int8_t decimales = (int8_t) GPOINTER_TO_INT (data);
   
   BUGPARAMCRIT (cell, "%p", cell, )
   BUGPARAMCRIT (tree_model, "%p", tree_model, )
@@ -298,12 +409,6 @@ common_gtk_render_double (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
-                            GtkCellRenderer   *cell,
-                            GtkTreeModel      *tree_model,
-                            GtkTreeIter       *iter,
-                            gpointer           data)
 /**
  * \brief Personnalise l'affichage des nombres de type double dans un treeview.
  * \param tree_column : la colonne,
@@ -313,6 +418,12 @@ common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
  * \param data : le nombre de décimale.
  * \return Rien.
  */
+void
+common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
+                            GtkCellRenderer   *cell,
+                            GtkTreeModel      *tree_model,
+                            GtkTreeIter       *iter,
+                            gpointer           data)
 {
   gchar     texte[30];
   gint      colonne;
@@ -322,19 +433,13 @@ common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
   colonne = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   gtk_tree_model_get (tree_model, iter, colonne, &nombre, -1);
   
-  conv_f_c (*nombre, texte, decimales);
+  conv_f_c (*nombre, texte, (uint8_t) decimales);
   g_object_set (GTK_CELL_RENDERER_TEXT (cell), "text", texte, NULL);
   
   return;
 }
 
 
-GtkTreeViewColumn *
-common_gtk_cree_colonne (char  *nom,
-                         GType  type,
-                         int    num_colonne,
-                         double xalign,
-                         int    num_decimales)
 /**
  * \brief Permet de créer une colonne pour un treeview.
  * \param nom : nom de la colonne,
@@ -345,15 +450,25 @@ common_gtk_cree_colonne (char  *nom,
  *                        décimales devant être affiché.
  * \return Un pointeur vers la nouvelle colonne.
  */
+GtkTreeViewColumn *
+common_gtk_cree_colonne (char    *nom,
+                         GType    type,
+                         uint32_t num_colonne,
+                         float    xalign,
+                         int8_t   num_decimales)
 {
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *column;
   GtkWidget         *label;
   
   if (type == G_TYPE_OBJECT)
+  {
     cell = gtk_cell_renderer_pixbuf_new ();
+  }
   else
+  {
     cell = gtk_cell_renderer_text_new ();
+  }
   
   // Pour les nombres flottants, l'alignement à droite permet aux virgules
   // d'être alignées.
@@ -366,17 +481,21 @@ common_gtk_cree_colonne (char  *nom,
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   if (type == G_TYPE_OBJECT)
+  {
     gtk_tree_view_column_set_attributes (column,
                                          cell,
                                          "pixbuf",
                                          num_colonne,
                                          NULL);
+  }
   else
+  {
     gtk_tree_view_column_set_attributes (column,
                                          cell,
                                          "text",
                                          num_colonne,
                                          NULL);
+  }
   gtk_tree_view_column_set_widget (column, label);
   gtk_tree_view_column_set_alignment (column, 0.5);
   

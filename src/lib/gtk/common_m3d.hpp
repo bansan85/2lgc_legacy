@@ -27,9 +27,15 @@
 #ifdef __cplusplus
 #include <M3d++.hpp>
 
+/**
+ * \struct SGlobalData
+ * \brief Les données nécessaire pour la librairie m3dlib.
+ */
 typedef struct
 {
+  /// La scène.
   CM3dScene  scene;
+  /// La caméra.
   CM3dCamera camera;
 } SGlobalData;
 

@@ -42,10 +42,6 @@ GTK_WINDOW_DESTROY (ef, section_carree, );
 GTK_WINDOW_CLOSE (ef, section_carree);
 
 
-gboolean
-EF_gtk_section_carree_recupere_donnees (Projet *p,
-                                        double *cote,
-                                        gchar **nom)
 /**
  * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
  *        d'éditer une section carrée.
@@ -60,6 +56,10 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
  *     - nom == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+gboolean
+EF_gtk_section_carree_recupere_donnees (Projet *p,
+                                        double *cote,
+                                        gchar **nom)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -71,7 +71,7 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
   BUGCRIT (UI_SEC_CA.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Carrée");)
+                     "Ajout Section Carrée"); )
   
   *cote = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                           UI_SEC_CA.builder, "EF_section_carree_buffer_cote")),
@@ -80,7 +80,9 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
                        INFINITY,
                        FALSE);
   if (isnan (*cote))
+  {
     ok = FALSE;
+  }
   
   // Si tous les paramètres sont corrects
   textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
@@ -101,7 +103,9 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
       ok = FALSE;
     }
     else
+    {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+    }
   }
   else if ((strcmp (*nom, "") == 0) ||
            ((strcmp (UI_SEC_CA.section->nom, *nom) != 0) &&
@@ -111,7 +115,9 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
     ok = FALSE;
   }
   else
+  {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
   
   if (ok == FALSE)
   {
@@ -123,9 +129,6 @@ EF_gtk_section_carree_recupere_donnees (Projet *p,
 }
 
 
-void
-EF_gtk_section_carree_check (GtkWidget *button,
-                             Projet    *p)
 /**
  * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
  *        add/edit.
@@ -136,6 +139,9 @@ EF_gtk_section_carree_check (GtkWidget *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_carree_check (GtkWidget *button,
+                             Projet    *p)
 {
   double cote;
   char  *nom;
@@ -144,12 +150,14 @@ EF_gtk_section_carree_check (GtkWidget *button,
   BUGCRIT (UI_SEC_CA.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Carrée");)
+                     "Ajout Section Carrée"); )
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &nom))
+  {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                       UI_SEC_CA.builder, "EF_section_carree_button_add_edit")),
                               FALSE);
+  }
   else
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -162,9 +170,6 @@ EF_gtk_section_carree_check (GtkWidget *button,
 }
 
 
-void
-EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
-                                       Projet    *p)
 /**
  * \brief Ferme la fenêtre en ajoutant la section.
  * \param button : composant à l'origine de l'évènement,
@@ -174,6 +179,9 @@ EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
+                                       Projet    *p)
 {
   double cote;
   gchar *texte;
@@ -182,16 +190,18 @@ EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
   BUGCRIT (UI_SEC_CA.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Carrée");)
+                     "Ajout Section Carrée"); )
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &texte))
+  {
     return;
+  }
   
   gtk_widget_destroy (UI_SEC_CA.window);
   
   BUG (EF_sections_carree_ajout (p, texte, m_f (cote, FLOTTANT_UTILISATEUR)),
        ,
-       free (texte);)
+       free (texte); )
   
   free (texte);
   
@@ -199,9 +209,6 @@ EF_gtk_section_carree_ajouter_clicked (GtkButton *button,
 }
 
 
-void
-EF_gtk_section_carree_modifier_clicked (GtkButton *button,
-                                        Projet    *p)
 /**
  * \brief Ferme la fenêtre en appliquant les modifications.
  * \param button : composant à l'origine de l'évènement,
@@ -211,6 +218,9 @@ EF_gtk_section_carree_modifier_clicked (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_section_carree_modifier_clicked (GtkButton *button,
+                                        Projet    *p)
 {
   double cote;
   gchar *texte;
@@ -219,17 +229,19 @@ EF_gtk_section_carree_modifier_clicked (GtkButton *button,
   BUGCRIT (UI_SEC_CA.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Ajout Section Carrée");)
+                     "Ajout Section Carrée"); )
   
   if (!EF_gtk_section_carree_recupere_donnees (p, &cote, &texte))
+  {
     return;
+  }
   
   BUG (EF_sections_carree_modif (p,
                                  UI_SEC_CA.section,
                                  texte,
                                  m_f (cote, FLOTTANT_UTILISATEUR)),
       ,
-      free (texte);)
+      free (texte); )
   
   free (texte);
   
@@ -239,9 +251,6 @@ EF_gtk_section_carree_modifier_clicked (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_section_carree (Projet  *p,
-                       Section *section)
 /**
  * \brief Affichage de la fenêtre permettant de créer ou modifier une section
  *        de type carré.
@@ -253,6 +262,9 @@ EF_gtk_section_carree (Projet  *p,
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+gboolean
+EF_gtk_section_carree (Projet  *p,
+                       Section *section)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -260,7 +272,9 @@ EF_gtk_section_carree (Projet  *p,
   {
     gtk_window_present (GTK_WINDOW (UI_SEC_CA.window));
     if (UI_SEC_CA.section == section)
+    {
       return TRUE;
+    }
   }
   else
   {
@@ -270,7 +284,7 @@ EF_gtk_section_carree (Projet  *p,
                                             NULL) != 0,
              FALSE,
              (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                       "Ajout Section Carrée");)
+                       "Ajout Section Carrée"); )
     gtk_builder_connect_signals (UI_SEC_CA.builder, p);
     UI_SEC_CA.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_CA.builder,
                                                   "EF_section_carree_window"));
@@ -302,7 +316,7 @@ EF_gtk_section_carree (Projet  *p,
     UI_SEC_CA.section = section;
     BUGCRIT (UI_SEC_CA.section->type == SECTION_CARREE,
              FALSE,
-             (gettext ("La section à modifier n'est pas carrée.\n"));)
+             (gettext ("La section à modifier n'est pas carrée.\n")); )
     data = UI_SEC_CA.section->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (

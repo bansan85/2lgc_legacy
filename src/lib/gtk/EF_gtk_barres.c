@@ -49,11 +49,6 @@ GTK_WINDOW_DESTROY (ef, barres, );
 GTK_WINDOW_KEY_PRESS (ef, barres);
 
 
-void
-EF_gtk_barres_edit_type (GtkCellRendererText *cell,
-                         const gchar         *path_string,
-                         const gchar         *new_text,
-                         Projet              *p)
 /**
  * \brief Changement du type d'une barre.
  * \param cell : cellule en cours,
@@ -65,7 +60,12 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
  *     - p == NULL,
  *     - interface graphique non initialisée,
  *     - liste des types de barre est indéfinie.
-*/
+ */
+void
+EF_gtk_barres_edit_type (GtkCellRendererText *cell,
+                         const gchar         *path_string,
+                         const gchar         *new_text,
+                         Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter, iter2;
@@ -76,10 +76,10 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   BUGCRIT (UI_BAR.liste_types,
            ,
-           (gettext ("La liste des types de barre est indéfinie.\n"));)
+           (gettext ("La liste des types de barre est indéfinie.\n")); )
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -90,7 +90,7 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   BUGCRIT (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (UI_BAR.liste_types),
                                           &iter2) == TRUE,
            ,
-           (gettext ("Aucun type de barre n'est défini.\n"));)
+           (gettext ("Aucun type de barre n'est défini.\n")); )
   gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                       &iter2,
                       0, &nom_type,
@@ -126,18 +126,13 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
       parcours++;
     }
     // Impossible (normalement)
-    FAILCRIT ( , (gettext ("Impossible de trouver le type de l'élément.\n"));)
+    FAILCRIT ( , (gettext ("Impossible de trouver le type de l'élément.\n")); )
   }
   
   return;
 }
 
 
-void
-EF_gtk_barres_edit_section (GtkCellRendererText *cell,
-                            const gchar         *path_string,
-                            const gchar         *new_text,
-                            Projet              *p)
 /**
  * \brief Changement la section d'une barre.
  * \param cell : cellule en cours,
@@ -148,7 +143,12 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée.
-*/
+ */
+void
+EF_gtk_barres_edit_section (GtkCellRendererText *cell,
+                            const gchar         *path_string,
+                            const gchar         *new_text,
+                            Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -159,10 +159,10 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   BUGCRIT (UI_SEC.liste_sections,
            ,
-           (gettext ("La liste des sections est indéfinie.\n"));)
+           (gettext ("La liste des sections est indéfinie.\n")); )
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -177,11 +177,6 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
-                             const gchar         *path_string,
-                             const gchar         *new_text,
-                             Projet              *p)
 /**
  * \brief Changement le matériau d'une barre.
  * \param cell : cellule en cours,
@@ -192,7 +187,12 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée.
-*/
+ */
+void
+EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
+                             const gchar         *path_string,
+                             const gchar         *new_text,
+                             Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -203,10 +203,10 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   BUGCRIT (UI_MAT.liste_materiaux,
            ,
-           (gettext ("La liste des matériaux est indéfinie.\n"));)
+           (gettext ("La liste des matériaux est indéfinie.\n")); )
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -221,11 +221,6 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
-                                const gchar         *path_string,
-                                const gchar         *new_text,
-                                Projet              *p)
 /**
  * \brief Changement du relachement d'une barre.
  * \param cell : cellule en cours,
@@ -236,7 +231,12 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée.
-*/
+ */
+void
+EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
+                                const gchar         *path_string,
+                                const gchar         *new_text,
+                                Projet              *p)
 {
   GtkTreeModel   *model;
   GtkTreeIter     iter;
@@ -246,10 +246,10 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   BUGCRIT (UI_REL.liste_relachements,
            ,
-           (gettext ("La liste des relâchements de barre est indéfinie.\n"));)
+           (gettext ("La liste des relâchements de barre est indéfinie.\n")); )
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -258,7 +258,9 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   if (strcmp (gettext ("Aucun"), new_text) == 0)
+  {
     BUG (_1992_1_1_barres_change_relachement (barre, NULL, p), )
+  }
   else
   {
     EF_Relachement *relachement;
@@ -271,11 +273,6 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
-                          gchar               *path_string,
-                          gchar               *new_text,
-                          Projet              *p)
 /**
  * \brief Change le noeud initial de la barre.
  * \param cell : cellule en cours,
@@ -287,11 +284,16 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
+                          gchar               *path_string,
+                          gchar               *new_text,
+                          Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
   char         *fake;
-  unsigned int  conversion;
+  uint32_t      conversion;
   gint          column;
   EF_Barre     *barre;
   
@@ -299,11 +301,11 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
@@ -322,22 +324,23 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
     BUG (noeud = EF_noeuds_cherche_numero (p, conversion, TRUE), )
     
     if (column == 4)
+    {
       BUG (_1992_1_1_barres_change_noeud (barre, noeud, TRUE, p), )
+    }
     else
+    {
       BUG (_1992_1_1_barres_change_noeud (barre, noeud, FALSE, p), )
+    }
   }
   else
+  {
     free (fake);
+  }
    
   return;
 }
 
 
-void
-EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
-                          gchar               *path_string,
-                          gchar               *new_text,
-                          Projet              *p)
 /**
  * \brief Change l'angle de la barre.
  * \param cell : cellule en cours,
@@ -349,6 +352,11 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
+                          gchar               *path_string,
+                          gchar               *new_text,
+                          Projet              *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
@@ -359,7 +367,7 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
                                                   "EF_barres_treestore"));
@@ -369,7 +377,9 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
   
   conversion = common_text_str_to_double (new_text, -360., FALSE, 360., FALSE);
   if (isnan (conversion))
+  {
     return;
+  }
   
   BUG (_1992_1_1_barres_change_angle (barre,
                                       m_f (conversion, FLOTTANT_UTILISATEUR),
@@ -379,9 +389,6 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
 }
 
 
-void
-EF_gtk_barres_supprimer (GtkButton *button,
-                         Projet    *p)
 /**
  * \brief Supprime la barre sélectionnée en fonction de l'onglet en cours
  *        d'affichage.
@@ -392,6 +399,9 @@ EF_gtk_barres_supprimer (GtkButton *button,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_supprimer (GtkButton *button,
+                         Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -402,14 +412,14 @@ EF_gtk_barres_supprimer (GtkButton *button,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   BUGCRIT ( gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
          gtk_builder_get_object (UI_BAR.builder, "EF_barres_treeview_select")),
                                              &model,
                                              &Iter),
            ,
-           (gettext ("Aucune barre n'est sélectionnée.\n"));)
+           (gettext ("Aucune barre n'est sélectionnée.\n")); )
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
@@ -425,10 +435,6 @@ EF_gtk_barres_supprimer (GtkButton *button,
 }
 
 
-gboolean
-EF_gtk_barres_treeview_key_press (GtkWidget *widget,
-                                  GdkEvent  *event,
-                                  Projet    *p)
 /**
  * \brief Supprime une barre sans dépendance si la touche SUPPR est appuyée.
  * \param widget : composant à l'origine de l'évènement,
@@ -439,12 +445,16 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+EF_gtk_barres_treeview_key_press (GtkWidget *widget,
+                                  GdkEvent  *event,
+                                  Projet    *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   BUGCRIT (UI_BAR.builder,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -477,10 +487,10 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
       {
         BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres),
              FALSE,
-             g_list_free (liste_barres);)
+             g_list_free (liste_barres); )
         BUG (m3d_rafraichit (p),
              FALSE,
-             g_list_free (liste_barres);)
+             g_list_free (liste_barres); )
       }
       
       g_list_free (liste_barres);
@@ -488,13 +498,12 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
     return TRUE;
   }
   else
+  {
     return FALSE;
+  }
 }
 
 
-void
-EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
-                              Projet           *p)
 /**
  * \brief En fonction de la sélection, active ou désactive le bouton supprimer.
  * \param treeselection : composant à l'origine de l'évènement,
@@ -504,6 +513,9 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
+                              Projet           *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
@@ -512,7 +524,7 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   // Si aucune barre n'est sélectionnée, il n'est pas possible de supprimer.
   if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -570,7 +582,8 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
     else
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
-                        UI_BAR.builder, "EF_barres_boutton_supprimer_direct")), TRUE);
+                        UI_BAR.builder, "EF_barres_boutton_supprimer_direct")),
+                                TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                           UI_BAR.builder, "EF_barres_boutton_supprimer_menu")),
                                 FALSE);
@@ -589,9 +602,6 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
 }
 
 
-void
-EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
-                                      Projet    *p)
 /**
  * \brief Affiche la liste des dépendances dans le menu lorsqu'on clique sur le
  *        bouton.
@@ -602,19 +612,22 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+void
+EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
+                                      Projet    *p)
 {
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Barre     *barre;
   GList        *liste_barres = NULL;
   GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
-  char *desc;
+  char         *desc;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Barres");)
+                     "Barres"); )
   
   // Si aucune barre n'est sélectionnée, il n'est pas possible de supprimer.
   BUGCRIT (gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -622,7 +635,7 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
                                             &model,
                                             &Iter),
            ,
-           (gettext ("Aucun élément n'est sélectionné.\n"));)
+           (gettext ("Aucun élément n'est sélectionné.\n")); )
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
@@ -640,12 +653,12 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
                                              FALSE,
                                              FALSE),
       ,
-      g_list_free (liste_barres);)
+      g_list_free (liste_barres); )
   g_list_free (liste_barres);
   
   BUGCRIT (liste_noeuds_dep && liste_barres_dep && liste_charges_dep,
            ,
-           (gettext ("L'élément ne possède aucune dépendance.\n"));)
+           (gettext ("L'élément ne possède aucune dépendance.\n")); )
 
   BUG (desc = common_text_dependances (liste_noeuds_dep,
                                        liste_barres_dep,
@@ -654,7 +667,7 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
        ,
        g_list_free (liste_noeuds_dep);
          g_list_free (liste_barres_dep);
-         g_list_free (liste_charges_dep););
+         g_list_free (liste_charges_dep); )
   gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_BAR.builder, "EF_barres_supprimer_menu_barres")),
                            desc);
@@ -668,12 +681,6 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
 }
 
 
-void
-EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -683,6 +690,12 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   char     *tmp;
@@ -692,7 +705,7 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->numero),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -702,12 +715,6 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -717,6 +724,12 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre   *barre;
   char       *tmp;
@@ -730,7 +743,7 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
   
   BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                        &iter2,
                                        tmp);
@@ -749,12 +762,6 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -764,6 +771,12 @@ EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   
@@ -776,12 +789,6 @@ EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -789,9 +796,14 @@ EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
  * \param tree_model : le mode en cours d'édition,
  * \param iter : la ligne en cours d'édition,
  * \param data2 : la variable projet.
- * Valeur renvoyée : Aucune.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   
@@ -804,12 +816,6 @@ EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -819,6 +825,12 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   char     *tmp;
@@ -828,7 +840,7 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_debut->numero),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -838,12 +850,6 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -853,6 +859,12 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   char     *tmp;
@@ -862,7 +874,7 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
   
   BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_fin->numero),
            ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   g_object_set (cell, "text", tmp, NULL);
   
@@ -872,12 +884,6 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -887,6 +893,12 @@ EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   char      tmp[30];
@@ -902,12 +914,6 @@ EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
 }
 
 
-void
-EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer   *cell,
-                        GtkTreeModel      *tree_model,
-                        GtkTreeIter       *iter,
-                        gpointer           data2)
 /**
  * \brief Affiche la distance vz de la section.
  * \param tree_column : composant à l'origine de l'évènement,
@@ -917,6 +923,12 @@ EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
  * \param data2 : la variable projet.
  * \return Rien.
  */
+void
+EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer   *cell,
+                        GtkTreeModel      *tree_model,
+                        GtkTreeIter       *iter,
+                        gpointer           data2)
 {
   EF_Barre *barre;
   
@@ -924,16 +936,18 @@ EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
   BUGPARAM (barre, "%p", barre, )
   
   if (barre->relachement == NULL)
+  {
     g_object_set (cell, "text", gettext ("Aucun"), NULL);
+  }
   else
+  {
     g_object_set (cell, "text", barre->relachement->nom, NULL);
+  }
   
   return;
 }
 
 
-void
-EF_gtk_barres (Projet *p)
 /**
  * \brief Création de la fenêtre permettant d'afficher les barres sous forme
  *        d'un tableau.
@@ -943,6 +957,8 @@ EF_gtk_barres (Projet *p)
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
+void
+EF_gtk_barres (Projet *p)
 {
   GList *list_parcours;
   
@@ -959,7 +975,7 @@ EF_gtk_barres (Projet *p)
                                           NULL) != 0,
            ,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
-                     "Barres");)
+                     "Barres"); )
   gtk_builder_connect_signals (UI_BAR.builder, p);
   
   UI_BAR.window = GTK_WIDGET (gtk_builder_get_object (UI_BAR.builder,
@@ -1069,7 +1085,7 @@ EF_gtk_barres (Projet *p)
     
     BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
              ,
-             (gettext ("Erreur d'allocation mémoire.\n"));)
+             (gettext ("Erreur d'allocation mémoire.\n")); )
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                          &iter,
                                          tmp);

@@ -25,7 +25,8 @@
 
 #define PRINTF(...) printf (__VA_ARGS__)
 
-#define NOTE(X, ...) {if (!(X)) \
+#define NOTE(X, ...) { \
+  if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
             __FILE__, \
@@ -60,7 +61,8 @@
   FAILINFO (Y, __VA_ARGS__) \
 }
 
-#define BUG(X, Y, ...) {if (!(X)) \
+#define BUG(X, Y, ...) { \
+  if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
             __FILE__, \
@@ -81,7 +83,8 @@
  *              la mémoire, ...). Ne pas oublier le ; final.
  */
 
-#define INFO(X, Y, ...) {if (!(X)) \
+#define INFO(X, Y, ...) { \
+  if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s, texte : "), \
             __FILE__, \
@@ -119,7 +122,8 @@
  */
 
 
-#define BUGPARAM(PARAM, TYPE, X, Y, ...) {if (!(X)) \
+#define BUGPARAM(PARAM, TYPE, X, Y, ...) { \
+  if (!(X)) \
   { \
     FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
   } \
@@ -137,7 +141,8 @@
  */
 
 
-#define BUGPARAMCRIT(PARAM, TYPE, X, Y, ...) {if (!(X)) \
+#define BUGPARAMCRIT(PARAM, TYPE, X, Y, ...) { \
+  if (!(X)) \
   { \
     PRINTF (gettext ("Erreur critique. ")); \
     FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
@@ -156,7 +161,8 @@
  */
 
 
-#define BUGCRIT(X, Y, ...) {if (!(X)) \
+#define BUGCRIT(X, Y, ...) { \
+  if (!(X)) \
   { \
     PRINTF (gettext ("Erreur critique. ")); \
     FAILINFO (Y, __VA_ARGS__) \

@@ -31,13 +31,13 @@
 #include <wchar.h>
 
 
-void
-show_warranty ()
 /**
  * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la
  *        licence GPL).
  * \return Rien.
  */
+void
+show_warranty ()
 {
   printf (gettext ("15. Disclaimer of Warranty.\n"));
   printf (gettext ("\n"));
@@ -73,13 +73,13 @@ show_warranty ()
   return;
 }
 
-void
-show_help ()
 /**
  * \brief Affiche l'aide lorsque l'utilisateur lance le programme avec l'option
  *        -h.
  * \return Rien.
  */
+void
+show_help ()
 {
   printf (gettext ("Utilisation : codegui [OPTION]... [FILE]...\n"));
   printf (gettext ("Options :\n"));
@@ -89,12 +89,6 @@ show_help ()
 }
 
 
-double
-common_text_str_to_double (char    *texte,
-                           double   val_min,
-                           gboolean min_include,
-                           double   val_max,
-                           gboolean max_include)
 /**
  * \brief Sur la base d'une chaîne de caractères, renvoie un nombre flottant
  *        compris entre les valeurs val_min et val_max. S'il ne contient pas de
@@ -108,6 +102,12 @@ common_text_str_to_double (char    *texte,
  *   Succès : la valeur du nombre.\n
  *   Echec : NAN.
  */
+double
+common_text_str_to_double (char    *texte,
+                           double   val_min,
+                           gboolean min_include,
+                           double   val_max,
+                           gboolean max_include)
 {
   gboolean      min_check, max_check;
   char         *fake, *textebis;
@@ -117,11 +117,11 @@ common_text_str_to_double (char    *texte,
   
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
            NAN,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (textebis = g_strdup (texte),
            NAN,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (fake);)
+             free (fake); )
   
   // On remplace par la bonne décimale.
   locale_conv = localeconv ();
@@ -144,10 +144,12 @@ common_text_str_to_double (char    *texte,
     }
   }
   else
+  {
     FAILCRIT (NAN,
               (gettext ("Impossible de déterminer le caractère décimal.\n"));
                 free (fake);
-                free (textebis);)
+                free (textebis); )
+  }
   
   if (sscanf (textebis, "%lf%s", &nombre, fake) != 1)
   {
@@ -157,36 +159,53 @@ common_text_str_to_double (char    *texte,
   else
   {
     if (isinf (val_min) == -1)
+    {
       min_check = TRUE;
+    }
     else if ((min_include) && (errrel (nombre, val_min)))
+    {
       min_check = TRUE;
+    }
     else if (nombre > val_min)
+    {
       min_check = TRUE;
+    }
     else
+    {
       min_check = FALSE;
+    }
       
     if (isinf (val_max) == 1)
+    {
       max_check = TRUE;
+    }
     else if ((max_include) && (errrel (nombre, val_max)))
+    {
       max_check = TRUE;
+    }
     else if (nombre < val_max)
+    {
       max_check = TRUE;
+    }
     else
+    {
       max_check = FALSE;
+    }
   }
   free (fake);
   free (textebis);
   
   if ((min_check) && (max_check))
+  {
     return nombre;
+  }
   else
+  {
     return NAN;
+  }
 }
 
 
-wchar_t *
-strcasestr_internal (const wchar_t *haystack,
-                     const wchar_t *needle)
 /**
  * \brief Est un équivalent de strcasestr avec gestion des accents et ne
  *        recherche l'aiguille qu'en début de chaque mot.
@@ -196,31 +215,38 @@ strcasestr_internal (const wchar_t *haystack,
  *   Succès : pointeur vers le texte.\n
  *   Échec : NULL.
  */
+wchar_t *
+strcasestr_internal (const wchar_t *haystack,
+                     const wchar_t *needle)
 {
-#define CAR_UP   L"ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÐÒÓÔÕÖØÙÚÛÜÝàáâãäåèçéêëìíîïðñòóôõöøùúûüýÿ"
+#define CAR_UP   L"ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÐÒÓÔÕÖØÙÚÛÜÝàáâãäåèçéêëìíîïðñòóôõöøùúûüýÿ" // NS (nsiqcppstyle)
 #define CAR_DOWN L"aaaaaaæceeeeiiiindoooooouuuuyaaaaaaeceeeiiiionoooooouuuuyy"
   
-  unsigned int i;
-  wchar_t     *meule, *aiguille;
-  wchar_t     *tmp;
+  uint8_t  i;
+  wchar_t *meule, *aiguille;
+  wchar_t *tmp;
   
   BUGPARAM (haystack, "%p", haystack, NULL)
   BUGPARAM (needle, "%p", needle, NULL)
   
   BUGCRIT (meule = malloc (sizeof (wchar_t) * (wcslen (haystack) + 1)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   wcscpy (meule, haystack);
   BUGCRIT (aiguille = malloc (sizeof (wchar_t) * (wcslen (needle) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (meule);)
+             free (meule); )
   wcscpy (aiguille, needle);
   
   for (i = 0; meule[i]; i++)
+  {
     meule[i] = tolower (meule[i]);
+  }
   for (i = 0; aiguille[i]; i++)
+  {
     aiguille[i] = tolower (aiguille[i]);
+  }
   
   for (i = 0; i < wcslen (CAR_UP); i++)
   {
@@ -249,7 +275,9 @@ strcasestr_internal (const wchar_t *haystack,
          (tmp != meule) &&
          (tmp[-1] != ' ') &&
          (tmp[-1] != '-'))
+  {
     tmp = wcsstr (tmp + 1, aiguille);
+  }
   
   free (meule);
   free (aiguille);
@@ -259,12 +287,6 @@ strcasestr_internal (const wchar_t *haystack,
 }
 
 
-// coverity[+alloc]
-char *
-common_text_dependances (GList  *liste_noeuds,
-                         GList  *liste_barres,
-                         GList  *liste_charges,
-                         Projet *p)
 /**
  * \brief Renvoie la liste des types d'éléments dépendants sous forme de texte.
  *        liste_noeuds et liste_barres viennent de
@@ -278,6 +300,12 @@ common_text_dependances (GList  *liste_noeuds,
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+common_text_dependances (GList  *liste_noeuds,
+                         GList  *liste_barres,
+                         GList  *liste_charges,
+                         Projet *p)
 {
   char *retour = NULL;
   char *tmp;
@@ -286,13 +314,17 @@ common_text_dependances (GList  *liste_noeuds,
   {
     BUG (tmp = common_selection_noeuds_en_texte (liste_noeuds), NULL)
     if (g_list_length (liste_noeuds) == 1)
+    {
       retour = g_strdup_printf ("%s : %s", gettext ("noeud"), tmp);
+    }
     else
+    {
       retour = g_strdup_printf ("%s : %s", gettext ("noeuds"), tmp);
+    }
     BUGCRIT (retour,
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp);)
+               free (tmp); )
     free(tmp);
   }
   if (liste_barres != NULL)
@@ -301,13 +333,17 @@ common_text_dependances (GList  *liste_noeuds,
     if (retour == NULL)
     {
       if (g_list_length (liste_barres) == 1)
+      {
         retour = g_strdup_printf ("%s : %s", gettext ("barre"), tmp);
+      }
       else
+      {
         retour = g_strdup_printf ("%s : %s", gettext ("barres"), tmp);
+      }
       BUGCRIT (retour, 
                NULL, 
                (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);)
+                 free (tmp); )
     }
     else
     {
@@ -315,17 +351,21 @@ common_text_dependances (GList  *liste_noeuds,
       
       tmp2 = retour;
       if (g_list_length (liste_barres) == 1)
+      {
         retour = g_strdup_printf ("%s, %s : %s", tmp2, gettext ("barre"), tmp);
+      }
       else
+      {
         retour = g_strdup_printf ("%s, %s : %s",
                                   tmp2,
                                   gettext ("barres"),
                                   tmp);
+      }
       BUGCRIT (retour,
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (tmp);
-                 free (tmp2);)
+                 free (tmp2); )
       free (tmp2);
     }
     free (tmp);
@@ -336,13 +376,17 @@ common_text_dependances (GList  *liste_noeuds,
     if (retour == NULL)
     {
       if (g_list_length (liste_charges) == 1)
+      {
         retour = g_strdup_printf ("%s : %s", gettext ("charge"), tmp);
+      }
       else
+      {
         retour = g_strdup_printf ("%s : %s", gettext ("charges"), tmp);
+      }
       BUGCRIT (retour,
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);)
+                 free (tmp); )
     }
     else
     {
@@ -350,20 +394,24 @@ common_text_dependances (GList  *liste_noeuds,
       
       tmp2 = retour;
       if (g_list_length (liste_charges) == 1)
+      {
         retour = g_strdup_printf ("%s, %s : %s",
                                   tmp2,
                                   gettext ("charge"),
                                   tmp);
+      }
       else
+      {
         retour = g_strdup_printf ("%s, %s : %s",
                                   tmp2,
                                   gettext ("charges"),
                                   tmp);
+      }
       BUGCRIT (retour,
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (tmp);
-                 free (tmp2);)
+                 free (tmp2); )
       free (tmp2);
     }
     free (tmp);
@@ -373,16 +421,13 @@ common_text_dependances (GList  *liste_noeuds,
   BUGCRIT (retour = g_strdup_printf (gettext ("et ces dépendances (%s)"), tmp),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (tmp);)
+             free (tmp); )
   free (tmp);
   
   return retour;
 }
 
 
-// coverity[+alloc]
-wchar_t *
-common_text_get_line (FILE *fichier)
 /**
  * \brief Renvoie la ligne en cours de la variable fichier.
  * \param fichier : la variable fichier.
@@ -392,13 +437,16 @@ common_text_get_line (FILE *fichier)
  *     - fichier == NULL,
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+wchar_t *
+common_text_get_line (FILE *fichier)
 {
-#define CUR_MAX 256
+  const uint16_t CUR_MAX = 256;
   wchar_t *buffer, *retour = NULL;
   
-  BUGCRIT (buffer = malloc (sizeof (wchar_t) * (CUR_MAX + 1)),
+  BUGCRIT (buffer = malloc (sizeof (wchar_t) * (CUR_MAX + 1U)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   do
   {
@@ -415,7 +463,7 @@ common_text_get_line (FILE *fichier)
       BUGCRIT (retour = malloc (sizeof (wchar_t) * (wcslen (buffer) + 1)),
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (buffer);)
+                 free (buffer); )
       wcscpy (retour, buffer);
     }
     else
@@ -425,7 +473,7 @@ common_text_get_line (FILE *fichier)
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (buffer);
-                 free (ligne_tmp);)
+                 free (ligne_tmp); )
       wcscpy (retour, ligne_tmp);
       wcscat (retour, buffer);
       free (ligne_tmp);
@@ -437,15 +485,13 @@ common_text_get_line (FILE *fichier)
       free (buffer);
       // Suppression du retour chariot
       retour[wcslen (retour) - 1] = 0;
-      return retour;}
+      
+      return retour;
+    }
   } while (TRUE);
-#undef CUR_MAX
 }
 
 
-// coverity[+alloc]
-char *
-common_text_wcstostr_dup (const wchar_t *texte)
 /**
  * \brief Renvoie le texte sous format char *, y compris l'allocation mémoire.
  * \param texte : le texte à convertir.
@@ -454,24 +500,26 @@ common_text_wcstostr_dup (const wchar_t *texte)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+char *
+common_text_wcstostr_dup (const wchar_t *texte)
 {
   char *tmp;
   
   if (texte == NULL)
+  {
     return NULL;
+  }
   
   BUGCRIT (tmp = malloc (sizeof (char) * (wcstombs (NULL, texte, 0) + 1)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   wcstombs (tmp, texte, wcstombs (NULL, texte, 0) + 1);
   
   return tmp;
 }
 
 
-// coverity[+alloc]
-wchar_t *
-common_text_strtowcs_dup (const char *texte)
 /**
  * \brief Renvoie le texte sous format wchar_t *, y compris l'allocation
  *        mémoire.
@@ -481,15 +529,20 @@ common_text_strtowcs_dup (const char *texte)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
+// coverity[+alloc]
+wchar_t *
+common_text_strtowcs_dup (const char *texte)
 {
   wchar_t *tmp;
   
   if (texte == NULL)
+  {
     return NULL;
+  }
   
   BUGCRIT (tmp = malloc (sizeof (wchar_t) * (mbstowcs (NULL, texte, 0) + 1)),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   mbstowcs (tmp, texte, mbstowcs (NULL, texte, 0) + 1);
   
   return tmp;
