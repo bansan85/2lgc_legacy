@@ -44,8 +44,7 @@ gboolean EF_calculs_resoud_charge  (Projet        *p,
                                     Action        *action)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_calculs_free           (Projet        *p)
-                                       __attribute__((__warn_unused_result__));
+gboolean EF_calculs_free           (Projet        *p);
 
 #endif
 

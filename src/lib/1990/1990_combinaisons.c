@@ -26,6 +26,7 @@
 #include "1990_action.h"
 #include "1990_groupe.h"
 #include "1990_ponderations.h"
+#include "1990_combinaisons.h"
 
 /**
  * \brief Vérifie si une combinaison est déjà présente dans une liste de
@@ -37,6 +38,7 @@
  *    - TRUE si la combinaison est présente,
  *    - TRUE si la combinaison est vide (afin de ne pas l'ajouter).
  */
+static
 gboolean
 _1990_combinaisons_verifie_double (GList *liste_combinaisons,
                                    GList *comb_a_verifier)
@@ -113,6 +115,7 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
  *     - liste_comb_destination == NULL,
  *     - erreur d'allocation mémoire.
  */
+static
 gboolean
 _1990_combinaisons_duplique (GList  **liste_comb_destination,
                              GList   *liste_comb_source,
@@ -199,6 +202,7 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
  *     - erreur d'allocation mémoire,
  *     - _1990_combinaisons_duplique.
  */
+static
 gboolean
 _1990_combinaisons_genere_xor (Projet        *p,
                                Niveau_Groupe *niveau,
@@ -312,6 +316,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
  *     - destination == NULL,
  *     - erreur d'allocation mémoire.
  */
+static
 gboolean
 _1990_combinaisons_fusion (GList *destination,
                            GList *source)
@@ -359,6 +364,7 @@ _1990_combinaisons_fusion (GList *destination,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
+static
 gboolean
 _1990_combinaisons_genere_and (Projet        *p,
                                Niveau_Groupe *niveau,
@@ -569,6 +575,7 @@ _1990_combinaisons_genere_and (Projet        *p,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
+static
 gboolean
 _1990_combinaisons_genere_or (Projet        *p,
                               Niveau_Groupe *niveau,
@@ -878,6 +885,7 @@ _1990_combinaisons_init (Projet *p)
  * \param data : une pondération à libérer.
  * \return void.
  */
+static
 void
 _1990_combinaisons_free_1 (void *data)
 {

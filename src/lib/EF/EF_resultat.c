@@ -27,6 +27,7 @@
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
+#include "EF_resultat.h"
 
 
 /**

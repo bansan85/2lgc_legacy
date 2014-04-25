@@ -21,6 +21,7 @@
 #include "common_selection.h"
 #include "common_erreurs.h"
 #include "common_math.h"
+#include "common_text.h"
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>

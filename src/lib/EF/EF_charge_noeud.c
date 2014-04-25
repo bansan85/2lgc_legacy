@@ -33,6 +33,7 @@
 #endif
 #include "EF_calculs.h"
 #include "EF_charge.h"
+#include "EF_charge_noeud.h"
 
 
 /**

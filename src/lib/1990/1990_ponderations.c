@@ -26,6 +26,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "1990_action.h"
+#include "1990_ponderations.h"
 
 /**
  * \brief Vérifie dans la liste des ponderations si la ponderation à vérifier
@@ -37,6 +38,7 @@
  *     - FALSE si la pondération n'existe pas,
  *     - TRUE si la pondération existe.
  */
+static
 gboolean
 _1990_ponderations_verifie_double (GList *liste_ponderations,
                                    GList *pond_a_verifier)
@@ -110,6 +112,7 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
  *     - liste_dest == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+static
 gboolean
 _1990_ponderations_duplique_sans_double (GList **liste_dest,
                                          GList  *liste_source)
@@ -199,6 +202,7 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
  *     - p->niveaux_groupes == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+static
 gboolean
 _1990_ponderations_genere_un (Projet *p,
                               GList **ponderations_destination,
@@ -387,6 +391,7 @@ _1990_ponderations_genere_un (Projet *p,
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
+static
 gboolean
 _1990_ponderations_genere_eu (Projet *p)
 {
@@ -1020,6 +1025,7 @@ _1990_ponderations_genere_eu (Projet *p)
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
+static
 gboolean
 _1990_ponderations_genere_fr (Projet *p)
 {
@@ -1848,6 +1854,7 @@ _1990_ponderations_description (GList *ponderation)
 }
 
 
+static
 /**
  * \brief Affiche les pondérations de la liste fournie en argument.
  * \param ponderations : la liste des pondérations.

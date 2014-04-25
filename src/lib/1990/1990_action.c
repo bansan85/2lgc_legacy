@@ -29,6 +29,7 @@
 #include "common_projet.h"
 #include "1990_coef_psi.h"
 #include "1990_groupe.h"
+#include "1990_action.h"
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
@@ -73,6 +74,7 @@
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
+static
 char *
 _1990_action_bat_txt_type_eu (uint8_t type)
 {
@@ -140,6 +142,7 @@ _1990_action_bat_txt_type_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
+static
 char *
 _1990_action_bat_txt_type_fr (uint8_t type)
 {
@@ -212,6 +215,7 @@ _1990_action_bat_txt_type (uint8_t type,
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_categorie_bat.
  */
+static
 Action_Categorie
 _1990_action_categorie_bat_eu (uint8_t type)
 {
@@ -259,6 +263,7 @@ _1990_action_categorie_bat_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_categorie_bat.
  */
+static
 Action_Categorie
 _1990_action_categorie_bat_fr (uint8_t type)
 {

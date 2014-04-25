@@ -360,6 +360,7 @@ common_fonction_ajout_fonction (Fonction *fonction,
  *     - fonction == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+static
 gboolean
 common_fonction_compacte (Fonction *fonction,
                           Fonction *index)
@@ -447,6 +448,7 @@ common_fonction_compacte (Fonction *fonction,
  * \param c : valeur de c de la fonction a*x²+b*x+c.
  * \return Rien.
  */
+static
 void
 common_fonction_ax2_bx_c (double      x1,
                           long double y1,
@@ -580,6 +582,7 @@ common_fonction_y (Fonction *fonction,
  *     - fonction == NULL,
  *     - maxi <= mini.
  */
+static
 gboolean
 common_fonction_cherche_zero (Fonction *fonction,
                               double    mini,
@@ -871,6 +874,7 @@ common_fonction_cherche_zero (Fonction *fonction,
  *     - val == NULL,
  *     - erreur d'allocation mémoire.
  */
+static
 uint8_t
 common_fonction_caracteristiques (Fonction *fonction,
                                   double  **pos,

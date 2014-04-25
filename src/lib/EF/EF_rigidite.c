@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "EF_rigidite.h"
 
 /**
  * \brief Initialise à NULL les différentes matrices de rigidité.

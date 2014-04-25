@@ -28,7 +28,7 @@ char            *_1990_action_bat_txt_type  (uint8_t type,
 Action_Categorie _1990_action_categorie_bat (uint8_t type,
                                              Norme   norme)
                                        __attribute__((__warn_unused_result__));
-int8_t           _1990_action_num_bat_txt   (Norme  norme)
+uint8_t           _1990_action_num_bat_txt  (Norme  norme)
                                        __attribute__((__warn_unused_result__));
 
 Action *_1990_action_ajout (Projet     *p,
@@ -114,8 +114,7 @@ gboolean _1990_action_fonction_init (Projet *p,
                                      Action *action)
                                        __attribute__((__warn_unused_result__));
 gboolean _1990_action_fonction_free (Projet *p,
-                                     Action *action)
-                                       __attribute__((__warn_unused_result__));
+                                     Action *action);
 
 gboolean _1990_action_affiche_tout      (Projet *p)
                                        __attribute__((__warn_unused_result__));
@@ -126,8 +125,7 @@ gboolean _1990_action_affiche_resultats (Projet *p,
 Action  *_1990_action_ponderation_resultat              (GList  *ponderation,
                                                          Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_ponderation_resultat_free_calculs (Action *action)
-                                       __attribute__((__warn_unused_result__));
+gboolean _1990_action_ponderation_resultat_free_calculs (Action *action);
 
 gboolean _1990_action_free_calculs (Projet *p,
                                     Action *action)

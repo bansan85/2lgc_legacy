@@ -28,6 +28,7 @@
 #include "EF_charge.h"
 #include "1992_1_1_barres.h"
 #include "common_erreurs.h"
+#include "common_selection.h"
 
 /**
  * \brief Ajoute un nombre à la liste chainée.
