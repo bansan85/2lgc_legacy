@@ -28,6 +28,7 @@
 #include "common_selection.h"
 #include "common_math.h"
 #include "EF_calculs.h"
+#include "EF_relachement.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #include "EF_gtk_relachement.h"

@@ -32,6 +32,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_calculs.h"
+#include "EF_charge.h"
 
 
 /**

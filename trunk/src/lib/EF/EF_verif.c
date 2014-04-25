@@ -46,6 +46,7 @@
  *     - barres_dep = NULL,
  *     - p = NULL.
  */
+static
 gboolean
 EF_verif_bloc (GList  *noeuds,
                GList  *barres,

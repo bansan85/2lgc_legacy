@@ -45,6 +45,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_charge_noeud.h"
+#include "1992_1_1_barres.h"
 
 /**
  * \brief Initialise la liste des éléments en béton.

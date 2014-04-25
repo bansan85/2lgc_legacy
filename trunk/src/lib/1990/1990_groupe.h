@@ -28,7 +28,7 @@ gboolean _1990_groupe_init (Projet *p) __attribute__((__warn_unused_result__));
 
 gboolean _1990_groupe_ajout_niveau  (Projet                 *p)
                                        __attribute__((__warn_unused_result__));
-Groupe  *_1990_groupe_ajout_groupe  (Projet                 *p,
+Groupe * _1990_groupe_ajout_groupe  (Projet                 *p,
                                      Niveau_Groupe          *niveau_groupe,
                                      Type_Groupe_Combinaison type_combinaison,
                                      const char             *nom)

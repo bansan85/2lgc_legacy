@@ -27,6 +27,7 @@
 #include "common_selection.h"
 #include "EF_noeuds.h"
 #include "EF_calculs.h"
+#include "EF_appuis.h"
 #include "1992_1_1_barres.h"
 
 #ifdef ENABLE_GTK
@@ -451,10 +452,10 @@ EF_appuis_edit (EF_Appui     *appui,
  *     - appui possédant le nouveau nom est déjà existant.
  */
 gboolean
-EF_appuis_renomme (EF_Appui *appui,
-                   gchar    *nom,
-                   Projet   *p,
-                   gboolean  critique)
+EF_appuis_renomme (EF_Appui   *appui,
+                   const char *nom,
+                   Projet     *p,
+                   gboolean    critique)
 {
   GList *list_parcours;
   

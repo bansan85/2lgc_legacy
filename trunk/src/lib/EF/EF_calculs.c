@@ -34,6 +34,7 @@
 #include "EF_rigidite.h"
 #include "EF_sections.h"
 #include "EF_materiaux.h"
+#include "EF_calculs.h"
 
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
@@ -1475,6 +1476,7 @@ EF_calculs_resoud_charge (Projet *p,
           {
             double    ll;
             EF_Barre *element = list_parcours2->data;
+            uint16_t pos;
             
             uint32_t num = (uint32_t) g_list_index (p->modele.barres, element);
             
@@ -1656,7 +1658,7 @@ EF_calculs_resoud_charge (Projet *p,
             }
             
       //   Pour chaque barre comprise entre j_d et j_f inclus Faire
-            for (uint16_t pos = j_d; pos <= j_f; pos++)
+            for (pos = j_d; pos <= j_f; pos++)
             {
               double    a, b; // Position de la charge par rapport au
                         // début et à la fin de l'élément discrétisé

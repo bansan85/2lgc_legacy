@@ -72,6 +72,7 @@ EF_sections_init (Projet *p)
  *     - p == NULL,
  *     - section == NULL.
  */
+static
 gboolean
 EF_sections_insert (Projet  *p,
                     Section *section)
@@ -152,6 +153,7 @@ EF_sections_insert (Projet  *p,
  *     - p == NULL,
  *     - section == NULL.
  */
+static
 gboolean
 EF_sections_repositionne (Projet  *p,
                           Section *section)

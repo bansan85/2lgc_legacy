@@ -34,6 +34,7 @@
 #include "1992_1_1_materiaux.h"
 #include "1993_1_1_materiaux.h"
 #include "EF_calculs.h"
+#include "EF_materiaux.h"
 
 
 /**

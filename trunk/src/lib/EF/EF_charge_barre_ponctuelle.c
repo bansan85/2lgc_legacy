@@ -38,6 +38,7 @@
 #include "EF_charge.h"
 #include "EF_sections.h"
 #include "EF_materiaux.h"
+#include "EF_charge_barre_ponctuelle.h"
 
 
 /**

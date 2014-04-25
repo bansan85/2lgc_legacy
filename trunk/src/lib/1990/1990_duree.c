@@ -23,6 +23,7 @@
 
 #include "common_erreurs.h"
 #include "common_projet.h"
+#include "1990_duree.h"
 
 
 /**
@@ -44,6 +45,7 @@
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
+static
 uint16_t
 _1990_duree_norme_eu (uint8_t type)
 {
@@ -76,6 +78,7 @@ _1990_duree_norme_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
+static
 uint16_t
 _1990_duree_norme_fr (uint8_t type)
 {
@@ -110,6 +113,7 @@ _1990_duree_norme_fr (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
+static
 char *
 _1990_duree_norme_txt_eu (uint8_t type)
 {
@@ -144,6 +148,7 @@ _1990_duree_norme_txt_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
+static
 char *
 _1990_duree_norme_txt_fr (uint8_t type)
 {

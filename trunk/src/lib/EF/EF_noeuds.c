@@ -27,6 +27,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "EF_calculs.h"
+#include "EF_noeuds.h"
 #include "1992_1_1_barres.h"
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
