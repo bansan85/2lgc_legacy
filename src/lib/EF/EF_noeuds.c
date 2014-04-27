@@ -901,8 +901,6 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
                                   (infos->barre->discretisation_element + 1U));
   }
   
-  free (noeud->data);
-  
 #ifdef ENABLE_GTK
   if (UI_NOE.builder != NULL)
   {
@@ -933,6 +931,8 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
   }
   m3d_noeud_free (&UI_M3D, noeud);
 #endif
+  
+  free (noeud->data);
   free (noeud);
   
   return;
