@@ -242,11 +242,11 @@ strcasestr_internal (const wchar_t *haystack,
   
   for (i = 0; meule[i]; i++)
   {
-    meule[i] = tolower (meule[i]);
+    meule[i] = (wchar_t) tolower (meule[i]);
   }
   for (i = 0; aiguille[i]; i++)
   {
-    aiguille[i] = tolower (aiguille[i]);
+    aiguille[i] = (wchar_t) tolower (aiguille[i]);
   }
   
   for (i = 0; i < wcslen (CAR_UP); i++)
