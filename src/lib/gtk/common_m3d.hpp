@@ -34,9 +34,9 @@
 typedef struct
 {
   /// La scène.
-  CM3dScene  scene;
+  CM3dScene  *scene;
   /// La caméra.
-  CM3dCamera camera;
+  CM3dCamera *camera;
 } SGlobalData;
 
 
