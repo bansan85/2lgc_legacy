@@ -299,26 +299,7 @@ Compilation du programme
 ========================
 
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
-./clean_config
 
-gettextize -c -f --no-changelog
-
-sed -i 's#po/Makefile.in po/Makefile.in#po/Makefile.in#g' configure.ac
-sed -i 's/config.rpath  config.rpath/config.rpath/g' Makefile.am
-cd po
-patch < ../diff-po-Makevars.template.patch
-cd ..
-mv po/Makevars.template po/Makevars
-rm -f po/POTFILES.in
-find files/ui -name "*.ui" -exec intltool-extract --quiet --type=gettext/glade {} \;
-sed -i 's/N_(/gettext(/g' files/ui/*.ui.h
-find . -name "*.c" -o -name "*.cc" -o -name "*.h" > po/POTFILES.in
-
-autoheader
-aclocal
-libtoolize
-automake --add-missing --copy
-autoconf
 ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes ./configure --with-gtk --enable-shared --disable-static --prefix=/usr/i686-pc-mingw32/usr CFLAGS="" CXXFLAGS="" --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --with-xml-exec-prefix=/usr/i686-pc-mingw32/usr
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 make -j9 && sudo make install && make package_win

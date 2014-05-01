@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 
-#ifdef __cplusplus
 #include <M3d++.hpp>
 
 /**
@@ -40,10 +39,7 @@ typedef struct
 } SGlobalData;
 
 
-extern "C" {
-#endif
-
-#include "common_projet.h"
+#include "common_projet.hpp"
 
 gboolean m3d_init (Projet *p) __attribute__((__warn_unused_result__));
 
@@ -86,10 +82,6 @@ void     m3d_barre_free (void     *donnees_m3d,
                          EF_Barre *barre);
 
 gboolean m3d_free (Projet *p) __attribute__((__warn_unused_result__));
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 #endif

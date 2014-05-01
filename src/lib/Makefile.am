@@ -11,9 +11,9 @@ lib_LTLIBRARIES = libeurocodes.la
 
 libeurocodes_la_LIBADD		=	@BLAS_LIBS@ -lgfortran @XML_LIBS@
 if ENABLE_GTK
-libeurocodes_la_CFLAGS		=	$(AM_CFLAGS) @GTK_CFLAGS@
+libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GTK_CFLAGS@
 else
-libeurocodes_la_CFLAGS		=	$(AM_CFLAGS) @GLIB_CFLAGS@
+libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GLIB_CFLAGS@
 endif
 libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
@@ -22,144 +22,144 @@ libeurocodes_la_CPPFLAGS	+=	@GTK_CFLAGS@
 endif
 libeurocodes_ladir = $(includedir)/2lgc
 
-libeurocodes_la_SOURCES 	=	1990/1990_action.c \
-							1990/1990_coef_psi.c \
-							1990/1990_combinaisons.c \
-							1990/1990_duree.c \
-							1990/1990_groupe.c \
-							1990/1990_ponderations.c \
-							1992_1_1/1992_1_1_barres.c \
-							1992_1_1/1992_1_1_materiaux.c \
-							1993_1_1/1993_1_1_materiaux.c \
-							common/common_fonction.c \
-							common/common_math.c \
-							common/common_projet.c \
-							common/common_selection.c \
-							common/common_text.c \
-							common/common_tooltip.c \
-							common/common_ville.c \
-							EF/EF_appuis.c \
-							EF/EF_calculs.c \
-							EF/EF_charge.c \
-							EF/EF_charge_barre_ponctuelle.c \
-							EF/EF_charge_barre_repartie_uniforme.c \
-							EF/EF_charge_noeud.c \
-							EF/EF_materiaux.c \
-							EF/EF_noeuds.c \
-							EF/EF_relachement.c \
-							EF/EF_rigidite.c \
-							EF/EF_resultat.c \
-							EF/EF_sections.c \
-							EF/EF_verif.c
+libeurocodes_la_SOURCES 	=	1990/1990_action.cpp \
+							1990/1990_coef_psi.cpp \
+							1990/1990_combinaisons.cpp \
+							1990/1990_duree.cpp \
+							1990/1990_groupe.cpp \
+							1990/1990_ponderations.cpp \
+							1992_1_1/1992_1_1_barres.cpp \
+							1992_1_1/1992_1_1_materiaux.cpp \
+							1993_1_1/1993_1_1_materiaux.cpp \
+							common/common_fonction.cpp \
+							common/common_math.cpp \
+							common/common_projet.cpp \
+							common/common_selection.cpp \
+							common/common_text.cpp \
+							common/common_tooltip.cpp \
+							common/common_ville.cpp \
+							EF/EF_appuis.cpp \
+							EF/EF_calculs.cpp \
+							EF/EF_charge.cpp \
+							EF/EF_charge_barre_ponctuelle.cpp \
+							EF/EF_charge_barre_repartie_uniforme.cpp \
+							EF/EF_charge_noeud.cpp \
+							EF/EF_materiaux.cpp \
+							EF/EF_noeuds.cpp \
+							EF/EF_relachement.cpp \
+							EF/EF_rigidite.cpp \
+							EF/EF_resultat.cpp \
+							EF/EF_sections.cpp \
+							EF/EF_verif.cpp
 
-libeurocodes_la_HEADERS =	1990/1990_action.h \
-							1990/1990_action_private.h \
-							1990/1990_coef_psi.h \
-							1990/1990_combinaisons.h \
-							1990/1990_duree.h \
-							1990/1990_groupe.h \
-							1990/1990_ponderations.h \
-							1992_1_1/1992_1_1_barres.h \
-							1992_1_1/1992_1_1_materiaux.h \
-							1993_1_1/1993_1_1_materiaux.h \
-							common/common_erreurs.h \
-							common/common_fonction.h \
-							common/common_math.h \
-							common/common_projet.h \
-							common/common_selection.h \
-							common/common_text.h \
-							common/common_tooltip.h \
-							common/common_ville.h \
-							EF/EF_appuis.h \
-							EF/EF_calculs.h \
-							EF/EF_charge.h \
-							EF/EF_charge_barre_ponctuelle.h \
-							EF/EF_charge_barre_repartie_uniforme.h \
-							EF/EF_charge_noeud.h \
-							EF/EF_materiaux.h \
-							EF/EF_noeuds.h \
-							EF/EF_relachement.h \
-							EF/EF_rigidite.h \
-							EF/EF_resultat.h \
-							EF/EF_sections.h \
-							EF/EF_verif.h
+libeurocodes_la_HEADERS =	1990/1990_action.hpp \
+							1990/1990_action_private.hpp \
+							1990/1990_coef_psi.hpp \
+							1990/1990_combinaisons.hpp \
+							1990/1990_duree.hpp \
+							1990/1990_groupe.hpp \
+							1990/1990_ponderations.hpp \
+							1992_1_1/1992_1_1_barres.hpp \
+							1992_1_1/1992_1_1_materiaux.hpp \
+							1993_1_1/1993_1_1_materiaux.hpp \
+							common/common_erreurs.hpp \
+							common/common_fonction.hpp \
+							common/common_math.hpp \
+							common/common_projet.hpp \
+							common/common_selection.hpp \
+							common/common_text.hpp \
+							common/common_tooltip.hpp \
+							common/common_ville.hpp \
+							EF/EF_appuis.hpp \
+							EF/EF_calculs.hpp \
+							EF/EF_charge.hpp \
+							EF/EF_charge_barre_ponctuelle.hpp \
+							EF/EF_charge_barre_repartie_uniforme.hpp \
+							EF/EF_charge_noeud.hpp \
+							EF/EF_materiaux.hpp \
+							EF/EF_noeuds.hpp \
+							EF/EF_relachement.hpp \
+							EF/EF_rigidite.hpp \
+							EF/EF_resultat.hpp \
+							EF/EF_sections.hpp \
+							EF/EF_verif.hpp
 
 if ENABLE_GTK
 DEFAULT_INCLUDES	+=	-Igtk
 lib_LTLIBRARIES += libeurocodes-gtk.la
 libeurocodes_gtk_la_LIBADD		=	@GTK_LIBS@
-libeurocodes_gtk_la_CFLAGS		=	$(AM_CFLAGS) @GTK_CFLAGS@
-libeurocodes_gtk_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
+libeurocodes_gtk_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GTK_CFLAGS@
+libeurocodes_gtk_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
 libeurocodes_gtk_la_CPPFLAGS	=	@XML_CPPFLAGS@ @GTK_CFLAGS@
 libeurocodes_gtk_ladir = $(includedir)/2lgc
 
-libeurocodes_gtk_la_SOURCES 	=	gtk/common_m3d.cc \
-							gtk/1990_gtk_groupes.c \
-							gtk/1990_gtk_groupes_options.c \
-							gtk/1990_gtk_actions.c \
-							gtk/1992_1_1_gtk_materiaux.c \
-							gtk/1993_1_1_gtk_materiaux.c \
-							gtk/common_gtk.c \
-							gtk/common_gtk_informations.c \
-							gtk/ressources.c \
-							gtk/EF_gtk_charge_noeud.c \
-							gtk/EF_gtk_charge_barre_ponctuelle.c \
-							gtk/EF_gtk_charge_barre_repartie_uniforme.c \
-							gtk/EF_gtk_noeud.c \
-							gtk/EF_gtk_appuis.c \
-							gtk/EF_gtk_barres.c \
-							gtk/EF_gtk_barres_add.c \
-							gtk/EF_gtk_calculs.c \
-							gtk/EF_gtk_sections.c \
-							gtk/EF_gtk_materiaux.c \
-							gtk/EF_gtk_section_rectangulaire.c \
-							gtk/EF_gtk_section_T.c \
-							gtk/EF_gtk_section_carree.c \
-							gtk/EF_gtk_section_circulaire.c \
-							gtk/EF_gtk_section_personnalisee.c \
-							gtk/EF_gtk_rapport.c \
-							gtk/EF_gtk_relachement.c \
-							gtk/EF_gtk_resultats.c
+libeurocodes_gtk_la_SOURCES 	=	gtk/common_m3d.cpp \
+							gtk/1990_gtk_groupes.cpp \
+							gtk/1990_gtk_groupes_options.cpp \
+							gtk/1990_gtk_actions.cpp \
+							gtk/1992_1_1_gtk_materiaux.cpp \
+							gtk/1993_1_1_gtk_materiaux.cpp \
+							gtk/common_gtk.cpp \
+							gtk/common_gtk_informations.cpp \
+							gtk/ressources.cpp \
+							gtk/EF_gtk_charge_noeud.cpp \
+							gtk/EF_gtk_charge_barre_ponctuelle.cpp \
+							gtk/EF_gtk_charge_barre_repartie_uniforme.cpp \
+							gtk/EF_gtk_noeud.cpp \
+							gtk/EF_gtk_appuis.cpp \
+							gtk/EF_gtk_barres.cpp \
+							gtk/EF_gtk_barres_add.cpp \
+							gtk/EF_gtk_calculs.cpp \
+							gtk/EF_gtk_sections.cpp \
+							gtk/EF_gtk_materiaux.cpp \
+							gtk/EF_gtk_section_rectangulaire.cpp \
+							gtk/EF_gtk_section_T.cpp \
+							gtk/EF_gtk_section_carree.cpp \
+							gtk/EF_gtk_section_circulaire.cpp \
+							gtk/EF_gtk_section_personnalisee.cpp \
+							gtk/EF_gtk_rapport.cpp \
+							gtk/EF_gtk_relachement.cpp \
+							gtk/EF_gtk_resultats.cpp
 
 libeurocodes_gtk_la_HEADERS =	gtk/common_m3d.hpp \
-							gtk/1990_gtk_groupes.h \
-							gtk/1990_gtk_groupes_options.h \
-							gtk/1990_gtk_actions.h \
-							gtk/1992_1_1_gtk_materiaux.h \
-							gtk/1993_1_1_gtk_materiaux.h \
-							gtk/common_gtk.h \
-							gtk/common_gtk_informations.h \
-							gtk/ressources.h \
-							gtk/EF_gtk_charge_noeud.h \
-							gtk/EF_gtk_charge_barre_ponctuelle.h \
-							gtk/EF_gtk_charge_barre_repartie_uniforme.h \
-							gtk/EF_gtk_noeud.h \
-							gtk/EF_gtk_appuis.h \
-							gtk/EF_gtk_barres.h \
-							gtk/EF_gtk_barres_add.h \
-							gtk/EF_gtk_calculs.h \
-							gtk/EF_gtk_sections.h \
-							gtk/EF_gtk_materiaux.h \
-							gtk/EF_gtk_section_rectangulaire.h \
-							gtk/EF_gtk_section_T.h \
-							gtk/EF_gtk_section_carree.h \
-							gtk/EF_gtk_section_circulaire.h \
-							gtk/EF_gtk_section_personnalisee.h \
-							gtk/EF_gtk_rapport.h \
-							gtk/EF_gtk_relachement.h \
-							gtk/EF_gtk_resultats.h
+							gtk/1990_gtk_groupes.hpp \
+							gtk/1990_gtk_groupes_options.hpp \
+							gtk/1990_gtk_actions.hpp \
+							gtk/1992_1_1_gtk_materiaux.hpp \
+							gtk/1993_1_1_gtk_materiaux.hpp \
+							gtk/common_gtk.hpp \
+							gtk/common_gtk_informations.hpp \
+							gtk/ressources.hpp \
+							gtk/EF_gtk_charge_noeud.hpp \
+							gtk/EF_gtk_charge_barre_ponctuelle.hpp \
+							gtk/EF_gtk_charge_barre_repartie_uniforme.hpp \
+							gtk/EF_gtk_noeud.hpp \
+							gtk/EF_gtk_appuis.hpp \
+							gtk/EF_gtk_barres.hpp \
+							gtk/EF_gtk_barres_add.hpp \
+							gtk/EF_gtk_calculs.hpp \
+							gtk/EF_gtk_sections.hpp \
+							gtk/EF_gtk_materiaux.hpp \
+							gtk/EF_gtk_section_rectangulaire.hpp \
+							gtk/EF_gtk_section_T.hpp \
+							gtk/EF_gtk_section_carree.hpp \
+							gtk/EF_gtk_section_circulaire.hpp \
+							gtk/EF_gtk_section_personnalisee.hpp \
+							gtk/EF_gtk_rapport.hpp \
+							gtk/EF_gtk_relachement.hpp \
+							gtk/EF_gtk_resultats.hpp
 endif
 
 if ENABLE_GTK
-common/common_projet.c: gtk/ressources.h gtk/ressources.c
+common/common_projet.cpp: gtk/ressources.hpp gtk/ressources.cpp
 
-gtk/ressources.h: ../../files/ressources.xml gtk/ressources.c
+gtk/ressources.hpp: ../../files/ressources.xml gtk/ressources.cpp
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
-gtk/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
+gtk/ressources.cpp: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
 endif
 
-CLEANFILES = *.gcno *.gcda gtk/ressources.c gtk/ressources.h
+CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) $(libeurocodes_gtk_la_SOURCES) &> ../../cppcheck.log
