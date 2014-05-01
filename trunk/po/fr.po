@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-04-09 21:43+0200\n"
+"POT-Creation-Date: 2014-04-28 00:11+0200\n"
 "PO-Revision-Date: 2014-03-30 01:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -13,463 +13,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
 
-msgid "et ces dépendances."
-msgstr "et ces dépendances."
-
-msgid "Noeuds"
-msgstr "Noeuds"
-
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Appui"
-msgstr "Appui"
-
-msgid "Noeud relatif"
-msgstr "Noeud relatif"
-
-msgid "Noeuds _libres"
-msgstr "Noeuds _libres"
-
-msgid "Barre"
-msgstr "Barre"
-
-msgid "Position relative"
-msgstr "Position relative"
-
-msgid "Noeuds _intermédiaires"
-msgstr "Noeuds _intermédiaires"
-
-msgid "_Ajouter"
-msgstr "_Ajouter"
-
-msgid "_Supprimer"
-msgstr "_Supprimer"
-
-msgid "_Fermer"
-msgstr "_Fermer"
-
-msgid "Réactions d'appuis (repère global)"
-msgstr "Réactions d'appuis (repère global)"
-
-msgid "Déplacements (repère global)"
-msgstr "Déplacements (repère global)"
-
-msgid "Barres"
-msgstr "Barres"
-
-msgid "Efforts dans les barres (repère local)"
-msgstr "Efforts dans les barres (repère local)"
-
-msgid "Déformations des barres (repère local)"
-msgstr "Déformations des barres (repère local)"
-
-msgid "Résultats"
-msgstr "Résultats"
-
-msgid "_Afficher : "
-msgstr "_Afficher : "
-
-msgid "Cas élémentaires"
-msgstr "Cas élémentaires"
-
-msgid "Combinaisons"
-msgstr "Combinaisons"
-
-msgid "Enveloppe"
-msgstr "Enveloppe"
-
-msgid "Rapport"
-msgstr "Rapport"
-
-msgid "Point analysé"
-msgstr "Point analysé"
-
-msgid "Commentaires"
-msgstr "Commentaires"
-
-msgid "Informations sur le projet"
-msgstr "Informations sur le projet"
-
-msgid "_Client :"
-msgstr "_Client :"
-
-msgid "A_dresse :"
-msgstr "A_dresse :"
-
-msgid "C_ode postal :"
-msgstr "C_ode postal :"
-
-msgid "_Ville :"
-msgstr "_Ville :"
-
-msgid "_Localisation"
-msgstr "_Localisation"
-
-msgid "_Neige :"
-msgstr "_Neige :"
-
-msgid "_Vent :"
-msgstr "_Vent :"
-
-msgid "_Séisme :"
-msgstr "_Séisme :"
-
-msgid "_Paramètres"
-msgstr "_Paramètres"
-
-msgid "_Annuler"
-msgstr "_Annuler"
-
-msgid "_Modifier"
-msgstr "_Modifier"
-
-msgid "_Nom :"
-msgstr "_Nom :"
-
-msgid "_Diamètre [m] :"
-msgstr "_Diamètre [m] :"
-
-msgid "_Coté [m] :"
-msgstr "_Coté [m] :"
-
-msgid "Libre"
-msgstr "Libre"
-
-msgid "Bloqué"
-msgstr "Bloqué"
-
-msgid "Linéaire"
-msgstr "Linéaire"
-
-msgid "r<sub>x</sub> début"
-msgstr "r<sub>x</sub> début"
-
-msgid "r<sub>y</sub> début"
-msgstr "r<sub>y</sub> début"
-
-msgid "r<sub>z</sub> début"
-msgstr "r<sub>z</sub> début"
-
-msgid "r<sub>x</sub> fin"
-msgstr "r<sub>x</sub> fin"
-
-msgid "r<sub>y</sub> fin"
-msgstr "r<sub>y</sub> fin"
-
-msgid "r<sub>z</sub> fin"
-msgstr "r<sub>z</sub> fin"
-
-msgid "Relâchements"
-msgstr "Relâchements"
-
-msgid "Nom"
-msgstr "Nom"
-
-msgid "Paramètre"
-msgstr "Paramètre"
-
-msgid "_Largeur de la table [m] :"
-msgstr "_Largeur de la table [m] :"
-
-msgid "_Hauteur de la table [m] :"
-msgstr "_Hauteur de la table [m] :"
-
-msgid "_Largeur de la retombée [m] :"
-msgstr "_Largeur de la retombée [m] :"
-
-msgid "_Hauteur de la retombée [m] :"
-msgstr "_Hauteur de la retombée [m] :"
-
-msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
-msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
-
-msgid "Appuis"
-msgstr "Appuis"
-
-msgid "Ajout d'une barre"
-msgstr "Ajout d'une barre"
-
-msgid "Numéro :"
-msgstr "Numéro :"
-
-msgid "_Type :"
-msgstr "_Type :"
-
-msgid "_Section :"
-msgstr "_Section :"
-
-msgid "_Matériau :"
-msgstr "_Matériau :"
-
-msgid "Noeud _1 :"
-msgstr "Noeud _1 :"
-
-msgid "Noeud _2 :"
-msgstr "Noeud _2 :"
-
-msgid "A_ngle :"
-msgstr "A_ngle :"
-
-msgid "_Relâchement :"
-msgstr "_Relâchement :"
-
-msgid "_Nombre de divisions :"
-msgstr "_Nombre de divisions :"
-
-msgid "Groupes"
-msgstr "Groupes"
-
-msgid "_Niveau :"
-msgstr "_Niveau :"
-
-msgid "<b>_Groupes :</b>"
-msgstr "<b>_Groupes :</b>"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "<b>É_léments disponibles :</b>"
-msgstr "<b>É_léments disponibles :</b>"
-
-msgid "Ajouter"
-msgstr "Ajouter"
-
-msgid "Ajouter tout"
-msgstr "Ajouter tout"
-
-msgid "_Options"
-msgstr "_Options"
-
-msgid "_Générer"
-msgstr "_Générer"
-
-msgid "et les barres utilisant le matériau."
-msgstr "et les barres utilisant le matériau."
-
-msgid "Acier"
-msgstr "Acier"
-
-msgid "Béton"
-msgstr "Béton"
-
-msgid "Matériaux"
-msgstr "Matériaux"
-
-msgid "Matériau"
-msgstr "Matériau"
-
-msgid "_Charge :"
-msgstr "_Charge :"
-
-msgid "_Description :"
-msgstr "_Description :"
-
-msgid "C_harge projetée sur la barre"
-msgstr "C_harge projetée sur la barre"
-
-msgid "Repere :"
-msgstr "Repere :"
-
-msgid "_Local"
-msgstr "_Local"
-
-msgid "_Global"
-msgstr "_Global"
-
-msgid "Ba_rres :"
-msgstr "Ba_rres :"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Section"
-msgstr "Section"
-
-msgid "Noeud 1"
-msgstr "Noeud 1"
-
-msgid "Noeud 2"
-msgstr "Noeud 2"
-
-msgid "Angle"
-msgstr "Angle"
-
-msgid "Relâchement"
-msgstr "Relâchement"
-
-msgid "Rectangulaire"
-msgstr "Rectangulaire"
-
-msgid "T"
-msgstr "T"
-
-msgid "Carrée"
-msgstr "Carrée"
-
-msgid "Circulaire"
-msgstr "Circulaire"
-
-msgid "Personnalisée"
-msgstr "Personnalisée"
-
-msgid "Importée"
-msgstr "Importée"
-
-msgid "J [m<sup>4</sup>]"
-msgstr "J [m<sup>4</sup>]"
-
-msgid "I<sub>y</sub> [m<sup>4</sup>]"
-msgstr "I<sub>y</sub> [m<sup>4</sup>]"
-
-msgid "I<sub>z</sub> [m<sup>4</sup>]"
-msgstr "I<sub>z</sub> [m<sup>4</sup>]"
-
-msgid "S [m<sup>2</sup>]"
-msgstr "S [m<sup>2</sup>]"
-
-msgid "v<sub>y</sub> [m]"
-msgstr "v<sub>y</sub> [m]"
-
-msgid "v'<sub>y</sub> [m]"
-msgstr "v'<sub>y</sub> [m]"
-
-msgid "v<sub>z</sub> [m]"
-msgstr "v<sub>z</sub> [m]"
-
-msgid "v'<sub>z</sub> [m]"
-msgstr "v'<sub>z</sub> [m]"
-
-msgid "Sections"
-msgstr "Sections"
-
-msgid "_Largeur [m] :"
-msgstr "_Largeur [m] :"
-
-msgid "_Hauteur [m] :"
-msgstr "_Hauteur [m] :"
-
-msgid "Options des combinaisons"
-msgstr "Options des combinaisons"
-
-msgid "<b>ELU Équilibre :</b>"
-msgstr "<b>ELU Équilibre :</b>"
-
-msgid ""
-"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
-"combinaisons pour la vérification à l'équilibre statique seulement ou à "
-"l'équilibre statique incluant la résistance d'éléments structuraux."
-msgstr ""
-"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
-"combinaisons pour la vérification à l'équilibre statique seulement ou à "
-"l'équilibre statique incluant la résistance d'éléments structuraux."
-
-msgid "É_quilibre seulement"
-msgstr "É_quilibre seulement"
-
-msgid "Équilibre et _résistance"
-msgstr "Équilibre et _résistance"
-
-msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
-msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
-
-msgid ""
-"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
-"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
-"est 6.10a et 6.10b."
-msgstr ""
-"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
-"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
-"est 6.10a et 6.10b."
-
-msgid "6.10_a et 6.10b"
-msgstr "6.10_a et 6.10b"
-
-msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
-msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
-
-msgid ""
-"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
-"actions appliquées à la structure."
-msgstr ""
-"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
-"actions appliquées à la structure."
-
-msgid "Approche _1"
-msgstr "Approche _1"
-
-msgid "Approche _2"
-msgstr "Approche _2"
-
-msgid "Approche _3"
-msgstr "Approche _3"
-
-msgid "<b>ELU ACCidentel :</b>"
-msgstr "<b>ELU ACCidentel :</b>"
-
-msgid ""
-"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
-"soit la valeur fréquente, soit la valeur quasi-permanente."
-msgstr ""
-"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
-"soit la valeur fréquente, soit la valeur quasi-permanente."
-
-msgid "valeur _fréquence"
-msgstr "valeur _fréquence"
-
-msgid "valeur q_uasi-permanente"
-msgstr "valeur q_uasi-permanente"
-
-msgid "_Noeuds :"
-msgstr "_Noeuds :"
-
-msgid "Repère :"
-msgstr "Repère :"
-
-msgid "_Position :"
-msgstr "_Position :"
-
-msgid "_Barres :"
-msgstr "_Barres :"
-
-msgid "_Personnaliser"
-msgstr "_Personnaliser"
-
-msgid "_Nom court :"
-msgstr "_Nom court :"
-
-msgid "_Forme :"
-msgstr "_Forme :"
-
-msgid "Actions"
-msgstr "Actions"
-
-msgid "<b>A_ctions :</b>"
-msgstr "<b>A_ctions :</b>"
-
-msgid "<b>_Charges :</b>"
-msgstr "<b>_Charges :</b>"
-
-msgid "Charge"
-msgstr "Charge"
-
-msgid "Valeur"
-msgstr "Valeur"
-
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
+
+msgid "Structures provisoires"
+msgstr "Structures provisoires"
+
+msgid ""
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
+msgstr ""
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
+
+msgid "Structures agricoles et similaires"
+msgstr "Structures agricoles et similaires"
+
+msgid "Structures de bâtiments et autres structures courantes"
+msgstr "Structures de bâtiments et autres structures courantes"
+
+msgid ""
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+msgstr ""
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
@@ -577,27 +143,6 @@ msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 #, c-format
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
-
-msgid "Structures provisoires"
-msgstr "Structures provisoires"
-
-msgid ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
-msgstr ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
-
-msgid "Structures agricoles et similaires"
-msgstr "Structures agricoles et similaires"
-
-msgid "Structures de bâtiments et autres structures courantes"
-msgstr "Structures de bâtiments et autres structures courantes"
-
-msgid ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-msgstr ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
 msgid "Permanente"
 msgstr "Permanente"
@@ -766,97 +311,97 @@ msgstr "Le matériau n'est pas en béton.\n"
 msgid "Le matériau %s existe déjà.\n"
 msgstr "Le matériau %s existe déjà.\n"
 
-#, c-format
+#, fuzzy, c-format
 msgid "f<sub>ck,cube</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
 #, fuzzy, c-format
 msgid "f<sub>cm</sub> : %s MPa"
 msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, f<sub>cm</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
 #, fuzzy, c-format
 msgid "f<sub>ctm</sub> : %s MPa"
 msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, f<sub>ctm</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "f<sub>ctk,0.05</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, f<sub>ctk,0.05</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "f<sub>ctk,0.95</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, f<sub>ctk,0.95</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
 #, fuzzy, c-format
 msgid "E<sub>cm</sub> : %s MPa"
 msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, E<sub>cm</sub> : %s MPa"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>c1</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>c1</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>cu1</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>cu1</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>c2</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>c2</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>cu2</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>cu2</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>c3</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>c3</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "&#949;<sub>cu3</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "%s, &#949;<sub>cu3</sub> : %s ‰"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
 #, c-format
 msgid "n : %s"
@@ -878,9 +423,9 @@ msgstr ""
 msgid "f<sub>ck</sub> : %s MPa"
 msgstr "r<sub>x</sub> [rad]"
 
-#, c-format
+#, fuzzy, c-format
 msgid "f<sub>ck</sub> : %s MPa avec %s"
-msgstr ""
+msgstr "r<sub>x</sub> [rad]"
 
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
@@ -928,39 +473,89 @@ msgstr "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
 
-msgid "Impossible de scinder une fonction vide\n"
-msgstr "Impossible de scinder une fonction vide\n"
+#, c-format
+msgid "Comparaison hors limite : %lf > %lf.\n"
+msgstr "Comparaison hors limite : %lf > %lf.\n"
+
+msgid "Type de nombre est inconnu.\n"
+msgstr "Type de nombre est inconnu.\n"
 
 #, c-format
-msgid "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
-msgstr "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
+msgid "Le type %d de la liste est inconnu.\n"
+msgstr "Le type %d de la liste est inconnu.\n"
 
-#, c-format
-msgid "Borne [%lf,%lf] incorrecte.\n"
-msgstr "Borne [%lf,%lf] incorrecte.\n"
+msgid "Région A1"
+msgstr "Région A1"
 
-msgid "Fonction indéfinie.\n"
-msgstr "Fonction indéfinie.\n"
+msgid "Région A2"
+msgstr "Région A2"
+
+msgid "Région B1"
+msgstr "Région B1"
+
+msgid "Région B2"
+msgstr "Région B2"
+
+msgid "Région C1"
+msgstr "Région C1"
+
+msgid "Région C2"
+msgstr "Région C2"
+
+msgid "Région D"
+msgstr "Région D"
+
+msgid "Région E"
+msgstr "Région E"
+
+msgid "Région 1"
+msgstr "Région 1"
+
+msgid "Région 2"
+msgstr "Région 2"
+
+msgid "Région 3"
+msgstr "Région 3"
+
+msgid "Région 4"
+msgstr "Région 4"
+
+msgid "Zone très faible"
+msgstr "Zone très faible"
+
+msgid "Zone faible"
+msgstr "Zone faible"
+
+msgid "Zone modérée"
+msgstr "Zone modérée"
+
+msgid "Zone moyenne"
+msgstr "Zone moyenne"
+
+msgid "Zone forte"
+msgstr "Zone forte"
 
 #, c-format
 msgid ""
-"debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f"
-"\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f"
-"\tf(%.5f) = %.20f\n"
+"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
 msgstr ""
-
-msgid "La largeur du dessin ne peut être nulle.\n"
-msgstr "La largeur du dessin ne peut être nulle.\n"
-
-msgid "La hauteur du dessin ne peut être nulle.\n"
-msgstr "La hauteur du dessin ne peut être nulle.\n"
+"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
 
 #, c-format
-msgid "%sde %.*lfm à %.*lfm : "
-msgstr "%sde %.*lfm à %.*lfm : "
+msgid "Le fichier '%s' est introuvable.\n"
+msgstr "Le fichier '%s' est introuvable.\n"
 
-msgid "Zéro impossible à trouver.\n"
-msgstr "Zéro impossible à trouver.\n"
+#, c-format
+msgid "Le fichier '%s' est incomplet.\n"
+msgstr "Le fichier '%s' est incomplet.\n"
+
+#, c-format
+msgid "Le fichier '%s' est corrompu.\n"
+msgstr "Le fichier '%s' est corrompu.\n"
+
+#, c-format
+msgid "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
+msgstr "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
 
 #, c-format
 msgid "15. Disclaimer of Warranty.\n"
@@ -1170,10 +765,6 @@ msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
 #, c-format
-msgid "Le fichier '%s' est corrompu.\n"
-msgstr "Le fichier '%s' est corrompu.\n"
-
-#, c-format
 msgid "Impossible d'ouvrir l'image %s : %s.\n"
 msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 
@@ -1181,100 +772,39 @@ msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
-#, c-format
-msgid "Comparaison hors limite : %lf > %lf.\n"
-msgstr "Comparaison hors limite : %lf > %lf.\n"
-
-msgid "Type de nombre est inconnu.\n"
-msgstr "Type de nombre est inconnu.\n"
+msgid "Impossible de scinder une fonction vide\n"
+msgstr "Impossible de scinder une fonction vide\n"
 
 #, c-format
-msgid "Le type %d de la liste est inconnu.\n"
-msgstr "Le type %d de la liste est inconnu.\n"
+msgid "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
+msgstr "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
 
 #, c-format
-msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
-msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
+msgid "Borne [%lf,%lf] incorrecte.\n"
+msgstr "Borne [%lf,%lf] incorrecte.\n"
 
-#, c-format
-msgid "fichier %s, fonction %s, ligne %d, texte : "
-msgstr "fichier %s, fonction %s, ligne %d, texte : "
-
-msgid "Erreur critique. "
-msgstr "Erreur critique. "
-
-#, c-format
-msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
-msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
-
-msgid "Région A1"
-msgstr "Région A1"
-
-msgid "Région A2"
-msgstr "Région A2"
-
-msgid "Région B1"
-msgstr "Région B1"
-
-msgid "Région B2"
-msgstr "Région B2"
-
-msgid "Région C1"
-msgstr "Région C1"
-
-msgid "Région C2"
-msgstr "Région C2"
-
-msgid "Région D"
-msgstr "Région D"
-
-msgid "Région E"
-msgstr "Région E"
-
-msgid "Région 1"
-msgstr "Région 1"
-
-msgid "Région 2"
-msgstr "Région 2"
-
-msgid "Région 3"
-msgstr "Région 3"
-
-msgid "Région 4"
-msgstr "Région 4"
-
-msgid "Zone très faible"
-msgstr "Zone très faible"
-
-msgid "Zone faible"
-msgstr "Zone faible"
-
-msgid "Zone modérée"
-msgstr "Zone modérée"
-
-msgid "Zone moyenne"
-msgstr "Zone moyenne"
-
-msgid "Zone forte"
-msgstr "Zone forte"
+msgid "Fonction indéfinie.\n"
+msgstr "Fonction indéfinie.\n"
 
 #, c-format
 msgid ""
-"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
+"debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f"
+"\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f"
+"\tf(%.5f) = %.20f\n"
 msgstr ""
-"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
+
+msgid "La largeur du dessin ne peut être nulle.\n"
+msgstr "La largeur du dessin ne peut être nulle.\n"
+
+msgid "La hauteur du dessin ne peut être nulle.\n"
+msgstr "La hauteur du dessin ne peut être nulle.\n"
 
 #, c-format
-msgid "Le fichier '%s' est introuvable.\n"
-msgstr "Le fichier '%s' est introuvable.\n"
+msgid "%sde %.*lfm à %.*lfm : "
+msgstr "%sde %.*lfm à %.*lfm : "
 
-#, c-format
-msgid "Le fichier '%s' est incomplet.\n"
-msgstr "Le fichier '%s' est incomplet.\n"
-
-#, c-format
-msgid "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
-msgstr "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
+msgid "Zéro impossible à trouver.\n"
+msgstr "Zéro impossible à trouver.\n"
 
 msgid "Fichier"
 msgstr "Fichier"
@@ -1312,11 +842,17 @@ msgstr "XY vers Z-"
 msgid "Modélisation"
 msgstr "Modélisation"
 
+msgid "Noeuds"
+msgstr "Noeuds"
+
 msgid "Appuis..."
 msgstr "Appuis..."
 
 msgid "Gestion des noeuds..."
 msgstr "Gestion des noeuds..."
+
+msgid "Barres"
+msgstr "Barres"
 
 msgid "Sections..."
 msgstr "Sections..."
@@ -1339,6 +875,9 @@ msgstr "Actions..."
 msgid "Groupes..."
 msgstr "Groupes..."
 
+msgid "Résultats"
+msgstr "Résultats"
+
 msgid "Calculer"
 msgstr "Calculer"
 
@@ -1360,99 +899,14 @@ msgstr "Le type du noeud est incorrect.\n"
 msgid "Le noeud %d est déjà dépendant du noeud %d.\n"
 msgstr "Le noeud %d est déjà dépendant du noeud %d.\n"
 
-msgid "Indice hors limite.\n"
-msgstr "Indice hors limite.\n"
-
-#, c-format
-msgid "Le type de matériau %d n'existe pas.\n"
-msgstr "Le type de matériau %d n'existe pas.\n"
-
-#, c-format
-msgid "Matériau '%s' introuvable.\n"
-msgstr "Matériau '%s' introuvable.\n"
-
-#, c-format
-msgid "Matériau %d inconnu.\n"
-msgstr "Matériau %d inconnu.\n"
-
-msgid "Seul le matériau béton supporte nu à 0.\n"
-msgstr "Seul le matériau béton supporte nu à 0.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
-msgstr ""
-"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
-msgstr ""
-"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
-
-msgid "Noeud"
-msgstr "Noeud"
-
-#, c-format
-msgid "La position de la charge ponctuelle %f est incorrecte.\n"
-msgstr "La position de la charge ponctuelle %f est incorrecte.\n"
-
-#, c-format
-msgid ""
-"La position de la charge ponctuelle %f est incorrecte.\n"
-"La longueur de la barre %d est de %f m.\n"
-msgstr ""
-"La position de la charge ponctuelle %f est incorrecte.\n"
-"La longueur de la barre %d est de %f m.\n"
-
-msgid "position"
-msgstr "position"
-
-msgid "repère : local"
-msgstr "repère : local"
-
-msgid "repère : global"
-msgstr "repère : global"
-
-#, c-format
-msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
-msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
-
-msgid "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
-msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
-
-#, c-format
-msgid ""
-"La position de la charge ponctuelle %f est incorrecte.\n"
-"La longueur de la barre est de %f m.\n"
-msgstr ""
-"La position de la charge ponctuelle %f est incorrecte.\n"
-"La longueur de la barre est de %f m.\n"
-
-msgid "Impossible de réaliser un calcul sans barre existante.\n"
-msgstr "Impossible de réaliser un calcul sans barre existante.\n"
-
-msgid "Impossible de réaliser un calcul sans noeud existant.\n"
-msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
-
-#, c-format
-msgid "Erreur de calcul : %d\n"
-msgstr "Erreur de calcul : %d\n"
-
-#, c-format
-msgid ""
-"Attention, matrice singulière.\n"
-"Il est possible que la modélisation ne soit pas stable.\n"
-msgstr ""
-"Attention, matrice singulière.\n"
-"Il est possible que la modélisation ne soit pas stable.\n"
-
-#, c-format
-msgid "Type d'élément %d inconnu.\n"
-msgstr "Type d'élément %d inconnu.\n"
-
 msgid "Aucun"
 msgstr "Aucun"
+
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Bloqué"
+msgstr "Bloqué"
 
 #, c-format
 msgid "Appui '%s' est introuvable.\n"
@@ -1488,6 +942,9 @@ msgstr ""
 #, c-format
 msgid "Le type d'appui de %s (%d) est inconnu.\n"
 msgstr "Le type d'appui de %s (%d) est inconnu.\n"
+
+msgid "Indice hors limite.\n"
+msgstr "Indice hors limite.\n"
 
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"
@@ -1530,6 +987,9 @@ msgstr ""
 "Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
+msgid "Barre"
+msgstr "Barre"
+
 msgid "début"
 msgstr "début"
 
@@ -1541,6 +1001,19 @@ msgstr "projection : oui"
 
 msgid "projection : non"
 msgstr "projection : non"
+
+msgid "repère : local"
+msgstr "repère : local"
+
+msgid "repère : global"
+msgstr "repère : global"
+
+#, c-format
+msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
+msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
+
+msgid "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
+msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
 
 #, c-format
 msgid "Le début de la charge répartie uniformément %f est incorrect.\n"
@@ -1590,100 +1063,8 @@ msgstr ""
 "Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
 "avec la longueur de la barre qui est de %f m.\n"
 
-#, c-format
-msgid "La section %s existe déjà.\n"
-msgstr "La section %s existe déjà.\n"
-
-msgid "La section doit être de type rectangulaire.\n"
-msgstr "La section doit être de type rectangulaire.\n"
-
-msgid "La section doit être de type en T.\n"
-msgstr "La section doit être de type en T.\n"
-
-msgid "La section doit être de type carrée.\n"
-msgstr "La section doit être de type carrée.\n"
-
-msgid "La section doit être de type circulaire.\n"
-msgstr "La section doit être de type circulaire.\n"
-
-msgid "La forme de la section est vide.\n"
-msgstr "La forme de la section est vide.\n"
-
-msgid "Un groupe de points doit avoir au minimum 3 points.\n"
-msgstr "Un groupe de points doit avoir au minimum 3 points.\n"
-
-msgid "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
-msgstr "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
-
-#, c-format
-msgid ""
-"Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se "
-"coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
-"%lf.\n"
-msgstr ""
-"Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se "
-"coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
-"%lf.\n"
-
-msgid "La forme est incorrecte.\n"
-msgstr "La forme est incorrecte.\n"
-
-msgid "La section doit être de type personnalisée.\n"
-msgstr "La section doit être de type personnalisée.\n"
-
-#, c-format
-msgid "Section '%s' introuvable.\n"
-msgstr "Section '%s' introuvable.\n"
-
-msgid "Largeur"
-msgstr "Largeur"
-
-msgid "Hauteur"
-msgstr "Hauteur"
-
-msgid "Largeur table"
-msgstr "Largeur table"
-
-msgid "Hauteur table"
-msgstr "Hauteur table"
-
-msgid "Largeur retombée"
-msgstr "Largeur retombée"
-
-msgid "Hauteur retombée"
-msgstr "Hauteur retombée"
-
-msgid "Coté"
-msgstr "Coté"
-
-msgid "Diamètre"
-msgstr "Diamètre"
-
-#, c-format
-msgid "Type de section %d inconnu.\n"
-msgstr "Type de section %d inconnu.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
-msgstr ""
-"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
-msgstr ""
-"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
-
-msgid "La fin doit être après le début.\n"
-msgstr "La fin doit être après le début.\n"
-
-msgid "La charge n'est dans aucune action.\n"
-msgstr "La charge n'est dans aucune action.\n"
-
-#, c-format
-msgid "Charge '%s' de l'action %s introuvable.\n"
-msgstr "Charge '%s' de l'action %s introuvable.\n"
+msgid "Noeud"
+msgstr "Noeud"
 
 msgid "Structure non vide (minimum 2 noeuds et une barre)"
 msgstr "Structure non vide (minimum 2 noeuds et une barre)"
@@ -1760,6 +1141,56 @@ msgstr ""
 "%s\n"
 "La longueur de la barre %d est nulle."
 
+#, c-format
+msgid "La position de la charge ponctuelle %f est incorrecte.\n"
+msgstr "La position de la charge ponctuelle %f est incorrecte.\n"
+
+#, c-format
+msgid ""
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
+msgstr ""
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre %d est de %f m.\n"
+
+msgid "position"
+msgstr "position"
+
+#, c-format
+msgid ""
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
+msgstr ""
+"La position de la charge ponctuelle %f est incorrecte.\n"
+"La longueur de la barre est de %f m.\n"
+
+#, c-format
+msgid "Le type de matériau %d n'existe pas.\n"
+msgstr "Le type de matériau %d n'existe pas.\n"
+
+#, c-format
+msgid "Matériau '%s' introuvable.\n"
+msgstr "Matériau '%s' introuvable.\n"
+
+#, c-format
+msgid "Matériau %d inconnu.\n"
+msgstr "Matériau %d inconnu.\n"
+
+msgid "Seul le matériau béton supporte nu à 0.\n"
+msgstr "Seul le matériau béton supporte nu à 0.\n"
+
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+
 msgid "Un relachement élastique linéaire doit être défini avec ses paramètres."
 msgstr ""
 "Un relachement élastique linéaire doit être défini avec ses paramètres."
@@ -1778,6 +1209,123 @@ msgstr "Le relâchement %s existe déjà.\n"
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
 
+#, c-format
+msgid ""
+"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+msgstr ""
+"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+
+#, c-format
+msgid ""
+"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+msgstr ""
+"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+
+#, c-format
+msgid "La section %s existe déjà.\n"
+msgstr "La section %s existe déjà.\n"
+
+msgid "La section doit être de type rectangulaire.\n"
+msgstr "La section doit être de type rectangulaire.\n"
+
+msgid "La section doit être de type en T.\n"
+msgstr "La section doit être de type en T.\n"
+
+msgid "La section doit être de type carrée.\n"
+msgstr "La section doit être de type carrée.\n"
+
+msgid "La section doit être de type circulaire.\n"
+msgstr "La section doit être de type circulaire.\n"
+
+msgid "La forme de la section est vide.\n"
+msgstr "La forme de la section est vide.\n"
+
+msgid "Un groupe de points doit avoir au minimum 3 points.\n"
+msgstr "Un groupe de points doit avoir au minimum 3 points.\n"
+
+msgid "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
+msgstr "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
+
+#, c-format
+msgid ""
+"Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se "
+"coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
+"%lf.\n"
+msgstr ""
+"Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se "
+"coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
+"%lf.\n"
+
+msgid "La forme est incorrecte.\n"
+msgstr "La forme est incorrecte.\n"
+
+msgid "La section doit être de type personnalisée.\n"
+msgstr "La section doit être de type personnalisée.\n"
+
+#, c-format
+msgid "Section '%s' introuvable.\n"
+msgstr "Section '%s' introuvable.\n"
+
+msgid "Largeur"
+msgstr "Largeur"
+
+msgid "Hauteur"
+msgstr "Hauteur"
+
+msgid "Largeur table"
+msgstr "Largeur table"
+
+msgid "Hauteur table"
+msgstr "Hauteur table"
+
+msgid "Largeur retombée"
+msgstr "Largeur retombée"
+
+msgid "Hauteur retombée"
+msgstr "Hauteur retombée"
+
+msgid "Coté"
+msgstr "Coté"
+
+msgid "Diamètre"
+msgstr "Diamètre"
+
+#, c-format
+msgid "Type de section %d inconnu.\n"
+msgstr "Type de section %d inconnu.\n"
+
+msgid "La fin doit être après le début.\n"
+msgstr "La fin doit être après le début.\n"
+
+msgid "La charge n'est dans aucune action.\n"
+msgstr "La charge n'est dans aucune action.\n"
+
+#, c-format
+msgid "Charge '%s' de l'action %s introuvable.\n"
+msgstr "Charge '%s' de l'action %s introuvable.\n"
+
+msgid "Impossible de réaliser un calcul sans barre existante.\n"
+msgstr "Impossible de réaliser un calcul sans barre existante.\n"
+
+msgid "Impossible de réaliser un calcul sans noeud existant.\n"
+msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
+
+#, c-format
+msgid "Erreur de calcul : %d\n"
+msgstr "Erreur de calcul : %d\n"
+
+#, c-format
+msgid ""
+"Attention, matrice singulière.\n"
+"Il est possible que la modélisation ne soit pas stable.\n"
+msgstr ""
+"Attention, matrice singulière.\n"
+"Il est possible que la modélisation ne soit pas stable.\n"
+
+#, c-format
+msgid "Type d'élément %d inconnu.\n"
+msgstr "Type d'élément %d inconnu.\n"
+
 msgid "Le matériau n'est pas en acier.\n"
 msgstr "Le matériau n'est pas en acier.\n"
 
@@ -1786,15 +1334,80 @@ msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
 #, c-format
+msgid "La génération de la fenêtre %s a échouée.\n"
+msgstr "La génération de la fenêtre %s a échouée.\n"
+
+msgid "Ajout d'une section circulaire"
+msgstr "Ajout d'une section circulaire"
+
+msgid "_Ajouter"
+msgstr "_Ajouter"
+
+msgid "Modification d'une section circulaire"
+msgstr "Modification d'une section circulaire"
+
+msgid "La section à modifier n'est pas circulaire.\n"
+msgstr "La section à modifier n'est pas circulaire.\n"
+
+msgid "_Modifier"
+msgstr "_Modifier"
+
+msgid "Ajout d'une section carrée"
+msgstr "Ajout d'une section carrée"
+
+msgid "Modification d'une section carrée"
+msgstr "Modification d'une section carrée"
+
+msgid "La section à modifier n'est pas carrée.\n"
+msgstr "La section à modifier n'est pas carrée.\n"
+
+msgid "Ajout d'une charge au noeud"
+msgstr "Ajout d'une charge au noeud"
+
+msgid "Modification d'une charge au noeud"
+msgstr "Modification d'une charge au noeud"
+
+msgid "Sans nom"
+msgstr "Sans nom"
+
+#, c-format
+msgid "Type d'appui %s inconnu.\n"
+msgstr "Type d'appui %s inconnu.\n"
+
+msgid "Aucun élément n'est sélectionné.\n"
+msgstr "Aucun élément n'est sélectionné.\n"
+
+msgid "L'élément ne possède aucune dépendance.\n"
+msgstr "L'élément ne possède aucune dépendance.\n"
+
+#, c-format
+msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
+msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
+
+#, c-format
+msgid "Groupe %d"
+msgstr "Groupe %d"
+
+#, c-format
+msgid "Point %d"
+msgstr "Point %d"
+
+msgid "Ajout d'une section personnalisée"
+msgstr "Ajout d'une section personnalisée"
+
+msgid "Modification d'une section personnalisée"
+msgstr "Modification d'une section personnalisée"
+
+msgid "La section à modifier n'est pas personnalisée.\n"
+msgstr "La section à modifier n'est pas personnalisée.\n"
+
+#, c-format
 msgid "Type d'action %u inconnu.\n"
 msgstr "Type d'action %u inconnu.\n"
 
 #, c-format
 msgid "Type d'action '%s' inconnu.\n"
 msgstr "Type d'action '%s' inconnu.\n"
-
-msgid "Sans nom"
-msgstr "Sans nom"
 
 msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
 msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
@@ -1808,9 +1421,133 @@ msgstr "Ponctuelle sur barre"
 msgid "Répartie uniforme sur barre"
 msgstr "Répartie uniforme sur barre"
 
+msgid "Ajout d'un matériau béton"
+msgstr "Ajout d'un matériau béton"
+
+msgid "Modification d'un matériau béton"
+msgstr "Modification d'un matériau béton"
+
+msgid "La fonction \"zoom tout\" vient de tourner en boucle.\n"
+msgstr "La fonction \"zoom tout\" vient de tourner en boucle.\n"
+
+msgid "Ajout d'une section en T"
+msgstr "Ajout d'une section en T"
+
+msgid "Modification d'une section en T"
+msgstr "Modification d'une section en T"
+
+msgid "La section à modifier n'est pas en T.\n"
+msgstr "La section à modifier n'est pas en T.\n"
+
+msgid "Béton"
+msgstr "Béton"
+
+msgid "Acier"
+msgstr "Acier"
+
+msgid "Inconnu"
+msgstr "Inconnu"
+
 #, c-format
-msgid "La génération de la fenêtre %s a échouée.\n"
-msgstr "La génération de la fenêtre %s a échouée.\n"
+msgid "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
+msgstr "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
+
+msgid "Le résultat d'un rapport doit être compris entre 0 et 2.\n"
+msgstr ""
+"Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
+"inclu.\n"
+
+#, c-format
+msgid ""
+"La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"
+msgstr ""
+"La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"
+
+msgid "Le fichier des sections est introuvable.\n"
+msgstr "Le fichier des sections est introuvable.\n"
+
+msgid "Ajout d'une charge répartie uniforme sur barre"
+msgstr "Ajout d'une charge répartie uniforme sur barre"
+
+msgid "Modification d'une charge répartie uniforme sur barre"
+msgstr "Modification d'une charge répartie uniforme sur barre"
+
+msgid ""
+"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
+"repère local."
+msgstr ""
+"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
+"repère local."
+
+msgid "La liste des types de barre est indéfinie.\n"
+msgstr "La liste des types de barre est indéfinie.\n"
+
+msgid "Aucun type de barre n'est défini.\n"
+msgstr "Aucun type de barre n'est défini.\n"
+
+msgid "Impossible de trouver le type de l'élément.\n"
+msgstr "Impossible de trouver le type de l'élément.\n"
+
+msgid "La liste des sections est indéfinie.\n"
+msgstr "La liste des sections est indéfinie.\n"
+
+msgid "La liste des matériaux est indéfinie.\n"
+msgstr "La liste des matériaux est indéfinie.\n"
+
+msgid "La liste des relâchements de barre est indéfinie.\n"
+msgstr "La liste des relâchements de barre est indéfinie.\n"
+
+msgid "Aucune barre n'est sélectionnée.\n"
+msgstr "Aucune barre n'est sélectionnée.\n"
+
+msgid "Ajout d'une section rectangulaire"
+msgstr "Ajout d'une section rectangulaire"
+
+msgid "Modification d'une section rectangulaire"
+msgstr "Modification d'une section rectangulaire"
+
+msgid "La section à modifier n'est pas rectangulaire.\n"
+msgstr "La section à modifier n'est pas rectangulaire.\n"
+
+msgid "Ajout d'un matériau acier"
+msgstr "Ajout d'un matériau acier"
+
+msgid "Modification d'un matériau acier"
+msgstr "Modification d'un matériau acier"
+
+msgid "Impossible d'éditer ce type de relâchement.\n"
+msgstr "Impossible d'éditer ce type de relâchement.\n"
+
+msgid "Linéaire"
+msgstr "Linéaire"
+
+msgid "Êtes-vous sûr de vouloir choisir pour"
+msgstr "Êtes-vous sûr de vouloir choisir pour"
+
+msgid "la neige"
+msgstr "la neige"
+
+msgid "le vent"
+msgstr "le vent"
+
+msgid "le séisme"
+msgstr "le séisme"
+
+msgid " des paramètres de calculs différents que ceux imposés par les normes ?"
+msgstr ""
+" des paramètres de calculs différents que ceux imposés par les normes ?"
+
+msgid "Aucun noeud n'est sélectionné.\n"
+msgstr "Aucun noeud n'est sélectionné.\n"
+
+msgid "La colonne d'où provient l'édition est incorrecte.\n"
+msgstr "La colonne d'où provient l'édition est incorrecte.\n"
+
+msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
+msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
+
+msgid "Le noeud doit être de type intermédiaire.\n"
+msgstr "Le noeud doit être de type intermédiaire.\n"
 
 #, c-format
 msgid "Paramètre %s incorrect.\n"
@@ -2045,22 +1782,20 @@ msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 msgid "Tout"
 msgstr "Tout"
 
+msgid "Réactions d'appuis (repère global)"
+msgstr "Réactions d'appuis (repère global)"
+
+msgid "Déplacements (repère global)"
+msgstr "Déplacements (repère global)"
+
+msgid "Efforts dans les barres (repère local)"
+msgstr "Efforts dans les barres (repère local)"
+
+msgid "Déformations des barres (repère local)"
+msgstr "Déformations des barres (repère local)"
+
 msgid "La page est inconnue.\n"
 msgstr "La page est inconnue.\n"
-
-#, c-format
-msgid "Type d'appui %s inconnu.\n"
-msgstr "Type d'appui %s inconnu.\n"
-
-msgid "Aucun élément n'est sélectionné.\n"
-msgstr "Aucun élément n'est sélectionné.\n"
-
-msgid "L'élément ne possède aucune dépendance.\n"
-msgstr "L'élément ne possède aucune dépendance.\n"
-
-#, c-format
-msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
-msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
 #, c-format
 msgid "Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"
@@ -2069,175 +1804,436 @@ msgstr "Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"
 msgid "Le type de combinaison est inconnu.\n"
 msgstr "Le type de combinaison est inconnu.\n"
 
-msgid "La fonction \"zoom tout\" vient de tourner en boucle.\n"
-msgstr "La fonction \"zoom tout\" vient de tourner en boucle.\n"
-
-msgid "Êtes-vous sûr de vouloir choisir pour"
-msgstr "Êtes-vous sûr de vouloir choisir pour"
-
-msgid "la neige"
-msgstr "la neige"
-
-msgid "le vent"
-msgstr "le vent"
-
-msgid "le séisme"
-msgstr "le séisme"
-
-msgid " des paramètres de calculs différents que ceux imposés par les normes ?"
-msgstr ""
-" des paramètres de calculs différents que ceux imposés par les normes ?"
-
-msgid "Aucun noeud n'est sélectionné.\n"
-msgstr "Aucun noeud n'est sélectionné.\n"
-
-msgid "La colonne d'où provient l'édition est incorrecte.\n"
-msgstr "La colonne d'où provient l'édition est incorrecte.\n"
-
-msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
-msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
-
-msgid "Le noeud doit être de type intermédiaire.\n"
-msgstr "Le noeud doit être de type intermédiaire.\n"
-
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"
 
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
-msgid "Ajout d'un matériau béton"
-msgstr "Ajout d'un matériau béton"
+#~ msgid "et ces dépendances."
+#~ msgstr "et ces dépendances."
 
-msgid "Modification d'un matériau béton"
-msgstr "Modification d'un matériau béton"
+#~ msgid "Numéro"
+#~ msgstr "Numéro"
 
-msgid "Ajout d'une section rectangulaire"
-msgstr "Ajout d'une section rectangulaire"
+#~ msgid "Appui"
+#~ msgstr "Appui"
 
-msgid "Modification d'une section rectangulaire"
-msgstr "Modification d'une section rectangulaire"
+#~ msgid "Noeud relatif"
+#~ msgstr "Noeud relatif"
 
-msgid "La section à modifier n'est pas rectangulaire.\n"
-msgstr "La section à modifier n'est pas rectangulaire.\n"
+#~ msgid "Noeuds _libres"
+#~ msgstr "Noeuds _libres"
 
-#, c-format
-msgid ""
-"La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"
-msgstr ""
-"La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"
+#~ msgid "Position relative"
+#~ msgstr "Position relative"
 
-msgid "Le fichier des sections est introuvable.\n"
-msgstr "Le fichier des sections est introuvable.\n"
+#~ msgid "Noeuds _intermédiaires"
+#~ msgstr "Noeuds _intermédiaires"
 
-msgid "Impossible d'éditer ce type de relâchement.\n"
-msgstr "Impossible d'éditer ce type de relâchement.\n"
+#~ msgid "_Supprimer"
+#~ msgstr "_Supprimer"
 
-msgid "Ajout d'une section en T"
-msgstr "Ajout d'une section en T"
+#~ msgid "_Fermer"
+#~ msgstr "_Fermer"
 
-msgid "Modification d'une section en T"
-msgstr "Modification d'une section en T"
+#~ msgid "_Afficher : "
+#~ msgstr "_Afficher : "
 
-msgid "La section à modifier n'est pas en T.\n"
-msgstr "La section à modifier n'est pas en T.\n"
+#~ msgid "Cas élémentaires"
+#~ msgstr "Cas élémentaires"
 
-msgid "Ajout d'une section circulaire"
-msgstr "Ajout d'une section circulaire"
+#~ msgid "Combinaisons"
+#~ msgstr "Combinaisons"
 
-msgid "Modification d'une section circulaire"
-msgstr "Modification d'une section circulaire"
+#~ msgid "Enveloppe"
+#~ msgstr "Enveloppe"
 
-msgid "La section à modifier n'est pas circulaire.\n"
-msgstr "La section à modifier n'est pas circulaire.\n"
+#~ msgid "Rapport"
+#~ msgstr "Rapport"
 
-msgid "Ajout d'une section carrée"
-msgstr "Ajout d'une section carrée"
+#~ msgid "Point analysé"
+#~ msgstr "Point analysé"
 
-msgid "Modification d'une section carrée"
-msgstr "Modification d'une section carrée"
+#~ msgid "Commentaires"
+#~ msgstr "Commentaires"
 
-msgid "La section à modifier n'est pas carrée.\n"
-msgstr "La section à modifier n'est pas carrée.\n"
+#~ msgid "Informations sur le projet"
+#~ msgstr "Informations sur le projet"
 
-#, c-format
-msgid "Groupe %d"
-msgstr "Groupe %d"
+#~ msgid "_Client :"
+#~ msgstr "_Client :"
 
-#, c-format
-msgid "Point %d"
-msgstr "Point %d"
+#~ msgid "A_dresse :"
+#~ msgstr "A_dresse :"
 
-msgid "Ajout d'une section personnalisée"
-msgstr "Ajout d'une section personnalisée"
+#~ msgid "C_ode postal :"
+#~ msgstr "C_ode postal :"
 
-msgid "Modification d'une section personnalisée"
-msgstr "Modification d'une section personnalisée"
+#~ msgid "_Ville :"
+#~ msgstr "_Ville :"
 
-msgid "La section à modifier n'est pas personnalisée.\n"
-msgstr "La section à modifier n'est pas personnalisée.\n"
+#~ msgid "_Localisation"
+#~ msgstr "_Localisation"
 
-msgid "Ajout d'un matériau acier"
-msgstr "Ajout d'un matériau acier"
+#~ msgid "_Neige :"
+#~ msgstr "_Neige :"
 
-msgid "Modification d'un matériau acier"
-msgstr "Modification d'un matériau acier"
+#~ msgid "_Vent :"
+#~ msgstr "_Vent :"
 
-msgid "La liste des types de barre est indéfinie.\n"
-msgstr "La liste des types de barre est indéfinie.\n"
+#~ msgid "_Séisme :"
+#~ msgstr "_Séisme :"
 
-msgid "Aucun type de barre n'est défini.\n"
-msgstr "Aucun type de barre n'est défini.\n"
+#~ msgid "_Paramètres"
+#~ msgstr "_Paramètres"
 
-msgid "Impossible de trouver le type de l'élément.\n"
-msgstr "Impossible de trouver le type de l'élément.\n"
+#~ msgid "_Annuler"
+#~ msgstr "_Annuler"
 
-msgid "La liste des sections est indéfinie.\n"
-msgstr "La liste des sections est indéfinie.\n"
+#~ msgid "_Nom :"
+#~ msgstr "_Nom :"
 
-msgid "La liste des matériaux est indéfinie.\n"
-msgstr "La liste des matériaux est indéfinie.\n"
+#~ msgid "_Diamètre [m] :"
+#~ msgstr "_Diamètre [m] :"
 
-msgid "La liste des relâchements de barre est indéfinie.\n"
-msgstr "La liste des relâchements de barre est indéfinie.\n"
+#~ msgid "_Coté [m] :"
+#~ msgstr "_Coté [m] :"
 
-msgid "Aucune barre n'est sélectionnée.\n"
-msgstr "Aucune barre n'est sélectionnée.\n"
+#~ msgid "r<sub>x</sub> début"
+#~ msgstr "r<sub>x</sub> début"
 
-#, c-format
-msgid "La fenêtre graphique %s n'est pas initialisée."
-msgstr "La fenêtre graphique %s n'est pas initialisée."
+#~ msgid "r<sub>y</sub> début"
+#~ msgstr "r<sub>y</sub> début"
 
-msgid "Ajout d'une charge répartie uniforme sur barre"
-msgstr "Ajout d'une charge répartie uniforme sur barre"
+#~ msgid "r<sub>z</sub> début"
+#~ msgstr "r<sub>z</sub> début"
 
-msgid "Modification d'une charge répartie uniforme sur barre"
-msgstr "Modification d'une charge répartie uniforme sur barre"
+#~ msgid "r<sub>x</sub> fin"
+#~ msgstr "r<sub>x</sub> fin"
 
-msgid ""
-"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
-"repère local."
-msgstr ""
-"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
-"repère local."
+#~ msgid "r<sub>y</sub> fin"
+#~ msgstr "r<sub>y</sub> fin"
 
-msgid "Ajout d'une charge au noeud"
-msgstr "Ajout d'une charge au noeud"
+#~ msgid "r<sub>z</sub> fin"
+#~ msgstr "r<sub>z</sub> fin"
 
-msgid "Modification d'une charge au noeud"
-msgstr "Modification d'une charge au noeud"
+#~ msgid "Relâchements"
+#~ msgstr "Relâchements"
 
-#, c-format
-msgid "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
-msgstr "Erreur lors de l'ouverture de l'image (%s) du thème.\n"
+#~ msgid "Nom"
+#~ msgstr "Nom"
 
-msgid "Le résultat d'un rapport doit être compris entre 0 et 2.\n"
-msgstr ""
-"Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
-"inclu.\n"
+#~ msgid "Paramètre"
+#~ msgstr "Paramètre"
 
-msgid "Inconnu"
-msgstr "Inconnu"
+#~ msgid "_Largeur de la table [m] :"
+#~ msgstr "_Largeur de la table [m] :"
+
+#~ msgid "_Hauteur de la table [m] :"
+#~ msgstr "_Hauteur de la table [m] :"
+
+#~ msgid "_Largeur de la retombée [m] :"
+#~ msgstr "_Largeur de la retombée [m] :"
+
+#~ msgid "_Hauteur de la retombée [m] :"
+#~ msgstr "_Hauteur de la retombée [m] :"
+
+#~ msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
+#~ msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
+
+#~ msgid "Appuis"
+#~ msgstr "Appuis"
+
+#~ msgid "Ajout d'une barre"
+#~ msgstr "Ajout d'une barre"
+
+#~ msgid "Numéro :"
+#~ msgstr "Numéro :"
+
+#~ msgid "_Type :"
+#~ msgstr "_Type :"
+
+#~ msgid "_Section :"
+#~ msgstr "_Section :"
+
+#~ msgid "_Matériau :"
+#~ msgstr "_Matériau :"
+
+#~ msgid "Noeud _1 :"
+#~ msgstr "Noeud _1 :"
+
+#~ msgid "Noeud _2 :"
+#~ msgstr "Noeud _2 :"
+
+#~ msgid "A_ngle :"
+#~ msgstr "A_ngle :"
+
+#~ msgid "_Relâchement :"
+#~ msgstr "_Relâchement :"
+
+#~ msgid "_Nombre de divisions :"
+#~ msgstr "_Nombre de divisions :"
+
+#~ msgid "Groupes"
+#~ msgstr "Groupes"
+
+#~ msgid "_Niveau :"
+#~ msgstr "_Niveau :"
+
+#~ msgid "<b>_Groupes :</b>"
+#~ msgstr "<b>_Groupes :</b>"
+
+#~ msgid "Description"
+#~ msgstr "Description"
+
+#~ msgid "<b>É_léments disponibles :</b>"
+#~ msgstr "<b>É_léments disponibles :</b>"
+
+#~ msgid "Ajouter"
+#~ msgstr "Ajouter"
+
+#~ msgid "Ajouter tout"
+#~ msgstr "Ajouter tout"
+
+#~ msgid "_Options"
+#~ msgstr "_Options"
+
+#~ msgid "_Générer"
+#~ msgstr "_Générer"
+
+#~ msgid "et les barres utilisant le matériau."
+#~ msgstr "et les barres utilisant le matériau."
+
+#~ msgid "Matériaux"
+#~ msgstr "Matériaux"
+
+#~ msgid "Matériau"
+#~ msgstr "Matériau"
+
+#~ msgid "_Charge :"
+#~ msgstr "_Charge :"
+
+#~ msgid "_Description :"
+#~ msgstr "_Description :"
+
+#~ msgid "C_harge projetée sur la barre"
+#~ msgstr "C_harge projetée sur la barre"
+
+#~ msgid "Repere :"
+#~ msgstr "Repere :"
+
+#~ msgid "_Local"
+#~ msgstr "_Local"
+
+#~ msgid "_Global"
+#~ msgstr "_Global"
+
+#~ msgid "Ba_rres :"
+#~ msgstr "Ba_rres :"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Section"
+#~ msgstr "Section"
+
+#~ msgid "Noeud 1"
+#~ msgstr "Noeud 1"
+
+#~ msgid "Noeud 2"
+#~ msgstr "Noeud 2"
+
+#~ msgid "Angle"
+#~ msgstr "Angle"
+
+#~ msgid "Relâchement"
+#~ msgstr "Relâchement"
+
+#~ msgid "Rectangulaire"
+#~ msgstr "Rectangulaire"
+
+#~ msgid "T"
+#~ msgstr "T"
+
+#~ msgid "Carrée"
+#~ msgstr "Carrée"
+
+#~ msgid "Circulaire"
+#~ msgstr "Circulaire"
+
+#~ msgid "Personnalisée"
+#~ msgstr "Personnalisée"
+
+#~ msgid "Importée"
+#~ msgstr "Importée"
+
+#~ msgid "J [m<sup>4</sup>]"
+#~ msgstr "J [m<sup>4</sup>]"
+
+#~ msgid "I<sub>y</sub> [m<sup>4</sup>]"
+#~ msgstr "I<sub>y</sub> [m<sup>4</sup>]"
+
+#~ msgid "I<sub>z</sub> [m<sup>4</sup>]"
+#~ msgstr "I<sub>z</sub> [m<sup>4</sup>]"
+
+#~ msgid "S [m<sup>2</sup>]"
+#~ msgstr "S [m<sup>2</sup>]"
+
+#~ msgid "v<sub>y</sub> [m]"
+#~ msgstr "v<sub>y</sub> [m]"
+
+#~ msgid "v'<sub>y</sub> [m]"
+#~ msgstr "v'<sub>y</sub> [m]"
+
+#~ msgid "v<sub>z</sub> [m]"
+#~ msgstr "v<sub>z</sub> [m]"
+
+#~ msgid "v'<sub>z</sub> [m]"
+#~ msgstr "v'<sub>z</sub> [m]"
+
+#~ msgid "Sections"
+#~ msgstr "Sections"
+
+#~ msgid "_Largeur [m] :"
+#~ msgstr "_Largeur [m] :"
+
+#~ msgid "_Hauteur [m] :"
+#~ msgstr "_Hauteur [m] :"
+
+#~ msgid "Options des combinaisons"
+#~ msgstr "Options des combinaisons"
+
+#~ msgid "<b>ELU Équilibre :</b>"
+#~ msgstr "<b>ELU Équilibre :</b>"
+
+#~ msgid ""
+#~ "À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+#~ "combinaisons pour la vérification à l'équilibre statique seulement ou à "
+#~ "l'équilibre statique incluant la résistance d'éléments structuraux."
+#~ msgstr ""
+#~ "À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+#~ "combinaisons pour la vérification à l'équilibre statique seulement ou à "
+#~ "l'équilibre statique incluant la résistance d'éléments structuraux."
+
+#~ msgid "É_quilibre seulement"
+#~ msgstr "É_quilibre seulement"
+
+#~ msgid "Équilibre et _résistance"
+#~ msgstr "Équilibre et _résistance"
+
+#~ msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
+#~ msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
+
+#~ msgid ""
+#~ "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+#~ "combinaison sont possibles. La première est la formule 6.10 et la "
+#~ "deuxième est 6.10a et 6.10b."
+#~ msgstr ""
+#~ "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+#~ "combinaison sont possibles. La première est la formule 6.10 et la "
+#~ "deuxième est 6.10a et 6.10b."
+
+#~ msgid "6.10_a et 6.10b"
+#~ msgstr "6.10_a et 6.10b"
+
+#~ msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
+#~ msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
+
+#~ msgid ""
+#~ "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+#~ "STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche "
+#~ "1 : vérification de la structure et du sol via les coefficients de "
+#~ "l'ensemble B puis les coefficients de l'ensemble C.&#013;Approche 2 : "
+#~ "vérification de la structure et du sol via les coefficients de l'ensemble "
+#~ "B.&#013;Approche 3 : vérification de la structure et du sol via les "
+#~ "coefficients de l'ensemble B pour les actions géotechniques et les "
+#~ "coefficients de l'ensemble C pour les actions appliquées à la structure."
+#~ msgstr ""
+#~ "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+#~ "STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche "
+#~ "1 : vérification de la structure et du sol via les coefficients de "
+#~ "l'ensemble B puis les coefficients de l'ensemble C.&#013;Approche 2 : "
+#~ "vérification de la structure et du sol via les coefficients de l'ensemble "
+#~ "B.&#013;Approche 3 : vérification de la structure et du sol via les "
+#~ "coefficients de l'ensemble B pour les actions géotechniques et les "
+#~ "coefficients de l'ensemble C pour les actions appliquées à la structure."
+
+#~ msgid "Approche _1"
+#~ msgstr "Approche _1"
+
+#~ msgid "Approche _2"
+#~ msgstr "Approche _2"
+
+#~ msgid "Approche _3"
+#~ msgstr "Approche _3"
+
+#~ msgid "<b>ELU ACCidentel :</b>"
+#~ msgstr "<b>ELU ACCidentel :</b>"
+
+#~ msgid ""
+#~ "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée "
+#~ "est soit la valeur fréquente, soit la valeur quasi-permanente."
+#~ msgstr ""
+#~ "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée "
+#~ "est soit la valeur fréquente, soit la valeur quasi-permanente."
+
+#~ msgid "valeur _fréquence"
+#~ msgstr "valeur _fréquence"
+
+#~ msgid "valeur q_uasi-permanente"
+#~ msgstr "valeur q_uasi-permanente"
+
+#~ msgid "_Noeuds :"
+#~ msgstr "_Noeuds :"
+
+#~ msgid "Repère :"
+#~ msgstr "Repère :"
+
+#~ msgid "_Position :"
+#~ msgstr "_Position :"
+
+#~ msgid "_Barres :"
+#~ msgstr "_Barres :"
+
+#~ msgid "_Personnaliser"
+#~ msgstr "_Personnaliser"
+
+#~ msgid "_Nom court :"
+#~ msgstr "_Nom court :"
+
+#~ msgid "_Forme :"
+#~ msgstr "_Forme :"
+
+#~ msgid "Actions"
+#~ msgstr "Actions"
+
+#~ msgid "<b>A_ctions :</b>"
+#~ msgstr "<b>A_ctions :</b>"
+
+#~ msgid "<b>_Charges :</b>"
+#~ msgstr "<b>_Charges :</b>"
+
+#~ msgid "Charge"
+#~ msgstr "Charge"
+
+#~ msgid "Valeur"
+#~ msgstr "Valeur"
+
+#~ msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
+#~ msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
+
+#~ msgid "fichier %s, fonction %s, ligne %d, texte : "
+#~ msgstr "fichier %s, fonction %s, ligne %d, texte : "
+
+#~ msgid "Erreur critique. "
+#~ msgstr "Erreur critique. "
+
+#~ msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
+#~ msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
+
+#~ msgid "La fenêtre graphique %s n'est pas initialisée."
+#~ msgstr "La fenêtre graphique %s n'est pas initialisée."
 
 #~ msgid ""
 #~ "Le début de la charge répartie uniformément %f est incorrect. La longueur "

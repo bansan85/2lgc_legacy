@@ -6,41 +6,38 @@ SUBDIRS =	po \
 			docs
 
 if PLATFORM_WIN32
-CUSTOM_CFLAGS 	= @CFLAGS@ -march=i686 -mms-bitfields
+CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=i686 -mms-bitfields
 else
 if PLATFORM_WIN64
-CUSTOM_CFLAGS 	= @CFLAGS@ -march=x86-64 -mms-bitfields
+CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=x86-64 -mms-bitfields
 else
-CUSTOM_CFLAGS 	= @CFLAGS@ -march=native
+CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=native
 endif
 endif
 
 if ENABLE_DEBUG
-CUSTOM_CFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
+CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
 else
-CUSTOM_CFLAGS	+= -O2 -fomit-frame-pointer -pipe
+CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CFLAGS 	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length -fsanitize=address -Wconversion
+CUSTOM_CXXFLAGS	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length -Wconversion
 #-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
 
 if PLATFORM_WIN32
-CUSTOM_CFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
+CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
 else
-if PLATFORM_WIN32
-CUSTOM_CFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
+if PLATFORM_WIN64
+CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
 else
-CUSTOM_CFLAGS 	+= -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\"
+CUSTOM_CXXFLAGS += -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" -fsanitize=address
 endif
 endif
 
-AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
+AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wold-style-cast -Wno-error -fpermissive -D__STRICT_ANSI__
 
-AM_CXXFLAGS		  = $(CUSTOM_CFLAGS) -std=gnu++11 -Wold-style-cast
-AM_CXXFLAGS		 += -D__STRICT_ANSI__
-
-export AM_CFLAGS AM_CXXFLAGS
+export AM_CXXFLAGS
 
 EXTRA_DIST = config.rpath
 
