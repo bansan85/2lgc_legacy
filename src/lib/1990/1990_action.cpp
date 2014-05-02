@@ -25,6 +25,8 @@
 #include <math.h>
 #include <stdint.h>
 
+#include <algorithm>
+
 #include "1990_action_private.hpp"
 #include "common_projet.hpp"
 #include "1990_coef_psi.hpp"
@@ -368,7 +370,7 @@ _1990_action_init (Projet *p)
   UI_ACT.liste = gtk_list_store_new (1, G_TYPE_STRING);
   UI_ACT.builder = NULL;
   
-  UI_ACT.items_type_action = NULL;
+  UI_ACT.items_type_action = new std::list <GtkWidget *> ();
   UI_ACT.type_action = GTK_MENU (gtk_menu_new ());
   UI_ACT.choix_type_action = gtk_list_store_new (1, G_TYPE_STRING);
   for (i = 0; i < _1990_action_num_bat_txt (p->parametres.norme); i++)
@@ -380,8 +382,7 @@ _1990_action_init (Projet *p)
     w_temp = gtk_menu_item_new_with_label (
                            _1990_action_bat_txt_type (i, p->parametres.norme));
     gtk_menu_shell_append (GTK_MENU_SHELL (UI_ACT.type_action), w_temp);
-    UI_ACT.items_type_action = g_list_append (UI_ACT.items_type_action,
-                                              w_temp);
+    UI_ACT.items_type_action->push_back (w_temp);
     gtk_widget_show (w_temp);
     g_signal_connect (w_temp,
                       "activate",
@@ -1883,8 +1884,10 @@ _1990_action_free (Projet *p)
   g_object_unref (UI_ACT.liste);
   gtk_list_store_clear (UI_ACT.choix_type_action);
   g_object_unref (UI_ACT.choix_type_action);
-  g_list_free (UI_ACT.items_type_action);
-  UI_ACT.items_type_action = NULL;
+  for_each (UI_ACT.items_type_action->begin (),
+            UI_ACT.items_type_action->end (),
+            gtk_widget_destroy);
+  delete UI_ACT.items_type_action;
 #endif
   
   return TRUE;
