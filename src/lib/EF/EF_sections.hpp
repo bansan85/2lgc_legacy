@@ -73,37 +73,40 @@ gboolean EF_sections_circulaire_modif          (Projet     *p,
                                                 Flottant    diametre)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_personnalisee_verif_forme (GList      *forme,
-                                                gboolean    message)
+gboolean EF_sections_personnalisee_verif_forme (
+           std::list <std::list <EF_Point *> *> *forme,
+           gboolean    message)
                                        __attribute__((__warn_unused_result__));
-Section *EF_sections_personnalisee_ajout       (Projet     *p,
-                                                const char *nom,
-                                                const char *description,
-                                                Flottant    j,
-                                                Flottant    iy,
-                                                Flottant    iz,
-                                                Flottant    vy,
-                                                Flottant    vyp,
-                                                Flottant    vz,
-                                                Flottant    vzp,
-                                                Flottant    s,
-                                                GList      *forme)
+Section *EF_sections_personnalisee_ajout       (
+           Projet     *p,
+           const char *nom,
+           const char *description,
+           Flottant    j,
+           Flottant    iy,
+           Flottant    iz,
+           Flottant    vy,
+           Flottant    vyp,
+           Flottant    vz,
+           Flottant    vzp,
+           Flottant    s,
+           std::list <std::list <EF_Point *> *> *forme)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_personnalisee_modif       (Projet     *p,
-                                                Section    *section,
-                                                const char *nom,
-                                                const char *description,
-                                                Flottant    j,
-                                                Flottant    iy,
-                                                Flottant    iz,
-                                                Flottant    vy,
-                                                Flottant    vyp,
-                                                Flottant    vz,
-                                                Flottant    vzp,
-                                                Flottant    s,
-                                                GList      *forme)
+gboolean EF_sections_personnalisee_modif       (
+           Projet     *p,
+           Section    *section,
+           const char *nom,
+           const char *description,
+           Flottant    j,
+           Flottant    iy,
+           Flottant    iz,
+           Flottant    vy,
+           Flottant    vyp,
+           Flottant    vz,
+           Flottant    vzp,
+           Flottant    s,
+           std::list <std::list <EF_Point *> *> *forme)
                                        __attribute__((__warn_unused_result__));
-void     EF_sections_personnalisee_free_forme1 (GList      *forme);
+void     EF_sections_personnalisee_free_forme1 (std::list<EF_Point*> *forme_e);
 
 Section *EF_sections_cherche_nom               (Projet     *p,
                                                 const char *nom,

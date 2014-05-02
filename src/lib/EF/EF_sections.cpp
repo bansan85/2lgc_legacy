@@ -23,6 +23,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
@@ -805,60 +807,65 @@ EF_sections_circulaire_modif (Projet     *p,
  *     - les segments de droite ne doivent pas se couper entre elles.
  */
 gboolean
-EF_sections_personnalisee_verif_forme (GList *forme,
-                                       gboolean message)
+EF_sections_personnalisee_verif_forme (
+  std::list <std::list <EF_Point *> *> *forme,
+  gboolean message)
 {
-  GList *list_parcours;
+  std::list <std::list <EF_Point *> *>::iterator it;
   
-  // Maintenant, on va vérifier que les droites ne se coupent pas entre elles.
-  list_parcours = forme;
   // Il faut un minimum d'un groupe.
   if (message)
   {
-    INFO (list_parcours,
+    INFO ((forme != NULL) && (!forme->empty ()),
           FALSE,
           (gettext ("La forme de la section est vide.\n")); )
   }
-  else if (list_parcours == NULL)
+  else if ((forme == NULL) || (forme->empty ()))
   {
     return FALSE;
   }
   
-  while (list_parcours != NULL)
+  // Maintenant, on va vérifier que les droites ne se coupent pas entre elles.
+  it = forme->begin ();
+  while (it != forme->end())
   {
-    GList    *list_parcours2;
-    EF_Point *point2 = NULL;
+    std::list <EF_Point *> *forme_e;
+    std::list <EF_Point *>::iterator it2;
+    EF_Point *point2;
     
-    list_parcours2 = list_parcours->data;
+    forme_e = *it;
     
     // Il faut un minimum de trois points par groupe.
     if (message)
     {
-      INFO (g_list_next (g_list_next (list_parcours2)),
+      INFO (forme_e->size () >= 3,
             FALSE,
             (gettext ("Un groupe de points doit avoir au minimum 3 points.\n")); )
     }
-    else if (g_list_next (g_list_next (list_parcours2)) == NULL)
+    else if (forme_e->size () < 3)
     {
       return FALSE;
     }
     
-    point2 = list_parcours2->data;
+    it2 = forme_e->begin ();
+    point2 = *it2;
     
-    while (list_parcours2 != NULL)
+    while (it2 != forme_e->end ())
     {
       double    a, b;
-      GList    *list_parcours3, *list_parcours4;
       EF_Point *point1, *point3 = NULL, *point4 = NULL;
       
+      std::list <std::list <EF_Point *> *>::iterator it_2;
+      std::list <EF_Point *>::iterator              it2_2;
+      
       point1 = point2;
-      if (g_list_next (list_parcours2) != NULL)
+      if (std::next (it2) != forme_e->end ())
       {
-        point2 = g_list_next (list_parcours2)->data;
+        point2 = *std::next (it2);
       }
       else // On vérifie que le premier noeud est compatible avec le premier.
       {
-        point2 = ((GList *) list_parcours->data)->data;
+        point2 = *forme_e->begin ();
       }
       
       // On refuse le cas où point1 == point2
@@ -892,13 +899,13 @@ EF_sections_personnalisee_verif_forme (GList *forme,
       
       // Maintenant, on parcours tous les points suivants afin de vérifier si
       // les segments suivants se coupent avec le segment en cours.
-      list_parcours3 = list_parcours;
+      it_2 = it;
       point4 = point2;
-      list_parcours4 = g_list_next (list_parcours2);
+      it2_2 = std::next (it2);
       
-      while (list_parcours3 != NULL)
+      while (it_2 != forme->end ())
       {
-        while (list_parcours4 != NULL)
+        while (it2_2 != forme_e->end ())
         {
           double a2, b2;
           double xmin1, xmax1;
@@ -907,13 +914,13 @@ EF_sections_personnalisee_verif_forme (GList *forme,
           double ymin2, ymax2;
           
           point3 = point4;
-          if (g_list_next (list_parcours4) == NULL)
+          if (std::next (it2_2) != forme_e->end ())
           {
-            point4 = ((GList *) list_parcours3->data)->data;
+            point4 = *std::next (it2_2);
           }
           else
           {
-            point4 = g_list_next (list_parcours4)->data;
+            point4 = *forme_e->begin ();
           }
           
           // Maintenant, on s'assure qu'il n'y a pas d'intersection
@@ -1155,30 +1162,28 @@ EF_sections_personnalisee_verif_forme (GList *forme,
             }
           }
           
-          list_parcours4 = g_list_next (list_parcours4);
+          ++it2_2;
         }
         
-        list_parcours3 = g_list_next (list_parcours3);
+        ++it_2;
         point3 = NULL;
         point4 = NULL;
-        if (list_parcours3 == NULL)
+        if (it_2 != forme->end ())
         {
-          list_parcours4 = NULL;
-        }
-        else
-        {
-          list_parcours4 = list_parcours3->data;
-          if (list_parcours4 != NULL)
+          std::list <EF_Point *> *forme_tmp;
+          forme_tmp = *it_2;
+          it2_2 = forme_tmp->begin ();
+          if (it2_2 != forme_tmp->end ())
           {
-            point4 = list_parcours4->data;
+            point4 = *it2_2;
           }
         }
       }
       
-      list_parcours2 = g_list_next (list_parcours2);
+      ++it2;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   return TRUE;
@@ -1226,7 +1231,7 @@ EF_sections_personnalisee_ajout (Projet     *p,
                                  Flottant    vz,
                                  Flottant    vzp,
                                  Flottant    s,
-                                 GList      *forme)
+                                 std::list <std::list <EF_Point *> *> *forme)
 {
   SECTION_AJOUT (Section_Personnalisee)
   
@@ -1262,6 +1267,20 @@ EF_sections_personnalisee_ajout (Projet     *p,
          free (section_nouvelle); )
   
   return section_nouvelle;
+}
+
+
+/**
+ * \brief Libère la forme d'une section (liste ET points). Cette fonction doit
+ *        être appelée avec g_list_free_full.
+ *        Pour libérer seulement la liste sans les points, il suffit
+ *        d'appeler g_list_free_full (forme, (GDestroyNotify) g_list_free);
+ * \param forme : la forme à libérer,
+ */
+void EF_sections_personnalisee_free_forme1 (std::list <EF_Point *> *forme_e)
+{
+  for_each (forme_e->begin (), forme_e->end (), free);
+  delete forme_e;
 }
 
 
@@ -1306,7 +1325,7 @@ EF_sections_personnalisee_modif (Projet     *p,
                                  Flottant    vz,
                                  Flottant    vzp,
                                  Flottant    s,
-                                 GList      *forme)
+                                 std::list <std::list <EF_Point *> *> *forme)
 {
   Section_Personnalisee *section_data = section->data;
   
@@ -1316,9 +1335,12 @@ EF_sections_personnalisee_modif (Projet     *p,
         FALSE,
         (gettext ("La section doit être de type personnalisée.\n")); )
   
-  INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
-        FALSE,
-        (gettext ("La forme est incorrecte.\n")); )
+  if ((forme != NULL) && (!forme->empty ()))
+  {
+    INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
+          FALSE,
+          (gettext ("La forme est incorrecte.\n")); )
+  }
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
@@ -1371,10 +1393,13 @@ EF_sections_personnalisee_modif (Projet     *p,
   SECTION_MODIF (vzp, vzp)
   SECTION_MODIF (s, s)
   
-  if (forme != NULL)
+  if ((forme != NULL) && (!forme->empty ()))
   {
-    g_list_free_full (section_data->forme,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+    for_each (section_data->forme->begin (),
+              section_data->forme->end (),
+              (void (*)(std::list <EF_Point *> *))
+                EF_sections_personnalisee_free_forme1);
+    delete section_data->forme;
     
     section_data->forme = forme;
   }
@@ -1388,7 +1413,7 @@ EF_sections_personnalisee_modif (Projet     *p,
       (!isnan (m_g (vz))) ||
       (!isnan (m_g (vzp))) ||
       (!isnan (m_g (s))) ||
-      (forme != NULL))
+      ((forme != NULL) && (!forme->empty ())))
   {
     GList *liste_sections = NULL, *liste_barres_dep;
     
@@ -1412,7 +1437,7 @@ EF_sections_personnalisee_modif (Projet     *p,
     if (liste_barres_dep != NULL)
     {
 #ifdef ENABLE_GTK
-      if (forme != NULL)
+      if ((forme != NULL) && (!forme->empty ()))
       {
         BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep),
              FALSE,
@@ -1446,19 +1471,6 @@ EF_sections_personnalisee_modif (Projet     *p,
 #endif
   
   return TRUE;
-}
-
-
-/**
- * \brief Libère la forme d'une section (liste ET points). Cette fonction doit
- *        être appelée avec g_list_free_full.
- *        Pour libérer seulement la liste sans les points, il suffit
- *        d'appeler g_list_free_full (forme, (GDestroyNotify) g_list_free);
- * \param forme : la forme à libérer,
- */
-void EF_sections_personnalisee_free_forme1 (GList *forme)
-{
-  g_list_free_full (forme, (GDestroyNotify) free);
 }
 
 
@@ -1636,8 +1648,11 @@ EF_sections_free_un (Section *section)
       Section_Personnalisee *section2 = section->data;
       
       free (section2->description);
-      g_list_free_full (section2->forme,
-                       (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+      for_each (section2->forme->begin (),
+                section2->forme->end (),
+                (void (*)(std::list <EF_Point *>*))
+                  EF_sections_personnalisee_free_forme1);
+      delete section2->forme;
       
       break;
     }

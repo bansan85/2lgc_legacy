@@ -1100,36 +1100,43 @@ m3d_barre (void     *donnees_m3d,
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section;
-      GList                 *list_parcours;
       double                 angle;
+      
+      std::list <std::list <EF_Point *> *>::iterator it;
       
       section = (Section_Personnalisee *) barre->section->data;
       tout = new CM3dObject ("");
       
-      list_parcours = section->forme;
-      while (list_parcours != NULL)
+      it = section->forme->begin ();
+
+      while (it != section->forme->end ())
       {
-        GList    *list_parcours2;
+        std::list <EF_Point *>          *forme_e;
+        std::list <EF_Point *>::iterator it2;
         EF_Point *point1 = NULL, *point2 = NULL;
         double    somme_angle = 0.;
         double    angle1 = NAN, angle2 = NAN;
+        // On force à faire un dernier passage après la fin de la liste
+        // dans le but de fermer la forme.
+        bool      last = false;
         
         // On commence par parcourir la liste des points pour savoir si le
         // dessin est réalisé dans le sens horaire ou anti-horaire. Ce point
         // est important car les plans ne sont dessinés que s'ils sont vus de
         // face.
-        list_parcours2 = (GList *) list_parcours->data;
-        while (list_parcours2 != NULL)
+        forme_e = *it;
+        it2 = forme_e->begin ();
+        while ((it2 != forme_e->end ()) || (last))
         {
           if (point2 == NULL)
-            point2 = (EF_Point *) list_parcours2->data;
+            point2 = *it2;
           else
           {
             point1 = point2;
-            if (list_parcours2 != GINT_TO_POINTER (1))
-              point2 = (EF_Point *) list_parcours2->data;
+            if (!last)
+              point2 = *it2;
             else
-              point2 = (EF_Point *) ((GList *) list_parcours->data)->data;
+              point2 = *forme_e->begin ();
             
             BUGCRIT (point2,
                      FALSE,
@@ -1151,33 +1158,35 @@ m3d_barre (void     *donnees_m3d,
             }
           }
           
-          if (list_parcours2 != GINT_TO_POINTER (1))
+          if (!last)
           {
-            list_parcours2 = g_list_next (list_parcours2);
-            // On force à faire un dernier passage après la fin de la liste
-            // dans le but de fermer la forme.
-            if (list_parcours2 == NULL)
-              list_parcours2 = static_cast<GList *> GINT_TO_POINTER (1);
+            ++it2;
+            if (it2 == forme_e->end ())
+              last = true;
           }
           else
-            list_parcours2 = NULL;
+            last = false;
         }
         
-        list_parcours2 = (GList *) list_parcours->data;
-        while (list_parcours2 != NULL)
+        // Puis on dessine
+        point1 = NULL;
+        point2 = NULL;
+        it2 = forme_e->begin ();
+        last = false;
+        while ((it2 != forme_e->end ()) || (last))
         {
           if (point2 == NULL)
-            point2 = (EF_Point *) list_parcours2->data;
+            point2 = *it2;
           else
           {
-            std::vector<CM3dPolygon*>::iterator it;
-            CM3dPlan                            object_tmp;
+            std::vector <CM3dPolygon*>::iterator it;
+            CM3dPlan object_tmp;
             
             point1 = point2;
-            if (list_parcours2 != GINT_TO_POINTER (1))
-              point2 = (EF_Point *) list_parcours2->data;
+            if (!last)
+              point2 = *it2;
             else
-              point2 = (EF_Point *) ((GList *) list_parcours->data)->data;
+              point2 = *forme_e->begin ();
             BUGCRIT (point2,
                      FALSE,
                      (gettext ("Impossible\n"));
@@ -1208,19 +1217,17 @@ m3d_barre (void     *donnees_m3d,
             }
           }
           
-          if (list_parcours2 != GINT_TO_POINTER (1))
+          if (!last)
           {
-            list_parcours2 = g_list_next (list_parcours2);
-            // On force à faire un dernier passage après la fin de la liste
-            // dans le but de fermer la forme.
-            if (list_parcours2 == NULL)
-              list_parcours2 = static_cast <GList *> GINT_TO_POINTER (1);
+            ++it2;
+            if (it2 == forme_e->end ())
+              last = true;
           }
           else
-            list_parcours2 = NULL;
+            last = false;
         }
         
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
       tout->rotations (90., 0., 0.);
       tout->set_name (tmp);

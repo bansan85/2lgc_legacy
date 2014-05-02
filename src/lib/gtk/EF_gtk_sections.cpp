@@ -26,6 +26,8 @@
 #include <math.h>
 #include <inttypes.h>
 
+#include <algorithm>
+
 #include "common_m3d.hpp"
 
 #include "common_projet.hpp"
@@ -718,20 +720,21 @@ EF_gtk_sections_dessin (Section *section,
       Section_Personnalisee *data = section->data;
       
       double aa;
-      GList  *list_parcours;
-      GList  *list_parcours2;
       double xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
       double decalagex, decalagey;
       
+      std::list <std::list <EF_Point *> *>::iterator it;
+      
       // On commence par calculer la largeur et la hauteur de la section.
-      list_parcours = data->forme;
-      while (list_parcours != NULL)
+      it = data->forme->begin ();
+      while (it != data->forme->end ())
       {
-        list_parcours2 = list_parcours->data;
+        std::list <EF_Point *>          *forme_e = *it;
+        std::list <EF_Point *>::iterator it2 = forme_e->begin ();
         
-        while (list_parcours2 != NULL)
+        while (it2 != forme_e->end ())
         {
-          EF_Point *point = list_parcours2->data;
+          EF_Point *point = *it2;
           
           if (isnan (xmin))
           {
@@ -760,10 +763,10 @@ EF_gtk_sections_dessin (Section *section,
             }
           }
           
-          list_parcours2 = g_list_next (list_parcours2);
+          ++it2;
         }
         
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
       
       aa = (xmax - xmin) / (ymax - ymin);
@@ -781,19 +784,20 @@ EF_gtk_sections_dessin (Section *section,
       decalagey = (height - (ymax - ymin) * convert) / 2.;
       
       // On dessine la section.
-      list_parcours = data->forme;
-      while (list_parcours != NULL)
+      it = data->forme->begin ();
+      while (it != data->forme->end ())
       {
-        list_parcours2 = list_parcours->data;
+        std::list <EF_Point *>          *forme_e = *it;
+        std::list <EF_Point *>::iterator it2 = forme_e->begin ();
         
         cairo_set_source_rgba (cr, 0.8, 0.8, 0.8, 1.);
         cairo_new_path (cr);
         
-        while (list_parcours2 != NULL)
+        while (it2 != forme_e->end ())
         {
-          EF_Point *point = list_parcours2->data;
+          EF_Point *point = *it2;
           
-          if (list_parcours2 == list_parcours->data)
+          if (it2 == forme_e->begin ())
           {
             cairo_move_to (cr,
                            decalagex + ((m_g (point->x) - xmin) * convert),
@@ -806,7 +810,7 @@ EF_gtk_sections_dessin (Section *section,
                            decalagey + ((ymax - m_g (point->y)) * convert));
           }
           
-          list_parcours2 = g_list_next (list_parcours2);
+          ++it2;
         }
         cairo_close_path (cr);
         save_path = cairo_copy_path (cr);
@@ -818,7 +822,7 @@ EF_gtk_sections_dessin (Section *section,
         cairo_stroke (cr);
         
         cairo_path_destroy (save_path);
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
       
       break;
@@ -1508,7 +1512,7 @@ EF_gtk_sections_get_section (char    *ligne,
                              double  *vzp,
                              double  *vty,
                              double  *vtz,
-                             GList  **forme)
+                             std::list <std::list <EF_Point *> *> **forme)
 {
   char    *nom_, *ligne_tmp;
   double   g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_;
@@ -1517,8 +1521,10 @@ EF_gtk_sections_get_section (char    *ligne,
   uint8_t  phi_;
   
   uint16_t i;
-  GList   *forme_, *points;
   double   x, y;
+  
+  std::list <std::list <EF_Point *> *> *forme_;
+  std::list <EF_Point *>               *points;
   
   BUGPARAMCRIT (ligne, "%p", ligne, FALSE)
   
@@ -1606,8 +1612,8 @@ EF_gtk_sections_get_section (char    *ligne,
     }
     ligne_tmp++;
   }
-  forme_ = NULL;
-  points = NULL;
+  forme_ = new std::list <std::list <EF_Point *> *> ();
+  points = new std::list <EF_Point *> ();
   
   while (ligne_tmp[0] != 0)
   {
@@ -1615,20 +1621,28 @@ EF_gtk_sections_get_section (char    *ligne,
           FALSE,
           (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
                     ligne);
-            g_list_free_full (points, free);
-            g_list_free_full (
-              forme_,
-              (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
+            for_each (points->begin (),
+                      points->end (),
+                      free);
+            delete points;
+            for_each (forme_->begin (),
+                      forme_->end (),
+                      EF_sections_personnalisee_free_forme1);
+            delete forme_; )
     
     // Nouveau groupe de points
     if ((isnan (x)) && (isnan (y)))
     {
-      // On ajoute pas un groupe de point vide
-      if (points != NULL)
+      // On n'ajoute pas un groupe de point vide
+      if (!points->empty ())
       {
-        forme_ = g_list_append (forme_, points);
+        forme_->push_back (points);
       }
-      points = NULL;
+      else
+      {
+        delete points;
+      }
+      points = new std::list <EF_Point *> ();
     }
     else
     {
@@ -1637,15 +1651,19 @@ EF_gtk_sections_get_section (char    *ligne,
       BUGCRIT (point = malloc (sizeof (EF_Point)),
                FALSE,
                (gettext ("Erreur d'allocation mémoire.\n"));
-                 g_list_free_full (points, free);
-                 g_list_free_full (
-                   forme_,
-                   (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
+                 for_each (points->begin (),
+                           points->end (),
+                           free);
+                 delete points;
+                 for_each (forme_->begin (),
+                           forme_->end (),
+                           EF_sections_personnalisee_free_forme1);
+                 delete forme_; )
       point->x = m_f (x, FLOTTANT_UTILISATEUR);
       point->y = m_f (y, FLOTTANT_UTILISATEUR);
       point->z = m_f (0., FLOTTANT_UTILISATEUR);
       
-      points = g_list_append (points, point);
+      points->push_back (point);
     }
     
     // On passe au groupe de point suivant
@@ -1659,15 +1677,21 @@ EF_gtk_sections_get_section (char    *ligne,
       ligne_tmp++;
     }
   }
-  if (points != NULL)
+  if (!points->empty ())
   {
-    forme_ = g_list_append (forme_, points);
+    forme_->push_back (points);
+  }
+  else
+  {
+    delete points;
   }
   
   if (!EF_sections_personnalisee_verif_forme (forme_, TRUE))
   {
-    g_list_free_full (forme_,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+    for_each (forme_->begin (),
+              forme_->end (),
+              EF_sections_personnalisee_free_forme1);
+    delete forme_;
     
     FAILINFO (FALSE,
               (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
@@ -1675,8 +1699,10 @@ EF_gtk_sections_get_section (char    *ligne,
   }
   else if (forme == NULL)
   {
-    g_list_free_full (forme_,
-                      (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+    for_each (forme_->begin (),
+              forme_->end (),
+              EF_sections_personnalisee_free_forme1);
+    delete forme_;
   }
   else
   {
@@ -1690,9 +1716,10 @@ EF_gtk_sections_get_section (char    *ligne,
                        (long unsigned int) (strchr (ligne, '\t') - ligne + 1)),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               g_list_free_full (
-                 forme_,
-                 (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
+                for_each (forme_->begin (),
+                          forme_->end (),
+                          EF_sections_personnalisee_free_forme1);
+                delete forme_; )
     
     strncpy (nom_, ligne, (size_t) (strchr (ligne, '\t') - ligne));
     nom_[strchr (ligne, '\t') - ligne] = 0;
@@ -1750,8 +1777,9 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
     if (strncmp (ligne, section, strlen (section)) == 0)
     {
       double j, iy, iz, vy, vyp, vz, vzp, s;
-      GList *forme;
       char  *desc;
+      
+      std::list <std::list <EF_Point *> *> *forme;
       
       BUG (EF_gtk_sections_get_section (ligne,
                                         &desc,
@@ -1810,9 +1838,10 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
             free (section);
             free (ligne);
             free (desc);
-            g_list_free_full (
-              forme,
-              (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
+            for_each (forme->begin (),
+                      forme->end (),
+                      EF_sections_personnalisee_free_forme1);
+            delete forme; )
       free (desc);
     }
     free (ligne);
@@ -1994,7 +2023,8 @@ EF_gtk_sections (Projet *p)
     {
       char      *nom_section, *categorie;
       GtkWidget *menu, *categorie_menu = NULL;
-      GList     *forme;
+      
+      std::list <std::list <EF_Point *> *> *forme;
       
       BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
            ,
@@ -2045,9 +2075,10 @@ EF_gtk_sections (Projet *p)
                  fclose (file);
                  free (ligne);
                  free (nom_section);
-                 g_list_free_full (
-                   forme,
-                   (GDestroyNotify) EF_sections_personnalisee_free_forme1); )
+                 for_each (forme->begin (),
+                           forme->end (),
+                           EF_sections_personnalisee_free_forme1);
+                 delete forme; )
       if (strchr (nom_section, ' ') == NULL)
       {
         strcpy (categorie, nom_section);
@@ -2106,8 +2137,10 @@ EF_gtk_sections (Projet *p)
         
         list_categorie = g_list_append (list_categorie, categorie_menu);
       }
-      g_list_free_full (forme,
-                       (GDestroyNotify) EF_sections_personnalisee_free_forme1);
+      for_each (forme->begin (),
+                forme->end (),
+                EF_sections_personnalisee_free_forme1);
+      delete forme;
       
       menu = gtk_menu_item_new_with_label (nom_section);
       gtk_menu_shell_append (GTK_MENU_SHELL (gtk_menu_item_get_submenu (
