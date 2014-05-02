@@ -204,7 +204,7 @@ projet_init (Norme norme)
   UI_REL.builder = NULL;
   UI_RAP.builder = NULL;
   UI_RES.builder = NULL;
-  UI_RES.tableaux = NULL;
+  UI_RES.tableaux = new std::list <Gtk_EF_Resultats_Tableau *> ();
   gtk_css_provider_load_from_data (provider,
      "GtkPaned GtkToolbar {\n"
      "  background-image: -gtk-gradient (linear,"

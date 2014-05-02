@@ -26,27 +26,6 @@
 #include "common_projet.hpp"
 
 
-/**
- * \struct Gtk_EF_Resultats_Tableau
- * \brief La structure de données du tableau d'affichage des résultats.
- *        Un par onglet.
- */
-typedef struct
-{
-  /// Le treeview de la fenêtre résultat.
-  GtkTreeView       *treeview;
-  /// Le model du treeview.
-  GtkListStore      *list_store;
-  
-  /// La première valeur du tableau est le nombre de colonnes à afficher.
-  Colonne_Resultats *col_tab;
-  /// Le filtre des résultats.
-  Filtres            filtre;
-  /// Titre de l'onglet.
-  char              *nom;
-} Gtk_EF_Resultats_Tableau;
-
-
 void EF_gtk_resultats      (Projet *p);
 void EF_gtk_resultats_free (Projet *p);
 
