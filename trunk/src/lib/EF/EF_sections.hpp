@@ -106,7 +106,8 @@ gboolean EF_sections_personnalisee_modif       (
            Flottant    s,
            std::list <std::list <EF_Point *> *> *forme)
                                        __attribute__((__warn_unused_result__));
-void     EF_sections_personnalisee_free_forme1 (std::list<EF_Point*> *forme_e);
+void     EF_sections_personnalisee_free_forme1 (
+           std::list <EF_Point *> *forme_e);
 
 Section *EF_sections_cherche_nom               (Projet     *p,
                                                 const char *nom,
