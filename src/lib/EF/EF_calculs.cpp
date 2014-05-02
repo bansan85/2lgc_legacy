@@ -106,15 +106,17 @@ EF_calculs_free (Projet *p)
   
   if (UI_RES.builder != NULL)
   {
-    list_parcours = UI_RES.tableaux;
+    std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
     
-    while (list_parcours != NULL)
+    it = UI_RES.tableaux->begin ();
+    
+    while (it != UI_RES.tableaux->end ())
     {
-      Gtk_EF_Resultats_Tableau *res = list_parcours->data;
+      Gtk_EF_Resultats_Tableau *res = *it;
       
       gtk_list_store_clear (res->list_store);
       
-      list_parcours = g_list_next (list_parcours);
+      it++;
     }
   }
   if (UI_RAP.builder != NULL)

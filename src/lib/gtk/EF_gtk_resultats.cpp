@@ -2411,7 +2411,7 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  GList  *list_parcours;
+  std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
   uint8_t indice_combo;
   
   BUGPARAMCRIT (p, "%p", p, )
@@ -2429,13 +2429,13 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
     gtk_combo_box_set_model (UI_RES.combobox_ponderations, NULL);
   }
   
-  list_parcours = UI_RES.tableaux;
+  it = UI_RES.tableaux->begin ();
   
-  while (list_parcours != NULL)
+  while (it != UI_RES.tableaux->end ())
   {
-    BUG (EF_gtk_resultats_remplit_page (list_parcours->data, p), )
+    BUG (EF_gtk_resultats_remplit_page (*it, p), )
     
-    list_parcours = g_list_next (list_parcours);
+    it++;
   }
   
   if (indice_combo == 1)
@@ -2444,6 +2444,7 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
     GtkTreeIter   Iter;
     GList        *comb;
     uint16_t      i;
+    GList        *list_parcours;
     
     switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
     {
@@ -2562,7 +2563,7 @@ void
 EF_gtk_resultats_ponderations_change (GtkWidget *widget,
                                       Projet    *p)
 {
-  GList *list_parcours;
+  std::list<Gtk_EF_Resultats_Tableau*>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_RES.builder,
@@ -2570,13 +2571,13 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Résultats"); )
   
-  list_parcours = UI_RES.tableaux;
+  it = UI_RES.tableaux->begin ();
   
-  while (list_parcours != NULL)
+  while (it != UI_RES.tableaux->end ())
   {
-    BUG (EF_gtk_resultats_remplit_page (list_parcours->data, p), )
+    BUG (EF_gtk_resultats_remplit_page (*it, p), )
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   return;
@@ -2688,7 +2689,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext("Réactions d'appuis (repère global)")) == 0)
@@ -2717,7 +2718,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déplacements (repère global)")) == 0)
@@ -2746,7 +2747,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Barres")) == 0)
@@ -2770,7 +2771,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Efforts dans les barres (repère local)")) == 0)
@@ -2812,7 +2813,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déformations des barres (repère local)")) == 0)
@@ -2854,7 +2855,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux = g_list_append (UI_RES.tableaux, res);
+    UI_RES.tableaux->push_back (res);
   }
   else
   {
@@ -2879,7 +2880,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
 void
 EF_gtk_resultats (Projet *p)
 {
-  GList *list_parcours;
+  std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   
@@ -2912,12 +2913,12 @@ EF_gtk_resultats (Projet *p)
   
   gtk_combo_box_set_active (UI_RES.combobox, 0);
   
-  list_parcours = UI_RES.tableaux;
-  while (list_parcours != NULL)
+  it = UI_RES.tableaux->begin ();
+  while (it != UI_RES.tableaux->end ())
   {
-    BUG (EF_gtk_resultats_add_page (list_parcours->data, p), )
+    BUG (EF_gtk_resultats_add_page (*it, p), )
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_RES.window),
@@ -2938,19 +2939,22 @@ EF_gtk_resultats (Projet *p)
 void
 EF_gtk_resultats_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, )
+  std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
   
-  while (UI_RES.tableaux != NULL)
+  it = UI_RES.tableaux->begin ();
+  
+  while (it != UI_RES.tableaux->end ())
   {
-    Gtk_EF_Resultats_Tableau *res = UI_RES.tableaux->data;
+    Gtk_EF_Resultats_Tableau *res = *it;
     
     g_object_unref (res->list_store);
     free (res->col_tab);
     free (res->nom);
     free (res);
     
-    UI_RES.tableaux = g_list_delete_link (UI_RES.tableaux, UI_RES.tableaux);
+    ++it;
   }
+  delete UI_RES.tableaux;
   
   return;
 }
