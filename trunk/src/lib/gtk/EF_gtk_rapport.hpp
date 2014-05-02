@@ -25,8 +25,8 @@
 
 #include "common_projet.hpp"
 
-void EF_gtk_rapport (Projet *p,
-                     GList  *rapport);
+void EF_gtk_rapport (Projet                     *p,
+                     std::list <Analyse_Comm *> *rapport);
 
 #endif
 
