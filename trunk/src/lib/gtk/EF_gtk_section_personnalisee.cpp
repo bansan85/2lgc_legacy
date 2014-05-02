@@ -25,6 +25,9 @@
 #include <math.h>
 #include <string.h>
 
+#include <algorithm>
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -111,19 +114,20 @@ GTK_WINDOW_CLOSE (ef, section_personnalisee);
  *     - en cas d'erreur d'allocation mémoire.
  */
 gboolean
-EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
-                                               double   *j,
-                                               double   *iy,
-                                               double   *iz,
-                                               double   *vy,
-                                               double   *vyp,
-                                               double   *vz,
-                                               double   *vzp,
-                                               double   *s,
-                                               GList   **forme,
-                                               gboolean *ok_forme,
-                                               gchar   **nom,
-                                               gchar   **description)
+EF_gtk_section_personnalisee_recupere_donnees (
+  Projet   *p,
+  double   *j,
+  double   *iy,
+  double   *iz,
+  double   *vy,
+  double   *vyp,
+  double   *vz,
+  double   *vzp,
+  double   *s,
+  std::list <std::list <EF_Point *> *> **forme,
+  gboolean *ok_forme,
+  gchar   **nom,
+  gchar   **description)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -235,7 +239,7 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
     ok = FALSE;
   }
   
-  *forme = NULL;
+  *forme = new std::list <std::list <EF_Point *> *> ();
   if (!gtk_tree_model_get_iter_first (UI_SEC_PE.model, &iter))
   {
     *ok_forme = FALSE;
@@ -249,7 +253,8 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
       
       if (gtk_tree_model_iter_children (UI_SEC_PE.model, &iter2, &iter))
       {
-        GList    *liste_noeuds = NULL;
+        std::list <EF_Point *> *liste_noeuds = new std::list <EF_Point *> ();
+        
         EF_Point *point;
         
         gtk_tree_model_get (UI_SEC_PE.model, &iter2, 0, &point, -1);
@@ -257,14 +262,18 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
         // premier.
         while (gtk_tree_model_iter_next (UI_SEC_PE.model, &iter2))
         {
-          liste_noeuds = g_list_append (liste_noeuds, point);
+          liste_noeuds->push_back (point);
           
           gtk_tree_model_get (UI_SEC_PE.model, &iter2, 0, &point, -1);
         }
         
-        if (liste_noeuds != NULL)
+        if (!liste_noeuds->empty ())
         {
-          *forme = g_list_append (*forme, liste_noeuds);
+          (*forme)->push_back (liste_noeuds);
+        }
+        else
+        {
+          delete liste_noeuds;
         }
       }
       
@@ -325,7 +334,6 @@ EF_gtk_section_personnalisee_recupere_donnees (Projet   *p,
     *nom = NULL;
     free (*description);
     *description = NULL;
-    g_list_free_full (*forme, (GDestroyNotify) g_list_free);
   }
   
   return ok;
@@ -349,12 +357,13 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
 {
   double                j, iy, iz, vy, vyp, vz, vzp, s;
   gboolean              ok_forme;
-  GList                *forme = NULL;
   char                 *nom = NULL, *description = NULL;
   Section               section;
   Section_Personnalisee data;
   GdkPixbuf            *pixbuf;
   GtkCssProvider       *cssprovider = gtk_css_provider_new();
+  
+  std::list <std::list <EF_Point *> *> *forme;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_PE.builder,
@@ -418,7 +427,10 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   
   BUG (pixbuf = EF_gtk_sections_dessin (&section, 32, 32),
        ,
-       g_list_free_full (forme, (GDestroyNotify) g_list_free); )
+       for_each (forme->begin (),
+                 forme->end (),
+                 std::default_delete <std::list <EF_Point *> > ());
+       delete forme; )
   
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_builder_get_object (
                    UI_SEC_PE.builder, "EF_section_personnalisee_image_forme")),
@@ -426,7 +438,10 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   
   g_object_unref (pixbuf);
   
-  g_list_free_full (forme, (GDestroyNotify) g_list_free);
+  for_each (forme->begin (),
+            forme->end (),
+            std::default_delete <std::list <EF_Point *> > ());
+  delete forme;
   
   return;
 }
@@ -447,8 +462,9 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
 {
   double    j, iy, iz, vy, vyp, vz, vzp, s;
   gboolean  ok_forme;
-  GList     *forme = NULL;
   gchar     *texte = NULL, *description = NULL;
+  
+  std::list <std::list <EF_Point *> *> *forme;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_PE.builder,
@@ -470,6 +486,10 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
                                                       &texte,
                                                       &description))
   {
+    for_each (forme->begin (),
+              forme->end (),
+              std::default_delete <std::list <EF_Point *> > ());
+    delete forme;
     return;
   }
   
@@ -488,7 +508,10 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
       ,
       free (texte);
         free (description);
-        g_list_free_full (forme, (GDestroyNotify) g_list_free); )
+        for_each (forme->begin (),
+                  forme->end (),
+                  std::default_delete <std::list <EF_Point *> > ());
+        delete forme; )
   
   free (texte);
   free (description);
@@ -515,8 +538,9 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
 {
   double    j, iy, iz, vy, vyp, vz, vzp, s;
   gboolean  ok_forme;
-  GList    *forme;
   gchar    *texte, *description;
+  
+  std::list <std::list <EF_Point *> *> *forme;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_PE.builder,
@@ -538,6 +562,10 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
                                                       &texte,
                                                       &description))
   {
+    for_each (forme->begin (),
+              forme->end (),
+              std::default_delete <std::list <EF_Point *> > ());
+    delete forme;
     return;
   }
   
@@ -556,7 +584,11 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
                                         forme),
       ,
       free (texte);
-        free (description); )
+        free (description);
+        for_each (forme->begin (),
+                  forme->end (),
+                  std::default_delete <std::list <EF_Point *> > ());
+        delete forme; )
   
   free (texte);
   free (description);
@@ -1189,7 +1221,8 @@ EF_gtk_section_personnalisee (Projet  *p,
   {
     gchar                  tmp[30];
     Section_Personnalisee *data;
-    GList                 *list_parcours;
+    
+    std::list <std::list <EF_Point *> *>::iterator it;
     
     gtk_window_set_title (GTK_WINDOW (UI_SEC_PE.window),
                           gettext ("Modification d'une section personnalisée"));
@@ -1250,12 +1283,14 @@ EF_gtk_section_personnalisee (Projet  *p,
                               tmp,
                               -1);
     
-    list_parcours = data->forme;
-    while (list_parcours != NULL)
+    it = data->forme->begin ();
+    while (it != data->forme->end ())
     {
-      GList      *list_parcours2 = list_parcours->data;
       GtkTreeIter iter, iter_last;
       EF_Point   *point_bis;
+      
+      std::list <EF_Point *> *forme_e = *it;
+      std::list <EF_Point *>::iterator   it2 = forme_e->begin ();
       
       gtk_tree_store_append (GTK_TREE_STORE (UI_SEC_PE.model), &iter, NULL);
       gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
@@ -1264,7 +1299,7 @@ EF_gtk_section_personnalisee (Projet  *p,
                           -1);
       
       // On ajoute le dernier point de la forme qui est le même que le premier.
-      if (list_parcours2 != NULL)
+      if (it2 != forme_e->end ())
       {
         gtk_tree_store_append (GTK_TREE_STORE (UI_SEC_PE.model),
                                &iter_last,
@@ -1272,14 +1307,14 @@ EF_gtk_section_personnalisee (Projet  *p,
         BUGCRIT (point_bis = malloc (sizeof (EF_Point)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n")); )
-        memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
+        memcpy (point_bis, *it2, sizeof (EF_Point));
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
                             &iter_last,
                             0, point_bis,
                             -1);
       }
       
-      while (list_parcours2 != NULL)
+      while (it2 != forme_e->end ())
       {
         GtkTreeIter iter2;
         
@@ -1287,23 +1322,23 @@ EF_gtk_section_personnalisee (Projet  *p,
                                       &iter2,
                                       &iter,
                                       &iter_last);
-        // On forme le dernier point à être le même que le premier.
-        if (list_parcours2 != list_parcours->data)
+        // On force le dernier point à être le même que le premier.
+        if (it2 != forme_e->begin ())
         {
           BUGCRIT (point_bis = malloc (sizeof (EF_Point)),
                    FALSE,
                    (gettext ("Erreur d'allocation mémoire.\n")); )
-          memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
+          memcpy (point_bis, *it2, sizeof (EF_Point));
         }
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
                             &iter2,
                             0, point_bis,
                             -1);
         
-        list_parcours2 = g_list_next (list_parcours2);
+        it2++;
       }
       
-      list_parcours = g_list_next (list_parcours);
+      it++;
     }
     
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (

@@ -25,6 +25,8 @@
 #include <stdint.h>
 #include <glib.h>
 
+#include <list>
+
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #endif
@@ -590,7 +592,7 @@ typedef struct
    * une liste de points. Cette forme est automatiquement refermée. Il n'est
    * pas nécessaire que le premier point soit égal au dernier.
    */
-  GList   *forme;
+   std::list <std::list <EF_Point *> *> *forme;
 } Section_Personnalisee;
 
 
