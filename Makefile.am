@@ -16,7 +16,7 @@ endif
 endif
 
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	+= -Og -g -ggdb -fno-omit-frame-pointer -pipe -gdwarf-2
+CUSTOM_CXXFLAGS	+= -Og -g3 -ggdb3 -fno-omit-frame-pointer -pipe
 else
 CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
@@ -31,7 +31,7 @@ else
 if PLATFORM_WIN64
 CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
 else
-CUSTOM_CXXFLAGS += -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" #-fsanitize=address
+CUSTOM_CXXFLAGS += -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" -fsanitize=address
 endif
 endif
 

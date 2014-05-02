@@ -1397,8 +1397,7 @@ EF_sections_personnalisee_modif (Projet     *p,
   {
     for_each (section_data->forme->begin (),
               section_data->forme->end (),
-              (void (*)(std::list <EF_Point *> *))
-                EF_sections_personnalisee_free_forme1);
+              EF_sections_personnalisee_free_forme1);
     delete section_data->forme;
     
     section_data->forme = forme;
@@ -1650,8 +1649,7 @@ EF_sections_free_un (Section *section)
       free (section2->description);
       for_each (section2->forme->begin (),
                 section2->forme->end (),
-                (void (*)(std::list <EF_Point *>*))
-                  EF_sections_personnalisee_free_forme1);
+                EF_sections_personnalisee_free_forme1);
       delete section2->forme;
       
       break;
