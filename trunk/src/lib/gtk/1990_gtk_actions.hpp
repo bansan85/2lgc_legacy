@@ -25,7 +25,7 @@
 
 #include "common_projet.hpp"
 
-void _1990_gtk_nouvelle_action                         (GtkMenuItem *menuitem,
+void _1990_gtk_nouvelle_action                         (GtkWidget   *menuitem,
                                                         Projet      *p);
 void _1990_gtk_nouvelle_charge_nodale                  (GtkMenuItem *menuitem,
                                                         Projet      *p);

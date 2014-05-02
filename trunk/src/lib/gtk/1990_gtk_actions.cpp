@@ -553,11 +553,12 @@ _1990_gtk_tree_view_actions_psi_edited (GtkCellRendererText *cell,
  *     - type d'action inconnu.
  */
 void
-_1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
-                           Projet      *p)
+_1990_gtk_nouvelle_action (GtkWidget *menuitem,
+                           Projet    *p)
 {
   uint8_t type = 0;
-  GList  *list_parcours;
+  
+  std::list <GtkWidget *>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_ACT.builder,
@@ -565,12 +566,12 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Actions"); )
   
-  list_parcours = UI_ACT.items_type_action;
+  it = UI_ACT.items_type_action->begin ();
   
-  while (list_parcours != NULL)
+  while (it != UI_ACT.items_type_action->end ())
   {
     if ((GTK_IS_MENU_ITEM (menuitem)) &&
-        ((GtkMenuItem *) list_parcours->data == menuitem))
+        (*it == menuitem))
     {
       char        *tmp;
       Action      *action;
@@ -600,7 +601,7 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
       return;
     }
     type++;
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   FAILCRIT ( ,

@@ -685,7 +685,7 @@ typedef struct
    * Est uniquement utilisé pour trouver quel menu a été cliqué parmi ceux de
    * type_action.
    */
-  GList            *items_type_action;
+  std::list <GtkWidget *> *items_type_action;
   
   /// Le composant .
   GtkTreeStore     *tree_store_charges;
