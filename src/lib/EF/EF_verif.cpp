@@ -173,9 +173,9 @@ EF_verif_bloc (GList  *noeuds,
  *     - erreur d'allocation mémoire.
  */
 gboolean
-EF_verif_EF (Projet   *p,
-             GList   **rapport,
-             uint16_t *erreur)
+EF_verif_EF (Projet                      *p,
+             std::list <Analyse_Comm *> **rapport,
+             uint16_t                    *erreur)
 {
   Analyse_Comm *ligne;
   GList        *list_parcours;
@@ -185,7 +185,7 @@ EF_verif_EF (Projet   *p,
   BUGPARAM (erreur, "%p", erreur, FALSE)
   
   *erreur = 0;
-  *rapport = NULL;
+  *rapport = new std::list <Analyse_Comm *> ();
   
   // On vérifie si la structure possède au moins une barre (et donc deux
   // noeuds).
@@ -245,7 +245,7 @@ EF_verif_EF (Projet   *p,
       free (tmp);
     }
   }
-  *rapport = g_list_append (*rapport, ligne);
+  (*rapport)->push_back (ligne);
   
   // On vérifie si la structure est dans un seul bloc.
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
@@ -418,7 +418,7 @@ EF_verif_EF (Projet   *p,
       ligne->commentaire = NULL;
     }
   }
-  *rapport = g_list_append (*rapport, ligne);
+  (*rapport)->push_back (ligne);
   
   // On vérifie si la structure est bien bloquée en ux, uy et uz.
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
@@ -673,7 +673,7 @@ EF_verif_EF (Projet   *p,
       }
     }
   }
-  *rapport = g_list_append(*rapport, ligne);
+  (*rapport)->push_back (ligne);
   
   // Vérification si deux noeuds ont les mêmes coordonnées
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
@@ -761,7 +761,7 @@ EF_verif_EF (Projet   *p,
     
     list_parcours = g_list_next (list_parcours);
   }
-  *rapport = g_list_append (*rapport, ligne);
+  (*rapport)->push_back (ligne);
   
   // Vérification des barres
   BUGCRIT (ligne = malloc (sizeof (Analyse_Comm)),
@@ -822,7 +822,7 @@ EF_verif_EF (Projet   *p,
     
     list_parcours = g_list_next (list_parcours);
   }
-  *rapport = g_list_append (*rapport, ligne);
+  (*rapport)->push_back (ligne);
   
   return TRUE;
 }
@@ -834,22 +834,27 @@ EF_verif_EF (Projet   *p,
  * \return Rien.
  */
 void
-EF_verif_rapport_free (GList *rapport)
+EF_verif_rapport_free (std::list <Analyse_Comm *> *rapport)
 {
-  GList *list_parcours = rapport;
+  std::list <Analyse_Comm *>::iterator it;
   
-  while (list_parcours != NULL)
+  if (rapport == NULL)
+    return;
+  
+  it = rapport->begin ();
+  
+  while (it != rapport->end ())
   {
-    Analyse_Comm *ligne = list_parcours->data;
+    Analyse_Comm *ligne = *it;
     
     free (ligne->analyse);
     free (ligne->commentaire);
     free (ligne);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
-  g_list_free (rapport);
+  delete rapport;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

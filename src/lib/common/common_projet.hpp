@@ -657,6 +657,25 @@ typedef struct
 } Charge;
 
 
+/**
+ * \struct Analyse_Comm
+ * \brief Un rapport est constitué de lignes d'analyse.
+ */
+typedef struct
+{
+  /// Contient la description de l'analyse
+  char   *analyse;
+  /// Le résultat de l'analyse.
+  /** - 0 : tout va bien.
+   *  - 1 : attention mais problème non critique.
+   *  - 2 : erreur critique.
+   */
+  uint8_t resultat;
+  /// Contient le commentaire de l'analyse en cas d'erreur ou d'avertissement.
+  char   *commentaire;
+} Analyse_Comm;
+
+
 #ifdef ENABLE_GTK
 /**
  * \struct Gtk_1990_Actions
@@ -1123,7 +1142,7 @@ typedef struct
   /// Le composant EF_rapport_treestore.
   GtkListStore *liste;
   /// Le rapport à afficher défini par la fonction EF_gtk_rapport.
-  GList        *rapport;
+  std::list <Analyse_Comm *> *rapport;
 } Gtk_EF_Rapport;
 
 
@@ -1806,25 +1825,6 @@ typedef struct
   GtkListStore *list_el_desc;
 #endif
 } CombinaisonsEL;
-
-
-/**
- * \struct Analyse_Comm
- * \brief Un rapport est constitué de lignes d'analyse.
- */
-typedef struct
-{
-  /// Contient la description de l'analyse
-  char   *analyse;
-  /// Le résultat de l'analyse.
-  /** - 0 : tout va bien.
-   *  - 1 : attention mais problème non critique.
-   *  - 2 : erreur critique.
-   */
-  uint8_t resultat;
-  /// Contient le commentaire de l'analyse en cas d'erreur ou d'avertissement.
-  char   *commentaire;
-} Analyse_Comm;
 
 
 /**

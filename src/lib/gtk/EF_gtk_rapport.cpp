@@ -51,10 +51,10 @@ GTK_WINDOW_KEY_PRESS (ef, rapport);
  *     - interface graphique impossible à générer.
  */
 void
-EF_gtk_rapport (Projet *p,
-                GList  *rapport)
+EF_gtk_rapport (Projet                     *p,
+                std::list <Analyse_Comm *> *rapport)
 {
-  GList *list_parcours;
+  std::list <Analyse_Comm *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   
@@ -81,10 +81,10 @@ EF_gtk_rapport (Projet *p,
   }
   UI_RAP.rapport = rapport;
   
-  list_parcours = rapport;
-  while (list_parcours != NULL)
+  it = rapport->begin ();
+  while (it != rapport->end ())
   {
-    Analyse_Comm *analyse = list_parcours->data;
+    Analyse_Comm *analyse = *it;
     GtkTreeIter   Iter;
     GdkPixbuf    *pixbuf;
     
@@ -136,7 +136,7 @@ EF_gtk_rapport (Projet *p,
       g_object_unref (pixbuf);
     }
 
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_RAP.window),

@@ -49,7 +49,8 @@ void
 EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
                          Projet      *p)
 {
-  GList   *rapport;
+  std::list <Analyse_Comm *> *rapport;
+  
   uint16_t erreur;
   GList   *list_parcours;
   
