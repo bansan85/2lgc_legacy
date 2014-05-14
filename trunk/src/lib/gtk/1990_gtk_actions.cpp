@@ -24,6 +24,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
@@ -239,7 +241,10 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
     Charge       *charge_source;
     GtkTreeIter   iter_action_dest, iter_charge_source, iter_action_source;
     GtkTreeModel *model_charge_source, *model_action_source;
-    GList        *list, *list_fixe, *list_parcours;
+    GList        *list, *list_parcours;
+    
+    std::list <GtkTreeRowReference *> list_fixe;
+    std::list <GtkTreeRowReference *>::iterator it;
     
     // On récupère l'action de destination
     gtk_tree_model_get_iter (list_store, &iter_action_dest, path);
@@ -273,29 +278,22 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
     // lorsqu'on supprime les lignes dues au déplacement des actions en cours
     // de route.
     list_parcours = g_list_last (list);
-    list_fixe = NULL;
     for ( ;
          list_parcours != NULL;
          list_parcours = g_list_previous (list_parcours))
     {
-      list_fixe = g_list_append (list_fixe,
-                                 gtk_tree_row_reference_new (
-                                                           model_charge_source,
+      list_fixe.push_back (gtk_tree_row_reference_new (model_charge_source,
                                          (GtkTreePath *) list_parcours->data));
     }
-    g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
-    g_list_free (list);
+    g_list_free_full (list, (GFunc) gtk_tree_path_free);
     
     // On déplace les charges, charge par charge vers leur nouvelle action;
-    list_parcours = g_list_last (list_fixe);
-    for ( ;
-         list_parcours != NULL;
-         list_parcours = g_list_previous (list_parcours))
+    it = list_fixe.begin ();
+    while (it != list_fixe.end ())
     {
       if (gtk_tree_model_get_iter (model_charge_source,
                                    &iter_charge_source,
-                                   gtk_tree_row_reference_get_path (
-                                  (GtkTreeRowReference *)list_parcours->data)))
+                                   gtk_tree_row_reference_get_path (*it)))
       {
         gtk_tree_model_get (model_charge_source,
                             &iter_charge_source,
@@ -303,11 +301,16 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
                             &charge_source,
                             -1);
         BUG (EF_charge_deplace (p, action_source, charge_source, action_dest),
-             FALSE)
+             FALSE,
+             std::for_each (list_fixe.begin (),
+                            list_fixe.end (),
+                            gtk_tree_row_reference_free);)
       }
+      ++it;
     }
-    g_list_foreach (list_fixe, (GFunc) gtk_tree_row_reference_free, NULL);
-    g_list_free (list_fixe);
+    std::for_each (list_fixe.begin (),
+                   list_fixe.end (),
+                   gtk_tree_row_reference_free);
   }
   
   return FALSE;
@@ -917,7 +920,10 @@ _1990_gtk_menu_suppr_charge_clicked (GtkWidget *toolbutton,
   GtkTreeModel *model;
   Action       *action;
   Charge       *charge;
-  GList        *list, *list_fixe, *list_parcours;
+  GList        *list, *list_parcours;
+  
+  std::list <GtkTreeRowReference *> list_fixe;
+  std::list <GtkTreeRowReference *>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_ACT.builder,
@@ -943,37 +949,37 @@ _1990_gtk_menu_suppr_charge_clicked (GtkWidget *toolbutton,
   // lorsqu'on supprime les lignes dues au déplacement des actions en cours de
   // route.
   list_parcours = g_list_last (list);
-  list_fixe = NULL;
   for ( ;
        list_parcours != NULL;
        list_parcours = g_list_previous (list_parcours))
   {
-    list_fixe = g_list_append (list_fixe,
-                               gtk_tree_row_reference_new (model,
-                                           (GtkTreePath *) list_parcours->data)
-                              );
+    list_fixe.push_back (gtk_tree_row_reference_new (model,
+                                         (GtkTreePath *) list_parcours->data));
   }
   g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
   
   // On supprime les charges sélectionnées. Pas besoin de remettre à jour le
   // tree-view, c'est inclus dans EF_charge_supprime
-  list_parcours = g_list_first (list_fixe);
-  for ( ; list_parcours != NULL; list_parcours = g_list_next (list_parcours))
+  it = list_fixe.begin ();
+  while (it != list_fixe.end ())
   {
     if (gtk_tree_model_get_iter (model,
                                  &iter,
-                                 gtk_tree_row_reference_get_path(
-                                  (GtkTreeRowReference *) list_parcours->data))
+                                 gtk_tree_row_reference_get_path (*it))
        )
     {
       gtk_tree_model_get (model, &iter, 0, &charge, -1);
       BUG (EF_charge_supprime (p, action, charge),
            ,
-           g_list_free_full (list_fixe,
-                             (GDestroyNotify) gtk_tree_row_reference_free); )
+           std::for_each (list_fixe.begin (),
+                          list_fixe.end (),
+                          gtk_tree_row_reference_free); )
     }
+    ++it;
   }
-  g_list_free_full (list_fixe, (GDestroyNotify) gtk_tree_row_reference_free);
+  std::for_each (list_fixe.begin (),
+                 list_fixe.end (),
+                 gtk_tree_row_reference_free);
   
   return;
 }

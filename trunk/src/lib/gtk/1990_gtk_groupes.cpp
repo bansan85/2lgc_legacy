@@ -294,13 +294,13 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
       gtk_tree_path_free (path);
     }
     
-    if ((groupe->elements != NULL) && (dispos != NULL))
+    if ((!groupe->elements.empty ()) && (dispos != NULL))
     {
-      GList *list_parcours2 = groupe->elements;
+      std::list <void *>::iterator it3 = groupe->elements.begin ();
       
       do
       {
-        Groupe *groupe2 = list_parcours2->data;
+        Groupe *groupe2 = *it3;
         
         // On signale que l'élément a déjà été inséré.
         if (niveau == 0)
@@ -326,9 +326,9 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
                             0, groupe2,
                             -1);
         
-        list_parcours2 = g_list_next (list_parcours2);
+        ++it3;
       }
-      while (list_parcours2 != NULL);
+      while (it3 != groupe->elements.end ());
     }
     
     // Si la dernière fois que la ligne était affiché, elle était 'expand', on
@@ -1553,8 +1553,7 @@ _1990_gtk_tree_select_changed (GtkTreeSelection *treeselection,
   }
   else
   {
-    GList *list_orig;
-    GList *list;
+    GList *list_orig, *list;
     
     gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_suppr), TRUE);
     gtk_widget_set_sensitive (GTK_WIDGET (UI_GRO.item_groupe_and), TRUE);

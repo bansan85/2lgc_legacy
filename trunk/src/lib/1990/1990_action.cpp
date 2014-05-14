@@ -1584,7 +1584,6 @@ gboolean
 _1990_action_free_1 (Projet *p,
                      Action *action_free)
 {
-  std::list <Niveau_Groupe *>::iterator it;
   std::list <Charge *>::iterator it2;
   
 #ifdef ENABLE_GTK
@@ -1677,31 +1676,32 @@ _1990_action_free_1 (Projet *p,
 #endif
                                                                      
   // On enlève l'action dans la liste des groupes de niveau 0.
-  it = p->niveaux_groupes.begin ();
-  while (it != p->niveaux_groupes.end ())
+  if (!p->niveaux_groupes.empty ())
   {
-    Niveau_Groupe *niveau_groupe = *it;
+    Niveau_Groupe *niveau_groupe = *p->niveaux_groupes.begin ();
     std::list <Groupe *>::iterator it3 = niveau_groupe->groupes.begin ();
     
     while (it3 != niveau_groupe->groupes.end ())
     {
       Groupe *groupe = *it3;
-      GList  *list_elements = groupe->elements;
+      std::list <void *>::iterator it = groupe->elements.begin ();
       
-      if (list_elements->data == action_free)
+      while (it != groupe->elements.end ())
       {
-        BUG (_1990_groupe_retire_element (p,
-                                          niveau_groupe,
-                                          groupe,
-                                          list_elements->data),
-             FALSE)
-        break;
+        Action *act_it = static_cast <Action *> (*it);
+        if (act_it == action_free)
+        {
+          BUG (_1990_groupe_retire_element (p,
+                                            niveau_groupe,
+                                            groupe,
+                                            act_it),
+               FALSE)
+          break;
+        }
       }
       
       ++it3;
     }
-    
-    ++it;
   }
   
   // Il faut aussi parcourir le treeview des éléments inutilisés pour l'enlever

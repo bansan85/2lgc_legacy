@@ -1811,7 +1811,7 @@ typedef struct
   /// Le type de combinaisons des éléments.
   Type_Groupe_Combinaison type_combinaison;
   /// Contient des Action si le groupe est au niveau 0, des Groupe sinon.
-  GList                  *elements;
+  std::list <void *> elements;
   /// Combinaisons temporaires.
   /**
    * Ces combinaisons sont utilisées pour générer les groupes du niveau
