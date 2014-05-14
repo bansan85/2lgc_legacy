@@ -135,7 +135,6 @@ _1990_groupe_ajout_groupe (Projet                 *p,
   
   groupe_nouveau->tmp_combinaison.clear ();
   
-  groupe_nouveau->elements = NULL;
   niveau_groupe->groupes.push_back (groupe_nouveau);
   
 #ifdef ENABLE_GTK
@@ -211,30 +210,26 @@ _1990_groupe_ajout_element (Projet        *p,
   BUGPARAM (element_add, "%p", element_add, FALSE)
   
   // On ajoute le nouvel élément au groupe.
-  if (groupe->elements == NULL)
+  if (!groupe->elements.empty ())
   {
-    groupe->elements = g_list_append (groupe->elements, element_add);
-  }
-  else
-  {
-    GList *list_parcours;
+    std::list <void *>::iterator it;
     
-    list_parcours = groupe->elements;
+    it = groupe->elements.begin ();
     do
     {
-      if (list_parcours->data == element_add)
+      if (*it == element_add)
       {
         printf (gettext ("L'élément est déjà présent dans le groupe.\n"));
         
         return FALSE;
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
-    while (list_parcours != NULL);
-    
-    groupe->elements = g_list_append (groupe->elements, element_add);
+    while (it != groupe->elements.end ());
   }
+  
+  groupe->elements.push_back (element_add);
   
   #ifdef ENABLE_GTK
   if ((UI_GRO.builder != NULL) &&
@@ -427,7 +422,7 @@ _1990_groupe_affiche_tout (Projet *p)
     while (it2 != niveau->groupes.end ())
     {
       Groupe *groupe = *it2;
-      GList  *list_parcours3 = groupe->elements;
+      std::list <void *>::iterator it5 = groupe->elements.begin ();
       
       std::list <std::list <Combinaison *> *>::iterator it3;
       
@@ -467,22 +462,22 @@ _1990_groupe_affiche_tout (Projet *p)
                 nniveau - 1);
       }
       
-      while (list_parcours3 != NULL)
+      while (it5 != groupe->elements.end ())
       {
         if (p->niveaux_groupes.begin () == it)
         {
-          Action *action = (Action *) list_parcours3->data;
+          Action *action = static_cast <Action *> (*it5);
           
           printf("'%s' ", _1990_action_nom_renvoie (action));
         }
         else
         {
-          Groupe *groupe_n_1 = (Groupe *) list_parcours3->data;
+          Groupe *groupe_n_1 = static_cast <Groupe *> (*it5);
           
           printf("'%s' ", groupe_n_1->nom);
         }
         
-        list_parcours3 = g_list_next (list_parcours3);
+        ++it5;
       }
       printf ("\n");
       printf (gettext ("\t\tCombinaisons :\n"));
@@ -587,7 +582,7 @@ _1990_groupe_retire_element (Projet        *p,
   }
 #endif
   
-  groupe->elements = g_list_remove (groupe->elements, element);
+  groupe->elements.remove (element);
   
   return TRUE;
 }
@@ -629,15 +624,12 @@ _1990_groupe_free_niveau (Projet        *p,
     // les niveaux supérieurs vont également être supprimés.
     while (it2 != niveau_groupe->groupes.end ())
     {
-      Groupe *groupe = *niveau_groupe->groupes.begin ();
+      Groupe *groupe = *it2;
       
       free (groupe->nom);
       
       // On libère tous les éléments contenus dans le groupe
-      if (groupe->elements != NULL)
-      {
-        g_list_free (groupe->elements);
-      }
+      groupe->elements.clear ();
       
       // On libère toutes les combinaisons temporaires
       for_each (groupe->tmp_combinaison.begin (),
@@ -746,7 +738,7 @@ _1990_groupe_free_groupe (Projet        *p,
                                    p->niveaux_groupes.end (),
                                    niveau_groupe))))
   {
-    GList       *list_parcours;
+    std::list <void *>::iterator it2;
     GtkTreePath *path;
     
     // On sélectionne dans la liste des groupes la ligne suivante. Et si elle
@@ -772,13 +764,13 @@ _1990_groupe_free_groupe (Projet        *p,
     
     // On ajoute tous les éléments associés au groupe dans la liste des
     // éléments disponibles.
-    list_parcours = groupe->elements;
-    while (list_parcours != NULL)
+    it2 = groupe->elements.begin ();
+    while (it2 != groupe->elements.end ())
     {
-      BUG (_1990_gtk_insert_dispo (p, list_parcours->data, niveau_groupe),
+      BUG (_1990_gtk_insert_dispo (p, *it2, niveau_groupe),
            FALSE)
       
-      list_parcours = g_list_next (list_parcours);
+      ++it2;
     }
   }
 #endif
@@ -786,10 +778,7 @@ _1990_groupe_free_groupe (Projet        *p,
   free (groupe->nom);
   
   // On libère tous les éléments contenus dans le groupe.
-  if (groupe->elements != NULL)
-  {
-    g_list_free (groupe->elements);
-  }
+  groupe->elements.clear ();
   
   // On libère toutes les combinaisons temporaires.
   _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);
@@ -815,27 +804,22 @@ _1990_groupe_free_groupe (Projet        *p,
     
     while (it2 != niveau_groupe->groupes.end ())
     {
+      std::list <void *>::iterator it3 = groupe->elements.begin ();
+      
       // On parcours tous les groupes pour vérifier si l'un possède l'élément
       // qui a été supprimé.
       // On ne s'arrête pas volontairement au premier élément qu'on trouve.
       // Il est possible que quelqu'un trouve utile de pouvoir insérer un
       // même élément dans plusieurs groupes.
       groupe = *it2;
-      if (groupe->elements != NULL)
+      while (it3 != groupe->elements.end ())
       {
-        GList *list_parcours3 = groupe->elements;
-        do
+        if (*it3 == groupe)
         {
-          void *element = list_parcours3->data;
-          
-          list_parcours3 = g_list_next (list_parcours3);
-          
-          if (element == groupe)
-          {
-            groupe->elements = g_list_remove (groupe->elements, element);
-          }
+          groupe->elements.remove (*it3);
         }
-        while (list_parcours3 != NULL);
+        
+        ++it3;
       }
       
       ++it2;

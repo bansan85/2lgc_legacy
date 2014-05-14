@@ -211,7 +211,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
                                Niveau_Groupe *niveau,
                                Groupe        *groupe)
 {
-  GList *list_parcours;
+  std::list <void *>::iterator it2;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (!p->niveaux_groupes.empty (),
@@ -234,12 +234,12 @@ _1990_combinaisons_genere_xor (Projet        *p,
   // Si le nombre d'éléments est 0 Alors
   //   Fin.
   // FinSi
-  if (groupe->elements == NULL)
+  if (groupe->elements.empty ())
   {
     return TRUE;
   }
   
-  list_parcours = groupe->elements;
+  it2 = groupe->elements.begin ();
   
   // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
   //   L'opération XOR consiste à ajouter les actions listées dans le groupe
@@ -250,7 +250,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
   {
     do
     {
-      Action *action = (Action *) list_parcours->data;
+      Action *action = static_cast <Action *> (*it2);
       
       // On vérifie si l'action possède une charge. Si non, on ignore l'action.
       if (!_1990_action_charges_vide (action))
@@ -266,9 +266,9 @@ _1990_combinaisons_genere_xor (Projet        *p,
         groupe->tmp_combinaison.push_back (nouvelle_combinaison);
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it2;
     }
-    while (list_parcours != NULL);
+    while (it2 != groupe->elements.end ());
   }
   // Sinon
   //   Un XOR pour les autres étages consiste à ajouter toutes les combinaisons
@@ -288,17 +288,18 @@ _1990_combinaisons_genere_xor (Projet        *p,
     
     groupe->tmp_combinaison.clear ();
     
-    while (list_parcours != NULL)
+    do
     {
-      Groupe *groupe_n_1 = (Groupe *) list_parcours->data;
+      Groupe *groupe_n_1 = static_cast <Groupe *> (*it2);
       
       BUG (_1990_combinaisons_duplique (&groupe->tmp_combinaison,
                                         &groupe_n_1->tmp_combinaison,
                                         TRUE),
            FALSE)
       
-      list_parcours = g_list_next (list_parcours);
+      ++it2;
     }
+    while (it2 != groupe->elements.end ());
   }
   // FinSi
   
@@ -371,7 +372,7 @@ _1990_combinaisons_genere_and (Projet        *p,
                                Niveau_Groupe *niveau,
                                Groupe        *groupe)
 {
-  GList  *list_parcours;
+  std::list <void *>::iterator it4;
   Groupe *groupe_n_1;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
@@ -391,12 +392,12 @@ _1990_combinaisons_genere_and (Projet        *p,
         FALSE,
         (gettext ("Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n")); )
   
-  if (groupe->elements == NULL)
+  if (groupe->elements.empty ())
   {
     return TRUE;
   }
   
-  list_parcours = groupe->elements;
+  it4 = groupe->elements.begin ();
   
   // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
   //   L'opération AND consiste à créer une combinaison contenant l'ensemble
@@ -412,7 +413,7 @@ _1990_combinaisons_genere_and (Projet        *p,
     
     do
     {
-      Action *action = (Action *) list_parcours->data;
+      Action *action = static_cast <Action *> (*it4);
       
       // On ajoute l'action que si elle possède des charges
       if (!_1990_action_charges_vide (action))
@@ -425,9 +426,9 @@ _1990_combinaisons_genere_and (Projet        *p,
         nouvelle_combinaison->push_back (element);
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it4;
     }
-    while (list_parcours != NULL);
+    while (it4 != groupe->elements.end ());
     
     if (!nouvelle_combinaison->empty ())
     {
@@ -476,13 +477,13 @@ _1990_combinaisons_genere_and (Projet        *p,
              (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     --it;
     
-    while (list_parcours != NULL)
+    do
     {
       // On se positionne sur l'élément en cours du groupe.
-      groupe_n_1 = (Groupe *) list_parcours->data;
+      groupe_n_1 = static_cast <Groupe *> (*it4);
       
       // Alors, il s'agit de la première passe. On duplique donc simplement.
-      if (groupe->elements->data == groupe_n_1)
+      if (static_cast <Groupe *> (*groupe->elements.begin ()) == groupe_n_1)
       {
         BUG (_1990_combinaisons_duplique (nouvelles_combinaisons,
                                           &groupe_n_1->tmp_combinaison,
@@ -548,8 +549,9 @@ _1990_combinaisons_genere_and (Projet        *p,
         _1990_groupe_free_combinaisons (transition);
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it4;
     }
+    while (it4 != groupe->elements.end ());
     
     // On ajoute définitivement les nouvelles combinaisons.
     BUG (_1990_combinaisons_duplique (&groupe->tmp_combinaison,
@@ -590,7 +592,7 @@ _1990_combinaisons_genere_or (Projet        *p,
                               Niveau_Groupe *niveau,
                               Groupe        *groupe)
 {
-  GList   *list_parcours;
+  std::list <void *>::iterator it4;
   uint32_t boucle, i;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
@@ -615,7 +617,7 @@ _1990_combinaisons_genere_or (Projet        *p,
     return TRUE;
   }
   
-  boucle = (uint32_t) 1 << g_list_length (groupe->elements);
+  boucle = (uint32_t) 1 << groupe->elements.size ();
   
   // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
   //   Afin de générer l'ensemble des combinaisons, il va être nécessaire de
@@ -639,13 +641,13 @@ _1990_combinaisons_genere_or (Projet        *p,
       std::list <Combinaison *> *nouvelle_combinaison;
       
       nouvelle_combinaison = new std::list <Combinaison *> ();
-      list_parcours = groupe->elements;
+      it4 = groupe->elements.begin ();
       
       do
       {
         if ((parcours_bits & 1) == 1)
         {
-          Action *action = (Action *) list_parcours->data;
+          Action *action = static_cast <Action *> (*it4);
           
           // On ajoute l'action que si elle possède des charges
           if (!_1990_action_charges_vide (action))
@@ -660,7 +662,8 @@ _1990_combinaisons_genere_or (Projet        *p,
           }
         }
         parcours_bits = parcours_bits >> 1;
-        list_parcours = g_list_next (list_parcours);
+        
+        ++it4;
       }
       while (parcours_bits != 0);
       
@@ -707,16 +710,12 @@ _1990_combinaisons_genere_or (Projet        *p,
       
       nouvelles_combinaisons = new std::list <std::list <Combinaison *> *> ();
       
-      list_parcours = groupe->elements;
-      BUGCRIT (list_parcours,
-               FALSE,
-               (gettext ("Impossible\n"));
-                 _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
+      it4 = groupe->elements.begin ();
       do
       {
         if ((parcours_bits & 1) == 1)
         {
-          Groupe *groupe_n_1 = (Groupe *) list_parcours->data;
+          Groupe *groupe_n_1 = static_cast <Groupe *> (*it4);
           
           if (!groupe_n_1->tmp_combinaison.empty ())
           {
@@ -788,7 +787,8 @@ _1990_combinaisons_genere_or (Projet        *p,
           }
         }
         parcours_bits = parcours_bits >> 1;
-        list_parcours = g_list_next (list_parcours);
+        
+        ++it4;
       }
       while (parcours_bits != 0);
       

@@ -837,7 +837,7 @@ _1992_1_1_barres_cherche_dependances (
       
       ++it4;
     }
-    delete _1990_action_charges_renvoie (action);
+    _1990_action_charges_renvoie (action)->clear ();
     
     ++it3;
   }

@@ -793,7 +793,7 @@ EF_sections_circulaire_modif (Projet     *p,
 /**
  * \brief Vérifie la forme d'une section personnalisée.
  * \param forme : la forme à vérifier. Pour mémoire, la liste contient une
- *                liste de GList *points pouvant former des formes
+ *                liste de *points pouvant former des formes
  *                indépendantes.
  *                La forme dessinée depuis la liste des points est
  *                automatiquement fermée (le premier point rejoint le dernier).

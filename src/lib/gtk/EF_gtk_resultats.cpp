@@ -1118,7 +1118,15 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               }
             }
             
-            FREE_ALL2
+            free (comb_min.troncons);
+            free (comb_max.troncons);
+            free (f_min.troncons);
+            free (f_max.troncons);
+            free (tmp);
+            free (tmp1);
+            free (tmp2);
+            delete converti;
+//            FREE_ALL2
           }
           gtk_list_store_set (res->list_store, &Iter, res->col_tab[0], "", -1);
         }
