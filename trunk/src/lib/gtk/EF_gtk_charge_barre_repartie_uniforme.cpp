@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -83,26 +85,27 @@ GTK_WINDOW_DESTROY (ef, charge_barre_repartie_uniforme, );
  *     - interface graphique non initialisée.
  */
 gboolean EF_gtk_charge_barre_repartie_uniforme_recupere (
-           Projet  *p,
-           Action  **action,
-           GList   **barres,
-           double   *fx,
-           double   *fy,
-           double   *fz,
-           double   *mx,
-           double   *my,
-           double   *mz,
-           gchar   **nom,
-           gboolean *repere_local,
-           gboolean *projection,
-           double   *a,
-           double   *b)
+           Projet                  *p,
+           Action                 **action,
+           std::list <EF_Barre *> **barres,
+           double                  *fx,
+           double                  *fy,
+           double                  *fz,
+           double                  *mx,
+           double                  *my,
+           double                  *mz,
+           gchar                  **nom,
+           gboolean                *repere_local,
+           gboolean                *projection,
+           double                  *a,
+           double                  *b)
 {
-  GList         *num_barres;
   GtkTextIter    start, end;
   gchar         *texte_tmp;
   GtkTextBuffer *textbuffer;
   gboolean       ok = TRUE;
+  
+  std::list <unsigned int> *num_barres;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (action, "%p", action, FALSE)
@@ -129,8 +132,8 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere (
   }
   else
   {
-    *action = g_list_nth_data (p->actions,
-                               (unsigned int) gtk_combo_box_get_active (
+    *action = *std::next (p->actions.begin (),
+                          gtk_combo_box_get_active (
                                                    UI_CHBARR.combobox_charge));
   }
   
@@ -289,11 +292,12 @@ EF_gtk_charge_barre_rep_uni_check (GtkWidget *button,
                                    Projet    *p)
 {
   Action  *action;
-  GList   *barres;
   double   fx, fy, fz, mx, my, mz;
   gchar   *nom = NULL;
   gboolean repere_local, projection;
   double   a, b;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHBARR.builder,
@@ -325,7 +329,7 @@ EF_gtk_charge_barre_rep_uni_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                 UI_CHBARR.builder, "EF_charge_barre_rep_uni_button_add_edit")),
                               TRUE);
-    g_list_free (barres);
+    delete barres;
   }
   free (nom);
   
@@ -349,8 +353,9 @@ EF_gtk_charge_barre_repartie_uniforme_ajouter (GtkButton *button,
   double   fx, fy, fz, mx, my, mz, a, b;
   Action  *action;
   gboolean repere_local, projection;
-  GList   *barres;
   gchar   *texte;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHBARR.builder,
@@ -416,9 +421,10 @@ EF_gtk_charge_barre_repartie_uniforme_editer (GtkButton *button,
   double                          fx, fy, fz, mx, my, mz, a, b;
   Action                         *action;
   gboolean                        repere_local, projection;
-  GList                          *barres;
   gchar                          *texte;
   Charge_Barre_Repartie_Uniforme *charge_d;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHBARR.builder,
@@ -446,8 +452,7 @@ EF_gtk_charge_barre_repartie_uniforme_editer (GtkButton *button,
   free (UI_CHBARR.charge->nom);
   UI_CHBARR.charge->nom = texte;
   charge_d = UI_CHBARR.charge->data;
-  g_list_free (charge_d->barres);
-  charge_d->barres = barres;
+  charge_d->barres.assign (barres->begin (), barres->end ());
   charge_d->repere_local = (repere_local == TRUE);
   charge_d->projection = (projection == TRUE);
   charge_d->a = m_f (a, FLOTTANT_UTILISATEUR);
@@ -583,7 +588,10 @@ EF_gtk_charge_barre_repartie_uniforme (Projet *p,
   gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHBARR.combobox_charge),
                            GTK_TREE_MODEL (UI_ACT.liste));
   gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHBARR.combobox_charge),
-                            g_list_index (p->actions, action_defaut));
+                            std::distance (p->actions.begin (),
+                                           std::find (p->actions.begin (),
+                                                      p->actions.end (),
+                                                      action_defaut)));
   
   if (charge != NULL)
   {
@@ -666,7 +674,7 @@ EF_gtk_charge_barre_repartie_uniforme (Projet *p,
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (
                                             UI_CHBARR.check_button_projection),
                                   charge_d->projection);
-    BUG (tmp2 = common_selection_barres_en_texte (charge_d->barres), FALSE)
+    BUG (tmp2 = common_selection_barres_en_texte (&charge_d->barres), FALSE)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                   UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_barres")),
                               tmp2,

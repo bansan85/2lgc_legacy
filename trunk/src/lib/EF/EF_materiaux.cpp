@@ -23,6 +23,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #ifdef ENABLE_GTK
@@ -50,7 +52,7 @@ EF_materiaux_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  p->modele.materiaux = NULL;
+  p->modele.materiaux.clear ();
   
 #ifdef ENABLE_GTK
   UI_MAT.liste_materiaux = gtk_list_store_new (1, G_TYPE_STRING);
@@ -75,27 +77,27 @@ gboolean
 EF_materiaux_insert (Projet      *p,
                      EF_Materiau *materiau)
 {
-  GList       *list_parcours;
+  std::list <EF_Materiau *>::iterator it;
   EF_Materiau *materiau_tmp;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (materiau, "%p", materiau, FALSE)
   
-  list_parcours = p->modele.materiaux;
-  while (list_parcours != NULL)
+  it = p->modele.materiaux.begin ();
+  while (it != p->modele.materiaux.end ())
   {
-    materiau_tmp = list_parcours->data;
+    materiau_tmp = *it;
     
     if (strcmp (materiau->nom, materiau_tmp->nom) < 0)
     {
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.materiaux.end ())
   {
-    p->modele.materiaux = g_list_append (p->modele.materiaux, materiau);
+    p->modele.materiaux.push_back (materiau);
 #ifdef ENABLE_GTK
     gtk_list_store_append (UI_MAT.liste_materiaux,
                            &materiau->Iter_liste);
@@ -109,9 +111,7 @@ EF_materiaux_insert (Projet      *p,
   }
   else
   {
-    p->modele.materiaux = g_list_insert_before (p->modele.materiaux,
-                                                list_parcours,
-                                                materiau);
+    p->modele.materiaux.insert (it, materiau);
 #ifdef ENABLE_GTK
     gtk_list_store_insert_before (UI_MAT.liste_materiaux,
                                   &materiau->Iter_liste,
@@ -159,23 +159,21 @@ gboolean
 EF_materiaux_repositionne (Projet      *p,
                            EF_Materiau *materiau)
 {
-  GList *list_parcours;
+  std::list <EF_Materiau *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (materiau, "%p", materiau, FALSE)
   
   // On réinsère le matériau au bon endroit
-  p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
-  list_parcours = p->modele.materiaux;
-  while (list_parcours != NULL)
+  p->modele.materiaux.remove (materiau);
+  it = p->modele.materiaux.begin ();
+  while (it != p->modele.materiaux.end ())
   {
-    EF_Materiau *materiau_parcours = list_parcours->data;
+    EF_Materiau *materiau_parcours = *it;
     
     if (strcmp (materiau->nom, materiau_parcours->nom) < 0)
     {
-      p->modele.materiaux = g_list_insert_before (p->modele.materiaux,
-                                                  list_parcours,
-                                                  materiau);
+      p->modele.materiaux.insert (it, materiau);
       
 #ifdef ENABLE_GTK
       gtk_list_store_move_before (UI_MAT.liste_materiaux,
@@ -191,11 +189,11 @@ EF_materiaux_repositionne (Projet      *p,
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.materiaux.end ())
   {
-    p->modele.materiaux = g_list_append (p->modele.materiaux, materiau);
+    p->modele.materiaux.push_back (materiau);
     
 #ifdef ENABLE_GTK
     gtk_list_store_move_before (UI_MAT.liste_materiaux,
@@ -276,22 +274,22 @@ EF_materiaux_cherche_nom (Projet     *p,
                           const char *nom,
                           gboolean    critique)
 {
-  GList *list_parcours;
+  std::list <EF_Materiau *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (nom, "%p", nom, NULL)
   
-  list_parcours = p->modele.materiaux;
-  while (list_parcours != NULL)
+  it = p->modele.materiaux.begin ();
+  while (it != p->modele.materiaux.end ())
   {
-    EF_Materiau *materiau = list_parcours->data;
+    EF_Materiau *materiau = *it;
     
     if (strcmp (materiau->nom, nom) == 0)
     {
       return materiau;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (critique)
@@ -354,13 +352,13 @@ EF_materiaux_E (EF_Materiau *materiau)
   {
     case MATERIAU_BETON :
     {
-      Materiau_Beton *data_beton = materiau->data;
+      Materiau_Beton *data_beton = (Materiau_Beton *) materiau->data;
       
       return data_beton->ecm;
     }
     case MATERIAU_ACIER :
     {
-      Materiau_Acier *data_acier = materiau->data;
+      Materiau_Acier *data_acier = (Materiau_Acier *) materiau->data;
       
       return data_acier->e;
     }
@@ -395,7 +393,7 @@ EF_materiaux_G (EF_Materiau *materiau,
   {
     case MATERIAU_BETON :
     {
-      Materiau_Beton *data_beton = materiau->data;
+      Materiau_Beton *data_beton = (Materiau_Beton *) materiau->data;
       
       if (nu_null)
       {
@@ -409,7 +407,7 @@ EF_materiaux_G (EF_Materiau *materiau,
     }
     case MATERIAU_ACIER :
     {
-      Materiau_Acier *data_acier = materiau->data;
+      Materiau_Acier *data_acier = (Materiau_Acier *) materiau->data;
       
       INFO (!nu_null,
             m_f (NAN, FLOTTANT_ORDINATEUR),
@@ -440,8 +438,8 @@ EF_materiaux_free_un (EF_Materiau *materiau)
   BUGPARAM (materiau, "%p", materiau, )
   
   free (materiau->nom);
-  free (materiau->data);
-  free (materiau);
+  delete materiau->data;
+  delete materiau;
   
   return;
 }
@@ -462,30 +460,31 @@ gboolean
 EF_materiaux_supprime (EF_Materiau *materiau,
                        Projet      *p)
 {
-  GList *liste_materiaux = NULL, *liste_barres_dep;
+  std::list <EF_Materiau *> liste_materiaux;
+  std::list <EF_Barre *>   *liste_barres_dep;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (materiau, "%p", materiau, FALSE)
    
   // On vérifie les dépendances.
-  liste_materiaux = g_list_append (liste_materiaux, materiau);
+  liste_materiaux.push_back (materiau);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_materiaux,
+                                             &liste_materiaux,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (liste_materiaux); )
-  g_list_free (liste_materiaux);
+       FALSE)
+  liste_materiaux.clear ();
   
-  if (liste_barres_dep != NULL)
+  if (!liste_barres_dep->empty ())
   {
     char *liste;
     
@@ -497,7 +496,7 @@ EF_materiaux_supprime (EF_Materiau *materiau,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"),
                           liste);
                   free (liste);
-                  g_list_free (liste_barres_dep); )
+                  delete liste_barres_dep; )
     }
     else
     {
@@ -505,9 +504,10 @@ EF_materiaux_supprime (EF_Materiau *materiau,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"),
                           liste);
                   free (liste);
-                  g_list_free (liste_barres_dep); )
+                  delete liste_barres_dep; )
     }
   }
+  delete liste_barres_dep;
   
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_MAT.liste_materiaux, &materiau->Iter_liste);
@@ -517,7 +517,7 @@ EF_materiaux_supprime (EF_Materiau *materiau,
   }
 #endif
   
-  p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
+  p->modele.materiaux.remove (materiau);
   EF_materiaux_free_un (materiau);
   
   return TRUE;
@@ -537,11 +537,10 @@ EF_materiaux_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  g_list_free_full (p->modele.materiaux,
-                    (GDestroyNotify) EF_materiaux_free_un);
-  p->modele.materiaux = NULL;
-  
-  BUG (EF_calculs_free (p), TRUE)
+  for_each (p->modele.materiaux.begin (),
+            p->modele.materiaux.end (),
+            EF_materiaux_free_un);
+  p->modele.materiaux.clear ();
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_MAT.liste_materiaux);

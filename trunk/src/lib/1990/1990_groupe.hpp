@@ -47,7 +47,8 @@ gboolean _1990_groupe_modifie_nom   (Niveau_Groupe          *groupe_niveau,
                                      Projet                 *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_groupe_free_combinaisons    (GList        **liste);
+gboolean _1990_groupe_free_combinaisons (
+           std::list <std::list <Combinaison *> *> *liste);
 gboolean _1990_groupe_free_niveau          (Projet        *p,
                                             Niveau_Groupe *niveau_groupe,
                                             gboolean       accept_vide)

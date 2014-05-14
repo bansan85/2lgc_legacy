@@ -23,6 +23,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
@@ -447,124 +449,82 @@ _1992_1_1_materiaux_ajout (Projet     *p,
                            const char *nom,
                            Flottant    fck)
 {
-  EF_Materiau    *materiau_nouveau;
-  Materiau_Beton *data_beton;
+  std::unique_ptr <EF_Materiau>    materiau_nouveau (new EF_Materiau);
+  std::unique_ptr <Materiau_Beton> data_beton (new Materiau_Beton);
+  
+  EF_Materiau *mat;
   
   BUGPARAM (p, "%p", p, NULL)
   INFO ((m_g (fck) >= 1.) && (m_g (fck) <= 90.),
         NULL,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n")); )
-  BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (data_beton = malloc (sizeof (Materiau_Beton)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (materiau_nouveau); )
   
   materiau_nouveau->type = MATERIAU_BETON;
-  materiau_nouveau->data = data_beton;
   
   data_beton->fck = m_f (m_g (fck) * 1000000., fck.type);
   data_beton->fckcube = m_f (_1992_1_1_materiaux_fckcube (m_g (fck)),
                              FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fckcube)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->fckcube)), NULL)
   data_beton->fcm = m_f (_1992_1_1_materiaux_fcm (m_g (fck)),
                     FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fcm)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->fcm)), NULL)
   data_beton->fctm = m_f (_1992_1_1_materiaux_fctm (m_g (fck),
                                              m_g (data_beton->fcm) / 1000000.),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctm)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->fctm)), NULL)
   data_beton->fctk_0_05 = m_f (_1992_1_1_materiaux_fctk_0_05 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_05)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->fctk_0_05)), NULL)
   data_beton->fctk_0_95 = m_f (_1992_1_1_materiaux_fctk_0_95 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_95)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->fctk_0_95)), NULL)
   data_beton->ecm = m_f (_1992_1_1_materiaux_ecm (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecm)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ecm)), NULL)
   data_beton->ec1 = m_f (_1992_1_1_materiaux_ec1 (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec1)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ec1)), NULL)
   data_beton->ecu1 = m_f (_1992_1_1_materiaux_ecu1 (
                                               m_g (data_beton->fcm) / 1000000.,
                                                     m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu1)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ecu1)), NULL)
   data_beton->ec2 = m_f (_1992_1_1_materiaux_ec2 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec2)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ec2)), NULL)
   data_beton->ecu2 = m_f (_1992_1_1_materiaux_ecu2 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu2)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ecu2)), NULL)
   data_beton->ec3 = m_f (_1992_1_1_materiaux_ec3 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec3)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+  BUG (!isnan (m_g (data_beton->ec3)), NULL)
   data_beton->ecu3 = m_f (_1992_1_1_materiaux_ecu3 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
   BUG (!isnan (m_g (data_beton->ecu3)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+       NULL)
   data_beton->n = m_f (_1992_1_1_materiaux_n (m_g (fck)), FLOTTANT_ORDINATEUR);
   BUG (!isnan (m_g (data_beton->n)),
-       NULL,
-       free (materiau_nouveau);
-         free (data_beton); )
+       NULL)
   data_beton->nu = m_f (COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
   
   BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (materiau_nouveau);
-             free (data_beton); )
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
-  BUG (EF_materiaux_insert (p, materiau_nouveau),
+  mat = materiau_nouveau.release ();
+  mat->data = data_beton.release ();
+  
+  BUG (EF_materiaux_insert (p, mat),
        NULL,
        free (materiau_nouveau->nom);
-         free (materiau_nouveau);
-         free (data_beton); )
+         delete mat->data;
+         delete mat;)
   
-  return materiau_nouveau;
+  return mat;
 }
 
 
@@ -622,7 +582,7 @@ _1992_1_1_materiaux_modif (Projet      *p,
            FALSE,
            (gettext ("Le matériau n'est pas en béton.\n")); )
   
-  data_beton = materiau->data;
+  data_beton = (Materiau_Beton *) materiau->data;
   
   if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
   {
@@ -710,32 +670,32 @@ _1992_1_1_materiaux_modif (Projet      *p,
       (!isnan (m_g (ecu3)))      || (!isnan (m_g (n)))         ||
       (!isnan (m_g (nu))))
   {
-    GList *liste_materiaux = NULL;
-    GList *liste_barres_dep;
+    std::list <EF_Materiau *> liste_materiaux;
+    std::list <EF_Barre *>   *liste_barres_dep;
     
-    liste_materiaux = g_list_append (liste_materiaux, materiau);
+    liste_materiaux.push_back (materiau);
     BUG (_1992_1_1_barres_cherche_dependances (p,
                                                NULL,
                                                NULL,
                                                NULL,
-                                               liste_materiaux,
+                                               &liste_materiaux,
+                                               NULL,
                                                NULL,
                                                NULL,
                                                NULL,
                                                &liste_barres_dep,
                                                NULL,
-                                               FALSE,
+                                               NULL,
                                                FALSE),
-         FALSE,
-         g_list_free (liste_materiaux); )
-    g_list_free (liste_materiaux);
+         FALSE)
+    liste_materiaux.clear ();
     
-    if (liste_barres_dep != NULL)
+    if (!liste_barres_dep->empty ())
     {
-      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep); )
+      BUG (EF_calculs_free (p), FALSE, delete liste_barres_dep; )
     }
     
-    g_list_free (liste_barres_dep);
+    delete liste_barres_dep;
   }
   
 #ifdef ENABLE_GTK
@@ -774,7 +734,7 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
            FALSE,
            (gettext ("Le matériau n'est pas en béton.\n")); )
   
-  data_beton = materiau->data;
+  data_beton = (Materiau_Beton *) materiau->data;
   
   conv_f_c (m_f (m_g (data_beton->fck) / 1000000., data_beton->fck.type),
             fck,

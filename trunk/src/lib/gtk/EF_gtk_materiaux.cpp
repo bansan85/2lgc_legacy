@@ -80,7 +80,8 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
     GtkTreeIter   Iter;
     GtkTreeModel *model;
     EF_Materiau  *materiau;
-    GList        *liste_materiaux = NULL;
+    
+    std::list <EF_Materiau *> liste_materiaux;
     
     if (!gtk_tree_selection_get_selected (
                                         gtk_tree_view_get_selection (treeview),
@@ -92,26 +93,24 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
     
     gtk_tree_model_get (model, &Iter, 0, &materiau, -1);
     
-    liste_materiaux = g_list_append (liste_materiaux, materiau);
+    liste_materiaux.push_back (materiau);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              liste_materiaux,
+                                              &liste_materiaux,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE) == FALSE)
     {
       BUG (EF_materiaux_supprime (materiau, p),
-           FALSE,
-           g_list_free (liste_materiaux); )
+           FALSE)
     }
-    
-    g_list_free (liste_materiaux);
     
     return TRUE;
   }
@@ -266,7 +265,8 @@ EF_gtk_materiaux_select_changed (GtkTreeSelection *treeselection,
   else
   {
     EF_Materiau *materiau;
-    GList       *liste_materiaux = NULL;
+    
+    std::list <EF_Materiau *> liste_materiaux;
     
     gtk_tree_model_get (model, &Iter, 0, &materiau, -1);
     
@@ -274,18 +274,19 @@ EF_gtk_materiaux_select_changed (GtkTreeSelection *treeselection,
                             UI_MATX.builder, "EF_materiaux_boutton_modifier")),
                               TRUE);
     
-    liste_materiaux = g_list_append (liste_materiaux, materiau);
+    liste_materiaux.push_back (materiau);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              liste_materiaux,
+                                              &liste_materiaux,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -316,8 +317,6 @@ EF_gtk_materiaux_select_changed (GtkTreeSelection *treeselection,
                       UI_MATX.builder, "EF_materiaux_boutton_supprimer_menu")),
                               FALSE);
     }
-    
-    g_list_free (liste_materiaux);
   }
   
   return;
@@ -342,8 +341,11 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Materiau  *materiau;
-  GList        *liste_materiaux = NULL;
-  GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  
+  std::list <EF_Materiau *>  liste_materiaux;
+  std::list <EF_Noeud    *> *liste_noeuds_dep;
+  std::list <EF_Barre    *> *liste_barres_dep;
+  std::list <Charge      *> *liste_charges_dep;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_MATX.builder,
@@ -363,26 +365,25 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
   
   gtk_tree_model_get (model, &Iter, 0, &materiau, -1);
   
-  liste_materiaux = g_list_append (liste_materiaux, materiau);
+  liste_materiaux.push_back (materiau);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_materiaux,
+                                             &liste_materiaux,
                                              NULL,
                                              NULL,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
-      ,
-      g_list_free (liste_materiaux); )
-  g_list_free (liste_materiaux);
+      , )
   
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
+  if ((!liste_noeuds_dep->empty ()) ||
+      (!liste_barres_dep->empty ()) ||
+      (!liste_charges_dep->empty ()))
   {
     char *desc;
     
@@ -391,22 +392,25 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
                                          liste_charges_dep,
                                          p),
          ,
-         g_list_free (liste_noeuds_dep);
-           g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep); )
+         delete liste_noeuds_dep;
+           delete liste_barres_dep;
+           delete liste_charges_dep; )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                        UI_MATX.builder, "EF_materiaux_supprimer_menu_barres")),
                              desc);
     free (desc);
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
   }
   else
   {
     FAILINFO ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
   }
   
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
+  delete liste_noeuds_dep;
+  delete liste_barres_dep;
+  delete liste_charges_dep;
   
   return;
 }
@@ -430,7 +434,9 @@ EF_gtk_materiaux_supprimer_menu_barres (GtkButton *button,
   GtkTreeIter   iter;
   GtkTreeModel *model;
   EF_Materiau  *materiau;
-  GList        *liste_materiaux = NULL, *liste_barres_dep;
+  
+  std::list <EF_Materiau *>  liste_materiaux;
+  std::list <EF_Barre    *> *liste_barres_dep;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_MATX.builder,
@@ -449,26 +455,25 @@ EF_gtk_materiaux_supprimer_menu_barres (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &materiau, -1);
   
-  liste_materiaux = g_list_append (liste_materiaux, materiau);
+  liste_materiaux.push_back (materiau);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_materiaux,
+                                             &liste_materiaux,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              FALSE),
-      ,
-      g_list_free (liste_materiaux); )
-  g_list_free (liste_materiaux);
+      , )
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
        ,
-       g_list_free (liste_barres_dep); )
-  g_list_free (liste_barres_dep);
+       delete liste_barres_dep; )
+  delete liste_barres_dep;
   BUG (EF_materiaux_supprime (materiau, p), )
   
   BUG (m3d_rafraichit (p), )
@@ -766,7 +771,7 @@ EF_gtk_materiaux_double_clicked (GtkWidget *widget,
 void
 EF_gtk_materiaux (Projet *p)
 {
-  GList *list_parcours;
+  std::list <EF_Materiau *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   if (UI_MATX.builder != NULL)
@@ -814,10 +819,10 @@ EF_gtk_materiaux (Projet *p)
     p,
     NULL);
   
-  list_parcours = p->modele.materiaux;
-  while (list_parcours != NULL)
+  it = p->modele.materiaux.begin ();
+  while (it != p->modele.materiaux.end ())
   {
-    EF_Materiau *materiau = list_parcours->data;
+    EF_Materiau *materiau = *it;
     
     gtk_tree_store_append (UI_MATX.materiaux, &materiau->Iter_fenetre, NULL);
     gtk_tree_store_set (UI_MATX.materiaux,
@@ -825,7 +830,7 @@ EF_gtk_materiaux (Projet *p)
                         0, materiau,
                         -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_MATX.window),

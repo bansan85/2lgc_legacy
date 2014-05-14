@@ -74,47 +74,22 @@ projet_free (Projet *p)
   
   BUGPARAM (p, "%p", p, FALSE)
   
+  BUG (EF_calculs_free (p), FALSE)
   BUG (common_ville_free (p), FALSE)
-  if (p->actions != NULL)
-  {
-    BUG (_1990_action_free (p), FALSE)
-  }
-  if (p->niveaux_groupes != NULL)
-  {
-    BUG (_1990_groupe_free (p), FALSE)
-  }
-  if (p->combinaisons.elu_equ != NULL)
-  {
-    BUG (_1990_combinaisons_free (p), FALSE)
-  }
+  BUG (_1990_action_free (p), FALSE)
+  BUG (_1990_groupe_free (p), FALSE)
+  BUG (_1990_combinaisons_free (p), FALSE)
   // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
   // il est nécessaire d'avoir accès aux informations contenues dans les
   // noeuds.
   BUG (EF_calculs_free (p), FALSE)
-  if (p->modele.sections != NULL)
-  {
-    BUG (EF_sections_free (p), FALSE)
-  }
-  if (p->modele.noeuds != NULL)
-  {
-    BUG (EF_noeuds_free (p), FALSE)
-  }
-  if (p->modele.barres != NULL)
-  {
-    BUG (_1992_1_1_barres_free (p), FALSE)
-  }
-  if (p->modele.appuis != NULL)
-  {
-    BUG (EF_appuis_free (p), FALSE)
-  }
-  if (p->modele.materiaux != NULL)
-  {
-    BUG (EF_materiaux_free (p), FALSE)
-  }
-  if (p->modele.relachements != NULL)
-  {
-    BUG (EF_relachement_free (p), FALSE)
-  }
+  BUG (EF_sections_free (p), FALSE)
+  BUG (EF_noeuds_free (p), FALSE)
+  BUG (_1992_1_1_barres_free (p), FALSE)
+  BUG (EF_appuis_free (p), FALSE)
+  BUG (EF_materiaux_free (p), FALSE)
+  BUG (EF_relachement_free (p), FALSE)
+  UI_RES.tableaux.clear ();
 #ifdef ENABLE_GTK
   if (UI_M3D.data != NULL)
   {
@@ -127,7 +102,7 @@ projet_free (Projet *p)
   
   cholmod_finish (p->calculs.c);
   
-  free (p);
+  delete p;
   
   return TRUE;
 }
@@ -155,14 +130,11 @@ projet_init (Norme norme)
 #endif
   
   // Alloue toutes les zones mémoires du projet à savoir (par module) :
-  BUGCRIT (p = (Projet *) malloc (sizeof (Projet)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  memset (p, 0, sizeof (Projet));
+  p = new Projet;
   
   p->parametres.norme = norme;
   
-  BUG (common_ville_init (p), NULL, free (p); )
+  BUG (common_ville_init (p), NULL, delete p; )
   
   NOWARNING
   //   - 1990 : la liste des actions, des groupes et des combinaisons,
@@ -204,7 +176,6 @@ projet_init (Norme norme)
   UI_REL.builder = NULL;
   UI_RAP.builder = NULL;
   UI_RES.builder = NULL;
-  UI_RES.tableaux = new std::list <Gtk_EF_Resultats_Tableau *> ();
   gtk_css_provider_load_from_data (provider,
      "GtkPaned GtkToolbar {\n"
      "  background-image: -gtk-gradient (linear,"

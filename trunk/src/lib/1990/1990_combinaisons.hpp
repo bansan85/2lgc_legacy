@@ -51,6 +51,7 @@ gboolean _1990_combinaisons_eluacc_frequente        (Projet *p)
 gboolean _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
+void _1990_combinaisons_free_1 (std::list <Combinaison *> *comb);
 #endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

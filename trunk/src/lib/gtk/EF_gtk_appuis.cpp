@@ -202,13 +202,14 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
                                          &Iter))
     {
       EF_Appui *appui;
-      GList    *liste_appuis = NULL;
+      
+      std::list <EF_Appui *> liste_appuis;
       
       gtk_tree_model_get (model, &Iter, 0, &appui, -1);
       
-      liste_appuis = g_list_append (liste_appuis, appui);
+      liste_appuis.push_back (appui);
       if (_1992_1_1_barres_cherche_dependances (p,
-                                                liste_appuis,
+                                                &liste_appuis,
                                                 NULL,
                                                 NULL,
                                                 NULL,
@@ -217,13 +218,12 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                FALSE,
+                                                NULL,
+                                                NULL,
                                                 FALSE) == FALSE)
       {
         EF_gtk_appuis_supprimer (NULL, p);
       }
-      
-      g_list_free (liste_appuis);
     }
     return TRUE;
   }
@@ -468,13 +468,14 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
   else
   {
     EF_Appui *appui;
-    GList    *liste_appuis = NULL;
+    
+    std::list <EF_Appui *> liste_appuis;
     
     gtk_tree_model_get (model, &Iter, 0, &appui, -1);
     
-    liste_appuis = g_list_append (liste_appuis, appui);
+    liste_appuis.push_back (appui);
     if (_1992_1_1_barres_cherche_dependances (p,
-                                              liste_appuis,
+                                              &liste_appuis,
                                               NULL,
                                               NULL,
                                               NULL,
@@ -483,7 +484,8 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -514,8 +516,6 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
                           UI_APP.builder, "EF_appuis_boutton_supprimer_menu")),
                               FALSE);
     }
-    
-    g_list_free (liste_appuis);
   }
   
   return;
@@ -540,8 +540,11 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Appui     *appui;
-  GList        *liste_appuis = NULL;
-  GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  
+  std::list <EF_Appui *>  liste_appuis;
+  std::list <EF_Noeud *> *liste_noeuds_dep;
+  std::list <EF_Barre *> *liste_barres_dep;
+  std::list <Charge   *> *liste_charges_dep;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_APP.builder,
@@ -559,25 +562,25 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
   
   gtk_tree_model_get (model, &Iter, 0, &appui, -1);
   
-  liste_appuis = g_list_append (liste_appuis, appui);
+  liste_appuis.push_back (appui);
   BUG (_1992_1_1_barres_cherche_dependances (p,
-                                             liste_appuis,
+                                             &liste_appuis,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
        )
-  g_list_free (liste_appuis);
   
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
+  if ((!liste_noeuds_dep->empty ()) ||
+      (!liste_barres_dep->empty ()) ||
+      (!liste_charges_dep->empty ()))
   {
     char *desc;
     
@@ -587,26 +590,28 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
                                              p),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               g_list_free (liste_noeuds_dep);
-               g_list_free (liste_barres_dep);
-               g_list_free (liste_charges_dep); )
+               delete liste_noeuds_dep;
+               delete liste_barres_dep;
+               delete liste_charges_dep; )
+  
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                       UI_APP.builder, "EF_appuis_supprimer_menu_suppr_noeud")),
                              desc);
     free (desc);
+    
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
   }
   else
   {
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
+    
     FAILINFO ( ,
-              (gettext ("L'élément ne possède aucune dépendance.\n"));
-                g_list_free (liste_noeuds_dep);
-                g_list_free (liste_barres_dep);
-                g_list_free (liste_charges_dep); )
+              (gettext ("L'élément ne possède aucune dépendance.\n")); )
   }
-  
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
   
   return;
 }
@@ -709,7 +714,7 @@ EF_GTK_APPUIS_RENDER (6, rz);
 void
 EF_gtk_appuis (Projet *p)
 {
-  GList *list_parcours;
+  std::list<EF_Appui *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   if (UI_APP.builder != NULL)
@@ -814,15 +819,15 @@ EF_gtk_appuis (Projet *p)
     p,
     NULL);
   
-  list_parcours = p->modele.appuis;
-  while (list_parcours != NULL)
+  it = p->modele.appuis.begin ();
+  while (it != p->modele.appuis.end ())
   {
-    EF_Appui *appui = (EF_Appui *) list_parcours->data;
+    EF_Appui *appui = *it;
     
     gtk_tree_store_append (UI_APP.appuis, &appui->Iter_fenetre, NULL);
     gtk_tree_store_set (UI_APP.appuis, &appui->Iter_fenetre, 0, appui, -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   g_object_set_data (gtk_builder_get_object (UI_APP.builder,

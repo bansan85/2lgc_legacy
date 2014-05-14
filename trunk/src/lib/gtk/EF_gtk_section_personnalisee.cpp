@@ -423,7 +423,7 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
   
   section.type = SECTION_PERSONNALISEE;
   section.data = &data;
-  data.forme = forme;
+  data.forme.assign (forme->begin (), forme->end ());
   
   BUG (pixbuf = EF_gtk_sections_dessin (&section, 32, 32),
        ,
@@ -1283,8 +1283,8 @@ EF_gtk_section_personnalisee (Projet  *p,
                               tmp,
                               -1);
     
-    it = data->forme->begin ();
-    while (it != data->forme->end ())
+    it = data->forme.begin ();
+    while (it != data->forme.end ())
     {
       GtkTreeIter iter, iter_last;
       EF_Point   *point_bis;

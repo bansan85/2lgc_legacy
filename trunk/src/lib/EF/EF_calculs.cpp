@@ -23,6 +23,8 @@
 #include <math.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -56,26 +58,27 @@
 gboolean
 EF_calculs_free (Projet *p)
 {
-  GList *list_parcours;
+  std::list <Action   *>::iterator it;
+  std::list <EF_Barre *>::iterator it2;
   
   BUGPARAM (p, "%p", p, FALSE)
   
   BUG (EF_rigidite_free (p), FALSE)
   
-  list_parcours = p->actions;
-  while (list_parcours != NULL)
+  it = p->actions.begin ();
+  while (it != p->actions.end ())
   {
-    Action *action = list_parcours->data;
+    Action *action = *it;
     
     BUG (_1990_action_free_calculs (p, action), FALSE)
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
-  list_parcours = p->modele.barres;
-  while (list_parcours != NULL)
+  it2 = p->modele.barres.begin ();
+  while (it2 != p->modele.barres.end ())
   {
-    EF_Barre *barre = list_parcours->data;
+    EF_Barre *barre = *it2;
     uint16_t  i;
     
     for (i = 0; i <= barre->discretisation_element; i++)
@@ -98,7 +101,7 @@ EF_calculs_free (Projet *p)
       barre->m_rot_t = NULL;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it2;
   }
   
 #ifdef ENABLE_GTK
@@ -106,17 +109,17 @@ EF_calculs_free (Projet *p)
   
   if (UI_RES.builder != NULL)
   {
-    std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
+    std::list <Gtk_EF_Resultats_Tableau *>::iterator it3;
     
-    it = UI_RES.tableaux->begin ();
+    it3 = UI_RES.tableaux.begin ();
     
-    while (it != UI_RES.tableaux->end ())
+    while (it3 != UI_RES.tableaux.end ())
     {
-      Gtk_EF_Resultats_Tableau *res = *it;
+      Gtk_EF_Resultats_Tableau *res = *it3;
       
       gtk_list_store_clear (res->list_store);
       
-      it++;
+      ++it3;
     }
   }
   if (UI_RAP.builder != NULL)
@@ -146,16 +149,18 @@ EF_calculs_initialise (Projet *p)
 {
   uint32_t i, nnz_max;
   uint32_t nb_col_partielle, nb_col_complete;
-  GList   *list_parcours;
   uint32_t nb_noeuds;
   
+  std::list <EF_Noeud *>::iterator it;
+  std::list <EF_Barre *>::iterator it2;
+  
   BUGPARAM (p, "%p", p, FALSE)
-  INFO (p->modele.barres,
+  INFO (!p->modele.barres.empty (),
         FALSE,
         (gettext ("Impossible de réaliser un calcul sans barre existante.\n")); )
   
-  nb_noeuds = g_list_length (p->modele.noeuds);
-  INFO (nb_noeuds,
+  nb_noeuds = p->modele.noeuds.size ();
+  INFO (nb_noeuds != 0,
         FALSE,
         (gettext ("Impossible de réaliser un calcul sans noeud existant.\n")); )
   
@@ -208,11 +213,11 @@ EF_calculs_initialise (Projet *p)
   // FinPour
   nb_col_partielle = 0;
   nb_col_complete = 0;
-  list_parcours = p->modele.noeuds;
+  it = p->modele.noeuds.begin ();
   i = 0;
-  do
+  while (it != p->modele.noeuds. end ())
   {
-    EF_Noeud *noeud = list_parcours->data;
+    EF_Noeud *noeud = *it;
     
     p->calculs.n_comp[i][0] = nb_col_complete;
     nb_col_complete++;
@@ -309,24 +314,22 @@ EF_calculs_initialise (Projet *p)
     
     i++;
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  while (list_parcours != NULL);
   
   // Détermination du nombre de matrices de rigidité globale élémentaire du
   // système (y compris la discrétisation).
   // Détermination du nombre de triplets, soit 12*12*nombre_de_matrices.
   nnz_max = 0;
-  list_parcours = p->modele.barres;
-  do
+  it2 = p->modele.barres.begin ();
+  while (it2 != p->modele.barres.end ())
   {
-    EF_Barre *element = list_parcours->data;
+    EF_Barre *element = *it2;
     
     nnz_max += 12 * 12U * (element->discretisation_element + 1U);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it2;
   }
-  while (list_parcours != NULL);
   
   // Allocation des triplets de la matrice de rigidité partielle (t_part) et la
   // matrice de rigidité globale (triplet_rigidite_globale).
@@ -795,7 +798,8 @@ EF_calculs_resoud_charge (Projet *p,
   uint8_t          k;
   cholmod_sparse  *sparse_tmp;
   double           minusone[2] = {-1., 0.}, one[2] = {1., 0.};
-  GList           *list_parcours;
+  
+  std::list <EF_Barre *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (action, "%p", action, FALSE)
@@ -852,10 +856,13 @@ EF_calculs_resoud_charge (Projet *p,
   //   Pour chaque charge dans l'action
   if (!_1990_action_charges_vide (action))
   {
-    list_parcours = _1990_action_charges_renvoie (action);
-    do
+    std::list <Charge *>::iterator it3;
+    
+    it3 = _1990_action_charges_renvoie (action)->begin ();
+    
+    while (it3 != _1990_action_charges_renvoie (action)->end ())
     {
-      Charge         *charge = list_parcours->data;
+      Charge         *charge = *it3;
       cholmod_sparse *s_eff_loc_i, *s_eff_glo_f;
       cholmod_sparse *s_eff_loc_f;
       
@@ -866,13 +873,18 @@ EF_calculs_resoud_charge (Projet *p,
   //   Si la charge en cours est une charge au noeud Alors
   //     On ajoute au vecteur des efforts les efforts aux noeuds directement
   //     saisis par l'utilisateur dans le repère global.
-          Charge_Noeud *charge_d = charge->data;
-          GList        *list_parcours2 = charge_d->noeuds;
+          Charge_Noeud *charge_d = (Charge_Noeud *) charge->data;
           
-          while (list_parcours2 != NULL)
+          std::list <EF_Noeud *>::iterator it2  = charge_d->noeuds.begin ();
+          
+          while (it2 != charge_d->noeuds.end ())
           {
-            EF_Noeud *noeud = list_parcours2->data;
-            uint32_t  num = (uint32_t) g_list_index (p->modele.noeuds, noeud);
+            EF_Noeud *noeud = *it2;
+            uint32_t  num = std::distance (
+                              p->modele.noeuds.begin (),
+                              std::find (p->modele.noeuds.begin (), 
+                                         p->modele.noeuds.end (), 
+                                         noeud));
             
             if (p->calculs.n_part[num][0] != UINT32_MAX)
             {
@@ -905,7 +917,7 @@ EF_calculs_resoud_charge (Projet *p,
             ax3[p->calculs.n_comp[num][4]] += m_g (charge_d->my);
             ax3[p->calculs.n_comp[num][5]] += m_g (charge_d->mz);
             
-            list_parcours2 = g_list_next (list_parcours2);
+            ++it2;
           }
           
           break;
@@ -913,7 +925,8 @@ EF_calculs_resoud_charge (Projet *p,
   //   Sinon Si la charge est une charge ponctuelle sur la barre Alors
         case CHARGE_BARRE_PONCTUELLE :
         {
-          Charge_Barre_Ponctuelle *charge_d = charge->data;
+          Charge_Barre_Ponctuelle *charge_d =
+                                      (Charge_Barre_Ponctuelle *) charge->data;
           
           double       l;
           double       phiAy, phiBy, phiAz, phiBz; // Rotation sur appui
@@ -922,9 +935,10 @@ EF_calculs_resoud_charge (Projet *p,
                        // réaction d'appui
           EF_Noeud    *noeud_debut, *noeud_fin;
           uint16_t     pos; // numéro de l'élément dans la discrétisation
-          GList       *list_parcours2 = charge_d->barres;
           
-          while (list_parcours2 != NULL)
+          std::list <EF_Barre *>::iterator it2 = charge_d->barres.begin ();
+          
+          while (it2 != charge_d->barres.end ())
           {
             double    a, b; // Position de la charge par rapport au début
                       // et à la fin de l'élément discrétisé
@@ -935,11 +949,14 @@ EF_calculs_resoud_charge (Projet *p,
             double    FAy_i, FAy_h, FBy_i, FBy_h; // Force opposée à la
                       // réaction d'appui
             double    FAz_i, FAz_h, FBz_i, FBz_h;
-            EF_Barre *element = list_parcours2->data;
+            EF_Barre *element = *it2;
             uint32_t  num;
             uint32_t  num_d, num_f;
           
-            num = (uint32_t) g_list_index (p->modele.barres, element);
+            num = std::distance (p->modele.barres.begin (),
+                                 std::find (p->modele.barres.begin (),
+                                            p->modele.barres.end (),
+                                            element));
       //   Convertion des efforts globaux en efforts locaux si nécessaire :
       //   \end{verbatim}\begin{center}
       //   $\{ F \}_{local} = [R]^T \cdot \{ F \}_{global}$\end{center}
@@ -1059,9 +1076,11 @@ EF_calculs_resoud_charge (Projet *p,
                 }
                 else
                 {
-                  l = EF_noeuds_distance (
-                       g_list_nth_data (element->nds_inter, pos),
-                       element->noeud_debut);
+                  std::list <EF_Noeud *>::iterator it_t;
+                  
+                  it_t = element->nds_inter.begin ();
+                  std::advance (it_t, pos);
+                  l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
                 BUG (!isnan (l), FALSE, FREE_ALL)
                 pos++;
@@ -1072,24 +1091,38 @@ EF_calculs_resoud_charge (Projet *p,
               if (pos == 0)
               {
                 noeud_debut = element->noeud_debut;
-                noeud_fin = g_list_nth_data (element->nds_inter, 0);
+                noeud_fin = *element->nds_inter.begin ();
               }
               // Alors la position de la charge est compris entre le dernier
               // noeud intermédiaire et le noeud de fin de la barre
               else if (pos == element->discretisation_element)
               {
-                noeud_debut = g_list_nth_data (element->nds_inter, pos - 1U);
+                std::list <EF_Noeud *>::iterator it_t;
+                
+                it_t = element->nds_inter.begin ();
+                std::advance (it_t, pos - 1U);
+                noeud_debut = *it_t;
                 noeud_fin = element->noeud_fin;
               }
               else
               {
-                noeud_debut = g_list_nth_data (element->nds_inter, pos - 1U);
-                noeud_fin = g_list_nth_data (element->nds_inter,
-                                             pos);
+                std::list <EF_Noeud *>::iterator it_t;
+                
+                it_t = element->nds_inter.begin ();
+                std::advance (it_t, pos - 1U);
+                noeud_debut = *it_t;
+                std::next (it_t);
+                noeud_fin = *it_t;
               }
             }
-            num_d = (uint32_t) g_list_index (p->modele.noeuds, noeud_debut);
-            num_f = (uint32_t) g_list_index (p->modele.noeuds, noeud_fin);
+            num_d = std::distance (p->modele.noeuds.begin (),
+                                   std::find (p->modele.noeuds.begin (), 
+                                              p->modele.noeuds.end (), 
+                                              noeud_debut));
+            num_f = std::distance (p->modele.noeuds.begin (), 
+                                   std::find (p->modele.noeuds.begin (),
+                                              p->modele.noeuds.end (),     
+                                              noeud_fin));
             debut_barre = EF_noeuds_distance (noeud_debut,
                                               element->noeud_debut);
             BUG (!isnan (debut_barre), FALSE, FREE_ALL)
@@ -1460,7 +1493,7 @@ EF_calculs_resoud_charge (Projet *p,
             }
             cholmod_free_triplet (&t_eff_glo_f, p->calculs.c);
             
-            list_parcours2 = g_list_next (list_parcours2);
+            ++it2;
           }
           
           break;
@@ -1471,16 +1504,21 @@ EF_calculs_resoud_charge (Projet *p,
           double   xx, yy, zz, l;
           uint16_t j_d, j_f; // Numéro de l'élément dans la discrétisation
           
-          Charge_Barre_Repartie_Uniforme *charge_d = charge->data;
-          GList *list_parcours2 = charge_d->barres;
+          Charge_Barre_Repartie_Uniforme *charge_d =
+                               (Charge_Barre_Repartie_Uniforme *) charge->data;
+          std::list <EF_Barre *>::iterator it2 = charge_d->barres.begin ();
           
-          while (list_parcours2 != NULL)
+          while (it2 != charge_d->barres.end ())
           {
             double    ll;
-            EF_Barre *element = list_parcours2->data;
+            EF_Barre *element = *it2;
             uint16_t pos;
             
-            uint32_t num = (uint32_t) g_list_index (p->modele.barres, element);
+            uint32_t num = std::distance (
+                             p->modele.barres.begin (),
+                             std::find (p->modele.barres.begin (), 
+                                        p->modele.barres.end (), 
+                                        element));
             
       //   Convertion des efforts globaux en efforts locaux si nécessaire :
       //   \end{verbatim}\begin{center}
@@ -1624,10 +1662,11 @@ EF_calculs_resoud_charge (Projet *p,
                 }
                 else
                 {
-                  l = EF_noeuds_distance (
-                        g_list_nth_data (element->nds_inter,
-                                         j_d),
-                        element->noeud_debut);
+                  std::list <EF_Noeud *>::iterator it_t;
+                  
+                  it_t = element->nds_inter.begin ();
+                  std::advance (it_t, j_d);
+                  l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
                 BUG (!isnan (l), FALSE, FREE_ALL)
                 j_d++;
@@ -1648,10 +1687,11 @@ EF_calculs_resoud_charge (Projet *p,
                 }
                 else
                 {
-                  l = EF_noeuds_distance (
-                        g_list_nth_data (element->nds_inter,
-                                         j_f),
-                        element->noeud_debut);
+                  std::list <EF_Noeud *>::iterator it_t;
+                  
+                  it_t = element->nds_inter.begin ();       
+                  std::advance (it_t, j_f);
+                  l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
                 BUG (!isnan (l), FALSE, FREE_ALL)
                 j_f++;
@@ -1684,7 +1724,11 @@ EF_calculs_resoud_charge (Projet *p,
               }
               else
               {
-                noeud_debut = g_list_nth_data (element->nds_inter, pos - 1U);
+                std::list <EF_Noeud *>::iterator it_t;
+                
+                it_t = element->nds_inter.begin ();
+                std::advance (it_t, pos - 1U);
+                noeud_debut = *it_t;
               }
               if (pos == element->discretisation_element)
               {
@@ -1692,7 +1736,11 @@ EF_calculs_resoud_charge (Projet *p,
               }
               else
               {
-                noeud_fin = g_list_nth_data (element->nds_inter, pos);
+                std::list <EF_Noeud *>::iterator it_t;
+                
+                it_t = element->nds_inter.begin ();
+                std::advance (it_t, pos);
+                noeud_fin = *it_t;
               }
               debut_barre = EF_noeuds_distance (noeud_debut,
                                                 element->noeud_debut);
@@ -1720,8 +1768,14 @@ EF_calculs_resoud_charge (Projet *p,
                 b = 0.;
               }
               
-              num_d = (uint32_t) g_list_index (p->modele.noeuds, noeud_debut);
-              num_f = (uint32_t) g_list_index (p->modele.noeuds, noeud_fin);
+              num_d = std::distance (p->modele.noeuds.begin (),
+                                     std::find (p->modele.noeuds.begin (), 
+                                                p->modele.noeuds.end (),
+                                                noeud_debut));
+              num_f = std::distance (p->modele.noeuds.begin (),
+                                     std::find (p->modele.noeuds.begin (),
+                                                p->modele.noeuds.end (),
+                                                noeud_fin));
               
       //     Détermination des moments mx de rotation :
               BUG (EF_charge_barre_repartie_uniforme_mx (element,
@@ -2192,7 +2246,7 @@ EF_calculs_resoud_charge (Projet *p,
             cholmod_free_triplet (&t_eff_loc_i, p->calculs.c);
 #undef FREE_ALL
             
-            list_parcours2 = g_list_next (list_parcours2);
+            ++it2;
           }
           
           break;
@@ -2206,9 +2260,9 @@ EF_calculs_resoud_charge (Projet *p,
           break;
         }
       }
-      list_parcours = g_list_next (list_parcours);
+      
+      ++it3;
     }
-    while (list_parcours != NULL);
   }
   // FinPour
   
@@ -2307,7 +2361,7 @@ EF_calculs_resoud_charge (Projet *p,
   aj2 = (uint32_t *) t_dep_tot->j;
   ax2 = (double *) t_dep_tot->x;
   j = 0;
-  for (i = 0; i < g_list_length (p->modele.noeuds); i++)
+  for (i = 0; i < p->modele.noeuds.size (); i++)
   {
     for (k = 0; k < 6; k++)
     {
@@ -2367,12 +2421,15 @@ EF_calculs_resoud_charge (Projet *p,
   
   // Pour chaque barre, ajout des efforts et déplacement dus au mouvement de
   // l'ensemble de la structure.
-  list_parcours = p->modele.barres;
-  do
+  it = p->modele.barres.begin ();
+  while (it != p->modele.barres.end ())
   {
-    EF_Barre *element = list_parcours->data;
+    EF_Barre *element = *it;
     double    S = m_g (EF_sections_s (element->section));
-    uint32_t  num = (uint32_t) g_list_index (p->modele.barres, element);
+    uint32_t  num = std::distance (p->modele.barres.begin (),
+                                   std::find (p->modele.barres.begin (),
+                                              p->modele.barres.end (),
+                                              element));
     
   //   Pour chaque discrétisation de la barre
     for (j = 0; j <= element->discretisation_element; j++)
@@ -2408,7 +2465,11 @@ EF_calculs_resoud_charge (Projet *p,
       }
       else
       {
-        noeud_debut = g_list_nth_data (element->nds_inter, j - 1);
+        std::list <EF_Noeud *>::iterator it_t;
+        
+        it_t = element->nds_inter.begin ();
+        std::advance (it_t, j - 1);
+        noeud_debut = *it_t;
       }
       if (j == element->discretisation_element)
       {
@@ -2416,11 +2477,21 @@ EF_calculs_resoud_charge (Projet *p,
       }
       else
       {
-        noeud_fin = g_list_nth_data (element->nds_inter, j);
+        std::list <EF_Noeud *>::iterator it_t;
+        
+        it_t = element->nds_inter.begin ();
+        std::advance (it_t, j);
+        noeud_fin = *it_t;
       }
       
-      num_d = (uint32_t) g_list_index (p->modele.noeuds, noeud_debut);
-      num_f = (uint32_t) g_list_index (p->modele.noeuds, noeud_fin);
+      num_d = std::distance (p->modele.noeuds.begin (),
+                             std::find (p->modele.noeuds.begin (), 
+                                        p->modele.noeuds.end (),
+                                        noeud_debut));
+      num_f = std::distance (p->modele.noeuds.begin (),
+                             std::find (p->modele.noeuds.begin (),
+                                        p->modele.noeuds.end (),
+                                        noeud_fin));
       
       // Récupération des caractéristiques de la barre en fonction du matériau
       switch (element->type)
@@ -2742,10 +2813,9 @@ EF_calculs_resoud_charge (Projet *p,
       cholmod_free_sparse (&s_eff_loc, p->calculs.c);
     }
   //   FinPour
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   // FinPour
-  while (list_parcours != NULL);
   cholmod_free_triplet (&t_dep_tot, p->calculs.c);
   
   return TRUE;

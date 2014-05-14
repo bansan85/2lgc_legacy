@@ -92,7 +92,7 @@ EF_rigidite_free (Projet *p)
   
   if (p->calculs.n_comp != NULL)
   {
-    for (i = 0; i < g_list_length (p->modele.noeuds); i++)
+    for (i = 0; i < p->modele.noeuds.size (); i++)
     {
       free (p->calculs.n_comp[i]);
     }
@@ -101,7 +101,7 @@ EF_rigidite_free (Projet *p)
   }
   if (p->calculs.n_part != NULL)
   {
-    for (i = 0; i < g_list_length (p->modele.noeuds); i++)
+    for (i = 0; i < p->modele.noeuds.size (); i++)
     {
       free (p->calculs.n_part[i]);
     }

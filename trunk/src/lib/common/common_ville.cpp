@@ -240,7 +240,7 @@ common_ville_get_ville (wchar_t  *ligne,
   
   BUGPARAM (ligne, "%p", ligne, FALSE)
   
-  BUGCRIT (dep_ = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+  BUGCRIT (dep_ = (wchar_t *) malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
@@ -448,7 +448,7 @@ common_ville_set (Projet  *p,
          FALSE,
          free (ligne);
            fclose (villes); )
-    BUGCRIT (tmp = malloc (sizeof (wchar_t) *
+    BUGCRIT (tmp = (wchar_t *) malloc (sizeof (wchar_t) *
                                       (wcslen (artmin) + wcslen (nccenr) + 2)),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
@@ -497,47 +497,51 @@ common_ville_set (Projet  *p,
         g_signal_handler_block (
           gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (
-                   UI_INFO.builder, "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_add_char,
+            NULL));
         g_signal_handler_block (
           gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (
-                   UI_INFO.builder, "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_del_char,
+            NULL));
         g_signal_handler_block (
           gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_add_char,
+            NULL));
         g_signal_handler_block (
           gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_del_char,
+            NULL));
         
         BUGCRIT (code_postal2 = g_strdup_printf ("%d", code_postal),
                  FALSE,
@@ -555,47 +559,51 @@ common_ville_set (Projet  *p,
         g_signal_handler_unblock (
           gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_add_char,
+            NULL));
         g_signal_handler_unblock (
           gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_del_char,
+            NULL));
         g_signal_handler_unblock (
           gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_add_char,
+            NULL));
         g_signal_handler_unblock (
           gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+          g_signal_handler_find (
+            gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
+            G_SIGNAL_MATCH_FUNC,
+            0,
+            0,
+            NULL,
+            (void *) common_gtk_informations_entry_del_char,
+            NULL));
       }
 #endif
       if (graphique_seul)
@@ -619,18 +627,20 @@ common_ville_set (Projet  *p,
                         DATADIR"/france_neige.csv");
                 fclose (villes); )
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne);
                    free (champ1); )
-        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+        BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -723,12 +733,14 @@ common_ville_set (Projet  *p,
           break;
         }
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
@@ -855,18 +867,20 @@ common_ville_set (Projet  *p,
                         DATADIR"/france_vent.csv");
                 fclose (villes); )
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
-        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+        BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -941,12 +955,14 @@ common_ville_set (Projet  *p,
           break;
         }
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (ligne);
                    fclose (villes); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
@@ -1057,18 +1073,20 @@ common_ville_set (Projet  *p,
                         DATADIR"/france_seisme.csv");
                 fclose (villes); )
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                     free (ligne);
                     fclose (villes); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
-        BUGCRIT (dep_parcours = malloc (sizeof (wchar_t) *
+        BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -1147,12 +1165,14 @@ common_ville_set (Projet  *p,
           break;
         }
         
-        BUGCRIT (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (ligne);
                    fclose (villes); )
-        BUGCRIT (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
+        BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                         (wcslen (ligne) + 1)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);

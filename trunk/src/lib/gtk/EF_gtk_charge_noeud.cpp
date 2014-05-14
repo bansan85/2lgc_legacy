@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -74,18 +76,20 @@ GTK_WINDOW_DESTROY (ef, charge_noeud, );
  *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
-gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
-                                       Action **action,
-                                       GList  **noeuds,
-                                       double  *fx,
-                                       double  *fy,
-                                       double  *fz,
-                                       double  *mx,
-                                       double  *my,
-                                       double  *mz,
-                                       gchar  **nom)
+gboolean
+EF_gtk_charge_noeud_recupere (Projet                  *p,
+                              Action                 **action,
+                              std::list <EF_Noeud *> **noeuds,
+                              double                  *fx,
+                              double                  *fy,
+                              double                  *fz,
+                              double                  *mx,
+                              double                  *my,
+                              double                  *mz,
+                              gchar                  **nom)
 {
-  GList         *num_noeuds;
+  std::list <unsigned int> *num_noeuds;
+  
   GtkTextIter    start, end;
   gchar         *texte_tmp;
   GtkTextBuffer *textbuffer;
@@ -115,7 +119,7 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
   }
   else
   {
-    *action = g_list_nth_data (p->actions, (unsigned int) get_active);
+    *action = *std::next (p->actions.begin (), get_active);
   }
   
   *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
@@ -197,7 +201,7 @@ gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
   else
   {
     *noeuds = common_selection_numeros_en_noeuds (num_noeuds, p);
-    g_list_free (num_noeuds);
+    delete num_noeuds;
     if (*noeuds == NULL)
     {
       ok = FALSE;
@@ -244,9 +248,10 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
                            Projet    *p)
 {
   Action *action;
-  GList  *noeuds;
   double  fx, fy, fz, mx, my, mz;
   gchar  *nom = NULL;
+  
+  std::list <EF_Noeud *> *noeuds;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHNO.builder,
@@ -274,7 +279,7 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                           UI_CHNO.builder, "EF_charge_noeud_button_add_edit")),
                               TRUE);
-    g_list_free (noeuds);
+    delete noeuds;
   }
   
   g_free (nom);
@@ -298,8 +303,9 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
 {
   double  fx, fy, fz, mx, my, mz;
   Action *action;
-  GList  *noeuds;
   gchar  *texte;
+  
+  std::list <EF_Noeud *> *noeuds;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHNO.builder,
@@ -356,9 +362,10 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
 {
   double        fx, fy, fz, mx, my, mz;
   Action       *action;
-  GList        *noeuds;
   gchar        *texte;
   Charge_Noeud *charge_d;
+  
+  std::list <EF_Noeud *> *noeuds;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_CHNO.builder,
@@ -388,8 +395,7 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
   charge_d->mx = m_f (mx, FLOTTANT_UTILISATEUR);
   charge_d->my = m_f (my, FLOTTANT_UTILISATEUR);
   charge_d->mz = m_f (mz, FLOTTANT_UTILISATEUR);
-  g_list_free (charge_d->noeuds);
-  charge_d->noeuds = noeuds;
+  charge_d->noeuds.assign (noeuds->begin (), noeuds->end ());
   if (action != UI_CHNO.action)
   {
     BUG (EF_charge_deplace (p, UI_CHNO.action, UI_CHNO.charge, action), )
@@ -465,7 +471,10 @@ EF_gtk_charge_noeud (Projet *p,
   gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
                            GTK_TREE_MODEL (UI_ACT.liste));
   gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
-                            g_list_index (p->actions, action_defaut));
+                            std::distance (p->actions.begin (),
+                                           std::find (p->actions.begin (),
+                                                      p->actions.end (),
+                                                      action_defaut)));
   
   if (charge != NULL)
   {
@@ -508,7 +517,7 @@ EF_gtk_charge_noeud (Projet *p,
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_mz")),
                               tmp,
                               -1);
-    BUG (tmp2 = common_selection_noeuds_en_texte (charge_d->noeuds), FALSE)
+    BUG (tmp2 = common_selection_noeuds_en_texte (&charge_d->noeuds), FALSE)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_CHNO.builder, "EF_charge_noeud_buffer_noeuds")),
                               tmp2,

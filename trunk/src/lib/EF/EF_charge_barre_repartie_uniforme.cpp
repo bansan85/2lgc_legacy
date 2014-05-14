@@ -23,6 +23,8 @@
 #include <math.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -73,24 +75,24 @@
  *     - en cas d'erreur d'allocation mémoire.
  */
 Charge *
-EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
-                                         Action     *action,
-                                         GList      *barres,
-                                         gboolean    repere_local,
-                                         gboolean    projection,
-                                         Flottant    a,
-                                         Flottant    b,
-                                         Flottant    fx,
-                                         Flottant    fy,
-                                         Flottant    fz,
-                                         Flottant    mx,
-                                         Flottant    my,
-                                         Flottant    mz,
-                                         const char *nom)
+EF_charge_barre_repartie_uniforme_ajout (Projet                 *p,
+                                         Action                 *action,
+                                         std::list <EF_Barre *> *barres,
+                                         gboolean                repere_local,
+                                         gboolean                projection,
+                                         Flottant                a,
+                                         Flottant                b,
+                                         Flottant                fx,
+                                         Flottant                fy,
+                                         Flottant                fz,
+                                         Flottant                mx,
+                                         Flottant                my,
+                                         Flottant                mz,
+                                         const char             *nom)
 {
-  Charge                         *charge;
-  Charge_Barre_Repartie_Uniforme *charge_d;
-  GList                          *list_parcours = barres;
+  Charge                          *charge;
+  Charge_Barre_Repartie_Uniforme  *charge_d;
+  std::list <EF_Barre *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (action, "%p", action, NULL)
@@ -107,9 +109,11 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
         (gettext ("La fin de la position de la charge répartie uniformément %f est incorrecte.\n"),
                   m_g (b)); )
   
-  while (list_parcours != NULL)
+  it = barres->begin ();
+  
+  while (it != barres->end ())
   {
-    EF_Barre *barre = list_parcours->data;
+    EF_Barre *barre = *it;
     double    l = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
     
     INFO (m_g (a) <= l,
@@ -132,20 +136,15 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
                     barre->numero,
                     l); )
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
-  BUGCRIT (charge = malloc (sizeof (Charge)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (charge_d = malloc (sizeof (Charge_Barre_Repartie_Uniforme)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (charge); )
+  charge = new Charge;
+  charge_d = new Charge_Barre_Repartie_Uniforme;
   
   charge->data = charge_d;
   charge->type = CHARGE_BARRE_REPARTIE_UNIFORME;
-  charge_d->barres = barres;
+  charge_d->barres.assign (barres->begin (), barres->end ());
   charge_d->repere_local = (repere_local == TRUE);
   charge_d->projection = (projection == TRUE);
   charge_d->a = a;
@@ -159,8 +158,8 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
   
   BUG (EF_charge_ajout (p, action, charge, nom),
        NULL,
-       free (charge);
-         free (charge_d); )
+       delete charge;
+         delete charge_d; )
   
   return charge;
 }
@@ -180,7 +179,7 @@ EF_charge_barre_repartie_uniforme_ajout (Projet     *p,
 char *
 EF_charge_barre_repartie_uniforme_description (Charge *charge)
 {
-  Charge_Barre_Repartie_Uniforme  *charge_d;
+  Charge_Barre_Repartie_Uniforme *charge_d;
   
   char  txt_debut[30], txt_fin[30];
   char  txt_fx[30], txt_fy[30], txt_fz[30];
@@ -189,9 +188,9 @@ EF_charge_barre_repartie_uniforme_description (Charge *charge)
   
   BUGPARAM (charge, "%p", charge, NULL)
   
-  charge_d = charge->data;
+  charge_d = (Charge_Barre_Repartie_Uniforme *) charge->data;
   
-  BUG (txt_liste_barres = common_selection_barres_en_texte (charge_d->barres),
+  BUG (txt_liste_barres = common_selection_barres_en_texte (&charge_d->barres),
        NULL)
   
   conv_f_c (charge_d->a, txt_debut, DECIMAL_DISTANCE);
@@ -314,7 +313,11 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -322,7 +325,11 @@ EF_charge_barre_repartie_uniforme_mx (EF_Barre      *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   l = EF_noeuds_distance (debut, fin);
@@ -467,7 +474,11 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -475,7 +486,11 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   l = EF_noeuds_distance (debut, fin);
@@ -592,7 +607,11 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -600,7 +619,11 @@ EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr et
@@ -848,7 +871,11 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -856,7 +883,11 @@ EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
@@ -1160,7 +1191,11 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -1168,7 +1203,11 @@ EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
@@ -1510,7 +1549,11 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -1518,7 +1561,11 @@ EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
@@ -1806,7 +1853,11 @@ EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation - 1U);
+    debut = *it_t;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -1814,7 +1865,11 @@ EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it_t;
+    
+    it_t = barre->nds_inter.begin ();
+    std::advance (it_t, discretisation);
+    fin = *it_t;
   }
   
   debut_barre = EF_noeuds_distance (debut, barre->noeud_debut);
@@ -1914,24 +1969,27 @@ EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
  *     - charge == NULL.
  */
 gboolean
-EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
-                                                 GList  *barres,
-                                                 Projet *p)
+EF_charge_barre_repartie_uniforme_enleve_barres (
+  Charge                 *charge,
+  std::list <EF_Barre *> *barres,
+  Projet                 *p)
 {
-  GList                          *list_parcours = barres;
-  Charge_Barre_Repartie_Uniforme *charge_d;
+  std::list <EF_Barre *>::iterator it;
+  Charge_Barre_Repartie_Uniforme  *charge_d;
   
   BUGPARAM (charge, "%p", charge, FALSE)
   
-  charge_d = charge->data;
+  it = barres->begin ();
   
-  while (list_parcours != NULL)
+  charge_d = (Charge_Barre_Repartie_Uniforme *) charge->data;
+  
+  while (it != barres->end ())
   {
-    EF_Barre *barre = list_parcours->data;
+    EF_Barre *barre = *it;
     
-    charge_d->barres = g_list_remove (charge_d->barres, barre);
+    charge_d->barres.remove (barre);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
 #ifdef ENABLE_GTK
@@ -1950,7 +2008,9 @@ EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
       
       gtk_tree_model_get (model, &Iter, 0, &action, -1);
       
-      if (g_list_find (_1990_action_charges_renvoie (action), charge))
+      if (std::find (_1990_action_charges_renvoie (action)->begin (),
+                     _1990_action_charges_renvoie (action)->end (), 
+                     charge) != _1990_action_charges_renvoie (action)->end ())
       {
         gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
       }
@@ -1979,12 +2039,11 @@ EF_charge_barre_repartie_uniforme_free (Charge *charge)
   
   BUGPARAM (charge, "%p", charge, FALSE)
   
-  charge_d = charge->data;
+  charge_d = (Charge_Barre_Repartie_Uniforme *) charge->data;
   
   free (charge->nom);
-  g_list_free (charge_d->barres);
-  free (charge->data);
-  free (charge);
+  delete charge->data;
+  delete charge;
   
   return TRUE;
 }

@@ -23,6 +23,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
@@ -55,39 +57,34 @@ _1993_1_1_materiaux_ajout (Projet     *p,
                            Flottant    fy,
                            Flottant    fu)
 {
-  EF_Materiau    *materiau_nouveau;
-  Materiau_Acier *data_acier;
+  std::unique_ptr <EF_Materiau>    materiau_nouveau (new EF_Materiau);
+  std::unique_ptr <Materiau_Acier> data_acier (new Materiau_Acier);
+  
+  EF_Materiau *mat;
   
   BUGPARAM (p, "%p", p, NULL)
-  BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (data_acier = malloc (sizeof (Materiau_Acier)),
-           NULL,
-           (gettext("Erreur d'allocation mémoire.\n"));
-             free (materiau_nouveau); )
   
   materiau_nouveau->type = MATERIAU_ACIER;
-  materiau_nouveau->data = data_acier;
   
   BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (materiau_nouveau);
-             free (data_acier); )
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   data_acier->fy = m_f (m_g (fy) * 1000000., fy.type);
   data_acier->fu = m_f (m_g (fu) * 1000000., fu.type);
   data_acier->e  = m_f (MODULE_YOUNG_ACIER, FLOTTANT_ORDINATEUR);
   data_acier->nu = m_f (COEFFICIENT_NU_ACIER, FLOTTANT_ORDINATEUR);
   
-  BUG (EF_materiaux_insert (p, materiau_nouveau),
-       NULL,
-       free (materiau_nouveau->nom);
-         free (data_acier);
-         free (materiau_nouveau); )
+  mat = materiau_nouveau.release ();
+  mat->data = data_acier.release ();
   
-  return materiau_nouveau;
+  BUG (EF_materiaux_insert (p, mat),
+       NULL,
+       delete materiau_nouveau->nom;
+         delete mat->data;
+         delete mat; )
+  
+  return mat;
 }
 
 
@@ -123,7 +120,7 @@ _1993_1_1_materiaux_modif (Projet      *p,
            FALSE,
            (gettext ("Le matériau n'est pas en acier.\n")); )
   
-  data_acier = materiau->data;
+  data_acier = (Materiau_Acier *) materiau->data;
   
   if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
   {
@@ -161,32 +158,32 @@ _1993_1_1_materiaux_modif (Projet      *p,
   if ((!isnan (m_g (fy))) || (!isnan (m_g (fu))) ||
       (!isnan (m_g (e))) || (!isnan (m_g (nu))))
   {
-    GList *liste_materiaux = NULL;
-    GList *liste_barres_dep;
+    std::list <EF_Materiau *> liste_materiaux;
+    std::list <EF_Barre *>   *liste_barres_dep;
     
-    liste_materiaux = g_list_append (liste_materiaux, materiau);
+    liste_materiaux.push_back (materiau);
     BUG (_1992_1_1_barres_cherche_dependances (p,
                                                NULL,
                                                NULL,
                                                NULL,
-                                               liste_materiaux,
+                                               &liste_materiaux,
+                                               NULL,
                                                NULL,
                                                NULL,
                                                NULL,
                                                &liste_barres_dep,
                                                NULL,
-                                               FALSE,
+                                               NULL,
                                                FALSE),
-         FALSE,
-         g_list_free (liste_materiaux); )
-    g_list_free (liste_materiaux);
+         FALSE)
+    liste_materiaux.clear ();
     
-    if (liste_barres_dep != NULL)
+    if (!liste_barres_dep->empty ())
     {
-      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep); )
+      BUG (EF_calculs_free (p), FALSE, delete liste_barres_dep; )
     }
     
-    g_list_free (liste_barres_dep);
+    delete liste_barres_dep;
   }
   
 #ifdef ENABLE_GTK
@@ -225,7 +222,7 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
            NULL,
            (gettext ("Le matériau n'est pas en acier.\n")); )
   
-  data_acier = materiau->data;
+  data_acier = (Materiau_Acier *) materiau->data;
   
   conv_f_c (m_f (m_g (data_acier->fy) / 1000000., data_acier->fy.type),
             tmp1,

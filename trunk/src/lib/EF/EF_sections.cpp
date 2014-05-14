@@ -54,7 +54,7 @@ EF_sections_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  p->modele.sections = NULL;
+  p->modele.sections.clear ();
   
 #ifdef ENABLE_GTK
   UI_SEC.liste_sections = gtk_list_store_new (1, G_TYPE_STRING);
@@ -79,27 +79,28 @@ gboolean
 EF_sections_insert (Projet  *p,
                     Section *section)
 {
-  GList   *list_parcours;
+  std::list <Section *>::iterator it;
+  
   Section *section_tmp;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
   
-  list_parcours = p->modele.sections;
-  while (list_parcours != NULL)
+  it = p->modele.sections.begin ();
+  while (it != p->modele.sections.end ())
   {
-    section_tmp = list_parcours->data;
+    section_tmp = *it;
     
     if (strcmp (section->nom, section_tmp->nom) < 0)
     {
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.sections.end ())
   {
-    p->modele.sections = g_list_append (p->modele.sections, section);
+    p->modele.sections.push_back (section);
 #ifdef ENABLE_GTK
     gtk_list_store_append (UI_SEC.liste_sections, &section->Iter_liste);
     if (UI_SEC.builder != NULL)
@@ -110,8 +111,7 @@ EF_sections_insert (Projet  *p,
   }
   else
   {
-    p->modele.sections = g_list_insert_before (p->modele.sections,
-                                               list_parcours, section);
+    p->modele.sections.insert (it, section);
 #ifdef ENABLE_GTK
     gtk_list_store_insert_before (UI_SEC.liste_sections,
                                   &section->Iter_liste,
@@ -160,23 +160,21 @@ gboolean
 EF_sections_repositionne (Projet  *p,
                           Section *section)
 {
-  GList *list_parcours;
+  std::list <Section *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
   
   // On réinsère la section au bon endroit
-  p->modele.sections = g_list_remove (p->modele.sections, section);
-  list_parcours = p->modele.sections;
-  while (list_parcours != NULL)
+  p->modele.sections.remove (section);
+  it = p->modele.sections.begin ();
+  while (it != p->modele.sections.end ())
   {
-    Section *section_parcours = list_parcours->data;
+    Section *section_parcours = *it;
     
     if (strcmp (section->nom, section_parcours->nom) < 0)
     {
-      p->modele.sections = g_list_insert_before (p->modele.sections,
-                                                 list_parcours,
-                                                 section);
+      p->modele.sections.insert (it, section);
       
 #ifdef ENABLE_GTK
       gtk_list_store_move_before (UI_SEC.liste_sections,
@@ -192,11 +190,11 @@ EF_sections_repositionne (Projet  *p,
 #endif
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.sections.end ())
   {
-    p->modele.sections = g_list_append (p->modele.sections, section);
+    p->modele.sections.push_back (section);
     
 #ifdef ENABLE_GTK
     gtk_list_store_move_before (UI_SEC.liste_sections,
@@ -243,19 +241,14 @@ EF_sections_repositionne (Projet  *p,
   INFO (!EF_sections_cherche_nom (p, nom, FALSE), \
         NULL, \
         (gettext ("La section %s existe déjà.\n"), nom); ) \
-  BUGCRIT (section_nouvelle = malloc (sizeof (Section)), \
-           NULL, \
-           (gettext ("Erreur d'allocation mémoire.\n")); ) \
-  BUGCRIT (section_data = malloc (sizeof (TYPE)), \
-           NULL, \
-           (gettext ("Erreur d'allocation mémoire.\n")); \
-             free (section_nouvelle); ) \
+  section_nouvelle = new Section; \
+  section_data = new TYPE; \
   section_nouvelle->data = section_data; \
   BUGCRIT (section_nouvelle->nom = g_strdup (nom), \
            NULL, \
            (gettext ("Erreur d'allocation mémoire.\n")); \
-             free (section_data); \
-             free (section_nouvelle); )
+             delete section_data; \
+             delete section_nouvelle; )
 
 
 /**
@@ -288,9 +281,9 @@ EF_sections_rectangulaire_ajout (Projet     *p,
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
-       free (section_data);
+       delete section_data;
          free (section_nouvelle->nom);
-         free (section_nouvelle); )
+         delete section_nouvelle; )
   
   return section_nouvelle;
 }
@@ -309,33 +302,37 @@ EF_sections_rectangulaire_ajout (Projet     *p,
 #ifdef ENABLE_GTK
 #define SECTION_MODIF2 \
   { \
-    GList *liste_sections = NULL, *liste_barres_dep; \
+    std::list <Section *>   liste_sections; \
+    std::list <EF_Barre *> *liste_barres_dep; \
     \
-    liste_sections = g_list_append (liste_sections, section); \
+    liste_sections.push_back (section); \
     BUG (_1992_1_1_barres_cherche_dependances (p, \
                                                NULL, \
                                                NULL, \
-                                               liste_sections, \
+                                               &liste_sections, \
+                                               NULL, \
                                                NULL, \
                                                NULL, \
                                                NULL, \
                                                NULL, \
                                                &liste_barres_dep, \
                                                NULL, \
-                                               FALSE, \
+                                               NULL, \
                                                FALSE), \
-         FALSE, \
-         g_list_free (liste_sections); ) \
-    g_list_free (liste_sections); \
+         FALSE) \
     \
-    if (liste_barres_dep != NULL) \
+    if (!liste_barres_dep->empty ()) \
     { \
       BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), \
            FALSE, \
-           g_list_free (liste_barres_dep); ) \
-      g_list_free (liste_barres_dep); \
+             delete liste_barres_dep; ) \
+      delete liste_barres_dep; \
       BUG (m3d_rafraichit (p), FALSE) \
       BUG (EF_calculs_free (p), FALSE) \
+    } \
+    else \
+    { \
+      delete liste_barres_dep; \
     } \
   } \
   \
@@ -345,29 +342,33 @@ EF_sections_rectangulaire_ajout (Projet     *p,
 #else
 #define SECTION_MODIF2 \
   { \
-    GList *liste_sections = NULL, *liste_barres_dep; \
+    std::list <Section *>   liste_sections; \
+    std::list <EF_Barre *> *liste_barres_dep; \
     \
-    liste_sections = g_list_append (liste_sections, section); \
+    liste_sections.push_back (section); \
     BUG (_1992_1_1_barres_cherche_dependances (p, \
                                                NULL, \
                                                NULL, \
-                                               liste_sections, \
+                                               &liste_sections, \
+                                               NULL, \
                                                NULL, \
                                                NULL, \
                                                NULL, \
                                                NULL, \
                                                &liste_barres_dep, \
                                                NULL, \
-                                               FALSE, \
+                                               NULL, \
                                                FALSE), \
-         FALSE, \
-         g_list_free (liste_sections); ) \
-    g_list_free (liste_sections); \
+         FALSE) \
     \
-    if (liste_barres_dep != NULL) \
+    if (!liste_barres_dep->empty ()) \
     { \
-      g_list_free (liste_barres_dep); \
+      delete liste_barres_dep; \
       BUG (EF_calculs_free (p), FALSE) \
+    } \
+    else \
+    { \
+      delete liste_barres_dep; \
     } \
   }
 #endif
@@ -488,9 +489,9 @@ EF_sections_T_ajout (Projet     *p,
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
-       free (section_data);
+       delete section_data;
          free (section_nouvelle->nom);
-         free (section_nouvelle); )
+         delete section_nouvelle; )
   
   return section_nouvelle;
 }
@@ -601,9 +602,9 @@ EF_sections_carree_ajout (Projet    *p,
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
-       free (section_data);
+       delete section_data;
          free (section_nouvelle->nom);
-         free (section_nouvelle); )
+         delete section_nouvelle; )
   
   return section_nouvelle;
 }
@@ -713,9 +714,9 @@ EF_sections_circulaire_ajout (Projet     *p,
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
-       free (section_data);
+       delete section_data;
          free (section_nouvelle->nom);
-         free (section_nouvelle); )
+         delete section_nouvelle; )
   
   return section_nouvelle;
 }
@@ -1238,17 +1239,17 @@ EF_sections_personnalisee_ajout (Projet     *p,
   INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
         NULL,
         (gettext ("La forme est incorrecte.\n"));
-          free (section_data);
+          delete section_data;
           free (section_nouvelle->nom);
-          free (section_nouvelle); )
+          delete section_nouvelle; )
   
   section_nouvelle->type = SECTION_PERSONNALISEE;
   BUGCRIT (section_data->description = g_strdup (description),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (section_data);
+             delete section_data;
              free (section_nouvelle->nom);
-             free (section_nouvelle); )
+             delete section_nouvelle; )
   section_data->j = j;
   section_data->iy = iy;
   section_data->iz = iz;
@@ -1257,14 +1258,14 @@ EF_sections_personnalisee_ajout (Projet     *p,
   section_data->vz = vz;
   section_data->vzp = vzp;
   section_data->s = s;
-  section_data->forme = forme;
+  section_data->forme.assign (forme->begin (), forme->end ());
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
        free (section_data->description);
          free (section_nouvelle->nom);
-         free (section_data);
-         free (section_nouvelle); )
+         delete section_data;
+         delete section_nouvelle; )
   
   return section_nouvelle;
 }
@@ -1275,7 +1276,7 @@ EF_sections_personnalisee_ajout (Projet     *p,
  *        être appelée avec g_list_free_full.
  *        Pour libérer seulement la liste sans les points, il suffit
  *        d'appeler g_list_free_full (forme, (GDestroyNotify) g_list_free);
- * \param forme : la forme à libérer,
+ * \param forme_e : la forme à libérer,
  */
 void EF_sections_personnalisee_free_forme1 (std::list <EF_Point *> *forme_e)
 {
@@ -1393,14 +1394,13 @@ EF_sections_personnalisee_modif (Projet     *p,
   SECTION_MODIF (vzp, vzp)
   SECTION_MODIF (s, s)
   
-  if ((forme != NULL) && (!forme->empty ()))
+  if (forme != NULL)
   {
-    for_each (section_data->forme->begin (),
-              section_data->forme->end (),
+    for_each (section_data->forme.begin (),
+              section_data->forme.end (),
               EF_sections_personnalisee_free_forme1);
-    delete section_data->forme;
     
-    section_data->forme = forme;
+    section_data->forme.assign (forme->begin (), forme->end ());
   }
   
   // Ici, il n'est pas possible d'utiliser SECTION_MODIF2 à cause de forme.
@@ -1414,39 +1414,39 @@ EF_sections_personnalisee_modif (Projet     *p,
       (!isnan (m_g (s))) ||
       ((forme != NULL) && (!forme->empty ())))
   {
-    GList *liste_sections = NULL, *liste_barres_dep;
+    std::list <Section *>   liste_sections;
+    std::list <EF_Barre *> *liste_barres_dep;
     
-    liste_sections = g_list_append (liste_sections, section);
+    liste_sections.push_back (section);
     BUG (_1992_1_1_barres_cherche_dependances (p,
                                                NULL,
                                                NULL,
-                                               liste_sections,
+                                               &liste_sections,
+                                               NULL,
                                                NULL,
                                                NULL,
                                                NULL,
                                                NULL,
                                                &liste_barres_dep,
                                                NULL,
-                                               FALSE,
+                                               NULL,
                                                FALSE),
-         FALSE,
-         g_list_free (liste_sections); )
-    g_list_free (liste_sections);
+         FALSE)
     
-    if (liste_barres_dep != NULL)
+    if (!liste_barres_dep->empty ())
     {
 #ifdef ENABLE_GTK
       if ((forme != NULL) && (!forme->empty ()))
       {
         BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep),
              FALSE,
-             g_list_free (liste_barres_dep); )
+             delete liste_barres_dep; )
         BUG (m3d_rafraichit (p),
              FALSE,
-             g_list_free (liste_barres_dep); )
+             delete liste_barres_dep; )
       }
 #endif
-      g_list_free (liste_barres_dep);
+      delete liste_barres_dep;
       if ((!isnan (m_g (j))) ||
           (!isnan (m_g (iy))) ||
           (!isnan (m_g (iz))) ||
@@ -1490,21 +1490,21 @@ EF_sections_cherche_nom (Projet     *p,
                          const char *nom,
                          gboolean    critique)
 {
-  GList *list_parcours;
+  std::list <Section *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   
-  list_parcours = p->modele.sections;
-  while (list_parcours != NULL)
+  it = p->modele.sections.begin ();
+  while (it != p->modele.sections.end ())
   {
-    Section *section = list_parcours->data;
+    Section *section = *it;
     
     if (strcmp (section->nom, nom) == 0)
     {
       return section;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (critique)
@@ -1647,10 +1647,10 @@ EF_sections_free_un (Section *section)
       Section_Personnalisee *section2 = section->data;
       
       free (section2->description);
-      for_each (section2->forme->begin (),
-                section2->forme->end (),
+      for_each (section2->forme.begin (),
+                section2->forme.end (),
                 EF_sections_personnalisee_free_forme1);
-      delete section2->forme;
+      section2->forme.clear ();
       
       break;
     }
@@ -1662,9 +1662,9 @@ EF_sections_free_un (Section *section)
       break;
     }
   }
-  free (section->data);
+  delete section->data;
   free (section->nom);
-  free (section);
+  delete section;
   
   return;
 }
@@ -1692,42 +1692,42 @@ EF_sections_supprime (Section *section,
                       gboolean annule_si_utilise,
                       Projet  *p)
 {
-  GList *liste_sections = NULL, *liste_barres_dep;
+  std::list <Section *> liste_sections;
+  std::list <EF_Barre *> *liste_barres_dep;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (section, "%p", section, FALSE)
   
   // On vérifie les dépendances.
-  liste_sections = g_list_append (liste_sections, section);
+  liste_sections.push_back (section);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
-                                             liste_sections,
+                                             &liste_sections,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (liste_sections); )
-  g_list_free (liste_sections);
+       FALSE)
   
-  if ((annule_si_utilise) && (liste_barres_dep != NULL))
+  if ((annule_si_utilise) && (!liste_barres_dep->empty()))
   {
     char *liste;
     
     BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
          FALSE,
-         g_list_free (liste_barres_dep); )
-    if (g_list_next (liste_barres_dep) == NULL)
+         delete liste_barres_dep; )
+    if (liste_barres_dep->size () == 1)
     {
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
                           liste);
-                  g_list_free (liste_barres_dep);
+                  delete liste_barres_dep;
                   free (liste); )
     }
     else
@@ -1735,17 +1735,17 @@ EF_sections_supprime (Section *section,
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
                           liste);
-                  g_list_free (liste_barres_dep);
+                  delete liste_barres_dep;
                   free (liste); )
     }
   }
   
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
        FALSE,
-       g_list_free (liste_barres_dep); )
-  g_list_free (liste_barres_dep);
+       delete liste_barres_dep; )
+  delete liste_barres_dep;
   
-  p->modele.sections = g_list_remove (p->modele.sections, section);
+  p->modele.sections.remove (section);
   
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_SEC.liste_sections, &section->Iter_liste);
@@ -2292,7 +2292,11 @@ EF_sections_ay (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2300,7 +2304,11 @@ EF_sections_ay (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2349,7 +2357,11 @@ EF_sections_by (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2357,7 +2369,11 @@ EF_sections_by (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data(barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2406,7 +2422,11 @@ EF_sections_cy (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2414,7 +2434,11 @@ EF_sections_cy (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2463,7 +2487,11 @@ EF_sections_az (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2471,7 +2499,11 @@ EF_sections_az (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2520,7 +2552,11 @@ EF_sections_bz (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2528,7 +2564,11 @@ EF_sections_bz (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2577,7 +2617,11 @@ EF_sections_cz (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2585,7 +2629,11 @@ EF_sections_cz (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2733,7 +2781,11 @@ EF_sections_gj_l (EF_Barre *barre,
   }
   else
   {
-    debut = g_list_nth_data (barre->nds_inter, discretisation - 1U);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation - 1U);
+    debut = *it;
   }
   if (discretisation == barre->discretisation_element)
   {
@@ -2741,7 +2793,11 @@ EF_sections_gj_l (EF_Barre *barre,
   }
   else
   {
-    fin = g_list_nth_data (barre->nds_inter, discretisation);
+    std::list <EF_Noeud *>::iterator it;
+    
+    it = barre->nds_inter.begin ();
+    std::advance (it, discretisation);
+    fin = *it;
   }
   
   ll = EF_noeuds_distance (fin, debut);
@@ -2765,12 +2821,10 @@ EF_sections_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  if (p->modele.sections != NULL)
-  {
-    g_list_free_full (p->modele.sections,
-                      (GDestroyNotify) &EF_sections_free_un);
-    p->modele.sections = NULL;
-  }
+  for_each (p->modele.sections.begin (),
+            p->modele.sections.end (),
+            EF_sections_free_un);
+  p->modele.sections.clear ();
   
   BUG (EF_calculs_free (p), FALSE)
   

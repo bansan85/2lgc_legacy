@@ -22,9 +22,13 @@
 #include <gmodule.h>
 #include <math.h>
 
+#include <algorithm>
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "1990_action.hpp"
+#include "1990_combinaisons.hpp"
 #include "1990_groupe.hpp"
 
 #ifdef ENABLE_GTK
@@ -45,7 +49,7 @@ _1990_groupe_init (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  p->niveaux_groupes = NULL;
+  p->niveaux_groupes.clear ();
   
   return TRUE;
 }
@@ -67,13 +71,11 @@ _1990_groupe_ajout_niveau (Projet *p)
   Niveau_Groupe *niveau_nouveau;
   
   BUGPARAM (p, "%p", p, FALSE)
-  BUGCRIT (niveau_nouveau = malloc (sizeof (Niveau_Groupe)),
-           FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  niveau_nouveau = new Niveau_Groupe;
   
-  niveau_nouveau->groupes = NULL;
+  niveau_nouveau->groupes.clear ();
   
-  p->niveaux_groupes = g_list_append (p->niveaux_groupes, niveau_nouveau);
+  p->niveaux_groupes.push_back (niveau_nouveau);
   
 #ifdef ENABLE_GTK
   // Mise à jour des limites du composant spin_button
@@ -82,13 +84,13 @@ _1990_groupe_ajout_niveau (Projet *p)
     gtk_tree_store_clear (UI_GRO.tree_store_etat);
     gtk_spin_button_set_range (GTK_SPIN_BUTTON (UI_GRO.spin_button_niveau),
                                0,
-                               g_list_length (p->niveaux_groupes) - 1);
+                               p->niveaux_groupes.size () - 1);
     
     // La modification de la valeur du composant spin_button execute
     // automatiquement #_1990_gtk_spin_button_niveau_change qui met à jour
     // l'interface graphique
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (UI_GRO.spin_button_niveau),
-                               g_list_length (p->niveaux_groupes) - 1);
+                               p->niveaux_groupes.size () - 1);
   }
 #endif
   
@@ -120,30 +122,30 @@ _1990_groupe_ajout_groupe (Projet                 *p,
   
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (niveau_groupe, "%p", niveau_groupe, NULL)
-  BUGCRIT (groupe_nouveau = malloc (sizeof (Groupe)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  groupe_nouveau = new Groupe;
   
   BUGCRIT (groupe_nouveau->nom = g_strdup_printf ("%s", nom),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (groupe_nouveau); )
+             delete groupe_nouveau; )
   groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
   groupe_nouveau->Iter_expand = 1;
 #endif
   
-  groupe_nouveau->tmp_combinaison = NULL;
+  groupe_nouveau->tmp_combinaison.clear ();
   
   groupe_nouveau->elements = NULL;
-  niveau_groupe->groupes = g_list_append (niveau_groupe->groupes,
-                                          groupe_nouveau);
+  niveau_groupe->groupes.push_back (groupe_nouveau);
   
 #ifdef ENABLE_GTK
   if ((UI_GRO.builder != NULL) &&
       (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
-        g_list_index (p->niveaux_groupes, niveau_groupe)))
+         std::distance (p->niveaux_groupes.begin (),
+                        std::find (p->niveaux_groupes.begin (),
+                                   p->niveaux_groupes.end (),
+                                   niveau_groupe))))
   {
     GtkTreePath *path;
     
@@ -201,7 +203,7 @@ _1990_groupe_ajout_element (Projet        *p,
                             void          *element_add)
 {
   BUGPARAM (p, "%p", p, FALSE)
-  INFO (p->niveaux_groupes,
+  INFO (!p->niveaux_groupes.empty (),
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n")); )
   BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
@@ -238,12 +240,15 @@ _1990_groupe_ajout_element (Projet        *p,
   if ((UI_GRO.builder != NULL) &&
       (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
-         g_list_index (p->niveaux_groupes, niveau_groupe)))
+         std::distance (p->niveaux_groupes.begin (),
+                        std::find (p->niveaux_groupes.begin (),
+                                   p->niveaux_groupes.end (),
+                                   niveau_groupe))))
   {
     GtkTreeIter  iter;
     void        *data;
     GtkTreePath *path; // Pour développer une ligne du TreeView
-    Groupe      *groupe2 = element_add;
+    Groupe      *groupe2 = (Groupe *) element_add;
     
     // On supprime l'élément à ajouter dans le groupe de la liste des éléments
     // disponibles.
@@ -364,7 +369,10 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
     // modifier.
     if (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
-          g_list_index (p->niveaux_groupes, groupe_niveau))
+          std::distance (p->niveaux_groupes.begin (),
+                         std::find (p->niveaux_groupes.begin (),
+                                    p->niveaux_groupes.end (),
+                                    groupe_niveau)))
     {
       gtk_widget_queue_resize (GTK_WIDGET (UI_GRO.tree_view_etat));
     }
@@ -373,7 +381,10 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
     // liste des éléments disponibles.
     else if (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON 
                                                 (UI_GRO.spin_button_niveau)) ==
-               g_list_index (p->niveaux_groupes, groupe_niveau) + 1)
+          std::distance (p->niveaux_groupes.begin (),
+                         std::find (p->niveaux_groupes.begin (),
+                                    p->niveaux_groupes.end (),
+                                    groupe_niveau)) + 1)
     {
       gtk_widget_queue_resize (GTK_WIDGET (UI_GRO.tree_view_etat));
       gtk_widget_queue_resize (GTK_WIDGET (UI_GRO.tree_view_dispo));
@@ -398,23 +409,27 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
 gboolean
 _1990_groupe_affiche_tout (Projet *p)
 {
-  GList  *list_parcours;
+  std::list<Niveau_Groupe*>::iterator it;
+  
   uint8_t nniveau = 0;
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  list_parcours = p->niveaux_groupes;
-  while (list_parcours != NULL)
+  it = p->niveaux_groupes.begin ();
+  while (it != p->niveaux_groupes.end ())
   {
-    Niveau_Groupe *niveau = list_parcours->data;
-    GList         *list_parcours2 = niveau->groupes;
+    Niveau_Groupe *niveau = *it;
+    
+    std::list<Groupe*>::iterator it2 = niveau->groupes.begin ();
     
     printf (gettext ("niveau : %d\n"), nniveau);
     
-    while (list_parcours2 != NULL)
+    while (it2 != niveau->groupes.end ())
     {
-      Groupe *groupe = list_parcours2->data;
+      Groupe *groupe = *it2;
       GList  *list_parcours3 = groupe->elements;
+      
+      std::list <std::list <Combinaison *> *>::iterator it3;
       
       printf (gettext ("\tgroupe : '%s', combinaison : "), groupe->nom);
       switch (groupe->type_combinaison)
@@ -442,7 +457,7 @@ _1990_groupe_affiche_tout (Projet *p)
           break;
         }
       }
-      if (p->niveaux_groupes->data == list_parcours->data)
+      if (p->niveaux_groupes.begin () == it)
       {
         printf (gettext ("\t\tActions contenus dans ce groupe : "));
       }
@@ -454,15 +469,15 @@ _1990_groupe_affiche_tout (Projet *p)
       
       while (list_parcours3 != NULL)
       {
-        if (p->niveaux_groupes->data == list_parcours->data)
+        if (p->niveaux_groupes.begin () == it)
         {
-          Action *action = list_parcours3->data;
+          Action *action = (Action *) list_parcours3->data;
           
           printf("'%s' ", _1990_action_nom_renvoie (action));
         }
         else
         {
-          Groupe *groupe_n_1 = list_parcours3->data;
+          Groupe *groupe_n_1 = (Groupe *) list_parcours3->data;
           
           printf("'%s' ", groupe_n_1->nom);
         }
@@ -471,40 +486,35 @@ _1990_groupe_affiche_tout (Projet *p)
       }
       printf ("\n");
       printf (gettext ("\t\tCombinaisons :\n"));
-      if (groupe->tmp_combinaison != NULL)
+      
+      it3 = groupe->tmp_combinaison.begin ();
+      
+      while (it3 != groupe->tmp_combinaison.end ())
       {
-        list_parcours3 = groupe->tmp_combinaison;
+        std::list <Combinaison *> *combinaison = *it3;
+        std::list <Combinaison *>::iterator it4 = combinaison->begin ();
         
-        do
+        printf ("\t\t\t");
+        
+        while (it4 != combinaison->end ())
         {
-          GList *combinaison = list_parcours3->data;
+          Combinaison *comb_element = *it4;
+          Action      *action = (Action *) comb_element->action;
           
-          printf ("\t\t\t");
-          if (combinaison != NULL)
-          {
-            GList *list_parcours4 = combinaison;
-            do
-            {
-              Combinaison *comb_element = list_parcours4->data;
-              Action      *action = (Action *) comb_element->action;
-              
-              printf("'%s'(%u) ",
-                     _1990_action_nom_renvoie (action),
-                     comb_element->flags);
-              
-              list_parcours4 = g_list_next (list_parcours4);
-            }
-            while (list_parcours4 != NULL);
-          }
-          printf ("\n");
-          list_parcours3 = g_list_next (list_parcours3);
+          printf("'%s'(%u) ",
+                 _1990_action_nom_renvoie (action),
+                 comb_element->flags);
+          
+          ++it4;
         }
-        while (list_parcours3 != NULL);
+        
+        printf ("\n");
+        ++it3;
       }
-      list_parcours2 = g_list_next (list_parcours2);
+      ++it2;
     }
     nniveau++;
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   return TRUE;
@@ -532,7 +542,7 @@ _1990_groupe_retire_element (Projet        *p,
                              void          *element)
 {
 #ifdef ENABLE_GTK
-  Groupe  *groupe2 = element;
+  Groupe  *groupe2 = (Groupe *) element;
 #endif
   
   BUGPARAM (p, "%p", p, FALSE)
@@ -547,7 +557,10 @@ _1990_groupe_retire_element (Projet        *p,
   if ((UI_GRO.builder != NULL) &&
       (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
-         g_list_index (p->niveaux_groupes, niveau_groupe)))
+         std::distance (p->niveaux_groupes.begin (),
+                        std::find (p->niveaux_groupes.begin (),
+                                   p->niveaux_groupes.end (),
+                                   niveau_groupe))))
   {
     if (gtk_tree_selection_iter_is_selected (UI_GRO.tree_select_etat,
                                              &groupe2->Iter_groupe))
@@ -596,21 +609,27 @@ _1990_groupe_free_niveau (Projet        *p,
                           Niveau_Groupe *niveau_groupe,
                           gboolean       accept_vide)
 {
-  GList *list_parcours;
+  std::list <Niveau_Groupe *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  list_parcours = g_list_find (p->niveaux_groupes, niveau_groupe);
-  do
+  it = std::find (p->niveaux_groupes.begin (),
+                  p->niveaux_groupes.end (),
+                  niveau_groupe);
+  
+  
+  while (it != p->niveaux_groupes.end ())
   {
-    niveau_groupe = list_parcours->data;
+    niveau_groupe = *it;
+    
+    std::list <Groupe *>::iterator it2 = niveau_groupe->groupes.begin ();
     // Il peut être possible d'utiliser la fonction #_1990_groupe_free_groupe
     // mais cette dernier analyse également le niveau supérieur pour supprimer
     // les références devenues obsolète, ce qui est inutile ici puisque tous
     // les niveaux supérieurs vont également être supprimés.
-    while (niveau_groupe->groupes != NULL)
+    while (it2 != niveau_groupe->groupes.end ())
     {
-      Groupe *groupe = niveau_groupe->groupes->data;
+      Groupe *groupe = *niveau_groupe->groupes.begin ();
       
       free (groupe->nom);
       
@@ -621,38 +640,23 @@ _1990_groupe_free_niveau (Projet        *p,
       }
       
       // On libère toutes les combinaisons temporaires
-      if (groupe->tmp_combinaison != NULL)
-      {
-        while (groupe->tmp_combinaison != NULL)
-        {
-          GList *combinaison = groupe->tmp_combinaison->data;
-          
-          if (combinaison != NULL)
-          {
-            g_list_free_full (combinaison, free);
-          }
-          groupe->tmp_combinaison = g_list_delete_link (
-                             groupe->tmp_combinaison, groupe->tmp_combinaison);
-        }
-        free (groupe->tmp_combinaison);
-      }
+      for_each (groupe->tmp_combinaison.begin (),
+                groupe->tmp_combinaison.end (),
+                _1990_combinaisons_free_1);
       
-      free (groupe);
+      delete groupe;
       
       // Et enfin, on supprime l'élément courant.
-      niveau_groupe->groupes = g_list_delete_link (niveau_groupe->groupes,
-                                                   niveau_groupe->groupes);
+      ++it2;
     }
     
-    list_parcours = g_list_next (list_parcours);
-    p->niveaux_groupes = g_list_remove (p->niveaux_groupes, niveau_groupe);
+    it = p->niveaux_groupes.erase (it);
     
-    free (niveau_groupe);
+    delete niveau_groupe;
   }
-  while ((p->niveaux_groupes != NULL) && (list_parcours != NULL));
   
   // On oblige la liste des niveaux à posséder au moins un niveau vide.
-  if ((p->niveaux_groupes == NULL) && (accept_vide == FALSE))
+  if ((p->niveaux_groupes.empty ()) && (accept_vide == FALSE))
   {
     BUG (_1990_groupe_ajout_niveau (p), FALSE)
 #ifdef ENABLE_GTK
@@ -670,7 +674,7 @@ _1990_groupe_free_niveau (Projet        *p,
     // On réajuste les limites du spin_button
     gtk_spin_button_set_range (GTK_SPIN_BUTTON (UI_GRO.spin_button_niveau),
                                0,
-                               g_list_length (p->niveaux_groupes) - 1);
+                               p->niveaux_groupes.size () - 1);
   }
 #endif
   
@@ -687,19 +691,27 @@ _1990_groupe_free_niveau (Projet        *p,
  *     - groupe == NULL,
  */
 gboolean
-_1990_groupe_free_combinaisons (GList **liste)
+_1990_groupe_free_combinaisons (
+  std::list <std::list <Combinaison *> *> *liste)
 {
+  std::list <std::list <Combinaison *> *>::iterator it;
+  
   BUGPARAM (liste, "%p", liste, FALSE)
   
+  it = liste->begin ();
   // On libère toutes les combinaisons temporaires.
-  while (*liste != NULL)
+  while (it != liste->end ())
   {
-    GList *combinaison = (*liste)->data;
+    std::list <Combinaison *> *combinaison = *it;
     
-    g_list_free_full (combinaison, free);
-    *liste = g_list_delete_link (*liste, *liste);
+    for_each (combinaison->begin (),
+              combinaison->end (),
+              std::default_delete <Combinaison> ());
+    delete combinaison;
+    
+    it = liste->erase (it);
   }
-  
+
   return TRUE;
 }
 
@@ -721,7 +733,7 @@ _1990_groupe_free_groupe (Projet        *p,
                           Niveau_Groupe *niveau_groupe,
                           Groupe        *groupe)
 {
-  GList *list_parcours;
+  std::list <Niveau_Groupe *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -729,8 +741,12 @@ _1990_groupe_free_groupe (Projet        *p,
   if ((UI_GRO.builder != NULL) &&
       (GTK_COMMON_SPINBUTTON_AS_INT (GTK_SPIN_BUTTON (
                                                  UI_GRO.spin_button_niveau)) ==
-         g_list_index (p->niveaux_groupes, niveau_groupe)))
+         std::distance (p->niveaux_groupes.begin (),
+                        std::find (p->niveaux_groupes.begin (),
+                                   p->niveaux_groupes.end (),
+                                   niveau_groupe))))
   {
+    GList       *list_parcours;
     GtkTreePath *path;
     
     // On sélectionne dans la liste des groupes la ligne suivante. Et si elle
@@ -779,46 +795,50 @@ _1990_groupe_free_groupe (Projet        *p,
   _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);
   
   // Et enfin, on supprime l'élément courant.
-  niveau_groupe->groupes = g_list_remove (niveau_groupe->groupes, groupe);
-  free (groupe);
+  niveau_groupe->groupes.erase (std::find (niveau_groupe->groupes.begin (),
+                                           niveau_groupe->groupes.end (),
+                                           groupe));
+  delete groupe;
   
-  list_parcours = g_list_find (p->niveaux_groupes, niveau_groupe);
-  list_parcours = g_list_next (list_parcours);
+  it = std::find (p->niveaux_groupes.begin (),
+                  p->niveaux_groupes.end (),
+                  niveau_groupe);
+  ++it;
   
   // On passe au niveau suivant (s'il existe).
-  if (list_parcours != NULL)
+  if (it != p->niveaux_groupes.end ())
   {
-    niveau_groupe = list_parcours->data;
-    if (niveau_groupe->groupes != NULL)
+    std::list <Groupe *>::iterator it2;
+    
+    niveau_groupe = *it;
+    it2 = niveau_groupe->groupes.begin ();
+    
+    while (it2 != niveau_groupe->groupes.end ())
     {
-      GList *list_parcours2 = niveau_groupe->groupes;
-      do
+      // On parcours tous les groupes pour vérifier si l'un possède l'élément
+      // qui a été supprimé.
+      // On ne s'arrête pas volontairement au premier élément qu'on trouve.
+      // Il est possible que quelqu'un trouve utile de pouvoir insérer un
+      // même élément dans plusieurs groupes.
+      groupe = *it2;
+      if (groupe->elements != NULL)
       {
-        // On parcours tous les groupes pour vérifier si l'un possède l'élément
-        // qui a été supprimé.
-        // On ne s'arrête pas volontairement au premier élément qu'on trouve.
-        // Il est possible que quelqu'un trouve utile de pouvoir insérer un
-        // même élément dans plusieurs groupes.
-        groupe = list_parcours2->data;
-        if (groupe->elements != NULL)
+        GList *list_parcours3 = groupe->elements;
+        do
         {
-          GList *list_parcours3 = groupe->elements;
-          do
+          void *element = list_parcours3->data;
+          
+          list_parcours3 = g_list_next (list_parcours3);
+          
+          if (element == groupe)
           {
-            void *element = list_parcours3->data;
-            
-            list_parcours3 = g_list_next (list_parcours3);
-            
-            if (element == groupe)
-            {
-              groupe->elements = g_list_remove (groupe->elements, element);
-            }
+            groupe->elements = g_list_remove (groupe->elements, element);
           }
-          while (list_parcours3 != NULL);
         }
-        list_parcours2 = g_list_next (list_parcours2);
+        while (list_parcours3 != NULL);
       }
-      while (list_parcours2 != NULL);
+      
+      ++it2;
     }
   }
   
@@ -840,9 +860,12 @@ _1990_groupe_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE)
   
-  if (p->niveaux_groupes != NULL)
+  if (!p->niveaux_groupes.empty ())
   {
-    BUG (_1990_groupe_free_niveau (p, p->niveaux_groupes->data, TRUE), FALSE)
+    BUG (_1990_groupe_free_niveau (p,
+                                   *p->niveaux_groupes.begin (),
+                                   TRUE),
+         FALSE)
   }
   
   return TRUE;

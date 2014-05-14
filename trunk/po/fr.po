@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-04-28 00:11+0200\n"
-"PO-Revision-Date: 2014-03-30 01:24+0100\n"
+"POT-Creation-Date: 2014-05-12 00:30+0200\n"
+"PO-Revision-Date: 2014-05-14 14:20+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -37,15 +37,12 @@ msgid ""
 msgstr ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
-
 msgid "Le projet ne possède pas de niveaux de groupes.\n"
 msgstr "Le projet ne possède pas de niveaux de groupes.\n"
 
 #, c-format
-msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
-msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
+msgid "Le niveau %zu est vide. Veuillez soit le remplir, soit le supprimer.\n"
+msgstr "Le niveau %zu est vide. Veuillez soit le remplir, soit le supprimer.\n"
 
 msgid ""
 "Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
@@ -57,9 +54,6 @@ msgstr ""
 msgid "Impossible de trouver le niveau dans la liste des niveaux de groupes.\n"
 msgstr ""
 "Impossible de trouver le niveau dans la liste des niveaux de groupes.\n"
-
-msgid "Impossible de trouver le niveau précédent le niveau.\n"
-msgstr "Impossible de trouver le niveau précédent le niveau.\n"
 
 msgid ""
 "Seuls les groupes possédant un type de combinaison AND peuvent appeler "
@@ -108,6 +102,9 @@ msgstr "ELS permanent"
 #, c-format
 msgid "Le type de combinaison %d est inconnu.\n"
 msgstr "Le type de combinaison %d est inconnu.\n"
+
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
 
 msgid ""
 "Le projet ne possède pas de niveaux de groupes permettant de regrouper "
@@ -311,121 +308,121 @@ msgstr "Le matériau n'est pas en béton.\n"
 msgid "Le matériau %s existe déjà.\n"
 msgstr "Le matériau %s existe déjà.\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ck,cube</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ck,cube</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>cm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>cm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, f<sub>cm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, f<sub>cm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ctm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ctm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, f<sub>ctm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, f<sub>ctm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ctk,0.05</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ctk,0.05</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, f<sub>ctk,0.05</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, f<sub>ctk,0.05</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ctk,0.95</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ctk,0.95</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, f<sub>ctk,0.95</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, f<sub>ctk,0.95</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "E<sub>cm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "E<sub>cm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, E<sub>cm</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, E<sub>cm</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>c1</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>c1</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>c1</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>c1</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>cu1</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>cu1</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>cu1</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>cu1</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>c2</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>c2</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>c2</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>c2</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>cu2</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>cu2</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>cu2</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>cu2</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>c3</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>c3</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>c3</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>c3</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "&#949;<sub>cu3</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "&#949;<sub>cu3</sub> : %s ‰"
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s, &#949;<sub>cu3</sub> : %s ‰"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "%s, &#949;<sub>cu3</sub> : %s ‰"
 
 #, c-format
 msgid "n : %s"
-msgstr ""
+msgstr "n : %s"
 
 #, c-format
 msgid "%s, n : %s"
-msgstr ""
+msgstr "%s, n : %s"
 
 #, c-format
 msgid "&#957; : %s"
-msgstr ""
+msgstr "&#957; : %s"
 
 #, c-format
 msgid "%s, &#957; : %s"
-msgstr ""
+msgstr "%s, &#957; : %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ck</sub> : %s MPa"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ck</sub> : %s MPa"
 
-#, fuzzy, c-format
+#, c-format
 msgid "f<sub>ck</sub> : %s MPa avec %s"
-msgstr "r<sub>x</sub> [rad]"
+msgstr "f<sub>ck</sub> : %s MPa avec %s"
 
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
@@ -479,10 +476,6 @@ msgstr "Comparaison hors limite : %lf > %lf.\n"
 
 msgid "Type de nombre est inconnu.\n"
 msgstr "Type de nombre est inconnu.\n"
-
-#, c-format
-msgid "Le type %d de la liste est inconnu.\n"
-msgstr "Le type %d de la liste est inconnu.\n"
 
 msgid "Région A1"
 msgstr "Région A1"
@@ -792,6 +785,9 @@ msgid ""
 "\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f"
 "\tf(%.5f) = %.20f\n"
 msgstr ""
+"debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f"
+"\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f"
+"\tf(%.5f) = %.20f\n"
 
 msgid "La largeur du dessin ne peut être nulle.\n"
 msgstr "La largeur du dessin ne peut être nulle.\n"
@@ -1809,6 +1805,12 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
+
+#~ msgid "Le type %d de la liste est inconnu.\n"
+#~ msgstr "Le type %d de la liste est inconnu.\n"
+
+#~ msgid "Impossible de trouver le niveau précédent le niveau.\n"
+#~ msgstr "Impossible de trouver le niveau précédent le niveau.\n"
 
 #~ msgid "et ces dépendances."
 #~ msgstr "et ces dépendances."

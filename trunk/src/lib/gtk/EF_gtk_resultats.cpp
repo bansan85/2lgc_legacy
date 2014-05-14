@@ -24,6 +24,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "1990_ponderations.hpp"
 #include "common_projet.hpp"
@@ -86,9 +88,11 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                                Projet                   *p)
 {
   uint8_t i;
-  GList  *actions = NULL;
   Action *action;
-  GList  *comb = NULL;
+  
+  std::list <Action *> actions;
+  
+  std::list <std::list <Ponderation *> *> *comb;
   
   BUGPARAMCRIT (p, "%p", p, FALSE)
   BUGPARAMCRIT (res, "%p", res, FALSE)
@@ -107,11 +111,11 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         gtk_list_store_clear (res->list_store);
         return TRUE;
       }
-      BUG (action = g_list_nth_data (p->actions,
-                                     (guint) gtk_combo_box_get_active (
+      BUG (action = *std::next (p->actions.begin (),
+                                gtk_combo_box_get_active (
                                                          UI_RES.combobox_cas)),
            FALSE)
-      actions = g_list_append (actions, action);
+      actions.push_back (action);
       break;
     }
     // Combinaisons
@@ -129,47 +133,47 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
       {
         case 0 :
         {
-          comb = p->combinaisons.elu_equ;
+          comb = &p->ponderations.elu_equ;
           break;
         }
         case 1 :
         {
-          comb = p->combinaisons.elu_str;
+          comb = &p->ponderations.elu_str;
           break;
         }
         case 2 :
         {
-          comb = p->combinaisons.elu_geo;
+          comb = &p->ponderations.elu_geo;
           break;
         }
         case 3 :
         {
-          comb = p->combinaisons.elu_fat;
+          comb = &p->ponderations.elu_fat;
           break;
         }
         case 4 :
         {
-          comb = p->combinaisons.elu_acc;
+          comb = &p->ponderations.elu_acc;
           break;
         }
         case 5 :
         {
-          comb = p->combinaisons.elu_sis;
+          comb = &p->ponderations.elu_sis;
           break;
         }
         case 6 :
         {
-          comb = p->combinaisons.els_car;
+          comb = &p->ponderations.els_car;
           break;
         }
         case 7 :
         {
-          comb = p->combinaisons.els_freq;
+          comb = &p->ponderations.els_freq;
           break;
         }
         case 8 :
         {
-          comb = p->combinaisons.els_perm;
+          comb = &p->ponderations.els_perm;
           break;
         }
         default :
@@ -179,12 +183,14 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
           break;
         }
       }
-      comb = g_list_nth (comb,
-                         (guint) gtk_combo_box_get_active (
-                                                UI_RES.combobox_ponderations));
       
-      BUG (action = _1990_action_ponderation_resultat (comb->data, p), FALSE)
-      actions = g_list_append (actions, action);
+      BUG (action = _1990_action_ponderation_resultat (
+                      *std::next (comb->begin (),
+                                  gtk_combo_box_get_active (
+                                      UI_RES.combobox_ponderations)),
+                    p),
+           FALSE)
+      actions.push_back (action);
       break;
     }
     case 2 :
@@ -201,47 +207,47 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
       {
         case 0 :
         {
-          comb = p->combinaisons.elu_equ;
+          comb = &p->ponderations.elu_equ;
           break;
         }
         case 1 :
         {
-          comb = p->combinaisons.elu_str;
+          comb = &p->ponderations.elu_str;
           break;
         }
         case 2 :
         {
-          comb = p->combinaisons.elu_geo;
+          comb = &p->ponderations.elu_geo;
           break;
         }
         case 3 :
         {
-          comb = p->combinaisons.elu_fat;
+          comb = &p->ponderations.elu_fat;
           break;
         }
         case 4 :
         {
-          comb = p->combinaisons.elu_acc;
+          comb = &p->ponderations.elu_acc;
           break;
         }
         case 5 :
         {
-          comb = p->combinaisons.elu_sis;
+          comb = &p->ponderations.elu_sis;
           break;
         }
         case 6 :
         {
-          comb = p->combinaisons.els_car;
+          comb = &p->ponderations.els_car;
           break;
         }
         case 7 :
         {
-          comb = p->combinaisons.els_freq;
+          comb = &p->ponderations.els_freq;
           break;
         }
         case 8 :
         {
-          comb = p->combinaisons.els_perm;
+          comb = &p->ponderations.els_perm;
           break;
         }
         default :
@@ -254,17 +260,15 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
       
       if (gtk_combo_box_get_active (UI_RES.combobox_ponderations) == 0)
       {
-        GList *list_parcours;
+        std::list <std::list <Ponderation *> *>::iterator it;
         
-        list_parcours = comb;
-        while (list_parcours != NULL)
+        it = comb->begin ();
+        while (it != comb->end ())
         {
-          BUG (action = _1990_action_ponderation_resultat (list_parcours->data,
-                                                           p),
-               FALSE,
-               g_list_free (actions); )
-          actions = g_list_append (actions, action);
-          list_parcours = g_list_next (list_parcours);
+          BUG (action = _1990_action_ponderation_resultat (*it, p), FALSE)
+          actions.push_back (action);
+          
+          ++it;
         }
       }
       break;
@@ -276,25 +280,23 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
       break;
     }
   }
-  BUGCRIT (actions,
+  BUGCRIT (!actions.empty (),
            FALSE,
            (gettext ("Impossible\n")); )
   
   #define FREE_ALL { \
-    if (gtk_combo_box_get_active (UI_RES.combobox) == 0) \
-      g_list_free (actions); \
-    else \
+    if (gtk_combo_box_get_active (UI_RES.combobox) != 0) \
     { \
-      GList *list_parcours3 = actions; \
+      std::list <Action *>::iterator it_ = actions.begin (); \
       \
-      while (list_parcours3 != NULL) \
+      while (it_ != actions.end ()) \
       { \
-        action = list_parcours3->data; \
-        BUG (_1990_action_fonction_free (p, action), FALSE) \
+        action = *it_; \
+        BUG (_1990_action_fonction_free (action), FALSE) \
         BUG (_1990_action_ponderation_resultat_free_calculs (action), FALSE) \
-        free (action); \
+        delete action; \
         \
-        list_parcours3 = g_list_next (list_parcours3); \
+        ++it_; \
       } \
     } \
   }
@@ -305,13 +307,15 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
   {
     case COLRES_NUM_NOEUDS :
     {
-      GList *list_parcours = p->modele.noeuds;
+      std::list <EF_Noeud *>::iterator it;
+      
+      it = p->modele.noeuds.begin ();
       
       i = 0;
       
-      while (list_parcours != NULL)
+      while (it != p->modele.noeuds.end ())
       {
-        EF_Noeud *noeud = list_parcours->data;
+        EF_Noeud *noeud = *it;
         gboolean  ok;
         
         switch (res->filtre)
@@ -418,7 +422,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_REACTION_APPUI_MZ :
               {
                 BUG (EF_resultat_noeud_reaction_appui (
-                       actions,
+                       &actions,
                        noeud,
                        (uint8_t) (res->col_tab[j] - COLRES_REACTION_APPUI_FX),
                        p,
@@ -442,7 +446,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_DEPLACEMENT_RZ :
               {
                 BUG (EF_resultat_noeud_deplacement (
-                       actions,
+                       &actions,
                        noeud,
                        (uint8_t) (res->col_tab[j] - COLRES_DEPLACEMENT_UX),
                        p,
@@ -517,20 +521,22 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         }
         
         i++;
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
       break;
     }
      
     case COLRES_NUM_BARRES :
     {
-      GList *list_parcours = p->modele.barres;
+      std::list <EF_Barre *>::iterator it;
+      
+      it = p->modele.barres.begin ();
       
       i = 0;
       
-      while (list_parcours != NULL)
+      while (it != p->modele.barres.end ())
       {
-        EF_Barre *barre = list_parcours->data;
+        EF_Barre *barre = *it;
         gboolean  ok;
         
         switch (res->filtre)
@@ -571,8 +577,10 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
             Fonction f_min, f_max;
             char    *tmp1 = NULL, *tmp2 = NULL;
             char    *tmp = NULL;
-            GList   *liste = NULL, *list_parcours2;
-            GList   *converti = NULL;
+            std::list <Fonction *> liste;
+            std::list <std::list <Ponderation *> *> *converti = NULL;
+            
+            std::list <Action *>::iterator it2;
             
     #define FREE_ALL2 free (comb_min.troncons); \
     free (comb_max.troncons); \
@@ -581,8 +589,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
     free (tmp); \
     free (tmp1); \
     free (tmp2); \
-    g_list_free (liste); \
-    g_list_free (converti);
+    delete converti;
             
             comb_min.troncons = NULL;
             comb_max.troncons = NULL;
@@ -642,24 +649,22 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               {
                 GdkPixbuf *pixbuf;
                 
-                list_parcours2 = actions;
-                while (list_parcours2 != NULL)
+                it2 = actions.begin ();
+                while (it2 != actions.end ())
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   
-                  liste = g_list_append (
-                            liste,
-                            _1990_action_efforts_renvoie (
-                              action2,
-                              (uint8_t) (res->col_tab[j] -
+                  liste.push_back (_1990_action_efforts_renvoie (
+                                     action2,
+                                       (uint8_t) (res->col_tab[j] -
                                                        COLRES_BARRES_PIXBUF_N),
-                              i));
+                                     i));
                   
-                  list_parcours2 = g_list_next (list_parcours2);
+                  ++it2;
                 }
                 
                 pixbuf = common_fonction_dessin (
-                           liste,
+                           &liste,
                            200,
                            50,
                            res->col_tab[j] < COLRES_BARRES_PIXBUF_MX ?
@@ -678,26 +683,24 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_BARRES_DESC_MY :
               case COLRES_BARRES_DESC_MZ :
               {
-                list_parcours2 = actions;
+                it2 = actions.begin ();
                 
-                if (g_list_next(actions) != NULL)
+                if (std::next (it2) != actions.end ())
                 {
-                  while (list_parcours2 != NULL)
+                  while (it2 != actions.end ())
                   {
-                    Action *action2 = list_parcours2->data;
+                    Action *action2 = *it2;
                     
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_efforts_renvoie (
-                                action2,
-                                (uint8_t) (res->col_tab[j] -
+                    liste.push_back (_1990_action_efforts_renvoie (
+                                       action2,
+                                       (uint8_t) (res->col_tab[j] -
                                                          COLRES_BARRES_DESC_N),
-                                i));
+                                       i));
                     
-                    list_parcours2 = g_list_next (list_parcours2);
+                    ++it2;
                   }
                   
-                  if (common_fonction_renvoie_enveloppe (liste,
+                  if (common_fonction_renvoie_enveloppe (&liste,
                                                          &f_min,
                                                          &f_max,
                                                          &comb_min,
@@ -735,7 +738,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                 }
                 else
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   
                   tmp = common_fonction_affiche_caract (
                           _1990_action_efforts_renvoie (
@@ -758,26 +761,24 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_BARRES_EQ_MY :
               case COLRES_BARRES_EQ_MZ :
               {
-                list_parcours2 = actions;
+                it2 = actions.begin ();
                 
-                if (g_list_next (actions) != NULL)
+                if (std::next (it2) != actions.end ())
                 {
-                  while (list_parcours2 != NULL)
+                  while (it2 != actions.end ())
                   {
-                    Action *action2 = list_parcours2->data;
+                    Action *action2 = *it2;
                     
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_efforts_renvoie (
-                                action2,
-                                (uint8_t) (res->col_tab[j] -
+                    liste.push_back (_1990_action_efforts_renvoie (
+                                       action2,
+                                       (uint8_t) (res->col_tab[j] -
                                                            COLRES_BARRES_EQ_N),
-                                i));
+                                       i));
                     
-                    list_parcours2 = g_list_next (list_parcours2);
+                    ++it2;
                   }
                   
-                  if (common_fonction_renvoie_enveloppe (liste,
+                  if (common_fonction_renvoie_enveloppe (&liste,
                                                          &f_min,
                                                          &f_max,
                                                          &comb_min,
@@ -803,7 +804,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                              res->col_tab[j] < COLRES_BARRES_EQ_MX ?
                                DECIMAL_FORCE :
                                DECIMAL_MOMENT);
-                    g_list_free (converti);
+                    delete converti;
                     converti = NULL;
                     BUG (common_fonction_conversion_combinaisons (&comb_max,
                                                                   comb,
@@ -829,7 +830,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                 }
                 else
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   tmp = common_fonction_renvoie (
                           _1990_action_efforts_renvoie (
                             action2,
@@ -853,38 +854,34 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               {
                 GdkPixbuf *pixbuf;
                 
-                list_parcours2 = actions;
+                it2 = actions.begin ();
                 
-                while (list_parcours2 != NULL)
+                while (it2 != actions.end ())
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   
                   if (res->col_tab[j] < COLRES_DEF_PIXBUF_RX)
                   {
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_deformation_renvoie (
-                                action2,
-                                (uint8_t) (res->col_tab[j] -
+                    liste.push_back (_1990_action_deformation_renvoie (
+                                       action2,
+                                       (uint8_t) (res->col_tab[j] -
                                                          COLRES_DEF_PIXBUF_UX),
-                                i));
+                                       i));
                   }
                   else
                   {
-                    liste = g_list_append (
-                              liste,
-                              _1990_action_rotation_renvoie (
-                                action2,
-                                (uint8_t) (res->col_tab[j] -
+                    liste.push_back (_1990_action_rotation_renvoie (
+                                       action2,
+                                       (uint8_t) (res->col_tab[j] -
                                                          COLRES_DEF_PIXBUF_RX),
-                                i));
+                                       i));
                   }
                   
-                  list_parcours2 = g_list_next (list_parcours2);
+                  ++it2;
                 }
                 
                 pixbuf = common_fonction_dessin (
-                           liste,
+                           &liste,
                            200,
                            50,
                            res->col_tab[j] < COLRES_DEF_PIXBUF_RX ?
@@ -903,39 +900,35 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_DEF_DESC_RY :
               case COLRES_DEF_DESC_RZ :
               {
-                list_parcours2 = actions;
+                it2 = actions.begin ();
                 
-                if (g_list_next (actions) != NULL)
+                if (std::next (it2) != actions.end ())
                 {
-                  while (list_parcours2 != NULL)
+                  while (it2 != actions.end ())
                   {
-                    Action *action2 = list_parcours2->data;
+                    Action *action2 = *it2;
                     
                     if (res->col_tab[j] < COLRES_DEF_DESC_RX)
                     {
-                      liste = g_list_append (
-                                liste,
-                                _1990_action_deformation_renvoie (
-                                  action2,
-                                  (uint8_t) (res->col_tab[j] -
+                      liste.push_back (_1990_action_deformation_renvoie (
+                                         action2,
+                                         (uint8_t) (res->col_tab[j] -
                                                            COLRES_DEF_DESC_UX),
-                                  i));
+                                         i));
                     }
                     else
                     {
-                      liste = g_list_append (
-                                liste,
-                                _1990_action_rotation_renvoie (
-                                  action2,
-                                  (uint8_t) (res->col_tab[j] -
+                      liste.push_back (_1990_action_rotation_renvoie (
+                                         action2,
+                                         (uint8_t) (res->col_tab[j] -
                                                            COLRES_DEF_DESC_RX),
-                                  i));
+                                         i));
                     }
                     
-                    list_parcours2 = g_list_next (list_parcours2);
+                    ++it2;
                   }
                   
-                  if (common_fonction_renvoie_enveloppe (liste,
+                  if (common_fonction_renvoie_enveloppe (&liste,
                                                          &f_min,
                                                          &f_max,
                                                          &comb_min,
@@ -973,7 +966,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                 }
                 else
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   
                   if (res->col_tab[j] < COLRES_DEF_DESC_RX)
                   {
@@ -1007,37 +1000,35 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
               case COLRES_DEF_RY :
               case COLRES_DEF_RZ :
               {
-                list_parcours2 = actions;
+                it2 = actions.begin ();
                 
-                if (g_list_next (actions) != NULL)
+                if (std::next (it2) != actions.end ())
                 {
-                  while (list_parcours2 != NULL)
+                  while (it2 != actions.end ())
                   {
-                    Action *action2 = list_parcours2->data;
+                    Action *action2 = *it2;
                     
                     if (res->col_tab[j] < COLRES_DEF_RX)
                     {
-                      liste = g_list_append (
-                                liste,
-                                _1990_action_deformation_renvoie (
-                                  action2,
-                                  (uint8_t) (res->col_tab[j] - COLRES_DEF_UX),
-                                  i));
+                      liste.push_back (_1990_action_deformation_renvoie (
+                                         action2,
+                                         (uint8_t) (res->col_tab[j] -
+                                                                COLRES_DEF_UX),
+                                         i));
                     }
                     else
                     {
-                      liste = g_list_append (
-                                liste,
-                                _1990_action_rotation_renvoie (
-                                  action2,
-                                  (uint8_t) (res->col_tab[j] - COLRES_DEF_RX),
-                                  i));
+                      liste.push_back (_1990_action_rotation_renvoie (
+                                         action2,
+                                         (uint8_t) (res->col_tab[j] -
+                                                                COLRES_DEF_RX),
+                                         i));
                     }
                     
-                    list_parcours2 = g_list_next (list_parcours2);
+                    ++it2;
                   }
                   
-                  if (common_fonction_renvoie_enveloppe (liste,
+                  if (common_fonction_renvoie_enveloppe (&liste,
                                                          &f_min,
                                                          &f_max,
                                                          &comb_min,
@@ -1063,7 +1054,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                              res->col_tab[j] < COLRES_DEF_RX ?
                                DECIMAL_DEPLACEMENT :
                                DECIMAL_ROTATION);
-                    g_list_free (converti);
+                    delete converti;
                     converti = NULL;
                     BUG (common_fonction_conversion_combinaisons (&comb_max,
                                                                   comb,
@@ -1089,7 +1080,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
                 }
                 else
                 {
-                  Action *action2 = list_parcours2->data;
+                  Action *action2 = *it2;
                   
                   if (res->col_tab[j] < COLRES_DEF_RX)
                   {
@@ -1133,7 +1124,7 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
         }
         
         i++;
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
       break;
     }
@@ -2429,9 +2420,9 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
     gtk_combo_box_set_model (UI_RES.combobox_ponderations, NULL);
   }
   
-  it = UI_RES.tableaux->begin ();
+  it = UI_RES.tableaux.begin ();
   
-  while (it != UI_RES.tableaux->end ())
+  while (it != UI_RES.tableaux.end ())
   {
     BUG (EF_gtk_resultats_remplit_page (*it, p), )
     
@@ -2442,9 +2433,10 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
   {
     GtkListStore *list_pond;
     GtkTreeIter   Iter;
-    GList        *comb;
     uint16_t      i;
-    GList        *list_parcours;
+    
+    std::list <std::list <Ponderation *> *> *comb;
+    std::list <std::list <Ponderation *> *>::iterator it2;
     
     switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
     {
@@ -2452,47 +2444,47 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
         return;
       case 0 :
       {
-        comb = p->combinaisons.elu_equ;
+        comb = &p->ponderations.elu_equ;
         break;
       }
       case 1 :
       {
-        comb = p->combinaisons.elu_str;
+        comb = &p->ponderations.elu_str;
         break;
       }
       case 2 :
       {
-        comb = p->combinaisons.elu_geo;
+        comb = &p->ponderations.elu_geo;
         break;
       }
       case 3 :
       {
-        comb = p->combinaisons.elu_fat;
+        comb = &p->ponderations.elu_fat;
         break;
       }
       case 4 :
       {
-        comb = p->combinaisons.elu_acc;
+        comb = &p->ponderations.elu_acc;
         break;
       }
       case 5 :
       {
-        comb = p->combinaisons.elu_sis;
+        comb = &p->ponderations.elu_sis;
         break;
       }
       case 6 :
       {
-        comb = p->combinaisons.els_car;
+        comb = &p->ponderations.els_car;
         break;
       }
       case 7 :
       {
-        comb = p->combinaisons.els_freq;
+        comb = &p->ponderations.els_freq;
         break;
       }
       case 8 :
       {
-        comb = p->combinaisons.els_perm;
+        comb = &p->ponderations.els_perm;
         break;
       }
       default :
@@ -2505,14 +2497,14 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
     
     list_pond = gtk_list_store_new (1, G_TYPE_STRING);
     
-    list_parcours = comb;
+    it2 = comb->begin ();
     i = 0;
-    while (list_parcours != NULL)
+    while (it2 != comb->end ())
     {
       char *tmp, *tmp2;
       
       gtk_list_store_append (list_pond, &Iter);
-      tmp = _1990_ponderations_description (list_parcours->data);
+      tmp = _1990_ponderations_description (*it2);
       BUGCRIT (tmp2 = g_strdup_printf ("%d : %s", i, tmp),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));
@@ -2521,8 +2513,8 @@ EF_gtk_resultats_cas_change (GtkWidget *widget,
       gtk_list_store_set (list_pond, &Iter, 0, tmp2, -1);
       free (tmp2);
       
-      list_parcours = g_list_next (list_parcours);
       i++;
+      ++it2;
     }
     
     gtk_combo_box_set_model (UI_RES.combobox_ponderations,
@@ -2571,9 +2563,9 @@ EF_gtk_resultats_ponderations_change (GtkWidget *widget,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Résultats"); )
   
-  it = UI_RES.tableaux->begin ();
+  it = UI_RES.tableaux.begin ();
   
-  while (it != UI_RES.tableaux->end ())
+  while (it != UI_RES.tableaux.end ())
   {
     BUG (EF_gtk_resultats_remplit_page (*it, p), )
     
@@ -2628,9 +2620,9 @@ EF_gtk_resultats_combobox_changed (GtkComboBox *combobox,
   // Combinaisons ou enveloppes
   else
   {
-    g_object_ref (p->combinaisons.list_el_desc);
+    g_object_ref (p->ponderations.list_el_desc);
     gtk_combo_box_set_model (UI_RES.combobox_cas,
-                             GTK_TREE_MODEL (p->combinaisons.list_el_desc));
+                             GTK_TREE_MODEL (p->ponderations.list_el_desc));
     gtk_widget_set_visible (GTK_WIDGET (UI_RES.combobox_ponderations), TRUE);
     gtk_widget_set_hexpand (GTK_WIDGET (UI_RES.combobox_cas), FALSE);
     EF_gtk_resultats_cas_change (NULL, p);
@@ -2689,7 +2681,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext("Réactions d'appuis (repère global)")) == 0)
@@ -2718,7 +2710,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déplacements (repère global)")) == 0)
@@ -2747,7 +2739,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Barres")) == 0)
@@ -2771,7 +2763,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Efforts dans les barres (repère local)")) == 0)
@@ -2813,7 +2805,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else if (strcmp (gtk_menu_item_get_label (menuitem),
                    gettext ("Déformations des barres (repère local)")) == 0)
@@ -2855,7 +2847,7 @@ EF_gtk_resultats_add_page_type (GtkMenuItem *menuitem,
     
     BUG (EF_gtk_resultats_add_page (res, p), )
     
-    UI_RES.tableaux->push_back (res);
+    UI_RES.tableaux.push_back (res);
   }
   else
   {
@@ -2913,8 +2905,9 @@ EF_gtk_resultats (Projet *p)
   
   gtk_combo_box_set_active (UI_RES.combobox, 0);
   
-  it = UI_RES.tableaux->begin ();
-  while (it != UI_RES.tableaux->end ())
+  it = UI_RES.tableaux.begin ();
+  
+  while (it != UI_RES.tableaux.end ())
   {
     BUG (EF_gtk_resultats_add_page (*it, p), )
     
@@ -2941,9 +2934,9 @@ EF_gtk_resultats_free (Projet *p)
 {
   std::list <Gtk_EF_Resultats_Tableau *>::iterator it;
   
-  it = UI_RES.tableaux->begin ();
+  it = UI_RES.tableaux.begin ();
   
-  while (it != UI_RES.tableaux->end ())
+  while (it != UI_RES.tableaux.end ())
   {
     Gtk_EF_Resultats_Tableau *res = *it;
     
@@ -2954,7 +2947,7 @@ EF_gtk_resultats_free (Projet *p)
     
     ++it;
   }
-  delete UI_RES.tableaux;
+  UI_RES.tableaux.clear ();
   
   return;
 }

@@ -91,7 +91,8 @@ _1990_gtk_actions_cursor_changed (GtkTreeView *tree_view,
   GtkTreeModel *model;
   GtkTreeIter   iter;
   Action       *action;
-  GList        *list_parcours;
+  
+  std::list <Charge *>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_ACT.builder,
@@ -161,18 +162,21 @@ _1990_gtk_actions_cursor_changed (GtkTreeView *tree_view,
   // On actualise la liste des charges
   gtk_tree_store_clear (UI_ACT.tree_store_charges);
   
-  list_parcours = _1990_action_charges_renvoie (action);
-  while (list_parcours != NULL)
+  if (_1990_action_charges_renvoie (action) != NULL)
   {
-    Charge *charge = list_parcours->data;
-    
-    gtk_tree_store_append (UI_ACT.tree_store_charges, &charge->Iter, NULL);
-    gtk_tree_store_set (UI_ACT.tree_store_charges,
-                        &charge->Iter,
-                        0, list_parcours->data,
-                        -1);
-    
-    list_parcours = g_list_next (list_parcours);
+    it = _1990_action_charges_renvoie (action)->begin ();
+    while (it != _1990_action_charges_renvoie (action)->end ())
+    {
+      Charge *charge = *it;
+      
+      gtk_tree_store_append (UI_ACT.tree_store_charges, &charge->Iter, NULL);
+      gtk_tree_store_set (UI_ACT.tree_store_charges,
+                          &charge->Iter,
+                          0, charge,
+                          -1);
+      
+      ++it;
+    }
   }
   
   return;
@@ -566,9 +570,9 @@ _1990_gtk_nouvelle_action (GtkWidget *menuitem,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Actions"); )
   
-  it = UI_ACT.items_type_action->begin ();
+  it = UI_ACT.items_type_action.begin ();
   
-  while (it != UI_ACT.items_type_action->end ())
+  while (it != UI_ACT.items_type_action.end ())
   {
     if ((GTK_IS_MENU_ITEM (menuitem)) &&
         (*it == menuitem))
@@ -579,7 +583,7 @@ _1990_gtk_nouvelle_action (GtkWidget *menuitem,
       
       BUGCRIT (tmp = g_strdup_printf ("%s %u",
                                       gettext ("Sans nom"),
-                                      g_list_length (p->actions)),
+                                      p->actions.size ()),
                ,
                (gettext ("Erreur d'allocation mémoire.\n")); )
       // On crée l'action en fonction de la catégorie sélectionnée dans le menu
@@ -1428,7 +1432,7 @@ _1990_gtk_actions_charge_render_2 (GtkTreeViewColumn *tree_column,
 void
 _1990_gtk_actions (Projet *p)
 {
-  GList *list_parcours;
+  std::list <Action *>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1538,10 +1542,10 @@ _1990_gtk_actions (Projet *p)
     NULL);
   
   // Affiche la liste des actions
-  list_parcours = p->actions;
-  while (list_parcours != NULL)
+  it = p->actions.begin ();
+  while (it != p->actions.end ())
   {
-    Action *action = list_parcours->data;
+    Action *action = *it;
     
     gtk_tree_store_append (UI_ACT.tree_store_actions,
                            _1990_action_Iter_fenetre_renvoie (action),
@@ -1551,7 +1555,7 @@ _1990_gtk_actions (Projet *p)
                         0, action,
                         -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   UI_ACT.tree_store_charges = GTK_TREE_STORE (gtk_builder_get_object (

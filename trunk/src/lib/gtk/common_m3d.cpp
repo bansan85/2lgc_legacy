@@ -95,7 +95,6 @@ m3d_init (Projet *p)
   BUGCRIT (UI_M3D.data = malloc (sizeof (SGlobalData)),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n"));)
-  memset (UI_M3D.data, 0, sizeof (SGlobalData));
   
   global_data = (SGlobalData *) UI_M3D.data;
   global_data->scene = new CM3dScene ();
@@ -272,18 +271,21 @@ m3d_get_rect (double *xmin,
  */
 {
   SGlobalData *vue;
-  GList       *list_parcours;
   EF_Noeud    *noeud;
   EF_Point     point;
   CM3dVertex   v1, *v2, *v3;     // Vecteur permettant de créer le polygone
   double       x1, y1; // Les coordonnées des vecteurs.
+  
+  std::list <EF_Noeud *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (xmin, "%p", xmin, FALSE)
   BUGPARAM (xmax, "%p", xmax, FALSE)
   BUGPARAM (ymin, "%p", ymin, FALSE)
   BUGPARAM (ymax, "%p", ymax, FALSE)
-  INFO (p->modele.noeuds, FALSE, (gettext ("Aucun noeud n'est existant.\n"));)
+  INFO (!p->modele.noeuds.empty (),
+        FALSE,
+        (gettext ("Aucun noeud n'est existant.\n"));)
   BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
@@ -291,7 +293,7 @@ m3d_get_rect (double *xmin,
   
   vue = (SGlobalData *) UI_M3D.data;
   
-  noeud = (EF_Noeud *) p->modele.noeuds->data;
+  noeud = *p->modele.noeuds.begin ();
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
   v2 = vue->camera->convert_vertex_by_camera_view (v1);
@@ -304,10 +306,10 @@ m3d_get_rect (double *xmin,
   *xmax = x1;
   *xmin = x1;
   
-  list_parcours = g_list_next (p->modele.noeuds);
-  while (list_parcours != NULL)
+  it = std::next (p->modele.noeuds.begin ());
+  while (it != p->modele.noeuds.end ())
   {
-    noeud = (EF_Noeud *) list_parcours->data;
+    noeud = *it;
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
     v2 = vue->camera->convert_vertex_by_camera_view (v1);
@@ -325,7 +327,7 @@ m3d_get_rect (double *xmin,
     if (*ymax < y1)
       *ymax = y1;
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   return TRUE;
@@ -351,7 +353,6 @@ m3d_camera_zoom_all (Projet *p)
   EF_Noeud     *noeud;         // Noeud en cours d'étude
   EF_Point      point;         // Position du noeud en cours d'étude
   double        ymax, ymin, xmin, xmax, zmin; // Leur projection en 2D
-  GList        *list_parcours; // Noeud en cours d'étude
   GtkAllocation allocation;    // Dimension de la fenêtre 2D.
   double        cx, cy, cz;    // Le vecteur de la caméra
   CM3dVertex    v1, *v2;
@@ -360,6 +361,8 @@ m3d_camera_zoom_all (Projet *p)
   double        xmin2, xmax2, ymin2, ymax2;
   double        yymin;
   int           i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
+  
+  std::list<EF_Noeud*>::iterator it; // Noeud en cours d'étude
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGCRIT (UI_GTK.window,
@@ -370,11 +373,11 @@ m3d_camera_zoom_all (Projet *p)
   vue = (SGlobalData *) UI_M3D.data;
   
   // Aucune noeud, on ne fait rien
-  if (p->modele.noeuds == NULL)
+  if (p->modele.noeuds.empty ())
     return TRUE;
   
   // Un seul noeud, on l'affiche en gros plan.
-  noeud = (EF_Noeud *) p->modele.noeuds->data;
+  noeud = *p->modele.noeuds.begin ();
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
   
   gtk_widget_get_allocation (GTK_WIDGET (UI_M3D.drawing), &allocation);
@@ -396,10 +399,10 @@ m3d_camera_zoom_all (Projet *p)
   ymax = tmpy;
   ymin = tmpy;
   zmin = tmpz;
-  list_parcours = g_list_next (p->modele.noeuds);
-  while (list_parcours != NULL)
+  it = std::next (p->modele.noeuds.begin ());
+  while (it != p->modele.noeuds.end ())
   {
-    noeud = (EF_Noeud *) list_parcours->data;
+    noeud = *it;
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
@@ -417,7 +420,7 @@ m3d_camera_zoom_all (Projet *p)
     if (zmin > tmpz)
       zmin = tmpz;
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   // On positionne le centre de la caméra
@@ -627,10 +630,10 @@ m3d_camera_axe_##NOM (Projet *p) \
   \
   vue = (SGlobalData *) UI_M3D.data; \
   \
-  if (p->modele.noeuds == NULL) \
+  if (p->modele.noeuds.empty ()) \
     return TRUE; \
   \
-  noeud = (EF_Noeud *) p->modele.noeuds->data; \
+  noeud = *p->modele.noeuds.begin (); \
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE) \
   \
   gtk_widget_get_allocation (GTK_WIDGET (UI_M3D.drawing), &allocation); \
@@ -670,9 +673,9 @@ M3D_CAMERA (x_y__z,  0., 0.,  -1.);
 
 
 gboolean
-m3d_actualise_graphique (Projet *p,
-                         GList  *noeuds,
-                         GList *barres)
+m3d_actualise_graphique (Projet                 *p,
+                         std::list <EF_Noeud *> *noeuds,
+                         std::list <EF_Barre *> *barres)
 /**
  * \brief Met à jour l'affichage graphique en actualisant l'affichage des
  *        noeuds et barres passés en argument. Les listes contient une série de
@@ -686,8 +689,11 @@ m3d_actualise_graphique (Projet *p,
  *     - p == NULL.
  */
 {
-  GList *noeuds_dep, *barres_dep;
-  GList *list_parcours;
+  std::list <EF_Noeud *> *noeuds_dep;
+  std::list <EF_Barre *> *barres_dep;
+  
+  std::list <EF_Noeud *>::iterator it1;
+  std::list <EF_Barre *>::iterator it2;
   
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -699,32 +705,35 @@ m3d_actualise_graphique (Projet *p,
                                              NULL,
                                              barres,
                                              &noeuds_dep,
+                                             NULL,
                                              &barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              TRUE),
        FALSE);
   
-  list_parcours = noeuds_dep;
-  while (list_parcours != NULL)
+  it1 = noeuds_dep->begin ();
+  while (it1 != noeuds_dep->end ())
   {
-    BUG (m3d_noeud (&UI_M3D, (EF_Noeud *) list_parcours->data),
+    BUG (m3d_noeud (&UI_M3D, *it1),
          FALSE,
-         g_list_free (noeuds_dep);
-           g_list_free (barres_dep);)
-    list_parcours = g_list_next (list_parcours);
+         delete noeuds_dep;
+           delete barres_dep; )
+    
+    ++it1;
   }
-  g_list_free (noeuds_dep);
+  delete noeuds_dep;
   
-  list_parcours = barres_dep;
-  while (list_parcours != NULL)
+  it2 = barres_dep->begin ();
+  while (it2 != barres_dep->end ())
   {
-    BUG (m3d_barre (&UI_M3D, (EF_Barre *) list_parcours->data),
+    BUG (m3d_barre (&UI_M3D, *it2),
          FALSE,
-         g_list_free (barres_dep);)
-    list_parcours = g_list_next (list_parcours);
+         delete barres_dep; )
+    
+    ++it2;
   }
-  g_list_free (barres_dep);
+  delete barres_dep;
   
   return TRUE;
 }
@@ -1107,9 +1116,9 @@ m3d_barre (void     *donnees_m3d,
       section = (Section_Personnalisee *) barre->section->data;
       tout = new CM3dObject ("");
       
-      it = section->forme->begin ();
+      it = section->forme.begin ();
 
-      while (it != section->forme->end ())
+      while (it != section->forme.end ())
       {
         std::list <EF_Point *>          *forme_e;
         std::list <EF_Point *>::iterator it2;
