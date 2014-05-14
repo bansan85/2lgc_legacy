@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-05-12 00:30+0200\n"
+"POT-Creation-Date: 2014-05-14 22:14+0200\n"
 "PO-Revision-Date: 2014-05-14 14:20+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -68,9 +68,6 @@ msgid ""
 msgstr ""
 "Seuls les groupes possédant un type de combinaison OR peuvent appeler "
 "_1990_combinaisons_genere_or.\n"
-
-msgid "Impossible\n"
-msgstr "Impossible\n"
 
 msgid "ELU équilibre"
 msgstr "ELU équilibre"
@@ -890,6 +887,9 @@ msgstr "Noeud n°%u introuvable.\n"
 
 msgid "Le type du noeud est incorrect.\n"
 msgstr "Le type du noeud est incorrect.\n"
+
+msgid "Impossible\n"
+msgstr "Impossible\n"
 
 #, c-format
 msgid "Le noeud %d est déjà dépendant du noeud %d.\n"
