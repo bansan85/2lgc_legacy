@@ -89,8 +89,8 @@ projet_free (Projet *p)
   BUG (EF_appuis_free (p), FALSE)
   BUG (EF_materiaux_free (p), FALSE)
   BUG (EF_relachement_free (p), FALSE)
-  UI_RES.tableaux.clear ();
 #ifdef ENABLE_GTK
+  UI_RES.tableaux.clear ();
   if (UI_M3D.data != NULL)
   {
     BUG (m3d_free (p), FALSE)
