@@ -414,7 +414,8 @@ EF_gtk_barres_supprimer (GtkButton *button,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Barre     *barre;
-  GList        *list = NULL;
+  
+  std::list <EF_Barre *> list;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
@@ -431,11 +432,9 @@ EF_gtk_barres_supprimer (GtkButton *button,
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
-  list = g_list_append (list, barre);
+  list.push_back (barre);
   
-  BUG (_1992_1_1_barres_supprime_liste (p, NULL, list), )
-  
-  g_list_free (list);
+  BUG (_1992_1_1_barres_supprime_liste (p, NULL, &list), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -476,33 +475,31 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
                                          &Iter))
     {
       EF_Barre *barre;
-      GList    *liste_barres = NULL;
+      
+      std::list <EF_Barre *> liste_barres;
       
       gtk_tree_model_get (model, &Iter, 0, &barre, -1);
       
-      liste_barres = g_list_append (liste_barres, barre);
+      liste_barres.push_back (barre);
       if (_1992_1_1_barres_cherche_dependances (p,
                                                 NULL,
                                                 NULL,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                liste_barres,
+                                                &liste_barres,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                FALSE,
+                                                NULL,
+                                                NULL,
                                                 FALSE) == FALSE)
       {
-        BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres),
-             FALSE,
-             g_list_free (liste_barres); )
+        BUG (_1992_1_1_barres_supprime_liste (p, NULL, &liste_barres),
+             FALSE)
         BUG (m3d_rafraichit (p),
-             FALSE,
-             g_list_free (liste_barres); )
+             FALSE)
       }
-      
-      g_list_free (liste_barres);
     }
     return TRUE;
   }
@@ -558,22 +555,23 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
   else
   {
     EF_Barre *barre;
-    GList    *liste_barres = NULL;
+    std::list <EF_Barre *> liste_barres;
     
     gtk_tree_model_get (model, &Iter, 0, &barre, -1);
     
-    liste_barres = g_list_append (liste_barres, barre);
+    liste_barres.push_back (barre);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              liste_barres,
+                                              &liste_barres,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -604,8 +602,6 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
                           UI_BAR.builder, "EF_barres_boutton_supprimer_menu")),
                               FALSE);
     }
-    
-    g_list_free (liste_barres);
   }
   
   return;
@@ -630,9 +626,12 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Barre     *barre;
-  GList        *liste_barres = NULL;
-  GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
   char         *desc;
+  
+  std::list <EF_Barre *>  liste_barres;
+  std::list <EF_Noeud *> *liste_noeuds_dep;
+  std::list <EF_Barre *> *liste_barres_dep;
+  std::list <Charge   *> *liste_charges_dep;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
@@ -650,24 +649,25 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
   
   gtk_tree_model_get (model, &Iter, 0, &barre, -1);
   
-  liste_barres = g_list_append (liste_barres, barre);
+  liste_barres.push_back (barre);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_barres,
+                                             &liste_barres,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
-      ,
-      g_list_free (liste_barres); )
-  g_list_free (liste_barres);
+      , )
   
-  BUGCRIT (liste_noeuds_dep && liste_barres_dep && liste_charges_dep,
+  BUGCRIT ((!liste_noeuds_dep->empty ()) ||
+           (!liste_barres_dep->empty ()) ||
+           (!liste_charges_dep->empty ()),
            ,
            (gettext ("L'élément ne possède aucune dépendance.\n")); )
 
@@ -676,17 +676,17 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
                                        liste_charges_dep,
                                        p),
        ,
-       g_list_free (liste_noeuds_dep);
-         g_list_free (liste_barres_dep);
-         g_list_free (liste_charges_dep); )
+       delete liste_noeuds_dep;
+         delete liste_barres_dep;
+         delete liste_charges_dep; )
   gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_BAR.builder, "EF_barres_supprimer_menu_barres")),
                            desc);
   free (desc);
   
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
+  delete liste_noeuds_dep;
+  delete liste_barres_dep;
+  delete liste_charges_dep;
   
   return;
 }
@@ -971,7 +971,7 @@ EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
 void
 EF_gtk_barres (Projet *p)
 {
-  GList *list_parcours;
+  std::list <EF_Barre *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   if (UI_BAR.builder != NULL)
@@ -1087,10 +1087,10 @@ EF_gtk_barres (Projet *p)
     p,
     NULL);
   
-  list_parcours = p->modele.barres;
-  while (list_parcours != NULL)
+  it = p->modele.barres.begin ();
+  while (it != p->modele.barres.end ())
   {
-    EF_Barre   *barre = list_parcours->data;
+    EF_Barre   *barre = *it;
     GtkTreeIter iter;
     char       *tmp;
     
@@ -1112,7 +1112,7 @@ EF_gtk_barres (Projet *p)
                         0, barre,
                         -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_BAR.window),

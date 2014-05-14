@@ -53,7 +53,7 @@ EF_relachement_init (Projet *p)
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  p->modele.relachements = NULL;
+  p->modele.relachements.clear ();
   
 #ifdef ENABLE_GTK
   UI_REL.liste_relachements = gtk_list_store_new (1, G_TYPE_STRING);
@@ -114,7 +114,7 @@ EF_relachement_ajout (Projet             *p,
 {
   EF_Relachement *relachement_nouveau;
   EF_Relachement *relachement_tmp;
-  GList          *list_parcours;
+  std::list <EF_Relachement *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   INFO (!((rx_debut == EF_RELACHEMENT_LIBRE) &&
@@ -142,9 +142,7 @@ EF_relachement_ajout (Projet             *p,
   INFO (rz_fin != EF_RELACHEMENT_ELASTIQUE_LINEAIRE || rz_f_data != NULL,
         NULL,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
-  BUGCRIT (relachement_nouveau = malloc (sizeof (EF_Relachement)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  relachement_nouveau = new EF_Relachement;
   
   relachement_nouveau->rx_debut = rx_debut;
   relachement_nouveau->rx_d_data = rx_d_data;
@@ -161,24 +159,23 @@ EF_relachement_ajout (Projet             *p,
   BUGCRIT (relachement_nouveau->nom = g_strdup_printf ("%s", nom),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
-             free (relachement_nouveau); )
+             delete relachement_nouveau; )
   
-  list_parcours = p->modele.relachements;
-  while (list_parcours != NULL)
+  it = p->modele.relachements.begin ();
+  while (it != p->modele.relachements.end ())
   {
-    relachement_tmp = list_parcours->data;
+    relachement_tmp = *it;
     
     if (strcmp (relachement_nouveau->nom, relachement_tmp->nom) < 0)
     {
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.relachements.end ())
   {
-    p->modele.relachements = g_list_append (p->modele.relachements,
-                                            relachement_nouveau);
+    p->modele.relachements.push_back (relachement_nouveau);
 #ifdef ENABLE_GTK
     gtk_list_store_append (UI_REL.liste_relachements,
                            &relachement_nouveau->Iter_liste);
@@ -192,9 +189,7 @@ EF_relachement_ajout (Projet             *p,
   }
   else
   {
-    p->modele.relachements = g_list_insert_before (p->modele.relachements,
-                                                   list_parcours,
-                                                   relachement_nouveau);
+    p->modele.relachements.insert (it, relachement_nouveau);
 #ifdef ENABLE_GTK
     gtk_list_store_insert_before (UI_REL.liste_relachements,
                                   &relachement_nouveau->Iter_liste,
@@ -244,22 +239,22 @@ EF_relachement_cherche_nom (Projet     *p,
                             const char *nom,
                             gboolean    critique)
 {
-  GList *list_parcours;
+  std::list <EF_Relachement *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (nom, "%p", nom, NULL)
   
-  list_parcours = p->modele.relachements;
-  while (list_parcours != NULL)
+  it = p->modele.relachements.begin ();
+  while (it != p->modele.relachements.end ())
   {
-    EF_Relachement *relachement = list_parcours->data;
+    EF_Relachement *relachement = *it;
     
     if (strcmp (relachement->nom, nom) == 0)
     {
       return relachement;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (critique)
@@ -291,15 +286,15 @@ EF_relachement_cherche_nom (Projet     *p,
  * \param rz_d_data : paramètre additionnel de la rotation en z si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param rx_fin : relachement de la rotation autour de l'axe x à la fin,
- *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
+ *                 EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rx_f_data : paramètre additionnel de la rotation en x si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param ry_fin : relachement de la rotation autour de l'axe y à la fin,
- *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
+ *                 EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param ry_f_data : paramètre additionnel de la rotation en y si nécessaire,
  *                    NULL pour ne pas modifier,
  * \param rz_fin : relachement de la rotation autour de l'axe z à la fin,
- *                   EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
+ *                 EF_RELACHEMENT_UNTOUCH pour ne pas modifier,
  * \param rz_f_data : paramètre additionnel de la rotation en z si nécessaire.
  *                    NULL pour ne pas modifier,
  * \return
@@ -325,7 +320,8 @@ EF_relachement_modif (Projet             *p,
                       EF_Relachement_Type rz_fin,
                       void               *rz_f_data)
 {
-  GList *liste_relachement = NULL, *liste_barres_dep;
+  std::list <EF_Relachement *> liste_relachement;
+  std::list <EF_Barre *>      *liste_barres_dep;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (relachement, "%p", relachement, FALSE)
@@ -427,33 +423,32 @@ EF_relachement_modif (Projet             *p,
         FALSE,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   
-  liste_relachement = g_list_append (liste_relachement, relachement);
+  liste_relachement.push_back (relachement);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_relachement,
+                                             &liste_relachement,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              &liste_barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (liste_relachement); )
-  g_list_free (liste_relachement);
-  if (liste_barres_dep != NULL)
+       FALSE)
+  if (!liste_barres_dep->empty ())
   {
     BUG (EF_calculs_free (p),
          FALSE,
-         g_list_free (liste_barres_dep); )
+         delete liste_barres_dep; )
   }
-  g_list_free (liste_barres_dep);
+  delete liste_barres_dep;
   
   if ((nom != NULL) && (strcmp (relachement->nom, nom) != 0))
   {
-    GList *list_parcours;
+    std::list <EF_Relachement *>::iterator it;
     char  *tmp;
     
     INFO (!EF_relachement_cherche_nom (p, nom, FALSE),
@@ -473,18 +468,15 @@ EF_relachement_modif (Projet             *p,
 #endif
     
     // On réinsère le relâchement au bon endroit
-    p->modele.relachements = g_list_remove (p->modele.relachements,
-                                            relachement);
-    list_parcours = p->modele.relachements;
-    while (list_parcours != NULL)
+    p->modele.relachements.remove (relachement);
+    it = p->modele.relachements.begin ();
+    while (it != p->modele.relachements.end ())
     {
-      EF_Relachement *relachement_parcours = list_parcours->data;
+      EF_Relachement *relachement_parcours = *it;
       
       if (strcmp (relachement->nom, relachement_parcours->nom) < 0)
       {
-        p->modele.relachements = g_list_insert_before (p->modele.relachements,
-                                                       list_parcours,
-                                                       relachement);
+        p->modele.relachements.insert (it, relachement);
         
 #ifdef ENABLE_GTK
         gtk_list_store_move_before (UI_REL.liste_relachements,
@@ -500,12 +492,11 @@ EF_relachement_modif (Projet             *p,
         break;
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
-    if (list_parcours == NULL)
+    if (it != p->modele.relachements.end ())
     {
-      p->modele.relachements = g_list_append (p->modele.relachements,
-                                              relachement);
+      p->modele.relachements.push_back (relachement);
       
 #ifdef ENABLE_GTK
       gtk_list_store_move_before (UI_REL.liste_relachements,
@@ -651,43 +642,42 @@ EF_relachement_supprime (EF_Relachement *relachement,
                          gboolean        annule_si_utilise,
                          Projet         *p)
 {
-  GList *liste_relachements = NULL, *liste_barres_dep;
+  std::list <EF_Relachement *> liste_relachements;
+  std::list <EF_Barre *>      *liste_barres_dep;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (relachement, "%p", relachement, FALSE)
   
   // On vérifie les dépendances.
-  liste_relachements = g_list_append (liste_relachements, relachement);
+  liste_relachements.push_back (relachement);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_relachements,
+                                             &liste_relachements,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              &liste_barres_dep,
                                              NULL,
-                                             FALSE,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (liste_barres_dep); )
+       FALSE)
   
-  if ((annule_si_utilise) && (liste_barres_dep != NULL))
+  if ((annule_si_utilise) && (!liste_barres_dep->empty ()))
   {
     char *liste;
     
-    BUG (liste = common_selection_barres_en_texte (liste_relachements),
+    BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
          FALSE,
-         g_list_free (liste_relachements);
-           g_list_free (liste_barres_dep); )
-    if (g_list_next (liste_relachements) == NULL)
+         delete liste_barres_dep; )
+    if (liste_barres_dep->size () == 1)
     {
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
                           liste);
-                  g_list_free (liste_relachements);
-                  g_list_free (liste_barres_dep);
+                  delete liste_barres_dep;
                   free (liste); )
     }
     else
@@ -695,26 +685,24 @@ EF_relachement_supprime (EF_Relachement *relachement,
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
                           liste);
-                  g_list_free (liste_relachements);
-                  g_list_free (liste_barres_dep);
+                  delete liste_barres_dep;
                   free (liste); )
     }
   }
   
-  g_list_free (liste_relachements);
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
        TRUE,
-       g_list_free (liste_barres_dep); )
-  g_list_free (liste_barres_dep);
+       delete liste_barres_dep; )
+  delete liste_barres_dep;
   
   free (relachement->nom);
-  free (relachement->rx_d_data);
-  free (relachement->ry_d_data);
-  free (relachement->rz_d_data);
-  free (relachement->rx_f_data);
-  free (relachement->ry_f_data);
-  free (relachement->rz_f_data);
-  p->modele.relachements = g_list_remove (p->modele.relachements, relachement);
+  delete relachement->rx_d_data;
+  delete relachement->ry_d_data;
+  delete relachement->rz_d_data;
+  delete relachement->rx_f_data;
+  delete relachement->ry_f_data;
+  delete relachement->rz_f_data;
+  p->modele.relachements.remove (relachement);
   
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_REL.liste_relachements, &relachement->Iter_liste);
@@ -724,7 +712,7 @@ EF_relachement_supprime (EF_Relachement *relachement,
   }
 #endif
   
-  free (relachement);
+  delete relachement;
   
   return TRUE;
 }
@@ -741,26 +729,28 @@ EF_relachement_supprime (EF_Relachement *relachement,
 gboolean
 EF_relachement_free (Projet *p)
 {
+  std::list <EF_Relachement *>::iterator it;
+  
   BUGPARAM (p, "%p", p, FALSE)
   
-  while (p->modele.relachements != NULL)
+  it = p->modele.relachements.begin ();
+  while (it != p->modele.relachements.end ())
   {
-    EF_Relachement *relachement = p->modele.relachements->data;
+    EF_Relachement *relachement = *it;
     
-    p->modele.relachements = g_list_delete_link (p->modele.relachements,
-                                                 p->modele.relachements);
-    free (relachement->rx_d_data);
-    free (relachement->ry_d_data);
-    free (relachement->rz_d_data);
-    free (relachement->rx_f_data);
-    free (relachement->ry_f_data);
-    free (relachement->rz_f_data);
+    delete relachement->rx_d_data;
+    delete relachement->ry_d_data;
+    delete relachement->rz_d_data;
+    delete relachement->rx_f_data;
+    delete relachement->ry_f_data;
+    delete relachement->rz_f_data;
     free (relachement->nom);
     
-    free (relachement);
+    delete relachement;
+    
+    ++it;
   }
-  
-  BUG (EF_calculs_free (p), FALSE)
+  p->modele.relachements.clear ();
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_REL.liste_relachements);

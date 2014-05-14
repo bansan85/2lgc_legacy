@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_selection.hpp"
@@ -78,20 +80,22 @@ GTK_WINDOW_DESTROY (ef, charge_barre_ponctuelle, );
  *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
-gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
-                                                  Action  **action,
-                                                  GList   **barres,
-                                                  double   *fx,
-                                                  double   *fy,
-                                                  double   *fz,
-                                                  double   *mx,
-                                                  double   *my,
-                                                  double   *mz,
-                                                  gchar   **nom,
-                                                  gboolean *repere_local,
-                                                  double   *position)
+gboolean EF_gtk_charge_barre_ponctuelle_recupere (
+           Projet                  *p,
+           Action                 **action,
+           std::list <EF_Barre *> **barres,
+           double                  *fx,
+           double                  *fy,
+           double                  *fz,
+           double                  *mx,
+           double                  *my,
+           double                  *mz,
+           gchar                  **nom,
+           gboolean                *repere_local,
+           double                  *position)
 {
-  GList         *num_barres;
+  std::list <unsigned int> *num_barres;
+  
   GtkTextIter    start, end;
   gchar         *texte_tmp;
   GtkTextBuffer *textbuffer;
@@ -120,8 +124,8 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
   }
   else
   {
-    *action = g_list_nth_data (p->actions,
-                               (unsigned int) gtk_combo_box_get_active (
+    *action = *std::next (p->actions.begin (),
+                          gtk_combo_box_get_active (
                                                    UI_CHBARP.combobox_charge));
   }
   
@@ -219,7 +223,7 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere (Projet   *p,
   else
   {
     *barres = common_selection_numeros_en_barres (num_barres, p);
-    g_list_free (num_barres);
+    delete num_barres;
     if (*barres == NULL)
     {
       ok = FALSE;
@@ -266,11 +270,12 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
                                  Projet    *p)
 {
   Action  *action;
-  GList   *barres;
   double   fx, fy, fz, mx, my, mz;
   gchar   *nom = NULL;
   gboolean repere_local;
   double   position;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_CHBARP.builder,
@@ -300,7 +305,7 @@ EF_gtk_charge_barre_ponct_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                   UI_CHBARP.builder, "EF_charge_barre_ponct_button_add_edit")),
                               TRUE);
-    g_list_free (barres);
+    delete barres;
   }
   free (nom);
   
@@ -324,8 +329,9 @@ EF_gtk_charge_barre_ponctuelle_ajouter (GtkButton *button,
   double   fx, fy, fz, mx, my, mz, position;
   Action  *action;
   gboolean repere_local;
-  GList   *barres;
   gchar   *texte;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_CHBARP.builder,
@@ -387,9 +393,10 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
   double                   fx, fy, fz, mx, my, mz, position;
   gboolean                 repere_local;
   Action                  *action;
-  GList                   *barres;
   gchar                   *texte;
   Charge_Barre_Ponctuelle *charge_d;
+  
+  std::list <EF_Barre *> *barres;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_CHBARP.builder,
@@ -421,8 +428,7 @@ EF_gtk_charge_barre_ponctuelle_editer (GtkButton *button,
   charge_d->mx = m_f (mx, FLOTTANT_UTILISATEUR);
   charge_d->my = m_f (my, FLOTTANT_UTILISATEUR);
   charge_d->mz = m_f (mz, FLOTTANT_UTILISATEUR);
-  g_list_free (charge_d->barres);
-  charge_d->barres = barres;
+  charge_d->barres.assign (barres->begin (), barres->end ());
   charge_d->position = m_f (position, FLOTTANT_UTILISATEUR);
   charge_d->repere_local = repere_local == TRUE;
   if (action != UI_CHBARP.action)
@@ -500,7 +506,10 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
   gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHBARP.combobox_charge),
                            GTK_TREE_MODEL (UI_ACT.liste));
   gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHBARP.combobox_charge),
-                            g_list_index (p->actions, action_defaut));
+                            std::distance (p->actions.begin (),
+                                           std::find (p->actions.begin (), 
+                                                      p->actions.end (), 
+                                                      action_defaut)));
   
   if (charge != NULL)
   {
@@ -560,7 +569,7 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
                      UI_CHBARP.builder, "EF_charge_barre_ponct_radio_global")),
                                     TRUE);
     }
-    BUG (tmp2 = common_selection_barres_en_texte (charge_d->barres), FALSE)
+    BUG (tmp2 = common_selection_barres_en_texte (&charge_d->barres), FALSE)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                     UI_CHBARP.builder, "EF_charge_barre_ponct_buffer_barres")),
                               tmp2,

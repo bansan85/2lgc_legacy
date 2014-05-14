@@ -22,6 +22,8 @@
 #include <gmodule.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -58,16 +60,16 @@
  *     - en cas d'erreur d'allocation mémoire.
  */
 Charge *
-EF_charge_noeud_ajout (Projet     *p,
-                       Action     *action,
-                       GList      *noeuds,
-                       Flottant    fx,
-                       Flottant    fy,
-                       Flottant    fz,
-                       Flottant    mx,
-                       Flottant    my,
-                       Flottant    mz,
-                       const char *nom)
+EF_charge_noeud_ajout (Projet                 *p,
+                       Action                 *action,
+                       std::list <EF_Noeud *> *noeuds,
+                       Flottant                fx,
+                       Flottant                fy,
+                       Flottant                fz,
+                       Flottant                mx,
+                       Flottant                my,
+                       Flottant                mz,
+                       const char             *nom)
 {
   Charge       *charge;
   Charge_Noeud *charge_d;
@@ -75,17 +77,12 @@ EF_charge_noeud_ajout (Projet     *p,
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (action, "%p", action, NULL)
   BUGPARAM (noeuds, "%p", noeuds, NULL)
-  BUGCRIT (charge = malloc (sizeof (Charge)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (charge_d = malloc (sizeof (Charge_Noeud)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (charge); )
+  charge = new Charge;
+  charge_d = new Charge_Noeud;
   charge->data = charge_d;
   
   charge->type = CHARGE_NOEUD;
-  charge_d->noeuds = noeuds;
+  charge_d->noeuds.assign (noeuds->begin (), noeuds->end ());
   charge_d->fx = fx;
   charge_d->fy = fy;
   charge_d->fz = fz;
@@ -95,8 +92,8 @@ EF_charge_noeud_ajout (Projet     *p,
   
   BUG (EF_charge_ajout (p, action, charge, nom),
        NULL,
-       free (charge);
-         free (charge_d); )
+       delete charge;
+         delete charge_d; )
   
   return charge;
 }
@@ -122,9 +119,9 @@ EF_charge_noeud_description (Charge *charge)
   
   BUGPARAM (charge, "%p", charge, NULL)
   
-  charge_d = charge->data;
+  charge_d = (Charge_Noeud *) charge->data;
   
-  BUG (txt_liste_noeuds = common_selection_noeuds_en_texte (charge_d->noeuds),
+  BUG (txt_liste_noeuds = common_selection_noeuds_en_texte (&charge_d->noeuds),
        NULL)
   conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
   conv_f_c (charge_d->fy, txt_fy, DECIMAL_FORCE);
@@ -169,24 +166,26 @@ EF_charge_noeud_description (Charge *charge)
  *     - charge == NULL.
  */
 gboolean
-EF_charge_noeud_enleve_noeuds (Charge *charge,
-                               GList  *noeuds,
-                               Projet *p)
+EF_charge_noeud_enleve_noeuds (Charge                 *charge,
+                               std::list <EF_Noeud *> *noeuds,
+                               Projet                 *p)
 {
-  GList        *list_parcours = noeuds;
+  std::list <EF_Noeud *>::iterator it;
   Charge_Noeud *charge_d;
   
   BUGPARAM (charge, "%p", charge, FALSE)
   
-  charge_d = charge->data;
+  it = noeuds->begin ();
   
-  while (list_parcours != NULL)
+  charge_d = (Charge_Noeud *) charge->data;
+  
+  while (it != noeuds->end ())
   {
-    EF_Noeud *noeud = list_parcours->data;
+    EF_Noeud *noeud = *it;
     
-    charge_d->noeuds = g_list_remove (charge_d->noeuds, noeud);
+    charge_d->noeuds.remove (noeud);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
 #ifdef ENABLE_GTK
@@ -205,7 +204,9 @@ EF_charge_noeud_enleve_noeuds (Charge *charge,
       
       gtk_tree_model_get (model, &Iter, 0, &action, -1);
       
-      if (g_list_find (_1990_action_charges_renvoie (action), charge))
+      if (std::find (_1990_action_charges_renvoie (action)->begin (),
+                     _1990_action_charges_renvoie (action)->end (), 
+                     charge) != _1990_action_charges_renvoie (action)->end ())
       {
         gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
       }
@@ -233,12 +234,11 @@ EF_charge_noeud_free (Charge *charge)
   Charge_Noeud *charge_d;
   
   BUGPARAM (charge, "%p", charge, FALSE)
-  charge_d = charge->data;
+  charge_d = (Charge_Noeud *) charge->data;
   
   free (charge->nom);
-  g_list_free (charge_d->noeuds);
-  free (charge_d);
-  free (charge);
+  delete charge_d;
+  delete charge;
   
   return TRUE;
 }

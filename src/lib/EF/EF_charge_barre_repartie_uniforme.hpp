@@ -22,20 +22,21 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-Charge *EF_charge_barre_repartie_uniforme_ajout     (Projet     *p,
-                                                     Action     *action,
-                                                     GList      *barres,
-                                                     gboolean    repere_local,
-                                                     gboolean    projection,
-                                                     Flottant    a,
-                                                     Flottant    b,
-                                                     Flottant    fx,
-                                                     Flottant    fy,
-                                                     Flottant    fz,
-                                                     Flottant    mx,
-                                                     Flottant    my,
-                                                     Flottant    mz,
-                                                     const char *nom)
+Charge *EF_charge_barre_repartie_uniforme_ajout (
+          Projet                 *p,
+          Action                 *action,
+          std::list <EF_Barre *> *barres,
+          gboolean                repere_local,
+          gboolean                projection,
+          Flottant                a,
+          Flottant                b,
+          Flottant                fx,
+          Flottant                fy,
+          Flottant                fz,
+          Flottant                mx,
+          Flottant                my,
+          Flottant                mz,
+          const char             *nom)
                                        __attribute__((__warn_unused_result__));
 char *EF_charge_barre_repartie_uniforme_description (Charge     *charge)
                                        __attribute__((__warn_unused_result__));
@@ -116,9 +117,10 @@ gboolean EF_charge_barre_repartie_uniforme_n (Fonction *fonction,
                                               double    fbx)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
-                                                          GList  *barres,
-                                                          Projet *p)
+gboolean EF_charge_barre_repartie_uniforme_enleve_barres (
+           Charge                 *charge,
+           std::list <EF_Barre *> *barres,
+           Projet                 *p)
                                        __attribute__((__warn_unused_result__));
 gboolean EF_charge_barre_repartie_uniforme_free (Charge *charge)
                                        __attribute__((__warn_unused_result__));

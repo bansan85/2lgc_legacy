@@ -23,26 +23,34 @@
 #include "common_projet.hpp"
 
 
-gboolean common_selection_ajout_nombre               (void       *data,
-                                                      GList     **liste,
-                                                      Type_Liste  type,
-                                                      Projet     *p)
-                                       __attribute__((__warn_unused_result__));
-GList   *common_selection_renvoie_numeros            (const char *texte)
+void common_selection_ajout_nombre  (uint32_t                nb,
+                                     std::list <uint32_t>   *liste);
+void common_selection_ajout_nombre  (EF_Noeud *              noeud,
+                                     std::list <EF_Noeud *> *liste);
+void common_selection_ajout_nombre  (EF_Barre *              barre,
+                                     std::list <EF_Barre *> *liste);
+
+void common_selection_ajout_nombre  (Charge               *charge,
+                                     std::list <Charge *> *liste,
+                                     Projet               *p);
+std::list <uint32_t>   *common_selection_renvoie_numeros (const char *texte)
                                        __attribute__((__warn_unused_result__));
 
-GList   *common_selection_numeros_en_noeuds (GList      *liste_numeros,
-                                             Projet     *p)
+std::list <EF_Noeud *> *common_selection_numeros_en_noeuds (
+                          std::list <uint32_t> *liste_numeros,
+                          Projet               *p)
                                        __attribute__((__warn_unused_result__));
-GList   *common_selection_numeros_en_barres (GList      *liste_numeros,
-                                             Projet     *p)
+std::list <EF_Barre *> *common_selection_numeros_en_barres (
+                          std::list <uint32_t> *liste_numeros,
+                          Projet               *p)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_noeuds_en_texte   (GList      *liste_noeuds)
+char    *common_selection_noeuds_en_texte   (std::list <EF_Noeud *> *liste)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_barres_en_texte   (GList      *liste_barres)
+char    *common_selection_barres_en_texte   (std::list <EF_Barre *> *liste)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_charges_en_texte  (GList      *liste_charges,
-                                             Projet     *p)
+char    *common_selection_charges_en_texte  (
+           std::list <Charge *> *liste_charges,
+           Projet               *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

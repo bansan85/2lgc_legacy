@@ -79,7 +79,7 @@ EF_gtk_rapport (Projet                     *p,
     UI_RAP.liste = GTK_LIST_STORE (gtk_builder_get_object (UI_RAP.builder,
                                                       "EF_rapport_treestore"));
   }
-  UI_RAP.rapport = rapport;
+  UI_RAP.rapport.assign (rapport->begin (), rapport->end ());
   
   it = rapport->begin ();
   while (it != rapport->end ())

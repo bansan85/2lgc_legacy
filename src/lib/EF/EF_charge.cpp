@@ -22,6 +22,8 @@
 #include <gmodule.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #ifdef ENABLE_GTK
@@ -67,11 +69,7 @@ EF_charge_ajout (Projet     *p,
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
-  BUG (_1990_action_charges_change (action,
-                          g_list_append (_1990_action_charges_renvoie (action),
-                                    charge)),
-       NULL,
-       free (charge->nom); )
+  _1990_action_charges_renvoie (action)->push_back (charge);
   
   BUG (EF_calculs_free (p), NULL)
   
@@ -114,22 +112,24 @@ Action *
 EF_charge_action (Projet *p,
                   Charge *charge)
 {
-  GList *list_parcours;
+  std::list <Action *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (charge, "%p", charge, NULL)
   
-  list_parcours = p->actions;
-  while (list_parcours != NULL)
+  it = p->actions.begin ();
+  while (it != p->actions.end ())
   {
-    Action *action = list_parcours->data;
+    Action *action = *it;
     
-    if (g_list_find (_1990_action_charges_renvoie (action), charge) != NULL)
+    if (std::find (_1990_action_charges_renvoie (action)->begin (),
+                   _1990_action_charges_renvoie (action)->end (),
+                   charge) != _1990_action_charges_renvoie (action)->end ())
     {
       return action;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   FAILINFO (NULL, (gettext ("La charge n'est dans aucune action.\n")); )
@@ -196,7 +196,7 @@ EF_charge_deplace (Projet *p,
                    Action *action_dest)
 {
   Charge *charge_data = NULL;
-  GList  *list_parcours;
+  std::list <Charge *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (action_src, "%p", action_src, FALSE)
@@ -209,11 +209,11 @@ EF_charge_deplace (Projet *p,
   }
   
   // Lorsqu'elle est trouvée,
-  list_parcours = _1990_action_charges_renvoie (action_src);
+  it = _1990_action_charges_renvoie (action_src)->begin ();
   //   Pour chaque charge de l'action en cours Faire
-  while (list_parcours != NULL)
+  while (it != _1990_action_charges_renvoie (action_src)->end ())
   {
-    Charge *charge = list_parcours->data;
+    Charge *charge = *it;
     
   //     Si la charge est celle à supprimer Alors
     if (charge == charge_s)
@@ -230,17 +230,12 @@ EF_charge_deplace (Projet *p,
   //       et de la liste des charges tout en conservant les données
   //         de la charge dans charge_data.
       charge_data = charge;
-      BUG (_1990_action_charges_change (action_src,
-                                        g_list_delete_link
-                                                (_1990_action_charges_renvoie (
-                                                                   action_src),
-                                                 list_parcours)),
-           FALSE)
+      _1990_action_charges_renvoie (action_src)->remove (charge);
       
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   //   FinPour
   }
   
@@ -252,11 +247,7 @@ EF_charge_deplace (Projet *p,
   
   // On insère la charge à la fin de la liste des charges dans l'action de
   // destination en modifiant son numéro.
-  BUG (_1990_action_charges_change (
-         action_dest,
-         g_list_append (_1990_action_charges_renvoie (action_dest),
-                        charge_data)),
-       FALSE)
+  _1990_action_charges_renvoie (action_dest)->push_back (charge_data);
   
   BUG (EF_calculs_free (p), FALSE)
   
@@ -284,15 +275,15 @@ EF_charge_supprime (Projet *p,
                     Charge *charge_s)
 {
   Charge *charge_data = NULL;
-  GList  *list_parcours;
+  std::list <Charge *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  list_parcours = _1990_action_charges_renvoie (action);
+  it = _1990_action_charges_renvoie (action)->begin ();
   // Pour chaque charge de l'action en cours Faire
-  while (list_parcours != NULL)
+  while (it != _1990_action_charges_renvoie (action)->end ())
   {
-    Charge *charge = list_parcours->data;
+    Charge *charge = *it;
   //   Si la charge est celle à supprimer Alors
     if (charge == charge_s)
     {
@@ -308,11 +299,8 @@ EF_charge_supprime (Projet *p,
 #endif
   //     et de la liste des charges tout en conservant les données
   //       de la charge dans charge_data
-      charge_data = list_parcours->data;
-      BUG (_1990_action_charges_change (action,
-                      g_list_delete_link (_1990_action_charges_renvoie(action),
-                                        list_parcours)),
-           FALSE)
+      charge_data = *it;
+      _1990_action_charges_renvoie (action)->remove (charge_data);
   
   //     On libère la charge charge_data
       switch (charge_data->type)
@@ -343,7 +331,8 @@ EF_charge_supprime (Projet *p,
       break;
     }
   // FinPour
-    list_parcours = g_list_next (list_parcours);
+    
+    ++it;
   }
   
   INFO (charge_data,

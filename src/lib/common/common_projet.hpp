@@ -26,6 +26,7 @@
 #include <glib.h>
 
 #include <list>
+#include <vector>
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
@@ -592,7 +593,7 @@ typedef struct
    * une liste de points. Cette forme est automatiquement refermée. Il n'est
    * pas nécessaire que le premier point soit égal au dernier.
    */
-   std::list <std::list <EF_Point *> *> *forme;
+   std::list <std::list <EF_Point *> *> forme;
 } Section_Personnalisee;
 
 
@@ -618,13 +619,6 @@ typedef struct
    */
   void        *data;
 } Section;
-
-
-/**
- * \struct __Action
- * \brief Action version privée.
- */
-typedef struct __Action Action;
 
 
 #ifdef ENABLE_GTK
@@ -676,6 +670,103 @@ typedef struct
 } Analyse_Comm;
 
 
+/**
+ * \struct Troncon
+ * \brief Définition de la structure Troncon qui contient une fonction avec un
+ *        domaine de validité précis. La fonction mathématique est définie par
+ *        x0 + x1*x + x2*x^2 + x3*x^3 + x4*x^4 + x5*x^5 + x6*x^6.
+ */
+typedef struct
+{
+  /// Début du tronçon de validité de la fonction.
+  double debut_troncon;
+  /// Fin du tronçon de validité de la fonction.
+  double fin_troncon;
+  /// Coefficient x0.
+  double x0;
+  /// Coefficient x1.
+  double x1;
+  /// Coefficient x2.
+  double x2;
+  /// Coefficient x3.
+  double x3;
+  /// Coefficient x4.
+  double x4;
+  /// Coefficient x5.
+  double x5;
+  /// Coefficient x6.
+  double x6;
+} Troncon;
+
+
+/**
+ * \struct Fonction
+ * \brief Une fonction décrit une courbe sous forme d'une liste de troncons.
+ *        Les fonctions n'étant pas forcément continues le long de la barre
+ *        (par exemple de part et d'une charge ponctuelle). Il est nécessaire
+ *        de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+ */
+typedef struct
+{
+  /// nb_troncons défini le nombre de tronçons que possède la fonction.
+  uint16_t nb_troncons;
+  /// Tableau dynamique contenant les fonctions continues par tronçon.
+  Troncon *troncons;
+} Fonction;
+
+
+#ifdef ENABLE_GTK
+#define ENTETE_ITER_GROUPE GtkTreeIter Iter_groupe;
+#else
+#define ENTETE_ITER_GROUPE
+#endif
+
+
+#define ENTETE_ACTION_ET_GROUPE \
+  char  *nom; \
+  ENTETE_ITER_GROUPE
+
+
+/**
+ * \brief Objet définissant une action avec sa liste de charges.
+ */
+typedef struct
+{
+  /// Le nom plus si nécessaire un Iter_groupe pour l'affichage graphique.
+  ENTETE_ACTION_ET_GROUPE;
+  /// La description de type est donnée par #_1990_action_bat_txt_type.
+  uint8_t         type;
+  /// Flag utilisé temporairement.
+  uint8_t         action_predominante : 1;
+  /// Liste des charges (ponctuelle, répartie, …).
+  std::list <Charge *> charges;
+  /// Valeur de combinaison d'une charge variable.
+  Flottant        psi0;
+  /// Valeur fréquente d'une action variable.
+  Flottant        psi1;
+  /// Valeur quasi-permanente d'une action variable.
+  Flottant        psi2;
+  /// Déplacement des nœuds de la structure sous l'effet de l'action.
+  cholmod_sparse *deplacement;
+  /// Efforts équivalents des charges dans les nœuds de la structure.
+  cholmod_sparse *forces;
+  /// Efforts (y compris les réactions d'appui) dans les nœuds.
+  cholmod_sparse *efforts_noeuds;
+#ifdef ENABLE_GTK
+  /// Iter utilisé par le treeview dans la fenêtre Action. 
+  GtkTreeIter     Iter_fenetre;
+  /// Iter utilisé par les menus des fenêtres Charges.
+  GtkTreeIter     Iter_liste;
+#endif
+  /// Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
+  std::vector <Fonction *> efforts[6];
+  /// Les 3 déformations x, y, z pour chaque barre dans le repère local.
+  std::vector <Fonction *> deformation[3]; 
+  /// Les 3 rotations rx, ry, rz pour chaque barre dans le repère local.
+  std::vector <Fonction *> rotation[3];
+} Action;
+
+
 #ifdef ENABLE_GTK
 /**
  * \struct Gtk_EF_Resultats_Tableau
@@ -725,7 +816,7 @@ typedef struct
    * Est uniquement utilisé pour trouver quel menu a été cliqué parmi ceux de
    * type_action.
    */
-  std::list <GtkWidget *> *items_type_action;
+  std::list <GtkWidget *> items_type_action;
   
   /// Le composant .
   GtkTreeStore     *tree_store_charges;
@@ -1163,7 +1254,7 @@ typedef struct
   /// Le composant EF_rapport_treestore.
   GtkListStore *liste;
   /// Le rapport à afficher défini par la fonction EF_gtk_rapport.
-  std::list <Analyse_Comm *> *rapport;
+  std::list <Analyse_Comm *> rapport;
 } Gtk_EF_Rapport;
 
 
@@ -1188,7 +1279,7 @@ typedef struct
   GtkNotebook *notebook;
   
   /// Liste de tableaux Gtk_EF_Resultats_Tableau.
-  std::list <Gtk_EF_Resultats_Tableau *> *tableaux;
+  std::list <Gtk_EF_Resultats_Tableau *> tableaux;
 } Gtk_EF_Resultats;
 
 
@@ -1410,90 +1501,6 @@ typedef struct
 
 
 /**
- * \struct Charge_Noeud
- * \brief Charge ponctuelle appliquée à un noeud.
- */
-typedef struct
-{
-  /// Liste des noeuds où est appliquée la charge.
-  GList   *noeuds;
-  /// Charge ponctuelle en N dans l'axe x.
-  Flottant fx;
-  /// Charge ponctuelle en N dans l'axe y.
-  Flottant fy;
-  /// Charge ponctuelle en N dans l'axe z.
-  Flottant fz;
-  /// Moment ponctuelle en N.m autour de l'axe x.
-  Flottant mx;
-  /// Moment ponctuelle en N.m autour de l'axe y.
-  Flottant my;
-  /// Moment ponctuelle en N.m autour de l'axe z.
-  Flottant mz;
-} Charge_Noeud;
-
-
-/**
- * \struct Charge_Barre_Ponctuelle
- * \brief Charge ponctuelle appliquée sur une barre.
- */
-typedef struct
-{
-  /// Liste des barres où est appliquée la charge.
-  GList   *barres; // À laisser en premier
-  /// Charge appliquée dans le repère local.
-  uint8_t  repere_local : 1;
-  ///Position en m du début de la charge par rapport au début de la barre.
-  Flottant position;
-  /// Charge ponctuelle en N dans l'axe x.
-  Flottant fx;
-  /// Charge ponctuelle en N dans l'axe y.
-  Flottant fy;
-  /// Charge ponctuelle en N dans l'axe z.
-  Flottant fz;
-  /// Moment ponctuelle en N.m autour de l'axe x.
-  Flottant mx;
-  /// Moment ponctuelle en N.m autour de l'axe y.
-  Flottant my;
-  /// Moment ponctuelle en N.m autour de l'axe z.
-  Flottant mz;
-} Charge_Barre_Ponctuelle;
-
-
-/**
- * \struct Charge_Barre_Repartie_Uniforme
- * \brief Charge uniformément répartie appliquée sur une barre.
- */
-typedef struct
-{
-  /// Liste des barres où est appliquée la charge.
-  GList   *barres; // À laisser en premier
-  /// Charge appliquée dans le repère local.
-  uint8_t  repere_local : 1;
-  /// La charge est projetée dans le repère local.
-  /**
-   * Cette option est incompatible avec repere_local == TRUE.
-   */
-  uint8_t  projection : 1;
-  /// Position en m du début de la charge par rapport au début de la barre.
-  Flottant a;
-  /// Position en m de la fin de la charge par rapport à la fin de la barre.
-  Flottant b;
-  /// Charge linéaire en N/m dans l'axe x.
-  Flottant fx;
-  /// Charge linéaire en N/m dans l'axe y.
-  Flottant fy;
-  /// Charge linéaire en N/m dans l'axe z.
-  Flottant fz;
-  /// Moment linéaire en N.m/m autour de l'axe x.
-  Flottant mx;
-  /// Moment linéaire en N.m/m autour de l'axe y.
-  Flottant my;
-  /// Moment linéaire en N.m/m autour de l'axe z.
-  Flottant mz;
-} Charge_Barre_Repartie_Uniforme;
-
-
-/**
  * \struct EF_Relachement_Donnees_Elastique_Lineaire
  * \brief Données du relâchement élastique linéaire.
  */
@@ -1621,7 +1628,7 @@ typedef struct
    * p->modele.noeuds. La liste de noeuds nds_inter contient uniquement un
    * pointeur vers chaque noeud de la liste principale.
    */
-  GList          *nds_inter;
+  std::list <EF_Noeud *> nds_inter;
   /// Une info de calcul par élément discrétisé.
   Barre_Info_EF  *info_EF;
 #ifdef ENABLE_GTK
@@ -1667,48 +1674,87 @@ typedef struct
 
 
 /**
- * \struct Troncon
- * \brief Définition de la structure Troncon qui contient une fonction avec un
- *        domaine de validité précis. La fonction mathématique est définie par
- *        x0 + x1*x + x2*x^2 + x3*x^3 + x4*x^4 + x5*x^5 + x6*x^6.
+ * \struct Charge_Noeud
+ * \brief Charge ponctuelle appliquée à un noeud.
  */
 typedef struct
 {
-  /// Début du tronçon de validité de la fonction.
-  double debut_troncon;
-  /// Fin du tronçon de validité de la fonction.
-  double fin_troncon;
-  /// Coefficient x0.
-  double x0;
-  /// Coefficient x1.
-  double x1;
-  /// Coefficient x2.
-  double x2;
-  /// Coefficient x3.
-  double x3;
-  /// Coefficient x4.
-  double x4;
-  /// Coefficient x5.
-  double x5;
-  /// Coefficient x6.
-  double x6;
-} Troncon;
+  /// Liste des noeuds où est appliquée la charge.
+  std::list <EF_Noeud *> noeuds;
+  /// Charge ponctuelle en N dans l'axe x.
+  Flottant fx;
+  /// Charge ponctuelle en N dans l'axe y.
+  Flottant fy;
+  /// Charge ponctuelle en N dans l'axe z.
+  Flottant fz;
+  /// Moment ponctuelle en N.m autour de l'axe x.
+  Flottant mx;
+  /// Moment ponctuelle en N.m autour de l'axe y.
+  Flottant my;
+  /// Moment ponctuelle en N.m autour de l'axe z.
+  Flottant mz;
+} Charge_Noeud;
 
 
 /**
- * \struct Fonction
- * \brief Une fonction décrit une courbe sous forme d'une liste de troncons.
- *        Les fonctions n'étant pas forcément continues le long de la barre
- *        (par exemple de part et d'une charge ponctuelle). Il est nécessaire
- *        de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+ * \struct Charge_Barre_Ponctuelle
+ * \brief Charge ponctuelle appliquée sur une barre.
  */
 typedef struct
 {
-  /// nb_troncons défini le nombre de tronçons que possède la fonction.
-  uint16_t nb_troncons;
-  /// Tableau dynamique contenant les fonctions continues par tronçon.
-  Troncon *troncons;
-} Fonction;
+  /// Liste des barres où est appliquée la charge.
+  std::list <EF_Barre *> barres;
+  /// Charge appliquée dans le repère local.
+  uint8_t  repere_local : 1;
+  ///Position en m du début de la charge par rapport au début de la barre.
+  Flottant position;
+  /// Charge ponctuelle en N dans l'axe x.
+  Flottant fx;
+  /// Charge ponctuelle en N dans l'axe y.
+  Flottant fy;
+  /// Charge ponctuelle en N dans l'axe z.
+  Flottant fz;
+  /// Moment ponctuelle en N.m autour de l'axe x.
+  Flottant mx;
+  /// Moment ponctuelle en N.m autour de l'axe y.
+  Flottant my;
+  /// Moment ponctuelle en N.m autour de l'axe z.
+  Flottant mz;
+} Charge_Barre_Ponctuelle;
+
+
+/**
+ * \struct Charge_Barre_Repartie_Uniforme
+ * \brief Charge uniformément répartie appliquée sur une barre.
+ */
+typedef struct
+{
+  /// Liste des barres où est appliquée la charge.
+  std::list <EF_Barre *> barres;
+  /// Charge appliquée dans le repère local.
+  uint8_t  repere_local : 1;
+  /// La charge est projetée dans le repère local.
+  /**
+   * Cette option est incompatible avec repere_local == TRUE.
+   */
+  uint8_t  projection : 1;
+  /// Position en m du début de la charge par rapport au début de la barre.
+  Flottant a;
+  /// Position en m de la fin de la charge par rapport à la fin de la barre.
+  Flottant b;
+  /// Charge linéaire en N/m dans l'axe x.
+  Flottant fx;
+  /// Charge linéaire en N/m dans l'axe y.
+  Flottant fy;
+  /// Charge linéaire en N/m dans l'axe z.
+  Flottant fz;
+  /// Moment linéaire en N.m/m autour de l'axe x.
+  Flottant mx;
+  /// Moment linéaire en N.m/m autour de l'axe y.
+  Flottant my;
+  /// Moment linéaire en N.m/m autour de l'axe z.
+  Flottant mz;
+} Charge_Barre_Repartie_Uniforme;
 
 
 /**
@@ -1753,18 +1799,6 @@ typedef struct
 } Combinaison;
 
 
-#ifdef ENABLE_GTK
-#define ENTETE_ITER_GROUPE GtkTreeIter Iter_groupe;
-#else
-#define ENTETE_ITER_GROUPE
-#endif
-
-
-#define ENTETE_ACTION_ET_GROUPE \
-  char  *nom; \
-  ENTETE_ITER_GROUPE
-
-
 /**
  * \struct Groupe
  * \brief Contient une liste d'actions ou de groupes avec la méthode pour les
@@ -1783,7 +1817,7 @@ typedef struct
    * Ces combinaisons sont utilisées pour générer les groupes du niveau
    * supérieur jusqu'au dernier.
    */
-  GList                  *tmp_combinaison;
+  std::list <std::list <Combinaison *> *> tmp_combinaison;
 #ifdef ENABLE_GTK
   /// Pour préserver l'affichage graphique lors d'un changement de niveau.
   /**
@@ -1803,12 +1837,12 @@ typedef struct
 typedef struct
 {
   /// La liste.
-  GList      *groupes;
+  std::list <Groupe *> groupes;
 } Niveau_Groupe;
 
 
 /**
- * \struct CombinaisonsEL
+ * \struct PonderationsEL
  * \brief Paramètres de combinaisons avec leurs listes générées.
  *        Spécifie la méthode des combinaisons (E0,A1.3).
  */
@@ -1823,29 +1857,29 @@ typedef struct
   /// si 0, utilisation des formules 6.10a et b. Si 1 alors formule 6.10.
   uint8_t form_6_10 : 1;
   
-  /// Liste des combinaisons selon l'ELU EQU
-  GList        *elu_equ;
-  /// Liste des combinaisons selon l'ELU STR
-  GList        *elu_str;
-  /// Liste des combinaisons selon l'ELU GEO
-  GList        *elu_geo;
-  /// Liste des combinaisons selon l'ELU FAT
-  GList        *elu_fat;
-  /// Liste des combinaisons selon l'ELU ACC
-  GList        *elu_acc;
-  /// Liste des combinaisons selon l'ELU SIS
-  GList        *elu_sis;
-  /// Liste des combinaisons selon l'ELS CAR
-  GList        *els_car;
-  /// Liste des combinaisons selon l'ELS FREQ
-  GList        *els_freq;
-  /// Liste des combinaisons selon l'ELS PERM
-  GList        *els_perm;
+  /// Liste des pondérations selon l'ELU EQU
+  std::list <std::list <Ponderation *> *> elu_equ;
+  /// Liste des pondérations selon l'ELU STR
+  std::list <std::list <Ponderation *> *> elu_str;
+  /// Liste des pondérations selon l'ELU GEO
+  std::list <std::list <Ponderation *> *> elu_geo;
+  /// Liste des pondérations selon l'ELU FAT
+  std::list <std::list <Ponderation *> *> elu_fat;
+  /// Liste des pondérations selon l'ELU ACC
+  std::list <std::list <Ponderation *> *> elu_acc;
+  /// Liste des pondérations selon l'ELU SIS
+  std::list <std::list <Ponderation *> *> elu_sis;
+  /// Liste des pondérations selon l'ELS CAR
+  std::list <std::list <Ponderation *> *> els_car;
+  /// Liste des pondérations selon l'ELS FREQ
+  std::list <std::list <Ponderation *> *> els_freq;
+  /// Liste des pondérations selon l'ELS PERM
+  std::list <std::list <Ponderation *> *> els_perm;
 #ifdef ENABLE_GTK
   /// Liste graphique des combinaisons ou enveloppe pour la fenêtre résultat.
   GtkListStore *list_el_desc;
 #endif
-} CombinaisonsEL;
+} PonderationsEL;
 
 
 /**
@@ -1859,18 +1893,18 @@ typedef struct
   /** Y compris les noeuds définis par l'utilisateur ou les noeuds créés par la
    * discrétisation des éléments.
    */
-  GList *noeuds;
+  std::list <EF_Noeud *>       noeuds;
   /// Liste des types d'appuis.
-  GList *appuis;
+  std::list <EF_Appui *>       appuis;
   
   /// Liste des types de relâchements des barres.
-  GList *relachements;
+  std::list <EF_Relachement *> relachements;
   /// Liste des sections des barres.
-  GList *sections;
+  std::list <Section *>        sections;
   /// Liste des matériaux des barres.
-  GList *materiaux;
+  std::list <EF_Materiau *>    materiaux;
   /// Liste des barres.
-  GList *barres;
+  std::list <EF_Barre *>       barres;
 } Modele;
 
 
@@ -2002,20 +2036,20 @@ typedef struct
 typedef struct
 {
   /// Paramètres de calculs.
-  Parametres     parametres;
+  Parametres                   parametres;
   /// Liste des actions contenant chacunes des charges.
-  GList         *actions;
+  std::list <Action *>        actions;
   /// Compatibilités entres actions.
-  GList         *niveaux_groupes;
-  /// Combinaisons conformes aux Eurocodes.
-  CombinaisonsEL combinaisons;
+  std::list <Niveau_Groupe *> niveaux_groupes;
+  /// Pondérations conformes aux Eurocodes.
+  PonderationsEL               ponderations;
   /// Données du modèle de calcul.
-  Modele         modele;
+  Modele                       modele;
   /// Données nécessaires aux calculs.
-  Calculs        calculs;
+  Calculs                      calculs;
 #ifdef ENABLE_GTK
   /// Informations nécessaires pour l'interface graphique.
-  List_Gtk       ui;
+  List_Gtk                     ui;
 #endif
 } Projet;
 

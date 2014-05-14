@@ -84,7 +84,8 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
     GtkTreeIter   Iter;
     GtkTreeModel *model;
     Section      *section;
-    GList        *liste_sections = NULL;
+    
+    std::list <Section *> liste_sections;
     
     if (!gtk_tree_selection_get_selected (
            gtk_tree_view_get_selection (treeview),
@@ -96,27 +97,25 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
     
     gtk_tree_model_get (model, &Iter, 0, &section, -1);
     
-    liste_sections = g_list_append (liste_sections, section);
+    liste_sections.push_back (section);
     
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
-                                              liste_sections,
+                                              &liste_sections,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE) == FALSE)
     {
       BUG (EF_sections_supprime (section, TRUE, p),
-           FALSE,
-           g_list_free (liste_sections); )
+           FALSE)
     }
-    
-    g_list_free (liste_sections);
     
     return TRUE;
   }
@@ -177,25 +176,27 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
   else
   {
     Section *section;
-    GList   *liste_sections = NULL;
+    
+    std::list <Section *> liste_sections;
     
     gtk_tree_model_get (model, &Iter, 0, &section, -1);
     
-    liste_sections = g_list_append (liste_sections, section);
+    liste_sections.push_back (section);
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                               UI_SEC.builder, "EF_sections_boutton_modifier")),
                               TRUE);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
-                                              liste_sections,
+                                              &liste_sections,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -226,8 +227,6 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
                         UI_SEC.builder, "EF_sections_boutton_supprimer_menu")),
                               FALSE);
     }
-    
-    g_list_free (liste_sections);
   }
   
   return;
@@ -252,8 +251,11 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   Section      *section;
-  GList        *liste_sections = NULL;
-  GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  
+  std::list <Section  *>  liste_sections;
+  std::list <EF_Noeud *> *liste_noeuds_dep;
+  std::list <EF_Barre *> *liste_barres_dep;
+  std::list <Charge   *> *liste_charges_dep;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
@@ -271,26 +273,25 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   
   gtk_tree_model_get (model, &Iter, 0, &section, -1);
   
-  liste_sections = g_list_append (liste_sections, section);
+  liste_sections.push_back (section);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
-                                             liste_sections,
+                                             &liste_sections,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
-      ,
-      g_list_free (liste_sections); )
-  g_list_free (liste_sections);
+      , )
   
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
+  if ((!liste_noeuds_dep->empty ()) ||
+      (!liste_barres_dep->empty ()) ||
+      (!liste_charges_dep->empty ()))
   {
     char *desc;
     
@@ -299,9 +300,9 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                                          liste_charges_dep,
                                          p),
          ,
-         g_list_free (liste_noeuds_dep);
-           g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep); )
+         delete liste_noeuds_dep;
+           delete liste_barres_dep;
+           delete liste_charges_dep; )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_supprimer_menu_barres")),
                              desc);
@@ -309,12 +310,15 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
   }
   else
   {
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
     FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
   }
   
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
+  delete liste_noeuds_dep;
+  delete liste_barres_dep;
+  delete liste_charges_dep;
   
   return;
 }
@@ -726,8 +730,8 @@ EF_gtk_sections_dessin (Section *section,
       std::list <std::list <EF_Point *> *>::iterator it;
       
       // On commence par calculer la largeur et la hauteur de la section.
-      it = data->forme->begin ();
-      while (it != data->forme->end ())
+      it = data->forme.begin ();
+      while (it != data->forme.end ())
       {
         std::list <EF_Point *>          *forme_e = *it;
         std::list <EF_Point *>::iterator it2 = forme_e->begin ();
@@ -784,8 +788,8 @@ EF_gtk_sections_dessin (Section *section,
       decalagey = (height - (ymax - ymin) * convert) / 2.;
       
       // On dessine la section.
-      it = data->forme->begin ();
-      while (it != data->forme->end ())
+      it = data->forme.begin ();
+      while (it != data->forme.end ())
       {
         std::list <EF_Point *>          *forme_e = *it;
         std::list <EF_Point *>::iterator it2 = forme_e->begin ();
@@ -1867,7 +1871,7 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
 void
 EF_gtk_sections (Projet *p)
 {
-  GList *list_parcours;
+  std::list <Section *>::iterator it;
   FILE  *file;
   
   BUGPARAM (p, "%p", p, )
@@ -1981,10 +1985,10 @@ EF_gtk_sections (Projet *p)
     p,
     NULL);
   
-  list_parcours = p->modele.sections;
-  while (list_parcours != NULL)
+  it = p->modele.sections.begin ();
+  while (it != p->modele.sections.end ())
   {
-    Section *section = (Section *)list_parcours->data;
+    Section *section = *it;
     
     gtk_tree_store_append (UI_SEC.sections, &section->Iter_fenetre, NULL);
     gtk_tree_store_set (UI_SEC.sections,
@@ -1992,7 +1996,7 @@ EF_gtk_sections (Projet *p)
                         0, section,
                         -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   file = fopen (DATADIR"/profiles_acier.csv", "r");
@@ -2001,7 +2005,8 @@ EF_gtk_sections (Projet *p)
     char      *ligne;
     wchar_t   *ligne_tmp;
     GtkWidget *sous_menu;
-    GList     *list_categorie = NULL;
+    
+    std::list <GtkWidget *> list_categorie;
     
     sous_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (
                                         gtk_builder_get_object (UI_SEC.builder,
@@ -2025,6 +2030,7 @@ EF_gtk_sections (Projet *p)
       GtkWidget *menu, *categorie_menu = NULL;
       
       std::list <std::list <EF_Point *> *> *forme;
+      std::list <GtkWidget *>::iterator it2;
       
       BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
            ,
@@ -2091,10 +2097,10 @@ EF_gtk_sections (Projet *p)
         categorie[strchr (nom_section, ' ') - nom_section] = 0;
       }
       
-      list_parcours = list_categorie;
-      while (list_parcours != NULL)
+      it2 = list_categorie.begin ();
+      while (it2 != list_categorie.end ())
       {
-        GtkWidget *widget = list_parcours->data;
+        GtkWidget *widget = *it2;
         GtkWidget *grid;
         GtkWidget *label;
         
@@ -2107,7 +2113,7 @@ EF_gtk_sections (Projet *p)
           break;
         }
         
-        list_parcours = g_list_next (list_parcours);
+        ++it2;
       }
       if (categorie_menu == NULL)
       {
@@ -2119,7 +2125,7 @@ EF_gtk_sections (Projet *p)
         
         section.data = &data;
         section.type = SECTION_PERSONNALISEE;
-        data.forme = forme;
+        data.forme.assign (forme->begin (), forme->end ());
         
         categorie_menu = gtk_menu_item_new ();
         label = gtk_label_new (categorie);
@@ -2135,7 +2141,7 @@ EF_gtk_sections (Projet *p)
         gtk_menu_item_set_submenu (GTK_MENU_ITEM (categorie_menu),
                                    gtk_menu_new ());
         
-        list_categorie = g_list_append (list_categorie, categorie_menu);
+        list_categorie.push_back (categorie_menu);
       }
       for_each (forme->begin (),
                 forme->end (),
@@ -2156,7 +2162,6 @@ EF_gtk_sections (Projet *p)
       free (categorie);
       ligne_tmp = common_text_get_line (file);
     }
-    g_list_free (list_categorie);
     
     gtk_widget_show_all (sous_menu);
     

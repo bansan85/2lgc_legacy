@@ -41,18 +41,20 @@ EF_Barre *_1992_1_1_barres_cherche_numero     (Projet   *p,
                                                uint32_t  numero,
                                                gboolean  critique)
                                        __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_cherche_dependances (Projet   *p,
-                                               GList    *appuis,
-                                               GList    *noeuds,
-                                               GList    *sections,
-                                               GList    *materiaux,
-                                               GList    *relachements,
-                                               GList    *barres,
-                                               GList   **noeuds_dep,
-                                               GList   **barres_dep,
-                                               GList   **charges_dep,
-                                               gboolean  numero,
-                                               gboolean  origine)
+gboolean _1992_1_1_barres_cherche_dependances (
+           Projet                       *p,
+           std::list <EF_Appui *>       *appuis,
+           std::list <EF_Noeud *>       *noeuds,
+           std::list <Section *>        *sections,
+           std::list <EF_Materiau *>    *materiaux,
+           std::list <EF_Relachement *> *relachements,
+           std::list <EF_Barre *>       *barres,
+           std::list <EF_Noeud *>      **noeuds_dep,
+           std::list <uint32_t>        **noeuds_dep_n,
+           std::list <EF_Barre *>      **barres_dep,
+           std::list <uint32_t>        **barres_dep_n,
+           std::list <Charge *>        **charges_dep,
+           gboolean                      origine)
                                        __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_angle_rotation      (EF_Noeud *debut,
                                                EF_Noeud *fin,
@@ -92,9 +94,10 @@ gboolean _1992_1_1_barres_rigidite_ajout     (Projet         *p,
 gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet         *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_supprime_liste     (Projet         *p,
-                                              GList          *liste_noeuds,
-                                              GList          *liste_barres)
+gboolean _1992_1_1_barres_supprime_liste (
+           Projet                 *p,
+           std::list <EF_Noeud *> *liste_noeuds,
+           std::list <EF_Barre *> *liste_barres)
                                        __attribute__((__warn_unused_result__));
 void     _1992_1_1_barres_free_foreach       (EF_Barre       *barre,
                                               Projet         *p);

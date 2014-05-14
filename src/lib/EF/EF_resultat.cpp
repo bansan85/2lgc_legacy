@@ -22,6 +22,8 @@
 #include <gmodule.h>
 #include <string.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_math.hpp"
@@ -56,15 +58,16 @@
  *     - p == NULL.
  */
 gboolean
-EF_resultat_noeud_reaction_appui (GList    *liste,
-                                  EF_Noeud *noeud,
-                                  uint8_t   indice,
-                                  Projet   *p,
-                                  char    **texte,
-                                  double   *mini,
-                                  double   *maxi)
+EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
+                                  EF_Noeud             *noeud,
+                                  uint8_t               indice,
+                                  Projet               *p,
+                                  char                **texte,
+                                  double               *mini,
+                                  double               *maxi)
 {
-  GList   *list_parcours;
+  std::list <Action*>::iterator it;
+  
   uint32_t i;
   double   mi, ma;
   double  *x;
@@ -99,17 +102,20 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
     return TRUE;
   }
   
-  i = (uint32_t) g_list_index (p->modele.noeuds, noeud);
+  i = std::distance (p->modele.noeuds.begin (),
+                     std::find (p->modele.noeuds.begin (), 
+                                p->modele.noeuds.end (),
+                                noeud));
   
-  list_parcours = liste;
-  action = list_parcours->data;
+  it = liste->begin ();
+  action = *it;
   x = _1990_action_efforts_noeuds_renvoie (action)->x;
   mi = x[i * 6 + indice];
   ma = x[i * 6 + indice];
-  list_parcours = g_list_next (list_parcours);
-  while (list_parcours != NULL)
+  ++it;
+  while (it != liste->end ())
   {
-    action = list_parcours->data;
+    action = *it;
     
     x = _1990_action_efforts_noeuds_renvoie (action)->x;
     
@@ -122,7 +128,7 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
       ma = x[i * 6 + indice];
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (mini != NULL)
@@ -191,15 +197,16 @@ EF_resultat_noeud_reaction_appui (GList    *liste,
  *     - p == NULL.
  */
 gboolean
-EF_resultat_noeud_deplacement (GList    *liste,
-                               EF_Noeud *noeud,
-                               uint8_t   indice,
-                               Projet   *p,
-                               char    **texte,
-                               double   *mini,
-                               double   *maxi)
+EF_resultat_noeud_deplacement (std::list <Action *> *liste,
+                               EF_Noeud             *noeud,
+                               uint8_t               indice,
+                               Projet               *p,
+                               char                **texte,
+                               double               *mini,
+                               double               *maxi)
 {
-  GList   *list_parcours;
+  std::list <Action*>::iterator it;
+  
   uint32_t i;
   double   mi, ma;
   double  *x;
@@ -234,17 +241,20 @@ EF_resultat_noeud_deplacement (GList    *liste,
     return TRUE;
   }
   
-  i = (uint32_t) g_list_index (p->modele.noeuds, noeud);
+  i = std::distance (p->modele.noeuds.begin (),
+                     std::find (p->modele.noeuds.begin (), 
+                                p->modele.noeuds.end (), 
+                                noeud));
   
-  list_parcours = liste;
-  action = list_parcours->data;
+  it = liste->begin ();
+  action = *it;
   x = _1990_action_deplacement_renvoie (action)->x;
   mi = x[i * 6 + indice];
   ma = x[i * 6 + indice];
-  list_parcours = g_list_next (list_parcours);
-  while (list_parcours != NULL)
+  ++it;
+  while (it != liste->end ())
   {
-    action = list_parcours->data;
+    action = *it;
     
     x = _1990_action_deplacement_renvoie (action)->x;
     
@@ -257,7 +267,7 @@ EF_resultat_noeud_deplacement (GList    *liste,
       ma = x[i * 6 + indice];
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (mini != NULL)

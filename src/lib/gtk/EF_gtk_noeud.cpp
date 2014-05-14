@@ -82,13 +82,13 @@ EF_gtk_noeud_ajouter (GtkButton *button,
   // On ajoute un noeud intermédiaire
   else
   {
-    if (p->modele.barres == NULL)
+    if (p->modele.barres.empty ())
     {
       return;
     }
     
     BUG (EF_noeuds_ajout_noeud_barre (p,
-                                      (EF_Barre *) p->modele.barres->data,
+                                      *p->modele.barres.begin (),
                                       m_f (0.5, FLOTTANT_UTILISATEUR),
                                       NULL),
         )
@@ -116,7 +116,8 @@ EF_gtk_noeud_supprimer (GtkButton *button,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Noeud     *noeud;
-  GList        *list = NULL;
+  
+  std::list <EF_Noeud *> list;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
@@ -151,13 +152,10 @@ EF_gtk_noeud_supprimer (GtkButton *button,
   
   gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
   
-  list = g_list_append (list, noeud);
+  list.push_back (noeud);
   
-  BUG (_1992_1_1_barres_supprime_liste (p, list, NULL),
-       ,
-       g_list_free (list); )
-  
-  g_list_free (list);
+  BUG (_1992_1_1_barres_supprime_liste (p, &list, NULL),
+       , )
   
   BUG (m3d_rafraichit (p), )
   
@@ -193,7 +191,8 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
     GtkTreeIter   Iter;
     GtkTreeModel *model;
     EF_Noeud     *noeud;
-    GList        *liste_noeuds = NULL;
+    
+    std::list <EF_Noeud *> liste_noeuds;
     
     if (!gtk_tree_selection_get_selected (gtk_tree_view_get_selection (
                                                                      treeview),
@@ -205,10 +204,10 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
     
     gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
     
-    liste_noeuds = g_list_append (liste_noeuds, noeud);
+    liste_noeuds.push_back (noeud);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
-                                              liste_noeuds,
+                                              &liste_noeuds,
                                               NULL,
                                               NULL,
                                               NULL,
@@ -216,18 +215,15 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE) == FALSE)
     {
-      BUG (_1992_1_1_barres_supprime_liste (p, liste_noeuds, NULL),
-           FALSE,
-           g_list_free (liste_noeuds); )
+      BUG (_1992_1_1_barres_supprime_liste (p, &liste_noeuds, NULL),
+           FALSE)
       BUG (m3d_rafraichit (p),
-           FALSE,
-           g_list_free (liste_noeuds); )
+           FALSE)
     }
-    
-    g_list_free (liste_noeuds);
     
     return TRUE;
   }
@@ -318,12 +314,12 @@ EF_noeuds_set_supprimer_visible (gboolean select,
   }
   else
   {
-    GList *liste_noeuds = NULL;
+    std::list <EF_Noeud *> liste_noeuds;
     
-    liste_noeuds = g_list_append (liste_noeuds, noeud);
+    liste_noeuds.push_back (noeud);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
-                                              liste_noeuds,
+                                              &liste_noeuds,
                                               NULL,
                                               NULL,
                                               NULL,
@@ -331,7 +327,8 @@ EF_noeuds_set_supprimer_visible (gboolean select,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -363,7 +360,6 @@ EF_noeuds_set_supprimer_visible (gboolean select,
                           UI_NOE.builder, "EF_noeuds_boutton_supprimer_menu")),
                               FALSE);
     }
-    g_list_free (liste_noeuds);
   }
   
   return;
@@ -388,8 +384,11 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Noeud     *noeud;
-  GList        *liste_noeuds = NULL;
-  GList        *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  
+  std::list <EF_Noeud *>  liste_noeuds;
+  std::list <EF_Noeud *> *liste_noeuds_dep;
+  std::list <EF_Barre *> *liste_barres_dep;
+  std::list <Charge   *> *liste_charges_dep;
     
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
@@ -431,27 +430,26 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
     }
   }
   
-  liste_noeuds = g_list_append (liste_noeuds, noeud);
+  liste_noeuds.push_back (noeud);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
-                                             liste_noeuds,
+                                             &liste_noeuds,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
-      ,
-      g_list_free (liste_noeuds); )
-  g_list_free (liste_noeuds);
+      , )
   
   // Noeud utilisé
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
+  if ((!liste_noeuds_dep->empty ()) ||
+      (!liste_barres_dep->empty ()) ||
+      (!liste_charges_dep->empty ()))
   {
     char *desc;
     
@@ -460,22 +458,25 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                          liste_charges_dep,
                                          p),
          ,
-         g_list_free (liste_noeuds_dep);
-           g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep); )
+         delete liste_noeuds_dep;
+           delete liste_barres_dep;
+           delete liste_charges_dep; )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                            UI_NOE.builder, "EF_noeuds_supprimer_menu_barres")),
                              desc);
     free (desc);
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
   }
   else
   {
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
+    
     FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
   }
-  
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
   
   return;
 }
@@ -551,7 +552,9 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Noeuds"); )
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
+  BUGCRIT (!p->modele.noeuds.empty (),
+           ,
+           (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
@@ -651,7 +654,9 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Noeuds"); )
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
+  BUGCRIT (!p->modele.noeuds.empty (),
+           ,
+           (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
@@ -720,7 +725,9 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Noeuds"); )
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
+  BUGCRIT (!p->modele.noeuds.empty (),
+           ,
+           (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
@@ -791,9 +798,9 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Noeuds"); )
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
+  BUGCRIT (!p->modele.noeuds.empty (), , (gettext ("Aucun noeud n'est existant.\n")); )
   
-  if (p->modele.appuis == NULL)
+  if (p->modele.appuis.empty ())
   {
     return;
   }
@@ -864,7 +871,9 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Noeuds"); )
-  BUGCRIT (p->modele.noeuds, , (gettext ("Aucun noeud n'est existant.\n")); )
+  BUGCRIT (!p->modele.noeuds.empty (),
+           ,
+           (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
            ,
@@ -881,7 +890,8 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
   {
     EF_Barre *barre;
     EF_Noeud *noeud;
-    GList    *liste_noeuds = NULL;
+    
+    std::list <EF_Noeud *> liste_noeuds;
     
     // On modifie l'action
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
@@ -892,12 +902,13 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     if (noeud->type == NOEUD_BARRE)
     {
       EF_Noeud_Barre *info = (EF_Noeud_Barre *) noeud->data;
-      GList          *liste;
+      
+      std::list <EF_Noeud *>::iterator it;
       
       BUG (EF_calculs_free (p), , free (fake); )
       
       info->barre->discretisation_element--;
-      info->barre->nds_inter = g_list_remove (info->barre->nds_inter, noeud);
+      info->barre->nds_inter.remove (noeud);
       BUGCRIT (info->barre->info_EF = realloc (
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
@@ -917,17 +928,15 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
               sizeof (Barre_Info_EF) *
                                    (info->barre->discretisation_element + 1U));
       
-      liste = info->barre->nds_inter;
-      while ((liste != NULL) &&
-             (m_g (((EF_Noeud_Barre *) liste->data)->position_relative_barre) <
+      it = info->barre->nds_inter.begin ();
+      while ((it != info->barre->nds_inter.end ()) &&
+             (m_g (((EF_Noeud_Barre *) (*it)->data)->position_relative_barre) <
                                           m_g (info->position_relative_barre)))
       {
-        liste = g_list_next (liste);
+        ++it;
       }
       
-      info->barre->nds_inter = g_list_insert_before (info->barre->nds_inter,
-                                                     liste,
-                                                     noeud);
+      info->barre->nds_inter.insert (it, noeud);
     }
     else
     {
@@ -936,18 +945,14 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
                   free (fake); )
     }
     
-    liste_noeuds = g_list_append (liste_noeuds, noeud);
+    liste_noeuds.push_back (noeud);
     
-    BUG (m3d_actualise_graphique (p, liste_noeuds, NULL),
+    BUG (m3d_actualise_graphique (p, &liste_noeuds, NULL),
          ,
-         free (fake);
-           g_list_free (liste_noeuds); )
+         free (fake); )
     BUG (m3d_rafraichit (p),
          ,
-         free (fake);
-           g_list_free (liste_noeuds); )
-    
-    g_list_free (liste_noeuds);
+         free (fake); )
   }
   
   free (fake);
@@ -1254,9 +1259,11 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
 void
 EF_gtk_noeud (Projet *p)
 {
-  GList *list_parcours = p->modele.noeuds;
+  std::list <EF_Noeud *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
+  
+  it = p->modele.noeuds.begin ();
   
   if (UI_NOE.builder != NULL)
   {
@@ -1428,9 +1435,9 @@ EF_gtk_noeud (Projet *p)
                 UI_APP.liste_appuis,
                 NULL);
   
-  while (list_parcours != NULL)
+  while (it != p->modele.noeuds.end ())
   {
-    EF_Noeud *noeud = (EF_Noeud *) list_parcours->data;
+    EF_Noeud *noeud = *it;
     
     if (noeud->type == NOEUD_LIBRE)
     {
@@ -1450,7 +1457,7 @@ EF_gtk_noeud (Projet *p)
       
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_NOE.window),

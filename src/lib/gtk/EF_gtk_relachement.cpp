@@ -95,22 +95,24 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
   {
     EF_Relachement      *relachement;
     GtkCellRendererText *cell;
-    GList               *liste_relachements = NULL;
+    
+    std::list <EF_Relachement *> liste_relachements;
     
     gtk_tree_model_get (model, &Iter, 0, &relachement, -1);
     
-    liste_relachements = g_list_append (liste_relachements, relachement);
+    liste_relachements.push_back (relachement);
     if (_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              liste_relachements,
+                                              &liste_relachements,
                                               NULL,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE,
+                                              NULL,
+                                              NULL,
                                               FALSE))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -141,7 +143,6 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
                     UI_REL.builder, "EF_relachements_boutton_supprimer_menu")),
                               FALSE);
     }
-    g_list_free (liste_relachements);
     
     cell = GTK_CELL_RENDERER_TEXT (gtk_builder_get_object (UI_REL.builder,
                                             "EF_relachements_treeview_cell2"));
@@ -308,8 +309,11 @@ EF_gtk_relachements_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel   *model;
   GtkTreeIter     Iter;
   EF_Relachement *relachement;
-  GList          *liste_relachements = NULL;
-  GList          *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+  
+  std::list <EF_Relachement *>  liste_relachements;
+  std::list <EF_Noeud       *> *liste_noeuds_dep;
+  std::list <EF_Barre       *> *liste_barres_dep;
+  std::list <Charge         *> *liste_charges_dep;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_REL.builder,
@@ -330,25 +334,25 @@ EF_gtk_relachements_boutton_supprimer_menu (GtkButton *widget,
   
   gtk_tree_model_get (model, &Iter, 0, &relachement, -1);
   
-  liste_relachements = g_list_append (liste_relachements, relachement);
+  liste_relachements.push_back (relachement);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_relachements,
+                                             &liste_relachements,
                                              NULL,
                                              &liste_noeuds_dep,
+                                             NULL,
                                              &liste_barres_dep,
+                                             NULL,
                                              &liste_charges_dep,
-                                             FALSE,
                                              FALSE),
       )
-  g_list_free (liste_relachements);
   
-  if ((liste_noeuds_dep != NULL) ||
-      (liste_barres_dep != NULL) ||
-      (liste_charges_dep != NULL))
+  if ((!liste_noeuds_dep->empty ()) ||
+      (!liste_barres_dep->empty ()) ||
+      (!liste_charges_dep->empty ()))
   {
     char *desc;
     
@@ -357,22 +361,25 @@ EF_gtk_relachements_boutton_supprimer_menu (GtkButton *widget,
                                          liste_charges_dep,
                                          p),
          ,
-         g_list_free (liste_noeuds_dep);
-           g_list_free (liste_barres_dep);
-           g_list_free (liste_charges_dep); )
+         delete liste_noeuds_dep;
+           delete liste_barres_dep;
+           delete liste_charges_dep; )
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                      UI_REL.builder, "EF_relachements_supprimer_menu_barres")),
                              desc);
     free (desc);
+    delete liste_noeuds_dep;
+    delete liste_barres_dep;
+    delete liste_charges_dep;
   }
   else
   {
     FAILCRIT ( , (gettext ("L'élément ne possède aucune dépendance.\n")); )
   }
   
-  g_list_free (liste_noeuds_dep);
-  g_list_free (liste_barres_dep);
-  g_list_free (liste_charges_dep);
+  delete liste_noeuds_dep;
+  delete liste_barres_dep;
+  delete liste_charges_dep;
   
   return;
 }
@@ -520,28 +527,28 @@ EF_gtk_relachements_treeview_key_press (GtkWidget *widget,
                                          &Iter))
     {
       EF_Relachement *relachement;
-      GList          *liste_relachements = NULL;
+      
+      std::list <EF_Relachement *> liste_relachements;
       
       gtk_tree_model_get (model, &Iter, 0, &relachement, -1);
       
-      liste_relachements = g_list_append (liste_relachements, relachement);
+      liste_relachements.push_back (relachement);
       if (_1992_1_1_barres_cherche_dependances (p,
                                                 NULL,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                liste_relachements,
+                                                &liste_relachements,
                                                 NULL,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                FALSE,
+                                                NULL,
+                                                NULL,
                                                 FALSE) == FALSE)
       {
         EF_gtk_relachements_supprimer_direct (NULL, p);
       }
-      
-      g_list_free (liste_relachements);
     }
     return TRUE;
   }
@@ -1858,7 +1865,7 @@ EF_gtk_relachements_render_12 (GtkTreeViewColumn *tree_column,
 void
 EF_gtk_relachement (Projet *p)
 {
-  GList *list_parcours;
+  std::list <EF_Relachement *>::iterator it;
   
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -2036,10 +2043,10 @@ EF_gtk_relachement (Projet *p)
   UI_REL.relachements = GTK_TREE_STORE (gtk_builder_get_object (UI_REL.builder,
                                                  "EF_relachements_treestore"));
   
-  list_parcours = p->modele.relachements;
-  while (list_parcours != NULL)
+  it = p->modele.relachements.begin ();
+  while (it != p->modele.relachements.end ())
   {
-    EF_Relachement *relachement = (EF_Relachement *) list_parcours->data;
+    EF_Relachement *relachement = *it;
     
     gtk_tree_store_append (UI_REL.relachements,
                            &relachement->Iter_fenetre,
@@ -2049,7 +2056,7 @@ EF_gtk_relachement (Projet *p)
                         0, relachement,
                         -1);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_REL.window),

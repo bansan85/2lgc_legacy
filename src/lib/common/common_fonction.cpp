@@ -420,13 +420,14 @@ common_fonction_compacte (Fonction *fonction,
   {
     index->nb_troncons = j;
   }
-  BUGCRIT (fonction->troncons = realloc (fonction->troncons,
+  BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                                          sizeof (Troncon) * j),
            FALSE,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   if (index != NULL)
   {
-    BUGCRIT (index->troncons = realloc (index->troncons, sizeof (Troncon) * j),
+    BUGCRIT (index->troncons = (Troncon *) realloc (index->troncons,
+                                                    sizeof (Troncon) * j),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n")); )
   }
@@ -904,11 +905,11 @@ common_fonction_caracteristiques (Fonction *fonction,
     // On ajoute si c'est le début de la fonction
     if (i == 0)
     {
-      BUGCRIT (pos_tmp = malloc (sizeof (double)),
+      BUGCRIT (pos_tmp = (double *) malloc (sizeof (double)),
                0,
                (gettext ("Erreur d'allocation mémoire.\n")); )
       pos_tmp[0] = fonction->troncons[0].debut_troncon;
-      BUGCRIT (val_tmp = malloc (sizeof (double)),
+      BUGCRIT (val_tmp = (double *) malloc (sizeof (double)),
                0,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (pos_tmp); )
@@ -932,14 +933,14 @@ common_fonction_caracteristiques (Fonction *fonction,
       {
         nb++;
         tmp = pos_tmp;
-        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+        BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
         pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
         tmp = val_tmp;
-        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+        BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (pos_tmp);
@@ -949,14 +950,14 @@ common_fonction_caracteristiques (Fonction *fonction,
                                              -1);
         nb++;
         tmp = pos_tmp;
-        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+        BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
         pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
         tmp = val_tmp;
-        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+        BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (pos_tmp);
@@ -995,14 +996,16 @@ common_fonction_caracteristiques (Fonction *fonction,
         {
           nb++;
           tmp = pos_tmp;
-          BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+          BUGCRIT (pos_tmp = (double *) realloc (pos_tmp,
+                                                 sizeof (double) * nb),
                    0,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      free (tmp);
                      free (val_tmp); )
           pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
           tmp = val_tmp;
-          BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+          BUGCRIT (val_tmp = (double *) realloc (val_tmp,
+                                                 sizeof (double) * nb),
                    0,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      free (pos_tmp);
@@ -1416,14 +1419,14 @@ common_fonction_caracteristiques (Fonction *fonction,
       {
         nb++;
         tmp = pos_tmp;
-        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+        BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
         pos_tmp[nb - 1] = a;
         tmp = val_tmp;
-        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+        BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (pos_tmp);
@@ -1434,14 +1437,14 @@ common_fonction_caracteristiques (Fonction *fonction,
       {
         nb++;
         tmp = pos_tmp;
-        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+        BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
         pos_tmp[nb - 1] = b;
         tmp = val_tmp;
-        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+        BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (pos_tmp);
@@ -1452,14 +1455,14 @@ common_fonction_caracteristiques (Fonction *fonction,
       {
         nb++;
         tmp = pos_tmp;
-        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+        BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
         pos_tmp[nb - 1] = c;
         tmp = val_tmp;
-        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+        BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (pos_tmp);
@@ -1474,14 +1477,14 @@ common_fonction_caracteristiques (Fonction *fonction,
   {
     nb++;
     tmp = pos_tmp;
-    BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+    BUGCRIT (pos_tmp = (double *) realloc (pos_tmp, sizeof (double) * nb),
              0,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (tmp);
                free (val_tmp); )
     pos_tmp[nb - 1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
     tmp = val_tmp;
-    BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+    BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
              0,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (pos_tmp);
@@ -1628,10 +1631,10 @@ common_fonction_affiche (Fonction *fonction)
  *       longueur.
  */
 GdkPixbuf *
-common_fonction_dessin (GList   *fonctions,
-                        uint16_t width,
-                        uint16_t height,
-                        int8_t   decimales)
+common_fonction_dessin (std::list <Fonction *> *fonctions,
+                        uint16_t                width,
+                        uint16_t                height,
+                        int8_t                  decimales)
 {
   gint             rowstride, n_channels;
   uint16_t         x, y;
@@ -1641,8 +1644,9 @@ common_fonction_dessin (GList   *fonctions,
   cairo_t         *cr;
   double           fy_min = 0., fy_max = 0., echelle;
   double          *mi, *ma;
-  GList           *list_parcours;
   Fonction        *fonction;
+  
+  std::list <Fonction *>::iterator it;
   
   BUGPARAM (fonctions, "%p", fonctions, NULL)
   BUGPARAM (decimales, "%d", decimales > 0, NULL)
@@ -1661,12 +1665,12 @@ common_fonction_dessin (GList   *fonctions,
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cairo_surface_destroy (surface); )
-  BUGCRIT (mi = malloc (sizeof (double) * width),
+  BUGCRIT (mi = (double *) malloc (sizeof (double) * width),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cairo_destroy (cr);
              cairo_surface_destroy (surface); )
-  BUGCRIT (ma = malloc (sizeof (double) * width),
+  BUGCRIT (ma = (double *) malloc (sizeof (double) * width),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cairo_destroy (cr);
@@ -1702,8 +1706,8 @@ common_fonction_dessin (GList   *fonctions,
   }
   
   // On détermine les valeurs de la courbe pour la première fonction.
-  list_parcours = fonctions;
-  fonction = list_parcours->data;
+  it = fonctions->begin ();
+  fonction = *it;
   for (x = 0; x < width; x++)
   {
     mi[x] = common_fonction_y (
@@ -1724,10 +1728,10 @@ common_fonction_dessin (GList   *fonctions,
     }
   }
   
-  list_parcours = g_list_next (list_parcours);
-  while (list_parcours != NULL)
+  ++it;
+  while (it != fonctions->end ())
   {
-    fonction = list_parcours->data;
+    fonction = *it;
     for (x = 0; x < width; x++)
     {
       echelle = common_fonction_y (
@@ -1754,7 +1758,8 @@ common_fonction_dessin (GList   *fonctions,
         fy_min = echelle;
       }
     }
-    list_parcours = g_list_next (list_parcours);
+    
+    ++it;
   }
 
   if (ABS (fy_max) < pow (10, -decimales))
@@ -1847,30 +1852,31 @@ common_fonction_dessin (GList   *fonctions,
  *     - liste == NULL.
  */
 gboolean
-common_fonction_conversion_combinaisons (Fonction *fonction,
-                                         GList    *ponderations,
-                                         GList   **liste)
+common_fonction_conversion_combinaisons (
+  Fonction                                 *fonction,
+  std::list <std::list <Ponderation *> *>  *ponderations,
+  std::list <std::list <Ponderation *> *> **liste)
 {
-  GList   *list_tmp = NULL;
+  std::list <std::list <Ponderation *> *> *list_tmp;
   uint16_t i;
   
   BUGPARAM (fonction, "%p", fonction, FALSE)
   BUGPARAM (ponderations, "%p", ponderations, FALSE)
   BUGPARAM (liste, "%p", liste, FALSE)
   
+  list_tmp = new std::list <std::list <Ponderation *> *> ();
+  
   for (i = 0; i < fonction->nb_troncons; i++)
   {
     uint16_t numero = (uint16_t) fonction->troncons[i].x0;
     
-    list_tmp = g_list_append (list_tmp,
-                              g_list_nth (ponderations, numero)->data);
+    list_tmp->push_back (*std::next (ponderations->begin (), numero));
   }
   
   *liste = list_tmp;
   
   return TRUE;
 }
-
 
 /**
  * \brief Renvoie la fonction sous forme de texte (coefficients pour chaque
@@ -1890,20 +1896,21 @@ common_fonction_conversion_combinaisons (Fonction *fonction,
  */
 // coverity[+alloc]
 char *
-common_fonction_renvoie (Fonction *fonction,
-                         GList    *index,
-                         int8_t    decimales)
+common_fonction_renvoie (Fonction                                *fonction,
+                         std::list <std::list <Ponderation *> *> *index,
+                         int8_t                                   decimales)
 {
   uint16_t i;
   char    *retour;
   double   minimum = pow (10, -decimales);
-  GList   *list_parcours;
+  
+  std::list <std::list <Ponderation *> *>::iterator it;
   
   BUGPARAM (fonction, "%p", fonction, NULL)
   BUGPARAM (index,
             "%p",
             (index == NULL) ||
-          ((index != NULL) && (fonction->nb_troncons == g_list_length(index))),
+            ((index != NULL) && (fonction->nb_troncons == index->size ())),
             NULL)
   
   if (fonction->nb_troncons == 0)
@@ -1914,13 +1921,16 @@ common_fonction_renvoie (Fonction *fonction,
   }
   else
   {
-    BUGCRIT (retour = malloc (sizeof (char)),
+    BUGCRIT (retour = (char *) malloc (sizeof (char)),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     retour[0] = 0;
   }
   
-  list_parcours = index;
+  if (index != NULL)
+  {
+    it = index->begin ();
+  }
   for (i = 0; i < fonction->nb_troncons; i++)
   {
     char *tmp, *ajout;
@@ -1950,7 +1960,7 @@ common_fonction_renvoie (Fonction *fonction,
       free (tmp);
     }
     
-    BUGCRIT (ajout = malloc (sizeof (char)),
+    BUGCRIT (ajout = (char *) malloc (sizeof (char)),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (retour); )
@@ -2099,7 +2109,7 @@ common_fonction_renvoie (Fonction *fonction,
     {
       char *tmp2;
       
-      BUGCRIT (tmp2 = _1990_ponderations_description (list_parcours->data),
+      BUGCRIT (tmp2 = _1990_ponderations_description (*it),
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (retour); )
@@ -2111,9 +2121,9 @@ common_fonction_renvoie (Fonction *fonction,
                  free (tmp2); )
       free (tmp2);
       free (tmp);
+      
+      ++it;
     }
-    
-    list_parcours = g_list_next (list_parcours);
   }
   
   return retour;
@@ -2138,15 +2148,16 @@ common_fonction_renvoie (Fonction *fonction,
  *     - erreur d'allocation mémoire.
  */
 gboolean
-common_fonction_renvoie_enveloppe (GList    *fonctions,
-                                   Fonction *fonction_min,
-                                   Fonction *fonction_max,
-                                   Fonction *comb_min,
-                                   Fonction *comb_max)
+common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
+                                   Fonction               *fonction_min,
+                                   Fonction               *fonction_max,
+                                   Fonction               *comb_min,
+                                   Fonction               *comb_max)
 {
   Fonction *fonction;
-  GList    *list_parcours;
   uint16_t  num;
+  
+  std::list <Fonction *>::iterator it;
   
   BUGPARAM (fonctions, "%p", fonctions, FALSE)
   BUGPARAM (fonction_min, "%p", fonction_min, FALSE)
@@ -2169,8 +2180,8 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
   comb_max->nb_troncons = 0;
   comb_max->troncons = NULL;
   
-  list_parcours = fonctions;
-  fonction = list_parcours->data;
+  it = fonctions->begin ();
+  fonction = *it;
   
   BUG (common_fonction_ajout_fonction (fonction_min, fonction, 1.),
        FALSE,
@@ -2186,9 +2197,9 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
        FREE_ALL)
   
 #undef FREE_ALL
-  list_parcours = g_list_next (list_parcours);
+  ++it;
   num = 1;
-  while (list_parcours != NULL)
+  while (it != fonctions->end ())
   {
     uint16_t i, k;
     uint8_t  j;
@@ -2196,7 +2207,7 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
     Fonction fonction_moins, fonction_bis;
     double   x_base, tmp;
     
-    fonction = list_parcours->data;
+    fonction = *it;
     
     memset (&fonction_moins, 0, sizeof (fonction_moins));
     memset (&fonction_bis, 0, sizeof (fonction_bis));
@@ -2595,11 +2606,12 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
     free (fonction_moins.troncons);
     free (fonction_bis.troncons);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
     num++;
   }
   
   return TRUE;
 }
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

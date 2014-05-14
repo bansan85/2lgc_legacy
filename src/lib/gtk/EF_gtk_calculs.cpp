@@ -52,7 +52,8 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   std::list <Analyse_Comm *> *rapport;
   
   uint16_t erreur;
-  GList   *list_parcours;
+  
+  std::list <Action *>::iterator it;
   
   BUGPARAM (p, "%p", p, )
   
@@ -70,14 +71,14 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   BUG (_1992_1_1_barres_rigidite_ajout_tout (p), )
   BUG (EF_calculs_genere_mat_rig (p), )
   
-  list_parcours = p->actions;
-  while (list_parcours)
+  it = p->actions.begin ();
+  while (it != p->actions.end ())
   {
-    Action *action = list_parcours->data;
+    Action *action = *it;
     
     BUG (EF_calculs_resoud_charge (p, action), )
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   BUG (_1990_combinaisons_genere (p), )

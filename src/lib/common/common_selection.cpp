@@ -22,6 +22,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <algorithm>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "EF_noeuds.hpp"
@@ -31,169 +33,195 @@
 #include "common_selection.hpp"
 
 /**
+ * \brief Ajoute un nombre non signé à la liste chainée.
+ * \param nb : nombre à ajouter,
+ * \param liste : liste où la donnée doit être ajoutée.
+ * \return Rien.
+ */
+void
+common_selection_ajout_nombre (uint32_t              nb,
+                               std::list <uint32_t> *liste)
+{
+  std::list <uint32_t>::iterator it;
+  
+  BUGPARAM (liste, "%p", liste, )
+  
+  it = liste->begin ();
+  
+  while (it != liste->end ())
+  {
+    uint32_t nombre_liste;
+    
+    nombre_liste = *it;
+    
+    if (nombre_liste == nb)
+    {
+      return;
+    }
+    else if (nombre_liste > nb)
+    {
+      liste->insert (it, nb);
+      return;
+    }
+    
+    ++it;
+  }
+  
+  liste->push_back (nb);
+  
+  return;
+}
+
+
+/**
+ * \brief Ajoute un noeud à la liste chainée.
+ * \param noeud : noeud à ajouter,
+ * \param liste : liste où la donnée doit être ajoutée.
+ * \return Rien.
+ */
+void
+common_selection_ajout_nombre (EF_Noeud               *noeud,
+                               std::list <EF_Noeud *> *liste)
+{
+  std::list <EF_Noeud *>::iterator it;
+  
+  BUGPARAM (liste, "%p", liste, )
+  
+  it = liste->begin ();
+  
+  while (it != liste->end ())
+  {
+    EF_Noeud *noeud_liste;
+    
+    noeud_liste = *it;
+    
+    if (noeud_liste->numero == noeud->numero)
+    {
+      return;
+    }
+    else if (noeud_liste->numero > noeud->numero)
+    {
+      liste->insert (it, noeud);
+      return;
+    }
+    
+    ++it;
+  }
+  
+  liste->push_back (noeud);
+  
+  return;
+}
+
+
+/**
+ * \brief Ajoute une barre à la liste chainée.
+ * \param barre : barre à ajouter,
+ * \param liste : liste où la donnée doit être ajoutée.
+ * \return Rien.
+ */
+void
+common_selection_ajout_nombre (EF_Barre               *barre,
+                               std::list <EF_Barre *> *liste)
+{
+  std::list <EF_Barre *>::iterator it;
+  
+  it = liste->begin ();
+  while (it != liste->end ())
+  {
+    EF_Barre *barre_liste;
+    
+    barre_liste = *it;
+    
+    if (barre_liste->numero == barre->numero)
+    {
+      return;
+    }
+    else if (barre_liste->numero > barre->numero)
+    {
+      liste->insert (it, barre);
+      return;
+    }
+    
+    ++it;
+  }
+  
+  liste->push_back (barre);
+  
+  return;
+}
+
+
+/**
  * \brief Ajoute un nombre à la liste chainée.
- * \param data : donnée à ajouter,
+ * \param charge : donnée à ajouter,
  * \param liste : liste où la donnée doit être ajoutée,
- * \param type : nature de la donnée data,
  * \param p : la variable projet, doit être différent de NULL uniquement si
  *            le type vaut #LISTE_CHARGES.
- * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
- *     - liste == NULL,
- *     - p == NULL && type == LISTE_CHARGES
+ * \return Rien.
  */
-gboolean
-common_selection_ajout_nombre (void      *data,
-                               GList    **liste,
-                               Type_Liste type,
-                               Projet    *p)
+void
+common_selection_ajout_nombre (Charge               *charge,
+                               std::list <Charge *> *liste,
+                               Projet               *p)
 {
-  GList  *list_parcours;
+  std::list <Charge *>::iterator it;
+  
   Action *action = NULL;
+  long    pos_act, pos_cha;
   
-  BUGPARAM (liste, "%p", liste, FALSE)
-  BUGPARAM (type, "%d", (p) || (type != LISTE_CHARGES), FALSE)
+  BUGPARAM (liste, "%p", liste, )
+  BUGPARAM (p, "%p", p, )
   
-  if (type == LISTE_CHARGES)
+  BUG (action = EF_charge_action (p, charge), )
+  
+  if (liste == NULL)
   {
-    BUG (action = EF_charge_action (p, data), FALSE)
+    liste->push_back (charge);
+    return;
   }
   
-  if (*liste == NULL)
+  pos_act = std::distance (p->actions.begin (),
+                           std::find (p->actions.begin (),
+                                      p->actions.end (),
+                                      action));
+  pos_cha = std::distance (_1990_action_charges_renvoie (action)->begin (),
+              std::find (_1990_action_charges_renvoie (action)->begin (),
+                         _1990_action_charges_renvoie (action)->end (),
+                         charge));
+  
+  it = liste->begin ();
+  while (it != liste->end ())
   {
-    switch (type)
+    Charge *charge_liste;
+    Action *action_en_cours;
+    
+    charge_liste = *it;
+    BUG (action_en_cours = EF_charge_action (p, charge_liste), )
+    
+    if ((action_en_cours == action) && (charge_liste == charge))
     {
-      case LISTE_UINT :
-      case LISTE_NOEUDS :
-      case LISTE_BARRES :
-      case LISTE_CHARGES :
-      {
-        *liste = g_list_append (*liste, data);
-        return TRUE;
-      }
-      default :
-      {
-        FAILCRIT (FALSE,
-                  (gettext ("Le type %d de la liste est inconnu.\n"), type); )
-      }
+      return;
     }
+    else if ((std::distance (p->actions.begin (),
+                             std::find (p->actions.begin (),
+                                        p->actions.end (),
+                                        action_en_cours))> pos_act) ||
+             ((action_en_cours == action) &&
+              (std::distance (_1990_action_charges_renvoie (action)->begin (),
+                 std::find (_1990_action_charges_renvoie (action)->begin (),
+                            _1990_action_charges_renvoie (action)->end (),
+                            charge_liste)) >= pos_cha)))
+    {
+      liste->insert (it, charge);
+      return;
+    }
+    
+    ++it;
   }
   
-  list_parcours = *liste;
-  do
-  {
-    switch (type)
-    {
-      case LISTE_UINT :
-      {
-        uint32_t nombre_liste, nombre;
-        
-        nombre_liste = GPOINTER_TO_UINT (list_parcours->data);
-        nombre = GPOINTER_TO_UINT (data);
-        
-        if (nombre_liste == nombre)
-        {
-          return TRUE;
-        }
-        else if (nombre_liste > nombre)
-        {
-          *liste = g_list_insert_before (*liste, list_parcours, data);
-          return TRUE;
-        }
-        break;
-      }
-      case LISTE_NOEUDS :
-      {
-        EF_Noeud *noeud_liste, *noeud;
-        
-        noeud_liste = list_parcours->data;
-        noeud = data;
-        
-        if (noeud_liste->numero == noeud->numero)
-        {
-          return TRUE;
-        }
-        else if (noeud_liste->numero > noeud->numero)
-        {
-          *liste = g_list_insert_before (*liste, list_parcours, data);
-          return TRUE;
-        }
-        break;
-      }
-      case LISTE_BARRES :
-      {
-        EF_Barre *barre_liste, *barre;
-        
-        barre_liste = list_parcours->data;
-        barre = data;
-        
-        if (barre_liste->numero == barre->numero)
-        {
-          return TRUE;
-        }
-        else if (barre_liste->numero > barre->numero)
-        {
-          *liste = g_list_insert_before (*liste, list_parcours, data);
-          return TRUE;
-        }
-        break;
-      }
-      case LISTE_CHARGES :
-      {
-        Charge *charge_liste, *charge;
-        Action *action_en_cours;
-        
-        charge_liste = list_parcours->data;
-        BUG (action_en_cours = EF_charge_action (p, charge_liste), FALSE)
-        charge = data;
-        
-        if ((action_en_cours == action) && (charge_liste == charge))
-        {
-          return TRUE;
-        }
-        else if ((g_list_index (p->actions, action_en_cours) >
-                                          g_list_index (p->actions, action)) ||
-                 ((action_en_cours == action) &&
-                 (g_list_index (_1990_action_charges_renvoie (action_en_cours),
-                                charge_liste) >=
-                  g_list_index (_1990_action_charges_renvoie (action_en_cours),
-                                charge))))
-        {
-          *liste = g_list_insert_before (*liste, list_parcours, data);
-          return TRUE;
-        }
-        break;
-      }
-      default :
-      {
-        FAILCRIT (FALSE,
-                  (gettext ("Le type %d de la liste est inconnu.\n"), type); )
-      }
-    }
-    list_parcours = g_list_next (list_parcours);
-  } while (list_parcours != NULL);
-  
-  switch (type)
-  {
-    case LISTE_UINT :
-    {
-      *liste = g_list_append (*liste, GUINT_TO_POINTER (data));
-      return TRUE;
-    }
-    case LISTE_NOEUDS :
-    case LISTE_BARRES :
-    case LISTE_CHARGES :
-    {
-      *liste = g_list_append (*liste, data);
-      return TRUE;
-    }
-    default :
-    {
-      FAILCRIT (FALSE,
-                (gettext ("Le type %d de la liste est inconnu.\n"), type); )
-    }
-  }
+  liste->push_back (charge);
+  return;
 }
 
 
@@ -210,19 +238,20 @@ common_selection_ajout_nombre (void      *data,
  *     - Erreur d'allocation mémoire,
  *     - Format de texte illisible.
  */
-GList *
+std::list <uint32_t> *
 common_selection_renvoie_numeros (const char *texte)
 {
-  char    *texte_clean;
-  GList   *list;
-  uint32_t i, j;
+  char                 *texte_clean;
+  std::list <uint32_t> *list;
+  uint32_t              i, j;
   
   if (texte == NULL)
   {
     return NULL;
   }
   
-  BUGCRIT (texte_clean = malloc (sizeof (char) * (strlen (texte) + 1)),
+  BUGCRIT (texte_clean = (char *) malloc (sizeof (char) *
+                                                         (strlen (texte) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
@@ -265,7 +294,7 @@ common_selection_renvoie_numeros (const char *texte)
     return NULL;
   }
   
-  list = NULL;
+  list = new std::list <uint32_t> ();
   
   // On parcours chaque numéro et on les ajoute à la liste.
   i = 0;
@@ -290,17 +319,17 @@ common_selection_renvoie_numeros (const char *texte)
         char    *fake;
         uint32_t debut, fin, pas;
         
-        BUGCRIT (tmp = malloc (sizeof (char) * (j - i + 2U)),
+        BUGCRIT (tmp = (char *) malloc (sizeof (char) * (j - i + 2U)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (texte_clean);
-                   g_list_free (list); )
-        BUGCRIT (fake = malloc (sizeof (char) * (j - i + 2U)),
+                   delete list; )
+        BUGCRIT (fake = (char *) malloc (sizeof (char) * (j - i + 2U)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (texte_clean);
                    free (tmp);
-                   g_list_free (list); )
+                   delete list; )
         
         strncpy (tmp, texte_clean + i, j - i + 1U);
         tmp[j - i + 1] = 0;
@@ -310,15 +339,7 @@ common_selection_renvoie_numeros (const char *texte)
         {
           for (i = debut; i <= fin; i = i + pas)
           {
-            BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (i),
-                                                &list,
-                                                LISTE_UINT,
-                                                NULL),
-                 NULL,
-                 free (texte_clean);
-                   free (tmp);
-                   free (fake);
-                   g_list_free (list); )
+            common_selection_ajout_nombre (i, list);
           }
         }
         // Si c'est du format debut-fin
@@ -326,36 +347,20 @@ common_selection_renvoie_numeros (const char *texte)
         {
           for (i = debut; i <= fin; i++)
           {
-            BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (i),
-                                                &list,
-                                                LISTE_UINT,
-                                                NULL),
-                 NULL,
-                 free (texte_clean);
-                   free (tmp);
-                   free (fake);
-                   g_list_free (list); )
+            common_selection_ajout_nombre (i, list);
           }
         }
         // Si c'est du format nombre simple
         else if (sscanf (tmp, "%u%s", &debut, fake) == 1)
         {
-          BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (debut),
-                                              &list,
-                                              LISTE_UINT,
-                                              NULL),
-               NULL,
-               free (texte_clean);
-                 free (tmp);
-                 free (fake);
-                 g_list_free (list); )
+          common_selection_ajout_nombre (debut, list);
         }
         // Le format est inconnu.
         else
         {
           free (tmp);
           free (fake);
-          g_list_free (list);
+          delete list;
           free (texte_clean);
           return NULL;
         }
@@ -384,34 +389,30 @@ common_selection_renvoie_numeros (const char *texte)
  *   Échec : NULL :
  *     - un des noeuds est introuvable.
  */
-GList *
-common_selection_numeros_en_noeuds (GList  *liste_numeros,
-                                    Projet *p)
+std::list <EF_Noeud *> *
+common_selection_numeros_en_noeuds (std::list <uint32_t> *liste_numeros,
+                                    Projet               *p)
 {
-  GList *liste_noeuds = NULL;
+  std::list <EF_Noeud *> *liste_noeuds = new std::list <EF_Noeud *> ();
   
-  if (liste_numeros != NULL)
+  std::list <uint32_t>::iterator it = liste_numeros->begin ();
+  
+  while (it != liste_numeros->end ())
   {
-    GList *list_parcours = liste_numeros;
+    uint32_t  numero = *it;
+    EF_Noeud *noeud = EF_noeuds_cherche_numero (p, numero, FALSE);
     
-    do
+    if (noeud == NULL)
     {
-      uint32_t  numero = GPOINTER_TO_UINT (list_parcours->data);
-      EF_Noeud *noeud = EF_noeuds_cherche_numero (p, numero, FALSE);
-      
-      if (noeud == NULL)
-      {
-        g_list_free (liste_noeuds);
-        return NULL;
-      }
-      else
-      {
-        liste_noeuds = g_list_append (liste_noeuds, noeud);
-      }
-      
-      list_parcours = g_list_next (list_parcours);
+      delete liste_noeuds;
+      return NULL;
     }
-    while (list_parcours != NULL);
+    else
+    {
+      liste_noeuds->push_back (noeud);
+    }
+    
+    ++it;
   }
   
   return liste_noeuds;
@@ -428,34 +429,30 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
  *   Échec : NULL :
  *     - une des barres est introuvable.
  */
-GList *
-common_selection_numeros_en_barres (GList  *liste_numeros,
-                                    Projet *p)
+std::list <EF_Barre *> *
+common_selection_numeros_en_barres (std::list <uint32_t> *liste_numeros,
+                                    Projet               *p)
 {
-  GList *liste_barres = NULL;
+  std::list <EF_Barre *> *liste_barres = new std::list <EF_Barre *> ();
   
-  if (liste_numeros != NULL)
+  std::list <uint32_t>::iterator it = liste_numeros->begin ();
+  
+  while (it != liste_numeros->end ())
   {
-    GList *list_parcours = liste_numeros;
+    uint32_t  numero = *it;
+    EF_Barre *barre = _1992_1_1_barres_cherche_numero (p, numero, FALSE);
     
-    do
+    if (barre == NULL)
     {
-      uint32_t  numero = GPOINTER_TO_UINT (list_parcours->data);
-      EF_Barre *barre = _1992_1_1_barres_cherche_numero (p, numero, FALSE);
-      
-      if (barre == NULL)
-      {
-        g_list_free (liste_barres);
-        return NULL;
-      }
-      else
-      {
-        liste_barres = g_list_append (liste_barres, barre);
-      }
-      
-      list_parcours = g_list_next (list_parcours);
+      delete liste_barres;
+      return NULL;
     }
-    while (list_parcours != NULL);
+    else
+    {
+      liste_barres->push_back (barre);
+    }
+    
+    ++it;
   }
   
   return liste_barres;
@@ -464,7 +461,7 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
 
 /**
  * \brief Renvoie sous forme de texte une liste de noeuds.
- * \param liste_noeuds : la liste des noeuds à convertir en texte.
+ * \param liste : la liste des noeuds à convertir en texte.
  * \return
  *   Succès : le texte correspondant.\n
  *   Échec : NULL :
@@ -472,26 +469,26 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
  */
 // coverity[+alloc]
 char *
-common_selection_noeuds_en_texte (GList *liste_noeuds)
+common_selection_noeuds_en_texte (std::list <EF_Noeud *> *liste)
 {
   char *tmp = NULL, *tmp2 = NULL;
   
-  if (liste_noeuds != NULL)
+  if (!liste->empty ())
   {
-    GList    *list_parcours;
+    std::list <EF_Noeud *>::iterator it;
     EF_Noeud *noeud;
     
-    list_parcours = liste_noeuds;
-    noeud = list_parcours->data;
+    it = liste->begin ();
+    noeud = *it;
     BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n")); )
-    if (g_list_next (list_parcours) != NULL)
+    if (std::next (it) != liste->end ())
     {
-      list_parcours = g_list_next (list_parcours);
+      ++it;
       do
       {
-        noeud = list_parcours->data;
+        noeud = *it;
         BUGCRIT (tmp2 = g_strdup_printf ("%s;%d", tmp, noeud->numero),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -499,9 +496,9 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
-        list_parcours = g_list_next (list_parcours);
+        ++it;
       }
-      while (list_parcours != NULL);
+      while (it != liste->end ());
     }
   }
   else
@@ -525,36 +522,34 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
  */
 // coverity[+alloc]
 char *
-common_selection_barres_en_texte (GList *liste_barres)
+common_selection_barres_en_texte (std::list <EF_Barre *> *liste_barres)
 {
   char *tmp, *tmp2;
   
-  if (liste_barres != NULL)
+  if (!liste_barres->empty ())
   {
-    GList    *list_parcours;
+    std::list <EF_Barre *>::iterator it = liste_barres->begin ();
+    
     EF_Barre *barre;
     
-    list_parcours = liste_barres;
-    barre = list_parcours->data;
+    barre = *it;
     BUGCRIT (tmp = g_strdup_printf ("%u", barre->numero),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n")); )
-    if (g_list_next (list_parcours) != NULL)
+    
+    ++it;
+    while (it != liste_barres->end ())
     {
-      list_parcours = g_list_next (list_parcours);
-      do
-      {
-        barre = list_parcours->data;
-        BUGCRIT (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp); )
-        free (tmp);
-        tmp = tmp2;
-        tmp2 = NULL;
-        list_parcours = g_list_next (list_parcours);
-      }
-      while (list_parcours != NULL);
+      barre = *it;
+      BUGCRIT (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp); )
+      free (tmp);
+      tmp = tmp2;
+      tmp2 = NULL;
+      
+      ++it;
     }
   }
   else
@@ -579,60 +574,75 @@ common_selection_barres_en_texte (GList *liste_barres)
  */
 // coverity[+alloc]
 char *
-common_selection_charges_en_texte (GList  *liste_charges,
-                                   Projet *p)
+common_selection_charges_en_texte (std::list <Charge *> *liste_charges,
+                                   Projet               *p)
 {
   char *tmp, *tmp2;
   
-  if (liste_charges != NULL)
+  if (!liste_charges->empty ())
   {
-    GList  *list_parcours, *list_parcours2;
+    std::list <Charge *>::iterator it;
     Charge *charge;
     Action *action = NULL;
     
-    list_parcours = liste_charges;
-    charge = list_parcours->data;
+    it = liste_charges->begin ();
+    charge = *it;
     
     BUG (action = EF_charge_action (p, charge), NULL)
     
-    BUGCRIT (tmp = g_strdup_printf ("%u:%u",
-                                    g_list_index (p->actions, action),
-                 g_list_index (_1990_action_charges_renvoie (action), charge)),
+    BUGCRIT (tmp = g_strdup_printf ("%lu:%lu",
+                                    std::distance (p->actions.begin (),
+                                      std::find (p->actions.begin (),
+                                                 p->actions.end (),
+                                                 action)),
+                std::distance (_1990_action_charges_renvoie (action)->begin (),
+                  std::find (_1990_action_charges_renvoie (action)->begin (),
+                             _1990_action_charges_renvoie (action)->end (),
+                             charge))),
              NULL,
              (gettext ("Erreur d'allocation mémoire.\n")); )
-    if (g_list_next (list_parcours) != NULL)
+    if (std::next (it) != liste_charges->end ())
     {
-      list_parcours = g_list_next (list_parcours);
-      do
+      ++it;
+      while (it != liste_charges->end ())
       {
-        charge = list_parcours->data;
+        std::list <Action *>::iterator it2 = p->actions.begin ();
+        
+        charge = *it;
         // On cherche dans la liste des actions laquelle possède la charge.
-        list_parcours2 = p->actions;
-        while (list_parcours2 != NULL)
+        while (it2 != p->actions.end ())
         {
-          action = list_parcours2->data;
+          action = *it2;
           
-          if (g_list_find (_1990_action_charges_renvoie(action), charge) !=
-                                                                          NULL)
+          if (std::find (_1990_action_charges_renvoie(action)->begin (),
+                         _1990_action_charges_renvoie(action)->end (),
+                         charge) !=
+                                  _1990_action_charges_renvoie(action)->end ())
           {
-            list_parcours2 = NULL;
+            break;
           }
            
-          list_parcours2 = g_list_next (list_parcours2);
+          ++it2;
         }
-        BUGCRIT (tmp2 = g_strdup_printf ("%s;%u:%u",
+        BUGCRIT (tmp2 = g_strdup_printf ("%s;%lu:%lu",
                                          tmp,
-                                         g_list_index (p->actions, action),
-                 g_list_index (_1990_action_charges_renvoie (action), charge)),
+                                         std::distance (p->actions.begin (),
+                                           std::find (p->actions.begin (),
+                                                      p->actions.end (),
+                                                      action)),
+                std::distance (_1990_action_charges_renvoie (action)->begin (),
+                  std::find (_1990_action_charges_renvoie (action)->begin (),
+                             _1990_action_charges_renvoie (action)->end (),
+                             charge))),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp); )
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
-        list_parcours = g_list_next (list_parcours);
+        
+        ++it;
       }
-      while (list_parcours != NULL);
     }
   }
   else

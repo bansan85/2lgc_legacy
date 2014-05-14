@@ -22,6 +22,9 @@
 #include <gmodule.h>
 #include <math.h>
 
+#include <algorithm>
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
@@ -40,10 +43,11 @@
  */
 static
 gboolean
-_1990_ponderations_verifie_double (GList *liste_ponderations,
-                                   GList *pond_a_verifier)
+_1990_ponderations_verifie_double (
+  std::list <std::list <Ponderation *> *> *liste_ponderations,
+  std::list <Ponderation *>               *pond_a_verifier)
 {
-  GList *list_parcours;
+  std::list <std::list <Ponderation *> *>::iterator it;
   
   if (liste_ponderations == NULL)
   {
@@ -59,21 +63,24 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
     return TRUE;
   }
   
-  list_parcours = liste_ponderations;
-  do
+  it = liste_ponderations->begin ();
+  while (it != liste_ponderations->end ())
   {
     // On pense que la pondération est identique jusqu'à preuve du contraire
     gboolean doublon = TRUE;
-    GList   *ponderation = list_parcours->data;
-    GList   *list_parcours2 = ponderation;
-    GList   *list_parcours3 = pond_a_verifier;
     
-    while ((list_parcours2 != NULL) && (list_parcours3 != NULL) && (doublon))
+    std::list <Ponderation *> *ponderation = *it;
+    std::list <Ponderation *>::iterator it2 = ponderation->begin ();
+    std::list <Ponderation *>::iterator it3 = pond_a_verifier->begin ();
+    
+    while ((it2 != ponderation->end ()) &&
+           (it3 != pond_a_verifier->end ()) &&
+           (doublon))
     {
       Ponderation *elem1, *elem2;
       
-      elem1 = list_parcours2->data;
-      elem2 = list_parcours3->data;
+      elem1 = *it2;
+      elem2 = *it3;
       
       if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) ||
           (!(errrel (elem1->ponderation, elem2->ponderation))))
@@ -81,18 +88,19 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
         doublon = FALSE;
       }
       
-      list_parcours2 = g_list_next (list_parcours2);
-      list_parcours3 = g_list_next (list_parcours3);
+      ++it2;
+      ++it3;
     }
     
-    if (doublon)
+    if ((it2 == ponderation->end ()) &&
+        (it3 == pond_a_verifier->end ()) &&
+        (doublon))
     {
       return TRUE;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  while (list_parcours != NULL);
   
   return FALSE;
 }
@@ -114,59 +122,55 @@ _1990_ponderations_verifie_double (GList *liste_ponderations,
  */
 static
 gboolean
-_1990_ponderations_duplique_sans_double (GList **liste_dest,
-                                         GList  *liste_source)
+_1990_ponderations_duplique_sans_double (
+  std::list <std::list <Ponderation *> *> *liste_dest,
+  std::list <std::list <Ponderation *> *> *liste_source)
 {
-  GList *list_parcours;
+  std::list <std::list <Ponderation *> *>::iterator it;
   
   BUGPARAM (liste_dest, "%p", liste_dest, FALSE)
+  BUGPARAM (liste_source, "%p", liste_dest, FALSE)
   
-  if (liste_source == NULL)
+  if (liste_source->empty ())
   {
     return 0;
   }
   
-  list_parcours = liste_source;
-  do
+  it = liste_source->begin ();
+  while (it != liste_source->end ())
   {
-    GList *ponderation_source;
+    std::list <Ponderation *> *ponderation_source;
     
-    ponderation_source = list_parcours->data;
+    ponderation_source = *it;
     /* Si la ponderation n'existe pas, on l'ajoute à la fin */
-    if (_1990_ponderations_verifie_double (*liste_dest, ponderation_source) ==
+    if (_1990_ponderations_verifie_double (liste_dest, ponderation_source) ==
                                                                          FALSE)
     {
-      GList *ponderation_destination;
-      GList *list_parcours2 = ponderation_source;
+      std::list <Ponderation *>::iterator it2 = ponderation_source->begin ();
+      std::list <Ponderation *>          *ponderation_destination;
       
-      ponderation_destination = NULL;
+      ponderation_destination = new std::list <Ponderation *> ();
       
-      do
+      while (it2 != ponderation_source->end ())
       {
         Ponderation *element_source;
-        Ponderation *element_destination = malloc (sizeof (Ponderation));
+        Ponderation *element_destination = new Ponderation;
         
-        BUGCRIT (element_destination,
-                 FALSE,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   g_list_free_full (ponderation_destination, free); )
-        element_source = list_parcours2->data;
+        element_source = *it2;
         element_destination->action = element_source->action;
         element_destination->flags = element_source->flags;
         element_destination->psi = element_source->psi;
         element_destination->ponderation = element_source->ponderation;
-        ponderation_destination = g_list_append (ponderation_destination,
-                                                 element_destination);
+        ponderation_destination->push_back (element_destination);
         
-        list_parcours2 = g_list_next (list_parcours2);
+        ++it2;
       }
-      while (list_parcours2 != NULL);
       
-      *liste_dest = g_list_append (*liste_dest, ponderation_destination);
+      liste_dest->push_back (ponderation_destination);
     }
-    list_parcours = g_list_next (list_parcours);
+    
+    it++;
   }
-  while (list_parcours != NULL);
   
   return TRUE;
 }
@@ -204,36 +208,41 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
  */
 static
 gboolean
-_1990_ponderations_genere_un (Projet *p,
-                              GList **ponderations_destination,
-                              double *coef_min,
-                              double *coef_max,
-                              uint8_t dim_coef,
-                              int8_t  psi_dominante,
-                              int8_t  psi_accompagnement)
+_1990_ponderations_genere_un (
+  Projet *p,
+  std::list <std::list <Ponderation *> *> *ponderations_destination,
+  double *coef_min,
+  double *coef_max,
+  uint8_t dim_coef,
+  int8_t  psi_dominante,
+  int8_t  psi_accompagnement)
 {
   uint32_t       nbboucle, j;
   Groupe        *groupe;
   Niveau_Groupe *niveau;
   
+  std::list <Niveau_Groupe *>::iterator it_tmp;
+  
   BUGPARAMCRIT (p, "%p", p, FALSE)
-  INFO (p->niveaux_groupes,
+  INFO (!p->niveaux_groupes.empty (),
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
   // Si le dernier niveau ne possède pas un seul et unique groupe Alors
   //   Fin.
   // FinSi
-  niveau = g_list_last (p->niveaux_groupes)->data;
-  INFO (g_list_length (niveau->groupes) == 1,
+  it_tmp = p->niveaux_groupes.end ();
+  --it_tmp;
+  niveau = *it_tmp;
+  INFO (niveau->groupes.size () == 1,
         FALSE,
         (gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n")); )
-  groupe = niveau->groupes->data;
+  groupe = *niveau->groupes.begin ();
   
   // Si le groupe du dernier niveau ne possède pas de combinaison Alors
   //   Fin.
   // FinSi
-  INFO (groupe->tmp_combinaison,
+  INFO (!groupe->tmp_combinaison.empty (),
         FALSE,
         (gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n")); )
   
@@ -247,9 +256,11 @@ _1990_ponderations_genere_un (Projet *p,
   nbboucle = (uint32_t) 1 << dim_coef;
   for (j = 0; j < nbboucle; j++)
   {
-    GList *list_parcours = groupe->tmp_combinaison;
+    std::list <std::list <Combinaison *> *>::iterator it;
+    
+    it = groupe->tmp_combinaison.begin ();
     // Pour chaque combinaison dans le groupe final Faire
-    do
+    while (it != groupe->tmp_combinaison.end ())
     {
       // Déterminer si la pondération générée doit être prise en compte. Elle
       // n'est valable que si :
@@ -262,90 +273,84 @@ _1990_ponderations_genere_un (Projet *p,
       //     possédant des actions accidentelles.
       gboolean suivant = FALSE;
       gboolean variable_accompagnement = FALSE, variable_dominante = FALSE;
-      GList *combinaison;
-      GList *ponderation;
       
-      combinaison = list_parcours->data;
-      ponderation = NULL;
+      std::list <Combinaison *>          *combinaison;
+      std::list <Combinaison *>::iterator it2;
+      std::list <Ponderation *>          *ponderation;
       
-      if (combinaison != NULL)
+      combinaison = *it;
+      ponderation = new std::list <Ponderation *> ();
+      
+      it2 = combinaison->begin ();
+      // Pour chaque élément de la combinaison Faire
+      while ((it2 != combinaison->end ()) && (suivant == FALSE))
       {
-        GList *list_parcours2 = combinaison;
-        // Pour chaque élément de la combinaison Faire
-        do
+        Combinaison     *combinaison_element;
+        Action_Categorie categorie;
+        
+        combinaison_element = *it2;
+        categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
+                                                combinaison_element->action),
+                                                p->parametres.norme);
+        BUG (categorie != ACTION_INCONNUE, FALSE)
+        // Vérification si le coefficient min et max de la catégorie vaut 0.
+        //  Si oui, pondération ignorée.
+        if ((errmax (coef_min[categorie], ERRMAX_POND)) &&
+            (errmax (coef_max[categorie], ERRMAX_POND)))
         {
-          Combinaison     *combinaison_element;
-          Action_Categorie categorie;
-          
-          combinaison_element = list_parcours2->data;
-          categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
-                                                  combinaison_element->action),
-                                                  p->parametres.norme);
-          BUG (categorie != ACTION_INCONNUE, FALSE)
-          // Vérification si le coefficient min et max de la catégorie vaut 0.
-          //  Si oui, pondération ignorée.
-          if ((errmax (coef_min[categorie], ERRMAX_POND)) &&
-              (errmax (coef_max[categorie], ERRMAX_POND)))
+          suivant = TRUE;
+        }
+        else
+        {
+          double pond;
+        // On affecte le coefficient min/max à la combinaison pour obtenir la
+        // pondération
+          if ((j & ((uint32_t) 1 << categorie)) != 0)
           {
-            suivant = TRUE;
+            pond = coef_max[categorie];
           }
           else
           {
-            double pond;
-          // On affecte le coefficient min/max à la combinaison pour obtenir la
-          // pondération
-            if ((j & ((uint32_t) 1 << categorie)) != 0)
-            {
-              pond = coef_max[categorie];
-            }
-            else
-            {
-              pond = coef_min[categorie];
-            }
+            pond = coef_min[categorie];
+          }
+          
+          if (!(errmax (pond, ERRMAX_POND)))
+          {
+            Ponderation *ponderation_element = new Ponderation;
             
-            if (!(errmax (pond, ERRMAX_POND)))
+            ponderation_element->action = combinaison_element->action;
+            ponderation_element->flags = combinaison_element->flags;
+            
+            // Vérifier la présente d'une action variable prédominante et
+            // d'une action variable d'accompagnement. Si oui, pondération
+            // ignorée.
+            if (categorie == ACTION_VARIABLE)
             {
-              Ponderation *ponderation_element = malloc (sizeof (Ponderation));
-              
-              BUGCRIT (ponderation_element,
-                       FALSE,
-                       (gettext ("Erreur d'allocation mémoire.\n"));
-                       g_list_free_full (ponderation, free); )
-              ponderation_element->action = combinaison_element->action;
-              ponderation_element->flags = combinaison_element->flags;
-              
-              // Vérifier la présente d'une action variable prédominante et
-              // d'une action variable d'accompagnement. Si oui, pondération
-              // ignorée.
-              if (categorie == ACTION_VARIABLE)
+              variable_accompagnement = TRUE;
+              if ((ponderation_element->flags & 1) != 0)
               {
-                variable_accompagnement = TRUE;
-                if ((ponderation_element->flags & 1) != 0)
-                {
-                  variable_dominante = TRUE;
-                  ponderation_element->psi = psi_dominante;
-                }
-                else
-                {
-                  ponderation_element->psi = psi_accompagnement;
-                }
+                variable_dominante = TRUE;
+                ponderation_element->psi = psi_dominante;
               }
-              // psi vaut toujours -1 s'il ne s'agit pas d'une action variable.
               else
               {
-                ponderation_element->psi = -1;
+                ponderation_element->psi = psi_accompagnement;
               }
-              
-              ponderation_element->ponderation = pond;
-          
-              ponderation = g_list_append (ponderation, ponderation_element);
             }
+            // psi vaut toujours -1 s'il ne s'agit pas d'une action variable.
+            else
+            {
+              ponderation_element->psi = -1;
+            }
+            
+            ponderation_element->ponderation = pond;
+        
+            ponderation->push_back (ponderation_element);
           }
-          list_parcours2 = g_list_next (list_parcours2);
         }
-        while ((list_parcours2 != NULL) && (suivant == FALSE));
-        // FinPour
+        ++it2;
       }
+      // FinPour
   // Si la pondération n'est pas ignorée Alors
   //   Ajout à la liste des pondérations existante.
   // FinSi
@@ -354,20 +359,18 @@ _1990_ponderations_genere_un (Projet *p,
         suivant = TRUE;
       }
       if ((suivant == FALSE) &&
-          (_1990_ponderations_verifie_double (*ponderations_destination,
+          (_1990_ponderations_verifie_double (ponderations_destination,
                                               ponderation) == FALSE))
       {
-        *ponderations_destination = g_list_append (*ponderations_destination,
-                                                   ponderation);
+        ponderations_destination->push_back (ponderation);
       }
       else
       {
-        g_list_free_full (ponderation, g_free);
+        _1990_ponderations_free_1 (ponderation);
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
-    while (list_parcours != NULL);
     // FinPour
   }
   // FinPour
@@ -382,7 +385,7 @@ _1990_ponderations_genere_un (Projet *p,
  *        que nécessaire avec les coefficients min/max ajustées en fonction des
  *        valeur de la norme européenne et de la nature de l'état limite
  *        recherché. Les options de calculs sont définies dans la variable
- *        p->combinaisons.flags et doivent être définies.
+ *        p->ponderations.flags et doivent être définies.
  * \param p : la variable projet.
  * \return
  *   Succès : TRUE.\n
@@ -409,7 +412,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 0.9, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.1, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-  if (p->combinaisons.elu_equ_methode == 0)
+  if (p->ponderations.elu_equ_methode == 0)
   {
     coef_min[ACTION_POIDS_PROPRE]  = 0.9;
     coef_max[ACTION_POIDS_PROPRE]  = 1.1;
@@ -422,7 +425,7 @@ _1990_ponderations_genere_eu (Projet *p)
     coef_min[ACTION_SISMIQUE]      = 0.0;
     coef_max[ACTION_SISMIQUE]      = 0.0;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        5,
@@ -455,7 +458,7 @@ _1990_ponderations_genere_eu (Projet *p)
     coef_min[ACTION_SISMIQUE]      = 0.0;
     coef_max[ACTION_SISMIQUE]      = 0.0;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        5,
@@ -474,7 +477,7 @@ _1990_ponderations_genere_eu (Projet *p)
     coef_min[ACTION_SISMIQUE]      = 0.0;
     coef_max[ACTION_SISMIQUE]      = 0.0;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        5,
@@ -483,9 +486,9 @@ _1990_ponderations_genere_eu (Projet *p)
          FALSE)
   }
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
-  if (p->combinaisons.form_6_10 == 0)
+  if (p->ponderations.form_6_10 == 0)
   {
-    switch (p->combinaisons.elu_geo_str_methode)
+    switch (p->ponderations.elu_geo_str_methode)
     {
   // Si selon l'approche 1 Alors
   // Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -516,7 +519,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -535,7 +538,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]    = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -554,7 +557,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -562,8 +565,9 @@ _1990_ponderations_genere_eu (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -591,7 +595,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -609,15 +613,16 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
                                            -1,
                                            0),
              FALSE)
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -645,7 +650,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -664,7 +669,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -688,7 +693,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_geo,
+                                           &p->ponderations.elu_geo,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -702,7 +707,7 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode); )
+                            p->ponderations.elu_geo_str_methode); )
         break;
       }
     }
@@ -710,7 +715,7 @@ _1990_ponderations_genere_eu (Projet *p)
   // Si utilisation de la formule 6.10 de l'Eurocode 0 Alors
   else
   {
-    switch (p->combinaisons.elu_geo_str_methode)
+    switch (p->ponderations.elu_geo_str_methode)
     {
   // Si selon l'approche 1 Alors
   // Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -736,7 +741,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -755,7 +760,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -763,8 +768,9 @@ _1990_ponderations_genere_eu (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -787,15 +793,16 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
                                            -1,
                                            0),
              FALSE)
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -818,7 +825,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -841,7 +848,7 @@ _1990_ponderations_genere_eu (Projet *p)
         coef_min[ACTION_SISMIQUE]      = 0.0;
         coef_max[ACTION_SISMIQUE]      = 0.0;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_geo,
+                                           &p->ponderations.elu_geo,
                                            coef_min,
                                            coef_max,
                                            5,
@@ -855,7 +862,7 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode); )
+                            p->ponderations.elu_geo_str_methode); )
         break;
       }
     }
@@ -883,10 +890,10 @@ _1990_ponderations_genere_eu (Projet *p)
   //   FinSi
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
-  if (p->combinaisons.elu_acc_psi == 0)
+  if (p->ponderations.elu_acc_psi == 0)
   {
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_acc,
+                                       &p->ponderations.elu_acc,
                                        coef_min,
                                        coef_max,
                                        5,
@@ -897,7 +904,7 @@ _1990_ponderations_genere_eu (Projet *p)
   else
   {
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_acc,
+                                       &p->ponderations.elu_acc,
                                        coef_min,
                                        coef_max,
                                        5,
@@ -923,7 +930,7 @@ _1990_ponderations_genere_eu (Projet *p)
   coef_min[ACTION_SISMIQUE]      = 1.0;
   coef_max[ACTION_SISMIQUE]      = 1.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.elu_sis,
+                                     &p->ponderations.elu_sis,
                                      coef_min,
                                      coef_max,
                                      5,
@@ -948,7 +955,7 @@ _1990_ponderations_genere_eu (Projet *p)
   coef_min[ACTION_SISMIQUE]      = 0.0;
   coef_max[ACTION_SISMIQUE]      = 0.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_car,
+                                     &p->ponderations.els_car,
                                      coef_min,
                                      coef_max,
                                      5,
@@ -973,7 +980,7 @@ _1990_ponderations_genere_eu (Projet *p)
   coef_min[ACTION_SISMIQUE]      = 0.0;
   coef_max[ACTION_SISMIQUE]      = 0.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_freq,
+                                     &p->ponderations.els_freq,
                                      coef_min,
                                      coef_max,
                                      5,
@@ -998,7 +1005,7 @@ _1990_ponderations_genere_eu (Projet *p)
   coef_min[ACTION_SISMIQUE]      = 0.0;
   coef_max[ACTION_SISMIQUE]      = 0.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_perm,
+                                     &p->ponderations.els_perm,
                                      coef_min,
                                      coef_max,
                                      5,
@@ -1016,7 +1023,7 @@ _1990_ponderations_genere_eu (Projet *p)
  *        que nécessaire avec les coefficients min/max ajustées en fonction des
  *        valeur de la norme française et de la nature de l'état limite
  *        recherché. Les options de calculs sont définies dans la variable
- *        p->combinaisons.flags et doivent être définies.
+ *        p->ponderations.flags et doivent être définies.
  * \brief p : la variable projet.
  * \return
  *   Succès : FALSE.\n
@@ -1045,7 +1052,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.1, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-  if (p->combinaisons.elu_equ_methode == 0)
+  if (p->ponderations.elu_equ_methode == 0)
   {
     coef_min[ACTION_POIDS_PROPRE]      = 0.9;
     coef_max[ACTION_POIDS_PROPRE]      = 1.1;
@@ -1060,7 +1067,7 @@ _1990_ponderations_genere_fr (Projet *p)
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
     coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        6,
@@ -1099,7 +1106,7 @@ _1990_ponderations_genere_fr (Projet *p)
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
     coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        6,
@@ -1120,7 +1127,7 @@ _1990_ponderations_genere_fr (Projet *p)
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
     coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_equ,
+                                       &p->ponderations.elu_equ,
                                        coef_min,
                                        coef_max,
                                        6,
@@ -1130,9 +1137,9 @@ _1990_ponderations_genere_fr (Projet *p)
   }
   
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
-  if (p->combinaisons.form_6_10 == 0)
+  if (p->ponderations.form_6_10 == 0)
   {
-    switch (p->combinaisons.elu_geo_str_methode)
+    switch (p->ponderations.elu_geo_str_methode)
     {
   //   Si selon l'approche 1 Alors
   //     Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -1171,7 +1178,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1192,7 +1199,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1213,7 +1220,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1221,8 +1228,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -1256,7 +1264,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1277,7 +1285,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1285,8 +1293,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -1320,7 +1329,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1341,7 +1350,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1369,7 +1378,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_geo,
+                                           &p->ponderations.elu_geo,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1383,7 +1392,7 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode); )
+                            p->ponderations.elu_geo_str_methode); )
         break;
       }
     }
@@ -1392,7 +1401,7 @@ _1990_ponderations_genere_fr (Projet *p)
   else
   // équation 6.10
   {
-    switch (p->combinaisons.elu_geo_str_methode)
+    switch (p->ponderations.elu_geo_str_methode)
     {
   //   Si selon l'approche 1 Alors
   //     Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -1424,7 +1433,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1445,7 +1454,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1453,8 +1462,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -1481,7 +1491,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1489,8 +1499,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                            0),
              FALSE)
         
-        BUG (_1990_ponderations_duplique_sans_double (&p->combinaisons.elu_geo,
-                                                      p->combinaisons.elu_str),
+        BUG (_1990_ponderations_duplique_sans_double (
+               &p->ponderations.elu_geo,
+               &p->ponderations.elu_str),
              FALSE)
         break;
       }
@@ -1517,7 +1528,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_str,
+                                           &p->ponderations.elu_str,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1545,7 +1556,7 @@ _1990_ponderations_genere_fr (Projet *p)
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
         coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
         BUG (_1990_ponderations_genere_un (p,
-                                           &p->combinaisons.elu_geo,
+                                           &p->ponderations.elu_geo,
                                            coef_min,
                                            coef_max,
                                            6,
@@ -1559,7 +1570,7 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         FAILCRIT (FALSE,
                   (gettext ("Flag %d inconnu.\n"),
-                            p->combinaisons.elu_geo_str_methode); )
+                            p->ponderations.elu_geo_str_methode); )
         break;
       }
     }
@@ -1590,10 +1601,10 @@ _1990_ponderations_genere_fr (Projet *p)
   //   FinSi
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
-  if (p->combinaisons.elu_acc_psi == 0)
+  if (p->ponderations.elu_acc_psi == 0)
   {
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_acc,
+                                       &p->ponderations.elu_acc,
                                        coef_min,
                                        coef_max,
                                        6,
@@ -1604,7 +1615,7 @@ _1990_ponderations_genere_fr (Projet *p)
   else
   {
     BUG (_1990_ponderations_genere_un (p,
-                                       &p->combinaisons.elu_acc,
+                                       &p->ponderations.elu_acc,
                                        coef_min,
                                        coef_max,
                                        6,
@@ -1634,7 +1645,7 @@ _1990_ponderations_genere_fr (Projet *p)
   coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
   coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.elu_acc,
+                                     &p->ponderations.elu_acc,
                                      coef_min,
                                      coef_max,
                                      6,
@@ -1663,7 +1674,7 @@ _1990_ponderations_genere_fr (Projet *p)
   coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
   coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_car,
+                                     &p->ponderations.els_car,
                                      coef_min,
                                      coef_max,
                                      6,
@@ -1692,7 +1703,7 @@ _1990_ponderations_genere_fr (Projet *p)
   coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
   coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_freq,
+                                     &p->ponderations.els_freq,
                                      coef_min,
                                      coef_max,
                                      6,
@@ -1721,7 +1732,7 @@ _1990_ponderations_genere_fr (Projet *p)
   coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;
   coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
   BUG (_1990_ponderations_genere_un (p,
-                                     &p->combinaisons.els_perm,
+                                     &p->ponderations.els_perm,
                                      coef_min,
                                      coef_max,
                                      6,
@@ -1774,23 +1785,23 @@ _1990_ponderations_genere (Projet *p)
  */
 // coverity[+alloc]
 char *
-_1990_ponderations_description (GList *ponderation)
+_1990_ponderations_description (std::list <Ponderation*> *ponderation)
 {
   char *retour = NULL;
   
-  BUGCRIT (retour = malloc (sizeof (char)),
+  BUGCRIT (retour = (char *) malloc (sizeof (char)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   retour[0] = 0;
   
   if (ponderation != NULL)
   {
-    GList *list_parcours = ponderation;
+    std::list <Ponderation*>::iterator it = ponderation->begin ();
     
-    do
+    while (it != ponderation->end ())
     {
       char         psi[30];
-      Ponderation *ponderation_element = list_parcours->data;
+      Ponderation *ponderation_element = *it;
       char        *tmp = retour;
       
       if (ponderation_element->psi == 0)
@@ -1845,59 +1856,57 @@ _1990_ponderations_description (GList *ponderation)
       
       free (tmp);
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
-    while (list_parcours != NULL);
   }
   
   return retour;
 }
 
 
-static
 /**
  * \brief Affiche les pondérations de la liste fournie en argument.
  * \param ponderations : la liste des pondérations.
  * \return Valeur renvoyée : Aucun.
  */
+static
 void
-_1990_ponderations_affiche (GList *ponderations)
+_1990_ponderations_affiche (
+  std::list <std::list <Ponderation *> *> *ponderations)
 {
-  GList *list_parcours = ponderations;
+  std::list <std::list <Ponderation *> *>::iterator it = ponderations->begin ();
   
-  while (list_parcours != NULL)
+  it = ponderations->begin ();
+  
+  while (it != ponderations->end ())
   {
-    GList *ponderation = list_parcours->data;
+    std::list <Ponderation *> *ponderation = *it;
+    std::list <Ponderation *>::iterator it2 = ponderation->begin ();
     
-    if (ponderation != NULL)
+    while (it2 != ponderation->end ())
     {
-      GList *list_parcours2 = ponderation;
+      Ponderation *ponderation_element = *it2;
       
-      while (list_parcours2 != NULL)
+      if (std::next (it2) != ponderation->end ())
       {
-        Ponderation *ponderation_element = list_parcours2->data;
-        
-        if (g_list_next (list_parcours2) != NULL)
-        {
-          printf ("'%s'*%f(%d)+",
-                  _1990_action_nom_renvoie (ponderation_element->action),
-                  ponderation_element->ponderation,
-                  ponderation_element->psi);
-        }
-        else
-        {
-          printf ("'%s'*%f(%d)",
-                  _1990_action_nom_renvoie (ponderation_element->action),
-                  ponderation_element->ponderation,
-                  ponderation_element->psi);
-        }
-        
-        list_parcours2 = g_list_next (list_parcours2);
+        printf ("'%s'*%f(%d)+",
+                _1990_action_nom_renvoie (ponderation_element->action),
+                ponderation_element->ponderation,
+                ponderation_element->psi);
       }
-      printf ("\n");
+      else
+      {
+        printf ("'%s'*%f(%d)",
+                _1990_action_nom_renvoie (ponderation_element->action),
+                ponderation_element->ponderation,
+                ponderation_element->psi);
+      }
+      
+      ++it2;
     }
+    printf ("\n");
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
 
   return;
@@ -1918,25 +1927,43 @@ _1990_ponderations_affiche_tout (Projet *p)
   BUGPARAMCRIT (p, "%p", p, FALSE)
   
   printf ("elu_equ\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_equ);
+  _1990_ponderations_affiche (&p->ponderations.elu_equ);
   printf ("elu_str\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_str);
+  _1990_ponderations_affiche (&p->ponderations.elu_str);
   printf ("elu_geo\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_geo);
+  _1990_ponderations_affiche (&p->ponderations.elu_geo);
   printf ("elu_fat\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_fat);
+  _1990_ponderations_affiche (&p->ponderations.elu_fat);
   printf ("elu_acc\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_acc);
+  _1990_ponderations_affiche (&p->ponderations.elu_acc);
   printf ("elu_sis\n");
-  _1990_ponderations_affiche (p->combinaisons.elu_sis);
+  _1990_ponderations_affiche (&p->ponderations.elu_sis);
   printf ("els_car\n");
-  _1990_ponderations_affiche (p->combinaisons.els_car);
+  _1990_ponderations_affiche (&p->ponderations.els_car);
   printf ("els_freq\n");
-  _1990_ponderations_affiche (p->combinaisons.els_freq);
+  _1990_ponderations_affiche (&p->ponderations.els_freq);
   printf ("els_perm\n");
-  _1990_ponderations_affiche (p->combinaisons.els_perm);
+  _1990_ponderations_affiche (&p->ponderations.els_perm);
   
   return TRUE;
 }
+
+
+/**
+ * \brief Fonction à utiliser avec for_each pour libérer une pondération.
+ * \param pond : une pondération à libérer.
+ * \return Rien.
+ */
+void
+_1990_ponderations_free_1 (std::list <Ponderation *> *pond)
+{
+  for_each (pond->begin (),
+            pond->end (),
+            std::default_delete <Ponderation> ());
+  delete pond;
+  
+  return;
+}
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

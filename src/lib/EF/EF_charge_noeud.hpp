@@ -22,24 +22,25 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-Charge *EF_charge_noeud_ajout          (Projet     *p,
-                                        Action     *action,
-                                        GList      *noeud,
-                                        Flottant    fx,
-                                        Flottant    fy,
-                                        Flottant    fz,
-                                        Flottant    mx,
-                                        Flottant    my,
-                                        Flottant    mz,
-                                        const char *nom)
+Charge *EF_charge_noeud_ajout          (Projet                 *p,
+                                        Action                 *action,
+                                        std::list <EF_Noeud *> *noeud,
+                                        Flottant                fx,
+                                        Flottant                fy,
+                                        Flottant                fz,
+                                        Flottant                mx,
+                                        Flottant                my,
+                                        Flottant                mz,
+                                        const char             *nom)
                                        __attribute__((__warn_unused_result__));
-char *EF_charge_noeud_description      (Charge     *charge)
+
+char *EF_charge_noeud_description      (Charge                 *charge)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_enleve_noeuds (Charge     *charge,
-                                        GList      *noeuds,
-                                        Projet     *p)
+gboolean EF_charge_noeud_enleve_noeuds (Charge                 *charge,
+                                        std::list <EF_Noeud *> *noeuds,
+                                        Projet                 *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_free          (Charge     *charge)
+gboolean EF_charge_noeud_free          (Charge                 *charge)
                                        __attribute__((__warn_unused_result__));
 
 #endif

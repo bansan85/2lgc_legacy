@@ -52,10 +52,10 @@ gboolean _1990_action_type_change  (Projet *p,
 
 gboolean _1990_action_charges_vide    (Action *action)
                                        __attribute__((__warn_unused_result__));
-GList   *_1990_action_charges_renvoie (Action *action)
+std::list <Charge *> *_1990_action_charges_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_charges_change  (Action *action,
-                                       GList  *charges)
+gboolean _1990_action_charges_change  (Action               *action,
+                                       std::list <Charge *> *charges)
                                        __attribute__((__warn_unused_result__));
 
 uint8_t  _1990_action_flags_action_predominante_renvoie (Action *action)
@@ -113,8 +113,7 @@ Fonction *_1990_action_deformation_renvoie (Action  *action,
 gboolean _1990_action_fonction_init (Projet *p,
                                      Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_fonction_free (Projet *p,
-                                     Action *action);
+gboolean _1990_action_fonction_free (Action *action);
 
 gboolean _1990_action_affiche_tout      (Projet *p)
                                        __attribute__((__warn_unused_result__));
@@ -122,8 +121,9 @@ gboolean _1990_action_affiche_resultats (Projet *p,
                                          Action *action)
                                        __attribute__((__warn_unused_result__));
 
-Action  *_1990_action_ponderation_resultat              (GList  *ponderation,
-                                                         Projet *p)
+Action  *_1990_action_ponderation_resultat (
+           std::list <Ponderation *> *ponderation,
+           Projet                    *p)
                                        __attribute__((__warn_unused_result__));
 gboolean _1990_action_ponderation_resultat_free_calculs (Action *action);
 

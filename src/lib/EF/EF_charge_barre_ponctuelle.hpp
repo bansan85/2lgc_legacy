@@ -23,18 +23,19 @@
 #include "common_projet.hpp"
 
 
-Charge *EF_charge_barre_ponctuelle_ajout          (Projet      *p,
-                                                   Action      *action,
-                                                   GList       *barre,
-                                                   gboolean     repere_local,
-                                                   Flottant     a,
-                                                   Flottant     fx,
-                                                   Flottant     fy,
-                                                   Flottant     fz,
-                                                   Flottant     mx,
-                                                   Flottant     my,
-                                                   Flottant     mz,
-                                                   const char  *nom)
+Charge *EF_charge_barre_ponctuelle_ajout (
+  Projet      *p,
+  Action      *action,
+  std::list <EF_Barre *> *barres,
+  gboolean     repere_local,
+  Flottant     a,
+  Flottant     fx,
+  Flottant     fy,
+  Flottant     fz,
+  Flottant     mx,
+  Flottant     my,
+  Flottant     mz,
+  const char  *nom)
                                        __attribute__((__warn_unused_result__));
 char *EF_charge_barre_ponctuelle_description      (Charge      *charge)
                                        __attribute__((__warn_unused_result__));
@@ -101,9 +102,10 @@ gboolean EF_charge_barre_ponctuelle_n             (Fonction *fonction,
                                                    double    fbx)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_enleve_barres (Charge      *charge,
-                                                   GList       *barres,
-                                                   Projet      *p)
+gboolean EF_charge_barre_ponctuelle_enleve_barres (
+           Charge                 *charge,
+           std::list <EF_Barre *> *barres,
+           Projet                 *p)
                                        __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_ponctuelle_free          (Charge      *charge)

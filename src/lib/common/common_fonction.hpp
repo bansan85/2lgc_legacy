@@ -54,10 +54,10 @@ gboolean common_fonction_affiche                 (Fonction    *fonction)
                                        __attribute__((__warn_unused_result__));
 
 #ifdef ENABLE_GTK
-GdkPixbuf *common_fonction_dessin                (GList       *fonctions,
-                                                  uint16_t     width,
-                                                  uint16_t     height,
-                                                  int8_t       decimales)
+GdkPixbuf *common_fonction_dessin (std::list <Fonction *> *fonctions,
+                                   uint16_t                width,
+                                   uint16_t                height,
+                                   int8_t                  decimales)
                                        __attribute__((__warn_unused_result__));
 #endif
 
@@ -66,21 +66,24 @@ char *common_fonction_affiche_caract             (Fonction    *fonction,
                                                   uint8_t      decimales_y)
                                        __attribute__((__warn_unused_result__));
 
-gboolean common_fonction_conversion_combinaisons (Fonction    *fonction,
-                                                  GList       *ponderations,
-                                                  GList      **liste)
+gboolean common_fonction_conversion_combinaisons (
+           Fonction                                 *fonction,
+           std::list <std::list <Ponderation *> *>  *ponderations,
+           std::list <std::list <Ponderation *> *> **liste)
                                        __attribute__((__warn_unused_result__));
 
-char *common_fonction_renvoie                    (Fonction    *fonction,
-                                                  GList       *index,
-                                                  int8_t       decimales)
+char *common_fonction_renvoie (
+        Fonction                                *fonction,
+        std::list <std::list <Ponderation *> *> *index,
+        int8_t                                   decimales)
                                        __attribute__((__warn_unused_result__));
 
-gboolean common_fonction_renvoie_enveloppe       (GList       *fonctions,
-                                                  Fonction    *fonction_min,
-                                                  Fonction    *fonction_max,
-                                                  Fonction    *comb_min,
-                                                  Fonction    *comb_max)
+gboolean common_fonction_renvoie_enveloppe (
+           std::list <Fonction *> *fonctions,
+           Fonction               *fonction_min,
+           Fonction               *fonction_max,
+           Fonction               *comb_min,
+           Fonction               *comb_max)
                                        __attribute__((__warn_unused_result__));
 
 #endif

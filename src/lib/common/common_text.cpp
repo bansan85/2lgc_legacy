@@ -230,11 +230,13 @@ strcasestr_internal (const wchar_t *haystack,
   BUGPARAM (haystack, "%p", haystack, NULL)
   BUGPARAM (needle, "%p", needle, NULL)
   
-  BUGCRIT (meule = malloc (sizeof (wchar_t) * (wcslen (haystack) + 1)),
+  BUGCRIT (meule = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                      (wcslen (haystack) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   wcscpy (meule, haystack);
-  BUGCRIT (aiguille = malloc (sizeof (wchar_t) * (wcslen (needle) + 1)),
+  BUGCRIT (aiguille = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                        (wcslen (needle) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (meule); )
@@ -303,18 +305,18 @@ strcasestr_internal (const wchar_t *haystack,
  */
 // coverity[+alloc]
 char *
-common_text_dependances (GList  *liste_noeuds,
-                         GList  *liste_barres,
-                         GList  *liste_charges,
-                         Projet *p)
+common_text_dependances (std::list <EF_Noeud *> *liste_noeuds,
+                         std::list <EF_Barre *> *liste_barres,
+                         std::list <Charge   *> *liste_charges,
+                         Projet                 *p)
 {
   char *retour = NULL;
   char *tmp;
   
-  if (liste_noeuds != NULL)
+  if (!liste_noeuds->empty ())
   {
     BUG (tmp = common_selection_noeuds_en_texte (liste_noeuds), NULL)
-    if (g_list_length (liste_noeuds) == 1)
+    if (std::next (liste_noeuds->begin ()) == liste_noeuds->end ())
     {
       retour = g_strdup_printf ("%s : %s", gettext ("noeud"), tmp);
     }
@@ -328,12 +330,12 @@ common_text_dependances (GList  *liste_noeuds,
                free (tmp); )
     free(tmp);
   }
-  if (liste_barres != NULL)
+  if (!liste_barres->empty ())
   {
     BUG (tmp = common_selection_barres_en_texte (liste_barres), NULL)
     if (retour == NULL)
     {
-      if (g_list_length (liste_barres) == 1)
+      if (std::next (liste_barres->begin ()) == liste_barres->end ())
       {
         retour = g_strdup_printf ("%s : %s", gettext ("barre"), tmp);
       }
@@ -351,7 +353,7 @@ common_text_dependances (GList  *liste_noeuds,
       char *tmp2;
       
       tmp2 = retour;
-      if (g_list_length (liste_barres) == 1)
+      if (std::next (liste_barres->begin ()) == liste_barres->end ())
       {
         retour = g_strdup_printf ("%s, %s : %s", tmp2, gettext ("barre"), tmp);
       }
@@ -376,7 +378,7 @@ common_text_dependances (GList  *liste_noeuds,
     BUG (tmp = common_selection_charges_en_texte (liste_charges, p), NULL)
     if (retour == NULL)
     {
-      if (g_list_length (liste_charges) == 1)
+      if (liste_charges->size () == 1)
       {
         retour = g_strdup_printf ("%s : %s", gettext ("charge"), tmp);
       }
@@ -394,7 +396,7 @@ common_text_dependances (GList  *liste_noeuds,
       char *tmp2;
       
       tmp2 = retour;
-      if (g_list_length (liste_charges) == 1)
+      if (liste_charges->size () == 1)
       {
         retour = g_strdup_printf ("%s, %s : %s",
                                   tmp2,
@@ -445,7 +447,7 @@ common_text_get_line (FILE *fichier)
   const uint16_t CUR_MAX = 256;
   wchar_t *buffer, *retour = NULL;
   
-  BUGCRIT (buffer = malloc (sizeof (wchar_t) * (CUR_MAX + 1U)),
+  BUGCRIT (buffer = (wchar_t *) malloc (sizeof (wchar_t) * (CUR_MAX + 1U)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
@@ -461,7 +463,7 @@ common_text_get_line (FILE *fichier)
     ligne_tmp = retour;
     if (ligne_tmp == NULL)
     {
-      BUGCRIT (retour = malloc (sizeof (wchar_t) * (wcslen (buffer) + 1)),
+      BUGCRIT (retour = (wchar_t *) malloc (sizeof (wchar_t) * (wcslen (buffer) + 1)),
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (buffer); )
@@ -469,7 +471,7 @@ common_text_get_line (FILE *fichier)
     }
     else
     {
-      BUGCRIT (retour = malloc (sizeof (wchar_t) *
+      BUGCRIT (retour = (wchar_t *) malloc (sizeof (wchar_t) *
                                    (wcslen (ligne_tmp) + wcslen (buffer) + 1)),
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
@@ -512,7 +514,8 @@ common_text_wcstostr_dup (const wchar_t *texte)
     return NULL;
   }
   
-  BUGCRIT (tmp = malloc (sizeof (char) * (wcstombs (NULL, texte, 0) + 1)),
+  BUGCRIT (tmp = (char *) malloc (sizeof (char) *
+                                              (wcstombs (NULL, texte, 0) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   wcstombs (tmp, texte, wcstombs (NULL, texte, 0) + 1);
@@ -541,7 +544,8 @@ common_text_strtowcs_dup (const char *texte)
     return NULL;
   }
   
-  BUGCRIT (tmp = malloc (sizeof (wchar_t) * (mbstowcs (NULL, texte, 0) + 1)),
+  BUGCRIT (tmp = (wchar_t *) malloc (sizeof (wchar_t) *
+                                              (mbstowcs (NULL, texte, 0) + 1)),
            NULL,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   mbstowcs (tmp, texte, mbstowcs (NULL, texte, 0) + 1);

@@ -64,9 +64,9 @@ gboolean m3d_camera_axe_x_y_z  (Projet *p)
 gboolean m3d_camera_axe_x_y__z (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean m3d_actualise_graphique (Projet *p,
-                                  GList  *noeuds,
-                                  GList  *barres)
+gboolean m3d_actualise_graphique (Projet                 *p,
+                                  std::list <EF_Noeud *> *noeuds,
+                                  std::list <EF_Barre *> *barres)
                                        __attribute__((__warn_unused_result__));
 gboolean m3d_rafraichit          (Projet *p)
                                        __attribute__((__warn_unused_result__));

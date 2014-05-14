@@ -22,6 +22,8 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <memory>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_selection.hpp"
@@ -53,7 +55,7 @@ EF_appuis_init (Projet *p)
   
   BUGPARAM (p, "%p", p, FALSE)
 
-  p->modele.appuis = NULL;
+  p->modele.appuis.clear ();
   
 #ifdef ENABLE_GTK
   UI_APP.liste_appuis = gtk_list_store_new (1, G_TYPE_STRING);
@@ -91,21 +93,21 @@ EF_appuis_cherche_nom (Projet     *p,
                        const char *nom,
                        gboolean    critique)
 {
-  GList *list_parcours;
+  std::list <EF_Appui *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   
-  list_parcours = p->modele.appuis;
-  while (list_parcours != NULL)
+  it = p->modele.appuis.begin ();
+  while (it != p->modele.appuis.end ())
   {
-    EF_Appui *appui = list_parcours->data;
+    EF_Appui *appui = *it;
     
     if (strcmp (appui->nom, nom) == 0)
     {
       return appui;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (critique)
@@ -147,8 +149,9 @@ EF_appuis_ajout (Projet       *p,
                  Type_EF_Appui ry,
                  Type_EF_Appui rz)
 {
-  EF_Appui *appui_nouveau, *appui_parcours;
-  GList    *list_parcours;
+  std::unique_ptr <EF_Appui> appui_nouveau (new EF_Appui);
+  EF_Appui *appui_parcours, *app;
+  std::list <EF_Appui *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   INFO (strcmp (nom, gettext ("Aucun")),
@@ -159,157 +162,146 @@ EF_appuis_ajout (Projet       *p,
         NULL,
         (gettext ("L'appui '%s' existe déjà.\n"), nom); )
    
-  BUGCRIT (appui_nouveau = malloc (sizeof (EF_Appui)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  
-  appui_nouveau->ux = x;
+  appui_nouveau.get ()->ux = x;
   switch (x)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->ux_donnees = NULL;
+      appui_nouveau.get ()->ux_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), x);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), x); )
       break;
     }
   }
-  appui_nouveau->uy = y;
+  appui_nouveau.get ()->uy = y;
   switch (y)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->uy_donnees = NULL;
+      appui_nouveau.get ()->uy_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), y);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), y); )
       break;
     }
   }
-  appui_nouveau->uz = z;
+  appui_nouveau.get ()->uz = z;
   switch (z)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->uz_donnees = NULL;
+      appui_nouveau.get ()->uz_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), z);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), z); )
       break;
     }
   }
-  appui_nouveau->rx = rx;
+  appui_nouveau.get ()->rx = rx;
   switch (rx)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->rx_donnees = NULL;
+      appui_nouveau.get ()->rx_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), rx);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), rx); )
       break;
     }
   }
-  appui_nouveau->ry = ry;
+  appui_nouveau.get ()->ry = ry;
   switch (ry)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->ry_donnees = NULL;
+      appui_nouveau.get ()->ry_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), ry);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), ry); )
       break;
     }
   }
-  appui_nouveau->rz = rz;
+  appui_nouveau.get ()->rz = rz;
   switch (rz)
   {
     case EF_APPUI_LIBRE :
     case EF_APPUI_BLOQUE :
     {
-      appui_nouveau->rz_donnees = NULL;
+      appui_nouveau.get ()->rz_donnees = NULL;
       break;
     }
     default:
     {
       FAILINFO (NULL,
-                (gettext ("Type d'appui %d inconnu.\n"), rz);
-                  free (appui_nouveau); )
+                (gettext ("Type d'appui %d inconnu.\n"), rz); )
       break;
     }
   }
   
-  BUGCRIT (appui_nouveau->nom = g_strdup_printf ("%s", nom),
+  BUGCRIT (appui_nouveau.get ()->nom = g_strdup_printf ("%s", nom),
            NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (appui_nouveau); )
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
-  list_parcours = p->modele.appuis;
-  while (list_parcours != NULL)
+  it = p->modele.appuis.begin ();
+  while (it != p->modele.appuis.end ())
   {
-    appui_parcours = list_parcours->data;
+    appui_parcours = *it;
     if (strcmp (nom, appui_parcours->nom) < 0)
     {
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  
+  app = appui_nouveau.release ();
+  if (it == p->modele.appuis.end ())
   {
-    p->modele.appuis = g_list_append (p->modele.appuis, appui_nouveau);
+    p->modele.appuis.push_back (app);
 #ifdef ENABLE_GTK
-    gtk_list_store_append (UI_APP.liste_appuis, &appui_nouveau->Iter_liste);
+    gtk_list_store_append (UI_APP.liste_appuis, &app->Iter_liste);
     if (UI_APP.builder != NULL)
     {
       gtk_tree_store_append (GTK_TREE_STORE (gtk_builder_get_object (
                                        UI_APP.builder, "EF_appuis_treestore")),
-                             &appui_nouveau->Iter_fenetre,
+                             &app->Iter_fenetre,
                              NULL);
     }
 #endif
   }
   else
   {
-    p->modele.appuis = g_list_insert_before (p->modele.appuis,
-                                             list_parcours,
-                                             appui_nouveau);
+    p->modele.appuis.insert (it, app);
 #ifdef ENABLE_GTK
     gtk_list_store_insert_before (UI_APP.liste_appuis,
-                                  &appui_nouveau->Iter_liste,
+                                  &app->Iter_liste,
                                   &appui_parcours->Iter_liste);
     if (UI_APP.builder != NULL)
     {
       gtk_tree_store_insert_before (GTK_TREE_STORE (gtk_builder_get_object (
                                        UI_APP.builder, "EF_appuis_treestore")),
-                                    &appui_nouveau->Iter_fenetre,
+                                    &app->Iter_fenetre,
                                     NULL,
                                     &appui_parcours->Iter_fenetre);
     }
@@ -317,20 +309,20 @@ EF_appuis_ajout (Projet       *p,
   }
 #ifdef ENABLE_GTK
   gtk_list_store_set (UI_APP.liste_appuis,
-                      &appui_nouveau->Iter_liste,
+                      &app->Iter_liste,
                       0, nom,
                       -1);
   if (UI_APP.builder != NULL)
   {
     gtk_tree_store_set (GTK_TREE_STORE (gtk_builder_get_object (
                                        UI_APP.builder, "EF_appuis_treestore")),
-                        &appui_nouveau->Iter_fenetre,
-                        0, appui_nouveau,
+                        &app->Iter_fenetre,
+                        0, app,
                         -1);
   }
 #endif
   
-  return appui_nouveau;
+  return app;
 }
 
 
@@ -353,7 +345,9 @@ EF_appuis_edit (EF_Appui     *appui,
                 Type_EF_Appui type_x,
                 Projet       *p)
 {
-  GList *list_appuis = NULL, *list_noeuds;
+  std::list <EF_Appui *> list_appuis;
+  
+  std::list <EF_Noeud *> *list_noeuds;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (appui, "%p", appui, FALSE)
@@ -409,9 +403,9 @@ EF_appuis_edit (EF_Appui     *appui,
   }
 #endif
   
-  list_appuis = g_list_append (list_appuis, appui);
+  list_appuis.push_back (appui);
   BUG (_1992_1_1_barres_cherche_dependances (p,
-                                             list_appuis,
+                                             &list_appuis,
                                              NULL,
                                              NULL,
                                              NULL,
@@ -420,17 +414,16 @@ EF_appuis_edit (EF_Appui     *appui,
                                              &list_noeuds,
                                              NULL,
                                              NULL,
-                                             FALSE,
+                                             NULL,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (list_appuis); )
-  g_list_free (list_appuis);
+       FALSE)
+  list_appuis.clear ();
+  
   if (list_noeuds != NULL)
   {
-    BUG (EF_calculs_free (p),
-         FALSE,
-         g_list_free (list_noeuds); )
-    g_list_free (list_noeuds);
+    delete list_noeuds;
+    BUG (EF_calculs_free (p), FALSE)
   }
   
   return TRUE;
@@ -457,7 +450,7 @@ EF_appuis_renomme (EF_Appui   *appui,
                    Projet     *p,
                    gboolean    critique)
 {
-  GList *list_parcours;
+  std::list <EF_Appui *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (nom, "%p", nom, FALSE)
@@ -480,17 +473,15 @@ EF_appuis_renomme (EF_Appui   *appui,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // On réinsère l'appui au bon endroit
-  p->modele.appuis = g_list_remove (p->modele.appuis, appui);
-  list_parcours = p->modele.appuis;
-  while (list_parcours != NULL)
+  p->modele.appuis.remove (appui);
+  it = p->modele.appuis.begin ();
+  while (it != p->modele.appuis.end ())
   {
-    EF_Appui *appui_parcours = list_parcours->data;
+    EF_Appui *appui_parcours = *it;
     
     if (strcmp (nom, appui_parcours->nom) < 0)
     {
-      p->modele.appuis = g_list_insert_before (p->modele.appuis,
-                                               list_parcours,
-                                               appui);
+      p->modele.appuis.insert (it, appui);
       
 #ifdef ENABLE_GTK
       gtk_list_store_move_before (UI_APP.liste_appuis,
@@ -506,11 +497,11 @@ EF_appuis_renomme (EF_Appui   *appui,
       break;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  if (list_parcours == NULL)
+  if (it == p->modele.appuis.end ())
   {
-    p->modele.appuis = g_list_append (p->modele.appuis, appui);
+    p->modele.appuis.push_back (appui);
     
 #ifdef ENABLE_GTK
     gtk_list_store_move_before (UI_APP.liste_appuis,
@@ -584,16 +575,17 @@ EF_appuis_supprime (EF_Appui *appui,
                     gboolean  supprime,
                     Projet   *p)
 {
-  GList *list_appuis = NULL, *list_parcours;
-  GList *noeuds_suppr;
+  std::list <EF_Appui *> list_appuis;
+  
+  std::list <EF_Noeud *> *noeuds_suppr;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (appui, "%p", appui, FALSE)
   
   // On vérifie les dépendances.
-  list_appuis = g_list_append (list_appuis, appui);
+  list_appuis.push_back (appui);
   BUG (_1992_1_1_barres_cherche_dependances (p,
-                                             list_appuis,
+                                             &list_appuis,
                                              NULL,
                                              NULL,
                                              NULL,
@@ -602,28 +594,28 @@ EF_appuis_supprime (EF_Appui *appui,
                                              &noeuds_suppr,
                                              NULL,
                                              NULL,
-                                             FALSE,
+                                             NULL,
+                                             NULL,
                                              FALSE),
-       FALSE,
-       g_list_free (list_appuis); )
-  g_list_free (list_appuis);
+       FALSE)
+  list_appuis.clear ();
   
-  if ((annule_si_utilise) && (noeuds_suppr != NULL))
+  if ((annule_si_utilise) && (!noeuds_suppr->empty ()))
   {
     char *liste;
     
     BUGCRIT (liste = common_selection_noeuds_en_texte (noeuds_suppr),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               g_list_free (noeuds_suppr); )
+               delete noeuds_suppr; )
 
-    if (g_list_next (noeuds_suppr) == NULL)
+    if (noeuds_suppr->size () == 1)
     {
       FAILINFO (FALSE,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"),
                           liste);
                   free (liste);
-                  g_list_free (noeuds_suppr); )
+                  delete noeuds_suppr; )
     }
     else
     {
@@ -631,33 +623,34 @@ EF_appuis_supprime (EF_Appui *appui,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"),
                           liste);
                   free (liste);
-                  g_list_free (noeuds_suppr); )
+                  delete noeuds_suppr; )
     }
   }
   
   // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).
   if (supprime == FALSE)
   {
-    list_parcours = noeuds_suppr;
-    while (list_parcours != NULL)
+    std::list <EF_Noeud *>::iterator it = noeuds_suppr->begin ();
+    
+    while (it != noeuds_suppr->end ())
     {
-      EF_Noeud *noeud = list_parcours->data;
+      EF_Noeud *noeud = *it;
       
       BUG (EF_noeuds_change_appui (p, noeud, NULL),
            TRUE,
-           g_list_free (noeuds_suppr); )
+           delete noeuds_suppr; )
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
   }
   else
   {
     BUG (_1992_1_1_barres_supprime_liste (p, noeuds_suppr, NULL),
          TRUE,
-         g_list_free (noeuds_suppr); )
+         delete noeuds_suppr; )
   }
   
-  g_list_free (noeuds_suppr);
+  delete noeuds_suppr;
   
   free (appui->nom);
   appui->nom = NULL;
@@ -740,7 +733,7 @@ EF_appuis_supprime (EF_Appui *appui,
                           appui->ux); )
     }
   }
-  p->modele.appuis = g_list_remove (p->modele.appuis, appui);
+  p->modele.appuis.remove (appui);
   
 #ifdef ENABLE_GTK
   gtk_list_store_remove (UI_APP.liste_appuis, &appui->Iter_liste);
@@ -750,7 +743,7 @@ EF_appuis_supprime (EF_Appui *appui,
   }
 #endif
   
-  free (appui);
+  delete appui;
   
   return TRUE;
 }
@@ -768,16 +761,21 @@ EF_appuis_supprime (EF_Appui *appui,
 gboolean
 EF_appuis_free (Projet *p)
 {
+  std::list <EF_Appui *>::iterator it;
+  
   BUGPARAM (p, "%p", p, FALSE)
   
-  while (p->modele.appuis != NULL)
+  it = p->modele.appuis.begin ();
+  while (it != p->modele.appuis.end ())
   {
-    EF_Appui *appui = p->modele.appuis->data;
+    EF_Appui *appui = *it;
     
-    p->modele.appuis = g_list_delete_link (p->modele.appuis, p->modele.appuis);
     free (appui->nom);
-    free (appui);
+    delete appui;
+    
+    ++it;
   }
+  p->modele.appuis.clear ();
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_APP.liste_appuis);

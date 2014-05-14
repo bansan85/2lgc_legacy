@@ -24,6 +24,10 @@
 #include <math.h>
 #include <gmodule.h>
 
+#include <memory>
+#include <algorithm>
+#include <iterator>
+
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -65,7 +69,7 @@ _1992_1_1_barres_init (Projet *p)
   BUGPARAM (p, "%p", p, FALSE)
   
   // Trivial
-  p->modele.barres = NULL;
+  p->modele.barres.clear ();
 #ifdef ENABLE_GTK
   UI_BAR.liste_types = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_list_store_append (UI_BAR.liste_types, &iter);
@@ -97,16 +101,19 @@ void
 _1992_1_1_barres_free_foreach (EF_Barre *barre,
                                Projet   *p)
 {
+  std::list <EF_Noeud *>::iterator it;
+  
   BUGPARAM (p, "%p", p, )
   BUGPARAM (barre, "%p", barre, )
   
-  while (barre->nds_inter != NULL)
+  it = barre->nds_inter.begin ();
+  while (it != barre->nds_inter.end ())
   {
-    void *tmp = barre->nds_inter->data;
-     
-    EF_noeuds_free_foreach ((EF_Noeud *) barre->nds_inter->data, p);
-    p->modele.noeuds = g_list_remove (p->modele.noeuds, tmp);
+    EF_noeuds_free_foreach (*it, p);
+    
+    ++it;
   }
+  
   if (barre->m_rot != NULL)
   {
     cholmod_free_sparse (&barre->m_rot, p->calculs.c);
@@ -115,7 +122,7 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
   {
     cholmod_free_sparse (&barre->m_rot_t, p->calculs.c);
   }
-  free (barre->info_EF);
+  delete barre->info_EF;
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
@@ -127,7 +134,7 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
   }
   m3d_barre_free (&UI_M3D, barre);
 #endif
-  free (barre);
+  delete barre;
   
   return;
 }
@@ -139,11 +146,11 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
  * \param type : type de l'élément en béton,
  * \param section : section correspondant à l'élément,
  * \param materiau : matériau correspondant à l'élément,
- * \param noeud_debut : numéro de départ de l'élément,
- * \param noeud_fin : numéro de fin de l'élément,
+ * \param noeud_debut : noeud de départ de l'élément,
+ * \param noeud_fin : noeud de fin de l'élément,
  * \param angle : angle de la barre en degré,
  * \param relachement : relachement de la barre (NULL si aucun),
- * \param discretisation_element : nombre d'élément une fois discrétisé.
+ * \param discretisation_element : nombre d'éléments une fois discrétisé.
  * \return
  *   Succès : TRUE.\n
  *   Échec : FALSE :
@@ -183,9 +190,7 @@ _1992_1_1_barres_ajout (Projet         *p,
         (gettext ("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"),
                   noeud_debut->numero,
                   noeud_fin->numero); )
-  BUGCRIT (element_nouveau = malloc (sizeof (EF_Barre)),
-           FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  element_nouveau = new EF_Barre;
   
   element_nouveau->type = type;
   
@@ -197,32 +202,23 @@ _1992_1_1_barres_ajout (Projet         *p,
   element_nouveau->relachement = relachement;
   element_nouveau->discretisation_element = 0;
   
-  BUGCRIT (element_nouveau->info_EF = (Barre_Info_EF *) malloc (sizeof (
-                                                               Barre_Info_EF)),
-           FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (element_nouveau); )
+  element_nouveau->info_EF = new Barre_Info_EF;
   memset (element_nouveau->info_EF, 0, sizeof (Barre_Info_EF));
   
   element_nouveau->m_rot = NULL;
   element_nouveau->m_rot_t = NULL;
   
-  if (p->modele.barres == NULL)
+  if (p->modele.barres.empty ())
   {
     element_nouveau->numero = 0;
   }
   else
   {
-    element_nouveau->numero =
-      (((EF_Barre *) (g_list_last (p->modele.barres)->data))->numero + 1U);
+    element_nouveau->numero = (*(--p->modele.barres.end ()))->numero + 1U;
   }
   
   BUG (EF_calculs_free (p),
-       FALSE,
-       free (element_nouveau->info_EF);
-         free (element_nouveau); )
-  
-  element_nouveau->nds_inter = NULL;
+       FALSE)
   
 #ifdef ENABLE_GTK
   // On incrémente le numéro de la future barre
@@ -233,8 +229,8 @@ _1992_1_1_barres_ajout (Projet         *p,
     BUGCRIT (nb_barres = g_strdup_printf ("%d", element_nouveau->numero + 1),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (element_nouveau->info_EF);
-               free (element_nouveau); )
+               delete element_nouveau->info_EF;
+               delete element_nouveau; )
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_numero_label2")),
                         nb_barres);
@@ -250,8 +246,8 @@ _1992_1_1_barres_ajout (Projet         *p,
     BUGCRIT (tmp = g_strdup_printf ("%d", (int) type),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n"));
-               free (element_nouveau->info_EF);
-               free (element_nouveau); )
+               delete element_nouveau->info_EF;
+               delete element_nouveau; )
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL ( UI_BAR.liste_types),
                                          &iter,
                                          tmp);
@@ -294,7 +290,7 @@ _1992_1_1_barres_ajout (Projet         *p,
     }
   }
   
-  p->modele.barres = g_list_append (p->modele.barres, element_nouveau);
+  p->modele.barres.push_back (element_nouveau);
   
   return TRUE;
 }
@@ -316,22 +312,22 @@ _1992_1_1_barres_cherche_numero (Projet  *p,
                                  uint32_t numero,
                                  gboolean critique)
 {
-  GList *list_parcours;
+  std::list <EF_Barre *>::iterator it;
   
   BUGPARAM (p, "%p", p, NULL)
   
-  list_parcours = p->modele.barres;
+  it = p->modele.barres.begin ();
   
-  while (list_parcours != NULL)
+  while (it != p->modele.barres.end ())
   {
-    EF_Barre *element = list_parcours->data;
+    EF_Barre *element = *it;
     
     if (element->numero == numero)
     {
       return element;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   if (critique)
@@ -364,43 +360,69 @@ _1992_1_1_barres_cherche_numero (Projet  *p,
  * \param materiaux : liste de pointeurs vers les matériaux à analyser,
  * \param relachements : liste de pointeurs vers les relâchements à analyser,
  * \param barres : liste de pointeurs vers les barres à analyser,
- * \param noeuds_dep : liste de noeuds/numeros vers les noeuds dépendants,
+ * \param noeuds_dep : liste des noeuds dépendants,
  *                     peut être NULL,
- * \param barres_dep : liste de barres/numeros vers les barres dépendantes,
+ * \param noeuds_dep_n : liste des numéros des noeuds dépendants,
+ *                       peut être NULL,
+ * \param barres_dep : liste des barres dépendantes,
  *                     peut être NULL,
+ * \param barres_dep_n : liste de numeros des barres dépendantes,
+ *                       peut être NULL,
  * \param charges_dep : liste de charges (pointeur uniquement) dépendantes,
- *                   : peut être NULL.
- * \param numero : TRUE si les listes renvoient un numéro
- *               : FALSE si les listes renvoient un pointer vers les barres ou
- *                noeuds.
- * \param origine : TRUE si noeuds_dep et barres_dep doivent respectivement
- *                  inclure noeuds et barres.
+ *                      peut être NULL,
+ * \param origine : TRUE si noeuds_dep, noeuds_dep_n, barres_dep et
+ *                  barres_dep_n doivent respectivement inclure noeuds et
+ *                  barres.
  * \return Succès : cf. description.\n
  *    Échec : FALSE :
  *      - p == NULL,
  *      - #common_selection_ajout_nombre
  */
 gboolean
-_1992_1_1_barres_cherche_dependances (Projet  *p,
-                                      GList   *appuis,
-                                      GList   *noeuds,
-                                      GList   *sections,
-                                      GList   *materiaux,
-                                      GList   *relachements,
-                                      GList   *barres,
-                                      GList  **noeuds_dep,
-                                      GList  **barres_dep,
-                                      GList  **charges_dep,
-                                      gboolean numero,
-                                      gboolean origine)
+_1992_1_1_barres_cherche_dependances (
+  Projet                       *p,
+  std::list <EF_Appui *>       *appuis,
+  std::list <EF_Noeud *>       *noeuds,
+  std::list <Section *>        *sections,
+  std::list <EF_Materiau *>    *materiaux,
+  std::list <EF_Relachement *> *relachements,
+  std::list <EF_Barre *>       *barres,
+  std::list <EF_Noeud *>      **noeuds_dep,
+  std::list <uint32_t>        **noeuds_dep_n,
+  std::list <EF_Barre *>      **barres_dep,
+  std::list <uint32_t>        **barres_dep_n,
+  std::list <Charge *>        **charges_dep,
+  gboolean                      origine)
 {
-  GList   *list_parcours;
-  GList   *noeuds_todo = NULL, *noeuds_done = NULL, *barres_todo = NULL;
   gboolean verif;
+  
+  std::unique_ptr <std::list <EF_Noeud *> > noeuds_todo
+                                               (new std::list <EF_Noeud *> ());
+  std::unique_ptr <std::list <EF_Noeud *> > noeuds_done
+                                               (new std::list <EF_Noeud *> ());
+  std::unique_ptr <std::list <EF_Barre *> > barres_todo
+                                               (new std::list <EF_Barre *> ());
+  
+  std::unique_ptr <std::list <EF_Noeud *> > noeuds_dep_
+                                               (new std::list <EF_Noeud *> ());
+  std::unique_ptr <std::list <uint32_t> >   noeuds_dep_n_
+                                               (new std::list <uint32_t>   ());
+  std::unique_ptr <std::list <EF_Barre *> > barres_dep_
+                                               (new std::list <EF_Barre *> ());
+  std::unique_ptr <std::list <uint32_t> >   barres_dep_n_
+                                               (new std::list <uint32_t>   ());
+  std::unique_ptr <std::list <Charge *> >   charges_dep_
+                                               (new std::list <Charge *>   ());
+  
+  std::list <EF_Noeud *>::iterator it;
+  std::list <EF_Barre *>::iterator it2;
+  std::list <Action   *>::iterator it3;
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  if ((noeuds_dep == NULL) && (barres_dep == NULL) && (charges_dep == NULL))
+  if ((noeuds_dep == NULL) && (noeuds_dep_n == NULL) &&
+      (barres_dep == NULL) && (barres_dep_n == NULL) &&
+      (charges_dep == NULL))
   {
     verif = TRUE;
   }
@@ -409,34 +431,23 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
     verif = FALSE;
   }
   
-  if (noeuds_dep != NULL)
-  {
-    *noeuds_dep = NULL;
-  }
-  if (barres_dep != NULL)
-  {
-    *barres_dep = NULL;
-  }
-  if (charges_dep != NULL)
-  {
-    *charges_dep = NULL;
-  }
-  
   // On ajoute les noeuds utilisant les appuis
   if (appuis != NULL)
   {
-    list_parcours = p->modele.noeuds;
+    it = p->modele.noeuds.begin ();
     
-    while (list_parcours != NULL)
+    while (it != p->modele.noeuds.end ())
     {
-      EF_Noeud *noeud = list_parcours->data;
+      EF_Noeud *noeud = *it;
       
       if ((noeud->appui != NULL) &&
-          (g_list_find (appuis, noeud->appui) != NULL))
+          (std::find (appuis->begin (),
+                      appuis->end (),
+                      noeud->appui) != appuis->end ()))
       {
         if (verif == FALSE)
         {
-          noeuds_todo = g_list_append (noeuds_todo, noeud);
+          noeuds_todo.get ()->push_back (noeud);
         }
         else
         {
@@ -444,46 +455,63 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
         }
       }
       
-      list_parcours = g_list_next (list_parcours);
+      ++it;
     }
   }
   
   // On ajoute les noeuds dont la position est dépendante d'un des noeuds à
   // analyser
-  list_parcours = p->modele.noeuds;
-  while (list_parcours != NULL)
+  it = p->modele.noeuds.begin ();
+  while (it != p->modele.noeuds.end ())
   {
-    EF_Noeud *noeud = list_parcours->data;
+    EF_Noeud *noeud = *it;
     
     if (noeud->type == NOEUD_LIBRE)
     {
-      EF_Noeud_Libre *data = noeud->data;
+      EF_Noeud_Libre *data = (EF_Noeud_Libre *) noeud->data;
       
       if ((data->relatif != NULL) &&
-          (g_list_find (noeuds, data->relatif) != NULL))
+          ((noeuds != NULL) && (std::find (noeuds->begin (),
+                                           noeuds->end (),
+                                           data->relatif) != noeuds->end ())))
       {
-        noeuds_todo = g_list_append (noeuds_todo, noeud);
+        if (verif == FALSE)
+        {
+          noeuds_todo.get ()->push_back (noeud);
+        }
+        else
+        {
+          return TRUE;
+        }
       }
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
   
   // On ajoute les barres utilisant les sections, matériaux et relâchements.
-  list_parcours = p->modele.barres;
+  it2 = p->modele.barres.begin ();
   
-  while (list_parcours != NULL)
+  while (it2 != p->modele.barres.end ())
   {
-    EF_Barre *barre = list_parcours->data;
+    EF_Barre *barre = *it2;
     
-    if ((g_list_find (sections, barre->section) != NULL)
-      || (g_list_find (materiaux, barre->materiau) != NULL)
+    if ((sections != NULL) && (std::find (sections->begin (),
+                                          sections->end (),
+                                          barre->section) != sections->end ())
+      || ((materiaux != NULL) &&
+          (std::find (materiaux->begin (),
+                      materiaux->end (),
+                      barre->materiau) != materiaux->end ()))
       || ((barre->relachement != NULL) &&
-          (g_list_find (relachements, barre->relachement) != NULL)))
+          (relachements != NULL) &&
+          (std::find (relachements->begin (),
+                      relachements->end (),
+                      barre->relachement) != relachements->end ())))
     {
       if (verif == FALSE)
       {
-        barres_todo = g_list_append (barres_todo, barre);
+        barres_todo.get ()->push_back (barre);
       }
       else
       {
@@ -491,58 +519,57 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
       }
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it2;
   }
   
   // On initialise les barres à parcourir.
-  list_parcours = barres;
-  
-  while (list_parcours != NULL)
+  if (barres != NULL)
   {
-    EF_Barre *barre = list_parcours->data;
+    it2 = barres->begin ();
     
-    if (g_list_find (barres_todo, barre) == NULL)
+    while (it2 != barres->end ())
     {
-      barres_todo = g_list_append (barres_todo, barre);
+      EF_Barre *barre = *it2;
+      
+      if (std::find (barres_todo.get ()->begin (),
+                     barres_todo.get ()->end (),
+                     barre) == barres_todo.get ()->end ())
+      {
+        if (verif == FALSE)
+        {
+          barres_todo.get ()->push_back (barre);
+        }
+        else
+        {
+          return TRUE;
+        }
+      }
+      
+      ++it2;
     }
-    
-    list_parcours = g_list_next (list_parcours);
   }
   
   // On commence par s'occuper des barres.
-  list_parcours = barres_todo;
+  it2 = barres_todo.get ()->begin ();
   
-  while (list_parcours != NULL)
+  while (it2 != barres_todo.get ()->end ())
   {
-    GList    *list_parcours2;
     EF_Barre *barre;
     
     // Toutes les barres sélectionnées sont forcément des barres dépendantes.
-    barre = list_parcours->data;
-    if ((barres_dep != NULL) &&
-        ((origine) || (g_list_find (barres, barre) == NULL)))
+    barre = *it2;
+    if ((origine) ||
+        ((barres != NULL) && (std::find (barres->begin (),
+                                         barres->end (),
+                                         barre) == barres->end ())))
     {
-      if (numero)
+      if (barres_dep_n != NULL)
       {
-        BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (barre->numero),
-                                            barres_dep,
-                                            LISTE_UINT,
-                                            NULL),
-             FALSE,
-             g_list_free (barres_todo);
-               g_list_free (noeuds_todo);
-               g_list_free (*barres_dep); )
+        common_selection_ajout_nombre (barre->numero, barres_dep_n_.get ());
       }
-      else
+      if (barres_dep != NULL)
       {
-        BUG (common_selection_ajout_nombre (barre,
-                                            barres_dep,
-                                            LISTE_BARRES,
-                                            NULL),
-             FALSE,
-             g_list_free (barres_todo);
-               g_list_free (noeuds_todo);
-               g_list_free (*barres_dep); )
+        common_selection_ajout_nombre (barre, barres_dep_.get ());
       }
     }
     // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout
@@ -552,96 +579,61 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
     
     // Puis, tous les noeuds intermédiaires sont ajoutés à la liste des noeuds
     // à étudier.
-    list_parcours2 = barre->nds_inter;
+    it = barre->nds_inter.begin ();
     
-    while (list_parcours2 != NULL)
+    while (it != barre->nds_inter.end ())
     {
       EF_Noeud *noeud;
       
-      noeud = list_parcours2->data;
-      noeuds_todo = g_list_append (noeuds_todo, noeud);
+      noeud = *it;
+      noeuds_todo.get ()->push_back (noeud);
       
-      list_parcours2 = g_list_next (list_parcours2);
+      ++it;
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it2;
   }
   
   // On ajoute tous les noeuds à la liste des noeuds à étudier.
-  list_parcours = noeuds;
-  
-  while (list_parcours != NULL)
+  if (noeuds != NULL)
   {
-    EF_Noeud *noeud;
+    it = noeuds->begin ();
     
-    noeud = list_parcours->data;
-    noeuds_todo = g_list_append (noeuds_todo, noeud);
-    
-    list_parcours = g_list_next (list_parcours);
+    while (it != noeuds->end ())
+    {
+      EF_Noeud *noeud;
+      
+      noeud = *it;
+      noeuds_todo.get ()->push_back (noeud);
+      
+      ++it;
+    }
   }
   
   // On étudie enfin tous les noeuds.
-  while (noeuds_todo != NULL)
+  while (!noeuds_todo.get ()->empty ())
   {
-    EF_Noeud *dataa = noeuds_todo->data;
+    EF_Noeud *dataa = *noeuds_todo.get ()->begin();
     
-    noeuds_todo = g_list_delete_link (noeuds_todo, noeuds_todo);
+    noeuds_todo.get ()->erase (noeuds_todo.get ()->begin());
     
     // On commence par ajouter le noeud en cours d'étude dans la liste des
     // noeuds traités.
-    BUG (common_selection_ajout_nombre (dataa,
-                                        &noeuds_done,
-                                        LISTE_NOEUDS,
-                                        NULL),
-         FALSE,
-         g_list_free (barres_todo);
-           g_list_free (noeuds_todo);
-           g_list_free (noeuds_done);
-           if (barres_dep != NULL)
-           {
-             g_list_free (*barres_dep);
-           }
-           if (noeuds_dep != NULL)
-           {
-             g_list_free (*noeuds_dep);
-           })
+    common_selection_ajout_nombre (dataa, noeuds_done.get ());
     
     // On ajoute le noeud à la liste des noeuds dépendants.
-    if ((noeuds_dep != NULL) &&
-        ((origine) || (g_list_find (noeuds, dataa) == NULL)))
+    if ((origine) ||
+        ((noeuds != NULL) && (std::find (noeuds->begin (),
+                                         noeuds->end (),
+                                         dataa) == noeuds->end ())))
     {
-      if (numero)
+      if (noeuds_dep_n != NULL)
       {
-        BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (((EF_Noeud *) 
-                                                               dataa)->numero),
-                                            noeuds_dep,
-                                            LISTE_UINT,
-                                            NULL),
-             FALSE,
-             g_list_free (barres_todo);
-               g_list_free (noeuds_todo);
-               g_list_free (noeuds_done);
-               if (barres_dep != NULL)
-               {
-                 g_list_free (*barres_dep);
-               }
-               g_list_free (*noeuds_dep); )
+        common_selection_ajout_nombre (dataa->numero, noeuds_dep_n_.get ());
       }
-      else
+      if (noeuds_dep != NULL)
       {
-        BUG (common_selection_ajout_nombre (dataa,
-                                            noeuds_dep,
-                                            LISTE_NOEUDS,
-                                            NULL),
-             FALSE,
-             g_list_free (barres_todo);
-               g_list_free (noeuds_todo);
-               g_list_free (noeuds_done);
-               if (barres_dep != NULL)
-               {
-                 g_list_free (*barres_dep);
-               }
-               g_list_free (*noeuds_dep); )
+        common_selection_ajout_nombre (dataa, noeuds_dep_.get ());
       }
     }
     // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est
@@ -649,95 +641,67 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
     // suppression d'un élément.
     else if ((verif == TRUE) &&
              (dataa->type == NOEUD_LIBRE) &&
-             (g_list_find (noeuds, dataa) == NULL))
+             ((noeuds != NULL) &&  (std::find (noeuds->begin (),
+                                    noeuds->end (),
+                                    dataa) == noeuds->end ())))
     {
-      g_list_free (noeuds_todo);
-      g_list_free (noeuds_done);
-      g_list_free (barres_todo);
-      
       return TRUE;
     }
     
     // On parcours la liste des barres pour trouver celles qui commencent ou
     // finissent par le noeud en cours d'étude.
-    list_parcours = p->modele.barres;
+    it2 = p->modele.barres.begin ();
     
-    while (list_parcours != NULL)
+    while (it2 != p->modele.barres.end ())
     {
-      EF_Barre *barre;
-      
-      barre = list_parcours->data;
+      EF_Barre *barre = *it2;
       
       // Si une barre est dépendante du noeud en cours d'étude
       if ((barre->noeud_debut == dataa) || (barre->noeud_fin == dataa))
       {
-        GList *list_parcours2;
-        
         // On l'ajoute à la liste des barres dépendantes.
-        if ((barres_dep != NULL) &&
-            ((origine) || (g_list_find (barres, barre) == NULL)))
+        if ((origine) ||
+            ((barres != NULL) && (std::find (barres->begin (),
+                                             barres->end (),
+                                             barre) == barres->end ())))
         {
-          if (numero)
+          if (barres_dep_n != NULL)
           {
-            BUG (common_selection_ajout_nombre (GUINT_TO_POINTER (
-                                                                barre->numero),
-                                                barres_dep,
-                                                LISTE_UINT,
-                                                NULL),
-                 FALSE,
-                 g_list_free (barres_todo);
-                   g_list_free (noeuds_todo);
-                   g_list_free (noeuds_done);
-                   g_list_free (*barres_dep);
-                   if (noeuds_dep != NULL)
-                   {
-                     g_list_free (*noeuds_dep);
-                   })
+            common_selection_ajout_nombre (barre->numero,
+                                           barres_dep_n_.get ());
           }
-          else
+          if (barres_dep != NULL)
           {
-            BUG (common_selection_ajout_nombre (barre,
-                                                barres_dep,
-                                                LISTE_BARRES,
-                                                NULL),
-                 FALSE,
-                 g_list_free (barres_todo);
-                   g_list_free (noeuds_todo);
-                   g_list_free (noeuds_done);
-                   g_list_free (*barres_dep);
-                   if (noeuds_dep != NULL)
-                   {
-                     g_list_free (*noeuds_dep);
-                   })
+            common_selection_ajout_nombre (barre, barres_dep_.get ());
           }
         }
         else if (verif == TRUE)
         {
-          g_list_free (noeuds_todo);
-          g_list_free (noeuds_done);
-          g_list_free (barres_todo);
-          
           return TRUE;
         }
-        if (g_list_find (barres_todo, barre) == NULL)
+        if (std::find (barres_todo.get ()->begin (),
+                       barres_todo.get ()->end (),
+                       barre) == barres_todo.get ()->end ())
         {
-          barres_todo = g_list_append (barres_todo, barre);
+          barres_todo.get ()->push_back (barre);
         }
         
         // Puis on ajoute l'ensemble des noeuds intermédiaires.
-        list_parcours2 = barre->nds_inter;
+        it = barre->nds_inter.begin ();
         
-        while (list_parcours2 != NULL)
+        while (it !=barre->nds_inter.end ())
         {
           EF_Noeud *noeud;
           
-          noeud = list_parcours2->data;
-          if (g_list_find (noeuds_done, noeud) == NULL)
+          noeud = *it;
+          if (std::find (noeuds_done.get ()->begin (),
+                         noeuds_done.get ()->end (),
+                         noeud) == noeuds_done.get ()->end ())
           {
-            noeuds_todo = g_list_append (noeuds_todo, noeud);
+            noeuds_todo.get ()->push_back (noeud);
           }
           
-          list_parcours2 = g_list_next (list_parcours2);
+          ++it;
         }
       }
       
@@ -745,166 +709,152 @@ _1992_1_1_barres_cherche_dependances (Projet  *p,
       // Une fois que tous les noeuds ont été traités, on parcourt tous les
       // noeuds du modèle afin de trouver lesquels ont une position relative
       // ayant une dépendance avec les noeuds dépendants.
-      if (noeuds_todo == NULL)
+      if (noeuds_todo.get ()->empty ())
       {
-        GList *list_parcours2 = p->modele.noeuds;
+        it = p->modele.noeuds.begin ();
         
-        while (list_parcours2 != NULL)
+        while (it != p->modele.noeuds.end ())
         {
-          EF_Noeud *noeud = list_parcours2->data;
+          EF_Noeud *noeud = *it;
+          
           if ((noeud->type == NOEUD_LIBRE) &&
-              (g_list_find (noeuds_done, noeud) == NULL))
+              (std::find (noeuds_done.get ()->begin (),
+                          noeuds_done.get ()->end (),
+                          noeud) == noeuds_done.get ()->end ()))
           {
-            EF_Noeud_Libre *data = noeud->data;
+            EF_Noeud_Libre *data = (EF_Noeud_Libre *) noeud->data;
             
             if ((data->relatif != NULL) &&
-                (g_list_find (noeuds_done, data->relatif) != NULL))
+                (std::find (noeuds_done.get ()->begin (), 
+                            noeuds_done.get ()->end (),
+                            data->relatif) != noeuds_done.get ()->end ()))
             {
-              noeuds_todo = g_list_append (noeuds_todo, noeud);
+              noeuds_todo.get ()->push_back (noeud);
             }
           }
-          list_parcours2 = g_list_next (list_parcours2);
+          
+          ++it;
         }
       }
-      list_parcours = g_list_next (list_parcours);
+      
+      ++it2;
     }
   }
   
   // Ensuite, on parcours les charges pour déterminer si certaines sont
   // utilisées par les noeuds ou barres.
-  list_parcours = p->actions;
-  while (list_parcours != NULL)
+  it3 = p->actions.begin ();
+  while (it3 != p->actions.end ())
   {
-    Action *action = list_parcours->data;
-    GList  *liste_parcours2 = _1990_action_charges_renvoie (action);
+    Action *action = *it3;
+    std::list <Charge *>::iterator it4;
     
-    while (liste_parcours2 != NULL)
+    it4 = _1990_action_charges_renvoie (action)->begin ();
+    
+    while (it4 != _1990_action_charges_renvoie (action)->end ())
     {
-      Charge *charge = liste_parcours2->data;
+      Charge *charge = *it4;
+      
       switch (charge->type)
       {
         case CHARGE_NOEUD :
         {
-          Charge_Noeud *charge_d = charge->data;
-          GList        *liste_parcours3 = charge_d->noeuds;
+          Charge_Noeud *charge_d = (Charge_Noeud *) charge->data;
           
-          while (liste_parcours3 != NULL)
+          it = charge_d->noeuds.begin ();
+          
+          while (it != charge_d->noeuds.end ())
           {
-            EF_Noeud *noeud = liste_parcours3->data;
+            EF_Noeud *noeud = *it;
             
             if (charges_dep != NULL)
             {
-              if (g_list_find (noeuds_done, noeud) != NULL)
+              if (std::find (noeuds_done.get ()->begin (),
+                             noeuds_done.get ()->end (),
+                             noeud) != noeuds_done.get ()->end ())
               {
-                BUG (common_selection_ajout_nombre (charge,
-                                                    charges_dep,
-                                                    LISTE_CHARGES,
-                                                    p),
-                     FALSE,
-                     g_list_free (barres_todo);
-                       g_list_free (noeuds_done);
-                       if (barres_dep != NULL)
-                       {
-                         g_list_free (*barres_dep);
-                       }
-                       if (noeuds_dep != NULL)
-                       {
-                         g_list_free (*noeuds_dep);
-                       }
-                       g_list_free (*charges_dep); )
-                liste_parcours3 = NULL;
+                common_selection_ajout_nombre (charge,
+                                               charges_dep_.get (),
+                                               p);
+                break;
               }
             }
             else if ((verif == TRUE) &&
-                     (g_list_find (noeuds_done, noeud) != NULL))
+                     (std::find (noeuds_done.get ()->begin (),
+                                 noeuds_done.get ()->end (),
+                                 noeud) != noeuds_done.get ()->end ()))
             {
-              g_list_free (noeuds_done);
-              g_list_free (barres_todo);
               return TRUE;
             }
             
-            liste_parcours3 = g_list_next (liste_parcours3);
+            ++it;
           }
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          Charge_Barre_Ponctuelle *charge_d = charge->data;
-          GList                   *liste_parcours3 = charge_d->barres;
+          Charge_Barre_Ponctuelle *charge_d = 
+                                      (Charge_Barre_Ponctuelle *) charge->data;
           
-          while (liste_parcours3 != NULL)
+          it2 = charge_d->barres.begin ();
+          
+          while (it2 != charge_d->barres.end ())
           {
-            EF_Barre *barre = liste_parcours3->data;
+            EF_Barre *barre = *it2;
             
             if (charges_dep != NULL)
             {
-              if (g_list_find (barres_todo, barre) != NULL)
+              if (std::find (barres_todo.get ()->begin (),
+                             barres_todo.get ()->end (),
+                             barre) != barres_todo.get ()->end ())
               {
-                BUG (common_selection_ajout_nombre (charge,
-                                                    charges_dep,
-                                                    LISTE_CHARGES,
-                                                    p),
-                     FALSE,
-                     g_list_free (barres_todo);
-                       g_list_free (noeuds_done);
-                       if (barres_dep != NULL)
-                       {
-                         g_list_free (*barres_dep);
-                       }
-                       if (noeuds_dep != NULL)
-                       {
-                         g_list_free (*noeuds_dep);
-                       }
-                       g_list_free (*charges_dep); )
-                liste_parcours3 = NULL;
+                common_selection_ajout_nombre (charge,
+                                               charges_dep_.get (),
+                                               p);
+                break;
               }
             }
             else if ((verif == TRUE) &&
-                     (g_list_find (barres_todo, barre) != NULL))
+                     (std::find (barres_todo.get ()->begin (), 
+                                 barres_todo.get ()->end (),
+                                 barre) != barres_todo.get ()->end ()))
             {
-              g_list_free (noeuds_done);
-              g_list_free (barres_todo);
               return TRUE;
             }
             
-            liste_parcours3 = g_list_next (liste_parcours3);
+            ++it2;
           }
           break;
         }
         default :
         {
           FAILCRIT (FALSE,
-                    (gettext ("Type de charge %d inconnu.\n"), charge->type);
-                      g_list_free (barres_todo);
-                      g_list_free (noeuds_done);
-                      if (barres_dep != NULL)
-                      {
-                        g_list_free (*barres_dep);
-                      }
-                      if (noeuds_dep != NULL)
-                      {
-                        g_list_free (*noeuds_dep);
-                      }
-                      if (charges_dep != NULL)
-                      {
-                        g_list_free (*charges_dep);
-                      })
+                    (gettext ("Type de charge %d inconnu.\n"), charge->type); )
           break;
         }
       }
       
-      liste_parcours2 = g_list_next (liste_parcours2);
+      ++it4;
     }
+    delete _1990_action_charges_renvoie (action);
     
-    list_parcours = g_list_next (list_parcours);
+    ++it3;
   }
-  
-  g_list_free (noeuds_done);
-  g_list_free (barres_todo);
   
   if (verif == FALSE)
   {
+    if (noeuds_dep != NULL)
+      *noeuds_dep = noeuds_dep_.release ();
+    if (noeuds_dep_n != NULL)
+      *noeuds_dep_n = noeuds_dep_n_.release ();
+    if (barres_dep != NULL)
+      *barres_dep = barres_dep_.release ();
+    if (barres_dep_n != NULL)
+      *barres_dep_n = barres_dep_n_.release ();
+    if (charges_dep != NULL)
+      *charges_dep = charges_dep_.release ();
+    
     return TRUE;
   }
   else
@@ -1122,7 +1072,8 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
                                Projet   *p)
 {
 #ifdef ENABLE_GTK
-  GList *liste_barre = NULL;
+  std::unique_ptr <std::list <EF_Barre *> > liste_barre
+                                               (new std::list <EF_Barre *> ());
 #endif
   
   BUGPARAM (barre, "%p", barre, FALSE)
@@ -1138,10 +1089,9 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
-  liste_barre = g_list_append (liste_barre, barre);
-  BUG (m3d_actualise_graphique (p, NULL, liste_barre), FALSE)
+  liste_barre.get ()->push_back (barre);
+  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), FALSE)
   BUG (m3d_rafraichit (p), FALSE)
-  g_list_free (liste_barre);
   
   if (UI_BAR.builder != NULL)
   {
@@ -1179,8 +1129,9 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
                                gboolean noeud_1,
                                Projet *p)
 {
-  GList *liste_barre = NULL;
-  GList *liste_noeuds_dep;
+  std::list <EF_Noeud *> *liste_noeuds_dep;
+  std::unique_ptr <std::list <EF_Barre *> > liste_barre 
+                                               (new std::list <EF_Barre *> ());
   
   BUGPARAM (barre, "%p", barre, FALSE)
   BUGPARAM (noeud, "%p", noeud, FALSE)
@@ -1200,26 +1151,30 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   {
     return TRUE;
   }
-  liste_barre = g_list_append (liste_barre, barre);
+  liste_barre.get ()->push_back (barre);
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             liste_barre,
+                                             liste_barre.get (),
                                              &liste_noeuds_dep,
                                              NULL,
                                              NULL,
-                                             FALSE,
+                                             NULL,
+                                             NULL,
                                              TRUE),
        FALSE)
-  INFO (g_list_find (liste_noeuds_dep, noeud) == NULL,
+  INFO (std::find (liste_noeuds_dep->begin (),
+                   liste_noeuds_dep->end (),
+                   noeud) == liste_noeuds_dep->end (),
         FALSE,
         (gettext ("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"),
                   noeud->numero,
-                  barre->numero); )
-  g_list_free (liste_noeuds_dep);
+                  barre->numero);
+          delete liste_noeuds_dep; )
+  delete liste_noeuds_dep;
   
   if (noeud_1 == TRUE)
   {
@@ -1233,13 +1188,9 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
-  BUG (m3d_actualise_graphique (p, NULL, liste_barre), FALSE)
+  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), FALSE)
   BUG (m3d_rafraichit (p), FALSE)
-#endif
   
-  g_list_free (liste_barre);
-  
-#ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
   {
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
@@ -1480,7 +1431,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
       noeud1 = element->noeud_debut;
       if (element->discretisation_element != 0)
       {
-        noeud2 = g_list_first (element->nds_inter)->data;
+        noeud2 = *element->nds_inter.begin ();
       }
       else
       {
@@ -1489,17 +1440,32 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     }
     else if (j == element->discretisation_element)
     {
-      noeud1 = g_list_nth_data (element->nds_inter, j - 1U);
+      std::list <EF_Noeud *>::iterator it;
+      
+      it = element->nds_inter.begin ();
+      std::advance(it, j - 1U);
+      noeud1 = *it;
       noeud2 = element->noeud_fin;
     }
     else
     {
-      noeud1 = g_list_nth_data (element->nds_inter, j - 1U);
-      noeud2 = g_list_nth_data (element->nds_inter, j);
+      std::list <EF_Noeud *>::iterator it;
+      
+      it = element->nds_inter.begin ();
+      std::advance(it, j - 1U);
+      noeud1 = *it;
+      ++it;
+      noeud2 = *it;
     }
     
-    num1 = (uint32_t) g_list_index (p->modele.noeuds, noeud1);
-    num2 = (uint32_t) g_list_index (p->modele.noeuds, noeud2);
+    num1 = (uint32_t) std::distance (p->modele.noeuds.begin (),
+                                     std::find (p->modele.noeuds.begin (),
+                                                p->modele.noeuds.end (),
+                                                noeud1));
+    num2 = (uint32_t) std::distance (p->modele.noeuds.begin (),
+                                     std::find (p->modele.noeuds.begin (),
+                                                p->modele.noeuds.end (),
+                                                noeud2));
     
     // Calcul des L_x, L_y, L_z et L.
     ll = EF_noeuds_distance (noeud2, noeud1);
@@ -2238,26 +2204,19 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
 gboolean
 _1992_1_1_barres_rigidite_ajout_tout (Projet *p)
 {
-  GList *list_parcours;
+  std::list <EF_Barre *>::iterator it;
   
   BUGPARAM (p, "%p", p, FALSE)
   
-  // Trivial
-  if (p->modele.barres == NULL)
+  it = p->modele.barres.begin ();
+  while (it != p->modele.barres.end ())
   {
-    return TRUE;
-  }
-  
-  list_parcours = p->modele.barres;
-  do
-  {
-    EF_Barre *element = list_parcours->data;
+    EF_Barre *element = *it;
     
     BUG (_1992_1_1_barres_rigidite_ajout (p, element), FALSE)
     
-    list_parcours = g_list_next (list_parcours);
+    ++it;
   }
-  while (list_parcours != NULL);
   
   return TRUE;
 }
@@ -2278,12 +2237,16 @@ _1992_1_1_barres_rigidite_ajout_tout (Projet *p)
  *     - #EF_charge_barre_repartie_uniforme_enleve_barres.
  */
 gboolean
-_1992_1_1_barres_supprime_liste (Projet *p,
-                                 GList  *liste_noeuds,
-                                 GList  *liste_barres)
+_1992_1_1_barres_supprime_liste (Projet                 *p,
+                                 std::list <EF_Noeud *> *liste_noeuds,
+                                 std::list <EF_Barre *> *liste_barres)
 {
-  GList *noeuds_suppr, *barres_suppr, *charges_suppr;
-  GList *list_parcours;
+  std::list <EF_Noeud *> *noeuds_suppr;
+  std::list <EF_Barre *> *barres_suppr;
+  std::list <Charge *>   *charges_suppr;
+  std::list <EF_Noeud *>::iterator it1;
+  std::list <EF_Barre *>::iterator it2;
+  std::list <Charge   *>::iterator it3;
   
   BUGPARAM (p, "%p", p, FALSE)
   
@@ -2295,17 +2258,18 @@ _1992_1_1_barres_supprime_liste (Projet *p,
                                              NULL,
                                              liste_barres,
                                              &noeuds_suppr,
+                                             NULL,
                                              &barres_suppr,
+                                             NULL,
                                              &charges_suppr,
-                                             FALSE,
                                              TRUE),
        FALSE)
   
   // On enlève dans les charges les noeuds et barres qui seront supprimés
-  list_parcours = charges_suppr;
-  while (list_parcours != NULL)
+  it3 = charges_suppr->begin ();
+  while (it3 != charges_suppr->end ())
   {
-    Charge *charge = list_parcours->data;
+    Charge *charge = *it3;
     
     switch (charge->type)
     {
@@ -2313,9 +2277,9 @@ _1992_1_1_barres_supprime_liste (Projet *p,
       {
         BUG (EF_charge_noeud_enleve_noeuds (charge, noeuds_suppr, p),
              FALSE,
-             g_list_free (noeuds_suppr);
-               g_list_free (barres_suppr);
-               g_list_free (charges_suppr); )
+             delete noeuds_suppr;
+               delete barres_suppr;
+               delete charges_suppr; )
         break;
       }
       case CHARGE_BARRE_PONCTUELLE :
@@ -2324,9 +2288,9 @@ _1992_1_1_barres_supprime_liste (Projet *p,
                                                        barres_suppr,
                                                        p),
              FALSE,
-             g_list_free (noeuds_suppr);
-               g_list_free (barres_suppr);
-               g_list_free (charges_suppr); )
+             delete noeuds_suppr;
+               delete barres_suppr;
+               delete charges_suppr; )
         break;
       }
       case CHARGE_BARRE_REPARTIE_UNIFORME :
@@ -2335,27 +2299,27 @@ _1992_1_1_barres_supprime_liste (Projet *p,
                                                               barres_suppr,
                                                               p),
              FALSE,
-             g_list_free (noeuds_suppr);
-               g_list_free (barres_suppr);
-               g_list_free (charges_suppr); )
+             delete noeuds_suppr;
+               delete barres_suppr;
+               delete charges_suppr; )
         break;
       }
       default :
       {
         FAILCRIT (FALSE,
                   (gettext ("Type de charge %d inconnu.\n"), charge->type);
-                    g_list_free (noeuds_suppr);
-                    g_list_free (barres_suppr);
-                    g_list_free (charges_suppr); )
+                    delete noeuds_suppr;
+                    delete barres_suppr;
+                    delete charges_suppr; )
         break;
       }
     }
     
-    list_parcours = g_list_next (list_parcours);
+    ++it3;
   }
-  g_list_free (noeuds_suppr);
-  g_list_free (barres_suppr);
-  g_list_free (charges_suppr);
+  delete noeuds_suppr;
+  delete barres_suppr;
+  delete charges_suppr;
   
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
@@ -2365,49 +2329,43 @@ _1992_1_1_barres_supprime_liste (Projet *p,
                                              NULL,
                                              liste_barres,
                                              &noeuds_suppr,
+                                             NULL,
                                              &barres_suppr,
                                              NULL,
-                                             TRUE,
+                                             NULL,
                                              TRUE),
        FALSE)
   
-  if ((noeuds_suppr != NULL) || (barres_suppr != NULL))
+  if ((!noeuds_suppr->empty ()) || (!barres_suppr->empty ()))
   {
     BUG (EF_calculs_free (p),
          FALSE,
-         g_list_free (noeuds_suppr);
-           g_list_free (barres_suppr); )
+         delete noeuds_suppr;
+           delete barres_suppr; )
   }
   
   // On supprime les noeuds
-  list_parcours = noeuds_suppr;
-  while (list_parcours != NULL)
+  it1 = noeuds_suppr->begin ();
+  while (it1 != noeuds_suppr->end ())
   {
-    EF_Noeud *noeud = EF_noeuds_cherche_numero (p,
-                                        GPOINTER_TO_UINT (list_parcours->data),
-                                                FALSE);
-    if (noeud != NULL)
-    {
-      EF_noeuds_free_foreach (noeud, p);
-      p->modele.noeuds = g_list_remove (p->modele.noeuds, noeud);
-    }
-    list_parcours = g_list_next (list_parcours);
+    EF_Noeud *noeud = *it1;
+    
+    EF_noeuds_free_foreach (noeud, p);
+    p->modele.noeuds.remove (noeud);
+    
+    ++it1;
   }
   
   // On supprime les barres
-  list_parcours = barres_suppr;
-  while (list_parcours != NULL)
+  it2 = barres_suppr->begin ();
+  while (it2 != barres_suppr->end ())
   {
-    EF_Barre *barre = _1992_1_1_barres_cherche_numero (p,
-                                        GPOINTER_TO_UINT (list_parcours->data),
-                                                       FALSE);
+    EF_Barre *barre = *it2;
     
-    if (barre != NULL)
-    {
-      p->modele.barres = g_list_remove (p->modele.barres, barre);
-      _1992_1_1_barres_free_foreach (barre, p);
-    }
-    list_parcours = g_list_next (list_parcours);
+    _1992_1_1_barres_free_foreach (barre, p);
+    p->modele.barres.remove (barre);
+    
+    ++it2;
   }
   
 #ifdef ENABLE_GTK
@@ -2432,8 +2390,8 @@ _1992_1_1_barres_supprime_liste (Projet *p,
     EF_gtk_relachements_select_changed (NULL, p);
   }
 #endif
-  g_list_free (noeuds_suppr);
-  g_list_free (barres_suppr);
+  delete noeuds_suppr;
+  delete barres_suppr;
   
   return TRUE;
 }
@@ -2451,13 +2409,14 @@ _1992_1_1_barres_supprime_liste (Projet *p,
 gboolean
 _1992_1_1_barres_free (Projet *p)
 {
+  std::list <EF_Barre *>::iterator it;
+  
   BUGPARAM (p, "%p", p, FALSE)
   
-  BUG (EF_calculs_free (p), FALSE)
+  for (it = p->modele.barres.begin (); it != p->modele.barres.end (); ++it)
+    _1992_1_1_barres_free_foreach (*it, p);
   
-  g_list_foreach (p->modele.barres, (GFunc) _1992_1_1_barres_free_foreach, p);
-  g_list_free (p->modele.barres);
-  p->modele.barres = NULL;
+  p->modele.barres.clear ();
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_BAR.liste_types);

@@ -16,7 +16,7 @@ endif
 endif
 
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	+= -Og -g3 -ggdb3 -fno-omit-frame-pointer -pipe
+CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
 else
 CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif

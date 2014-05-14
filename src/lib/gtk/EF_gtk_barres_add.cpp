@@ -352,12 +352,12 @@ EF_gtk_barres_ajouter (GtkButton *button,
                 "model", UI_REL.liste_relachements,
                 NULL);
   
-  if (p->modele.barres != NULL)
+  if (!p->modele.barres.empty ())
   {
     char *nb_barres;
     
     BUGCRIT (nb_barres = g_strdup_printf ("%d",
-              ((EF_Barre *) g_list_last (p->modele.barres)->data)->numero + 1),
+                                  (*(--p->modele.barres.end ()))->numero + 1),
              ,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (UI_BARADD.builder,

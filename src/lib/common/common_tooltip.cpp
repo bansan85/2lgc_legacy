@@ -203,7 +203,7 @@ common_tooltip_generation (const char *nom)
                   char   *fake;
                   int16_t largeur, hauteur;
                   
-                  BUGCRIT (fake = malloc (sizeof (char) *
+                  BUGCRIT (fake = (char *) malloc (sizeof (char) *
                                               (strlen ((char *) contenu) + 1)),
                            NULL,
                            (gettext ("Erreur d'allocation mémoire.\n"));

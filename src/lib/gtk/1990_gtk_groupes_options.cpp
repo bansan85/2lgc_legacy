@@ -77,7 +77,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   UI_GROOP.window = GTK_WIDGET (gtk_builder_get_object (
                              UI_GROOP.builder, "1990_groupes_options_window"));
   
-  if (p->combinaisons.elu_equ_methode == 0)
+  if (p->ponderations.elu_equ_methode == 0)
   {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                    UI_GROOP.builder, "1990_groupes_options_radio_button_EQU")),
@@ -90,7 +90,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
                                   TRUE);
   }
   
-  if (p->combinaisons.form_6_10 == 0)
+  if (p->ponderations.form_6_10 == 0)
   {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")),
@@ -115,13 +115,13 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
               UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")));
   g_object_set (settings, "gtk-tooltip-timeout", 0, NULL);
   
-  if (p->combinaisons.elu_geo_str_methode == 2)
+  if (p->ponderations.elu_geo_str_methode == 2)
   {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr3")),
                                   TRUE);
   }
-  else if (p->combinaisons.elu_geo_str_methode == 1)
+  else if (p->ponderations.elu_geo_str_methode == 1)
   {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr2")),
@@ -134,7 +134,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
                                   TRUE);
   }
   
-  if (p->combinaisons.elu_acc_psi == 0)
+  if (p->ponderations.elu_acc_psi == 0)
   {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_freq")),
