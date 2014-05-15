@@ -41,47 +41,47 @@ typedef struct
 
 #include "common_projet.hpp"
 
-gboolean m3d_init (Projet *p) __attribute__((__warn_unused_result__));
+bool     m3d_init (Projet *p) __attribute__((__warn_unused_result__));
 
 gboolean m3d_draw (GtkWidget      *drawing,
                    GdkEventExpose *ev,
                    gpointer       *data);
 
-gboolean m3d_key_press (GtkWidget   *widget,
+gboolean     m3d_key_press (GtkWidget   *widget,
                         GdkEventKey *event,
                         Projet      *p);
 
-gboolean m3d_camera_axe_x_z_y  (Projet *p)
+bool m3d_camera_axe_x_z_y  (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean m3d_camera_axe_x_z__y (Projet *p)
+bool m3d_camera_axe_x_z__y (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean m3d_camera_axe_y_z_x  (Projet *p)
+bool m3d_camera_axe_y_z_x  (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean m3d_camera_axe_y_z__x (Projet *p)
+bool m3d_camera_axe_y_z__x (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean m3d_camera_axe_x_y_z  (Projet *p)
+bool m3d_camera_axe_x_y_z  (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean m3d_camera_axe_x_y__z (Projet *p)
-                                       __attribute__((__warn_unused_result__));
-
-gboolean m3d_actualise_graphique (Projet                 *p,
-                                  std::list <EF_Noeud *> *noeuds,
-                                  std::list <EF_Barre *> *barres)
-                                       __attribute__((__warn_unused_result__));
-gboolean m3d_rafraichit          (Projet *p)
+bool m3d_camera_axe_x_y__z (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean m3d_noeud      (void     *donnees_m3d,
-                         EF_Noeud *noeud);
-void     m3d_noeud_free (void     *donnees_m3d,
-                         EF_Noeud *noeud);
-gboolean m3d_barre      (void     *donnees_m3d,
-                         EF_Barre *barre)
+bool m3d_actualise_graphique (Projet                 *p,
+                              std::list <EF_Noeud *> *noeuds,
+                              std::list <EF_Barre *> *barres)
                                        __attribute__((__warn_unused_result__));
-void     m3d_barre_free (void     *donnees_m3d,
-                         EF_Barre *barre);
+bool m3d_rafraichit          (Projet *p)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean m3d_free (Projet *p) __attribute__((__warn_unused_result__));
+bool m3d_noeud      (void     *donnees_m3d,
+                     EF_Noeud *noeud);
+void m3d_noeud_free (void     *donnees_m3d,
+                     EF_Noeud *noeud);
+bool m3d_barre      (void     *donnees_m3d,
+                     EF_Barre *barre)
+                                       __attribute__((__warn_unused_result__));
+void m3d_barre_free (void     *donnees_m3d,
+                     EF_Barre *barre);
+
+bool m3d_free (Projet *p) __attribute__((__warn_unused_result__));
 
 #endif
 #endif

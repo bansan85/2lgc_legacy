@@ -113,7 +113,7 @@ EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                   UI_REL.builder, "EF_relachements_boutton_supprimer_direct")),
@@ -347,7 +347,7 @@ EF_gtk_relachements_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
       )
   
   if ((!liste_noeuds_dep->empty ()) ||
@@ -424,7 +424,7 @@ EF_gtk_relachements_edit_nom (GtkCellRendererText *cell,
   {
     return;
   }
-  if (EF_relachement_cherche_nom (p, new_text, FALSE))
+  if (EF_relachement_cherche_nom (p, new_text, false))
   {
     return;
   }
@@ -485,7 +485,7 @@ EF_gtk_relachements_supprimer_direct (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &relachement, -1);
   
-  BUG (EF_relachement_supprime (relachement, TRUE, p), )
+  BUG (EF_relachement_supprime (relachement, true, p), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -533,7 +533,7 @@ EF_gtk_relachements_treeview_key_press (GtkWidget *widget,
       gtk_tree_model_get (model, &Iter, 0, &relachement, -1);
       
       liste_relachements.push_back (relachement);
-      if (_1992_1_1_barres_cherche_dependances (p,
+      if (!_1992_1_1_barres_cherche_dependances (p,
                                                 NULL,
                                                 NULL,
                                                 NULL,
@@ -545,7 +545,7 @@ EF_gtk_relachements_treeview_key_press (GtkWidget *widget,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                FALSE) == FALSE)
+                                                false))
       {
         EF_gtk_relachements_supprimer_direct (NULL, p);
       }
@@ -595,7 +595,7 @@ EF_gtk_relachements_supprimer_menu_barres (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &relachement, -1);
   
-  BUG (EF_relachement_supprime (relachement, FALSE, p), )
+  BUG (EF_relachement_supprime (relachement, false, p), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -623,7 +623,7 @@ EF_gtk_relachements_ajouter (GtkButton *button,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Relâchement"); )
   
-  if (EF_relachement_cherche_nom (p, gettext ("Sans nom"), FALSE) == NULL)
+  if (EF_relachement_cherche_nom (p, gettext ("Sans nom"), false) == NULL)
   {
     BUG (EF_relachement_ajout (p,
                                gettext ("Sans nom"),
@@ -649,7 +649,7 @@ EF_gtk_relachements_ajouter (GtkButton *button,
     BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
              ,
              (gettext ("Erreur d'allocation mémoire.\n")); )
-    while (EF_relachement_cherche_nom (p, nom, FALSE) != NULL)
+    while (EF_relachement_cherche_nom (p, nom, false) != NULL)
     {
       i++;
       free (nom);
@@ -719,7 +719,7 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &relachement, -1);
   
-  conversion = common_text_str_to_double (new_text, 0., TRUE, INFINITY, FALSE);
+  conversion = common_text_str_to_double (new_text, 0., true, INFINITY, false);
   
   if (isnan (conversion))
   {

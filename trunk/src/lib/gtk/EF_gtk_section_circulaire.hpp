@@ -25,8 +25,8 @@
 
 #include "common_projet.hpp"
 
-gboolean EF_gtk_section_circulaire (Projet  *p,
-                                    Section *section)
+bool EF_gtk_section_circulaire (Projet  *p,
+                                Section *section)
                                        __attribute__((__warn_unused_result__));
 
 #endif

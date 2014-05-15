@@ -106,11 +106,11 @@ show_help ()
 double
 common_text_str_to_double (char    *texte,
                            double   val_min,
-                           gboolean min_include,
+                           bool     min_include,
                            double   val_max,
-                           gboolean max_include)
+                           bool     max_include)
 {
-  gboolean      min_check, max_check;
+  bool          min_check, max_check;
   char         *fake, *textebis;
   double        nombre;
   struct lconv *locale_conv;
@@ -154,43 +154,43 @@ common_text_str_to_double (char    *texte,
   
   if (sscanf (textebis, "%lf%s", &nombre, fake) != 1)
   {
-    min_check = FALSE;
-    max_check = FALSE;
+    min_check = false;
+    max_check = false;
   }
   else
   {
     if (isinf (val_min) == -1)
     {
-      min_check = TRUE;
+      min_check = true;
     }
     else if ((min_include) && (errrel (nombre, val_min)))
     {
-      min_check = TRUE;
+      min_check = true;
     }
     else if (nombre > val_min)
     {
-      min_check = TRUE;
+      min_check = true;
     }
     else
     {
-      min_check = FALSE;
+      min_check = false;
     }
       
     if (isinf (val_max) == 1)
     {
-      max_check = TRUE;
+      max_check = true;
     }
     else if ((max_include) && (errrel (nombre, val_max)))
     {
-      max_check = TRUE;
+      max_check = true;
     }
     else if (nombre < val_max)
     {
-      max_check = TRUE;
+      max_check = true;
     }
     else
     {
-      max_check = FALSE;
+      max_check = false;
     }
   }
   free (fake);
@@ -491,7 +491,7 @@ common_text_get_line (FILE *fichier)
       
       return retour;
     }
-  } while (TRUE);
+  } while (true);
 }
 
 

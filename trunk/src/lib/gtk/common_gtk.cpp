@@ -95,9 +95,9 @@ common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
 double
 conv_buff_d (GtkTextBuffer *textbuffer,
              double         val_min,
-             gboolean       min_include,
+             bool           min_include,
              double         val_max,
-             gboolean       max_include)
+             bool           max_include)
 {
   char       *texte;
   GtkTextIter start, end;
@@ -151,16 +151,16 @@ conv_buff_d (GtkTextBuffer *textbuffer,
 uint32_t
 conv_buff_u (GtkTextBuffer *textbuffer,
              uint32_t       val_min,
-             gboolean       min_include,
+             bool           min_include,
              uint32_t       val_max,
-             gboolean       max_include)
+             bool           max_include)
 {
   char       *texte;
   GtkTextIter start, end;
   uint32_t    nombre;
   char       *fake;
-  gboolean    min_check;
-  gboolean    max_check;
+  bool        min_check;
+  bool        max_check;
   
   BUGPARAMCRIT (textbuffer, "%p", textbuffer, UINT_MAX)
   
@@ -175,8 +175,8 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
   {
-    min_check = FALSE;
-    max_check = FALSE;
+    min_check = false;
+    max_check = false;
   }
   else
   {
@@ -234,16 +234,16 @@ conv_buff_u (GtkTextBuffer *textbuffer,
 uint16_t
 conv_buff_hu (GtkTextBuffer *textbuffer,
               uint16_t       val_min,
-              gboolean       min_include,
+              bool           min_include,
               uint16_t       val_max,
-              gboolean       max_include)
+              bool           max_include)
 {
   char       *texte;
   GtkTextIter start, end;
   uint16_t    nombre;
   char       *fake;
-  gboolean    min_check;
-  gboolean    max_check;
+  bool        min_check;
+  bool        max_check;
   
   BUGPARAMCRIT (textbuffer, "%p", textbuffer, UINT16_MAX)
   
@@ -258,8 +258,8 @@ conv_buff_hu (GtkTextBuffer *textbuffer,
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%hu%s", &nombre, fake) != 1)
   {
-    min_check = FALSE;
-    max_check = FALSE;
+    min_check = false;
+    max_check = false;
   }
   else
   {
@@ -315,15 +315,15 @@ conv_buff_hu (GtkTextBuffer *textbuffer,
 uint32_t
 common_gtk_entry_uint (GtkEntry *entry,
                        uint32_t  val_min,
-                       gboolean  min_include,
+                       bool      min_include,
                        uint32_t  val_max,
-                       gboolean  max_include)
+                       bool      max_include)
 {
   const char  *texte;
   uint32_t     nombre;
   char        *fake;
-  gboolean     min_check;
-  gboolean     max_check;
+  bool         min_check;
+  bool         max_check;
   
   BUGPARAMCRIT (entry, "%p", entry, UINT_MAX)
   
@@ -334,8 +334,8 @@ common_gtk_entry_uint (GtkEntry *entry,
   
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
   {
-    min_check = FALSE;
-    max_check = FALSE;
+    min_check = false;
+    max_check = false;
   }
   else
   {

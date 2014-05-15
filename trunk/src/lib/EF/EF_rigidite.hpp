@@ -23,8 +23,8 @@
 #include "common_projet.hpp"
 
 
-gboolean EF_rigidite_init (Projet *p) __attribute__((__warn_unused_result__));
-gboolean EF_rigidite_free (Projet *p) __attribute__((__warn_unused_result__));
+bool EF_rigidite_init (Projet *p) __attribute__((__warn_unused_result__));
+bool EF_rigidite_free (Projet *p) __attribute__((__warn_unused_result__));
 
 #endif
 

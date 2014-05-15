@@ -39,18 +39,18 @@
  *        paramètres de neige, de vent et de sismique.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : NULL :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 common_ville_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->parametres.adresse.departement = NULL;
   p->parametres.adresse.commune = 0;
@@ -157,7 +157,7 @@ common_ville_init (Projet *p)
                       -1);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -206,13 +206,13 @@ common_ville_init (Projet *p)
  * \param altitude : l'altitude, peut être NULL,
  * \param population : la population, peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - ligne == NULL,
  *     - La ligne est mal formée,
  *     - En cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_ville_get_ville (wchar_t  *ligne,
                         uint16_t *cdc,
                         uint16_t *cheflieu,
@@ -238,10 +238,10 @@ common_ville_get_ville (wchar_t  *ligne,
   uint32_t population_;
   wchar_t *dep_;
   
-  BUGPARAM (ligne, "%p", ligne, FALSE)
+  BUGPARAM (ligne, "%p", ligne, false)
   
   BUGCRIT (dep_ = (wchar_t *) malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // On récupère les numéros caractéristant la ville en cours.
@@ -255,12 +255,12 @@ common_ville_get_ville (wchar_t  *ligne,
                  &ar_,
                  &ct_,
                  &tncc_) == 8,
-        FALSE,
+        false,
         (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
                   ligne);
           free (dep_); )
   INFO ((0 < wcslen (dep_)) && (wcslen (dep_) <= 3),
-        FALSE,
+        false,
         (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
                   ligne);
           free (dep_); )
@@ -341,7 +341,7 @@ common_ville_get_ville (wchar_t  *ligne,
   }
   
   INFO (ligne[j] != '\000',
-        FALSE,
+        false,
         (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
                   ligne); )
   INFO (swscanf (&(ligne[j]),
@@ -349,7 +349,7 @@ common_ville_get_ville (wchar_t  *ligne,
                  &code_postal_,
                  &altitude_,
                  &population_) == 3,
-        FALSE,
+        false,
         (gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"),
                   ligne); )
   
@@ -366,7 +366,7 @@ common_ville_get_ville (wchar_t  *ligne,
     *population = population_;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -384,22 +384,22 @@ common_ville_get_ville (wchar_t  *ligne,
  *                       ((article == 5) || (article == 1) || (article == 0)) ?
  *                                "" : " ",
  *                                nccenr) pour la France,
- * \param graphique_seul : TRUE si on ne modifie que l'interface graphique et
+ * \param graphique_seul : true si on ne modifie que l'interface graphique et
  *                         pas la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - departement == NULL,
  *     - ville == NULL,
  *     - fichier france_villes.csv introuvable,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_ville_set (Projet  *p,
                   wchar_t *departement,
                   wchar_t *ville,
-                  gboolean graphique_seul)
+                  bool     graphique_seul)
 {
   FILE       *villes;
   wchar_t    *ligne = NULL;
@@ -413,20 +413,20 @@ common_ville_set (Projet  *p,
   Type_Seisme seisme_tmp;
   wchar_t    *tmp;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (departement, "%p", departement, FALSE)
-  BUGPARAM (ville, "%p", ville, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (departement, "%p", departement, false)
+  BUGPARAM (ville, "%p", ville, false)
   
   INFO (villes = fopen (DATADIR"/france_villes.csv", "r"),
-        FALSE,
+        false,
         (gettext ("Le fichier '%s' est introuvable.\n"),
                   DATADIR"/france_villes.csv"); )
   
   // On passe la première ligne qui est l'étiquette des colonnes.
-  BUG (ligne = common_text_get_line (villes), FALSE, fclose (villes); )
+  BUG (ligne = common_text_get_line (villes), false, fclose (villes); )
   free (ligne);
   
-  BUG (ligne = common_text_get_line (villes), FALSE, fclose (villes); )
+  BUG (ligne = common_text_get_line (villes), false, fclose (villes); )
   do
   {
     BUG (common_ville_get_ville (ligne,
@@ -445,12 +445,12 @@ common_ville_set (Projet  *p,
                                  &code_postal,
                                  NULL,
                                  &population),
-         FALSE,
+         false,
          free (ligne);
            fclose (villes); )
     BUGCRIT (tmp = (wchar_t *) malloc (sizeof (wchar_t) *
                                       (wcslen (artmin) + wcslen (nccenr) + 2)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (ligne);
                fclose (villes); )
@@ -463,7 +463,7 @@ common_ville_set (Projet  *p,
     {
       wchar_t *dep_parcours;
       wchar_t *champ1, *champ2;
-      gboolean done;
+      bool     done;
       
       // Maintenant que tout est récupéré, on enregistre dans le projet ce
       // qu'il faut.
@@ -473,14 +473,14 @@ common_ville_set (Projet  *p,
         free (p->parametres.adresse.departement);
         BUG (p->parametres.adresse.departement =
                                         common_text_wcstostr_dup (departement),
-             FALSE,
+             false,
              free (ligne);
                fclose (villes); )
         p->parametres.adresse.commune = com;
         p->parametres.adresse.code_postal = code_postal;
         free (p->parametres.adresse.ville);
         BUG (p->parametres.adresse.ville = common_text_wcstostr_dup (tmp),
-             FALSE,
+             false,
              free (ligne);
                fclose (villes); )
       }
@@ -544,13 +544,13 @@ common_ville_set (Projet  *p,
             NULL));
         
         BUGCRIT (code_postal2 = g_strdup_printf ("%d", code_postal),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n")); )
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
                             code_postal2);
         free (code_postal2);
-        BUG (code_postal2 = common_text_wcstostr_dup (tmp), FALSE)
+        BUG (code_postal2 = common_text_wcstostr_dup (tmp), false)
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_entry_ville")),
                             code_postal2);
@@ -613,7 +613,7 @@ common_ville_set (Projet  *p,
       
       // Le zonage neige.
       INFO (villes = fopen (DATADIR"/france_neige.csv", "r"),
-            FALSE,
+            false,
             (gettext ("Le fichier '%s' est introuvable.\n"),
                       DATADIR"/france_neige.csv"); )
       // On commence par chercher le département et on applique la règle de
@@ -622,27 +622,27 @@ common_ville_set (Projet  *p,
       while (dep_parcours == NULL)
       {
         INFO (ligne = common_text_get_line (villes),
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est incomplet.\n"),
                         DATADIR"/france_neige.csv");
                 fclose (villes); )
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne);
                    free (champ1); )
         BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne);
@@ -654,7 +654,7 @@ common_ville_set (Projet  *p,
                        champ1,
                        dep_parcours,
                        champ2) == 3,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_neige.csv");
                 fclose (villes);
@@ -713,7 +713,7 @@ common_ville_set (Projet  *p,
       }
       else
       {
-        FAILINFO (FALSE,
+        FAILINFO (false,
                   (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                             DATADIR"/france_neige.csv",
                             champ2);
@@ -723,8 +723,8 @@ common_ville_set (Projet  *p,
       free (champ2);
       
       // On recherche si il y a une exception à la règle de base.
-      done = FALSE;
-      while (done == FALSE)
+      done = false;
+      while (!done)
       {
         ligne = common_text_get_line (villes);
         // On a atteint la fin du fichier
@@ -735,20 +735,20 @@ common_ville_set (Projet  *p,
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne);
                    free (champ1); )
         
         INFO (swscanf (ligne, L"%ls", champ1) == 1,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_neige.csv");
                 fclose (villes);
@@ -759,7 +759,7 @@ common_ville_set (Projet  *p,
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
         {
-          done = TRUE;
+          done = true;
         }
         else
         {
@@ -770,7 +770,7 @@ common_ville_set (Projet  *p,
                          champ1,
                          &numero,
                          champ2) == 3,
-                FALSE,
+                false,
                 (gettext ("Le fichier '%s' est corrompu.\n"),
                           DATADIR"/france_neige.csv");
                   fclose (villes);
@@ -814,7 +814,7 @@ common_ville_set (Projet  *p,
             }
             else
             {
-              FAILINFO (FALSE,
+              FAILINFO (false,
                         (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                                   DATADIR"/france_neige.csv",
                                   champ2);
@@ -823,11 +823,11 @@ common_ville_set (Projet  *p,
                           free (champ1);
                           free (champ2); )
             }
-            done = TRUE;
+            done = true;
           }
           else
           {
-            done = FALSE;
+            done = false;
           }
         }
         
@@ -853,7 +853,7 @@ common_ville_set (Projet  *p,
       
       // Le zonage vent.
       INFO (villes = fopen (DATADIR"/france_vent.csv", "r"),
-            FALSE,
+            false,
             (gettext ("Le fichier '%s' est introuvable.\n"),
                       DATADIR"/france_vent.csv"); )
       // On commence par chercher le département et on applique la règle de
@@ -862,27 +862,27 @@ common_ville_set (Projet  *p,
       while (dep_parcours == NULL)
       {
         INFO (ligne = common_text_get_line (villes),
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est incomplet.\n"),
                         DATADIR"/france_vent.csv");
                 fclose (villes); )
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    fclose (villes);
                    free (ligne); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
         BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ2);
                    free (champ1);
@@ -894,7 +894,7 @@ common_ville_set (Projet  *p,
                        champ1,
                        dep_parcours,
                        champ2) == 3,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_vent.csv");
                 free (dep_parcours);
@@ -936,7 +936,7 @@ common_ville_set (Projet  *p,
       }
       else
       {
-        FAILINFO (FALSE,
+        FAILINFO (false,
                   (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                             DATADIR"/france_vent.csv",
                             champ2);
@@ -945,8 +945,8 @@ common_ville_set (Projet  *p,
       }
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
-      done = FALSE;
-      while (done == FALSE)
+      done = false;
+      while (!done)
       {
         ligne = common_text_get_line (villes);
         // On a atteint la fin du fichier
@@ -957,20 +957,20 @@ common_ville_set (Projet  *p,
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (ligne);
                    fclose (villes); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
         
         INFO (swscanf (ligne, L"%ls", champ1) == 1,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_vent.csv");
                 free (champ2);
@@ -981,7 +981,7 @@ common_ville_set (Projet  *p,
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
         {
-          done = TRUE;
+          done = true;
         }
         else
         {
@@ -992,7 +992,7 @@ common_ville_set (Projet  *p,
                          champ1,
                          &numero,
                          champ2) == 3,
-                FALSE,
+                false,
                 (gettext ("Le fichier '%s' est corrompu.\n"),
                           DATADIR"/france_vent.csv");
                   free (champ2);
@@ -1020,7 +1020,7 @@ common_ville_set (Projet  *p,
             }
             else
             {
-              FAILINFO (FALSE,
+              FAILINFO (false,
                         (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                                   DATADIR"/france_vent.csv",
                                   champ2);
@@ -1029,11 +1029,11 @@ common_ville_set (Projet  *p,
                           free (ligne);
                           fclose (villes); )
             }
-            done = TRUE;
+            done = true;
           }
           else
           {
-            done = FALSE;
+            done = false;
           }
         }
         
@@ -1059,7 +1059,7 @@ common_ville_set (Projet  *p,
       
       // Le zonage sismique.
       INFO (villes = fopen (DATADIR"/france_seisme.csv", "r"),
-            FALSE,
+            false,
             (gettext ("Le fichier '%s' est introuvable.\n"),
                       DATADIR"/france_seisme.csv"); )
       // On commence par chercher le département et on applique la règle de
@@ -1068,27 +1068,27 @@ common_ville_set (Projet  *p,
       while (dep_parcours == NULL)
       {
         INFO (ligne = common_text_get_line (villes),
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est incomplet.\n"),
                         DATADIR"/france_seisme.csv");
                 fclose (villes); )
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                     free (ligne);
                     fclose (villes); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
         BUGCRIT (dep_parcours = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ2);
                    free (champ1);
@@ -1100,7 +1100,7 @@ common_ville_set (Projet  *p,
                        champ1,
                        dep_parcours,
                        champ2) == 3,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_seisme.csv");
                 free (dep_parcours);
@@ -1146,7 +1146,7 @@ common_ville_set (Projet  *p,
       }
       else
       {
-        FAILINFO (FALSE,
+        FAILINFO (false,
                   (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                             DATADIR"/france_seisme.csv",
                             champ2);
@@ -1155,8 +1155,8 @@ common_ville_set (Projet  *p,
       }
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
-      done = FALSE;
-      while (done == FALSE)
+      done = false;
+      while (!done)
       {
         ligne = common_text_get_line (villes);
         // On a atteint la fin du fichier
@@ -1167,20 +1167,20 @@ common_ville_set (Projet  *p,
         
         BUGCRIT (champ1 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (ligne);
                    fclose (villes); )
         BUGCRIT (champ2 = (wchar_t *) malloc (sizeof (wchar_t) *
                                                          (wcslen (ligne) + 1)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (champ1);
                    free (ligne);
                    fclose (villes); )
         
         INFO (swscanf (ligne, L"%ls", champ1) == 1,
-              FALSE,
+              false,
               (gettext ("Le fichier '%s' est corrompu.\n"),
                         DATADIR"/france_seisme.csv");
                 free (champ2);
@@ -1191,7 +1191,7 @@ common_ville_set (Projet  *p,
         // Si on arrive au département suivant sans avoir trouvé d'exception.
         if (wcscmp (champ1, L"DEP") == 0)
         {
-          done = TRUE;
+          done = true;
         }
         else
         {
@@ -1202,7 +1202,7 @@ common_ville_set (Projet  *p,
                          champ1,
                          &numero,
                          champ2) == 3,
-                FALSE,
+                false,
                 (gettext ("Le fichier '%s' est corrompu.\n"),
                           DATADIR"/france_seisme.csv");
                   free (champ2);
@@ -1234,7 +1234,7 @@ common_ville_set (Projet  *p,
             }
             else
             {
-              FAILINFO (FALSE,
+              FAILINFO (false,
                         (gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"),
                                   DATADIR"/france_seisme.csv",
                                   champ2);
@@ -1243,11 +1243,11 @@ common_ville_set (Projet  *p,
                           free (ligne);
                           fclose (villes); )
             }
-            done = TRUE;
+            done = true;
           }
           else
           {
-            done = FALSE;
+            done = false;
           }
         }
         
@@ -1271,7 +1271,7 @@ common_ville_set (Projet  *p,
 #endif
       // Fin Sismique
       
-      return TRUE;
+      return true;
     }
     else
     {
@@ -1283,7 +1283,7 @@ common_ville_set (Projet  *p,
   
   fclose (villes);
   
-  return FALSE;
+  return false;
 }
 
 
@@ -1291,14 +1291,14 @@ common_ville_set (Projet  *p,
  * \brief Libère les allocations mémoires pour la gestion des villes.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 common_ville_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   free (p->parametres.adresse.departement);
   p->parametres.adresse.departement = NULL;
@@ -1309,7 +1309,7 @@ common_ville_free (Projet *p)
   free (p->parametres.adresse.ville);
   p->parametres.adresse.ville = NULL;
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

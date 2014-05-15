@@ -61,24 +61,24 @@ EF_Materiau *_1992_1_1_materiaux_ajout (Projet     *p,
                                         Flottant    fck)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_materiaux_modif (Projet      *p,
-                                    EF_Materiau *materiau,
-                                    char        *nom,
-                                    Flottant     fck,
-                                    Flottant     fckcube,
-                                    Flottant     fcm,
-                                    Flottant     fctm,
-                                    Flottant     fctk_0_05,
-                                    Flottant     fctk_0_95,
-                                    Flottant     ecm,
-                                    Flottant     ec1,
-                                    Flottant     ecu1,
-                                    Flottant     ec2,
-                                    Flottant     ecu2,
-                                    Flottant     n,
-                                    Flottant     ec3,
-                                    Flottant     ecu3,
-                                    Flottant     nu)
+bool _1992_1_1_materiaux_modif (Projet      *p,
+                                EF_Materiau *materiau,
+                                char        *nom,
+                                Flottant     fck,
+                                Flottant     fckcube,
+                                Flottant     fcm,
+                                Flottant     fctm,
+                                Flottant     fctk_0_05,
+                                Flottant     fctk_0_95,
+                                Flottant     ecm,
+                                Flottant     ec1,
+                                Flottant     ecu1,
+                                Flottant     ec2,
+                                Flottant     ecu2,
+                                Flottant     n,
+                                Flottant     ec3,
+                                Flottant     ecu3,
+                                Flottant     nu)
                                        __attribute__((__warn_unused_result__));
 
 char *_1992_1_1_materiaux_get_description (EF_Materiau *materiau)

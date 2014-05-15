@@ -19,11 +19,9 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <gmodule.h>
 
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
-#include "1990_duree.hpp"
 
 
 /**
@@ -45,7 +43,6 @@
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
-static
 uint16_t
 _1990_duree_norme_eu (uint8_t type)
 {
@@ -78,7 +75,6 @@ _1990_duree_norme_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme.
  */
-static
 uint16_t
 _1990_duree_norme_fr (uint8_t type)
 {
@@ -113,7 +109,6 @@ _1990_duree_norme_fr (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
-static
 char *
 _1990_duree_norme_txt_eu (uint8_t type)
 {
@@ -148,7 +143,6 @@ _1990_duree_norme_txt_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
-static
 char *
 _1990_duree_norme_txt_fr (uint8_t type)
 {

@@ -39,19 +39,19 @@
  * \brief Initialise la liste des relachements.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_relachement_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->modele.relachements.clear ();
   
@@ -64,7 +64,7 @@ EF_relachement_init (Projet *p)
                       -1);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -226,7 +226,7 @@ EF_relachement_ajout (Projet             *p,
  * \brief Renvoie le relachement cherché.
  * \param p : la variable projet,
  * \param nom : le nom du relachement.
- * \param critique : si critique = TRUE, BUG est utilisé, return sinon
+ * \param critique : si critique = true, BUG est utilisé, return sinon
  * \return
  *   Succès : pointeur vers le relachement recherché.\n
  *   Échec : NULL :
@@ -237,7 +237,7 @@ EF_relachement_ajout (Projet             *p,
 EF_Relachement *
 EF_relachement_cherche_nom (Projet     *p,
                             const char *nom,
-                            gboolean    critique)
+                            bool        critique)
 {
   std::list <EF_Relachement *>::iterator it;
   
@@ -298,12 +298,12 @@ EF_relachement_cherche_nom (Projet     *p,
  * \param rz_f_data : paramètre additionnel de la rotation en z si nécessaire.
  *                    NULL pour ne pas modifier,
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - materiau == NULL.
  */
-gboolean
+bool
 EF_relachement_modif (Projet             *p,
                       EF_Relachement     *relachement,
                       const char         *nom,
@@ -323,49 +323,49 @@ EF_relachement_modif (Projet             *p,
   std::list <EF_Relachement *> liste_relachement;
   std::list <EF_Barre *>      *liste_barres_dep;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (relachement, "%p", relachement, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (relachement, "%p", relachement, false)
   INFO (!(((rx_debut == EF_RELACHEMENT_UNTOUCH ?
                   relachement->rx_debut : rx_debut) == EF_RELACHEMENT_LIBRE) &&
           ((rx_fin == EF_RELACHEMENT_UNTOUCH ?
                        relachement->rx_fin : rx_fin) == EF_RELACHEMENT_LIBRE)),
-        FALSE,
+        false,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (((rx_debut == EF_RELACHEMENT_UNTOUCH ?
             relachement->rx_debut : rx_debut) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((rx_d_data == NULL ? relachement->rx_d_data : rx_d_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   INFO (((ry_debut == EF_RELACHEMENT_UNTOUCH ?
             relachement->ry_debut : ry_debut) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((ry_d_data == NULL ? relachement->ry_d_data : ry_d_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   INFO (((rz_debut == EF_RELACHEMENT_UNTOUCH ?
             relachement->rz_debut : rz_debut) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((rz_d_data == NULL ? relachement->rz_d_data : rz_d_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   INFO (((rx_fin == EF_RELACHEMENT_UNTOUCH ?
             relachement->rx_fin : rx_fin) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((rx_f_data == NULL ? relachement->rx_f_data : rx_f_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   INFO (((ry_fin == EF_RELACHEMENT_UNTOUCH ?
             relachement->ry_fin : ry_fin) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((ry_f_data == NULL ? relachement->ry_f_data : ry_f_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   INFO (((rz_fin == EF_RELACHEMENT_UNTOUCH ?
             relachement->rz_fin : rz_fin) !=
               EF_RELACHEMENT_ELASTIQUE_LINEAIRE) ||
         ((rz_f_data == NULL ? relachement->rz_f_data : rz_f_data) != NULL),
-        FALSE,
+        false,
         (gettext ("Un relachement élastique linéaire doit être défini avec ses paramètres.")); )
   
   INFO (!((((rx_debut == EF_RELACHEMENT_UNTOUCH ?
@@ -375,7 +375,7 @@ EF_relachement_modif (Projet             *p,
                relachement->rx_debut : rx_debut) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (rx_d_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   INFO (!((((ry_debut == EF_RELACHEMENT_UNTOUCH ?
                relachement->ry_debut : ry_debut) ==
@@ -384,7 +384,7 @@ EF_relachement_modif (Projet             *p,
                relachement->ry_debut : ry_debut) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (ry_d_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   INFO (!((((rz_debut == EF_RELACHEMENT_UNTOUCH ?
                relachement->rz_debut : rz_debut) ==
@@ -393,7 +393,7 @@ EF_relachement_modif (Projet             *p,
                relachement->rz_debut : rz_debut) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (rz_d_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   INFO (!((((rx_fin == EF_RELACHEMENT_UNTOUCH ?
                relachement->rx_fin : rx_fin) ==
@@ -402,7 +402,7 @@ EF_relachement_modif (Projet             *p,
                relachement->rx_fin : rx_fin) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (rx_f_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   INFO (!((((ry_fin == EF_RELACHEMENT_UNTOUCH ?
                relachement->ry_fin : ry_fin) ==
@@ -411,7 +411,7 @@ EF_relachement_modif (Projet             *p,
                relachement->ry_fin : ry_fin) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (ry_f_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   INFO (!((((rz_fin == EF_RELACHEMENT_UNTOUCH ?
                relachement->rz_fin : rz_fin) ==
@@ -420,7 +420,7 @@ EF_relachement_modif (Projet             *p,
                relachement->rz_fin : rz_fin) ==
                  EF_RELACHEMENT_LIBRE)) &&
           (rz_f_data != NULL)),
-        FALSE,
+        false,
         (gettext ("Un relachement libre ou bloqué ne doit pas avoir de paramètres.")); )
   
   liste_relachement.push_back (relachement);
@@ -436,12 +436,12 @@ EF_relachement_modif (Projet             *p,
                                              &liste_barres_dep,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   if (!liste_barres_dep->empty ())
   {
     BUG (EF_calculs_free (p),
-         FALSE,
+         false,
          delete liste_barres_dep; )
   }
   delete liste_barres_dep;
@@ -451,12 +451,12 @@ EF_relachement_modif (Projet             *p,
     std::list <EF_Relachement *>::iterator it;
     char  *tmp;
     
-    INFO (!EF_relachement_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_relachement_cherche_nom (p, nom, false),
+          false,
           (gettext ("Le relâchement %s existe déjà.\n"), nom); )
     tmp = relachement->nom;
     BUGCRIT (relachement->nom = g_strdup_printf ("%s", nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                relachement->nom = tmp; )
     free (tmp);
@@ -550,7 +550,7 @@ EF_relachement_modif (Projet             *p,
         free (relachement->RELA_DATA); \
         BUGCRIT (relachement->RELA_DATA = \
                  malloc (sizeof (EF_Relachement_Donnees_Elastique_Lineaire)), \
-                 FALSE, \
+                 false, \
                  (gettext ("Erreur d'allocation mémoire.\n")); ) \
         memcpy (relachement->RELA_DATA, \
                 RELA_DATA, \
@@ -561,7 +561,7 @@ EF_relachement_modif (Projet             *p,
     case EF_RELACHEMENT_UNTOUCH : \
     default : \
     { \
-      FAILCRIT (FALSE, (gettext ("Le type de relâchement est inconnu.\n")); ) \
+      FAILCRIT (false, (gettext ("Le type de relâchement est inconnu.\n")); ) \
       break; \
     } \
   }
@@ -585,7 +585,7 @@ EF_relachement_modif (Projet             *p,
         free (relachement->RELA_DATA); \
         BUGCRIT (relachement->RELA_DATA = \
                  malloc (sizeof (EF_Relachement_Donnees_Elastique_Lineaire)), \
-                 FALSE, \
+                 false, \
                  (gettext ("Erreur d'allocation mémoire.\n")); ) \
         memcpy (relachement->RELA_DATA, \
                 RELA_DATA, \
@@ -596,7 +596,7 @@ EF_relachement_modif (Projet             *p,
     case EF_RELACHEMENT_UNTOUCH : \
     default : \
     { \
-      FAILCRIT (FALSE, (gettext ("Le type de relâchement est inconnu.\n")); ) \
+      FAILCRIT (false, (gettext ("Le type de relâchement est inconnu.\n")); ) \
       break; \
     } \
   }
@@ -619,7 +619,7 @@ EF_relachement_modif (Projet             *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -632,21 +632,21 @@ EF_relachement_modif (Projet             *p,
  *        le relâchement seront supprimées.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL.
  */
-gboolean
+bool
 EF_relachement_supprime (EF_Relachement *relachement,
-                         gboolean        annule_si_utilise,
+                         bool            annule_si_utilise,
                          Projet         *p)
 {
   std::list <EF_Relachement *> liste_relachements;
   std::list <EF_Barre *>      *liste_barres_dep;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (relachement, "%p", relachement, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (relachement, "%p", relachement, false)
   
   // On vérifie les dépendances.
   liste_relachements.push_back (relachement);
@@ -662,19 +662,19 @@ EF_relachement_supprime (EF_Relachement *relachement,
                                              &liste_barres_dep,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   
   if ((annule_si_utilise) && (!liste_barres_dep->empty ()))
   {
     char *liste;
     
     BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
-         FALSE,
+         false,
          delete liste_barres_dep; )
     if (liste_barres_dep->size () == 1)
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
                           liste);
                   delete liste_barres_dep;
@@ -682,7 +682,7 @@ EF_relachement_supprime (EF_Relachement *relachement,
     }
     else
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
                           liste);
                   delete liste_barres_dep;
@@ -691,7 +691,7 @@ EF_relachement_supprime (EF_Relachement *relachement,
   }
   
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
-       TRUE,
+       true,
        delete liste_barres_dep; )
   delete liste_barres_dep;
   
@@ -714,7 +714,7 @@ EF_relachement_supprime (EF_Relachement *relachement,
   
   delete relachement;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -722,16 +722,16 @@ EF_relachement_supprime (EF_Relachement *relachement,
  * \brief Libère l'ensemble des relachements et la liste les contenant.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_relachement_free (Projet *p)
 {
   std::list <EF_Relachement *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->modele.relachements.begin ();
   while (it != p->modele.relachements.end ())
@@ -756,7 +756,7 @@ EF_relachement_free (Projet *p)
   g_object_unref (UI_REL.liste_relachements);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

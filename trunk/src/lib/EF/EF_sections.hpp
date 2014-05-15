@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean EF_sections_init                      (Projet     *p)
+bool     EF_sections_init                      (Projet     *p)
                                        __attribute__((__warn_unused_result__));
 
 Section *EF_sections_rectangulaire_ajout       (Projet     *p,
@@ -30,7 +30,7 @@ Section *EF_sections_rectangulaire_ajout       (Projet     *p,
                                                 Flottant    l,
                                                 Flottant    h)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_rectangulaire_modif       (Projet     *p,
+bool     EF_sections_rectangulaire_modif       (Projet     *p,
                                                 Section    *section,
                                                 const char *nom,
                                                 Flottant    l,
@@ -44,7 +44,7 @@ Section *EF_sections_T_ajout                   (Projet     *p,
                                                 Flottant    ht,
                                                 Flottant    hr)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_T_modif                   (Projet     *p,
+bool     EF_sections_T_modif                   (Projet     *p,
                                                 Section    *section,
                                                 const char *nom,
                                                 Flottant    lt,
@@ -57,7 +57,7 @@ Section *EF_sections_carree_ajout              (Projet     *p,
                                                 const char *nom,
                                                 Flottant    cote)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_carree_modif              (Projet     *p,
+bool     EF_sections_carree_modif              (Projet     *p,
                                                 Section    *section,
                                                 const char *nom,
                                                 Flottant    cote)
@@ -67,15 +67,15 @@ Section *EF_sections_circulaire_ajout          (Projet     *p,
                                                 const char *nom,
                                                 Flottant    diametre)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_circulaire_modif          (Projet     *p,
+bool     EF_sections_circulaire_modif          (Projet     *p,
                                                 Section    *section,
                                                 const char *nom,
                                                 Flottant    diametre)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_personnalisee_verif_forme (
+bool     EF_sections_personnalisee_verif_forme (
            std::list <std::list <EF_Point *> *> *forme,
-           gboolean    message)
+           bool        message)
                                        __attribute__((__warn_unused_result__));
 Section *EF_sections_personnalisee_ajout       (
            Projet     *p,
@@ -91,7 +91,7 @@ Section *EF_sections_personnalisee_ajout       (
            Flottant    s,
            std::list <std::list <EF_Point *> *> *forme)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_sections_personnalisee_modif       (
+bool     EF_sections_personnalisee_modif       (
            Projet     *p,
            Section    *section,
            const char *nom,
@@ -111,13 +111,13 @@ void     EF_sections_personnalisee_free_forme1 (
 
 Section *EF_sections_cherche_nom               (Projet     *p,
                                                 const char *nom,
-                                                gboolean    critique)
+                                                bool        critique)
                                        __attribute__((__warn_unused_result__));
 char    *EF_sections_get_description           (Section    *sect)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_supprime                  (Section    *section,
-                                                gboolean    annule_si_utilise,
+bool     EF_sections_supprime                  (Section    *section,
+                                                bool        annule_si_utilise,
                                                 Projet     *p)
                                        __attribute__((__warn_unused_result__));
 
@@ -166,7 +166,7 @@ double   EF_sections_gj_l (EF_Barre *barre,
                            uint16_t  discretisation)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_sections_free (Projet      *p)
+bool     EF_sections_free (Projet      *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

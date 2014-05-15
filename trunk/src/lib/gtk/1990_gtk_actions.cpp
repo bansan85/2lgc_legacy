@@ -60,7 +60,7 @@ GTK_WINDOW_DESTROY (
                           0,
                           0,
                           NULL,
-                          _1990_gtk_actions_cursor_changed,
+                          (gpointer) _1990_gtk_actions_cursor_changed,
                           NULL));
 );
 
@@ -285,7 +285,7 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
       list_fixe.push_back (gtk_tree_row_reference_new (model_charge_source,
                                          (GtkTreePath *) list_parcours->data));
     }
-    g_list_free_full (list, (GFunc) gtk_tree_path_free);
+    g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
     
     // On déplace les charges, charge par charge vers leur nouvelle action;
     it = list_fixe.begin ();
@@ -501,7 +501,6 @@ _1990_gtk_actions_type_edited (GtkCellRendererText *cell,
  *   Echec :
  *     - p == NULL,
  *     - interface graphique non initialisée,
- *     - #_1990_action_nom_change.
  */
 extern "C"
 void
@@ -533,7 +532,7 @@ _1990_gtk_tree_view_actions_psi_edited (GtkCellRendererText *cell,
                       -1);
   
   // On vérifie si le texte contient bien un nombre flottant
-  convertion = common_text_str_to_double (new_text, 0, TRUE, 1., TRUE);
+  convertion = common_text_str_to_double (new_text, 0, true, 1., true);
   if (!isnan (convertion))
   {
     BUG (_1990_action_psi_change (p,
@@ -584,7 +583,7 @@ _1990_gtk_nouvelle_action (GtkWidget *menuitem,
       Action      *action;
       GtkTreePath *path;
       
-      BUGCRIT (tmp = g_strdup_printf ("%s %u",
+      BUGCRIT (tmp = g_strdup_printf ("%s %zu",
                                       gettext ("Sans nom"),
                                       p->actions.size ()),
                ,
@@ -625,7 +624,6 @@ _1990_gtk_nouvelle_action (GtkWidget *menuitem,
  *     - p == NULL,
  *     - interface graphique non initialisée,
  *     - erreur d'allocation mémoire,
- *     - #_1990_action_nom_change.
  */
 extern "C"
 void
@@ -1181,7 +1179,7 @@ _1990_gtk_actions_render_1 (GtkTreeViewColumn *tree_column,
                             gpointer           data2)
 {
   Action *action;
-  Projet *p = data2;
+  Projet *p = (Projet *) data2;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
   BUGPARAM (action, "%p", action, )

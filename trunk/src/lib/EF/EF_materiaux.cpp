@@ -43,14 +43,14 @@
  * \brief Initialise la liste des matériaux.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_materiaux_init (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->modele.materiaux.clear ();
   
@@ -58,7 +58,7 @@ EF_materiaux_init (Projet *p)
   UI_MAT.liste_materiaux = gtk_list_store_new (1, G_TYPE_STRING);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -68,20 +68,20 @@ EF_materiaux_init (Projet *p)
  * \param p : la variable projet,
  * \param materiau : le matériau à insérer.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - materiau == NULL.
  */
-gboolean
+bool
 EF_materiaux_insert (Projet      *p,
                      EF_Materiau *materiau)
 {
   std::list <EF_Materiau *>::iterator it;
   EF_Materiau *materiau_tmp;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (materiau, "%p", materiau, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (materiau, "%p", materiau, false)
   
   it = p->modele.materiaux.begin ();
   while (it != p->modele.materiaux.end ())
@@ -140,7 +140,7 @@ EF_materiaux_insert (Projet      *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -150,19 +150,19 @@ EF_materiaux_insert (Projet      *p,
  * \param p : la variable projet,
  * \param materiau : le matériau à repositionner.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - materiau == NULL.
  */
-gboolean
+bool
 EF_materiaux_repositionne (Projet      *p,
                            EF_Materiau *materiau)
 {
   std::list <EF_Materiau *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (materiau, "%p", materiau, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (materiau, "%p", materiau, false)
   
   // On réinsère le matériau au bon endroit
   p->modele.materiaux.remove (materiau);
@@ -237,7 +237,7 @@ EF_materiaux_repositionne (Projet      *p,
     }
     default :
     {
-      FAILCRIT (FALSE,
+      FAILCRIT (false,
                 (gettext ("Le type de matériau %d n'existe pas.\n"),
                           materiau->type); )
       break;
@@ -254,7 +254,7 @@ EF_materiaux_repositionne (Projet      *p,
                       -1);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -262,7 +262,7 @@ EF_materiaux_repositionne (Projet      *p,
  * \brief Renvoie le matériau en fonction de son nom.
  * \param p : la variable projet,
  * \param nom : le nom du matériau,
- * \param critique : utilise BUG si TRUE, return sinon.
+ * \param critique : utilise BUG si true, return sinon.
  * \return
  *   Succès : pointeur vers le matériau en béton.\n
  *   Échec : NULL :
@@ -272,7 +272,7 @@ EF_materiaux_repositionne (Projet      *p,
 EF_Materiau *
 EF_materiaux_cherche_nom (Projet     *p,
                           const char *nom,
-                          gboolean    critique)
+                          bool        critique)
 {
   std::list <EF_Materiau *>::iterator it;
   
@@ -375,8 +375,8 @@ EF_materiaux_E (EF_Materiau *materiau)
 /**
  * \brief Renvoie le module de cisaillement du matériau.
  * \param materiau : le matériau à analyser,
- * \param nu_null : TRUE si on force le coefficient de poisson à 0,
- *                  FALSE si on prend la valeur définie dans le matériau.
+ * \param nu_null : true si on force le coefficient de poisson à 0,
+ *                  false si on prend la valeur définie dans le matériau.
  * \return
  *   Succès : le module de cisaillement.\n
  *   Échec : NAN :
@@ -385,7 +385,7 @@ EF_materiaux_E (EF_Materiau *materiau)
  */
 Flottant
 EF_materiaux_G (EF_Materiau *materiau,
-                gboolean     nu_null)
+                bool         nu_null)
 {
   BUGPARAM (materiau, "%p", materiau, m_f (NAN, FLOTTANT_ORDINATEUR))
   
@@ -438,7 +438,26 @@ EF_materiaux_free_un (EF_Materiau *materiau)
   BUGPARAM (materiau, "%p", materiau, )
   
   free (materiau->nom);
-  delete materiau->data;
+  
+  switch (materiau->type)
+  {
+    case MATERIAU_BETON :
+    {
+      delete (Materiau_Beton *) materiau->data;
+      break;
+    }
+    case MATERIAU_ACIER :
+    {
+      delete (Materiau_Acier *) materiau->data;
+      break;
+    }
+    default :
+    {
+      FAILCRIT ( ,
+                (gettext ("Matériau %d inconnu.\n"), materiau->type); )
+      break;
+    }
+  }
   delete materiau;
   
   return;
@@ -450,21 +469,21 @@ EF_materiaux_free_un (EF_Materiau *materiau)
  * \param materiau : le matériau à supprimer,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *       p == NULL,
  *       materiau == NULL,
  *       Le materiau est utilisé.
  */
-gboolean
+bool
 EF_materiaux_supprime (EF_Materiau *materiau,
                        Projet      *p)
 {
   std::list <EF_Materiau *> liste_materiaux;
   std::list <EF_Barre *>   *liste_barres_dep;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (materiau, "%p", materiau, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (materiau, "%p", materiau, false)
    
   // On vérifie les dépendances.
   liste_materiaux.push_back (materiau);
@@ -480,19 +499,19 @@ EF_materiaux_supprime (EF_Materiau *materiau,
                                              &liste_barres_dep,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   liste_materiaux.clear ();
   
   if (!liste_barres_dep->empty ())
   {
     char *liste;
     
-    BUG (liste = common_selection_barres_en_texte (liste_barres_dep), FALSE)
+    BUG (liste = common_selection_barres_en_texte (liste_barres_dep), false)
     
     if (g_list_next (liste_barres_dep) == NULL)
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"),
                           liste);
                   free (liste);
@@ -500,7 +519,7 @@ EF_materiaux_supprime (EF_Materiau *materiau,
     }
     else
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"),
                           liste);
                   free (liste);
@@ -520,7 +539,7 @@ EF_materiaux_supprime (EF_Materiau *materiau,
   p->modele.materiaux.remove (materiau);
   EF_materiaux_free_un (materiau);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -528,14 +547,14 @@ EF_materiaux_supprime (EF_Materiau *materiau,
  * \brief Libère l'ensemble des matériaux en béton.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_materiaux_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   for_each (p->modele.materiaux.begin (),
             p->modele.materiaux.end (),
@@ -546,7 +565,7 @@ EF_materiaux_free (Projet *p)
   g_object_unref (UI_MAT.liste_materiaux);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

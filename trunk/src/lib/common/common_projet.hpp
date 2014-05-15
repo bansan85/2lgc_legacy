@@ -23,7 +23,6 @@
 #include <cholmod.h>
 #include <umfpack.h>
 #include <stdint.h>
-#include <glib.h>
 
 #include <list>
 #include <vector>
@@ -1168,7 +1167,7 @@ typedef struct
   GtkTreeModel *model;
   
   /// Ne libère pas la liste des noeuds à la fermeture.
-  gboolean      keep;
+  bool          keep;
 } Gtk_EF_Section_Personnalisee;
 
 
@@ -2057,10 +2056,10 @@ typedef struct
 Projet *projet_init            (Norme norme)
                                        __attribute__((__warn_unused_result__));
 #ifdef ENABLE_GTK
-gboolean projet_init_graphique (Projet *p)
+bool     projet_init_graphique (Projet *p)
                                        __attribute__((__warn_unused_result__));
 #endif
-gboolean projet_free           (Projet *p)
+bool     projet_free           (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

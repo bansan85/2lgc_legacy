@@ -19,8 +19,8 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <gmodule.h>
 #include <math.h>
+#include <glib.h>
 
 #include <algorithm>
 #include <memory>
@@ -38,11 +38,10 @@
  * \param pond_a_verifier : pondération à vérifier.
  * \return
  *   Succès :
- *     - FALSE si la pondération n'existe pas,
- *     - TRUE si la pondération existe.
+ *     - false si la pondération n'existe pas,
+ *     - true si la pondération existe.
  */
-static
-gboolean
+bool
 _1990_ponderations_verifie_double (
   std::list <std::list <Ponderation *> *> *liste_ponderations,
   std::list <Ponderation *>               *pond_a_verifier)
@@ -51,7 +50,7 @@ _1990_ponderations_verifie_double (
   
   if (liste_ponderations == NULL)
   {
-    return FALSE;
+    return false;
   }
   
   // En renvoyant ici 1, la fonction fait croire que la pondération existe.
@@ -60,14 +59,14 @@ _1990_ponderations_verifie_double (
   // peuvent être utilisées par les niveaux supérieurs.
   if (pond_a_verifier == NULL)
   {
-    return TRUE;
+    return true;
   }
   
   it = liste_ponderations->begin ();
   while (it != liste_ponderations->end ())
   {
     // On pense que la pondération est identique jusqu'à preuve du contraire
-    gboolean doublon = TRUE;
+    bool doublon = true;
     
     std::list <Ponderation *> *ponderation = *it;
     std::list <Ponderation *>::iterator it2 = ponderation->begin ();
@@ -85,7 +84,7 @@ _1990_ponderations_verifie_double (
       if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) ||
           (!(errrel (elem1->ponderation, elem2->ponderation))))
       {
-        doublon = FALSE;
+        doublon = false;
       }
       
       ++it2;
@@ -96,13 +95,13 @@ _1990_ponderations_verifie_double (
         (it3 == pond_a_verifier->end ()) &&
         (doublon))
     {
-      return TRUE;
+      return true;
     }
     
     ++it;
   }
   
-  return FALSE;
+  return false;
 }
 
 
@@ -115,21 +114,20 @@ _1990_ponderations_verifie_double (
  *                     sources,
  * \param liste_source : liste de ponderations source.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - liste_dest == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-static
-gboolean
+bool
 _1990_ponderations_duplique_sans_double (
   std::list <std::list <Ponderation *> *> *liste_dest,
   std::list <std::list <Ponderation *> *> *liste_source)
 {
   std::list <std::list <Ponderation *> *>::iterator it;
   
-  BUGPARAM (liste_dest, "%p", liste_dest, FALSE)
-  BUGPARAM (liste_source, "%p", liste_dest, FALSE)
+  BUGPARAM (liste_dest, "%p", liste_dest, false)
+  BUGPARAM (liste_source, "%p", liste_dest, false)
   
   if (liste_source->empty ())
   {
@@ -143,8 +141,7 @@ _1990_ponderations_duplique_sans_double (
     
     ponderation_source = *it;
     /* Si la ponderation n'existe pas, on l'ajoute à la fin */
-    if (_1990_ponderations_verifie_double (liste_dest, ponderation_source) ==
-                                                                         FALSE)
+    if (!_1990_ponderations_verifie_double (liste_dest, ponderation_source))
     {
       std::list <Ponderation *>::iterator it2 = ponderation_source->begin ();
       std::list <Ponderation *>          *ponderation_destination;
@@ -172,7 +169,7 @@ _1990_ponderations_duplique_sans_double (
     it++;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -200,14 +197,13 @@ _1990_ponderations_duplique_sans_double (
  *        actions variables d'accompagnement : 0 = psi0, 1 = psi1, 2 = psi2 et
  *        -1 = prendre la valeur 1.0,
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-static
-gboolean
+bool
 _1990_ponderations_genere_un (
   Projet *p,
   std::list <std::list <Ponderation *> *> *ponderations_destination,
@@ -223,9 +219,9 @@ _1990_ponderations_genere_un (
   
   std::list <Niveau_Groupe *>::iterator it_tmp;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
   // Si le dernier niveau ne possède pas un seul et unique groupe Alors
@@ -235,7 +231,7 @@ _1990_ponderations_genere_un (
   --it_tmp;
   niveau = *it_tmp;
   INFO (niveau->groupes.size () == 1,
-        FALSE,
+        false,
         (gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n")); )
   groupe = *niveau->groupes.begin ();
   
@@ -243,7 +239,7 @@ _1990_ponderations_genere_un (
   //   Fin.
   // FinSi
   INFO (!groupe->tmp_combinaison.empty (),
-        FALSE,
+        false,
         (gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n")); )
   
   // Génération d'une boucle contenant 2^dim_coef permettant ainsi à chaque
@@ -253,7 +249,7 @@ _1990_ponderations_genere_un (
   // Lorsqu'un bit vaut 1, il est utilisé coef_max dans la pondération.
   // Pour chaque itération j, définissant chacune une combinaison différente
   // des coefficients coef_min et coef_max.
-  nbboucle = (uint32_t) 1 << dim_coef;
+  nbboucle = 1 << dim_coef;
   for (j = 0; j < nbboucle; j++)
   {
     std::list <std::list <Combinaison *> *>::iterator it;
@@ -271,8 +267,8 @@ _1990_ponderations_genere_un (
       //     compte. Par exemple, lorsque les actions à ELU STR sont en cours
       //     de génération, il convient de ne pas prendre les pondérations
       //     possédant des actions accidentelles.
-      gboolean suivant = FALSE;
-      gboolean variable_accompagnement = FALSE, variable_dominante = FALSE;
+      bool suivant = false;
+      bool variable_accompagnement = false, variable_dominante = false;
       
       std::list <Combinaison *>          *combinaison;
       std::list <Combinaison *>::iterator it2;
@@ -283,7 +279,7 @@ _1990_ponderations_genere_un (
       
       it2 = combinaison->begin ();
       // Pour chaque élément de la combinaison Faire
-      while ((it2 != combinaison->end ()) && (suivant == FALSE))
+      while ((it2 != combinaison->end ()) && (!suivant))
       {
         Combinaison     *combinaison_element;
         Action_Categorie categorie;
@@ -292,20 +288,20 @@ _1990_ponderations_genere_un (
         categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
                                                 combinaison_element->action),
                                                 p->parametres.norme);
-        BUG (categorie != ACTION_INCONNUE, FALSE)
+        BUG (categorie != ACTION_INCONNUE, false)
         // Vérification si le coefficient min et max de la catégorie vaut 0.
         //  Si oui, pondération ignorée.
         if ((errmax (coef_min[categorie], ERRMAX_POND)) &&
             (errmax (coef_max[categorie], ERRMAX_POND)))
         {
-          suivant = TRUE;
+          suivant = true;
         }
         else
         {
           double pond;
         // On affecte le coefficient min/max à la combinaison pour obtenir la
         // pondération
-          if ((j & ((uint32_t) 1 << categorie)) != 0)
+          if ((j & (1 << categorie)) != 0)
           {
             pond = coef_max[categorie];
           }
@@ -326,10 +322,10 @@ _1990_ponderations_genere_un (
             // ignorée.
             if (categorie == ACTION_VARIABLE)
             {
-              variable_accompagnement = TRUE;
+              variable_accompagnement = true;
               if ((ponderation_element->flags & 1) != 0)
               {
-                variable_dominante = TRUE;
+                variable_dominante = true;
                 ponderation_element->psi = psi_dominante;
               }
               else
@@ -356,11 +352,11 @@ _1990_ponderations_genere_un (
   // FinSi
       if ((variable_accompagnement) && (!variable_dominante))
       {
-        suivant = TRUE;
+        suivant = true;
       }
-      if ((suivant == FALSE) &&
-          (_1990_ponderations_verifie_double (ponderations_destination,
-                                              ponderation) == FALSE))
+      if ((!suivant) &&
+          (!_1990_ponderations_verifie_double (ponderations_destination,
+                                              ponderation)))
       {
         ponderations_destination->push_back (ponderation);
       }
@@ -375,7 +371,7 @@ _1990_ponderations_genere_un (
   }
   // FinPour
   
-  return TRUE;
+  return true;
 }
 
 
@@ -388,19 +384,18 @@ _1990_ponderations_genere_un (
  *        p->ponderations.flags et doivent être définies.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
-static
-gboolean
+bool
 _1990_ponderations_genere_eu (Projet *p)
 {
   double coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
  // Les indices ont les définitions suivantes : pp = poids propre,
  // p = précontrainte, var = variable, acc = accidentelle et
@@ -431,7 +426,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        5,
                                        -1,
                                        0),
-         FALSE)
+         false)
   }
   // Sinon (à l'équilibre et à la résistance structurelle)
   //   coefficient charges variables prédominante : 1,
@@ -464,7 +459,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        5,
                                        -1,
                                        0),
-         FALSE)
+         false)
     
     coef_min[ACTION_POIDS_PROPRE]  = 1.0;
     coef_max[ACTION_POIDS_PROPRE]  = 1.0;
@@ -483,7 +478,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        5,
                                        -1,
                                        0),
-         FALSE)
+         false)
   }
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
   if (p->ponderations.form_6_10 == 0)
@@ -525,7 +520,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            0,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.15;
@@ -544,7 +539,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.0;
@@ -563,12 +558,12 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   // Sinon Si selon l'approche 2 Alors
@@ -601,7 +596,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            0,
                                            0),
-             FALSE)
+             false)
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.15;
         coef_min[ACTION_PRECONTRAINTE] = 1.0;
@@ -619,11 +614,11 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   // Si selon l'approche 3 Alors
@@ -656,7 +651,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            0,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.15;
@@ -675,7 +670,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
   // Pour ELU_GEO, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : 1,
@@ -699,13 +694,13 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         break;
   // FinSi
       }
       default:
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Flag %d inconnu.\n"),
                             p->ponderations.elu_geo_str_methode); )
         break;
@@ -747,7 +742,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.0;
@@ -766,12 +761,12 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   // Sinon Si selon l'approche 2 Alors
@@ -799,11 +794,11 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   // Si selon l'approche 3 Alors
@@ -831,7 +826,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
   // Pour ELU_GEO, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : 1,
   //   coefficient charges variables d'accompagnement : psi0,
@@ -854,13 +849,13 @@ _1990_ponderations_genere_eu (Projet *p)
                                            5,
                                            -1,
                                            0),
-             FALSE)
+             false)
         break;
       }
   // FinSi
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Flag %d inconnu.\n"),
                             p->ponderations.elu_geo_str_methode); )
         break;
@@ -899,7 +894,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        5,
                                        1,
                                        2),
-         FALSE)
+         false)
   }
   else
   {
@@ -910,7 +905,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                        5,
                                        2,
                                        2),
-         FALSE)
+         false)
   }
   
   // Pour ELU_SIS, générer les pondérations suivantes :
@@ -936,7 +931,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                      5,
                                      2,
                                      2),
-       FALSE)
+       false)
   
   // Pour ELU_CAR, générer les pondérations suivantes :
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0,
@@ -961,7 +956,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                      5,
                                      -1,
                                      0),
-       FALSE)
+       false)
   
   // Pour ELU_FREQ, générer les pondérations suivantes :
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0,
@@ -986,7 +981,7 @@ _1990_ponderations_genere_eu (Projet *p)
                                      5,
                                      1,
                                      2),
-       FALSE)
+       false)
   
   // Pour ELU_PERM, générer les pondérations suivantes :
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0,
@@ -1011,9 +1006,9 @@ _1990_ponderations_genere_eu (Projet *p)
                                      5,
                                      2,
                                      2),
-       FALSE)
+       false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1026,14 +1021,13 @@ _1990_ponderations_genere_eu (Projet *p)
  *        p->ponderations.flags et doivent être définies.
  * \brief p : la variable projet.
  * \return
- *   Succès : FALSE.\n
- *   Échec : TRUE :
+ *   Succès : false.\n
+ *   Échec : true :
  *     - p == NULL,
  *     - #_1990_ponderations_genere_un,
  *     - #_1990_ponderations_duplique_sans_double.
  */
-static
-gboolean
+bool
 _1990_ponderations_genere_fr (Projet *p)
 {
   double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
@@ -1042,7 +1036,7 @@ _1990_ponderations_genere_fr (Projet *p)
   // p = précontrainte, var = variable, acc = accidentelle,
   // sis = sismique et es = eaux souterraines.
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
   // Pour ELU_EQU, générer les pondérations suivantes :
   //   Si à l'équilibre seulement Alors
@@ -1073,7 +1067,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        6,
                                        -1,
                                        0),
-         FALSE)
+         false)
   }
   else
   //   Sinon (à l'équilibre et à la résistance structurelle)
@@ -1112,7 +1106,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        6,
                                        -1,
                                        0),
-         FALSE)
+         false)
     
     coef_min[ACTION_POIDS_PROPRE]      = 1.0;
     coef_max[ACTION_POIDS_PROPRE]      = 1.0;
@@ -1133,7 +1127,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        6,
                                        -1,
                                        0),
-         FALSE)
+         false)
   }
   
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
@@ -1184,7 +1178,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            0,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.15;
@@ -1205,7 +1199,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.0;
@@ -1226,12 +1220,12 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   //   Sinon Si selon l'approche 2 Alors
@@ -1270,7 +1264,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            0,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.15;
@@ -1291,12 +1285,12 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   //   Si selon l'approche 3 Alors
@@ -1335,7 +1329,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            0,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.15;
@@ -1356,7 +1350,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
   //     Pour ELU_GEO, générer les pondérations suivantes :
   //     coefficient charges variables prédominante : 1,
@@ -1384,13 +1378,13 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         break;
   //   FinSi
       }
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Flag %d inconnu.\n"),
                             p->ponderations.elu_geo_str_methode); )
         break;
@@ -1439,7 +1433,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.0;
@@ -1460,12 +1454,12 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   //   Sinon Si selon l'approche 2 Alors
@@ -1497,12 +1491,12 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
         BUG (_1990_ponderations_duplique_sans_double (
                &p->ponderations.elu_geo,
                &p->ponderations.elu_str),
-             FALSE)
+             false)
         break;
       }
   //   Si selon l'approche 3 Alors
@@ -1534,7 +1528,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         
   //     Pour ELU_GEO, générer les pondérations suivantes :
   //     coefficient charges variables prédominante : 1,
@@ -1562,13 +1556,13 @@ _1990_ponderations_genere_fr (Projet *p)
                                            6,
                                            -1,
                                            0),
-             FALSE)
+             false)
         break;
       }
   //   FinSi
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Flag %d inconnu.\n"),
                             p->ponderations.elu_geo_str_methode); )
         break;
@@ -1610,7 +1604,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        6,
                                        1,
                                        2),
-         FALSE)
+         false)
   }
   else
   {
@@ -1621,7 +1615,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                        6,
                                        2,
                                        2),
-         FALSE)
+         false)
   }
   
   // Pour ELU_SIS, générer les pondérations suivantes :
@@ -1651,7 +1645,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                      6,
                                      2,
                                      2),
-       FALSE)
+       false)
   
   // Pour ELS_CAR, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : 1,
@@ -1680,7 +1674,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                      6,
                                      -1,
                                      0),
-       FALSE)
+       false)
 
   // Pour ELS_FREQ, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : psi1,
@@ -1709,7 +1703,7 @@ _1990_ponderations_genere_fr (Projet *p)
                                      6,
                                      1,
                                      2),
-       FALSE)
+       false)
 
   // Pour ELS_PERM, générer les pondérations suivantes :
   //   coefficient charges variables prédominante : psi2,
@@ -1738,9 +1732,9 @@ _1990_ponderations_genere_fr (Projet *p)
                                      6,
                                      2,
                                      2),
-       FALSE)
+       false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1749,24 +1743,24 @@ _1990_ponderations_genere_fr (Projet *p)
  *        Cf. _1990_ponderations_genere_PAYS.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - norme inconnue,
  *     - #_1990_ponderations_genere_eu,
  *     - #_1990_ponderations_genere_fr.
  */
-gboolean
+bool
 _1990_ponderations_genere (Projet *p)
 {
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
   switch (p->parametres.norme)
   {
     case NORME_EU : return _1990_ponderations_genere_eu (p);
     case NORME_FR : return _1990_ponderations_genere_fr (p);
     default : {
-                FAILCRIT (FALSE,
+                FAILCRIT (false,
                           (gettext ("Norme %d inconnue.\n"),
                                     p->parametres.norme); )
                 break;
@@ -1869,7 +1863,6 @@ _1990_ponderations_description (std::list <Ponderation*> *ponderation)
  * \param ponderations : la liste des pondérations.
  * \return Valeur renvoyée : Aucun.
  */
-static
 void
 _1990_ponderations_affiche (
   std::list <std::list <Ponderation *> *> *ponderations)
@@ -1917,14 +1910,14 @@ _1990_ponderations_affiche (
  * \brief Affiche toutes les pondérations du projet.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_ponderations_affiche_tout (Projet *p)
 {
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
   printf ("elu_equ\n");
   _1990_ponderations_affiche (&p->ponderations.elu_equ);
@@ -1945,7 +1938,7 @@ _1990_ponderations_affiche_tout (Projet *p)
   printf ("els_perm\n");
   _1990_ponderations_affiche (&p->ponderations.els_perm);
   
-  return TRUE;
+  return true;
 }
 
 

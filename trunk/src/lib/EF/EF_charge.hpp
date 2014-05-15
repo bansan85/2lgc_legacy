@@ -33,17 +33,17 @@ Action *EF_charge_action    (Projet     *p,
                              Charge     *charge)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_renomme  (Projet     *p,
+bool     EF_charge_renomme  (Projet     *p,
                              Charge     *charge,
                              const char *nom)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_charge_deplace  (Projet     *p,
+bool     EF_charge_deplace  (Projet     *p,
                              Action     *action_src,
                              Charge     *charge_s,
                              Action     *action_dest)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_supprime (Projet     *p,
+bool     EF_charge_supprime (Projet     *p,
                              Action     *action,
                              Charge     *charge)
                                        __attribute__((__warn_unused_result__));

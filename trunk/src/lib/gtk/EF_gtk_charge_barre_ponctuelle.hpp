@@ -25,9 +25,9 @@
 
 #include "common_projet.hpp"
 
-gboolean EF_gtk_charge_barre_ponctuelle (Projet *p,
-                                         Action *action_defaut,
-                                         Charge *charge)
+bool EF_gtk_charge_barre_ponctuelle (Projet *p,
+                                     Action *action_defaut,
+                                     Charge *charge)
                                        __attribute__((__warn_unused_result__));
 
 #endif

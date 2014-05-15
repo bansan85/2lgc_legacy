@@ -94,7 +94,7 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
     gtk_tree_model_get (model, &Iter, 0, &materiau, -1);
     
     liste_materiaux.push_back (materiau);
-    if (_1992_1_1_barres_cherche_dependances (p,
+    if (!_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               NULL,
                                               NULL,
@@ -106,7 +106,7 @@ EF_gtk_materiaux_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE) == FALSE)
+                                              false))
     {
       BUG (EF_materiaux_supprime (materiau, p),
            FALSE)
@@ -160,7 +160,7 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
     return;
   }
   
-  if (EF_materiaux_cherche_nom (p, new_text, FALSE))
+  if (EF_materiaux_cherche_nom (p, new_text, false))
   {
     return;
   }
@@ -287,7 +287,7 @@ EF_gtk_materiaux_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                     UI_MATX.builder, "EF_materiaux_boutton_supprimer_direct")),
@@ -378,7 +378,7 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
       , )
   
   if ((!liste_noeuds_dep->empty ()) ||
@@ -468,7 +468,7 @@ EF_gtk_materiaux_supprimer_menu_barres (GtkButton *button,
                                              &liste_barres_dep,
                                              NULL,
                                              NULL,
-                                             FALSE),
+                                             false),
       , )
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
        ,

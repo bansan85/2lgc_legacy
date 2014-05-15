@@ -31,14 +31,14 @@
  *        Emet un message d'erreur si le nombre est supérieur à err_min * 1e14.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_min : le nombre minimum.
- * \return TRUE si ABS (calc) <= err_moy * 1e-14.
+ * \return true si ABS (calc) <= err_moy * 1e-14.
  */
-gboolean
+bool
 errmin (double calc,
         double err_min)
 {
   INFO (ABS (calc) <= err_min * 1e14,
-        TRUE,
+        true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_min * 1e14); )
@@ -52,14 +52,14 @@ errmin (double calc,
  *        err_max.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_max : le nombre maximum.
- * \return TRUE si ABS (calc) <= err_moy * 1e-14.
+ * \return true si ABS (calc) <= err_moy * 1e-14.
  */
-gboolean
+bool
 errmax (double calc,
         double err_max)
 {
   INFO (ABS (calc) <= err_max,
-        TRUE,
+        true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_max); )
@@ -73,14 +73,14 @@ errmax (double calc,
  *        err_moy * 1e-7.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_moy : le nombre moyen.
- * \return TRUE si ABS (calc) <= err_moy * 1e-7.
+ * \return true si ABS (calc) <= err_moy * 1e-7.
  */
-gboolean
+bool
 errmoy (double calc,
         double err_moy)
 {
   INFO (ABS (calc) <= err_moy * 1e7,
-        TRUE,
+        true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_moy * 1e7); )
@@ -92,9 +92,9 @@ errmoy (double calc,
  * \brief Détermine si 2 nombres sont identiques.
  * \param calc : le nombre 1 (nombre calculé).
  * \param theo : le nombre 2 (nombre théorique).
- * \return TRUE si les deux nombres sont identiques à 10^-14 prêt.
+ * \return true si les deux nombres sont identiques à 10^-14 prêt.
  */
-gboolean
+bool
 errrel (double calc,
         double theo)
 {

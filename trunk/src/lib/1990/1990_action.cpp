@@ -21,7 +21,6 @@
 #include <locale.h>
 #include <cholmod.h>
 #include <string.h>
-#include <gmodule.h>
 #include <math.h>
 #include <stdint.h>
 
@@ -77,7 +76,6 @@
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
-static
 char *
 _1990_action_bat_txt_type_eu (uint8_t type)
 {
@@ -145,7 +143,6 @@ _1990_action_bat_txt_type_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
-static
 char *
 _1990_action_bat_txt_type_fr (uint8_t type)
 {
@@ -218,7 +215,6 @@ _1990_action_bat_txt_type (uint8_t type,
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_categorie_bat.
  */
-static
 Action_Categorie
 _1990_action_categorie_bat_eu (uint8_t type)
 {
@@ -266,7 +262,6 @@ _1990_action_categorie_bat_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_categorie_bat.
  */
-static
 Action_Categorie
 _1990_action_categorie_bat_fr (uint8_t type)
 {
@@ -350,12 +345,12 @@ _1990_action_num_bat_txt (Norme norme)
  * \brief Initialise la liste des actions.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
+ *   Succès : true\N
+ *   Échec : false :
  *     - p == NULL.
  * \warning Fonction interne. Il convient d'utiliser la fonction #projet_init.
  */
-gboolean
+bool
 _1990_action_init (Projet *p)
 {
 #ifdef ENABLE_GTK
@@ -363,7 +358,7 @@ _1990_action_init (Projet *p)
   GtkWidget *w_temp;
 #endif
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
   p->actions.clear ();
   
@@ -425,7 +420,7 @@ _1990_action_init (Projet *p)
   g_object_ref (UI_ACT.type_charges);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -553,24 +548,24 @@ _1990_action_nom_renvoie (Action *action)
  * \param action : une action,
  * \param nom : nouveau nom de l'action.
  * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
+ *   Succès : true\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_action_nom_change (Projet     *p,
                          Action     *action,
                          const char *nom)
 {
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (nom, "%p", nom, false)
   
   free (action->nom);
   BUGCRIT (action->nom = g_strdup_printf ("%s", nom),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
 #ifdef ENABLE_GTK
@@ -589,7 +584,7 @@ _1990_action_nom_change (Projet     *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -618,38 +613,38 @@ _1990_action_type_renvoie (Action *action)
  * \param action : une action,
  * \param type : le nouveau type d'action.
  * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
+ *   Succès : true\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_action_type_change (Projet *p,
                           Action *action,
                           uint8_t type)
 {
   Flottant  psi0, psi1, psi2;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
   
   if (action->type == type)
   {
-    return TRUE;
+    return true;
   }
   
   psi0 = m_f (_1990_coef_psi0_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi0)), FALSE)
+  BUG (!isnan (m_g (psi0)), false)
   psi1 = m_f (_1990_coef_psi1_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi1)), FALSE)
+  BUG (!isnan (m_g (psi1)), false)
   psi2 = m_f (_1990_coef_psi2_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi2)), FALSE)
+  BUG (!isnan (m_g (psi2)), false)
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
   action->type = type;
   action->psi0 = psi0;
@@ -663,23 +658,23 @@ _1990_action_type_change (Projet *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
 /**
- * \brief Renvoie TRUE si la liste des charges est vide ou si action est égale
+ * \brief Renvoie true si la liste des charges est vide ou si action est égale
  *        à NULL.
  * \param action : une action.
  * \return
  *   Succès : action->charges == NULL.\n
- *   Échec : TRUE :
+ *   Échec : true :
  *     - action == NULL.
  */
-gboolean
+bool
 _1990_action_charges_vide (Action *action)
 {
-  BUGPARAM (action, "%p", action, TRUE)
+  BUGPARAM (action, "%p", action, true)
   
   return action->charges.empty ();
 }
@@ -699,27 +694,6 @@ _1990_action_charges_renvoie (Action *action)
   BUGPARAM (action, "%p", action, NULL)
   
   return &action->charges;
-}
-
-
-/**
- * \brief Change la liste des charges. L'ancienne liste n'est pas libérée.
- * \param action : une action,
- * \param charges : la nouvelle liste des charges.
- * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
- *     - action == NULL.
- */
-gboolean
-_1990_action_charges_change (Action               *action,
-                             std::list <Charge *> *charges)
-{
-  BUGPARAM (action, "%p", action, FALSE)
-  
-  action->charges.assign (charges->begin (), charges->end ());
-  
-  return TRUE;
 }
 
 
@@ -745,21 +719,21 @@ _1990_action_flags_action_predominante_renvoie (Action *action)
  * \param action : une action,
  * \param flag : la nouvelle valeur du flag (0 ou 1).
  * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
+ *   Succès : true\n
+ *   Échec : false :
  *     - action == NULL.
  *     - flag != 0 ou 1.
  */
-gboolean
+bool
 _1990_action_flags_action_predominante_change (Action *action,
                                                uint8_t flag)
 {
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (flag, "%u", (flag == 0) || (flag == 1), FALSE)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (flag, "%u", (flag == 0) || (flag == 1), false)
   
   action->action_predominante = flag & 1U;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -821,32 +795,32 @@ _1990_action_psi_renvoie_2 (Action *action)
  * \param psi_num : coefficient &psi; à changer (0, 1 ou 2),
  * \param psi : nouveau coefficient psi (supérieur ou égale à 0).
  * \return
- *   Succès : TRUE\n
- *   Échec : FALSE :
+ *   Succès : true\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - psi_num != 0 et 1 et 2,
  *     - psi < 0.
  */
-gboolean
+bool
 _1990_action_psi_change (Projet  *p,
                          Action  *action,
                          uint8_t  psi_num,
                          Flottant psi)
 {
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
   BUGPARAM (psi_num,
             "%u",
             (psi_num == 0) || (psi_num == 1) || (psi_num == 2),
-            FALSE)
-  BUGPARAM (m_g (psi), "%lf", m_g (psi) >= 0., FALSE)
+            false)
+  BUGPARAM (m_g (psi), "%lf", m_g (psi) >= 0., false)
   
   if (psi_num == 0)
   {
     if (errrel (m_g (psi), m_g (action->psi0)))
     {
-      return TRUE;
+      return true;
     }
     
     action->psi0 = psi;
@@ -861,7 +835,7 @@ _1990_action_psi_change (Projet  *p,
   {
     if (errrel (m_g (psi), m_g (action->psi1)))
     {
-      return TRUE;
+      return true;
     }
     
     action->psi1 = psi;
@@ -876,7 +850,7 @@ _1990_action_psi_change (Projet  *p,
   {
     if (errrel (m_g (psi), m_g (action->psi2)))
     {
-      return TRUE;
+      return true;
     }
     
     action->psi2 = psi;
@@ -888,9 +862,9 @@ _1990_action_psi_change (Projet  *p,
 #endif
   }
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -917,21 +891,21 @@ _1990_action_deplacement_renvoie (Action *action)
  * \param action : une action,
  * \param sparse : la nouvelle matrice.
  * \return
- *   Succès : TRUE.\n
- *   Échec : NULL :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - action == NULL,
  *     - sparse == NULL.
  */
-gboolean
+bool
 _1990_action_deplacement_change (Action         *action,
                                  cholmod_sparse *sparse)
 {
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (sparse, "%p", sparse, FALSE)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (sparse, "%p", sparse, false)
   
   action->deplacement = sparse;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -958,21 +932,21 @@ _1990_action_forces_renvoie (Action *action)
  * \param action : une action,
  * \param sparse : la nouvelle matrice.
  * \return
- *   Succès : TRUE.\n
- *   Échec : NULL :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - action == NULL,
  *       sparse == NULL.
  */
-gboolean
+bool
 _1990_action_forces_change (Action         *action,
                             cholmod_sparse *sparse)
 {
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (sparse, "%p", sparse, FALSE)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (sparse, "%p", sparse, false)
   
   action->forces = sparse;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -999,21 +973,21 @@ _1990_action_efforts_noeuds_renvoie (Action *action)
  * \param action : une action,
  * \param sparse : la nouvelle matrice.
  * \return
- *   Succès : TRUE.\n
- *   Échec : NULL :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - action == NULL,
  *       sparse == NULL.
  */
-gboolean
+bool
 _1990_action_efforts_noeuds_change (Action         *action,
                                     cholmod_sparse *sparse)
 {
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (sparse, "%p", sparse, FALSE)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (sparse, "%p", sparse, false)
   
   action->efforts_noeuds = sparse;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1112,17 +1086,17 @@ _1990_action_deformation_renvoie (Action  *action,
  * \brief Libère les fonctions de toutes les barres de l'action souhaitée.
  * \param action : une action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL.
  */
-gboolean
+bool
 _1990_action_fonction_free (Action *action)
 {
   uint8_t  i;
   
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (action, "%p", action, false)
   
   for (i = 0; i < 6; i++)
   {
@@ -1145,7 +1119,7 @@ _1990_action_fonction_free (Action *action)
     action->rotation[i].clear ();
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1159,21 +1133,21 @@ _1990_action_fonction_free (Action *action)
  * \param p : la variable projet,
  * \param action : une action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_action_fonction_init (Projet *p,
                             Action *action)
 {
   uint8_t  i;
   uint32_t j;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
   
   for (i = 0; i < 6; i++)
   {
@@ -1205,7 +1179,7 @@ _1990_action_fonction_init (Projet *p,
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1213,21 +1187,21 @@ _1990_action_fonction_init (Projet *p,
  * \brief Affiche dans l'entrée standard les actions existantes.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_action_affiche_tout (Projet *p)
 {
   std::list <Action *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (p->actions.empty ())
   {
     printf (gettext ("Aucune action existante.\n"));
-    return TRUE;
+    return true;
   }
   
   it = p->actions.begin ();
@@ -1240,7 +1214,7 @@ _1990_action_affiche_tout (Projet *p)
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1249,24 +1223,24 @@ _1990_action_affiche_tout (Projet *p)
  * \param p : la variable projet,
  * \param action : une action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL.
  */
-gboolean
+bool
 _1990_action_affiche_resultats (Projet *p,
                                 Action *action)
 {
   uint32_t i;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
   
   if (p->modele.barres.empty ())
   {
     printf (gettext ("Aucune barre existante.\n"));
-    return TRUE;
+    return true;
   }
   
   // Affichage des efforts aux noeuds et des réactions d'appuis
@@ -1292,47 +1266,47 @@ _1990_action_affiche_resultats (Projet *p,
   {
     // Affichage de la courbe des sollicitations de l'effort normal
     printf ("Barre n°%u, Effort normal\n", i);
-    BUG (common_fonction_affiche (action->efforts[0].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[0].at (i)), false)
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Y
     printf ("Barre n°%u, Effort tranchant Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[1].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[1].at (i)), false)
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Z
     printf ("Barre n°%u, Effort tranchant Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[2].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[2].at (i)), false)
     // Affichage de la courbe des sollicitations du moment de torsion
     printf ("Barre n°%u, Moment de torsion\n", i);
-    BUG (common_fonction_affiche (action->efforts[3].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[3].at (i)), false)
     // Affichage de la courbe des sollicitations du moment fléchissant selon Y
     printf ("Barre n°%u, Moment de flexion Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[4].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[4].at (i)), false)
     // Affichage de la courbe des sollicitations du moment fléchissant selon Z
     printf ("Barre n°%u, Moment de flexion Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[5].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->efforts[5].at (i)), false)
   }
   for (i = 0; i < p->modele.barres.size (); i++)
   {
     // Affichage de la courbe de déformation selon l'axe X
     printf ("Barre n°%u, Déformation en X\n", i);
-    BUG (common_fonction_affiche (action->deformation[0].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->deformation[0].at (i)), false)
     // Affichage de la courbe de déformation selon l'axe Y
     printf ("Barre n°%u, Déformation en Y\n", i);
-    BUG (common_fonction_affiche (action->deformation[1].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->deformation[1].at (i)), false)
     // Affichage de la courbe de déformation selon l'axe Z
     printf ("Barre n°%u, Déformation en Z\n", i);
-    BUG (common_fonction_affiche (action->deformation[2].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->deformation[2].at (i)), false)
     // Affichage de la courbe de rotation selon l'axe X
     printf ("Barre n°%u, Rotation en X\n", i);
-    BUG (common_fonction_affiche (action->rotation[0].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->rotation[0].at (i)), false)
     // Affichage de la courbe de rotation selon l'axe Y
     printf ("Barre n°%u, Rotation en Y\n", i);
-    BUG (common_fonction_affiche (action->rotation[1].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->rotation[1].at (i)), false)
     // Affichage de la courbe de rotation selon l'axe Z
     printf ("Barre n°%u, Rotation en Z\n", i);
-    BUG (common_fonction_affiche (action->rotation[2].at (i)), FALSE)
+    BUG (common_fonction_affiche (action->rotation[2].at (i)), false)
   }
   // FinPour
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1341,21 +1315,21 @@ _1990_action_affiche_resultats (Projet *p,
  *        #_1990_action_ponderation_resultat.
  * \param action : une action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - action == NULL.
  */
-gboolean
+bool
 _1990_action_ponderation_resultat_free_calculs (Action *action)
 {
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (action, "%p", action, false)
   
   free (action->deplacement->x);
   free (action->deplacement);
   free (action->efforts_noeuds->x);
   free (action->efforts_noeuds);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1530,17 +1504,17 @@ _1990_action_ponderation_resultat (std::list <Ponderation *> *ponderation,
  * \param p : la variable projet,
  * \param action : une action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL.
  */
-gboolean
+bool
 _1990_action_free_calculs (Projet *p,
                            Action *action)
 {
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
   
   if (action->deplacement != NULL)
   {
@@ -1562,10 +1536,10 @@ _1990_action_free_calculs (Projet *p,
   
   if (!action->efforts[0].empty ())
   {
-    BUG (_1990_action_fonction_free (action), FALSE)
+    BUG (_1990_action_fonction_free (action), false)
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1574,13 +1548,13 @@ _1990_action_free_calculs (Projet *p,
  * \param p : la variable projet,
  * \param action_free : une action à supprimer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action_free == NULL,
  *     - un type d'une des actions est inconnu.
  */
-gboolean 
+bool
 _1990_action_free_1 (Projet *p,
                      Action *action_free)
 {
@@ -1590,8 +1564,8 @@ _1990_action_free_1 (Projet *p,
   GtkTreeIter Iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action_free, "%p", action_free, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action_free, "%p", action_free, false)
   
   // On enlève l'action de la liste des actions
   p->actions.remove (action_free);
@@ -1607,22 +1581,22 @@ _1990_action_free_1 (Projet *p,
     {
       case CHARGE_NOEUD :
       {
-        BUG (EF_charge_noeud_free (charge), FALSE)
+        BUG (EF_charge_noeud_free (charge), false)
         break;
       }
       case CHARGE_BARRE_PONCTUELLE :
       {
-        BUG (EF_charge_barre_ponctuelle_free (charge), FALSE)
+        BUG (EF_charge_barre_ponctuelle_free (charge), false)
         break;
       }
       case CHARGE_BARRE_REPARTIE_UNIFORME :
       {
-        BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE)
+        BUG (EF_charge_barre_repartie_uniforme_free (charge), false)
         break;
       }
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Type de charge %d inconnu.\n"),
                             charge->type); )
         break;
@@ -1647,7 +1621,7 @@ _1990_action_free_1 (Projet *p,
   
   if (!action_free->efforts[0].empty ())
   {
-    BUG (_1990_action_fonction_free (action_free), FALSE)
+    BUG (_1990_action_fonction_free (action_free), false)
   }
       
 #ifdef ENABLE_GTK
@@ -1695,7 +1669,7 @@ _1990_action_free_1 (Projet *p,
                                             niveau_groupe,
                                             groupe,
                                             act_it),
-               FALSE)
+               false)
           break;
         }
       }
@@ -1735,9 +1709,9 @@ _1990_action_free_1 (Projet *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1745,16 +1719,16 @@ _1990_action_free_1 (Projet *p,
  * \brief Libère l'ensemble des actions existantes.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_action_free (Projet *p)
 {
   std::list <Action *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->actions.begin ();
   while (it != p->actions.end ())
@@ -1771,22 +1745,22 @@ _1990_action_free (Projet *p)
       {
         case CHARGE_NOEUD :
         {
-          BUG (EF_charge_noeud_free (charge), FALSE)
+          BUG (EF_charge_noeud_free (charge), false)
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-          BUG (EF_charge_barre_ponctuelle_free (charge), FALSE)
+          BUG (EF_charge_barre_ponctuelle_free (charge), false)
           break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE)
+          BUG (EF_charge_barre_repartie_uniforme_free (charge), false)
           break;
         }
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                     (gettext ("Type de charge %d inconnu.\n"), charge->type); )
           break;
         }
@@ -1810,7 +1784,7 @@ _1990_action_free (Projet *p)
     
     if (!action->efforts[0].empty ())
     {
-      BUG (_1990_action_fonction_free (action), FALSE)
+      BUG (_1990_action_fonction_free (action), false)
     }
     
     delete action;
@@ -1837,7 +1811,7 @@ _1990_action_free (Projet *p)
   UI_ACT.items_type_action.clear ();
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

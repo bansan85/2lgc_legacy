@@ -90,7 +90,7 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (section = EF_sections_cherche_nom (p, nom, TRUE),
+  BUG (section = EF_sections_cherche_nom (p, nom, true),
        ,
        free (nom); )
   free (nom);
@@ -105,7 +105,7 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (materiau = EF_materiaux_cherche_nom (p, nom, TRUE),
+  BUG (materiau = EF_materiaux_cherche_nom (p, nom, true),
        ,
        free (nom); )
   free (nom);
@@ -126,7 +126,7 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   {
     gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
     gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-    BUG (relachement = EF_relachement_cherche_nom (p, nom, TRUE),
+    BUG (relachement = EF_relachement_cherche_nom (p, nom, true),
          ,
          free (nom); )
     free (nom);
@@ -134,28 +134,22 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   
   noeud_debut = conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_noeud1_buffer")),
-                             0,
-                             TRUE,
-                             UINT_MAX,
-                             FALSE);
+                             0, true,
+                             UINT_MAX, false);
   noeud_fin = conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_noeud2_buffer")),
-                           0,
-                           TRUE,
-                           UINT_MAX,
-                           FALSE);
-  if ((EF_noeuds_cherche_numero (p, noeud_debut, TRUE) == NULL) ||
-      (EF_noeuds_cherche_numero (p, noeud_fin, TRUE) == NULL))
+                           0, true,
+                           UINT_MAX, false);
+  if ((EF_noeuds_cherche_numero (p, noeud_debut, true) == NULL) ||
+      (EF_noeuds_cherche_numero (p, noeud_fin, true) == NULL))
   {
     return;
   }
   
   angle = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
-                       -360.,
-                       FALSE,
-                       360.,
-                       FALSE);
+                       -360., false,
+                       360., false);
   if (isnan (angle))
   {
     return;
@@ -166,18 +160,16 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   
   nb_noeuds = conv_buff_hu (GTK_TEXT_BUFFER (gtk_builder_get_object (
        UI_BARADD.builder, "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")),
-                            0,
-                            TRUE,
-                            UINT16_MAX,
-                            FALSE);
+                            0, true,
+                            UINT16_MAX, false);
   BUG (nb_noeuds != UINT16_MAX, )
   
   BUG (_1992_1_1_barres_ajout (p,
                                (Type_Element) type,
                                section,
                                materiau,
-                               EF_noeuds_cherche_numero (p, noeud_debut, TRUE),
-                               EF_noeuds_cherche_numero (p, noeud_fin, TRUE),
+                               EF_noeuds_cherche_numero (p, noeud_debut, true),
+                               EF_noeuds_cherche_numero (p, noeud_fin, true),
                                m_f (angle, FLOTTANT_UTILISATEUR),
                                relachement,
                                nb_noeuds),
@@ -204,7 +196,7 @@ void
 EF_gtk_barres_add_check_add (GtkWidget *widget,
                              Projet    *p)
 {
-  gboolean       ok = FALSE;
+  bool           ok = false;
   EF_Noeud      *noeud1, *noeud2;
   GtkTextIter    start, end;
   GtkTextBuffer *buff;
@@ -219,11 +211,9 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
              p,
              conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_noeud1_buffer")),
-             0,
-             TRUE,
-             UINT_MAX,
-             FALSE),
-           FALSE);
+             0, true,
+             UINT_MAX, false),
+           false);
   buff = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_noeud1_buffer"));
   gtk_text_buffer_get_iter_at_offset (buff, &start, 0);
@@ -241,11 +231,9 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
              p,
              conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_noeud2_buffer")),
-             0,
-             TRUE,
-             UINT_MAX,
-             FALSE),
-           FALSE);
+             0, true,
+             UINT_MAX, false),
+           false);
   buff = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_noeud2_buffer"));
   gtk_text_buffer_get_iter_at_offset (buff, &start, 0);
@@ -272,26 +260,22 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
       (noeud2 != NULL) &&
       (noeud1 != noeud2))
   {
-    ok = TRUE;
+    ok = true;
   }
   
   if (conv_buff_u (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_BARADD.builder,
                           "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")),
-                   0,
-                   TRUE,
-                   UINT_MAX,
-                   FALSE) == UINT_MAX)
+                   0, true,
+                   UINT_MAX, false) == UINT_MAX)
   {
-    ok = FALSE;
+    ok = false;
   }
   if (isnan (conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
-             -360.,
-             FALSE,
-             360.,
-             FALSE)))
+             -360., false,
+             360., false)))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (

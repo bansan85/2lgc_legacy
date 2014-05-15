@@ -76,13 +76,13 @@ GTK_WINDOW_CLOSE (_1992_1_1, materiaux);
  *               en valeur unitaire,
  * \param nu : coefficient de poisson.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - l'un des arguments == NULL,
  *     - interface graphique non initialisée,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                           char  **nom,
                                           double *fck,
@@ -103,28 +103,28 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
-  gboolean       ok = TRUE;
+  bool           ok = true;
   GtkBuilder    *builder;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (nom, "%p", nom, FALSE)
-  BUGPARAM (fck, "%p", fck, FALSE)
-  BUGPARAM (fckcube, "%p", fckcube, FALSE)
-  BUGPARAM (fcm, "%p", fcm, FALSE)
-  BUGPARAM (fctm, "%p", fctm, FALSE)
-  BUGPARAM (fctk_0_05, "%p", fctk_0_05, FALSE)
-  BUGPARAM (fctk_0_95, "%p", fctk_0_95, FALSE)
-  BUGPARAM (ecm, "%p", ecm, FALSE)
-  BUGPARAM (ec1, "%p", ec1, FALSE)
-  BUGPARAM (ecu1, "%p", ecu1, FALSE)
-  BUGPARAM (ec2, "%p", ec2, FALSE)
-  BUGPARAM (ecu2, "%p", ecu2, FALSE)
-  BUGPARAM (n, "%p", n, FALSE)
-  BUGPARAM (ec3, "%p", ec3, FALSE)
-  BUGPARAM (ecu3, "%p", ecu3, FALSE)
-  BUGPARAM (nu, "%p", nu, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (nom, "%p", nom, false)
+  BUGPARAM (fck, "%p", fck, false)
+  BUGPARAM (fckcube, "%p", fckcube, false)
+  BUGPARAM (fcm, "%p", fcm, false)
+  BUGPARAM (fctm, "%p", fctm, false)
+  BUGPARAM (fctk_0_05, "%p", fctk_0_05, false)
+  BUGPARAM (fctk_0_95, "%p", fctk_0_95, false)
+  BUGPARAM (ecm, "%p", ecm, false)
+  BUGPARAM (ec1, "%p", ec1, false)
+  BUGPARAM (ecu1, "%p", ecu1, false)
+  BUGPARAM (ec2, "%p", ec2, false)
+  BUGPARAM (ecu2, "%p", ecu2, false)
+  BUGPARAM (n, "%p", n, false)
+  BUGPARAM (ec3, "%p", ec3, false)
+  BUGPARAM (ecu3, "%p", ecu3, false)
+  BUGPARAM (nu, "%p", nu, false)
   BUGCRIT (UI_BET.builder,
-           FALSE,
+           false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Ajout Matériau Béton"); )
   
@@ -132,11 +132,11 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   
   *fck = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_fck")),
-                                        0., FALSE,
-                                        90., TRUE);
+                                        0., false,
+                                        90., true);
   if (isnan (*fck))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   if (ok)
@@ -146,12 +146,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *fckcube = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                        "_1992_1_1_materiaux_buffer_fck_cube")),
-                                                0., FALSE,
-                                                INFINITY, FALSE)
+                                                0., false,
+                                                INFINITY, false)
                  * 1000000.;
       if (isnan (*fckcube))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -167,12 +167,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *fcm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_fcm")),
-                                            0., FALSE,
-                                            INFINITY, FALSE)
+                                            0., false,
+                                            INFINITY, false)
              * 1000000.;
       if (isnan (*fcm))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -188,12 +188,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *fctm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                            "_1992_1_1_materiaux_buffer_fctm")),
-                                             0., FALSE,
-                                             INFINITY, FALSE)
+                                             0., false,
+                                             INFINITY, false)
               * 1000000.;
       if (isnan (*fctm))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -210,12 +210,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       *fctk_0_05 = conv_buff_d (GTK_TEXT_BUFFER (
               gtk_builder_get_object (builder,
                                       "_1992_1_1_materiaux_buffer_fctk_0_05")),
-                                                  0., FALSE,
-                                                  INFINITY, FALSE)
+                                                  0., false,
+                                                  INFINITY, false)
                    * 1000000.;
       if (isnan (*fctk_0_05))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -232,12 +232,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       *fctk_0_95 = conv_buff_d (GTK_TEXT_BUFFER (
               gtk_builder_get_object (builder,
                                       "_1992_1_1_materiaux_buffer_fctk_0_95")),
-                                                  0., FALSE,
-                                                  INFINITY, FALSE)
+                                                  0., false,
+                                                  INFINITY, false)
                    * 1000000.;
       if (isnan (*fctk_0_95))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -253,12 +253,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ecm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_Ecm")),
-                                            0., FALSE,
-                                            INFINITY, FALSE)
+                                            0., false,
+                                            INFINITY, false)
              * 1000000000.;
       if (isnan (*ecm))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -274,12 +274,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ec1 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_ec1")),
-                                            0., FALSE,
-                                            INFINITY, FALSE)
+                                            0., false,
+                                            INFINITY, false)
              / 1000.;
       if (isnan (*ec1))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -295,12 +295,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ecu1 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                            "_1992_1_1_materiaux_buffer_ecu1")),
-                                             0., FALSE,
-                                             INFINITY, FALSE)
+                                             0., false,
+                                             INFINITY, false)
               / 1000.;
       if (isnan (*ecu1))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -316,12 +316,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ec2 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_ec2")),
-                                            0., FALSE,
-                                            INFINITY, FALSE)
+                                            0., false,
+                                            INFINITY, false)
              / 1000.;
       if (isnan (*ec2))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -337,12 +337,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ecu2 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                            "_1992_1_1_materiaux_buffer_ecu2")),
-                                             0., FALSE,
-                                             INFINITY, FALSE)
+                                             0., false,
+                                             INFINITY, false)
               / 1000.;
       if (isnan (*ecu2))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -358,11 +358,11 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *n = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                               "_1992_1_1_materiaux_buffer_n")),
-                                          0., FALSE,
-                                          INFINITY, FALSE);
+                                          0., false,
+                                          INFINITY, false);
       if (isnan (*n))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -378,12 +378,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ec3 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                             "_1992_1_1_materiaux_buffer_ec3")),
-                                            0., FALSE,
-                                            INFINITY, FALSE)
+                                            0., false,
+                                            INFINITY, false)
              / 1000.;
       if (isnan (*ec3))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -399,12 +399,12 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *ecu3 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                            "_1992_1_1_materiaux_buffer_ecu3")),
-                                             0., FALSE,
-                                             INFINITY, FALSE)
+                                             0., false,
+                                             INFINITY, false)
               / 1000.;
       if (isnan (*ecu3))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -420,11 +420,11 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *nu = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                              "_1992_1_1_materiaux_buffer_nu")),
-                                           0., TRUE,
-                                           0.5, FALSE);
+                                           0., true,
+                                           0.5, false);
       if (isnan (*nu))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -447,10 +447,10 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   if (UI_BET.materiau == NULL)
   {
     if ((strcmp (*nom, "") == 0) ||
-        (EF_materiaux_cherche_nom (p, *nom, FALSE)))
+        (EF_materiaux_cherche_nom (p, *nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
-      ok = FALSE;
+      ok = false;
     }
     else
     {
@@ -459,17 +459,17 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   }
   else if ((strcmp(*nom, "") == 0) || 
     ((strcmp (UI_BET.materiau->nom, *nom) != 0) &&
-     (EF_materiaux_cherche_nom (p, *nom, FALSE))))
+     (EF_materiaux_cherche_nom (p, *nom, false))))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
-    ok = FALSE;
+    ok = false;
   }
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
   }
   
-  if (ok == FALSE)
+  if (!ok)
   {
     free (*nom);
   }
@@ -723,7 +723,7 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   mat = UI_BET.materiau;
   if (mat != NULL)
   {
-    beton_data = UI_BET.materiau->data;
+    beton_data = (Materiau_Beton *) UI_BET.materiau->data;
   }
   else
   {
@@ -1028,24 +1028,24 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
  * \param p : la variable projet,
  * \param materiau : materiau à modifier. NULL si nouveau matériau,
  * \return
- *   Succès : TRUE.\n
- *   Echec : FALSE :
+ *   Succès : true.\n
+ *   Echec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1992_1_1_gtk_materiaux (Projet      *p,
                          EF_Materiau *materiau)
 {
   Materiau_Beton *beton_data;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   
   if (UI_BET.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_BET.window));
     if (UI_BET.materiau == materiau)
     {
-      return TRUE;
+      return true;
     }
   }
   else
@@ -1054,7 +1054,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
     BUGCRIT (gtk_builder_add_from_resource (UI_BET.builder,
                                   "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui",
                                            NULL) != 0,
-            FALSE,
+            false,
             (gettext ("La génération de la fenêtre %s a échouée.\n"),
                       "Ajout Matériau Béton"); )
     gtk_builder_connect_signals (UI_BET.builder, p);
@@ -1094,12 +1094,12 @@ _1992_1_1_gtk_materiaux (Projet      *p,
     gchar tmp[30];
     
     BUGCRIT (materiau->type == MATERIAU_BETON,
-             FALSE,
+             false,
              (gettext ("Le matériau n'est pas en béton.\n")); )
     gtk_window_set_title (GTK_WINDOW (UI_BET.window),
                           gettext ("Modification d'un matériau béton"));
     UI_BET.materiau = materiau;
-    beton_data = materiau->data;
+    beton_data = (Materiau_Beton *) materiau->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                  gtk_builder_get_object (UI_BET.builder,
@@ -1214,7 +1214,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
   gtk_window_set_transient_for (GTK_WINDOW (UI_BET.window),
                                 GTK_WINDOW (UI_GTK.window));
   
-  return TRUE;
+  return true;
 }
 
 

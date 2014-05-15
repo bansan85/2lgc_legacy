@@ -21,7 +21,7 @@
 
 #include "common_projet.hpp"
 
-gboolean _1990_action_init(Projet *p) __attribute__((__warn_unused_result__));
+bool _1990_action_init(Projet *p) __attribute__((__warn_unused_result__));
 
 #endif
 

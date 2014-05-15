@@ -21,7 +21,7 @@
 #include <libintl.h>
 #include <math.h>
 #include <string.h>
-#include <gmodule.h>
+#include <glib.h>
 
 #include <memory>
 
@@ -81,7 +81,7 @@ _1993_1_1_materiaux_ajout (Projet     *p,
   BUG (EF_materiaux_insert (p, mat),
        NULL,
        delete materiau_nouveau->nom;
-         delete mat->data;
+         delete (Materiau_Acier *) mat->data;
          delete mat; )
   
   return mat;
@@ -98,12 +98,12 @@ _1993_1_1_materiaux_ajout (Projet     *p,
  * \param e : nouvelle valeur de e, peut être NAN.
  * \param nu : nouvelle valeur de nu, peut être NAN.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - materiau == NULL.
  */
-gboolean
+bool
 _1993_1_1_materiaux_modif (Projet      *p,
                            EF_Materiau *materiau,
                            char        *nom,
@@ -114,10 +114,10 @@ _1993_1_1_materiaux_modif (Projet      *p,
 {
   Materiau_Acier *data_acier;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (materiau, "%p", materiau, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (materiau, "%p", materiau, false)
   BUGCRIT (materiau->type == MATERIAU_ACIER,
-           FALSE,
+           false,
            (gettext ("Le matériau n'est pas en acier.\n")); )
   
   data_acier = (Materiau_Acier *) materiau->data;
@@ -126,16 +126,16 @@ _1993_1_1_materiaux_modif (Projet      *p,
   {
     char *tmp;
     
-    INFO (!EF_materiaux_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_materiaux_cherche_nom (p, nom, false),
+          false,
           (gettext ("Le matériau %s existe déjà.\n"), nom); )
     tmp = materiau->nom;
     BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                materiau->nom = tmp; )
     free (tmp);
-    BUG (EF_materiaux_repositionne (p, materiau), FALSE)
+    BUG (EF_materiaux_repositionne (p, materiau), false)
   }
   
   if (!isnan (m_g (fy)))
@@ -174,13 +174,13 @@ _1993_1_1_materiaux_modif (Projet      *p,
                                                &liste_barres_dep,
                                                NULL,
                                                NULL,
-                                               FALSE),
-         FALSE)
+                                               false),
+         false)
     liste_materiaux.clear ();
     
     if (!liste_barres_dep->empty ())
     {
-      BUG (EF_calculs_free (p), FALSE, delete liste_barres_dep; )
+      BUG (EF_calculs_free (p), false, delete liste_barres_dep; )
     }
     
     delete liste_barres_dep;
@@ -194,7 +194,7 @@ _1993_1_1_materiaux_modif (Projet      *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 

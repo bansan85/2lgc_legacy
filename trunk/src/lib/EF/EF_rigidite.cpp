@@ -31,14 +31,14 @@
  * \brief Initialise à NULL les différentes matrices de rigidité.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_rigidite_init (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->calculs.m_part = NULL;
   p->calculs.m_comp = NULL;
@@ -51,7 +51,7 @@ EF_rigidite_init (Projet *p)
   p->calculs.n_comp = NULL;
   p->calculs.n_part = NULL;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -59,16 +59,16 @@ EF_rigidite_init (Projet *p)
  * \brief Libère la liste contenant la matrice de rigidité.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_rigidite_free (Projet *p)
 {
   uint32_t i;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   cholmod_free_triplet (&p->calculs.t_part, p->calculs.c);
   p->calculs.t_part = NULL;
@@ -109,7 +109,7 @@ EF_rigidite_free (Projet *p)
     p->calculs.n_part = NULL;
   }
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -48,8 +48,8 @@
  * \param p : la variable projet,
  * \param action : l'action qui contiendra la charge,
  * \param barres : liste des barres qui supportera la charge,
- * \param repere_local : TRUE si les charges doivent être prises dans le repère
- *                       local, FALSE pour le repère global,
+ * \param repere_local : true si les charges doivent être prises dans le repère
+ *                       local, false pour le repère global,
  * \param a : position en mètre de la charge par rapport au début de la barre,
  * \param fx : force suivant l'axe x en N,
  * \param fy : force suivant l'axe y en N,
@@ -71,7 +71,7 @@ Charge *
 EF_charge_barre_ponctuelle_ajout (Projet     *p,
                                   Action     *action,
                                   std::list <EF_Barre *> *barres,
-                                  gboolean    repere_local,
+                                  bool        repere_local,
                                   Flottant    a,
                                   Flottant    fx,
                                   Flottant    fy,
@@ -118,7 +118,7 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
   
   charge->type = CHARGE_BARRE_PONCTUELLE;
   charge_d->barres.assign (barres->begin (), barres->end ());
-  charge_d->repere_local = repere_local == TRUE;
+  charge_d->repere_local = repere_local;
   charge_d->position = a;
   charge_d->fx = fx;
   charge_d->fy = fy;
@@ -210,8 +210,8 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
  * \param ma : pointeur qui contiendra le moment au début de la barre,
  * \param mb : pointeur qui contiendra le moment à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - infos == NULL,
  *     - ma == NULL,
@@ -220,7 +220,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
                                uint16_t       discretisation,
                                double         a,
@@ -232,21 +232,21 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   EF_Noeud *debut, *fin;
   double    l, G, J;
 
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (infos, "%p", infos, FALSE)
-  BUGPARAM (ma, "%p", ma, FALSE)
-  BUGPARAM (mb, "%p", mb, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (infos, "%p", infos, false)
+  BUGPARAM (ma, "%p", ma, false)
+  BUGPARAM (mb, "%p", mb, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
-        FALSE,
+        false,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (!(a < 0.),
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
 
@@ -284,18 +284,18 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
                   l); )
   
-  G = m_g (EF_materiaux_G (barre->materiau, FALSE));
+  G = m_g (EF_materiaux_G (barre->materiau, false));
   J = m_g (EF_sections_j (barre->section));
   
-  BUG (!isnan (G), FALSE)
-  BUG (!isnan (J), FALSE)
+  BUG (!isnan (G), false)
+  BUG (!isnan (J), false)
   
   // Pour une section section constante, les moments valent :\end{verbatim}
   // \begin{displaymath}
@@ -317,7 +317,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   }
   *ma = mx - *mb;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -337,15 +337,15 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
  * \param phib : pointeur qui contiendra l'angle à la fin de la barre,
  *               ne peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - phia == NULL,
  *     - phib == NULL,
  *     - discretisation>barre->discretisation_element,
  *     - a < 0. ou a > l.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
                                           uint16_t  discretisation,
                                           double    a,
@@ -357,16 +357,16 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   EF_Noeud *debut, *fin;
   double    l, b, E, I;
 
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (phia, "%p", phia, FALSE)
-  BUGPARAM (phib, "%p", phib, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (phia, "%p", phia, false)
+  BUGPARAM (phib, "%p", phib, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -421,9 +421,9 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
                   "La longueur de la barre est de %f m.\n"),
                   a,
@@ -432,8 +432,8 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
-  BUG (!isnan (I), FALSE)
-  BUG (!isnan (E), FALSE)
+  BUG (!isnan (I), false)
+  BUG (!isnan (E), false)
   
   // Pour une section constante, les angles valent :\end{verbatim}
   // \begin{align*}
@@ -449,7 +449,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   *phib = fz * a / (6 * E * I * l) * (l * l - a * a) -
             my / (6 * E * I * l) * (l * l - 3 * a * a);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -467,15 +467,15 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
  * \param phia : pointeur qui contiendra l'angle au début de la barre,
  * \param phib : pointeur qui contiendra l'angle à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - phia == NULL,
  *     - phib == NULL,
  *     - discretisation>barre->discretisation_element,
  *     - a < 0. ou a > l.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
                                           uint16_t  discretisation,
                                           double    a,
@@ -487,16 +487,16 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   EF_Noeud *debut, *fin;
   double    l, b, E, I;
   
-  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
-  BUGPARAM (phia, "%p", phia, FALSE)
-  BUGPARAM (phib, "%p", phib, FALSE)
+  BUGPARAM (phia, "%p", phia, false)
+  BUGPARAM (phib, "%p", phib, false)
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -550,9 +550,9 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
                   "La longueur de la barre est de %f m.\n"),
                   a,
@@ -561,8 +561,8 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
-  BUG (!isnan (E), FALSE)
-  BUG (!isnan (I), FALSE)
+  BUG (!isnan (E), false)
+  BUG (!isnan (I), false)
   
   // Pour une section constante, les angles valent :\end{verbatim}
   // \begin{displaymath}
@@ -578,7 +578,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   *phib = -fy * a / (6 * E * I * l) * (l * l - a * a) -
             mz / (6 * E * I * l) * (l * l - 3 * a * a);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -594,15 +594,15 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
  * \param max : moment au début de la barre,
  * \param mbx : moment à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - barre == NULL,
  *     - discretisation>barre->discretisation_element,
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
                                     EF_Barre *barre,
                                     uint16_t  discretisation,
@@ -615,20 +615,20 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   double         l;
   double         G, debut_barre, J;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
-  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
+  BUGPARAM (barre, "%p", barre, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   infos = &(barre->info_EF[discretisation]);
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
-        FALSE,
+        false,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -678,18 +678,18 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
                   "La longueur de la barre est de %f m.\n"),
                   a,
                   l); )
   
-  G = m_g (EF_materiaux_G (barre->materiau, FALSE));
+  G = m_g (EF_materiaux_G (barre->materiau, false));
   J = m_g (EF_sections_j (barre->section));
-  BUG (!isnan (G), FALSE)
-  BUG (!isnan (J), FALSE)
+  BUG (!isnan (G), false)
+  BUG (!isnan (J), false)
   
   if (errrel (infos->kBx, MAXDOUBLE))
   {
@@ -701,7 +701,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
            max / (G * J),
            0., 0., 0., 0., 0.,
            debut_barre),
-         FALSE)
+         false)
     BUG (common_fonction_ajout_poly (
            fonction,
            a,
@@ -710,7 +710,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
            -mbx / (G * J),
            0., 0., 0., 0., 0.,
            debut_barre),
-         FALSE)
+         false)
   }
   else
   {
@@ -722,7 +722,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
            max / (G * J),
            0., 0., 0., 0., 0.,
            debut_barre),
-         FALSE)
+         false)
     BUG (common_fonction_ajout_poly (
            fonction,
            a,
@@ -731,7 +731,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
            -mbx / (G * J),
            0., 0., 0., 0., 0.,
            debut_barre),
-         FALSE)
+         false)
   }
   
   // Pour une section section constante, les moments valent :
@@ -749,7 +749,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   // \textrm{ pour x variant de a à L}\end{align*}\begin{verbatim}
   // FinSi
   
-  return TRUE;
+  return true;
 }
 
 
@@ -768,8 +768,8 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
  * \param may : moment au début de la barre,
  * \param mby : moment à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - f_rotation == NULL,
  *     - f_deform == NULL,
  *     - barre == NULL,
@@ -777,7 +777,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
                                     Fonction *f_deform,
                                     EF_Barre *barre,
@@ -792,16 +792,16 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   double    l, b;
   double    E, debut_barre, I;
   
-  BUGPARAM (f_rotation, "%p", f_rotation, FALSE)
-  BUGPARAM (f_deform, "%p", f_deform, FALSE)
-  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (f_rotation, "%p", f_rotation, false)
+  BUGPARAM (f_deform, "%p", f_deform, false)
+  BUGPARAM (barre, "%p", barre, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -902,9 +902,9 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
                   "La longueur de la barre est de %f m.\n"),
                   a,
@@ -913,8 +913,8 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
-  BUG (!isnan (E), FALSE)
-  BUG (!isnan (I), FALSE)
+  BUG (!isnan (E), false)
+  BUG (!isnan (I), false)
   
   BUG (common_fonction_ajout_poly (
          f_rotation,
@@ -925,7 +925,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          fz * b / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          a,
@@ -935,7 +935,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          -fz * a / (2 * E* I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          0.,
@@ -945,7 +945,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          my / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          a,
@@ -955,7 +955,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          my / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          0.,
@@ -965,7 +965,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          (may + mby) / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   
   BUG (common_fonction_ajout_poly (
          f_deform,
@@ -977,7 +977,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          -fz * b / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          a,
@@ -988,7 +988,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          fz * a / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          0.,
@@ -999,7 +999,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          -my / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          a,
@@ -1010,7 +1010,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          -my / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          0.,
@@ -1021,7 +1021,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
          -(mby + may) / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   
   // Pour une section constante, les rotations valent :\end{verbatim}
   // \begin{align*}
@@ -1059,7 +1059,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   //          M_{Ay}}{L} \cdot x^2 \right) &
   //          &\textrm{ pour x variant de a à L}\end{align*}\begin{verbatim}
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1078,8 +1078,8 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
  * \param maz : moment au début de la barre,
  * \param mbz : moment à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - f_rotation == NULL,
  *     - f_deform == NULL,
  *     - barre == NULL,
@@ -1087,7 +1087,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
                                     Fonction *f_deform,
                                     EF_Barre *barre,
@@ -1102,16 +1102,16 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   double    l, b;
   double    E, debut_barre, I;
   
-  BUGPARAM (f_rotation, "%p", f_rotation, FALSE)
-  BUGPARAM (f_deform, "%p", f_deform, FALSE)
-  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (f_rotation, "%p", f_rotation, false)
+  BUGPARAM (f_deform, "%p", f_deform, false)
+  BUGPARAM (barre, "%p", barre, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -1151,9 +1151,9 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
                   l); )
@@ -1161,8 +1161,8 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
-  BUG (!isnan (E), FALSE)
-  BUG (!isnan (I), FALSE)
+  BUG (!isnan (E), false)
+  BUG (!isnan (I), false)
   
   BUG (common_fonction_ajout_poly (
          f_rotation,
@@ -1173,7 +1173,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          -fy * b / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          a,
@@ -1183,7 +1183,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          fy * a / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          0.,
@@ -1193,7 +1193,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          mz / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          a,
@@ -1203,7 +1203,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          mz / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_rotation,
          0.,
@@ -1213,7 +1213,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          (maz + mbz) / (2 * E * I * l),
          0., 0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   
   BUG (common_fonction_ajout_poly (
          f_deform,
@@ -1225,7 +1225,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          -fy * b / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          a,
@@ -1236,7 +1236,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          fy * a / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          0.,
@@ -1247,7 +1247,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          mz / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          a,
@@ -1258,7 +1258,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          mz / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   BUG (common_fonction_ajout_poly (
          f_deform,
          0.,
@@ -1269,9 +1269,9 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
          (mbz + maz) / (6 * E * I * l),
          0., 0., 0.,
          debut_barre),
-       FALSE)
+       false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1285,15 +1285,15 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
  * \param fax : effort normal au début de la barre,
  * \param fbx : effort normal à la fin de la barre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - fonction == NULL,
  *     - discretisation>barre->discretisation_element,
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_n (Fonction *fonction,
                               EF_Barre *barre,
                               uint16_t  discretisation,
@@ -1305,15 +1305,15 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
   double    l, debut_barre;
   double    E, S;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
-  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
+  BUGPARAM (barre, "%p", barre, false)
   INFO (discretisation <= barre->discretisation_element,
-        FALSE,
+        false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
                   barre->discretisation_element); )
   INFO (a >= 0.,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
                   a); )
   
@@ -1354,17 +1354,17 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), FALSE)
+  BUG (!isnan (l), false)
   INFO (a <= l,
-        FALSE,
+        false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
                   a,
                   l); )
   
   E = m_g (EF_materiaux_E (barre->materiau));
   S = m_g (EF_sections_s (barre->section));
-  BUG (!isnan (E), FALSE)
-  BUG (!isnan (S), FALSE)
+  BUG (!isnan (E), false)
+  BUG (!isnan (S), false)
   
   // Pour une section constante, les déformations valent :\end{verbatim}
   // \begin{align*}
@@ -1381,7 +1381,7 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
           fax / (E * S),
           0., 0., 0., 0., 0.,
           debut_barre),
-        FALSE)
+        false)
    BUG (common_fonction_ajout_poly (
           fonction,
           a,
@@ -1390,9 +1390,9 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
           -fbx / (E * S),
           0., 0., 0., 0., 0.,
           debut_barre),
-        FALSE)
+        false)
    
-   return TRUE;
+   return true;
 }
 
 
@@ -1405,11 +1405,11 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
  * \param barres : la liste de pointers de type EF_Barre devant être retirés,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - charge == NULL.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_enleve_barres (Charge                 *charge,
                                           std::list <EF_Barre *> *barres,
                                           Projet                 *p)
@@ -1417,7 +1417,7 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge                 *charge,
   std::list <EF_Barre *>::iterator it;
   Charge_Barre_Ponctuelle *charge_d;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, false)
   charge_d = (Charge_Barre_Ponctuelle *) charge->data;
   
   it = barres->begin ();
@@ -1457,9 +1457,9 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge                 *charge,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1467,23 +1467,23 @@ EF_charge_barre_ponctuelle_enleve_barres (Charge                 *charge,
  * \brief Libère une charge ponctuelle sur barre.
  * \param charge : la charge à libérer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - charge == NULL.
  */
-gboolean
+bool
 EF_charge_barre_ponctuelle_free (Charge *charge)
 {
   Charge_Barre_Ponctuelle *charge_d;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, false)
   charge_d = (Charge_Barre_Ponctuelle *) charge->data;
   
   free (charge->nom);
   delete charge_d;
   delete charge;
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

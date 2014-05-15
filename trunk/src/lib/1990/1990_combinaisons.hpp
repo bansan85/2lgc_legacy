@@ -22,33 +22,33 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean _1990_combinaisons_init   (Projet *p)
+bool     _1990_combinaisons_init   (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_genere (Projet *p)
+bool     _1990_combinaisons_genere (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_free   (Projet *p)
-                                       __attribute__((__warn_unused_result__));
-
-gboolean _1990_combinaisons_eluequ_equ_seul   (Projet *p)
-                                       __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_eluequ_equ_resist (Projet *p)
+bool     _1990_combinaisons_free   (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_combinaisons_elustrgeo_1 (Projet *p)
+bool     _1990_combinaisons_eluequ_equ_seul   (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_elustrgeo_2 (Projet *p)
-                                       __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_elustrgeo_3 (Projet *p)
+bool     _1990_combinaisons_eluequ_equ_resist (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_combinaisons_elustrgeo_6_10   (Projet *p)
+bool     _1990_combinaisons_elustrgeo_1 (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
+bool     _1990_combinaisons_elustrgeo_2 (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+bool     _1990_combinaisons_elustrgeo_3 (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_combinaisons_eluacc_frequente        (Projet *p)
+bool     _1990_combinaisons_elustrgeo_6_10   (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
+bool     _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
+bool     _1990_combinaisons_eluacc_frequente        (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+bool     _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 void _1990_combinaisons_free_1 (std::list <Combinaison *> *comb);

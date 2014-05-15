@@ -70,7 +70,7 @@ EF_gtk_appuis_ajouter (GtkButton *button,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Appui"); )
   
-  if (EF_appuis_cherche_nom (p, gettext ("Sans nom"), FALSE) == NULL)
+  if (EF_appuis_cherche_nom (p, gettext ("Sans nom"), false) == NULL)
   {
     BUG (appui = EF_appuis_ajout (p,
                                   gettext ("Sans nom"),
@@ -90,7 +90,7 @@ EF_gtk_appuis_ajouter (GtkButton *button,
     BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
              ,
              (gettext ("Erreur d'allocation mémoire.\n")); )
-    while (EF_appuis_cherche_nom (p, nom, FALSE) != NULL)
+    while (EF_appuis_cherche_nom (p, nom, false) != NULL)
     {
       i++;
       free (nom);
@@ -160,7 +160,7 @@ EF_gtk_appuis_supprimer (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
-  BUG (EF_appuis_supprime (appui, TRUE, FALSE, p), )
+  BUG (EF_appuis_supprime (appui, true, false, p), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -208,7 +208,7 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
       gtk_tree_model_get (model, &Iter, 0, &appui, -1);
       
       liste_appuis.push_back (appui);
-      if (_1992_1_1_barres_cherche_dependances (p,
+      if (!_1992_1_1_barres_cherche_dependances (p,
                                                 &liste_appuis,
                                                 NULL,
                                                 NULL,
@@ -220,7 +220,7 @@ EF_gtk_appuis_treeview_key_press (GtkWidget *widget,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                FALSE) == FALSE)
+                                                false))
       {
         EF_gtk_appuis_supprimer (NULL, p);
       }
@@ -269,7 +269,7 @@ EF_gtk_appuis_supprimer_menu_suppr_noeud (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
-  BUG (EF_appuis_supprime (appui, FALSE, TRUE, p), )
+  BUG (EF_appuis_supprime (appui, false, true, p), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -312,7 +312,7 @@ EF_gtk_appuis_supprimer_menu_modif_noeud (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
   
-  BUG (EF_appuis_supprime (appui, FALSE, FALSE, p), )
+  BUG (EF_appuis_supprime (appui, false, false, p), )
   
   return;
 }
@@ -414,7 +414,7 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
     return;
   }
 
-  if (EF_appuis_renomme (appui, new_text, p, FALSE))
+  if (EF_appuis_renomme (appui, new_text, p, false))
   {
     return;
   }
@@ -486,7 +486,7 @@ EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                         UI_APP.builder, "EF_appuis_boutton_supprimer_direct")),
@@ -575,7 +575,7 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
        )
   
   if ((!liste_noeuds_dep->empty ()) ||

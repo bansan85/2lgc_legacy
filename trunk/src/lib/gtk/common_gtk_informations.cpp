@@ -53,8 +53,8 @@ GTK_WINDOW_CLOSE (common, informations);
  * \param code_postal : le code postal du projet,
  * \param ville : la ville du projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - destinataire == NULL,
  *     - adresse == NULL,
@@ -63,36 +63,34 @@ GTK_WINDOW_CLOSE (common, informations);
  *     - interface graphique non initialisée,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_gtk_informations_recupere_donnees (Projet   *p,
                                           char    **destinataire,
                                           char    **adresse,
                                           uint32_t *code_postal,
                                           char    **ville)
 {
-  gboolean       ok = TRUE;
+  bool           ok = true;
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (destinataire, "%p", destinataire, FALSE)
-  BUGPARAM (adresse, "%p", adresse, FALSE)
-  BUGPARAM (code_postal, "%p", code_postal, FALSE)
-  BUGPARAM (ville, "%p", ville, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (destinataire, "%p", destinataire, false)
+  BUGPARAM (adresse, "%p", adresse, false)
+  BUGPARAM (code_postal, "%p", code_postal, false)
+  BUGPARAM (ville, "%p", ville, false)
   BUGCRIT (UI_INFO.builder,
-           FALSE,
+           false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Informations"); )
   
   *code_postal = common_gtk_entry_uint (GTK_ENTRY (gtk_builder_get_object (
                     UI_INFO.builder, "common_informations_entry_code_postal")),
-                                        0,
-                                        TRUE,
-                                        UINT_MAX,
-                                        FALSE);
+                                        0, true,
+                                        UINT_MAX, false);
   if (*code_postal == UINT_MAX)
   {
-    ok = FALSE;
+    ok = false;
   }
   
   textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_INFO.builder,
@@ -110,7 +108,7 @@ common_gtk_informations_recupere_donnees (Projet   *p,
   BUGCRIT (*ville = g_strdup (gtk_entry_buffer_get_text (GTK_ENTRY_BUFFER (
                                        gtk_builder_get_object (UI_INFO.builder,
                                         "common_informations_buffer_ville")))),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (*destinataire);
              free (*adresse); )
@@ -190,7 +188,7 @@ common_gtk_informations_compare_adresse (Ligne_Adresse *a,
   }
   else if (a->population < b->population)
   {
-    return - 1;
+    return -1;
   }
   else
   {
@@ -207,7 +205,7 @@ common_gtk_informations_compare_adresse (Ligne_Adresse *a,
 void
 common_gtk_informations_free_adresse (void *data)
 {
-  Ligne_Adresse *adresse = data;
+  Ligne_Adresse *adresse = (Ligne_Adresse *) data;
   
   BUGPARAM (adresse, "%p", adresse, )
   
@@ -249,7 +247,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   const char *code_postal_tmp, *ville_tmp;
   wchar_t    *code_postal, *ville;
   GList      *list = NULL, *list_parcours;
-  gboolean    f_codepostal; // TRUE si cherche sur la base du code postal.
+  bool        f_codepostal; // true si cherche sur la base du code postal.
   uint32_t    popmin; // La population minimale que doit avoir la ville pour
               // être autorisée à entrer dans la liste des propositions.
   
@@ -265,12 +263,12 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   if (gtk_entry_get_buffer (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                           "common_informations_entry_code_postal"))) == buffer)
   {
-    f_codepostal = TRUE;
+    f_codepostal = true;
   }
   else if (gtk_entry_get_buffer (GTK_ENTRY (gtk_builder_get_object (
                UI_INFO.builder, "common_informations_entry_ville"))) == buffer)
   {
-    f_codepostal = FALSE;
+    f_codepostal = false;
   }
   else
   {
@@ -336,7 +334,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
            g_list_free_full (list, common_gtk_informations_free_adresse);
            free (ville);
            free (code_postal); )
-    BUGCRIT (code_postal2 = malloc (sizeof (wchar_t) * 11),
+    BUGCRIT (code_postal2 = (wchar_t *) malloc (sizeof (wchar_t) * 11),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                fclose (villes);
@@ -345,7 +343,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                free (ville);
                free (code_postal); )
     swprintf (code_postal2, 11, L"%d", codepostal);
-    BUGCRIT (minuscule = malloc (sizeof (wchar_t) *
+    BUGCRIT (minuscule = (wchar_t *) malloc (sizeof (wchar_t) *
                                       (wcslen (artmin) + wcslen (nccenr) + 2)),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
@@ -370,17 +368,8 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
     {
       Ligne_Adresse *adresse;
       
-      BUGCRIT (adresse = malloc (sizeof (Ligne_Adresse)),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 fclose (villes);
-                 free (ligne);
-                 free (code_postal2);
-                 free (minuscule);
-                 g_list_free_full (list, common_gtk_informations_free_adresse);
-                 free (ville);
-                 free (code_postal); )
-      BUGCRIT (adresse->affichage = malloc (sizeof (char) *
+      adresse = new Ligne_Adresse;
+      BUGCRIT (adresse->affichage = (char *) malloc (sizeof (char) *
                                      (wcslen (artmin) + wcslen (nccenr) + 20)),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));
@@ -411,7 +400,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
       // On limite le nombre de villes dans la liste à MAX_VILLES
       if (i > MAX_VILLES)
       {
-        adresse = list->data;
+        adresse = (Ligne_Adresse *) list->data;
         free (adresse->affichage);
         free (adresse->ville);
         free (adresse);
@@ -420,7 +409,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
         i--;
       }
       
-      adresse = list->data;
+      adresse = (Ligne_Adresse *) list->data;
       popmin = adresse->population;
     }
     else
@@ -438,7 +427,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   list_parcours = g_list_last (list);
   while (list_parcours != NULL)
   {
-    Ligne_Adresse *adresse = list_parcours->data;
+    Ligne_Adresse *adresse = (Ligne_Adresse *) list_parcours->data;
     char          *tmp, *ville_tmp2;
     
     BUGCRIT (tmp = g_strdup_printf ("%d", adresse->code_postal),
@@ -760,6 +749,7 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
  * \param user_data : la variable projet.
  * \return TRUE.
  */
+extern "C"
 gboolean
 common_gtk_informations_always_match (GtkEntryCompletion *completion,
                                       const gchar        *key,
@@ -775,29 +765,29 @@ common_gtk_informations_always_match (GtkEntryCompletion *completion,
  *        projet et les caractéristiques.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Echec : FALSE :
+ *   Succès : true.\n
+ *   Echec : false :
  *     - p == NULL,
  *     - Fenêtre graphique déjà initialisée.
  */
-gboolean
+bool
 common_gtk_informations (Projet *p)
 {
   GtkEntryCompletion *completion;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (UI_INFO.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_INFO.window));
-    return TRUE;
+    return true;
   }
   
   UI_INFO.builder = gtk_builder_new ();
   BUGCRIT (gtk_builder_add_from_resource (UI_INFO.builder,
                                  "/org/2lgc/codegui/ui/common_informations.ui",
                                           NULL) != 0,
-          FALSE,
+          false,
           (gettext ("La génération de la fenêtre %s a échouée.\n"),
                     "Informations"); )
   gtk_builder_connect_signals (UI_INFO.builder, p);
@@ -808,7 +798,7 @@ common_gtk_informations (Projet *p)
   
   BUG (UI_INFO.departement =
                   common_text_strtowcs_dup (p->parametres.adresse.departement),
-       FALSE);
+       false);
   UI_INFO.commune = p->parametres.adresse.commune;
   common_gtk_informations_check (NULL, p);
   
@@ -847,7 +837,7 @@ common_gtk_informations (Projet *p)
     char *texte;
     
     BUGCRIT (texte = g_strdup_printf ("%d", p->parametres.adresse.code_postal),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
@@ -887,7 +877,7 @@ common_gtk_informations (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_INFO.window),
                                 GTK_WINDOW (UI_GTK.window));
   
-  return TRUE;
+  return true;
 }
 #endif
 

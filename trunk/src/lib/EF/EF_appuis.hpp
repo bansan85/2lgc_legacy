@@ -23,12 +23,12 @@
 #include "common_projet.hpp"
 
 
-gboolean EF_appuis_init         (Projet       *p)
+bool     EF_appuis_init         (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 EF_Appui* EF_appuis_cherche_nom (Projet       *p,
                                  const char   *nom,
-                                 gboolean      critique)
+                                 bool          critique)
                                        __attribute__((__warn_unused_result__));
 
 EF_Appui *EF_appuis_ajout       (Projet       *p,
@@ -41,23 +41,23 @@ EF_Appui *EF_appuis_ajout       (Projet       *p,
                                  Type_EF_Appui rz)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_appuis_edit         (EF_Appui     *appui,
+bool     EF_appuis_edit         (EF_Appui     *appui,
                                  uint8_t       x,
                                  Type_EF_Appui type_x,
                                  Projet       *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_appuis_renomme      (EF_Appui     *appui,
+bool     EF_appuis_renomme      (EF_Appui     *appui,
                                  const char   *nom,
                                  Projet       *p,
-                                 gboolean      critique)
+                                 bool          critique)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_appuis_supprime     (EF_Appui     *appui,
-                                 gboolean      annule_si_utilise,
-                                 gboolean      supprime,
+bool     EF_appuis_supprime     (EF_Appui     *appui,
+                                 bool          annule_si_utilise,
+                                 bool          supprime,
                                  Projet       *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_appuis_free         (Projet       *p)
+bool     EF_appuis_free         (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif
