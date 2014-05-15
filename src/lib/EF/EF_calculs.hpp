@@ -22,29 +22,29 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean EF_calculs_initialise     (Projet        *p)
+bool     EF_calculs_initialise     (Projet        *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_calculs_genere_mat_rig (Projet        *p)
+bool     EF_calculs_genere_mat_rig (Projet        *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
+bool     EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
                                     double         phia,
                                     double         phib,
                                     double        *ma,
                                     double        *mb)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_calculs_moment_hyper_z (Barre_Info_EF *infos,
+bool     EF_calculs_moment_hyper_z (Barre_Info_EF *infos,
                                     double         phia,
                                     double         phib,
                                     double        *ma,
                                     double        *mb)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_calculs_resoud_charge  (Projet        *p,
+bool     EF_calculs_resoud_charge  (Projet        *p,
                                     Action        *action)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_calculs_free           (Projet        *p);
+bool     EF_calculs_free           (Projet        *p);
 
 #endif
 

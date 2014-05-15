@@ -33,34 +33,34 @@
  * \brief Divise un tronçon en deux à la position coupure. Si la coupure est
  *        en dehors de la borne de validité actuelle de la fonction, les bornes
  *        s'en trouvent modifiées. Si la coupure correspond déjà à une jonction
- *        entre deux tronçons, la fonction ne fait rien et renvoie TRUE. Si la
+ *        entre deux tronçons, la fonction ne fait rien et renvoie true. Si la
  *        coupure à lieu en dehors des bornes de la fonction, le nouvel
  *        intervalle est remplit par une fonction vide.
  * \param fonction : la variable contenant la fonction,
  * \param coupure : position de la coupure.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - fonction->nb_troncons == 0,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_fonction_scinde_troncon (Fonction *fonction,
                                 double    coupure)
 {
   uint16_t i;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
   INFO (fonction->nb_troncons,
-        FALSE,
+        false,
         (gettext ("Impossible de scinder une fonction vide\n")); )
   
   // Si la coupure est égale au début du premier tronçon Alors
   //   Fin.
   if (errrel (fonction->troncons[0].debut_troncon, coupure))
   {
-    return TRUE;
+    return true;
   }
   // Sinon Si la coupure est inférieure au début du premier troncon Alors
   //   Insertion d'un tronçon en première position.
@@ -69,7 +69,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
   {
     BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                               (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     fonction->nb_troncons++;
     for (i = (uint16_t) (fonction->nb_troncons - 1U); i > 0; i--)
@@ -87,7 +87,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
     fonction->troncons[0].x4 = 0.;
     fonction->troncons[0].x5 = 0.;
     fonction->troncons[0].x6 = 0.;
-    return TRUE;
+    return true;
   }
   else
   {
@@ -106,7 +106,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
     {
       if (errrel (fonction->troncons[i].fin_troncon, coupure))
       {
-        return TRUE;
+        return true;
       }
       else if (fonction->troncons[i].fin_troncon > coupure)
       {
@@ -114,7 +114,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
         
         BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                               (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-                 FALSE,
+                 false,
                  (gettext ("Erreur d'allocation mémoire.\n")); )
         fonction->nb_troncons++;
         for (j = (uint16_t) (fonction->nb_troncons - 1U); j > i; j--)
@@ -126,7 +126,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
         fonction->troncons[i + 1].debut_troncon = coupure;
         fonction->troncons[i].fin_troncon = coupure;
         
-        return TRUE;
+        return true;
       }
     }
   // Si la position de la coupure est au-delà à la borne supérieure du dernier
@@ -137,7 +137,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
   // FinSi
     BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                               (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     fonction->nb_troncons++;
     fonction->troncons[fonction->nb_troncons - 1].debut_troncon =
@@ -151,7 +151,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
     fonction->troncons[fonction->nb_troncons-1].x5 = 0.;
     fonction->troncons[fonction->nb_troncons-1].x6 = 0.;
     
-    return TRUE;
+    return true;
   }
 }
 
@@ -178,14 +178,14 @@ common_fonction_scinde_troncon (Fonction *fonction,
  * \param t : modifie les coefficients ci-dessus afin d'effectuer une
  *                 translation de la fonction de 0 à t.
  *\return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - fin_troncon < debut_troncon,
  *     - en cas d'erreur d'allocation mémoire,
  *     - en cas d'erreur due à une fonction interne.
  */
-gboolean
+bool
 common_fonction_ajout_poly (Fonction *fonction,
                             double    debut_troncon,
                             double    fin_troncon,
@@ -200,17 +200,17 @@ common_fonction_ajout_poly (Fonction *fonction,
 {
   double x0_t, x1_t, x2_t, x3_t, x4_t, x5_t, x6_t;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
   // Si fin_troncon == debut_troncon Alors
   //   Fin.
   // FinSi
   if (errrel (fin_troncon, debut_troncon))
   {
-    return TRUE;
+    return true;
   }
   
   INFO (fin_troncon > debut_troncon,
-        FALSE,
+        false,
         (gettext ("Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"),
                   debut_troncon,
                   fin_troncon); )
@@ -254,7 +254,7 @@ common_fonction_ajout_poly (Fonction *fonction,
   if (fonction->nb_troncons == 0)
   {
     BUGCRIT (fonction->troncons = (Troncon *) malloc (sizeof (Troncon)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     fonction->nb_troncons = 1;
     fonction->troncons[0].debut_troncon = debut_troncon;
@@ -267,7 +267,7 @@ common_fonction_ajout_poly (Fonction *fonction,
     fonction->troncons[0].x5 = x5_t;
     fonction->troncons[0].x6 = x6_t;
     
-    return TRUE;
+    return true;
   }
   // Sinon
   //   Scission de la fonction à debut_troncon. Pour rappel, si la scission existe déjà
@@ -281,13 +281,13 @@ common_fonction_ajout_poly (Fonction *fonction,
   {
     uint16_t i = 0;
     
-    BUG (common_fonction_scinde_troncon (fonction, debut_troncon), FALSE)
-    BUG (common_fonction_scinde_troncon (fonction, fin_troncon), FALSE)
+    BUG (common_fonction_scinde_troncon (fonction, debut_troncon), false)
+    BUG (common_fonction_scinde_troncon (fonction, fin_troncon), false)
     while ((i < fonction->nb_troncons))
     {
       if (errrel (fonction->troncons[i].debut_troncon, fin_troncon))
       {
-        return TRUE;
+        return true;
       }
       else if ((errrel (fonction->troncons[i].debut_troncon, debut_troncon)) ||
                (fonction->troncons[i].debut_troncon > debut_troncon))
@@ -302,7 +302,7 @@ common_fonction_ajout_poly (Fonction *fonction,
       }
       i++;
     }
-    return TRUE;
+    return true;
   }
 }
 
@@ -313,21 +313,21 @@ common_fonction_ajout_poly (Fonction *fonction,
  * \param fonction_a_ajouter : fonction à ajouter,
  * \param multi : coefficient multiplicateur de la fonction à ajouter.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - fonction_a_ajouter == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_fonction_ajout_fonction (Fonction *fonction,
                                 Fonction *fonction_a_ajouter,
                                 double    multi)
 {
   uint16_t i;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
-  BUGPARAM (fonction_a_ajouter, "%p", fonction_a_ajouter, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
+  BUGPARAM (fonction_a_ajouter, "%p", fonction_a_ajouter, false)
   
   for (i = 0; i < fonction_a_ajouter->nb_troncons; i++)
   {
@@ -343,10 +343,10 @@ common_fonction_ajout_fonction (Fonction *fonction,
                                  multi*fonction_a_ajouter->troncons[i].x5,
                                  multi*fonction_a_ajouter->troncons[i].x6,
                                  0.),
-         FALSE)
+         false)
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -355,13 +355,12 @@ common_fonction_ajout_fonction (Fonction *fonction,
  * \param fonction : fonction à afficher,
  * \param index : index de la fonction fonction. Peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-static
-gboolean
+bool
 common_fonction_compacte (Fonction *fonction,
                           Fonction *index)
 {
@@ -369,11 +368,11 @@ common_fonction_compacte (Fonction *fonction,
   uint16_t j; /* Nombre de tronçons à conserver */
   uint16_t k; /* Numéro du précédent tronçon identique */
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
   
   if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
   {
-    return TRUE;
+    return true;
   }
   
   j = 1;
@@ -422,17 +421,17 @@ common_fonction_compacte (Fonction *fonction,
   }
   BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                                          sizeof (Troncon) * j),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   if (index != NULL)
   {
     BUGCRIT (index->troncons = (Troncon *) realloc (index->troncons,
                                                     sizeof (Troncon) * j),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -449,7 +448,6 @@ common_fonction_compacte (Fonction *fonction,
  * \param c : valeur de c de la fonction a*x²+b*x+c.
  * \return Rien.
  */
-static
 void
 common_fonction_ax2_bx_c (double      x1,
                           long double y1,
@@ -577,14 +575,13 @@ common_fonction_y (Fonction *fonction,
  * \param zero_2 : deuxième abscisse où l'ordonnée vaut 0. Si un seul zéro est
  *                trouvé, il sera toujours dans zero1 et zero2 vaudra NAN.
  * \return
- *   Succès : FALSE si aucun zéro n'est trouvé,
- *            TRUE si au moins est trouvé.
- *   Échec : FALSE :
+ *   Succès : false si aucun zéro n'est trouvé,
+ *            true si au moins est trouvé.
+ *   Échec : false :
  *     - fonction == NULL,
  *     - maxi <= mini.
  */
-static
-gboolean
+bool
 common_fonction_cherche_zero (Fonction *fonction,
                               double    mini,
                               double    maxi,
@@ -597,17 +594,17 @@ common_fonction_cherche_zero (Fonction *fonction,
   double zero1, zero2;
   double ecart_x;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
   INFO (maxi > mini,
-        FALSE,
+        false,
         (gettext("Borne [%lf,%lf] incorrecte.\n"), mini, maxi); )
   
   xx1_2 = mini;
   xx3_2 = maxi;
   xx2_2 = (xx1_2 + xx3_2) / 2.;
-  BUG (!isnan (yy1 = common_fonction_y (fonction, xx1_2,  1)), FALSE)
-  BUG (!isnan (yy2 = common_fonction_y (fonction, xx2_2,  0)), FALSE)
-  BUG (!isnan (yy3 = common_fonction_y (fonction, xx3_2, -1)), FALSE)
+  BUG (!isnan (yy1 = common_fonction_y (fonction, xx1_2,  1)), false)
+  BUG (!isnan (yy2 = common_fonction_y (fonction, xx2_2,  0)), false)
+  BUG (!isnan (yy3 = common_fonction_y (fonction, xx3_2, -1)), false)
   
   common_fonction_ax2_bx_c (xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
   
@@ -855,10 +852,10 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   if ((isnan (*zero_1)) || (!isnan (*zero_2)))
   {
-    return FALSE;
+    return false;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -875,7 +872,6 @@ common_fonction_cherche_zero (Fonction *fonction,
  *     - val == NULL,
  *     - erreur d'allocation mémoire.
  */
-static
 uint8_t
 common_fonction_caracteristiques (Fonction *fonction,
                                   double  **pos,
@@ -1170,7 +1166,7 @@ common_fonction_caracteristiques (Fonction *fonction,
           // xx1_2 devient égal à xx2_2. Si le signe de xx3_2 est le même que
           // xx2_2, xx3_2 devient égal à xx2_2.
           // La méthode est un peu plus longue mais est moins problématique.
-          while (TRUE)
+          while (true)
           {
             if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
@@ -1274,7 +1270,7 @@ common_fonction_caracteristiques (Fonction *fonction,
           // xx1_2 devient égal à xx2_2. Si le signe de xx3_2 est le même que
           // xx2_2, xx3_2 devient égal à xx2_2.
           // La méthode est un peu plus longue mais est moins problématique.
-          while (TRUE)
+          while (true)
           {
             if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
@@ -1355,7 +1351,7 @@ common_fonction_caracteristiques (Fonction *fonction,
           // que xx2_2, xx1_2 devient égal à xx2_2. Si le signe de xx3_2 est le
           // même que xx2_2, xx3_2 devient égal à xx2_2.
           // La méthode est un peu plus longue mais est moins problématique.
-          while (TRUE)
+          while (true)
           {
             ecart_old = xx3_2 - xx1_2;
             a = common_fonction_y (fonction, xx1_2 + ecart_old / 10., 1) -
@@ -1507,8 +1503,8 @@ common_fonction_caracteristiques (Fonction *fonction,
  * \param decimales_x : nombre de décimales à afficher pour l'abscisse.
  * \param decimales_y : nombre de décimales à afficher pour l'ordonnée.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL,
  *     - Echec de la fonction #common_fonction_caracteristiques
  */
@@ -1522,7 +1518,7 @@ common_fonction_affiche_caract (Fonction *fonction,
   uint8_t nb_val, i;
   char   *retour;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, NULL)
   
   BUG (nb_val = common_fonction_caracteristiques (fonction, &pos, &val), NULL);
   
@@ -1566,18 +1562,18 @@ common_fonction_affiche_caract (Fonction *fonction,
  *        valeur de la fonction pour chaque extrémité du tronçon.
  * \param fonction : fonction à afficher.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonction == NULL.
  */
-gboolean
+bool
 common_fonction_affiche (Fonction *fonction)
 {
   uint16_t i;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
   
-  INFO (fonction->nb_troncons, FALSE, (gettext ("Fonction indéfinie.\n")); )
+  INFO (fonction->nb_troncons, false, (gettext ("Fonction indéfinie.\n")); )
   
   for (i = 0; i < fonction->nb_troncons; i++)
   {
@@ -1609,7 +1605,7 @@ common_fonction_affiche (Fonction *fonction)
         fonction->troncons[i].x6 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon); // NS (nsiqcppstyle)
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1845,13 +1841,13 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
  * \param ponderations : liste des ponderations possibles,
  * \param liste : liste des ponderations sur la base de la variable fonction.
  * \return
- *   Succès : TRUE.\n
+ *   Succès : true.\n
  *   Échec : NULL :
  *     - fonction == NULL,
  *     - ponderations == NULL,
  *     - liste == NULL.
  */
-gboolean
+bool
 common_fonction_conversion_combinaisons (
   Fonction                                 *fonction,
   std::list <std::list <Ponderation *> *>  *ponderations,
@@ -1860,9 +1856,9 @@ common_fonction_conversion_combinaisons (
   std::list <std::list <Ponderation *> *> *list_tmp;
   uint16_t i;
   
-  BUGPARAM (fonction, "%p", fonction, FALSE)
-  BUGPARAM (ponderations, "%p", ponderations, FALSE)
-  BUGPARAM (liste, "%p", liste, FALSE)
+  BUGPARAM (fonction, "%p", fonction, false)
+  BUGPARAM (ponderations, "%p", ponderations, false)
+  BUGPARAM (liste, "%p", liste, false)
   
   list_tmp = new std::list <std::list <Ponderation *> *> ();
   
@@ -1875,7 +1871,7 @@ common_fonction_conversion_combinaisons (
   
   *liste = list_tmp;
   
-  return TRUE;
+  return true;
 }
 
 /**
@@ -2138,8 +2134,8 @@ common_fonction_renvoie (Fonction                                *fonction,
  * \param comb_min : le numéro de la combinaison (dans x0) prépondérante,
  * \param comb_max : le numéro de la combinaison (dans x0) prépondérante.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - fonctions == NULL,
  *     - fonction_min == NULL,
  *     - fonction_max == NULL,
@@ -2147,7 +2143,7 @@ common_fonction_renvoie (Fonction                                *fonction,
  *     - comb_max,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                    Fonction               *fonction_min,
                                    Fonction               *fonction_max,
@@ -2159,11 +2155,11 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
   
   std::list <Fonction *>::iterator it;
   
-  BUGPARAM (fonctions, "%p", fonctions, FALSE)
-  BUGPARAM (fonction_min, "%p", fonction_min, FALSE)
-  BUGPARAM (fonction_max, "%p", fonction_max, FALSE)
-  BUGPARAM (comb_min, "%p", comb_min, FALSE)
-  BUGPARAM (comb_max, "%p", comb_max, FALSE)
+  BUGPARAM (fonctions, "%p", fonctions, false)
+  BUGPARAM (fonction_min, "%p", fonction_min, false)
+  BUGPARAM (fonction_max, "%p", fonction_max, false)
+  BUGPARAM (comb_min, "%p", comb_min, false)
+  BUGPARAM (comb_max, "%p", comb_max, false)
   
 #define FREE_ALL { \
   free (fonction_min->troncons); \
@@ -2184,16 +2180,16 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
   fonction = *it;
   
   BUG (common_fonction_ajout_fonction (fonction_min, fonction, 1.),
-       FALSE,
+       false,
        FREE_ALL)
   BUG (common_fonction_ajout_fonction (fonction_max, fonction, 1.),
-       FALSE,
+       false,
        FREE_ALL)
   BUG (common_fonction_ajout_fonction (comb_min, fonction, 0.),
-       FALSE,
+       false,
        FREE_ALL)
   BUG (common_fonction_ajout_fonction (comb_max, fonction, 0.),
-       FALSE,
+       false,
        FREE_ALL)
   
 #undef FREE_ALL
@@ -2220,13 +2216,13 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
   free (fonction_moins.troncons); \
 }
     BUG (common_fonction_ajout_fonction (&fonction_moins, fonction, 1.),
-         FALSE,
+         false,
          FREE_ALL)
     BUG (common_fonction_ajout_fonction (&fonction_moins, fonction_max, -1.),
-         FALSE,
+         false,
          FREE_ALL)
     BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
-         FALSE,
+         false,
          FREE_ALL)
     for (i = 0; i < fonction_moins.nb_troncons; i++)
     {
@@ -2235,16 +2231,16 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       
       x_base = fonction_moins.troncons[i].debut_troncon;
       BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_scinde_troncon (fonction_max, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_scinde_troncon (comb_max, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_scinde_troncon (&fonction_moins, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       
       x[0] = x_base;
@@ -2291,23 +2287,23 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE,
+               false,
                FREE_ALL)
           BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
-                   FALSE,
+                   false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
           BUG (common_fonction_scinde_troncon (fonction_max, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (comb_max, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           x_base = zero1;
           modif = 1;
@@ -2327,23 +2323,23 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE,
+               false,
                FREE_ALL)
           BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
-                   FALSE,
+                   false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
           BUG (common_fonction_scinde_troncon (fonction_max, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (comb_max, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           
           for (k = 0; k < fonction_max->nb_troncons; k++)
@@ -2373,16 +2369,16 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       {
         tmp = fonction_moins.troncons[i].fin_troncon;
         BUG (common_fonction_scinde_troncon (fonction_max, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         BUG (common_fonction_scinde_troncon (comb_max, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         BUG (common_fonction_scinde_troncon (&fonction_bis, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         BUG (common_fonction_scinde_troncon (&fonction_moins, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         
         for (k = 0; k < fonction_max->nb_troncons; k++)
@@ -2405,7 +2401,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
         }
       }
     }
-    BUG (common_fonction_compacte (fonction_max, comb_max), FALSE, FREE_ALL)
+    BUG (common_fonction_compacte (fonction_max, comb_max), false, FREE_ALL)
     free (fonction_moins.troncons);
     free (fonction_bis.troncons);
     
@@ -2418,15 +2414,15 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
     BUG (common_fonction_ajout_fonction (&fonction_moins,
                                          fonction,
                                          -1.),
-         FALSE,
+         false,
          FREE_ALL)
     BUG (common_fonction_ajout_fonction (&fonction_moins,
                                          fonction_min,
                                          1.),
-         FALSE,
+         false,
          FREE_ALL)
     BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
-         FALSE,
+         false,
          FREE_ALL)
     for (i = 0; i < fonction_moins.nb_troncons; i++)
     {
@@ -2435,14 +2431,14 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       
       x_base = fonction_moins.troncons[i].debut_troncon;
       BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_scinde_troncon (fonction_min, x_base),
-           FALSE,
+           false,
            FREE_ALL)
-      BUG (common_fonction_scinde_troncon (comb_min, x_base), FALSE, FREE_ALL)
+      BUG (common_fonction_scinde_troncon (comb_min, x_base), false, FREE_ALL)
       BUG (common_fonction_scinde_troncon (&fonction_moins, x_base),
-           FALSE,
+           false,
            FREE_ALL)
       
       x[0] = x_base;
@@ -2490,23 +2486,23 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE,
+               false,
                FREE_ALL)
           BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
-                   FALSE,
+                   false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
           BUG (common_fonction_scinde_troncon (fonction_min, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (comb_min, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           x_base = zero1;
           modif = 1;
@@ -2526,23 +2522,23 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE,
+               false,
                FREE_ALL)
           BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
-                   FALSE,
+                   false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
           BUG (common_fonction_scinde_troncon (fonction_min, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (comb_min, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
-               FALSE,
+               false,
                FREE_ALL)
           
           for (k = 0; k < fonction_min->nb_troncons; k++)
@@ -2572,14 +2568,14 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       {
         tmp = fonction_moins.troncons[i].fin_troncon;
         BUG (common_fonction_scinde_troncon (fonction_min, tmp),
-             FALSE,
+             false,
              FREE_ALL)
-        BUG (common_fonction_scinde_troncon (comb_min, tmp), FALSE, FREE_ALL)
+        BUG (common_fonction_scinde_troncon (comb_min, tmp), false, FREE_ALL)
         BUG (common_fonction_scinde_troncon (&fonction_bis, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         BUG (common_fonction_scinde_troncon (&fonction_moins, tmp),
-             FALSE,
+             false,
              FREE_ALL)
         
         for (k = 0; k < fonction_min->nb_troncons; k++)
@@ -2602,7 +2598,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
         }
       }
     }
-    BUG (common_fonction_compacte (fonction_min, comb_min), FALSE, FREE_ALL)
+    BUG (common_fonction_compacte (fonction_min, comb_min), false, FREE_ALL)
     free (fonction_moins.troncons);
     free (fonction_bis.troncons);
     
@@ -2610,7 +2606,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
     num++;
   }
   
-  return TRUE;
+  return true;
 }
 
 

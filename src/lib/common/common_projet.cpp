@@ -63,37 +63,37 @@
  * \brief Libère les allocations mémoires de l'ensemble de la variable projet.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 projet_free (Projet *p)
 {
   // Action doit être libéré avant p->modele.barres
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
-  BUG (EF_calculs_free (p), FALSE)
-  BUG (common_ville_free (p), FALSE)
-  BUG (_1990_action_free (p), FALSE)
-  BUG (_1990_groupe_free (p), FALSE)
-  BUG (_1990_combinaisons_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
+  BUG (common_ville_free (p), false)
+  BUG (_1990_action_free (p), false)
+  BUG (_1990_groupe_free (p), false)
+  BUG (_1990_combinaisons_free (p), false)
   // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
   // il est nécessaire d'avoir accès aux informations contenues dans les
   // noeuds.
-  BUG (EF_calculs_free (p), FALSE)
-  BUG (EF_sections_free (p), FALSE)
-  BUG (EF_noeuds_free (p), FALSE)
-  BUG (_1992_1_1_barres_free (p), FALSE)
-  BUG (EF_appuis_free (p), FALSE)
-  BUG (EF_materiaux_free (p), FALSE)
-  BUG (EF_relachement_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
+  BUG (EF_sections_free (p), false)
+  BUG (EF_noeuds_free (p), false)
+  BUG (_1992_1_1_barres_free (p), false)
+  BUG (EF_appuis_free (p), false)
+  BUG (EF_materiaux_free (p), false)
+  BUG (EF_relachement_free (p), false)
 #ifdef ENABLE_GTK
   UI_RES.tableaux.clear ();
   if (UI_M3D.data != NULL)
   {
-    BUG (m3d_free (p), FALSE)
+    BUG (m3d_free (p), false)
   }
   EF_gtk_resultats_free (p);
   
@@ -104,7 +104,7 @@ projet_free (Projet *p)
   
   delete p;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -193,7 +193,7 @@ projet_init (Norme norme)
   g_object_unref (provider);
 #endif
   
-  BUG (common_ville_set (p, L"37", L"Joué-lès-Tours", FALSE),
+  BUG (common_ville_set (p, L"37", L"Joué-lès-Tours", false),
        NULL,
        projet_free (p); )
   POPWARNING
@@ -248,16 +248,16 @@ gui_window_option_destroy_button (GtkWidget *fenetre)
  *        ...).
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 projet_init_graphique (Projet *p)
 {
   GtkWidget *menu_separator;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   UI_GTK.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_resize (GTK_WINDOW (UI_GTK.window), 800, 600);
@@ -509,7 +509,7 @@ projet_init_graphique (Projet *p)
   UI_ACT.window = NULL;
   UI_GRO.window = NULL;
   
-  return TRUE;
+  return true;
 }
 #endif
 

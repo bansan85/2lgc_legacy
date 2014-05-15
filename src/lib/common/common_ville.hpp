@@ -22,9 +22,9 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean common_ville_init      (Projet   *p)
+bool     common_ville_init      (Projet   *p)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_get_ville (wchar_t  *ligne,
+bool     common_ville_get_ville (wchar_t  *ligne,
                                  uint16_t *cdc,
                                  uint16_t *cheflieu,
                                  uint16_t *reg,
@@ -41,12 +41,12 @@ gboolean common_ville_get_ville (wchar_t  *ligne,
                                  uint32_t *altitude,
                                  uint32_t *population)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_set       (Projet       *p,
+bool     common_ville_set       (Projet       *p,
                                  wchar_t      *departement,
                                  wchar_t      *ville,
-                                 gboolean  graphique_seul)
+                                 bool      graphique_seul)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_free      (Projet       *p)
+bool     common_ville_free      (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

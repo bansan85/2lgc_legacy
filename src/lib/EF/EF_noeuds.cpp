@@ -41,18 +41,18 @@
  * \brief Initialise la liste des noeuds.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_noeuds_init (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->modele.noeuds.clear ();
   
-  return TRUE;
+  return true;
 }
 
 
@@ -61,17 +61,17 @@ EF_noeuds_init (Projet *p)
  * \param noeud : le noeud à étudier,
  * \param point : la position du noeud.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - noeud == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_noeuds_renvoie_position (EF_Noeud *noeud,
                             EF_Point *point)
 {
-  BUGPARAM (noeud, "%p", noeud, FALSE)
-  BUGPARAM (point, "%p", point, FALSE)
+  BUGPARAM (noeud, "%p", noeud, false)
+  BUGPARAM (point, "%p", point, false)
   
   switch (noeud->type)
   {
@@ -83,7 +83,7 @@ EF_noeuds_renvoie_position (EF_Noeud *noeud,
       {
         EF_Point p;
         
-        BUG (EF_noeuds_renvoie_position (tmp->relatif, &p), FALSE)
+        BUG (EF_noeuds_renvoie_position (tmp->relatif, &p), false)
         
         point->x = m_add_f (p.x, tmp->x);
         point->y = m_add_f (p.y, tmp->y);
@@ -104,8 +104,8 @@ EF_noeuds_renvoie_position (EF_Noeud *noeud,
       EF_Point        point1, point2;
       
       BUG (EF_noeuds_renvoie_position (data->barre->noeud_debut, &point1),
-           FALSE)
-      BUG (EF_noeuds_renvoie_position (data->barre->noeud_fin, &point2), FALSE)
+           false)
+      BUG (EF_noeuds_renvoie_position (data->barre->noeud_fin, &point2), false)
       
       point->x = m_add_f (point1.x, m_dot_f (m_sub_f (point2.x, point1.x),
                           data->position_relative_barre));
@@ -118,14 +118,14 @@ EF_noeuds_renvoie_position (EF_Noeud *noeud,
     }
     default :
     {
-      FAILCRIT (FALSE,
+      FAILCRIT (false,
                 (gettext ("Le type de noeud %d est inconnu.\n"),
                           noeud->type); )
       break;
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -326,7 +326,7 @@ EF_noeuds_ajout_noeud_barre (Projet   *p,
  * \brief Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
  * \param p : la variable projet,
  * \param numero : le numéro du noeud.
- * \param critique : si TRUE alors BUGMSG, si FALSE alors return
+ * \param critique : si true alors BUGMSG, si false alors return
  * \return
  *   Succès : pointeur vers le noeud recherché.\n
  *   Échec : NULL :
@@ -336,7 +336,7 @@ EF_noeuds_ajout_noeud_barre (Projet   *p,
 EF_Noeud *
 EF_noeuds_cherche_numero (Projet      *p,
                           unsigned int numero,
-                          gboolean critique)
+                          bool     critique)
 {
   std::list <EF_Noeud *>::iterator it;
   
@@ -374,13 +374,13 @@ EF_noeuds_cherche_numero (Projet      *p,
  * \param y : la nouvelle coordonnée en y, NAN si pas de modification,
  * \param z : la nouvelle coordonnée en z, NAN si pas de modification.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - noeud == NULL,
  *     - noeud->type != NOEUD_LIBRE.
  */
-gboolean
+bool
 EF_noeuds_change_pos_abs (Projet   *p,
                           EF_Noeud *noeud,
                           Flottant  x,
@@ -389,10 +389,10 @@ EF_noeuds_change_pos_abs (Projet   *p,
 {
   EF_Noeud_Libre *point;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (noeud, "%p", noeud, false)
   INFO (noeud->type == NOEUD_LIBRE,
-        FALSE,
+        false,
         (gettext ("Le type du noeud est incorrect.\n")); )
   
   point = (EF_Noeud_Libre *) noeud->data;
@@ -411,8 +411,8 @@ EF_noeuds_change_pos_abs (Projet   *p,
   }
   
 #ifdef ENABLE_GTK
-  BUG (m3d_noeud (&UI_M3D, noeud), FALSE)
-  BUG (m3d_rafraichit (p), FALSE)
+  BUG (m3d_noeud (&UI_M3D, noeud), false)
+  BUG (m3d_rafraichit (p), false)
   
   if (UI_NOE.builder != NULL)
   {
@@ -421,9 +421,9 @@ EF_noeuds_change_pos_abs (Projet   *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -433,14 +433,14 @@ EF_noeuds_change_pos_abs (Projet   *p,
  * \param noeud : noeud à modifier,
  * \param pos : la nouvelle position relative,
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - noeud == NULL,
  *     - noeud->type != NOEUD_BARRE,
  *     - pos > 1.0 ou pos < 0.
  */
-gboolean
+bool
 EF_noeuds_change_pos_relat (Projet   *p,
                             EF_Noeud *noeud,
                             Flottant  pos)
@@ -450,12 +450,12 @@ EF_noeuds_change_pos_relat (Projet   *p,
   double          avant, apres;
   std::list <EF_Noeud *> list;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (noeud, "%p", noeud, false)
   INFO (noeud->type == NOEUD_BARRE,
-        FALSE,
+        false,
         (gettext ("Le type du noeud est incorrect.\n")); )
-  BUGPARAM (m_g (pos), "%lf", (0. <= m_g (pos)) && (m_g (pos) <= 1.), FALSE)
+  BUGPARAM (m_g (pos), "%lf", (0. <= m_g (pos)) && (m_g (pos) <= 1.), false)
   
   info = (EF_Noeud_Barre *) noeud->data;
   
@@ -466,7 +466,7 @@ EF_noeuds_change_pos_relat (Projet   *p,
                   info->barre->nds_inter.end (), 
                   noeud);
   BUGCRIT (it != info->barre->nds_inter.end (),
-           FALSE,
+           false,
            (gettext ("Impossible\n")); )
   if (it == info->barre->nds_inter.begin ())
   {
@@ -526,8 +526,8 @@ EF_noeuds_change_pos_relat (Projet   *p,
   list.push_back (noeud);
   
   BUG (m3d_actualise_graphique (p, &list, NULL),
-       FALSE)
-  BUG (m3d_rafraichit (p), FALSE)
+       false)
+  BUG (m3d_rafraichit (p), false)
   
   
   if (UI_NOE.builder != NULL)
@@ -537,9 +537,9 @@ EF_noeuds_change_pos_relat (Projet   *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -549,12 +549,12 @@ EF_noeuds_change_pos_relat (Projet   *p,
  * \param noeud : noeud à modifier,
  * \param appui : le nouvel appui. NULL signifie aucun appui.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - noeud == NULL.
  */
-gboolean
+bool
 EF_noeuds_change_appui (Projet   *p,
                         EF_Noeud *noeud,
                         EF_Appui *appui)
@@ -563,8 +563,8 @@ EF_noeuds_change_appui (Projet   *p,
   EF_Appui *appui_old = noeud->appui;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (noeud, "%p", noeud, false)
   
   noeud->appui = appui;
   
@@ -587,7 +587,7 @@ EF_noeuds_change_appui (Projet   *p,
       }
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Le type de noeud %d est inconnu.\n"),
                             noeud->type); )
         break;
@@ -619,9 +619,9 @@ EF_noeuds_change_appui (Projet   *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -631,13 +631,13 @@ EF_noeuds_change_appui (Projet   *p,
  * \param noeud : noeud à modifier,
  * \param relatif : le nouveau noeud relatif, NULL si aucun.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - noeud == NULL,
  *     - noeud->type != NOEUD_LIBRE.
  */
-gboolean
+bool
 EF_noeuds_change_noeud_relatif (Projet   *p,
                                 EF_Noeud *noeud,
                                 EF_Noeud *relatif)
@@ -645,17 +645,17 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
   EF_Noeud_Libre *point;
   std::list <EF_Noeud *> liste_noeuds, *noeuds_dep;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (noeud, "%p", noeud, false)
   INFO (noeud->type == NOEUD_LIBRE,
-        FALSE,
+        false,
         (gettext ("Le type du noeud est incorrect.\n")); )
   
   point = (EF_Noeud_Libre *) noeud->data;
   
   if (point->relatif == relatif)
   {
-    return TRUE;
+    return true;
   }
   
   if (relatif != NULL)
@@ -673,15 +673,15 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
                                                NULL,
                                                NULL,
                                                NULL,
-                                               TRUE),
-         FALSE)
+                                               true),
+         false)
     
     if (std::find (noeuds_dep->begin (),
                    noeuds_dep->end (),
                    noeud) != noeuds_dep->end ())
     {
       delete noeuds_dep;
-      FAILINFO (FALSE,
+      FAILINFO (false,
             (gettext ("Le noeud %d est déjà dépendant du noeud %d.\n"),
                       relatif->numero,
                       noeud->numero); )
@@ -703,8 +703,8 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
                                                NULL,
                                                NULL,
                                                NULL,
-                                               TRUE),
-         FALSE)
+                                               true),
+         false)
     liste_noeuds.clear ();
     
     if (std::find (noeuds_dep->begin (), 
@@ -712,7 +712,7 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
                    relatif) != noeuds_dep->end ())
     {
       delete noeuds_dep;
-      FAILINFO (FALSE,
+      FAILINFO (false,
             (gettext ("Le noeud %d est déjà dépendant du noeud %d.\n"),
                       noeud->numero,
                       relatif->numero); )
@@ -726,8 +726,8 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
 #ifdef ENABLE_GTK
   liste_noeuds.push_back (noeud);
   BUG (m3d_actualise_graphique (p, &liste_noeuds, NULL),
-       FALSE)
-  BUG(m3d_rafraichit (p), FALSE)
+       false)
+  BUG(m3d_rafraichit (p), false)
   
   if (UI_NOE.builder != NULL)
   {
@@ -736,9 +736,9 @@ EF_noeuds_change_noeud_relatif (Projet   *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -930,16 +930,16 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
  * \brief Libère l'ensemble des noeuds et la liste les contenant.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_noeuds_free (Projet *p)
 {
   std::list <EF_Noeud *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->modele.noeuds.begin ();
   while (it != p->modele.noeuds.end ())
@@ -949,7 +949,7 @@ EF_noeuds_free (Projet *p)
   }
   p->modele.noeuds.clear ();
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

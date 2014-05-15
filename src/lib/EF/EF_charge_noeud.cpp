@@ -161,11 +161,11 @@ EF_charge_noeud_description (Charge *charge)
  * \param noeuds : la liste de pointers de type EF_Noeud devant être retirés,
  * \param  p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - charge == NULL.
  */
-gboolean
+bool
 EF_charge_noeud_enleve_noeuds (Charge                 *charge,
                                std::list <EF_Noeud *> *noeuds,
                                Projet                 *p)
@@ -173,7 +173,7 @@ EF_charge_noeud_enleve_noeuds (Charge                 *charge,
   std::list <EF_Noeud *>::iterator it;
   Charge_Noeud *charge_d;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, false)
   
   it = noeuds->begin ();
   
@@ -214,9 +214,9 @@ EF_charge_noeud_enleve_noeuds (Charge                 *charge,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -224,23 +224,23 @@ EF_charge_noeud_enleve_noeuds (Charge                 *charge,
  * \brief Libère une charge nodale.
  * \param charge : la charge à libérer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - charge == NULL.
  */
-gboolean
+bool
 EF_charge_noeud_free (Charge *charge)
 {
   Charge_Noeud *charge_d;
   
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (charge, "%p", charge, false)
   charge_d = (Charge_Noeud *) charge->data;
   
   free (charge->nom);
   delete charge_d;
   delete charge;
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

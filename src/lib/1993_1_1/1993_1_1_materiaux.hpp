@@ -30,7 +30,7 @@ EF_Materiau *_1993_1_1_materiaux_ajout (Projet      *p,
                                         Flottant     fy,
                                         Flottant     fu)
                                        __attribute__((__warn_unused_result__));
-gboolean     _1993_1_1_materiaux_modif (Projet      *p,
+bool         _1993_1_1_materiaux_modif (Projet      *p,
                                         EF_Materiau *materiau,
                                         char        *nom,
                                         Flottant     fy,

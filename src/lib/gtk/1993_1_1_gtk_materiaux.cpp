@@ -54,13 +54,13 @@ GTK_WINDOW_CLOSE (_1993_1_1, materiaux);
  * \param e : Module d'élasticité de l'acier en Pa,
  * \param nu : coefficient de poisson
  * \return 
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - l'un des arguments == NULL,
  *     - interface graphique non initialisée,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
                                           char  **nom,
                                           double *fy,
@@ -70,17 +70,17 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
-  gboolean       ok = TRUE;
+  bool           ok = true;
   GtkBuilder    *builder;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (nom, "%p", nom, FALSE)
-  BUGPARAM (fy, "%p", fy, FALSE)
-  BUGPARAM (fu, "%p", fu, FALSE)
-  BUGPARAM (e, "%p", e, FALSE)
-  BUGPARAM (nu, "%p", nu, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (nom, "%p", nom, false)
+  BUGPARAM (fy, "%p", fy, false)
+  BUGPARAM (fu, "%p", fu, false)
+  BUGPARAM (e, "%p", e, false)
+  BUGPARAM (nu, "%p", nu, false)
   BUGCRIT (UI_ACI.builder,
-           FALSE,
+           false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Ajout Matériau Acier"); )
   
@@ -88,26 +88,22 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   
   *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                              "_1993_1_1_materiaux_buffer_fy")),
-                     0.,
-                     FALSE,
-                     INFINITY,
-                     FALSE) * 1000000.;
+                     0., false,
+                     INFINITY, false) * 1000000.;
   if (isnan (*fy))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   if (ok)
   {
     *fu = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                              "_1993_1_1_materiaux_buffer_fu")),
-                       0.,
-                       FALSE,
-                       INFINITY,
-                       FALSE) * 1000000.;
+                       0., false,
+                       INFINITY, false) * 1000000.;
     if (isnan (*fu))
     {
-      ok = FALSE;
+      ok = false;
     }
   }
   
@@ -118,13 +114,11 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *e = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                               "_1993_1_1_materiaux_buffer_e")),
-                        0.,
-                        FALSE,
-                        INFINITY,
-                        FALSE) * 1000000000.;
+                        0., false,
+                        INFINITY, false) * 1000000000.;
       if (isnan (*e))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -140,13 +134,11 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
     {
       *nu = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
                                              "_1993_1_1_materiaux_buffer_nu")),
-                         0.,
-                         TRUE,
-                         0.5,
-                         FALSE);
+                         0., true,
+                         0.5, false);
       if (isnan (*nu))
       {
-        ok = FALSE;
+        ok = false;
       }
     }
     else
@@ -169,10 +161,10 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   if (UI_ACI.materiau == NULL)
   {
     if ((strcmp (*nom, "") == 0) ||
-        (EF_materiaux_cherche_nom (p, *nom, FALSE)))
+        (EF_materiaux_cherche_nom (p, *nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
-      ok = FALSE;
+      ok = false;
     }
     else
     {
@@ -181,17 +173,17 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   }
   else if ((strcmp (*nom, "") == 0) || 
     ((strcmp (UI_ACI.materiau->nom, *nom) != 0) &&
-     (EF_materiaux_cherche_nom (p, *nom, FALSE))))
+     (EF_materiaux_cherche_nom (p, *nom, false))))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
-    ok = FALSE;
+    ok = false;
   }
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
   }
   
-  if (ok == FALSE)
+  if (!ok)
   {
     free (*nom);
   }
@@ -369,7 +361,7 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   mat = UI_ACI.materiau;
   if (mat != NULL)
   {
-    acier_data = UI_ACI.materiau->data;
+    acier_data = (Materiau_Acier *) UI_ACI.materiau->data;
   }
   else
   {
@@ -452,24 +444,24 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
  * \param p : la variable projet,
  * \param materiau : materiau à modifier. NULL si nouveau matériau,
  * \return
- *   Succès : TRUE.\n
- *   Echec : FALSE :
+ *   Succès : true.\n
+ *   Echec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1993_1_1_gtk_materiaux (Projet      *p,
                          EF_Materiau *materiau)
 {
   Materiau_Acier *acier_data;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (UI_ACI.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_ACI.window));
     if (UI_ACI.materiau == materiau)
     {
-      return TRUE;
+      return true;
     }
   }
   else
@@ -478,7 +470,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
     BUGCRIT (gtk_builder_add_from_resource (UI_ACI.builder,
                                   "/org/2lgc/codegui/ui/1993_1_1_materiaux.ui",
                                            NULL) != 0,
-             FALSE,
+             false,
              (gettext ("La génération de la fenêtre %s a échouée.\n"),
                        "Ajout Matériau Acier"); )
     gtk_builder_connect_signals (UI_ACI.builder, p);
@@ -523,12 +515,12 @@ _1993_1_1_gtk_materiaux (Projet      *p,
     gchar tmp[30];
     
     BUGCRIT (materiau->type == MATERIAU_ACIER,
-             FALSE,
+             false,
              (gettext ("Le matériau n'est pas en acier.\n")); )
     gtk_window_set_title (GTK_WINDOW (UI_ACI.window),
                           gettext ("Modification d'un matériau acier"));
     UI_ACI.materiau = materiau;
-    acier_data = materiau->data;
+    acier_data = (Materiau_Acier *) materiau->data;
     
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                  gtk_builder_get_object (UI_ACI.builder,
@@ -573,7 +565,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   gtk_window_set_transient_for (GTK_WINDOW (UI_ACI.window),
                                 GTK_WINDOW (UI_GTK.window));
   
-  return TRUE;
+  return true;
 }
 
 

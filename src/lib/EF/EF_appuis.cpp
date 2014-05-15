@@ -42,18 +42,18 @@
  * \brief Initialise la liste des types d'appuis.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_appuis_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
 
   p->modele.appuis.clear ();
   
@@ -73,7 +73,7 @@ EF_appuis_init (Projet *p)
                       0, gettext ("Bloqué"),
                       -1);
 #endif  
-  return TRUE;
+  return true;
 }
 
 
@@ -81,7 +81,7 @@ EF_appuis_init (Projet *p)
  * \brief Renvoie l'appui correspondant au nom demandé.
  * \param p : la variable projet,
  * \param nom : le nom de l'appui,
- * \param critique : TRUE si en cas d'échec, la fonction BUG est utilisée.
+ * \param critique : true si en cas d'échec, la fonction BUG est utilisée.
  * \return
  *   Succès : pointeur vers l'appui.\n
  *   Échec : NULL :
@@ -91,7 +91,7 @@ EF_appuis_init (Projet *p)
 EF_Appui *
 EF_appuis_cherche_nom (Projet     *p,
                        const char *nom,
-                       gboolean    critique)
+                       bool        critique)
 {
   std::list <EF_Appui *>::iterator it;
   
@@ -158,7 +158,7 @@ EF_appuis_ajout (Projet       *p,
         NULL,
         (gettext ("Impossible d'utiliser comme nom 'Aucun'.\n")); )
   
-  INFO (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
+  INFO (EF_appuis_cherche_nom (p, nom, false) == NULL,
         NULL,
         (gettext ("L'appui '%s' existe déjà.\n"), nom); )
    
@@ -333,13 +333,13 @@ EF_appuis_ajout (Projet       *p,
  * \param type_x : le nouveau type,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - appui == NULL,
  *     - type_x inconnu.
  */
-gboolean
+bool
 EF_appuis_edit (EF_Appui     *appui,
                 uint8_t       x,
                 Type_EF_Appui type_x,
@@ -349,10 +349,10 @@ EF_appuis_edit (EF_Appui     *appui,
   
   std::list <EF_Noeud *> *list_noeuds;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (appui, "%p", appui, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (appui, "%p", appui, false)
   INFO ((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE),
-        FALSE,
+        false,
         (gettext ("Type d'appui %d inconnu.\n"), type_x); )
   
   switch (x)
@@ -389,9 +389,9 @@ EF_appuis_edit (EF_Appui     *appui,
     }
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n")); )
-      return FALSE;
+      return false;
     }
   }
   
@@ -416,17 +416,17 @@ EF_appuis_edit (EF_Appui     *appui,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   list_appuis.clear ();
   
   if (list_noeuds != NULL)
   {
     delete list_noeuds;
-    BUG (EF_calculs_free (p), FALSE)
+    BUG (EF_calculs_free (p), false)
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -435,41 +435,41 @@ EF_appuis_edit (EF_Appui     *appui,
  * \param appui : appui à renommer,
  * \param nom : le nouveau nom,
  * \param p : la variable projet,
- * \param critique : si TRUE alors BUGMSG, si FALSE alors return.
+ * \param critique : si true alors BUGMSG, si false alors return.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - nom == NULL,
  *     - appui == NULL,
  *     - appui possédant le nouveau nom est déjà existant.
  */
-gboolean
+bool
 EF_appuis_renomme (EF_Appui   *appui,
                    const char *nom,
                    Projet     *p,
-                   gboolean    critique)
+                   bool        critique)
 {
   std::list <EF_Appui *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (nom, "%p", nom, FALSE)
-  BUGPARAM (appui, "%p", appui, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (nom, "%p", nom, false)
+  BUGPARAM (appui, "%p", appui, false)
   
   if (critique)
   {
-    INFO (EF_appuis_cherche_nom (p, nom, FALSE) == NULL,
-          FALSE,
+    INFO (EF_appuis_cherche_nom (p, nom, false) == NULL,
+          false,
           (gettext ("L'appui '%s' existe déjà.\n"), nom); )
   }
-  else if (EF_appuis_cherche_nom (p, nom, FALSE) != NULL)
+  else if (EF_appuis_cherche_nom (p, nom, false) != NULL)
   {
-    return FALSE;
+    return false;
   }
   
   free (appui->nom);
   BUGCRIT (appui->nom = g_strdup_printf ("%s", nom),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // On réinsère l'appui au bon endroit
@@ -548,7 +548,7 @@ EF_appuis_renomme (EF_Appui   *appui,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -558,29 +558,29 @@ EF_appuis_renomme (EF_Appui   *appui,
  * \param annule_si_utilise : possibilité d'annuler la suppression si l'appui
  *        est attribué à un noeud. Si l'option est désactivée, les noeuds
  *        possédant l'appui seront modifiés en fonction du paramètre supprime.
- * \param supprime : utilisé uniquement si annule_si_utilise == FALSE.
- *        Si TRUE alors, les noeuds (et les barres et noeuds intermédaires
- *        dépendants) utilisant l'appui seront supprimés. Si FALSE alors les
+ * \param supprime : utilisé uniquement si annule_si_utilise == false.
+ *        Si true alors, les noeuds (et les barres et noeuds intermédaires
+ *        dépendants) utilisant l'appui seront supprimés. Si false alors les
  *        noeuds deviendront sans appui.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - appui == NULL.
  */
-gboolean
+bool
 EF_appuis_supprime (EF_Appui *appui,
-                    gboolean  annule_si_utilise,
-                    gboolean  supprime,
+                    bool      annule_si_utilise,
+                    bool      supprime,
                     Projet   *p)
 {
   std::list <EF_Appui *> list_appuis;
   
   std::list <EF_Noeud *> *noeuds_suppr;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (appui, "%p", appui, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (appui, "%p", appui, false)
   
   // On vérifie les dépendances.
   list_appuis.push_back (appui);
@@ -596,8 +596,8 @@ EF_appuis_supprime (EF_Appui *appui,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   list_appuis.clear ();
   
   if ((annule_si_utilise) && (!noeuds_suppr->empty ()))
@@ -605,13 +605,13 @@ EF_appuis_supprime (EF_Appui *appui,
     char *liste;
     
     BUGCRIT (liste = common_selection_noeuds_en_texte (noeuds_suppr),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                delete noeuds_suppr; )
 
     if (noeuds_suppr->size () == 1)
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"),
                           liste);
                   free (liste);
@@ -619,7 +619,7 @@ EF_appuis_supprime (EF_Appui *appui,
     }
     else
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"),
                           liste);
                   free (liste);
@@ -627,8 +627,8 @@ EF_appuis_supprime (EF_Appui *appui,
     }
   }
   
-  // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).
-  if (supprime == FALSE)
+  // On enlève l'appui pour les noeuds dépendants (si supprime == false).
+  if (!supprime)
   {
     std::list <EF_Noeud *>::iterator it = noeuds_suppr->begin ();
     
@@ -637,7 +637,7 @@ EF_appuis_supprime (EF_Appui *appui,
       EF_Noeud *noeud = *it;
       
       BUG (EF_noeuds_change_appui (p, noeud, NULL),
-           TRUE,
+           true,
            delete noeuds_suppr; )
       
       ++it;
@@ -646,7 +646,7 @@ EF_appuis_supprime (EF_Appui *appui,
   else
   {
     BUG (_1992_1_1_barres_supprime_liste (p, noeuds_suppr, NULL),
-         TRUE,
+         true,
          delete noeuds_suppr; )
   }
   
@@ -662,7 +662,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "ux",
                           appui->ux); )
@@ -675,7 +675,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "uy",
                           appui->ux); )
@@ -688,7 +688,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "uz",
                           appui->ux); )
@@ -701,7 +701,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "rx",
                           appui->ux); )
@@ -714,7 +714,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "ry",
                           appui->ux); )
@@ -727,7 +727,7 @@ EF_appuis_supprime (EF_Appui *appui,
       break;
     default :
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Le type d'appui de %s (%d) est inconnu.\n"),
                           "rz",
                           appui->ux); )
@@ -745,7 +745,7 @@ EF_appuis_supprime (EF_Appui *appui,
   
   delete appui;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -754,16 +754,16 @@ EF_appuis_supprime (EF_Appui *appui,
  *        contenant.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_appuis_free (Projet *p)
 {
   std::list <EF_Appui *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->modele.appuis.begin ();
   while (it != p->modele.appuis.end ())
@@ -782,7 +782,7 @@ EF_appuis_free (Projet *p)
   g_object_unref (UI_APP.liste_type_appui);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

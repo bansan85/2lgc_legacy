@@ -142,23 +142,23 @@ EF_charge_action (Projet *p,
  * \param charge : la charge,
  * \param nom : le nouveau nom.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - charge == NULL,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_charge_renomme (Projet     *p,
                    Charge     *charge,
                    const char *nom)
 {
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (charge, "%p", charge, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (charge, "%p", charge, false)
   
   free (charge->nom);
   BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
 #ifdef ENABLE_GTK
@@ -168,7 +168,7 @@ EF_charge_renomme (Projet     *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -182,14 +182,14 @@ EF_charge_renomme (Projet     *p,
  * \param charge_s : la charge à déplacer,
  * \param action_dest : l'action où sera déplacer la charge.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action_src == NULL,
  *     - action_dest == NULL,
  *     - charge_s == NULL,
  */
-gboolean
+bool
 EF_charge_deplace (Projet *p,
                    Action *action_src,
                    Charge *charge_s,
@@ -198,14 +198,14 @@ EF_charge_deplace (Projet *p,
   Charge *charge_data = NULL;
   std::list <Charge *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action_src, "%p", action_src, FALSE)
-  BUGPARAM (charge_s, "%p", charge_s, FALSE)
-  BUGPARAM (action_dest, "%p", action_dest, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action_src, "%p", action_src, false)
+  BUGPARAM (charge_s, "%p", charge_s, false)
+  BUGPARAM (action_dest, "%p", action_dest, false)
   
   if (action_src == action_dest)
   {
-    return TRUE;
+    return true;
   }
   
   // Lorsqu'elle est trouvée,
@@ -240,7 +240,7 @@ EF_charge_deplace (Projet *p,
   }
   
   INFO (charge_data,
-        FALSE,
+        false,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
                   charge_s->nom,
                   _1990_action_nom_renvoie (action_src)); )
@@ -249,9 +249,9 @@ EF_charge_deplace (Projet *p,
   // destination en modifiant son numéro.
   _1990_action_charges_renvoie (action_dest)->push_back (charge_data);
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 
@@ -263,13 +263,13 @@ EF_charge_deplace (Projet *p,
  * \param action : l'action où se situe la charge à supprimer,
  * \param charge_s : la charge à supprimer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - charge_s == NULL.
  */
-gboolean
+bool
 EF_charge_supprime (Projet *p,
                     Action *action,
                     Charge *charge_s)
@@ -277,7 +277,7 @@ EF_charge_supprime (Projet *p,
   Charge *charge_data = NULL;
   std::list <Charge *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = _1990_action_charges_renvoie (action)->begin ();
   // Pour chaque charge de l'action en cours Faire
@@ -307,22 +307,22 @@ EF_charge_supprime (Projet *p,
       {
         case CHARGE_NOEUD :
         {
-          BUG (EF_charge_noeud_free (charge_data), FALSE)
+          BUG (EF_charge_noeud_free (charge_data), false)
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-          BUG (EF_charge_barre_ponctuelle_free (charge_data), FALSE)
+          BUG (EF_charge_barre_ponctuelle_free (charge_data), false)
           break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          BUG (EF_charge_barre_repartie_uniforme_free (charge_data), FALSE)
+          BUG (EF_charge_barre_repartie_uniforme_free (charge_data), false)
           break;
         }
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                    (gettext ("Type de charge %d inconnu.\n"),
                              charge_data->type); )
           break;
@@ -336,14 +336,14 @@ EF_charge_supprime (Projet *p,
   }
   
   INFO (charge_data,
-        FALSE,
+        false,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
                   charge_s->nom,
                   _1990_action_nom_renvoie (action)); )
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

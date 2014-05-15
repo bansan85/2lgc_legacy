@@ -28,7 +28,7 @@ char            *_1990_action_bat_txt_type  (uint8_t type,
 Action_Categorie _1990_action_categorie_bat (uint8_t type,
                                              Norme   norme)
                                        __attribute__((__warn_unused_result__));
-uint8_t           _1990_action_num_bat_txt  (Norme  norme)
+uint8_t          _1990_action_num_bat_txt  (Norme  norme)
                                        __attribute__((__warn_unused_result__));
 
 Action *_1990_action_ajout (Projet     *p,
@@ -38,29 +38,27 @@ Action *_1990_action_ajout (Projet     *p,
 
 const char *_1990_action_nom_renvoie (Action     *action)
                                        __attribute__((__warn_unused_result__));
-gboolean    _1990_action_nom_change  (Projet     *p,
+bool        _1990_action_nom_change  (Projet     *p,
                                       Action     *action,
                                       const char *nom)
                                        __attribute__((__warn_unused_result__));
 
 uint8_t  _1990_action_type_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_type_change  (Projet *p,
+bool     _1990_action_type_change  (Projet *p,
                                     Action *action,
                                     uint8_t type)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_action_charges_vide    (Action *action)
+bool     _1990_action_charges_vide (Action *action)
                                        __attribute__((__warn_unused_result__));
+
 std::list <Charge *> *_1990_action_charges_renvoie (Action *action)
-                                       __attribute__((__warn_unused_result__));
-gboolean _1990_action_charges_change  (Action               *action,
-                                       std::list <Charge *> *charges)
                                        __attribute__((__warn_unused_result__));
 
 uint8_t  _1990_action_flags_action_predominante_renvoie (Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_flags_action_predominante_change  (Action *action,
+bool     _1990_action_flags_action_predominante_change  (Action *action,
                                                          uint8_t flag)
                                        __attribute__((__warn_unused_result__));
 
@@ -70,7 +68,7 @@ Flottant _1990_action_psi_renvoie_1 (Action      *action)
                                        __attribute__((__warn_unused_result__));
 Flottant _1990_action_psi_renvoie_2 (Action      *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_psi_change    (Projet  *p,
+bool     _1990_action_psi_change    (Projet  *p,
                                      Action  *action,
                                      uint8_t  psi_num,
                                      Flottant psi)
@@ -78,17 +76,17 @@ gboolean _1990_action_psi_change    (Projet  *p,
 
 cholmod_sparse *_1990_action_deplacement_renvoie    (Action         *action)
                                        __attribute__((__warn_unused_result__));
-gboolean        _1990_action_deplacement_change     (Action         *action,
+bool            _1990_action_deplacement_change     (Action         *action,
                                                      cholmod_sparse *sparse)
                                        __attribute__((__warn_unused_result__));
 cholmod_sparse *_1990_action_forces_renvoie         (Action         *action)
                                        __attribute__((__warn_unused_result__));
-gboolean        _1990_action_forces_change          (Action         *action,
+bool            _1990_action_forces_change          (Action         *action,
                                                      cholmod_sparse *sparse)
                                        __attribute__((__warn_unused_result__));
 cholmod_sparse *_1990_action_efforts_noeuds_renvoie (Action         *action)
                                        __attribute__((__warn_unused_result__));
-gboolean        _1990_action_efforts_noeuds_change  (Action         *action,
+bool            _1990_action_efforts_noeuds_change  (Action         *action,
                                                      cholmod_sparse *sparse)
                                        __attribute__((__warn_unused_result__));
 
@@ -110,14 +108,14 @@ Fonction *_1990_action_deformation_renvoie (Action  *action,
                                             uint32_t barre)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_action_fonction_init (Projet *p,
+bool     _1990_action_fonction_init (Projet *p,
                                      Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_fonction_free (Action *action);
+bool     _1990_action_fonction_free (Action *action);
 
-gboolean _1990_action_affiche_tout      (Projet *p)
+bool     _1990_action_affiche_tout      (Projet *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_affiche_resultats (Projet *p,
+bool     _1990_action_affiche_resultats (Projet *p,
                                          Action *action)
                                        __attribute__((__warn_unused_result__));
 
@@ -125,15 +123,15 @@ Action  *_1990_action_ponderation_resultat (
            std::list <Ponderation *> *ponderation,
            Projet                    *p)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_ponderation_resultat_free_calculs (Action *action);
+bool     _1990_action_ponderation_resultat_free_calculs (Action *action);
 
-gboolean _1990_action_free_calculs (Projet *p,
+bool     _1990_action_free_calculs (Projet *p,
                                     Action *action)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_free_1       (Projet *p,
+bool     _1990_action_free_1       (Projet *p,
                                     Action *action_free)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_action_free         (Projet *p)
+bool     _1990_action_free         (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

@@ -25,14 +25,14 @@
 
 #include "common_projet.hpp"
 
-gboolean _1990_gtk_insert_dispo           (Projet        *p,
-                                           void          *data,
-                                           Niveau_Groupe *niveau)
+bool _1990_gtk_insert_dispo           (Projet        *p,
+                                       void          *data,
+                                       Niveau_Groupe *niveau)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_gtk_groupes_affiche_niveau (Projet        *p,
-                                           uint16_t       niveau)
+bool _1990_gtk_groupes_affiche_niveau (Projet        *p,
+                                       uint16_t       niveau)
                                        __attribute__((__warn_unused_result__));
-void     _1990_gtk_groupes                (Projet        *p);
+void _1990_gtk_groupes                (Projet        *p);
 
 #endif
 

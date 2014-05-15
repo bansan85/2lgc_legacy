@@ -40,18 +40,18 @@
  * \brief Initialise la liste des groupes.
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_groupe_init (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->niveaux_groupes.clear ();
   
-  return TRUE;
+  return true;
 }
 
 
@@ -60,17 +60,17 @@ _1990_groupe_init (Projet *p)
  *        dernier niveau existant.
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_groupe_ajout_niveau (Projet *p)
 {
   Niveau_Groupe *niveau_nouveau;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   niveau_nouveau = new Niveau_Groupe;
   
   niveau_nouveau->groupes.clear ();
@@ -94,7 +94,7 @@ _1990_groupe_ajout_niveau (Projet *p)
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -185,8 +185,8 @@ _1990_groupe_ajout_groupe (Projet                 *p,
  * \param groupe : groupe où ajouter l'élément,
  * \param element_add : l'élément à ajouter.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL,
  *     - niveau_groupe == NULL,
@@ -195,19 +195,19 @@ _1990_groupe_ajout_groupe (Projet                 *p,
  *     - si l'élément num_element, est déjà présentant dans le groupe groupe_n,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_groupe_ajout_element (Projet        *p,
                             Niveau_Groupe *niveau_groupe,
                             Groupe        *groupe,
                             void          *element_add)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n")); )
-  BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
-  BUGPARAM (groupe, "%p", groupe, FALSE)
-  BUGPARAM (element_add, "%p", element_add, FALSE)
+  BUGPARAM (niveau_groupe, "%p", niveau_groupe, false)
+  BUGPARAM (groupe, "%p", groupe, false)
+  BUGPARAM (element_add, "%p", element_add, false)
   
   // On ajoute le nouvel élément au groupe.
   if (!groupe->elements.empty ())
@@ -221,7 +221,7 @@ _1990_groupe_ajout_element (Projet        *p,
       {
         printf (gettext ("L'élément est déjà présent dans le groupe.\n"));
         
-        return FALSE;
+        return false;
       }
       
       ++it;
@@ -249,7 +249,7 @@ _1990_groupe_ajout_element (Projet        *p,
     // disponibles.
     if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (
                                                       UI_GRO.tree_store_dispo),
-                                       &iter) == TRUE)
+                                       &iter))
     {
       do
       {
@@ -264,7 +264,8 @@ _1990_groupe_ajout_element (Projet        *p,
         }
       }
       while (gtk_tree_model_iter_next (GTK_TREE_MODEL (
-                                    UI_GRO.tree_store_dispo), &iter) != FALSE);
+                                             UI_GRO.tree_store_dispo),
+                                       &iter));
     }
     
     // On ajoute la ligne dans l'interface graphique
@@ -285,7 +286,7 @@ _1990_groupe_ajout_element (Projet        *p,
   }
   #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -294,16 +295,16 @@ _1990_groupe_ajout_element (Projet        *p,
  * \param groupe : le groupe à modifier,
  * \param type_combinaison : le nouveau type de combinaison.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - groupe == NULL,
  *     - type_combinaison inconnu.
  */
-gboolean
+bool
 _1990_groupe_modifie_combinaison (Groupe                 *groupe,
                                   Type_Groupe_Combinaison type_combinaison)
 {
-  BUGPARAM (groupe, "%p", groupe, FALSE)
+  BUGPARAM (groupe, "%p", groupe, false)
   
   switch (type_combinaison)
   {
@@ -316,12 +317,12 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
     }
     default :
     {
-      FAILPARAM (type_combinaison, "%d", FALSE)
+      FAILPARAM (type_combinaison, "%d", false)
       break;
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -332,12 +333,12 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
  * \param nom : le nouveau nom,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - groupe == NULL,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
                           Groupe        *groupe,
                           const char    *nom,
@@ -345,14 +346,14 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
 {
   char *tmp;
   
-  BUGPARAM (groupe_niveau, "%p", groupe_niveau, FALSE, )
-  BUGPARAM (groupe, "%p", groupe, FALSE)
-  BUGPARAM (nom, "%p", groupe, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (groupe_niveau, "%p", groupe_niveau, false, )
+  BUGPARAM (groupe, "%p", groupe, false)
+  BUGPARAM (nom, "%p", groupe, false)
+  BUGPARAM (p, "%p", p, false)
   
   tmp = groupe->nom;
   BUGCRIT (groupe->nom = g_strdup_printf ("%s", nom),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              groupe->nom = tmp; )
   free (tmp);
@@ -387,7 +388,7 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -397,18 +398,18 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
  *        l'action est prédominante (1) ou pas (0).
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_groupe_affiche_tout (Projet *p)
 {
   std::list<Niveau_Groupe*>::iterator it;
   
   uint8_t nniveau = 0;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->niveaux_groupes.begin ();
   while (it != p->niveaux_groupes.end ())
@@ -446,7 +447,7 @@ _1990_groupe_affiche_tout (Projet *p)
         }
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                     (gettext ("Combinaison %d inconnue"),
                               groupe->type_combinaison); )
           break;
@@ -512,7 +513,7 @@ _1990_groupe_affiche_tout (Projet *p)
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -523,14 +524,14 @@ _1990_groupe_affiche_tout (Projet *p)
  * \param groupe : le groupe contenant l'élément,
  * \param element : l'élément à retirer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - niveau_groupe == NULL,
  *     - element == NULL,
  *     - groupe == NULL.
  */
-gboolean
+bool
 _1990_groupe_retire_element (Projet        *p,
                              Niveau_Groupe *niveau_groupe,
                              Groupe        *groupe,
@@ -540,10 +541,10 @@ _1990_groupe_retire_element (Projet        *p,
   Groupe  *groupe2 = (Groupe *) element;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
-  BUGPARAM (groupe, "%p", groupe, FALSE)
-  BUGPARAM (element, "%p", element, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (niveau_groupe, "%p", niveau_groupe, false)
+  BUGPARAM (groupe, "%p", groupe, false)
+  BUGPARAM (element, "%p", element, false)
   
 #ifdef ENABLE_GTK
   // On sélectionne dans la liste des groupes la ligne suivante. Et si elle
@@ -584,7 +585,7 @@ _1990_groupe_retire_element (Projet        *p,
   
   groupe->elements.remove (element);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -592,26 +593,25 @@ _1990_groupe_retire_element (Projet        *p,
  * \brief Libère le niveau ainsi que tous les niveaux supérieurs.
  * \param p : la variable projet,
  * \param niveau_groupe : le niveau à libérer,
- * \param accept_vide : si FALSE et que tous les niveaux sont libérés alors un
+ * \param accept_vide : si false et que tous les niveaux sont libérés alors un
  *                      niveau vide est créé.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_groupe_free_niveau (Projet        *p,
                           Niveau_Groupe *niveau_groupe,
-                          gboolean       accept_vide)
+                          bool           accept_vide)
 {
   std::list <Niveau_Groupe *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = std::find (p->niveaux_groupes.begin (),
                   p->niveaux_groupes.end (),
                   niveau_groupe);
-  
   
   while (it != p->niveaux_groupes.end ())
   {
@@ -648,14 +648,14 @@ _1990_groupe_free_niveau (Projet        *p,
   }
   
   // On oblige la liste des niveaux à posséder au moins un niveau vide.
-  if ((p->niveaux_groupes.empty ()) && (accept_vide == FALSE))
+  if ((p->niveaux_groupes.empty ()) && (!accept_vide))
   {
-    BUG (_1990_groupe_ajout_niveau (p), FALSE)
+    BUG (_1990_groupe_ajout_niveau (p), false)
 #ifdef ENABLE_GTK
     if (UI_GRO.builder != NULL)
     {
       gtk_tree_store_clear (UI_GRO.tree_store_etat);
-      BUG (_1990_gtk_groupes_affiche_niveau (p, 0), FALSE)
+      BUG (_1990_gtk_groupes_affiche_niveau (p, 0), false)
     }
 #endif
   }
@@ -670,7 +670,7 @@ _1990_groupe_free_niveau (Projet        *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -678,17 +678,17 @@ _1990_groupe_free_niveau (Projet        *p,
  * \brief Libère les combinaisons temporaires d'un groupe.
  * \param liste : liste contenant les combinaisons à libérer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - groupe == NULL,
  */
-gboolean
+bool
 _1990_groupe_free_combinaisons (
   std::list <std::list <Combinaison *> *> *liste)
 {
   std::list <std::list <Combinaison *> *>::iterator it;
   
-  BUGPARAM (liste, "%p", liste, FALSE)
+  BUGPARAM (liste, "%p", liste, false)
   
   it = liste->begin ();
   // On libère toutes les combinaisons temporaires.
@@ -704,7 +704,7 @@ _1990_groupe_free_combinaisons (
     it = liste->erase (it);
   }
 
-  return TRUE;
+  return true;
 }
 
 
@@ -716,18 +716,18 @@ _1990_groupe_free_combinaisons (
  * \param niveau_groupe : niveau contenant le groupe,
  * \param groupe : groupe à libérer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  */
-gboolean
+bool
 _1990_groupe_free_groupe (Projet        *p,
                           Niveau_Groupe *niveau_groupe,
                           Groupe        *groupe)
 {
   std::list <Niveau_Groupe *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
 #ifdef ENABLE_GTK
   if ((UI_GRO.builder != NULL) &&
@@ -768,7 +768,7 @@ _1990_groupe_free_groupe (Projet        *p,
     while (it2 != groupe->elements.end ())
     {
       BUG (_1990_gtk_insert_dispo (p, *it2, niveau_groupe),
-           FALSE)
+           false)
       
       ++it2;
     }
@@ -826,7 +826,7 @@ _1990_groupe_free_groupe (Projet        *p,
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -834,25 +834,25 @@ _1990_groupe_free_groupe (Projet        *p,
  * \brief Libère l'ensemble des groupes et niveaux.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - #_1990_groupe_free_niveau.
  */
-gboolean
+bool
 _1990_groupe_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (!p->niveaux_groupes.empty ())
   {
     BUG (_1990_groupe_free_niveau (p,
                                    *p->niveaux_groupes.begin (),
-                                   TRUE),
-         FALSE)
+                                   true),
+         false)
   }
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

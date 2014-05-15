@@ -23,7 +23,7 @@
 #include "common_projet.hpp"
 #include "1990_action.hpp"
 
-gboolean EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
+bool     EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            EF_Noeud             *noeud,
                                            uint8_t               indice,
                                            Projet               *p,
@@ -31,7 +31,7 @@ gboolean EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            double               *mini,
                                            double               *maxi)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_resultat_noeud_deplacement    (std::list <Action *> *liste,
+bool     EF_resultat_noeud_deplacement    (std::list <Action *> *liste,
                                            EF_Noeud             *noeud,
                                            uint8_t               indice,
                                            Projet               *p,

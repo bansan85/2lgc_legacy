@@ -59,7 +59,7 @@ void common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                                              guint           n_chars,
                                              Projet         *p);
 
-gboolean common_gtk_informations (Projet *p)
+bool common_gtk_informations (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

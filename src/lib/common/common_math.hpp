@@ -21,7 +21,6 @@
 
 #include "config.h"
 #include <cholmod.h>
-#include <glib.h>
 #include "common_projet.hpp"
 
 #ifndef M_PI
@@ -35,14 +34,14 @@
 #define ERREUR_RELATIVE_PUISSANCE 8
 // Avec 13, common_fonction_compacte peut ne pas marcher correctement.
 
-gboolean errmin (double calc,
-                 double err_min);
-gboolean errmax (double calc,
-                 double err_max);
-gboolean errmoy (double calc,
-                 double err_moy);
-gboolean errrel (double calc,
-                 double theo);
+bool errmin (double calc,
+             double err_min);
+bool errmax (double calc,
+             double err_max);
+bool errmoy (double calc,
+             double err_moy);
+bool errrel (double calc,
+             double theo);
 
 #define ERRMAX_POND 100.
 #define ERRMOY_RAIDEUR 100000.

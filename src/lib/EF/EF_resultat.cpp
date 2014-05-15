@@ -51,13 +51,13 @@
  * \param maxi : la valeur maximale (dans le cas d'une liste à plusieurs
  *               actions), peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - liste == NULL,
  *     - noeud == NULL,
  *     - p == NULL.
  */
-gboolean
+bool
 EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                   EF_Noeud             *noeud,
                                   uint8_t               indice,
@@ -68,15 +68,15 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
 {
   std::list <Action*>::iterator it;
   
-  uint32_t i;
-  double   mi, ma;
-  double  *x;
-  Action  *action;
+  long    i;
+  double  mi, ma;
+  double *x;
+  Action *action;
   
-  BUGPARAM (noeud, "%p", noeud, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (noeud, "%p", noeud, false)
+  BUGPARAM (p, "%p", p, false)
   INFO (indice <= 5,
-        FALSE,
+        false,
         (gettext ("Indice hors limite.\n")); )
   
   if (liste == NULL)
@@ -88,7 +88,7 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            DECIMAL_FORCE :
                                            DECIMAL_MOMENT,
                                          0.),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
     if (mini != NULL)
@@ -99,7 +99,7 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
     {
       *maxi = 0.;
     }
-    return TRUE;
+    return true;
   }
   
   i = std::distance (p->modele.noeuds.begin (),
@@ -109,7 +109,7 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
   
   it = liste->begin ();
   action = *it;
-  x = _1990_action_efforts_noeuds_renvoie (action)->x;
+  x = (double *) _1990_action_efforts_noeuds_renvoie (action)->x;
   mi = x[i * 6 + indice];
   ma = x[i * 6 + indice];
   ++it;
@@ -117,7 +117,7 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
   {
     action = *it;
     
-    x = _1990_action_efforts_noeuds_renvoie (action)->x;
+    x = (double *) _1990_action_efforts_noeuds_renvoie (action)->x;
     
     if (x[i * 6 + indice] < mi)
     {
@@ -152,7 +152,7 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            DECIMAL_FORCE :
                                            DECIMAL_MOMENT,
                                          ma),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
     else
@@ -162,12 +162,12 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            DECIMAL_FORCE :
                                            DECIMAL_MOMENT,
                                          mi),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -190,13 +190,13 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
  * \param maxi : la valeur maximale (dans le cas d'une liste à plusieurs
  *               actions), peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - liste == NULL,
  *     - noeud == NULL,
  *     - p == NULL.
  */
-gboolean
+bool
 EF_resultat_noeud_deplacement (std::list <Action *> *liste,
                                EF_Noeud             *noeud,
                                uint8_t               indice,
@@ -207,15 +207,15 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
 {
   std::list <Action*>::iterator it;
   
-  uint32_t i;
-  double   mi, ma;
-  double  *x;
-  Action  *action;
+  long    i;
+  double  mi, ma;
+  double *x;
+  Action *action;
   
-  BUGPARAM (noeud, "%p", noeud, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (noeud, "%p", noeud, false)
+  BUGPARAM (p, "%p", p, false)
   INFO (indice <= 5,
-        FALSE,
+        false,
         (gettext ("Indice hors limite.\n")); )
   
   if (liste == NULL)
@@ -227,7 +227,7 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
                                            DECIMAL_DEPLACEMENT :
                                            DECIMAL_ROTATION,
                                          0.),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
     if (mini != NULL)
@@ -238,7 +238,7 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
     {
       *maxi = 0.;
     }
-    return TRUE;
+    return true;
   }
   
   i = std::distance (p->modele.noeuds.begin (),
@@ -248,7 +248,7 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
   
   it = liste->begin ();
   action = *it;
-  x = _1990_action_deplacement_renvoie (action)->x;
+  x = (double *) _1990_action_deplacement_renvoie (action)->x;
   mi = x[i * 6 + indice];
   ma = x[i * 6 + indice];
   ++it;
@@ -256,7 +256,7 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
   {
     action = *it;
     
-    x = _1990_action_deplacement_renvoie (action)->x;
+    x = (double *) _1990_action_deplacement_renvoie (action)->x;
     
     if (x[i * 6 + indice] < mi)
     {
@@ -291,7 +291,7 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
                                            DECIMAL_DEPLACEMENT :
                                            DECIMAL_ROTATION,
                                          ma),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
     else
@@ -301,12 +301,12 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
                                            DECIMAL_DEPLACEMENT :
                                            DECIMAL_ROTATION,
                                          mi),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n")); )
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

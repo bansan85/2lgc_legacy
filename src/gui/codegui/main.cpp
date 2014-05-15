@@ -91,7 +91,7 @@ main (int32_t   argc,
     }
     
     // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
-    INFO (gtk_init_check (&argc, &argv) == TRUE,
+    INFO (gtk_init_check (&argc, &argv),
           -1,
           (gettext ("Impossible d'initialiser gtk.\n")); )
     

@@ -400,7 +400,7 @@ common_selection_numeros_en_noeuds (std::list <uint32_t> *liste_numeros,
   while (it != liste_numeros->end ())
   {
     uint32_t  numero = *it;
-    EF_Noeud *noeud = EF_noeuds_cherche_numero (p, numero, FALSE);
+    EF_Noeud *noeud = EF_noeuds_cherche_numero (p, numero, false);
     
     if (noeud == NULL)
     {
@@ -440,7 +440,7 @@ common_selection_numeros_en_barres (std::list <uint32_t> *liste_numeros,
   while (it != liste_numeros->end ())
   {
     uint32_t  numero = *it;
-    EF_Barre *barre = _1992_1_1_barres_cherche_numero (p, numero, FALSE);
+    EF_Barre *barre = _1992_1_1_barres_cherche_numero (p, numero, false);
     
     if (barre == NULL)
     {

@@ -51,26 +51,26 @@
  *        noeud ou d'une barre, modification d'une action, ...).
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL
  */
-gboolean
+bool
 EF_calculs_free (Projet *p)
 {
   std::list <Action   *>::iterator it;
   std::list <EF_Barre *>::iterator it2;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
-  BUG (EF_rigidite_free (p), FALSE)
+  BUG (EF_rigidite_free (p), false)
   
   it = p->actions.begin ();
   while (it != p->actions.end ())
   {
     Action *action = *it;
     
-    BUG (_1990_action_free_calculs (p, action), FALSE)
+    BUG (_1990_action_free_calculs (p, action), false)
     
     ++it;
   }
@@ -128,7 +128,7 @@ EF_calculs_free (Projet *p)
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -137,31 +137,31 @@ EF_calculs_free (Projet *p)
  *        de rigidité élémentaires.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - Aucun nœud n'est présent,
  *     - Aucune barre n'est présente,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_calculs_initialise (Projet *p)
 {
   uint32_t i, nnz_max;
   uint32_t nb_col_partielle, nb_col_complete;
-  uint32_t nb_noeuds;
+  size_t   nb_noeuds;
   
   std::list <EF_Noeud *>::iterator it;
   std::list <EF_Barre *>::iterator it2;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   INFO (!p->modele.barres.empty (),
-        FALSE,
+        false,
         (gettext ("Impossible de réaliser un calcul sans barre existante.\n")); )
   
   nb_noeuds = p->modele.noeuds.size ();
   INFO (nb_noeuds != 0,
-        FALSE,
+        false,
         (gettext ("Impossible de réaliser un calcul sans noeud existant.\n")); )
   
   // Allocation de la mémoire nécessaire pour contenir la position de chaque
@@ -170,20 +170,20 @@ EF_calculs_initialise (Projet *p)
   // complète.
   BUGCRIT (p->calculs.n_part = (uint32_t **)
              malloc (sizeof (uint32_t *) * nb_noeuds),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   memset (p->calculs.n_part, 0, sizeof (uint32_t *) * nb_noeuds);
   for (i = 0; i < nb_noeuds; i++)
   {
     BUGCRIT (p->calculs.n_part[i] = (uint32_t *)
                malloc (6 * sizeof (uint32_t)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                EF_calculs_free (p); )
   }
   BUGCRIT (p->calculs.n_comp = (uint32_t **)
              malloc (sizeof (uint32_t *) * nb_noeuds),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_calculs_free (p); )
   memset (p->calculs.n_comp, 0, sizeof (uint32_t *) * nb_noeuds);
@@ -191,7 +191,7 @@ EF_calculs_initialise (Projet *p)
   {
     BUGCRIT (p->calculs.n_comp[i] = (uint32_t *)
                malloc (6 * sizeof (uint32_t)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                EF_calculs_free (p); )
   }
@@ -339,7 +339,7 @@ EF_calculs_initialise (Projet *p)
                                                          0,
                                                          CHOLMOD_REAL,
                                                          p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_calculs_free (p); )
   p->calculs.t_part->nnz = nnz_max;
@@ -349,7 +349,7 @@ EF_calculs_initialise (Projet *p)
                                                          0,
                                                          CHOLMOD_REAL,
                                                          p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              EF_calculs_free (p); )
   p->calculs.t_comp->nnz = nnz_max;
@@ -359,7 +359,7 @@ EF_calculs_initialise (Projet *p)
   p->calculs.t_part_en_cours = 0;
   p->calculs.t_comp_en_cours = 0;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -367,14 +367,14 @@ EF_calculs_initialise (Projet *p)
  * \brief Factorisation de la matrice de rigidité.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->calculs.t_part == NULL,
  *     - p->calculs.t_comp == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_calculs_genere_mat_rig (Projet *p)
 {
   uint32_t  i;
@@ -383,9 +383,9 @@ EF_calculs_genere_mat_rig (Projet *p)
   void     *symbolic;
   int       status; // NS
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (p->calculs.t_part, "%p", p->calculs.t_part, FALSE)
-  BUGPARAM (p->calculs.t_comp, "%p", p->calculs.t_comp, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (p->calculs.t_part, "%p", p->calculs.t_part, false)
+  BUGPARAM (p->calculs.t_comp, "%p", p->calculs.t_comp, false)
   
   ai = (uint32_t *) p->calculs.t_part->i;
   aj = (uint32_t *) p->calculs.t_part->j;
@@ -418,12 +418,12 @@ EF_calculs_genere_mat_rig (Projet *p)
                                                           0,
                                                           CHOLMOD_REAL,
                                                           p->calculs.c),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     BUGCRIT (p->calculs.m_part = cholmod_triplet_to_sparse (triplet_rigidite,
                                                             0,
                                                             p->calculs.c),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                cholmod_free_triplet (&triplet_rigidite, p->calculs.c); )
     cholmod_free_triplet (&triplet_rigidite, p->calculs.c);
@@ -431,7 +431,7 @@ EF_calculs_genere_mat_rig (Projet *p)
     BUGCRIT (p->calculs.m_comp = cholmod_triplet_to_sparse (p->calculs.t_comp,
                                                             0,
                                                             p->calculs.c),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     status = umfpack_di_symbolic (0.,
                                   0.,
@@ -442,7 +442,7 @@ EF_calculs_genere_mat_rig (Projet *p)
                                   NULL,
                                   NULL);
     BUGCRIT (status == UMFPACK_OK,
-             FALSE,
+             false,
              (gettext ("Erreur de calcul : %d\n"), status); )
     status = umfpack_di_numeric (NULL,
                                  NULL,
@@ -452,37 +452,37 @@ EF_calculs_genere_mat_rig (Projet *p)
                                  NULL,
                                  NULL);
     BUGCRIT (status == UMFPACK_OK,
-             FALSE,
+             false,
              (gettext ("Erreur de calcul : %d\n"), status);
                umfpack_di_free_symbolic (&symbolic); )
     umfpack_di_free_symbolic (&symbolic);
     
-    return TRUE;
+    return true;
   }
   
   BUGCRIT (p->calculs.m_part = cholmod_triplet_to_sparse (p->calculs.t_part,
                                                           0,
                                                           p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (p->calculs.m_comp = cholmod_triplet_to_sparse (p->calculs.t_comp,
                                                           0,
                                                           p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // Factorisation de la matrice de rigidité partielle.
   BUGCRIT (p->calculs.ap = (int *) malloc (sizeof (int) *
                                                 (p->calculs.t_part->ncol + 1)),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (p->calculs.ai = (int *) malloc (sizeof (int) *
                                                        p->calculs.t_part->nnz),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   BUGCRIT (p->calculs.ax = (double *) malloc (sizeof (double) *
                                                        p->calculs.t_part->nnz),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   ai = (uint32_t *) p->calculs.t_part->i;
   aj = (uint32_t *) p->calculs.t_part->j;
@@ -498,7 +498,7 @@ EF_calculs_genere_mat_rig (Projet *p)
                                       p->calculs.ax,
                                       NULL);
   BUGCRIT (status == UMFPACK_OK,
-           FALSE,
+           false,
            (gettext ("Erreur de calcul : %d\n"), status); )
   status = umfpack_di_symbolic ((int) p->calculs.t_part->nrow,
                                 (int) p->calculs.t_part->ncol,
@@ -509,7 +509,7 @@ EF_calculs_genere_mat_rig (Projet *p)
                                 NULL,
                                 NULL);
   BUGCRIT (status == UMFPACK_OK,
-           FALSE,
+           false,
            (gettext ("Erreur de calcul : %d\n"), status); )
   status = umfpack_di_numeric (p->calculs.ap,
                                p->calculs.ai,
@@ -526,13 +526,13 @@ EF_calculs_genere_mat_rig (Projet *p)
   else
   {
     BUGCRIT (status == UMFPACK_OK,
-             FALSE,
+             false,
              (gettext ("Erreur de calcul : %d\n"), status);
                umfpack_di_free_symbolic (&symbolic); )
   }
   umfpack_di_free_symbolic (&symbolic);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -546,18 +546,18 @@ EF_calculs_genere_mat_rig (Projet *p)
  * \param ma : moment au noeud A. Peut être NULL,
  * \param mb : moment au noeud B. Peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - infos == NULL.
  */
-gboolean
+bool
 EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
                            double         phia,
                            double         phib,
                            double        *ma,
                            double        *mb)
 {
-  BUGPARAM (infos, "%p", infos, FALSE)
+  BUGPARAM (infos, "%p", infos, false)
   
   // Calcul des moments créés par les raideurs :\end{verbatim}
   // \texttt{Référence : \cite{RDM_articulation}}\begin{align*}
@@ -615,7 +615,7 @@ EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -629,18 +629,18 @@ EF_calculs_moment_hyper_y (Barre_Info_EF *infos,
  * \param ma : moment au noeud A. Peut être NULL,
  * \param mb : moment au noeud B. Peut être NULL.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - infos == NULL
  */
-gboolean
+bool
 EF_calculs_moment_hyper_z (Barre_Info_EF *infos,
                            double         phia,
                            double         phib,
                            double        *ma,
                            double        *mb)
 {
-  BUGPARAM (infos, "%p", infos, FALSE)
+  BUGPARAM (infos, "%p", infos, false)
   
   // Calcul des moments créés par les raideurs :\end{verbatim}
   // \texttt{Référence : \cite{RDM_articulation}}\begin{align*}
@@ -698,7 +698,7 @@ EF_calculs_moment_hyper_z (Barre_Info_EF *infos,
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -773,14 +773,14 @@ EF_calculs_resid (int    *Ap,
  * \param p : la variable projet,
  * \param action : l'action à résoudre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - p->calculs.numeric == NULL && matrice_partielle->nrow != 0,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_calculs_resoud_charge (Projet *p,
                           Action *action)
 {
@@ -801,26 +801,26 @@ EF_calculs_resoud_charge (Projet *p,
   
   std::list <EF_Barre *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (p->calculs.numeric, "%p", p->calculs.numeric, FALSE)
-  BUGPARAM (p->calculs.m_part, "%p", p->calculs.m_part, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (p->calculs.numeric, "%p", p->calculs.numeric, false)
+  BUGPARAM (p->calculs.m_part, "%p", p->calculs.m_part, false)
   BUGPARAM (p->calculs.m_part->nrow,
             "%zu",
             p->calculs.m_part->nrow != 0,
-            FALSE)
+            false)
   
   // Création du triplet partiel et complet contenant les forces extérieures
   // sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
   // utilisé dans l'équation finale : {F} = [K]{D}
-  BUG (_1990_action_fonction_init (p, action), FALSE)
+  BUG (_1990_action_fonction_init (p, action), false)
   BUGCRIT (t_for_part = cholmod_allocate_triplet (p->calculs.m_part->nrow,
                                                   1,
                                                   p->calculs.m_part->nrow,
                                                   0,
                                                   CHOLMOD_REAL,
                                                   p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   ai = (uint32_t *) t_for_part->i;
   aj = (uint32_t *) t_for_part->j;
@@ -838,7 +838,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                   0,
                                                   CHOLMOD_REAL,
                                                   p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_for_part, p->calculs.c); )
   ai3 = (uint32_t *) t_for_comp->i;
@@ -880,7 +880,7 @@ EF_calculs_resoud_charge (Projet *p,
           while (it2 != charge_d->noeuds.end ())
           {
             EF_Noeud *noeud = *it2;
-            uint32_t  num = std::distance (
+            long      num = std::distance (
                               p->modele.noeuds.begin (),
                               std::find (p->modele.noeuds.begin (), 
                                          p->modele.noeuds.end (), 
@@ -961,7 +961,7 @@ EF_calculs_resoud_charge (Projet *p,
       //   \end{verbatim}\begin{center}
       //   $\{ F \}_{local} = [R]^T \cdot \{ F \}_{global}$\end{center}
       //   \begin{verbatim}
-            if (charge_d->repere_local == FALSE)
+            if (!charge_d->repere_local)
             {
               BUGCRIT (t_eff_glo_i = cholmod_allocate_triplet (12,
                                                                1,
@@ -969,7 +969,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                0,
                                                                CHOLMOD_REAL,
                                                                p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -986,7 +986,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                0,
                                                                CHOLMOD_REAL,
                                                                p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -1007,14 +1007,14 @@ EF_calculs_resoud_charge (Projet *p,
             ai2[9] = 9;   aj2[9] = 0;  ax2[9] = 0.;
             ai2[10] = 10; aj2[10] = 0; ax2[10] = 0.;
             ai2[11] = 11; aj2[11] = 0; ax2[11] = 0.;
-            if (charge_d->repere_local == FALSE)
+            if (!charge_d->repere_local)
             {
               cholmod_sparse *s_eff_glo_i;
               
               BUGCRIT (s_eff_glo_i = cholmod_triplet_to_sparse (t_eff_glo_i,
                                                                 0,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1026,7 +1026,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                      1,
                                                      0,
                                                      p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1034,7 +1034,7 @@ EF_calculs_resoud_charge (Projet *p,
               cholmod_free_sparse (&s_eff_glo_i, p->calculs.c);
               BUGCRIT (t_eff_loc_i = cholmod_sparse_to_triplet (s_eff_loc_i,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1082,7 +1082,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, pos);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), FALSE, FREE_ALL)
+                BUG (!isnan (l), false, FREE_ALL)
                 pos++;
               }
               pos--;
@@ -1125,10 +1125,10 @@ EF_calculs_resoud_charge (Projet *p,
                                               noeud_fin));
             debut_barre = EF_noeuds_distance (noeud_debut,
                                               element->noeud_debut);
-            BUG (!isnan (debut_barre), FALSE, FREE_ALL)
+            BUG (!isnan (debut_barre), false, FREE_ALL)
             a = m_g (charge_d->position) - debut_barre;
             fin_barre = EF_noeuds_distance (noeud_fin, element->noeud_debut);
-            BUG (!isnan (fin_barre), FALSE, FREE_ALL)
+            BUG (!isnan (fin_barre), false, FREE_ALL)
             l = ABS (fin_barre - debut_barre);
             b = l - a;
             
@@ -1140,7 +1140,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                 ax2[3],
                                                 &MAx,
                                                 &MBx),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
       //   Détermination de la rotation y et z aux noeuds de l'élément
@@ -1152,7 +1152,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                            ax2[4],
                                                            &phiAy,
                                                            &phiBy),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (EF_charge_barre_ponctuelle_def_ang_iso_z (element,
                                                            pos,
@@ -1161,7 +1161,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                            ax2[5],
                                                            &phiAz,
                                                            &phiBz),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
       //   Calcul des moments créés par les raideurs :
@@ -1170,14 +1170,14 @@ EF_calculs_resoud_charge (Projet *p,
                                             phiBy,
                                             &MAy,
                                             &MBy),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (EF_calculs_moment_hyper_z (&(element->info_EF[pos]),
                                             phiAz,
                                             phiBz,
                                             &MAz,
                                             &MBz),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
       //   Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}
@@ -1195,7 +1195,7 @@ EF_calculs_resoud_charge (Projet *p,
             // \begin{verbatim}
             FAx = ax2[0] * EF_sections_es_l (element, pos, 0, l) /
                     EF_sections_es_l (element, pos, a, l);
-            BUG (!isnan (FAx), FALSE, FREE_ALL)
+            BUG (!isnan (FAx), false, FREE_ALL)
             FBx = ax2[0] - FAx;
             FAy_i = ax2[1] * b / l - ax2[5] / l;
             FAy_h = (MBz + MAz) / l;
@@ -1222,7 +1222,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -FAx,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 0, num),
@@ -1231,7 +1231,7 @@ EF_calculs_resoud_charge (Projet *p,
                    FBx,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}
@@ -1246,7 +1246,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -FAy_i - FAy_h,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 1, num),
@@ -1255,7 +1255,7 @@ EF_calculs_resoud_charge (Projet *p,
                    FBy_i + FBy_h,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}
@@ -1270,7 +1270,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -FAz_i - FAz_h,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 2, num),
@@ -1279,7 +1279,7 @@ EF_calculs_resoud_charge (Projet *p,
                    FBz_i + FBz_h,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
@@ -1292,7 +1292,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -MAx,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 3, num),
@@ -1301,7 +1301,7 @@ EF_calculs_resoud_charge (Projet *p,
                    MBx,
                    0., 0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & 
@@ -1317,7 +1317,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -FAz_i - FAz_h,
                    0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 4, num),
@@ -1327,7 +1327,7 @@ EF_calculs_resoud_charge (Projet *p,
                    FBz_i + FBz_h,
                    0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x &
@@ -1343,7 +1343,7 @@ EF_calculs_resoud_charge (Projet *p,
                    FAy_i + FAy_h,
                    0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (common_fonction_ajout_poly (
                    _1990_action_efforts_renvoie (action, 5, num),
@@ -1353,7 +1353,7 @@ EF_calculs_resoud_charge (Projet *p,
                    -FBy_i - FBy_h,
                    0., 0., 0., 0., 0.,
                    debut_barre),
-                 FALSE,
+                 false,
                  FREE_ALL)
             // \end{align*}\begin{verbatim}
             
@@ -1368,7 +1368,7 @@ EF_calculs_resoud_charge (Projet *p,
                    a,
                    MAx,
                    MBx),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (EF_charge_barre_ponctuelle_fonc_ry (
                    _1990_action_rotation_renvoie (action, 1, num),
@@ -1380,7 +1380,7 @@ EF_calculs_resoud_charge (Projet *p,
                    ax2[4],
                    -MAy,
                    -MBy),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (EF_charge_barre_ponctuelle_fonc_rz (
                    _1990_action_rotation_renvoie (action, 2, num),
@@ -1392,7 +1392,7 @@ EF_calculs_resoud_charge (Projet *p,
                    ax2[5],
                    -MAz,
                    -MBz),
-                 FALSE,
+                 false,
                  FREE_ALL)
             BUG (EF_charge_barre_ponctuelle_n (
                    _1990_action_deformation_renvoie (action, 0, num),
@@ -1401,7 +1401,7 @@ EF_calculs_resoud_charge (Projet *p,
                    a,
                    FAx,
                    FBx),
-                 FALSE,
+                 false,
                  FREE_ALL)
             
             cholmod_free_triplet (&t_eff_loc_i, p->calculs.c);
@@ -1418,7 +1418,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                              0,
                                                              CHOLMOD_REAL,
                                                              p->calculs.c),
-                     FALSE,
+                     false,
                      (gettext ("Erreur d'allocation mémoire.\n"));
                        cholmod_free_triplet (&t_for_part, p->calculs.c);
                        cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -1441,7 +1441,7 @@ EF_calculs_resoud_charge (Projet *p,
             BUGCRIT (s_eff_loc_f = cholmod_triplet_to_sparse (t_eff_loc_f,
                                                               0,
                                                               p->calculs.c),
-                     FALSE,
+                     false,
                      (gettext ("Erreur d'allocation mémoire.\n"));
                        cholmod_free_triplet (&t_for_part, p->calculs.c);
                        cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1453,7 +1453,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                    1,
                                                    0,
                                                    p->calculs.c),
-                     FALSE,
+                     false,
                      (gettext ("Erreur d'allocation mémoire.\n"));
                        cholmod_free_triplet (&t_for_part, p->calculs.c);
                        cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1461,7 +1461,7 @@ EF_calculs_resoud_charge (Projet *p,
             cholmod_free_sparse (&s_eff_loc_f, p->calculs.c);
             BUGCRIT (t_eff_glo_f = cholmod_sparse_to_triplet (s_eff_glo_f,
                                                               p->calculs.c),
-                     FALSE,
+                     false,
                      (gettext ("Erreur d'allocation mémoire.\n"));
                        cholmod_free_triplet (&t_for_part, p->calculs.c);
                        cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1530,10 +1530,10 @@ EF_calculs_resoud_charge (Projet *p,
                                            &yy,
                                            &zz);
             BUG (!isnan (ll),
-                 FALSE,
+                 false,
                  cholmod_free_triplet (&t_for_part, p->calculs.c);
                    cholmod_free_triplet (&t_for_comp, p->calculs.c); )
-            if (charge_d->repere_local == FALSE)
+            if (!charge_d->repere_local)
             {
               BUGCRIT (t_eff_glo_i = cholmod_allocate_triplet (12,
                                                                1,
@@ -1541,7 +1541,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                0,
                                                                CHOLMOD_REAL,
                                                                p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -1558,14 +1558,14 @@ EF_calculs_resoud_charge (Projet *p,
                                                                0,
                                                                CHOLMOD_REAL,
                                                                p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n")); )
               ai2 = (uint32_t *) t_eff_loc_i->i;
               aj2 = (uint32_t *) t_eff_loc_i->j;
               ax2 = (double *) t_eff_loc_i->x;
               t_eff_loc_i->nnz = 12;
             }
-            if (charge_d->projection == TRUE)
+            if (charge_d->projection)
             {
               ai2[0] = 0; aj2[0] = 0;
               ax2[0] = m_g (charge_d->fx) * sqrt (yy * yy + zz * zz) / ll;
@@ -1595,14 +1595,14 @@ EF_calculs_resoud_charge (Projet *p,
             ai2[9]  = 9;  aj2[9]  = 0; ax2[9]  = 0.;
             ai2[10] = 10; aj2[10] = 0; ax2[10] = 0.;
             ai2[11] = 11; aj2[11] = 0; ax2[11] = 0.;
-            if (charge_d->repere_local == FALSE)
+            if (!charge_d->repere_local)
             {
               cholmod_sparse *s_eff_glo_i;
               
               BUGCRIT (s_eff_glo_i = cholmod_triplet_to_sparse (t_eff_glo_i,
                                                                 0,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1614,7 +1614,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                      1,
                                                      0,
                                                      p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1622,7 +1622,7 @@ EF_calculs_resoud_charge (Projet *p,
               cholmod_free_sparse (&(s_eff_glo_i), p->calculs.c);
               BUGCRIT (t_eff_loc_i = cholmod_sparse_to_triplet (s_eff_loc_i,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_for_part, p->calculs.c);
                          cholmod_free_triplet (&t_for_comp, p->calculs.c);
@@ -1668,7 +1668,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, j_d);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), FALSE, FREE_ALL)
+                BUG (!isnan (l), false, FREE_ALL)
                 j_d++;
               }
               j_d--;
@@ -1693,7 +1693,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, j_f);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), FALSE, FREE_ALL)
+                BUG (!isnan (l), false, FREE_ALL)
                 j_f++;
               }
               j_f--;
@@ -1744,7 +1744,7 @@ EF_calculs_resoud_charge (Projet *p,
               }
               debut_barre = EF_noeuds_distance (noeud_debut,
                                                 element->noeud_debut);
-              BUG (!isnan (debut_barre), FALSE, FREE_ALL)
+              BUG (!isnan (debut_barre), false, FREE_ALL)
               if (pos == j_d)
               {
                 a = m_g (charge_d->a) - debut_barre;
@@ -1755,7 +1755,7 @@ EF_calculs_resoud_charge (Projet *p,
               }
               fin_barre = EF_noeuds_distance (noeud_fin,
                                               element->noeud_debut);
-              BUG (!isnan (fin_barre), FALSE, FREE_ALL)
+              BUG (!isnan (fin_barre), false, FREE_ALL)
               l = ABS (fin_barre - debut_barre);
               if (pos == j_f)
               {
@@ -1786,7 +1786,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                          ax2[3],
                                                          &MAx,
                                                          &MBx),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
       //     Détermination de la rotation y et z aux noeuds de l'élément
@@ -1799,7 +1799,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                     ax2[4],
                                                                     &phiAy,
                                                                     &phiBy),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (EF_charge_barre_repartie_uniforme_def_ang_iso_z (element,
                                                                     pos,
@@ -1809,7 +1809,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                     ax2[5],
                                                                     &phiAz,
                                                                     &phiBz),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
       //     Calcul des moments créés par les raideurs :
@@ -1818,14 +1818,14 @@ EF_calculs_resoud_charge (Projet *p,
                                               phiBy,
                                               &MAy,
                                               &MBy),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (EF_calculs_moment_hyper_z (&(element->info_EF[pos]),
                                               phiAz,
                                               phiBz,
                                               &MAz,
                                               &MBz),
-                   FALSE,
+                   false,
                    FREE_ALL)
             
       //     Réaction d'appui sur les noeuds (X représente la position de la
@@ -1857,7 +1857,7 @@ EF_calculs_resoud_charge (Projet *p,
                         b,
                         l),
                       l);
-              BUG (!isnan (FAx), FALSE, FREE_ALL)
+              BUG (!isnan (FAx), false, FREE_ALL)
               FBx = ax2[0] * (l - a - b) - FAx;
               FAy_i = ax2[1] * (l - a - b) * (l - a + b) / (2. * l) -
                       ax2[5] * (l - a - b) / l;
@@ -1891,7 +1891,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -FAx,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 0, num),
@@ -1901,7 +1901,7 @@ EF_calculs_resoud_charge (Projet *p,
                      (FAx + FBx) / (l - a - b),
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 0, num),
@@ -1910,7 +1910,7 @@ EF_calculs_resoud_charge (Projet *p,
                      FBx,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}
@@ -1929,7 +1929,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -FAy_i - FAy_h,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 1, num),
@@ -1940,7 +1940,7 @@ EF_calculs_resoud_charge (Projet *p,
                      (FAy_i + FAy_h + FBy_i + FBy_h) / (l - a - b),
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 1, num),
@@ -1949,7 +1949,7 @@ EF_calculs_resoud_charge (Projet *p,
                      FBy_i + FBy_h,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
             // T_z(x) & = -F_{Az_i} - F_{Az_h} &
@@ -1968,7 +1968,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -FAz_i - FAz_h,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 2, num),
@@ -1979,7 +1979,7 @@ EF_calculs_resoud_charge (Projet *p,
                      (FAz_i + FAz_h + FBz_i + FBz_h) / (l - a - b),
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 2, num),
@@ -1988,7 +1988,7 @@ EF_calculs_resoud_charge (Projet *p,
                      FBz_i + FBz_h,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
@@ -2004,7 +2004,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -MAx,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 3, num),
@@ -2014,7 +2014,7 @@ EF_calculs_resoud_charge (Projet *p,
                      (MAx + MBx) / (l - a - b),
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 3, num),
@@ -2023,7 +2023,7 @@ EF_calculs_resoud_charge (Projet *p,
                      MBx,
                      0., 0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x &
@@ -2043,7 +2043,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -FAz_i - FAz_h,
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 4, num),
@@ -2056,7 +2056,7 @@ EF_calculs_resoud_charge (Projet *p,
                      ax2[2] / 2.,
                      0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 4, num),
@@ -2066,7 +2066,7 @@ EF_calculs_resoud_charge (Projet *p,
                      FBz_i + FBz_h,
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               
             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x &
@@ -2085,7 +2085,7 @@ EF_calculs_resoud_charge (Projet *p,
                      FAy_i + FAy_h,
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 5, num),
@@ -2098,7 +2098,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -ax2[1] / 2.,
                      0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (common_fonction_ajout_poly (
                      _1990_action_efforts_renvoie (action, 5, num),
@@ -2108,7 +2108,7 @@ EF_calculs_resoud_charge (Projet *p,
                      -FBy_i - FBy_h,
                      0., 0., 0., 0., 0.,
                      debut_barre),
-                   FALSE,
+                   false,
                    FREE_ALL)
             // \end{align*}\begin{verbatim}
               
@@ -2122,7 +2122,7 @@ EF_calculs_resoud_charge (Projet *p,
                      b,
                      MAx,
                      MBx),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (EF_charge_barre_repartie_uniforme_fonc_ry (
                      _1990_action_rotation_renvoie (action, 1, num),
@@ -2135,7 +2135,7 @@ EF_calculs_resoud_charge (Projet *p,
                      ax2[4],
                      MAy,
                      MBy),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (EF_charge_barre_repartie_uniforme_fonc_rz (
                      _1990_action_rotation_renvoie (action, 2, num),
@@ -2148,7 +2148,7 @@ EF_calculs_resoud_charge (Projet *p,
                      ax2[5],
                      MAz,
                      MBz),
-                   FALSE,
+                   false,
                    FREE_ALL)
               BUG (EF_charge_barre_repartie_uniforme_n (
                      _1990_action_deformation_renvoie (action, 0, num),
@@ -2158,7 +2158,7 @@ EF_calculs_resoud_charge (Projet *p,
                      b,
                      FAx,
                      FBx),
-                   FALSE,
+                   false,
                    FREE_ALL)
             
       //     Convertion des réactions d'appuis locales dans le repère global
@@ -2171,7 +2171,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                                0,
                                                                CHOLMOD_REAL,
                                                                p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          FREE_ALL)
               ai4 = (uint32_t *) t_eff_loc_f->i;
@@ -2193,7 +2193,7 @@ EF_calculs_resoud_charge (Projet *p,
               BUGCRIT (s_eff_loc_f = cholmod_triplet_to_sparse (t_eff_loc_f,
                                                                 0,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_triplet (&t_eff_loc_f, p->calculs.c);
                          FREE_ALL)
@@ -2204,14 +2204,14 @@ EF_calculs_resoud_charge (Projet *p,
                                                      1,
                                                      0,
                                                      p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_sparse (&s_eff_loc_f, p->calculs.c);
                          FREE_ALL)
               cholmod_free_sparse (&s_eff_loc_f, p->calculs.c);
               BUGCRIT (t_eff_glo_f = cholmod_sparse_to_triplet (s_eff_glo_f,
                                                                 p->calculs.c),
-                       FALSE,
+                       false,
                        (gettext ("Erreur d'allocation mémoire.\n"));
                          cholmod_free_sparse (&s_eff_glo_f, p->calculs.c);
                          FREE_ALL)
@@ -2255,7 +2255,7 @@ EF_calculs_resoud_charge (Projet *p,
         /* Charge inconnue */
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                     (gettext ("Type de charge %d inconnu.\n"), charge->type); )
           break;
         }
@@ -2272,7 +2272,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        cholmod_triplet_to_sparse (t_for_comp,
                                                                   0,
                                                                 p->calculs.c)),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_for_part, p->calculs.c);
              cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -2288,7 +2288,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                   0,
                                                   CHOLMOD_REAL,
                                                   p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_for_part, p->calculs.c); )
   t_dep_part->nnz = p->calculs.m_part->nrow;
@@ -2317,7 +2317,7 @@ EF_calculs_resoud_charge (Projet *p,
     else
     {
       BUGCRIT (status == UMFPACK_OK,
-               FALSE,
+               false,
                (gettext ("Erreur de calcul : %d\n"), status);
                  cholmod_free_triplet (&t_for_part, p->calculs.c);
                  cholmod_free_triplet (&t_dep_part, p->calculs.c); )
@@ -2329,7 +2329,7 @@ EF_calculs_resoud_charge (Projet *p,
                                           p->calculs.t_part->nrow,
                                           ax);
     BUG (!isnan (p->calculs.residu),
-         FALSE,
+         false,
          cholmod_free_triplet (&t_for_part, p->calculs.c);
            cholmod_free_triplet (&t_dep_part, p->calculs.c); )
     printf ("Residu sur les déplacements : %g\n", p->calculs.residu);
@@ -2353,7 +2353,7 @@ EF_calculs_resoud_charge (Projet *p,
                          0,
                          CHOLMOD_REAL,
                          p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_dep_part, p->calculs.c); )
   t_dep_tot->nnz = _1990_action_forces_renvoie (action)->nrow;
@@ -2389,7 +2389,7 @@ EF_calculs_resoud_charge (Projet *p,
                                           cholmod_triplet_to_sparse (t_dep_tot,
                                                                      0,
                                                                 p->calculs.c)),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
   
@@ -2398,10 +2398,10 @@ EF_calculs_resoud_charge (Projet *p,
   BUGCRIT (sparse_tmp = cholmod_ssmult (p->calculs.m_comp,
                                       _1990_action_deplacement_renvoie(action),
                                         0,
-                                        TRUE,
-                                        TRUE,
+                                        true,
+                                        true,
                                         p->calculs.c),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
   BUGCRIT (_1990_action_efforts_noeuds_change (
@@ -2410,10 +2410,10 @@ EF_calculs_resoud_charge (Projet *p,
                           _1990_action_forces_renvoie (action),
                           one,
                           minusone,
-                          TRUE,
-                          TRUE,
+                          true,
+                          true,
                           p->calculs.c)),
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&t_dep_tot, p->calculs.c);
              cholmod_free_sparse (&sparse_tmp, p->calculs.c); )
@@ -2426,7 +2426,7 @@ EF_calculs_resoud_charge (Projet *p,
   {
     EF_Barre *element = *it;
     double    S = m_g (EF_sections_s (element->section));
-    uint32_t  num = std::distance (p->modele.barres.begin (),
+    long      num = std::distance (p->modele.barres.begin (),
                                    std::find (p->modele.barres.begin (),
                                               p->modele.barres.end (),
                                               element));
@@ -2448,13 +2448,13 @@ EF_calculs_resoud_charge (Projet *p,
       double           Iz = m_g (EF_sections_iz (element->section));
       
       BUG (!isnan (J),
-           FALSE,
+           false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
       BUG (!isnan (Iy),
-           FALSE,
+           false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
       BUG (!isnan (Iz),
-           FALSE,
+           false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
       
       
@@ -2500,12 +2500,12 @@ EF_calculs_resoud_charge (Projet *p,
         case BETON_ELEMENT_POUTRE :
         {
           E = m_g (EF_materiaux_E (element->materiau));
-          G = m_g (EF_materiaux_G (element->materiau, FALSE));
+          G = m_g (EF_materiaux_G (element->materiau, false));
           break;
         }
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                     (gettext ("Type d'élément %d inconnu.\n"), element->type);
                       cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
           break;
@@ -2520,7 +2520,7 @@ EF_calculs_resoud_charge (Projet *p,
                                                      0,
                                                      CHOLMOD_REAL,
                                                      p->calculs.c),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
       ai = (uint32_t *) t_dep_glo->i;
@@ -2549,7 +2549,7 @@ EF_calculs_resoud_charge (Projet *p,
       BUGCRIT (s_dep_glo = cholmod_triplet_to_sparse (t_dep_glo,
                                                       0,
                                                       p->calculs.c),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  cholmod_free_triplet (&t_dep_tot, p->calculs.c);
                  cholmod_free_triplet (&t_dep_glo, p->calculs.c); )
@@ -2558,9 +2558,9 @@ EF_calculs_resoud_charge (Projet *p,
                                            s_dep_glo,
                                            0,
                                            1,
-                                           TRUE,
+                                           true,
                                            p->calculs.c),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  cholmod_free_triplet (&t_dep_tot, p->calculs.c);
                  cholmod_free_sparse (&s_dep_glo, p->calculs.c); )
@@ -2574,9 +2574,9 @@ EF_calculs_resoud_charge (Projet *p,
                                            s_dep_loc,
                                            0,
                                            1,
-                                           TRUE,
+                                           true,
                                            p->calculs.c),
-               FALSE,
+               false,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  cholmod_free_triplet (&t_dep_tot, p->calculs.c);
                  cholmod_free_sparse (&s_dep_loc, p->calculs.c); )
@@ -2589,8 +2589,8 @@ EF_calculs_resoud_charge (Projet *p,
       ax2 = (double *) s_eff_loc->x;
       l_debut = EF_noeuds_distance (noeud_debut, element->noeud_debut);
       l_fin = EF_noeuds_distance (noeud_fin, element->noeud_debut);
-      BUG (!isnan (l_debut), FALSE, FREE_ALL)
-      BUG (!isnan (l_fin), FALSE, FREE_ALL)
+      BUG (!isnan (l_debut), false, FREE_ALL)
+      BUG (!isnan (l_fin), false, FREE_ALL)
       l = ABS (l_fin - l_debut);
       
   //     Ajout des efforts entre deux noeuds dus à leur déplacement relatif,
@@ -2613,7 +2613,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[0] + ax2[6]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_ajout_poly (_1990_action_efforts_renvoie (action,
                                                                      1,
@@ -2624,7 +2624,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[1] + ax2[7]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_ajout_poly (_1990_action_efforts_renvoie (action,
                                                                      2,
@@ -2635,7 +2635,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[2] + ax2[8]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_ajout_poly (_1990_action_efforts_renvoie (action,
                                                                      3,
@@ -2646,7 +2646,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[3] + ax2[9]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_ajout_poly (_1990_action_efforts_renvoie (action,
                                                                      4,
@@ -2657,7 +2657,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[4] + ax2[10]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       BUG (common_fonction_ajout_poly (_1990_action_efforts_renvoie (action,
                                                                      5,
@@ -2668,7 +2668,7 @@ EF_calculs_resoud_charge (Projet *p,
                                        -(ax2[5] + ax2[11]) / l,
                                        0., 0., 0., 0., 0.,
                                        l_debut),
-           FALSE,
+           false,
            FREE_ALL)
       
   //     Ajout des déplacements & rotations entre deux noeuds dus à leur
@@ -2720,7 +2720,7 @@ EF_calculs_resoud_charge (Projet *p,
                  (ax2[0] + ax2[6]) / (2 * E * S * l),
                  0., 0., 0., 0.,
                  l_debut),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_ajout_poly (
                  _1990_action_deformation_renvoie (action, 1, num),
@@ -2734,7 +2734,7 @@ EF_calculs_resoud_charge (Projet *p,
                  (ax2[5] + ax2[11]) / (6 * l * E * Iz),
                  0., 0., 0.,
                  l_debut),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_ajout_poly (
                  _1990_action_deformation_renvoie (action, 2, num),
@@ -2748,7 +2748,7 @@ EF_calculs_resoud_charge (Projet *p,
                  -(ax2[4] + ax2[10]) / (6 * l * E * Iy),
                  0., 0., 0.,
                  l_debut),
-               FALSE,
+               false,
                FREE_ALL)
           if ((j == 0) &&
               (element->relachement != NULL) &&
@@ -2764,7 +2764,7 @@ EF_calculs_resoud_charge (Projet *p,
                    (ax2[3] + ax2[9]) / (2 * G * J * l),
                    0., 0., 0., 0.,
                    l_debut),
-                 FALSE,
+                 false,
                  FREE_ALL)
           }
           else
@@ -2778,7 +2778,7 @@ EF_calculs_resoud_charge (Projet *p,
                    (ax2[3] + ax2[9]) / (2 * G * J * l),
                    0., 0., 0., 0.,
                    l_debut),
-                 FALSE,
+                 false,
                  FREE_ALL)
           }
           BUG (common_fonction_ajout_poly (
@@ -2792,7 +2792,7 @@ EF_calculs_resoud_charge (Projet *p,
                  (ax2[4] + ax2[10]) / (2 * l * E * Iy),
                  0., 0., 0., 0.,
                  l_debut),
-               FALSE,
+               false,
                FREE_ALL)
           BUG (common_fonction_ajout_poly (
                  _1990_action_rotation_renvoie (action, 2, num),
@@ -2805,7 +2805,7 @@ EF_calculs_resoud_charge (Projet *p,
                  (ax2[5] + ax2[11]) / (2 * l * E * Iz),
                  0., 0., 0., 0.,
                  l_debut),
-               FALSE,
+               false,
                FREE_ALL)
   //        \end{align*}\begin{verbatim}
       
@@ -2818,7 +2818,7 @@ EF_calculs_resoud_charge (Projet *p,
   // FinPour
   cholmod_free_triplet (&t_dep_tot, p->calculs.c);
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

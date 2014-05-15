@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean EF_relachement_init               (Projet             *p)
+bool     EF_relachement_init               (Projet             *p)
                                        __attribute__((__warn_unused_result__));
 
 EF_Relachement *EF_relachement_ajout       (Projet             *p,
@@ -43,9 +43,9 @@ EF_Relachement *EF_relachement_ajout       (Projet             *p,
 
 EF_Relachement* EF_relachement_cherche_nom (Projet             *p,
                                             const char         *nom,
-                                            gboolean            critique)
+                                            bool                critique)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_relachement_modif              (Projet             *p,
+bool     EF_relachement_modif              (Projet             *p,
                                             EF_Relachement     *relachement,
                                             const char         *nom,
                                             EF_Relachement_Type rx_debut,
@@ -62,11 +62,11 @@ gboolean EF_relachement_modif              (Projet             *p,
                                             void               *rz_f_data)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_relachement_supprime           (EF_Relachement     *relachement,
-                                            gboolean         annule_si_utilise,
+bool     EF_relachement_supprime           (EF_Relachement     *relachement,
+                                            bool             annule_si_utilise,
                                             Projet             *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_relachement_free               (Projet             *p)
+bool     EF_relachement_free               (Projet             *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

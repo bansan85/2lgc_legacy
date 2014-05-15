@@ -27,9 +27,9 @@ void show_help     ();
 
 double   common_text_str_to_double (char          *texte,
                                     double         val_min,
-                                    gboolean       min_include,
+                                    bool           min_include,
                                     double         val_max,
-                                    gboolean       max_include)
+                                    bool           max_include)
                                        __attribute__((__warn_unused_result__));
 wchar_t *strcasestr_internal       (const wchar_t *haystack,
                                     const wchar_t *needle)

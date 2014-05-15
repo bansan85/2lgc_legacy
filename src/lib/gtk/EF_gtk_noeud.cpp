@@ -205,7 +205,7 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
     gtk_tree_model_get (model, &Iter, 0, &noeud, -1);
     
     liste_noeuds.push_back (noeud);
-    if (_1992_1_1_barres_cherche_dependances (p,
+    if (!_1992_1_1_barres_cherche_dependances (p,
                                               NULL,
                                               &liste_noeuds,
                                               NULL,
@@ -217,7 +217,7 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE) == FALSE)
+                                              false))
     {
       BUG (_1992_1_1_barres_supprime_liste (p, &liste_noeuds, NULL),
            FALSE)
@@ -237,8 +237,8 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
 /**
  * \brief En fonction de la sélection, active ou désactive les boutons
  *        supprimer.
- * \param select : TRUE si le changement survient via un changement de la
- *                 sélection, FALSE par un changement de page.
+ * \param select : true si le changement survient via un changement de la
+ *                 sélection, false par un changement de page.
  * \param p : la variable projet.
  * \return Rien.\n
  *   Echec :
@@ -246,7 +246,7 @@ EF_gtk_noeud_treeview_key_press (GtkTreeView *treeview,
  *     - interface graphique non initialisée.
  */
 void
-EF_noeuds_set_supprimer_visible (gboolean select,
+EF_noeuds_set_supprimer_visible (bool     select,
                                  Projet  *p)
 {
   GtkTreeModel *model;
@@ -261,9 +261,9 @@ EF_noeuds_set_supprimer_visible (gboolean select,
   
   // Noeud libre
   if (((gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 0) &&
-       (select == TRUE)) ||
+       (select)) ||
       ((gtk_notebook_get_current_page (GTK_NOTEBOOK (UI_NOE.notebook)) == 1) &&
-       (select == FALSE)))
+       (!select)))
   {
     // Aucune sélection
     if (!gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
@@ -329,7 +329,7 @@ EF_noeuds_set_supprimer_visible (gboolean select,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                                UI_NOE.builder, "EF_noeuds_boutton_supprimer")),
@@ -443,7 +443,7 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
       , )
   
   // Noeud utilisé
@@ -493,7 +493,7 @@ void
 EF_noeuds_treeview_select_changed (GtkTreeSelection *treeselection,
                                    Projet           *p)
 {
-  EF_noeuds_set_supprimer_visible (TRUE, p);
+  EF_noeuds_set_supprimer_visible (true, p);
   
   return;
 }
@@ -515,7 +515,7 @@ EF_gtk_noeuds_notebook_change (GtkNotebook *notebook,
                                guint        page_num,
                                Projet      *p)
 {
-  EF_noeuds_set_supprimer_visible (FALSE, p);
+  EF_noeuds_set_supprimer_visible (false, p);
   
   return;
 }
@@ -566,10 +566,8 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
   
   // On vérifie si le texte contient bien un nombre flottant
   conversion = common_text_str_to_double (new_text,
-                                          -INFINITY,
-                                          FALSE,
-                                          INFINITY,
-                                          FALSE);
+                                          -INFINITY, false,
+                                          INFINITY, false);
   
   if (!isnan (conversion))
   {
@@ -667,7 +665,7 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
   
   // On vérifie si le texte contient bien un nombre flottant
-  conversion = common_text_str_to_double (new_text, 0, TRUE, 1., TRUE);
+  conversion = common_text_str_to_double (new_text, 0, true, 1., true);
   if (!isnan (conversion))
   {
     EF_Noeud *noeud;
@@ -752,7 +750,7 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   {
     EF_Noeud *noeud2;
     
-    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, TRUE),
+    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, true),
          ,
          free (fake); )
     
@@ -829,7 +827,7 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   {
     EF_Appui *appui;
     
-    BUG (appui = EF_appuis_cherche_nom (p, new_text, TRUE), )
+    BUG (appui = EF_appuis_cherche_nom (p, new_text, true), )
     BUG (EF_noeuds_change_appui (p, noeud, appui), )
   }
   
@@ -895,7 +893,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     
     // On modifie l'action
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
-    BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, TRUE),
+    BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, true),
          ,
          free (fake); )
     
@@ -909,7 +907,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
       
       info->barre->discretisation_element--;
       info->barre->nds_inter.remove (noeud);
-      BUGCRIT (info->barre->info_EF = realloc (
+      BUGCRIT (info->barre->info_EF = (Barre_Info_EF *) realloc (
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
@@ -917,7 +915,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
                 free (fake); )
       info->barre = barre;
       info->barre->discretisation_element++;
-      BUGCRIT (info->barre->info_EF = realloc (
+      BUGCRIT (info->barre->info_EF = (Barre_Info_EF *) realloc (
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
@@ -1020,7 +1018,7 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   
-  data = noeud->data;
+  data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
     conv_f_c (data->x, tmp, DECIMAL_DISTANCE);
@@ -1060,7 +1058,7 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   
-  data = noeud->data;
+  data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
     conv_f_c (data->y, tmp, DECIMAL_DISTANCE);
@@ -1100,7 +1098,7 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   
-  data = noeud->data;
+  data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
     conv_f_c (data->z, tmp, DECIMAL_DISTANCE);
@@ -1168,7 +1166,7 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
-  data = noeud->data;
+  data = (EF_Noeud_Libre *) noeud->data;
   if (data->relatif != NULL)
   {
     BUGCRIT (tmp = g_strdup_printf ("%d", data->relatif->numero),
@@ -1207,7 +1205,7 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
-  data = noeud->data;
+  data = (EF_Noeud_Barre *) noeud->data;
   BUGCRIT (tmp = g_strdup_printf ("%d", data->barre->numero),
            ,
            (gettext ("Erreur d'allocation mémoire.\n")); )
@@ -1241,7 +1239,7 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
-  data = noeud->data;
+  data = (EF_Noeud_Barre *) noeud->data;
   conv_f_c (data->position_relative_barre, tmp, DECIMAL_DISTANCE);
   
   g_object_set (cell, "text", tmp, NULL);

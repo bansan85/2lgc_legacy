@@ -22,7 +22,6 @@
 #include <cholmod.h>
 #include <string.h>
 #include <math.h>
-#include <gmodule.h>
 
 #include <memory>
 #include <algorithm>
@@ -55,18 +54,18 @@
  * \brief Initialise la liste des éléments en béton.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1992_1_1_barres_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   // Trivial
   p->modele.barres.clear ();
@@ -84,7 +83,7 @@ _1992_1_1_barres_init (Projet *p)
                       -1);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -152,8 +151,8 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
  * \param relachement : relachement de la barre (NULL si aucun),
  * \param discretisation_element : nombre d'éléments une fois discrétisé.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - noeud_debut == NULL,
  *     - noeud_fin == NULL,
@@ -162,7 +161,7 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
  *     - materiau == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1992_1_1_barres_ajout (Projet         *p,
                         Type_Element    type,
                         Section        *section,
@@ -175,18 +174,17 @@ _1992_1_1_barres_ajout (Projet         *p,
 {
   EF_Barre *element_nouveau;
   
-  // Trivial
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (noeud_debut, "%p", noeud_debut, FALSE)
-  BUGPARAM (noeud_fin, "%p", noeud_fin, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (noeud_debut, "%p", noeud_debut, false)
+  BUGPARAM (noeud_fin, "%p", noeud_fin, false)
   INFO (noeud_debut != noeud_fin,
-        FALSE,
+        false,
         (gettext ("La création d'une barre nécessite l'utilisation de des noeuds différents.\n")); )
-  BUGPARAM (materiau, "%p", materiau, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (materiau, "%p", materiau, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (!errmoy (EF_noeuds_distance (noeud_debut, noeud_fin),
                  ERRMOY_DIST),
-        FALSE,
+        false,
         (gettext ("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"),
                   noeud_debut->numero,
                   noeud_fin->numero); )
@@ -217,8 +215,7 @@ _1992_1_1_barres_ajout (Projet         *p,
     element_nouveau->numero = (*(--p->modele.barres.end ()))->numero + 1U;
   }
   
-  BUG (EF_calculs_free (p),
-       FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
   // On incrémente le numéro de la future barre
@@ -227,7 +224,7 @@ _1992_1_1_barres_ajout (Projet         *p,
     char *nb_barres;
     
     BUGCRIT (nb_barres = g_strdup_printf ("%d", element_nouveau->numero + 1),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                delete element_nouveau->info_EF;
                delete element_nouveau; )
@@ -244,7 +241,7 @@ _1992_1_1_barres_ajout (Projet         *p,
     GtkTreeIter iter;
     
     BUGCRIT (tmp = g_strdup_printf ("%d", (int) type),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                delete element_nouveau->info_EF;
                delete element_nouveau; )
@@ -269,7 +266,7 @@ _1992_1_1_barres_ajout (Projet         *p,
     free (tmp);
   }
   
-  BUG (m3d_barre (&UI_M3D, element_nouveau), FALSE)
+  BUG (m3d_barre (&UI_M3D, element_nouveau), false)
 #endif
   
   if (discretisation_element != 0)
@@ -285,14 +282,14 @@ _1992_1_1_barres_ajout (Projet         *p,
              m_f ((i + 1.) / (discretisation_element + 1.),
                   FLOTTANT_ORDINATEUR),
              NULL),
-           FALSE,
+           false,
            _1992_1_1_barres_free_foreach (element_nouveau, p); )
     }
   }
   
   p->modele.barres.push_back (element_nouveau);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -300,7 +297,7 @@ _1992_1_1_barres_ajout (Projet         *p,
  * \brief Renvoie la barre en fonction du numéro.
  * \param p : la variable projet,
  * \param numero : le numéro de la barre.
- * \param critique : si TRUE alors #FAILINFO, si FALSE alors return NULL.
+ * \param critique : si true alors #FAILINFO, si false alors return NULL.
  * \return
  *   Succès : Pointeur vers la barre.\n
  *   Échec : NULL :
@@ -310,7 +307,7 @@ _1992_1_1_barres_ajout (Projet         *p,
 EF_Barre *
 _1992_1_1_barres_cherche_numero (Projet  *p,
                                  uint32_t numero,
-                                 gboolean critique)
+                                 bool     critique)
 {
   std::list <EF_Barre *>::iterator it;
   
@@ -347,11 +344,11 @@ _1992_1_1_barres_cherche_numero (Projet  *p,
  *        noeuds, sections, materiaux, relachements et barres passé en
  *        paramètres. Le retour contient également la liste d'origine. Si
  *        noeuds_dep, barres_dep ou charges_dep sont différents de NULL, la
- *        fonction renvoie TRUE si tout s'est bien passé et FALSE autrement.
+ *        fonction renvoie true si tout s'est bien passé et false autrement.
  *        Si noeuds_dep, barres_dep ET charges_dep sont NULL alors la fonction
- *        renvoie TRUE si un élément dépendant a été trouvé (les noeuds
+ *        renvoie true si un élément dépendant a été trouvé (les noeuds
  *        intermédiaires sans dépendance ne sont pas considérés comme une
- *        dépendance pour cette fonction) et FALSE si aucun élément n'a été
+ *        dépendance pour cette fonction) et false si aucun élément n'a été
  *        trouvé.
  * \param p : variable projet,
  * \param appuis : liste de pointeurs vers les appuis à analyser,
@@ -370,15 +367,16 @@ _1992_1_1_barres_cherche_numero (Projet  *p,
  *                       peut être NULL,
  * \param charges_dep : liste de charges (pointeur uniquement) dépendantes,
  *                      peut être NULL,
- * \param origine : TRUE si noeuds_dep, noeuds_dep_n, barres_dep et
+ * \param origine : true si noeuds_dep, noeuds_dep_n, barres_dep et
  *                  barres_dep_n doivent respectivement inclure noeuds et
  *                  barres.
- * \return Succès : cf. description.\n
- *    Échec : FALSE :
+ * \return
+ *    Succès : cf. description.\n
+ *    Échec : false :
  *      - p == NULL,
  *      - #common_selection_ajout_nombre
  */
-gboolean
+bool
 _1992_1_1_barres_cherche_dependances (
   Projet                       *p,
   std::list <EF_Appui *>       *appuis,
@@ -392,9 +390,9 @@ _1992_1_1_barres_cherche_dependances (
   std::list <EF_Barre *>      **barres_dep,
   std::list <uint32_t>        **barres_dep_n,
   std::list <Charge *>        **charges_dep,
-  gboolean                      origine)
+  bool                          origine)
 {
-  gboolean verif;
+  bool verif;
   
   std::unique_ptr <std::list <EF_Noeud *> > noeuds_todo
                                                (new std::list <EF_Noeud *> ());
@@ -418,17 +416,17 @@ _1992_1_1_barres_cherche_dependances (
   std::list <EF_Barre *>::iterator it2;
   std::list <Action   *>::iterator it3;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if ((noeuds_dep == NULL) && (noeuds_dep_n == NULL) &&
       (barres_dep == NULL) && (barres_dep_n == NULL) &&
       (charges_dep == NULL))
   {
-    verif = TRUE;
+    verif = true;
   }
   else
   {
-    verif = FALSE;
+    verif = false;
   }
   
   // On ajoute les noeuds utilisant les appuis
@@ -445,13 +443,13 @@ _1992_1_1_barres_cherche_dependances (
                       appuis->end (),
                       noeud->appui) != appuis->end ()))
       {
-        if (verif == FALSE)
+        if (!verif)
         {
           noeuds_todo.get ()->push_back (noeud);
         }
         else
         {
-          return TRUE;
+          return true;
         }
       }
       
@@ -475,13 +473,13 @@ _1992_1_1_barres_cherche_dependances (
                                            noeuds->end (),
                                            data->relatif) != noeuds->end ())))
       {
-        if (verif == FALSE)
+        if (!verif)
         {
           noeuds_todo.get ()->push_back (noeud);
         }
         else
         {
-          return TRUE;
+          return true;
         }
       }
     }
@@ -496,9 +494,10 @@ _1992_1_1_barres_cherche_dependances (
   {
     EF_Barre *barre = *it2;
     
-    if ((sections != NULL) && (std::find (sections->begin (),
-                                          sections->end (),
-                                          barre->section) != sections->end ())
+    if (((sections != NULL) &&
+         (std::find (sections->begin (),
+                     sections->end (),
+                     barre->section) != sections->end ()))
       || ((materiaux != NULL) &&
           (std::find (materiaux->begin (),
                       materiaux->end (),
@@ -509,13 +508,13 @@ _1992_1_1_barres_cherche_dependances (
                       relachements->end (),
                       barre->relachement) != relachements->end ())))
     {
-      if (verif == FALSE)
+      if (!verif)
       {
         barres_todo.get ()->push_back (barre);
       }
       else
       {
-        return TRUE;
+        return true;
       }
     }
     
@@ -535,13 +534,13 @@ _1992_1_1_barres_cherche_dependances (
                      barres_todo.get ()->end (),
                      barre) == barres_todo.get ()->end ())
       {
-        if (verif == FALSE)
+        if (!verif)
         {
           barres_todo.get ()->push_back (barre);
         }
         else
         {
-          return TRUE;
+          return true;
         }
       }
       
@@ -575,7 +574,7 @@ _1992_1_1_barres_cherche_dependances (
     // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout
     // ce qui est dans barres_todo ne sont que les barres à analyser.
     // barres_todo ne peut contenir une dépendance vis-à-vis des sections /
-    // matériaux / relâchements sinon, la fonction aurait déjà renvoyée TRUE.
+    // matériaux / relâchements sinon, la fonction aurait déjà renvoyée true.
     
     // Puis, tous les noeuds intermédiaires sont ajoutés à la liste des noeuds
     // à étudier.
@@ -639,13 +638,13 @@ _1992_1_1_barres_cherche_dependances (
     // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est
     // pas une dépendance suffisante pour justifier une impossibilité de
     // suppression d'un élément.
-    else if ((verif == TRUE) &&
+    else if ((verif) &&
              (dataa->type == NOEUD_LIBRE) &&
              ((noeuds != NULL) &&  (std::find (noeuds->begin (),
                                     noeuds->end (),
                                     dataa) == noeuds->end ())))
     {
-      return TRUE;
+      return true;
     }
     
     // On parcours la liste des barres pour trouver celles qui commencent ou
@@ -675,9 +674,9 @@ _1992_1_1_barres_cherche_dependances (
             common_selection_ajout_nombre (barre, barres_dep_.get ());
           }
         }
-        else if (verif == TRUE)
+        else if (verif)
         {
-          return TRUE;
+          return true;
         }
         if (std::find (barres_todo.get ()->begin (),
                        barres_todo.get ()->end (),
@@ -779,12 +778,12 @@ _1992_1_1_barres_cherche_dependances (
                 break;
               }
             }
-            else if ((verif == TRUE) &&
+            else if ((verif) &&
                      (std::find (noeuds_done.get ()->begin (),
                                  noeuds_done.get ()->end (),
                                  noeud) != noeuds_done.get ()->end ()))
             {
-              return TRUE;
+              return true;
             }
             
             ++it;
@@ -815,12 +814,12 @@ _1992_1_1_barres_cherche_dependances (
                 break;
               }
             }
-            else if ((verif == TRUE) &&
+            else if ((verif) &&
                      (std::find (barres_todo.get ()->begin (), 
                                  barres_todo.get ()->end (),
                                  barre) != barres_todo.get ()->end ()))
             {
-              return TRUE;
+              return true;
             }
             
             ++it2;
@@ -829,7 +828,7 @@ _1992_1_1_barres_cherche_dependances (
         }
         default :
         {
-          FAILCRIT (FALSE,
+          FAILCRIT (false,
                     (gettext ("Type de charge %d inconnu.\n"), charge->type); )
           break;
         }
@@ -842,7 +841,7 @@ _1992_1_1_barres_cherche_dependances (
     ++it3;
   }
   
-  if (verif == FALSE)
+  if (!verif)
   {
     if (noeuds_dep != NULL)
       *noeuds_dep = noeuds_dep_.release ();
@@ -855,11 +854,11 @@ _1992_1_1_barres_cherche_dependances (
     if (charges_dep != NULL)
       *charges_dep = charges_dep_.release ();
     
-    return TRUE;
+    return true;
   }
   else
   {
-    return FALSE;
+    return false;
   }
 }
 
@@ -874,15 +873,15 @@ _1992_1_1_barres_cherche_dependances (
  * \param y : angle autour de l'axe y,
  * \param z : angle autour de l'axe z.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - debut == NULL,
  *     - fin == NULL,
  *     - y == NULL,
  *     - z == NULL,
  *     - #EF_noeuds_distance_x_y_z.
  */
-gboolean
+bool
 _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
                                  EF_Noeud *fin,
                                  double   *y,
@@ -890,16 +889,16 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
 {
   double xx, yy, zz, ll;
   
-  BUGPARAM (debut, "%p", debut, FALSE)
-  BUGPARAM (fin, "%p", fin, FALSE)
-  BUGPARAM (y, "%p", y, FALSE)
-  BUGPARAM (z, "%p", z, FALSE)
+  BUGPARAM (debut, "%p", debut, false)
+  BUGPARAM (fin, "%p", fin, false)
+  BUGPARAM (y, "%p", y, false)
+  BUGPARAM (z, "%p", z, false)
   
   ll = EF_noeuds_distance_x_y_z (debut, fin, &xx, &yy, &zz);
   
-  BUG (!isnan(ll), FALSE)
+  BUG (!isnan(ll), false)
   INFO (!errmoy (ll, ERRMOY_DIST),
-        FALSE,
+        false,
         (gettext ("La distance entre les noeuds %d et %d est nulle\n"),
                   debut->numero,
                   fin->numero); )
@@ -922,7 +921,7 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -932,19 +931,19 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
  * \param type : nouveau type,
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - p == NULL,
  *     - type inconnu.
  */
-gboolean
+bool
 _1992_1_1_barres_change_type (EF_Barre    *barre,
                               Type_Element type,
                               Projet      *p)
 {
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (p, "%p", p, false)
   
   switch (type)
   {
@@ -960,12 +959,12 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
     }
     default :
     {
-      FAILCRIT (FALSE, ("Le type de l'élément %d est inconnu.\n", type); )
+      FAILCRIT (false, ("Le type de l'élément %d est inconnu.\n", type); )
       break;
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -975,33 +974,33 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
  * \param section : la nouvelle section,
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - p == NULL,
  *     - section == NULL.
  */
-gboolean
+bool
 _1992_1_1_barres_change_section (EF_Barre   *barre,
                                  Section    *section,
                                  Projet     *p)
 {
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   
   if (barre->section == section)
   {
-    return TRUE;
+    return true;
   }
   
   barre->section = section;
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
-  BUG (m3d_barre (&UI_M3D, barre), FALSE)
-  BUG (m3d_rafraichit (p), FALSE)
+  BUG (m3d_barre (&UI_M3D, barre), false)
+  BUG (m3d_rafraichit (p), false)
   
   if (UI_BAR.builder != NULL)
   {
@@ -1010,7 +1009,7 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1020,28 +1019,28 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
  * \param materiau : le nouveau materiau,
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - p == NULL,
  *     - #EF_calculs_free;
  */
-gboolean
+bool
 _1992_1_1_barres_change_materiau (EF_Barre    *barre,
                                   EF_Materiau *materiau,
                                   Projet      *p)
 {
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (p, "%p", p, false)
   
   if (barre->materiau == materiau)
   {
-    return TRUE;
+    return true;
   }
   
   barre->materiau = materiau;
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
@@ -1051,7 +1050,7 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1061,12 +1060,12 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
  * \param angle : le nouvel angle,
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - p == NULL.
  */
-gboolean
+bool
 _1992_1_1_barres_change_angle (EF_Barre *barre,
                                Flottant  angle,
                                Projet   *p)
@@ -1076,22 +1075,22 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
                                                (new std::list <EF_Barre *> ());
 #endif
   
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (p, "%p", p, false)
   
   if (errmax (m_g (barre->angle), m_g (angle)))
   {
-    return TRUE;
+    return true;
   }
   
   barre->angle = angle;
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
   liste_barre.get ()->push_back (barre);
-  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), FALSE)
-  BUG (m3d_rafraichit (p), FALSE)
+  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), false)
+  BUG (m3d_rafraichit (p), false)
   
   if (UI_BAR.builder != NULL)
   {
@@ -1100,7 +1099,7 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1108,48 +1107,48 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
  * \brief Change un des deux noeuds d'extrémité d'une barre.
  * \param barre : barre à modifier,
  * \param noeud : le nouveau noeud,
- * \param noeud_1 : TRUE si le noeud_debut est à modifier,
- *                  FALSE si le noeud_fin est à modifier.
+ * \param noeud_1 : true si le noeud_debut est à modifier,
+ *                  false si le noeud_fin est à modifier.
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - barre == NULL,
  *     - noeud == NULL,
  *     - p == NULL,
- *     - noeud_1 == TRUE && barre->noeud_fin == noeud,
- *     - noeud_1 == FALSE && barre->noeud_debut == noeud,
+ *     - noeud_1 == true && barre->noeud_fin == noeud,
+ *     - noeud_1 == false && barre->noeud_debut == noeud,
  *     - #_1992_1_1_barres_cherche_dependances,
  *     - le noeud est dépendant de la barre,
  *     - #EF_calculs_free.
  */
-gboolean
+bool
 _1992_1_1_barres_change_noeud (EF_Barre *barre,
                                EF_Noeud *noeud,
-                               gboolean noeud_1,
-                               Projet *p)
+                               bool      noeud_1,
+                               Projet   *p)
 {
   std::list <EF_Noeud *> *liste_noeuds_dep;
   std::unique_ptr <std::list <EF_Barre *> > liste_barre 
                                                (new std::list <EF_Barre *> ());
   
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (noeud, "%p", noeud, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
-  INFO (!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)),
-        FALSE,
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (noeud, "%p", noeud, false)
+  BUGPARAM (p, "%p", p, false)
+  INFO (!((noeud_1) && (barre->noeud_fin == noeud)),
+        false,
         (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n")); )
-  INFO (!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)),
-        FALSE,
+  INFO (!((!noeud_1) && (barre->noeud_debut == noeud)),
+        false,
         (gettext ("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n")); )
   
   if ((noeud_1) && (barre->noeud_debut == noeud))
   {
-    return TRUE;
+    return true;
   }
   if ((!noeud_1) && (barre->noeud_fin == noeud))
   {
-    return TRUE;
+    return true;
   }
   liste_barre.get ()->push_back (barre);
   BUG (_1992_1_1_barres_cherche_dependances (p,
@@ -1164,19 +1163,19 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
                                              NULL,
                                              NULL,
                                              NULL,
-                                             TRUE),
-       FALSE)
+                                             true),
+       false)
   INFO (std::find (liste_noeuds_dep->begin (),
                    liste_noeuds_dep->end (),
                    noeud) == liste_noeuds_dep->end (),
-        FALSE,
+        false,
         (gettext ("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"),
                   noeud->numero,
                   barre->numero);
           delete liste_noeuds_dep; )
   delete liste_noeuds_dep;
   
-  if (noeud_1 == TRUE)
+  if (noeud_1)
   {
     barre->noeud_debut = noeud;
   }
@@ -1185,11 +1184,11 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
     barre->noeud_fin = noeud;
   }
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
-  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), FALSE)
-  BUG (m3d_rafraichit (p), FALSE)
+  BUG (m3d_actualise_graphique (p, NULL, liste_barre.get ()), false)
+  BUG (m3d_rafraichit (p), false)
   
   if (UI_BAR.builder != NULL)
   {
@@ -1198,7 +1197,7 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1208,28 +1207,28 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
  * \param relachement : nouveau relâchement,
  * \param p : variable projet.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - barre == NULL,
  *     - p == NULL,
  *     - #EF_calculs_free.
  */
-gboolean
+bool
 _1992_1_1_barres_change_relachement (EF_Barre       *barre,
                                      EF_Relachement *relachement,
                                      Projet         *p)
 {
-  BUGPARAM (barre, "%p", barre, FALSE)
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (barre, "%p", barre, false)
+  BUGPARAM (p, "%p", p, false)
   
   if (barre->relachement == relachement)
   {
-    return TRUE;
+    return true;
   }
   
   barre->relachement = relachement;
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
@@ -1239,7 +1238,7 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1248,8 +1247,8 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
  * \param p : la variable projet,
  * \param element : la barre à ajouter.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->calculs.t_part == NULL,
  *     - element == NULL,
@@ -1259,7 +1258,7 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
  *     - en cas d'erreur d'allocation mémoire,
  *     - en cas d'erreur due à une fonction interne.
  */
-gboolean
+bool
 _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                  EF_Barre *element)
 {
@@ -1271,13 +1270,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   cholmod_triplet *triplet;
   uint16_t         j;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   INFO (p->calculs.t_part,
-        FALSE,
+        false,
         (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n")); )
-  BUGPARAM (element, "%p", element, FALSE)
+  BUGPARAM (element, "%p", element, false)
   INFO (p->calculs.t_comp,
-        FALSE,
+        false,
         (gettext ("Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n")); )
   
   // Calcul de la matrice de rotation 3D qui permet de passer du repère local
@@ -1363,14 +1362,14 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                         element->noeud_fin,
                                         &y,
                                         &z),
-       FALSE)
+       false)
   triplet = cholmod_allocate_triplet (12,
                                       12,
                                       36,
                                       0,
                                       CHOLMOD_REAL,
                                       p->calculs.c);
-  BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (triplet, false, (gettext ("Erreur d'allocation mémoire.\n")); )
   ai = (uint32_t *) triplet->i;
   aj = (uint32_t *) triplet->j;
   ax = (double *) triplet->x;
@@ -1398,13 +1397,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   triplet->nnz = 36;
   element->m_rot = cholmod_triplet_to_sparse(triplet, 0, p->calculs.c);
   BUGCRIT (element->m_rot,
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n"));
              cholmod_free_triplet (&triplet, p->calculs.c); )
   cholmod_free_triplet (&triplet, p->calculs.c);
   element->m_rot_t = cholmod_transpose ( element->m_rot, 1, p->calculs.c);
   BUGCRIT (element->m_rot_t,
-           FALSE,
+           false,
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // Une fois la matrice de rotation déterminée, il est nécessaire de calculer
@@ -1469,7 +1468,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     
     // Calcul des L_x, L_y, L_z et L.
     ll = EF_noeuds_distance (noeud2, noeud1);
-    BUG (!isnan(ll), FALSE)
+    BUG (!isnan(ll), false)
     
     // Détermination des paramètres de souplesse de l'élément de barre par
     // l'utilisation des fonctions EF_sections_ay, by, cy, az, bz et cz.
@@ -1533,7 +1532,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->rx_debut); )
             break;
@@ -1571,7 +1570,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->ry_debut); )
             break;
@@ -1609,7 +1608,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->rz_debut); )
             break;
@@ -1656,7 +1655,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->rx_fin); )
             break;
@@ -1694,7 +1693,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->ry_fin); )
             break;
@@ -1732,7 +1731,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
           case EF_RELACHEMENT_UNTOUCH :
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Relachement %d inconnu."),
                                 element->relachement->rx_debut); )
             break;
@@ -1748,7 +1747,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                         0,
                                         CHOLMOD_REAL,
                                         p->calculs.c);
-    BUGCRIT (triplet, FALSE, (gettext ("Erreur d'allocation mémoire.\n")); )
+    BUGCRIT (triplet, false, (gettext ("Erreur d'allocation mémoire.\n")); )
     ai = (uint32_t *) triplet->i;
     aj = (uint32_t *) triplet->j;
     ax = (double *) triplet->x;
@@ -1762,7 +1761,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
     es_l = EF_sections_es_l (element, j, 0., ll);
-    BUG (!isnan (es_l), FALSE, cholmod_free_triplet (&triplet, p->calculs.c); )
+    BUG (!isnan (es_l), false, cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
     ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
     ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;
@@ -1801,7 +1800,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     1. / ll,
                                     &MA,
                                     &MB),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 1;  aj[i] = 1;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 5;  aj[i] = 1;  ax[i] =  MA;                i++;
@@ -1824,7 +1823,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    1.,
                                                    &phia_iso,
                                                    &phib_iso),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kAz, MAXDOUBLE))
     {
@@ -1857,7 +1856,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     -1. / ll,
                                     &MA,
                                     &MB),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 1;  aj[i] = 7;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;                i++;
@@ -1883,7 +1882,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    1.,
                                                    &phia_iso,
                                                    &phib_iso),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kBz, MAXDOUBLE))
     {
@@ -1927,7 +1926,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     1. / ll,
                                     &MA,
                                     &MB),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 2;  aj[i] = 2;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 4;  aj[i] = 2;  ax[i] = -MA;                i++;
@@ -1950,7 +1949,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    1.,
                                                    &phia_iso,
                                                    &phib_iso),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kAy, MAXDOUBLE))
     {
@@ -1984,7 +1983,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                     -1. / ll,
                                     &MA,
                                     &MB),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 2;  aj[i] = 8;  ax[i] =  MA / ll + MB / ll; i++;
     ai[i] = 4;  aj[i] = 8;  ax[i] = -MA;                i++;
@@ -2007,7 +2006,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                    1.,
                                                    &phia_iso,
                                                    &phib_iso),
-         FALSE,
+         false,
          cholmod_free_triplet (&triplet, p->calculs.c); )
     if (errrel (element->info_EF[j].kBy, MAXDOUBLE))
     {
@@ -2067,7 +2066,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                                p->calculs.c);
     cholmod_free_triplet (&triplet, p->calculs.c);
     BUGCRIT (element->info_EF[j].m_rig_loc,
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     
     // Calcule la matrice locale dans le repère globale :\end{verbatim}
@@ -2082,7 +2081,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                  0,
                                  p->calculs.c);
     BUGCRIT (sparse_tmp,
-             FALSE,
+             false,
              (gettext( "Erreur d'allocation mémoire.\n")); )
     matrice_rigidite_globale = cholmod_ssmult (sparse_tmp,
                                                element->m_rot_t,
@@ -2092,13 +2091,13 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
                                                p->calculs.c);
     cholmod_free_sparse (&(sparse_tmp), p->calculs.c);
     BUGCRIT (matrice_rigidite_globale,
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     triplet = cholmod_sparse_to_triplet (matrice_rigidite_globale,
                                          p->calculs.c);
     cholmod_free_sparse (&(matrice_rigidite_globale), p->calculs.c);
     BUGCRIT (triplet,
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     ai = (uint32_t *)     triplet->i;
     aj = (uint32_t *)     triplet->j;
@@ -2188,7 +2187,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   }
   // FinPour
   
-  return TRUE;
+  return true;
 }
 
 
@@ -2196,29 +2195,29 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
  * \brief Ajoute à la matrice de rigidité toutes les barres.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - #_1992_1_1_barres_rigidite_ajout.
  */
-gboolean
+bool
 _1992_1_1_barres_rigidite_ajout_tout (Projet *p)
 {
   std::list <EF_Barre *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   it = p->modele.barres.begin ();
   while (it != p->modele.barres.end ())
   {
     EF_Barre *element = *it;
     
-    BUG (_1992_1_1_barres_rigidite_ajout (p, element), FALSE)
+    BUG (_1992_1_1_barres_rigidite_ajout (p, element), false)
     
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -2228,15 +2227,15 @@ _1992_1_1_barres_rigidite_ajout_tout (Projet *p)
  * \param liste_noeuds : liste des noeuds à supprimer.
  * \param liste_barres : liste des barres à supprimer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - #_1992_1_1_barres_cherche_dependances,
  *     - #EF_charge_noeud_enleve_noeuds,
  *     - #EF_charge_barre_ponctuelle_enleve_barres,
  *     - #EF_charge_barre_repartie_uniforme_enleve_barres.
  */
-gboolean
+bool
 _1992_1_1_barres_supprime_liste (Projet                 *p,
                                  std::list <EF_Noeud *> *liste_noeuds,
                                  std::list <EF_Barre *> *liste_barres)
@@ -2248,7 +2247,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
   std::list <EF_Barre *>::iterator it2;
   std::list <Charge   *>::iterator it3;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
@@ -2262,8 +2261,8 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
                                              &barres_suppr,
                                              NULL,
                                              &charges_suppr,
-                                             TRUE),
-       FALSE)
+                                             true),
+       false)
   
   // On enlève dans les charges les noeuds et barres qui seront supprimés
   it3 = charges_suppr->begin ();
@@ -2276,7 +2275,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
       case CHARGE_NOEUD :
       {
         BUG (EF_charge_noeud_enleve_noeuds (charge, noeuds_suppr, p),
-             FALSE,
+             false,
              delete noeuds_suppr;
                delete barres_suppr;
                delete charges_suppr; )
@@ -2287,7 +2286,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
         BUG (EF_charge_barre_ponctuelle_enleve_barres (charge,
                                                        barres_suppr,
                                                        p),
-             FALSE,
+             false,
              delete noeuds_suppr;
                delete barres_suppr;
                delete charges_suppr; )
@@ -2298,7 +2297,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
         BUG (EF_charge_barre_repartie_uniforme_enleve_barres (charge,
                                                               barres_suppr,
                                                               p),
-             FALSE,
+             false,
              delete noeuds_suppr;
                delete barres_suppr;
                delete charges_suppr; )
@@ -2306,7 +2305,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
       }
       default :
       {
-        FAILCRIT (FALSE,
+        FAILCRIT (false,
                   (gettext ("Type de charge %d inconnu.\n"), charge->type);
                     delete noeuds_suppr;
                     delete barres_suppr;
@@ -2333,13 +2332,13 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
                                              &barres_suppr,
                                              NULL,
                                              NULL,
-                                             TRUE),
-       FALSE)
+                                             true),
+       false)
   
   if ((!noeuds_suppr->empty ()) || (!barres_suppr->empty ()))
   {
     BUG (EF_calculs_free (p),
-         FALSE,
+         false,
          delete noeuds_suppr;
            delete barres_suppr; )
   }
@@ -2375,7 +2374,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
   }
   if ((UI_NOE.builder != NULL) && (noeuds_suppr != NULL))
   {
-    EF_noeuds_set_supprimer_visible (TRUE, p);
+    EF_noeuds_set_supprimer_visible (true, p);
   }
   if ((UI_SEC.builder != NULL) && (barres_suppr != NULL))
   {
@@ -2393,7 +2392,7 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
   delete noeuds_suppr;
   delete barres_suppr;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -2401,17 +2400,17 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
  * \brief Libère l'ensemble des barres.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - #EF_calculs_free.
  */
-gboolean
+bool
 _1992_1_1_barres_free (Projet *p)
 {
   std::list <EF_Barre *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   for (it = p->modele.barres.begin (); it != p->modele.barres.end (); ++it)
     _1992_1_1_barres_free_foreach (*it, p);
@@ -2422,7 +2421,7 @@ _1992_1_1_barres_free (Projet *p)
   g_object_unref (UI_BAR.liste_types);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

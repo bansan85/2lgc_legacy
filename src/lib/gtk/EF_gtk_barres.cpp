@@ -90,7 +90,7 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   BUGCRIT (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (UI_BAR.liste_types),
-                                          &iter2) == TRUE,
+                                          &iter2),
            ,
            (gettext ("Aucun type de barre n'est défini.\n")); )
   gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
@@ -109,7 +109,7 @@ EF_gtk_barres_edit_type (GtkCellRendererText *cell,
     free (nom_type);
     parcours = 1;
     while (gtk_tree_model_iter_next (GTK_TREE_MODEL (UI_BAR.liste_types),
-                                     &iter2) == TRUE)
+                                     &iter2))
     {
       gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                           &iter2,
@@ -173,7 +173,7 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  BUG (section = EF_sections_cherche_nom (p, new_text, TRUE), )
+  BUG (section = EF_sections_cherche_nom (p, new_text, true), )
   BUG (_1992_1_1_barres_change_section (barre, section, p), )
   
   return;
@@ -218,7 +218,7 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  BUG (materiau = EF_materiaux_cherche_nom (p, new_text, TRUE), )
+  BUG (materiau = EF_materiaux_cherche_nom (p, new_text, true), )
   BUG (_1992_1_1_barres_change_materiau (barre, materiau, p), )
   
   return;
@@ -270,7 +270,7 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   {
     EF_Relachement *relachement;
     
-    BUG (relachement = EF_relachement_cherche_nom (p, new_text, TRUE), )
+    BUG (relachement = EF_relachement_cherche_nom (p, new_text, true), )
     BUG (_1992_1_1_barres_change_relachement (barre, relachement, p), )
   }
   
@@ -327,15 +327,15 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
     
     free (fake);
     
-    BUG (noeud = EF_noeuds_cherche_numero (p, conversion, TRUE), )
+    BUG (noeud = EF_noeuds_cherche_numero (p, conversion, true), )
     
     if (column == 4)
     {
-      BUG (_1992_1_1_barres_change_noeud (barre, noeud, TRUE, p), )
+      BUG (_1992_1_1_barres_change_noeud (barre, noeud, true, p), )
     }
     else
     {
-      BUG (_1992_1_1_barres_change_noeud (barre, noeud, FALSE, p), )
+      BUG (_1992_1_1_barres_change_noeud (barre, noeud, false, p), )
     }
   }
   else
@@ -382,7 +382,7 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  conversion = common_text_str_to_double (new_text, -360., FALSE, 360., FALSE);
+  conversion = common_text_str_to_double (new_text, -360., false, 360., false);
   if (isnan (conversion))
   {
     return;
@@ -481,19 +481,19 @@ EF_gtk_barres_treeview_key_press (GtkWidget *widget,
       gtk_tree_model_get (model, &Iter, 0, &barre, -1);
       
       liste_barres.push_back (barre);
-      if (_1992_1_1_barres_cherche_dependances (p,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                &liste_barres,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                NULL,
-                                                FALSE) == FALSE)
+      if (!_1992_1_1_barres_cherche_dependances (p,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 &liste_barres,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL,
+                                                 false))
       {
         BUG (_1992_1_1_barres_supprime_liste (p, NULL, &liste_barres),
              FALSE)
@@ -572,7 +572,7 @@ EF_gtk_barres_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                         UI_BAR.builder, "EF_barres_boutton_supprimer_direct")),
@@ -662,7 +662,7 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
       , )
   
   BUGCRIT ((!liste_noeuds_dep->empty ()) ||
@@ -745,7 +745,7 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
   EF_Barre   *barre;
   char       *tmp;
   GtkTreeIter iter2;
-  Projet     *p = data2;
+  Projet     *p = (Projet *) data2;
   
   BUGPARAM (p, "%p", p, )
   

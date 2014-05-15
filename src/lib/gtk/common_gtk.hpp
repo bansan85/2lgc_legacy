@@ -166,24 +166,24 @@ gboolean common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
 
 double       conv_buff_d           (GtkTextBuffer *textbuffer,
                                     double         val_min,
-                                    gboolean       min_include,
+                                    bool           min_include,
                                     double         val_max,
-                                    gboolean       max_include);
+                                    bool           max_include);
 uint32_t     conv_buff_u           (GtkTextBuffer *textbuffer,
                                     uint32_t       val_min,
-                                    gboolean       min_include,
+                                    bool           min_include,
                                     uint32_t       val_max,
-                                    gboolean       max_include);
+                                    bool           max_include);
 uint16_t     conv_buff_hu          (GtkTextBuffer *textbuffer,
                                     uint16_t       val_min,
-                                    gboolean       min_include,
+                                    bool           min_include,
                                     uint16_t       val_max,
-                                    gboolean       max_include);
+                                    bool           max_include);
 uint32_t common_gtk_entry_uint     (GtkEntry      *entry,
                                     uint32_t       val_min,
-                                    gboolean       min_include,
+                                    bool           min_include,
                                     uint32_t       val_max,
-                                    gboolean       max_include);
+                                    bool           max_include);
 
 void common_gtk_render_double   (GtkTreeViewColumn *tree_column,
                                  GtkCellRenderer   *cell,

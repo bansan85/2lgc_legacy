@@ -45,14 +45,14 @@
  * \brief Initialise la liste des sections.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_sections_init (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->modele.sections.clear ();
   
@@ -60,7 +60,7 @@ EF_sections_init (Projet *p)
   UI_SEC.liste_sections = gtk_list_store_new (1, G_TYPE_STRING);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -69,13 +69,12 @@ EF_sections_init (Projet *p)
  * \param p : la variable projet,
  * \param section : la section à insérer.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL.
  */
-static
-gboolean
+bool
 EF_sections_insert (Projet  *p,
                     Section *section)
 {
@@ -83,8 +82,8 @@ EF_sections_insert (Projet  *p,
   
   Section *section_tmp;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   
   it = p->modele.sections.begin ();
   while (it != p->modele.sections.end ())
@@ -140,7 +139,7 @@ EF_sections_insert (Projet  *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -150,20 +149,19 @@ EF_sections_insert (Projet  *p,
  * \param p : la variable projet,
  * \param section : la section à repositionner.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL.
  */
-static
-gboolean
+bool
 EF_sections_repositionne (Projet  *p,
                           Section *section)
 {
   std::list <Section *>::iterator it;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   
   // On réinsère la section au bon endroit
   p->modele.sections.remove (section);
@@ -228,7 +226,7 @@ EF_sections_repositionne (Projet  *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -238,7 +236,7 @@ EF_sections_repositionne (Projet  *p,
   \
   BUGPARAM (p, "%p", p, NULL) \
   BUGPARAM (nom, "%p", nom, NULL) \
-  INFO (!EF_sections_cherche_nom (p, nom, FALSE), \
+  INFO (!EF_sections_cherche_nom (p, nom, false), \
         NULL, \
         (gettext ("La section %s existe déjà.\n"), nom); ) \
   section_nouvelle = new Section; \
@@ -258,8 +256,8 @@ EF_sections_repositionne (Projet  *p,
  * \param l : la largeur,
  * \param h : la hauteur.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - nom == NULL,
  *     - le nom de la section est déjà existant,
@@ -318,17 +316,17 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                &liste_barres_dep, \
                                                NULL, \
                                                NULL, \
-                                               FALSE), \
-         FALSE) \
+                                               false), \
+         false) \
     \
     if (!liste_barres_dep->empty ()) \
     { \
       BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep), \
-           FALSE, \
+           false, \
              delete liste_barres_dep; ) \
       delete liste_barres_dep; \
-      BUG (m3d_rafraichit (p), FALSE) \
-      BUG (EF_calculs_free (p), FALSE) \
+      BUG (m3d_rafraichit (p), false) \
+      BUG (EF_calculs_free (p), false) \
     } \
     else \
     { \
@@ -358,13 +356,13 @@ EF_sections_rectangulaire_ajout (Projet     *p,
                                                &liste_barres_dep, \
                                                NULL, \
                                                NULL, \
-                                               FALSE), \
-         FALSE) \
+                                               false), \
+         false) \
     \
     if (!liste_barres_dep->empty ()) \
     { \
       delete liste_barres_dep; \
-      BUG (EF_calculs_free (p), FALSE) \
+      BUG (EF_calculs_free (p), false) \
     } \
     else \
     { \
@@ -382,41 +380,41 @@ EF_sections_rectangulaire_ajout (Projet     *p,
  * \param l : sa nouvelle largeur, NAN si aucun changement,
  * \param h : sa nouvelle hauteur, NAN si aucun changement.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL,
  *     - section->type != RECTANGULAIRE.
  */
-gboolean
+bool
 EF_sections_rectangulaire_modif (Projet     *p,
                                  Section    *section,
                                  const char *nom,
                                  Flottant    l,
                                  Flottant    h)
 {
-  Section_T *section_data = section->data;
+  Section_T *section_data = (Section_T *) section->data;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (section->type == SECTION_RECTANGULAIRE,
-        FALSE,
+        false,
         (gettext ("La section doit être de type rectangulaire.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
-    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_sections_cherche_nom (p, nom, false),
+          false,
           (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     INFO (section->nom = g_strdup (nom),
-          FALSE,
+          false,
           (gettext ("Erreur d'allocation mémoire.\n"));
             section->nom = tmp; )
     free (tmp);
-    BUG (EF_sections_repositionne (p, section), FALSE)
+    BUG (EF_sections_repositionne (p, section), false)
   }
   
   SECTION_MODIF (largeur_retombee, l)
@@ -429,7 +427,7 @@ EF_sections_rectangulaire_modif (Projet     *p,
     SECTION_MODIF2
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -442,8 +440,8 @@ EF_sections_rectangulaire_modif (Projet     *p,
  * \param ht : la hauteur de la table,
  * \param hr : la hauteur de la retombée.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - nom == NULL,
  *     - en cas d'erreur d'allocation mémoire.
@@ -507,13 +505,13 @@ EF_sections_T_ajout (Projet     *p,
  * \param ht : la nouvelle hauteur de la table, NAN si aucun changement,
  * \param hr : la nouvelle hauteur de la retombée, NAN si aucun changement.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL, 
  *     - section->type != T.
  */
-gboolean EF_sections_T_modif (Projet     *p,
+bool     EF_sections_T_modif (Projet     *p,
                               Section    *section,
                               const char *nom,
                               Flottant    lt,
@@ -521,28 +519,28 @@ gboolean EF_sections_T_modif (Projet     *p,
                               Flottant    ht,
                               Flottant    hr)
 {
-  Section_T *section_data = section->data;
+  Section_T *section_data = (Section_T *) section->data;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (section->type == SECTION_T,
-        FALSE,
+        false,
         (gettext ("La section doit être de type en T.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
-    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_sections_cherche_nom (p, nom, false),
+          false,
           (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                section->nom = tmp; )
     free (tmp);
-    BUG (EF_sections_repositionne (p, section), FALSE)
+    BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
@@ -572,7 +570,7 @@ gboolean EF_sections_T_modif (Projet     *p,
     SECTION_MODIF2
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -582,8 +580,8 @@ gboolean EF_sections_T_modif (Projet     *p,
  * \param nom : nom de la section,
  * \param cote : le coté.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
@@ -617,40 +615,40 @@ EF_sections_carree_ajout (Projet    *p,
  * \param nom : nouveau nom de la section, NULL si aucun changement,
  * \param cote : le nouveau coté, NAN si aucun changement.
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL,
  *     - section->type != CARREE.
  */
-gboolean
+bool
 EF_sections_carree_modif (Projet     *p,
                           Section    *section,
                           const char *nom,
                           Flottant    cote)
 {
-  Section_T *section_data = section->data;
+  Section_T *section_data = (Section_T *) section->data;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (section->type == SECTION_CARREE,
-        FALSE,
+        false,
         (gettext ("La section doit être de type carrée.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
-    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_sections_cherche_nom (p, nom, false),
+          false,
           (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                section->nom = tmp; )
     free (section->nom);
-    BUG (EF_sections_repositionne (p, section), FALSE)
+    BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
@@ -677,7 +675,7 @@ EF_sections_carree_modif (Projet     *p,
     SECTION_MODIF2
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -687,8 +685,8 @@ EF_sections_carree_modif (Projet     *p,
  * \param nom : nom de la section,
  * \param diametre : le diamètre.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
@@ -729,40 +727,40 @@ EF_sections_circulaire_ajout (Projet     *p,
  * \param nom : nom de la section, NULL si aucun changement,
  * \param diametre : le diamètre, NAN si aucun changement.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL,
  *     - section->type != CIRCULAIRE.
  */
-gboolean
+bool
 EF_sections_circulaire_modif (Projet     *p,
                               Section    *section,
                               const char *nom,
                               Flottant    diametre)
 {
-  Section_Circulaire *section_data = section->data;
+  Section_Circulaire *section_data = (Section_Circulaire *) section->data;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (section->type == SECTION_CIRCULAIRE,
-        FALSE,
+        false,
         (gettext ("La section doit être de type circulaire.\n")); )
   
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
-    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_sections_cherche_nom (p, nom, false),
+          false,
           (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                section->nom = tmp; )
     free (tmp);
-    BUG (EF_sections_repositionne (p, section), FALSE)
+    BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
@@ -786,7 +784,7 @@ EF_sections_circulaire_modif (Projet     *p,
     SECTION_MODIF2
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -797,20 +795,20 @@ EF_sections_circulaire_modif (Projet     *p,
  *                indépendantes.
  *                La forme dessinée depuis la liste des points est
  *                automatiquement fermée (le premier point rejoint le dernier).
- * \param message : TRUE si un message d'erreur doit être affiché en cas
+ * \param message : true si un message d'erreur doit être affiché en cas
  *                  d'erreur.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - forme == NULL,
  *     - un groupe de points contient au minimum 3 points,
  *     - deux points se suivant ne peuvent être identiques.
  *     - les segments de droite ne doivent pas se couper entre elles.
  */
-gboolean
+bool
 EF_sections_personnalisee_verif_forme (
   std::list <std::list <EF_Point *> *> *forme,
-  gboolean message)
+  bool     message)
 {
   std::list <std::list <EF_Point *> *>::iterator it;
   
@@ -818,12 +816,12 @@ EF_sections_personnalisee_verif_forme (
   if (message)
   {
     INFO ((forme != NULL) && (!forme->empty ()),
-          FALSE,
+          false,
           (gettext ("La forme de la section est vide.\n")); )
   }
   else if ((forme == NULL) || (forme->empty ()))
   {
-    return FALSE;
+    return false;
   }
   
   // Maintenant, on va vérifier que les droites ne se coupent pas entre elles.
@@ -840,12 +838,12 @@ EF_sections_personnalisee_verif_forme (
     if (message)
     {
       INFO (forme_e->size () >= 3,
-            FALSE,
+            false,
             (gettext ("Un groupe de points doit avoir au minimum 3 points.\n")); )
     }
     else if (forme_e->size () < 3)
     {
-      return FALSE;
+      return false;
     }
     
     it2 = forme_e->begin ();
@@ -874,13 +872,13 @@ EF_sections_personnalisee_verif_forme (
       {
         INFO ((!errrel (m_g (point1->x), m_g (point2->x))) ||
               (!errrel (m_g (point1->y), m_g (point2->y))),
-              FALSE,
+              false,
               (gettext ("2 points se suivant ne peuvent avoir les mêmes coordonnées.\n")); )
       }
       else if ((errrel (m_g (point1->x), m_g (point2->x))) &&
                (errrel (m_g (point1->y), m_g (point2->y))))
       {
-        return FALSE;
+        return false;
       }
       
       // Equation de la droite passant par les deux points.
@@ -973,7 +971,7 @@ EF_sections_personnalisee_verif_forme (
                           ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
                           ((errrel (ymin1, ymin2)) &&
                            (errrel (ymax1, ymax2)))),
-                        FALSE,
+                        false,
                         (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                   m_g (point1->x),
                                   m_g (point1->y),
@@ -990,7 +988,7 @@ EF_sections_personnalisee_verif_forme (
                   ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
                   ((errrel (ymin1, ymin2)) && (errrel (ymax1, ymax2))))
                 {
-                  return FALSE;
+                  return false;
                 }
               }
             }
@@ -1015,7 +1013,7 @@ EF_sections_personnalisee_verif_forme (
                         (y_b < ymax1) &&
                         (xmin1 < xmin2) &&
                         (xmin2 < xmax1)),
-                      FALSE,
+                      false,
                       (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                 m_g (point1->x),
                                 m_g (point1->y),
@@ -1031,7 +1029,7 @@ EF_sections_personnalisee_verif_forme (
                        (xmin1 < xmin2) &&
                        (xmin2 < xmax1))
               {
-                return FALSE;
+                return false;
               }
             }
           }
@@ -1055,7 +1053,7 @@ EF_sections_personnalisee_verif_forme (
                         (y_b < ymax2) &&
                         (xmin2 < xmin1) &&
                         (xmin1 < xmax2)),
-                      FALSE,
+                      false,
                       (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                 m_g (point1->x),
                                 m_g (point1->y),
@@ -1071,7 +1069,7 @@ EF_sections_personnalisee_verif_forme (
                        (xmin2 < xmin1) &&
                        (xmin1 < xmax2))
               {
-                return FALSE;
+                return false;
               }
             }
           }
@@ -1102,7 +1100,7 @@ EF_sections_personnalisee_verif_forme (
                             ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
                             ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
                             ((xmin1 < xmax2) && (xmax2 < xmax1))),
-                          FALSE,
+                          false,
                           (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                     m_g (point1->x),
                                     m_g (point1->y),
@@ -1118,7 +1116,7 @@ EF_sections_personnalisee_verif_forme (
                            ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
                            ((xmin1 < xmax2) && (xmax2 < xmax1)))
                   {
-                    return FALSE;
+                    return false;
                   }
                 }
               }
@@ -1143,7 +1141,7 @@ EF_sections_personnalisee_verif_forme (
                           (x_inter < xmax1) &&
                           (xmin2 < x_inter) &&
                           (x_inter < xmax2)),
-                        FALSE,
+                        false,
                         (gettext ("Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = %lf.\n"),
                                   m_g (point1->x),
                                   m_g (point1->y),
@@ -1157,7 +1155,7 @@ EF_sections_personnalisee_verif_forme (
                 else if ((xmin1 < x_inter) && (x_inter < xmax1) &&
                          (xmin2 < x_inter) && (x_inter < xmax2))
                 {
-                  return FALSE;
+                  return false;
                 }
               }
             }
@@ -1187,7 +1185,7 @@ EF_sections_personnalisee_verif_forme (
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1215,8 +1213,8 @@ EF_sections_personnalisee_verif_forme (
  *                directement ajoutée à la section. Il ne faut donc pas la
  *                libérer une fois l'ajout effectué.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
@@ -1236,7 +1234,7 @@ EF_sections_personnalisee_ajout (Projet     *p,
 {
   SECTION_AJOUT (Section_Personnalisee)
   
-  INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
+  INFO (EF_sections_personnalisee_verif_forme (forme, true),
         NULL,
         (gettext ("La forme est incorrecte.\n"));
           delete section_data;
@@ -1307,13 +1305,13 @@ void EF_sections_personnalisee_free_forme1 (std::list <EF_Point *> *forme_e)
  * \param s : surface de la section, NAN si aucun changement,
  * \param forme : dessin de la section, NULL si aucun changement. 
  * \return
- *   Succès : TRUE.
- *   Échec : FALSE :
+ *   Succès : true.
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL,
  *     - section->type != SECTION_PERSONNALISEE.
  */
-gboolean
+bool
 EF_sections_personnalisee_modif (Projet     *p,
                                  Section    *section,
                                  const char *nom,
@@ -1328,34 +1326,35 @@ EF_sections_personnalisee_modif (Projet     *p,
                                  Flottant    s,
                                  std::list <std::list <EF_Point *> *> *forme)
 {
-  Section_Personnalisee *section_data = section->data;
+  Section_Personnalisee *section_data = (Section_Personnalisee *)
+                                                                 section->data;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   INFO (section->type == SECTION_PERSONNALISEE,
-        FALSE,
+        false,
         (gettext ("La section doit être de type personnalisée.\n")); )
   
   if ((forme != NULL) && (!forme->empty ()))
   {
-    INFO (EF_sections_personnalisee_verif_forme (forme, TRUE),
-          FALSE,
+    INFO (EF_sections_personnalisee_verif_forme (forme, true),
+          false,
           (gettext ("La forme est incorrecte.\n")); )
   }
   if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
   {
     char *tmp;
     
-    INFO (!EF_sections_cherche_nom (p, nom, FALSE),
-          FALSE,
+    INFO (!EF_sections_cherche_nom (p, nom, false),
+          false,
           (gettext ("La section %s existe déjà.\n"), nom); )
     tmp = section->nom;
     BUGCRIT (section->nom = g_strdup (nom),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                section->nom = tmp; )
     free (tmp);
-    BUG (EF_sections_repositionne (p, section), FALSE)
+    BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
@@ -1379,7 +1378,7 @@ EF_sections_personnalisee_modif (Projet     *p,
     
     tmp = section_data->description;
     BUGCRIT (section_data->description = g_strdup (description),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                section_data->description = tmp; )
     free (tmp);
@@ -1430,8 +1429,8 @@ EF_sections_personnalisee_modif (Projet     *p,
                                                &liste_barres_dep,
                                                NULL,
                                                NULL,
-                                               FALSE),
-         FALSE)
+                                               false),
+         false)
     
     if (!liste_barres_dep->empty ())
     {
@@ -1439,10 +1438,10 @@ EF_sections_personnalisee_modif (Projet     *p,
       if ((forme != NULL) && (!forme->empty ()))
       {
         BUG (m3d_actualise_graphique (p, NULL, liste_barres_dep),
-             FALSE,
+             false,
              delete liste_barres_dep; )
         BUG (m3d_rafraichit (p),
-             FALSE,
+             false,
              delete liste_barres_dep; )
       }
 #endif
@@ -1456,7 +1455,7 @@ EF_sections_personnalisee_modif (Projet     *p,
           (!isnan (m_g (vzp))) ||
           (!isnan (m_g (s))))
         {
-          BUG (EF_calculs_free (p), FALSE)
+          BUG (EF_calculs_free (p), false)
         }
     }
   }
@@ -1469,7 +1468,7 @@ EF_sections_personnalisee_modif (Projet     *p,
   }
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1478,7 +1477,7 @@ EF_sections_personnalisee_modif (Projet     *p,
  *        souhaité.
  * \param p : la variable projet,
  * \param nom : le nom de la section.
- * \param critique : TRUE si en cas d'echec, la fonction BUG est utilisée
+ * \param critique : true si en cas d'echec, la fonction BUG est utilisée
  * \return
  *   Succès : pointeur vers la section.\n
  *   Échec : NULL :
@@ -1488,7 +1487,7 @@ EF_sections_personnalisee_modif (Projet     *p,
 Section *
 EF_sections_cherche_nom (Projet     *p,
                          const char *nom,
-                         gboolean    critique)
+                         bool        critique)
 {
   std::list <Section *>::iterator it;
   
@@ -1540,7 +1539,7 @@ EF_sections_get_description (Section *sect)
     case SECTION_RECTANGULAIRE :
     {
       char       larg[30], haut[30];
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       conv_f_c (section->largeur_retombee, larg, DECIMAL_DISTANCE);
       conv_f_c (section->hauteur_retombee, haut, DECIMAL_DISTANCE);
@@ -1557,7 +1556,7 @@ EF_sections_get_description (Section *sect)
     case SECTION_T :
     {
       char       larg_t[30], haut_t[30], larg_r[30], haut_r[30];
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       conv_f_c (section->largeur_table, larg_t, DECIMAL_DISTANCE);
       conv_f_c (section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
@@ -1580,7 +1579,7 @@ EF_sections_get_description (Section *sect)
     case SECTION_CARREE :
     {
       char       cote[30];
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       conv_f_c (section->largeur_table, cote, DECIMAL_DISTANCE);
       BUGCRIT (description = g_strdup_printf ("%s : %s m",
@@ -1594,7 +1593,7 @@ EF_sections_get_description (Section *sect)
     case SECTION_CIRCULAIRE :
     {
       char                diam[30];
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       conv_f_c (section->diametre, diam, DECIMAL_DISTANCE);
       BUGCRIT (description = g_strdup_printf ("%s : %s m",
@@ -1607,7 +1606,7 @@ EF_sections_get_description (Section *sect)
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       BUGCRIT (description = g_strdup (section->description),
                NULL,
@@ -1644,7 +1643,8 @@ EF_sections_free_un (Section *section)
       break;
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section2 = section->data;
+      Section_Personnalisee *section2 = (Section_Personnalisee *)
+                                                                 section->data;
       
       free (section2->description);
       for_each (section2->forme.begin (),
@@ -1682,21 +1682,21 @@ EF_sections_free_un (Section *section)
  *                            section seront supprimées.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - section == NULL.
  */
-gboolean
+bool
 EF_sections_supprime (Section *section,
-                      gboolean annule_si_utilise,
+                      bool     annule_si_utilise,
                       Projet  *p)
 {
   std::list <Section *> liste_sections;
   std::list <EF_Barre *> *liste_barres_dep;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (section, "%p", section, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (section, "%p", section, false)
   
   // On vérifie les dépendances.
   liste_sections.push_back (section);
@@ -1712,19 +1712,19 @@ EF_sections_supprime (Section *section,
                                              &liste_barres_dep,
                                              NULL,
                                              NULL,
-                                             FALSE),
-       FALSE)
+                                             false),
+       false)
   
   if ((annule_si_utilise) && (!liste_barres_dep->empty()))
   {
     char *liste;
     
     BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
-         FALSE,
+         false,
          delete liste_barres_dep; )
     if (liste_barres_dep->size () == 1)
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
                           liste);
                   delete liste_barres_dep;
@@ -1732,7 +1732,7 @@ EF_sections_supprime (Section *section,
     }
     else
     {
-      FAILINFO (FALSE,
+      FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
                           liste);
                   delete liste_barres_dep;
@@ -1741,7 +1741,7 @@ EF_sections_supprime (Section *section,
   }
   
   BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep),
-       FALSE,
+       false,
        delete liste_barres_dep; )
   delete liste_barres_dep;
   
@@ -1797,7 +1797,7 @@ EF_sections_supprime (Section *section,
     }
     default :
     {
-      FAILCRIT (FALSE,
+      FAILCRIT (false,
                 (gettext ("Type de section %d inconnu.\n"), section->type); )
       break;
     }
@@ -1806,7 +1806,7 @@ EF_sections_supprime (Section *section,
   
   EF_sections_free_un (section);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1830,7 +1830,7 @@ EF_sections_j (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       double     lt = m_g (section->largeur_table);
       double     lr = m_g (section->largeur_retombee);
       double     ht = m_g (section->hauteur_table);
@@ -1884,7 +1884,7 @@ EF_sections_j (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       double              diametre = m_g (section->diametre);
       
       return m_f (M_PI * diametre * diametre * diametre * diametre / 32.,
@@ -1896,7 +1896,7 @@ EF_sections_j (Section *sect)
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->j;
     }
@@ -1930,7 +1930,7 @@ EF_sections_iy (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       double     lt = m_g (section->largeur_table);
       double     lr = m_g (section->largeur_retombee);
       double     ht = m_g (section->hauteur_table);
@@ -1959,7 +1959,7 @@ EF_sections_iy (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       double              diametre = m_g (section->diametre);
       
       return m_f (M_PI * diametre * diametre * diametre * diametre / 64.,
@@ -1971,7 +1971,7 @@ EF_sections_iy (Section *sect)
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->iy;
     }
@@ -2005,7 +2005,7 @@ EF_sections_iz (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       double     lt = m_g (section->largeur_table);
       double     lr = m_g (section->largeur_retombee);
       double     ht = m_g (section->hauteur_table);
@@ -2022,7 +2022,7 @@ EF_sections_iz (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       double              diametre = m_g (section->diametre);
       return m_f (M_PI * diametre * diametre * diametre * diametre / 64.,
                   FLOTTANT_ORDINATEUR);
@@ -2033,7 +2033,7 @@ EF_sections_iz (Section *sect)
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->iz;
     }
@@ -2068,7 +2068,7 @@ EF_sections_vy (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       return m_f (MAX (m_g (section->largeur_table),
                        m_g (section->largeur_retombee)) / 2.,
@@ -2076,13 +2076,13 @@ EF_sections_vy (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->vy;
     }
@@ -2117,7 +2117,7 @@ EF_sections_vyp (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       return m_f (MAX (m_g (section->largeur_table),
                        m_g (section->largeur_retombee)) / 2.,
@@ -2125,13 +2125,13 @@ EF_sections_vyp (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->vyp;
     }
@@ -2166,7 +2166,7 @@ EF_sections_vz (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       return m_f ( (m_g (section->largeur_table) *
                     m_g (section->hauteur_table) *
@@ -2180,13 +2180,13 @@ EF_sections_vz (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->vz;
     }
@@ -2221,7 +2221,7 @@ EF_sections_vzp (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       return m_f ((m_g (section->largeur_table) *
                    m_g (section->hauteur_table) *
@@ -2235,13 +2235,13 @@ EF_sections_vzp (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->vzp;
     }
@@ -2665,7 +2665,7 @@ EF_sections_s (Section *sect)
     case SECTION_T :
     case SECTION_CARREE :
     {
-      Section_T *section = sect->data;
+      Section_T *section = (Section_T *) sect->data;
       
       return m_f (m_g (section->hauteur_table) * m_g (section->largeur_table) +
                     m_g (section->hauteur_retombee) *
@@ -2679,7 +2679,7 @@ EF_sections_s (Section *sect)
     }
     case SECTION_CIRCULAIRE :
     {
-      Section_Circulaire *section = sect->data;
+      Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
       return m_f (M_PI * m_g (section->diametre) *
                     m_g (section->diametre) / 4.,
@@ -2691,7 +2691,7 @@ EF_sections_s (Section *sect)
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *section = sect->data;
+      Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
       return section->s;
     }
@@ -2803,7 +2803,7 @@ EF_sections_gj_l (EF_Barre *barre,
   ll = EF_noeuds_distance (fin, debut);
   BUG (!isnan (ll), NAN)
   
-  return m_g (EF_materiaux_G (barre->materiau, FALSE)) *
+  return m_g (EF_materiaux_G (barre->materiau, false)) *
          m_g (EF_sections_j (barre->section)) / ll;
 }
 
@@ -2812,27 +2812,27 @@ EF_sections_gj_l (EF_Barre *barre,
  * \brief Libère l'ensemble des sections.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 EF_sections_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   for_each (p->modele.sections.begin (),
             p->modele.sections.end (),
             EF_sections_free_un);
   p->modele.sections.clear ();
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), false)
   
 #ifdef ENABLE_GTK
   g_object_unref (UI_SEC.liste_sections);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-gboolean EF_noeuds_init                 (Projet  *p)
+bool     EF_noeuds_init                 (Projet  *p)
                                        __attribute__((__warn_unused_result__));
 
 EF_Noeud* EF_noeuds_ajout_noeud_libre   (Projet      *p,
@@ -38,30 +38,30 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre   (Projet      *p,
                                          EF_Appui    *appui)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_noeuds_renvoie_position     (EF_Noeud    *noeud,
+bool     EF_noeuds_renvoie_position     (EF_Noeud    *noeud,
                                          EF_Point    *point)
                                        __attribute__((__warn_unused_result__));
 
 EF_Noeud* EF_noeuds_cherche_numero      (Projet      *p,
                                          unsigned int numero,
-                                         gboolean     critique)
+                                         bool         critique)
                                        __attribute__((__warn_unused_result__));
 
-gboolean EF_noeuds_change_pos_abs       (Projet      *p,
+bool     EF_noeuds_change_pos_abs       (Projet      *p,
                                          EF_Noeud    *noeud,
                                          Flottant     x,
                                          Flottant     y,
                                          Flottant     z)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_noeuds_change_pos_relat     (Projet      *p,
+bool     EF_noeuds_change_pos_relat     (Projet      *p,
                                          EF_Noeud    *noeud,
                                          Flottant     pos)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_noeuds_change_appui         (Projet      *p,
+bool     EF_noeuds_change_appui         (Projet      *p,
                                          EF_Noeud    *noeud,
                                          EF_Appui    *appui)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_noeuds_change_noeud_relatif (Projet      *p,
+bool     EF_noeuds_change_noeud_relatif (Projet      *p,
                                          EF_Noeud    *noeud,
                                          EF_Noeud    *relatif)
                                        __attribute__((__warn_unused_result__));
@@ -81,7 +81,7 @@ double EF_noeuds_distance_x_y_z         (EF_Noeud    *n1,
 
 void EF_noeuds_free_foreach             (EF_Noeud    *noeud,
                                          Projet      *p);
-gboolean EF_noeuds_free                 (Projet *p)
+bool     EF_noeuds_free                 (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

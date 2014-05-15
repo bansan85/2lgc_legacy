@@ -61,8 +61,8 @@ GTK_WINDOW_DESTROY (ef, charge_noeud, );
  * \param mz : moment selon z,
  * \param nom : nom de l'action.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - action == NULL,
  *     - noeuds == NULL,
@@ -76,7 +76,7 @@ GTK_WINDOW_DESTROY (ef, charge_noeud, );
  *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
-gboolean
+bool
 EF_gtk_charge_noeud_recupere (Projet                  *p,
                               Action                 **action,
                               std::list <EF_Noeud *> **noeuds,
@@ -94,20 +94,20 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
   gchar         *texte_tmp;
   GtkTextBuffer *textbuffer;
   gint           get_active;
-  gboolean       ok = TRUE;
+  bool           ok = true;
   
-  BUGPARAM (p, "%p", p, FALSE)
-  BUGPARAM (action, "%p", action, FALSE)
-  BUGPARAM (noeuds, "%p", noeuds, FALSE)
-  BUGPARAM (fx, "%p", fx, FALSE)
-  BUGPARAM (fy, "%p", fy, FALSE)
-  BUGPARAM (fz, "%p", fz, FALSE)
-  BUGPARAM (mx, "%p", mx, FALSE)
-  BUGPARAM (my, "%p", my, FALSE)
-  BUGPARAM (mz, "%p", mz, FALSE)
-  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (p, "%p", p, false)
+  BUGPARAM (action, "%p", action, false)
+  BUGPARAM (noeuds, "%p", noeuds, false)
+  BUGPARAM (fx, "%p", fx, false)
+  BUGPARAM (fy, "%p", fy, false)
+  BUGPARAM (fz, "%p", fz, false)
+  BUGPARAM (mx, "%p", mx, false)
+  BUGPARAM (my, "%p", my, false)
+  BUGPARAM (mz, "%p", mz, false)
+  BUGPARAM (nom, "%p", nom, false)
   BUGCRIT (UI_CHNO.builder,
-           FALSE,
+           false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Charge Nodale"); )
   
@@ -115,7 +115,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                      UI_CHNO.combobox_charge));
   if (get_active < 0)
   {
-    ok = FALSE;
+    ok = false;
   }
   else
   {
@@ -124,68 +124,56 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
   
   *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fx")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*fx))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fy")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*fy))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   *fz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_fz")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*fz))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   *mx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_mx")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*mx))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   *my = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_my")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*my))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   *mz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
                                                  "EF_charge_noeud_buffer_mz")),
-                     -INFINITY,
-                     FALSE,
-                     INFINITY,
-                     FALSE);
+                     -INFINITY, false,
+                     INFINITY, false);
   if (isnan (*mz))
   {
-    ok = FALSE;
+    ok = false;
   }
   
   textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
@@ -196,7 +184,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
   num_noeuds = common_selection_renvoie_numeros (texte_tmp);
   if (num_noeuds == NULL)
   {
-    ok = FALSE;
+    ok = false;
   }
   else
   {
@@ -204,7 +192,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
     delete num_noeuds;
     if (*noeuds == NULL)
     {
-      ok = FALSE;
+      ok = false;
     }
     else
     {
@@ -221,7 +209,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
       {
         free (*nom);
         *nom = NULL;
-        ok = FALSE;
+        ok = false;
       }
     }
   }
@@ -322,7 +310,7 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
                                      &mx,
                                      &my,
                                      &mz,
-                                     &texte) == TRUE,
+                                     &texte),
       )
   
   // Création de la nouvelle charge nodale
@@ -382,13 +370,13 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
                                      &mx,
                                      &my,
                                      &mz,
-                                     &texte) == TRUE,
+                                     &texte),
        )
   
   // Création de la nouvelle charge nodale
   free (UI_CHNO.charge->nom);
   UI_CHNO.charge->nom = texte;
-  charge_d = UI_CHNO.charge->data;
+  charge_d = (Charge_Noeud *) UI_CHNO.charge->data;
   charge_d->fx = m_f (fx, FLOTTANT_UTILISATEUR);
   charge_d->fy = m_f (fy, FLOTTANT_UTILISATEUR);
   charge_d->fz = m_f (fz, FLOTTANT_UTILISATEUR);
@@ -421,29 +409,29 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
  * \param charge : vaut NULL si une nouvelle charge doit être ajoutée,
  *                 vaut le numéro de la charge si elle doit être modifiée.
  * \return
- *   Succès : TRUE.\n
- *   Echec : FALSE :
+ *   Succès : true.\n
+ *   Echec : false :
  *     - p == NULL,
  *     - interface graphique impossible à générer.
  */
-gboolean
+bool
 EF_gtk_charge_noeud (Projet *p,
                      Action *action_defaut,
                      Charge *charge)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (UI_CHNO.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_CHNO.window));
-    return TRUE;
+    return true;
   }
   
   UI_CHNO.builder = gtk_builder_new ();
   BUGCRIT (gtk_builder_add_from_resource (UI_CHNO.builder,
                                      "/org/2lgc/codegui/ui/EF_charge_noeud.ui",
                                           NULL) != 0,
-           FALSE,
+           false,
            (gettext ("La génération de la fenêtre %s a échouée.\n"),
                      "Charge Nodale"); )
   gtk_builder_connect_signals (UI_CHNO.builder, p);
@@ -471,17 +459,17 @@ EF_gtk_charge_noeud (Projet *p,
   gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
                            GTK_TREE_MODEL (UI_ACT.liste));
   gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
-                            std::distance (p->actions.begin (),
-                                           std::find (p->actions.begin (),
-                                                      p->actions.end (),
-                                                      action_defaut)));
+                            (gint) std::distance (p->actions.begin (),
+                                     std::find (p->actions.begin (),
+                                                p->actions.end (),
+                                                action_defaut)));
   
   if (charge != NULL)
   {
     Charge_Noeud *charge_d;
     char          tmp[30], *tmp2;
     
-    charge_d = charge->data;
+    charge_d = (Charge_Noeud *) charge->data;
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                        gtk_builder_get_object (UI_CHNO.builder,
                                      "EF_charge_noeud_textview_description"))),
@@ -517,7 +505,7 @@ EF_gtk_charge_noeud (Projet *p,
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_mz")),
                               tmp,
                               -1);
-    BUG (tmp2 = common_selection_noeuds_en_texte (&charge_d->noeuds), FALSE)
+    BUG (tmp2 = common_selection_noeuds_en_texte (&charge_d->noeuds), false)
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_CHNO.builder, "EF_charge_noeud_buffer_noeuds")),
                               tmp2,
@@ -561,7 +549,7 @@ EF_gtk_charge_noeud (Projet *p,
                                   GTK_WINDOW (UI_ACT.window));
   }
   
-  return TRUE;
+  return true;
 }
 
 

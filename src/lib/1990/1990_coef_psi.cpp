@@ -21,7 +21,6 @@
 #include <libintl.h>
 #include <locale.h>
 #include <math.h>
-#include <gmodule.h>
 
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"

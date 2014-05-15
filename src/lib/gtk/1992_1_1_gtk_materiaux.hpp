@@ -25,8 +25,8 @@
 
 #include "common_projet.hpp"
 
-gboolean _1992_1_1_gtk_materiaux (Projet      *p,
-                                  EF_Materiau *materiau)
+bool _1992_1_1_gtk_materiaux (Projet      *p,
+                              EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 
 #endif

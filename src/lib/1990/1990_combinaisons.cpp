@@ -19,7 +19,6 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <gmodule.h>
 
 #include <memory>
 #include <algorithm>
@@ -38,12 +37,11 @@
  * \param liste_combinaisons : liste de combinaisons,
  * \param comb_a_verifier : combinaison à vérifier.
  * \return
- *    - FALSE si la combinaison n'est pas présente,
- *    - TRUE si la combinaison est présente,
- *    - TRUE si la combinaison est vide (afin de ne pas l'ajouter).
+ *    - false si la combinaison n'est pas présente,
+ *    - true si la combinaison est présente,
+ *    - true si la combinaison est vide (afin de ne pas l'ajouter).
  */
-static
-gboolean
+bool
 _1990_combinaisons_verifie_double (
   std::list <std::list <Combinaison *> *> *liste_combinaisons,
   std::list <Combinaison *>               *comb_a_verifier)
@@ -52,17 +50,17 @@ _1990_combinaisons_verifie_double (
   
   if (liste_combinaisons == NULL)
   {
-    return FALSE;
+    return false;
   }
   if (comb_a_verifier == NULL)
   {
-    return TRUE;
+    return true;
   }
   
   it = liste_combinaisons->begin ();
   while (it != liste_combinaisons->end ())
   {
-    gboolean doublon = TRUE;
+    bool doublon = true;
     
     std::list <Combinaison *>          *comb_en_cours = *it;
     std::list <Combinaison *>::iterator it1, it2;
@@ -72,7 +70,7 @@ _1990_combinaisons_verifie_double (
     
     while ((it1 != comb_en_cours->end ()) &&
            (it2 != comb_a_verifier->end ()) &&
-           (doublon == TRUE))
+           (doublon))
     {
       Combinaison *elem1;
       Combinaison *elem2;
@@ -84,24 +82,24 @@ _1990_combinaisons_verifie_double (
        *  et que les flags (paramètres de calculs) sont les mêmes */
       if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags))
       {
-        doublon = FALSE;
+        doublon = false;
       }
       
       ++it1;
       ++it2;
     }
     
-    if ((doublon == TRUE) &&
+    if ((doublon) &&
         (it1 == comb_en_cours->end ()) &&
         (it2 == comb_a_verifier->end ()))
     {
-      return TRUE;
+      return true;
     }
     
     ++it;
   }
   
-  return FALSE;
+  return false;
 }
 
 
@@ -111,28 +109,27 @@ _1990_combinaisons_verifie_double (
  * \param liste_comb_destination : liste de combinaisons qui recevra les
  *                                 combinaisons sources,
  * \param liste_comb_source : liste de combinaisons source,
- * \param sans_double : TRUE pour qu'aucune combinaison ne soit ajoutée en
+ * \param sans_double : true pour qu'aucune combinaison ne soit ajoutée en
  *                      double.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - liste_comb_destination == NULL,
  *     - erreur d'allocation mémoire.
  */
-static
-gboolean
+bool
 _1990_combinaisons_duplique (
   std::list <std::list <Combinaison *> *> *liste_comb_destination,
   std::list <std::list <Combinaison *> *> *liste_comb_source,
-  gboolean                                  sans_double)
+  bool                                     sans_double)
 {
   std::list <std::list <Combinaison *> *>::iterator it;
   
-  BUGPARAMCRIT (liste_comb_destination, "%p", liste_comb_destination, FALSE)
+  BUGPARAMCRIT (liste_comb_destination, "%p", liste_comb_destination, false)
   
   if (liste_comb_source == NULL)
   {
-    return TRUE;
+    return true;
   }
   
   it = liste_comb_source->begin ();
@@ -140,9 +137,9 @@ _1990_combinaisons_duplique (
   {
     std::list <Combinaison *> *combinaison_source = *it;
     
-    gboolean verifie_double;
+    bool verifie_double;
     
-    if (sans_double == TRUE)
+    if (sans_double)
     {
       verifie_double = _1990_combinaisons_verifie_double (
                          liste_comb_destination,
@@ -150,10 +147,10 @@ _1990_combinaisons_duplique (
     }
     else
     {
-      verifie_double = FALSE;
+      verifie_double = false;
     }
     
-    if (verifie_double == FALSE)
+    if (!verifie_double)
     {
       std::list <Combinaison *>          *combinaison_destination;
       std::list <Combinaison *>::iterator it2 = combinaison_source->begin ();
@@ -184,7 +181,7 @@ _1990_combinaisons_duplique (
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -195,8 +192,8 @@ _1990_combinaisons_duplique (
  * \param niveau : niveau du groupe à analyser,
  * \param groupe : groupe à analyser.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL (pas de niveau),
  *     - niveau == NULL,
@@ -205,21 +202,20 @@ _1990_combinaisons_duplique (
  *     - erreur d'allocation mémoire,
  *     - _1990_combinaisons_duplique.
  */
-static
-gboolean
+bool
 _1990_combinaisons_genere_xor (Projet        *p,
                                Niveau_Groupe *niveau,
                                Groupe        *groupe)
 {
   std::list <void *>::iterator it2;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
+  BUGPARAMCRIT (niveau, "%p", niveau, false)
   INFO (!niveau->groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le niveau %zu est vide. Veuillez soit le remplir, soit le supprimer.\n"),
                   std::distance (p->niveaux_groupes.begin (),
                                  std::find (p->niveaux_groupes.begin (),
@@ -228,7 +224,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
   BUGPARAMCRIT (groupe->type_combinaison,
                 "%d",
                 groupe->type_combinaison == GROUPE_COMBINAISON_XOR,
-                FALSE,
+                false,
                 (gettext ("Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n")); )
   
   // Si le nombre d'éléments est 0 Alors
@@ -236,7 +232,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
   // FinSi
   if (groupe->elements.empty ())
   {
-    return TRUE;
+    return true;
   }
   
   it2 = groupe->elements.begin ();
@@ -282,7 +278,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
                     p->niveaux_groupes.end (),
                     niveau);
     BUGCRIT (it != p->niveaux_groupes.end (),
-             FALSE,
+             false,
              (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     --it;
     
@@ -294,8 +290,8 @@ _1990_combinaisons_genere_xor (Projet        *p,
       
       BUG (_1990_combinaisons_duplique (&groupe->tmp_combinaison,
                                         &groupe_n_1->tmp_combinaison,
-                                        TRUE),
-           FALSE)
+                                        true),
+           false)
       
       ++it2;
     }
@@ -303,7 +299,7 @@ _1990_combinaisons_genere_xor (Projet        *p,
   }
   // FinSi
   
-  return TRUE;
+  return true;
 }
 
 
@@ -314,20 +310,19 @@ _1990_combinaisons_genere_xor (Projet        *p,
  * \param destination : combinaison de destination,
  * \param source : combinaison source.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - destination == NULL,
  *     - erreur d'allocation mémoire.
  */
-static
-gboolean
+bool
 _1990_combinaisons_fusion (std::list <Combinaison *> **destination,
                            std::list <Combinaison *>  *source)
 {
   std::list <Combinaison *>::iterator it;
   
-  BUGPARAMCRIT (destination, "%p", destination, FALSE)
-  BUGPARAMCRIT (source, "%p", source, FALSE)
+  BUGPARAMCRIT (destination, "%p", destination, false)
+  BUGPARAMCRIT (source, "%p", source, false)
   
   it = source->begin ();
   while (it != source->end ())
@@ -343,7 +338,7 @@ _1990_combinaisons_fusion (std::list <Combinaison *> **destination,
     ++it;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -354,8 +349,8 @@ _1990_combinaisons_fusion (std::list <Combinaison *> **destination,
  * \param niveau : niveau du groupe à analyser,
  * \param groupe : groupe à analyser.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL,
  *     - niveau == NULL,
@@ -366,8 +361,7 @@ _1990_combinaisons_fusion (std::list <Combinaison *> **destination,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
-static
-gboolean
+bool
 _1990_combinaisons_genere_and (Projet        *p,
                                Niveau_Groupe *niveau,
                                Groupe        *groupe)
@@ -375,26 +369,26 @@ _1990_combinaisons_genere_and (Projet        *p,
   std::list <void *>::iterator it4;
   Groupe *groupe_n_1;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
+  BUGPARAMCRIT (niveau, "%p", niveau, false)
   INFO (!niveau->groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le niveau %zu est vide. Veuillez soit le remplir, soit le supprimer.\n"),
                   std::distance (p->niveaux_groupes.begin (),
                                  std::find (p->niveaux_groupes.begin (),
                                             p->niveaux_groupes.end (),
                                             niveau))); )
-  BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
+  BUGPARAMCRIT (groupe, "%p", groupe, false)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_AND,
-        FALSE,
+        false,
         (gettext ("Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n")); )
   
   if (groupe->elements.empty ())
   {
-    return TRUE;
+    return true;
   }
   
   it4 = groupe->elements.begin ();
@@ -473,7 +467,7 @@ _1990_combinaisons_genere_and (Projet        *p,
                     p->niveaux_groupes.end (),
                     niveau);
     BUGCRIT (it != p->niveaux_groupes.end (),
-             FALSE,
+             false,
              (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     --it;
     
@@ -487,8 +481,8 @@ _1990_combinaisons_genere_and (Projet        *p,
       {
         BUG (_1990_combinaisons_duplique (nouvelles_combinaisons,
                                           &groupe_n_1->tmp_combinaison,
-                                          FALSE),
-             FALSE,
+                                          false),
+             false,
              _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
       }
       else
@@ -508,8 +502,8 @@ _1990_combinaisons_genere_and (Projet        *p,
         // la passe 2).
         BUG (_1990_combinaisons_duplique (transition,
                                           nouvelles_combinaisons,
-                                          FALSE),
-             FALSE,
+                                          false),
+             false,
              _1990_groupe_free_combinaisons (transition);
                _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
         nbboucle = groupe_n_1->tmp_combinaison.size ();
@@ -517,8 +511,8 @@ _1990_combinaisons_genere_and (Projet        *p,
         {
           BUG (_1990_combinaisons_duplique (nouvelles_combinaisons,
                                             transition,
-                                            FALSE),
-               FALSE,
+                                            false),
+               false,
                _1990_groupe_free_combinaisons (transition);
                  _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
         }
@@ -537,7 +531,7 @@ _1990_combinaisons_genere_and (Projet        *p,
             std::list <Combinaison *> *combinaison1 = *it3;
             
             BUG (_1990_combinaisons_fusion (&combinaison1, combinaison2),
-                 FALSE,
+                 false,
                  _1990_groupe_free_combinaisons (transition);
                    _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
             ++it3;
@@ -556,14 +550,14 @@ _1990_combinaisons_genere_and (Projet        *p,
     // On ajoute définitivement les nouvelles combinaisons.
     BUG (_1990_combinaisons_duplique (&groupe->tmp_combinaison,
                                       nouvelles_combinaisons,
-                                      TRUE),
-         FALSE,
+                                      true),
+         false,
          _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
     _1990_groupe_free_combinaisons (nouvelles_combinaisons);
   }
   // FinSi
   
-  return TRUE;
+  return true;
 }
 
 
@@ -574,8 +568,8 @@ _1990_combinaisons_genere_and (Projet        *p,
  * \param niveau : niveau du groupe à analyser,
  * \param groupe : groupe à analyser.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL,
  *     - niveau,
@@ -586,8 +580,7 @@ _1990_combinaisons_genere_and (Projet        *p,
  *     - #_1990_combinaisons_duplique,
  *     - #_1990_combinaisons_fusion.
  */
-static
-gboolean
+bool
 _1990_combinaisons_genere_or (Projet        *p,
                               Niveau_Groupe *niveau,
                               Groupe        *groupe)
@@ -595,29 +588,29 @@ _1990_combinaisons_genere_or (Projet        *p,
   std::list <void *>::iterator it4;
   uint32_t boucle, i;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
+  BUGPARAMCRIT (niveau, "%p", niveau, false)
   INFO (!niveau->groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le niveau %zu est vide. Veuillez soit le remplir, soit le supprimer.\n"),
                   std::distance (p->niveaux_groupes.begin (),
                                  std::find (p->niveaux_groupes.begin (),
                                             p->niveaux_groupes.end (),
                                             niveau))); )
-  BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
+  BUGPARAMCRIT (groupe, "%p", groupe, false)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_OR,
-        FALSE,
+        false,
         (gettext ("Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n")); )
   
   if (groupe == NULL)
   {
-    return TRUE;
+    return true;
   }
   
-  boucle = (uint32_t) 1 << groupe->elements.size ();
+  boucle = 1 << groupe->elements.size ();
   
   // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
   //   Afin de générer l'ensemble des combinaisons, il va être nécessaire de
@@ -699,7 +692,7 @@ _1990_combinaisons_genere_or (Projet        *p,
                     p->niveaux_groupes.end (),
                     niveau);
     BUGCRIT (it != p->niveaux_groupes.end (),
-             FALSE,
+             false,
              (gettext ("Impossible de trouver le niveau dans la liste des niveaux de groupes.\n")); )
     ++it;
     
@@ -724,8 +717,8 @@ _1990_combinaisons_genere_or (Projet        *p,
             {
               BUG (_1990_combinaisons_duplique (nouvelles_combinaisons,
                                                 &groupe_n_1->tmp_combinaison,
-                                                FALSE),
-                   FALSE,
+                                                false),
+                   false,
                    _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
             }
             else
@@ -740,8 +733,8 @@ _1990_combinaisons_genere_or (Projet        *p,
               
               BUG (_1990_combinaisons_duplique (transition,
                                                 nouvelles_combinaisons,
-                                                FALSE),
-                   FALSE,
+                                                false),
+                   false,
                    _1990_groupe_free_combinaisons (nouvelles_combinaisons);
                      _1990_groupe_free_combinaisons (transition); )
               
@@ -752,8 +745,8 @@ _1990_combinaisons_genere_or (Projet        *p,
               {
                 BUG (_1990_combinaisons_duplique (nouvelles_combinaisons,
                                                   transition,
-                                                  FALSE),
-                     FALSE,
+                                                  false),
+                     false,
                      _1990_groupe_free_combinaisons (nouvelles_combinaisons);
                        _1990_groupe_free_combinaisons (transition); )
               }
@@ -773,7 +766,7 @@ _1990_combinaisons_genere_or (Projet        *p,
                   
                   BUG (_1990_combinaisons_fusion (&combinaison1,
                                                   combinaison2),
-                       FALSE,
+                       false,
                        _1990_groupe_free_combinaisons (nouvelles_combinaisons);
                          _1990_groupe_free_combinaisons (transition); )
                   
@@ -794,14 +787,14 @@ _1990_combinaisons_genere_or (Projet        *p,
       
       BUG (_1990_combinaisons_duplique (&groupe->tmp_combinaison,
                                         nouvelles_combinaisons,
-                                        TRUE),
-           FALSE,
+                                        true),
+           false,
            _1990_groupe_free_combinaisons (nouvelles_combinaisons); )
       _1990_groupe_free_combinaisons (nouvelles_combinaisons);
     }
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -809,18 +802,18 @@ _1990_combinaisons_genere_or (Projet        *p,
  * \brief Initialise la mémoire pour les combinaisons à l'ELU et l'ELS.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_init (Projet *p)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter Iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_equ_methode = 1;
   p->ponderations.elu_geo_str_methode = 1;
@@ -885,7 +878,7 @@ _1990_combinaisons_init (Projet *p)
                       -1);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -910,14 +903,14 @@ _1990_combinaisons_free_1 (std::list <Combinaison *> *comb)
  * \brief Libère l'ensemble des combinaisons à l'ELU et l'ELS.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_free (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   if (!p->ponderations.elu_equ.empty ())
   {
@@ -987,7 +980,7 @@ _1990_combinaisons_free (Projet *p)
   g_object_unref (p->ponderations.list_el_desc);
 #endif
   
-  return TRUE;
+  return true;
 }
 
 
@@ -995,18 +988,19 @@ _1990_combinaisons_free (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre seulement.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_eluequ_equ_seul (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_equ_methode = 0;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1014,18 +1008,19 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre et à la résistance structurelle.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_eluequ_equ_resist (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_equ_methode = 1;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1033,18 +1028,19 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 1.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_elustrgeo_1 (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_geo_str_methode = 0;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1052,18 +1048,19 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 2.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_elustrgeo_2 (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_geo_str_methode = 1;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1071,18 +1068,19 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 3.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_elustrgeo_3 (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_geo_str_methode = 2;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1090,18 +1088,19 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 (a) et (b) de l'EN 1990.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.form_6_10 = 0;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1109,18 +1108,19 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 de l'EN 1990.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_elustrgeo_6_10 (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.form_6_10 = 1;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1128,18 +1128,19 @@ _1990_combinaisons_elustrgeo_6_10 (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs fréquentes des actions variables.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_eluacc_frequente (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_acc_psi = 0;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1147,18 +1148,19 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs quasi permanente des actions variables.
  * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL.
  */
-gboolean
+bool
 _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
 {
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   
   p->ponderations.elu_acc_psi = 1;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1166,8 +1168,8 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
  * \brief Génère l'ensemble des combinaisons et pondérations du projet.
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - p == NULL,
  *     - p->niveaux_groupes == NULL,
  *     - _1990_combinaisons_free,
@@ -1177,20 +1179,20 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
  *     - _1990_combinaisons_genere_and,
  *     - _1990_ponderations_genere.
  */
-gboolean
+bool
 _1990_combinaisons_genere (Projet *p)
 {
   uint32_t i;
   
-  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (p, "%p", p, false)
   INFO (!p->niveaux_groupes.empty (),
-        FALSE,
+        false,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n")); )
   
 #ifdef ENABLE_GTK
   g_object_ref (p->ponderations.list_el_desc);
 #endif
-  BUG (_1990_combinaisons_free (p), FALSE)
+  BUG (_1990_combinaisons_free (p), false)
   
   // Pour chaque action
   //   Cette boucle permet de générer toutes les combinaisons en prenant en
@@ -1237,23 +1239,23 @@ _1990_combinaisons_genere (Projet *p)
       
       if (j != i)
       {
-        BUG (_1990_action_flags_action_predominante_change (action, 0), FALSE)
+        BUG (_1990_action_flags_action_predominante_change (action, 0), false)
       }
       else
       {
         categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
                                                                        action),
                                                 p->parametres.norme);
-        BUG (categorie != ACTION_INCONNUE, FALSE)
+        BUG (categorie != ACTION_INCONNUE, false)
         if (categorie == ACTION_VARIABLE)
         {
           BUG (_1990_action_flags_action_predominante_change (action, 1),
-               FALSE)
+               false)
         }
         else
         {
           BUG (_1990_action_flags_action_predominante_change (action, 0),
-               FALSE)
+               false)
         }
       }
       
@@ -1283,22 +1285,22 @@ _1990_combinaisons_genere (Projet *p)
         {
           case GROUPE_COMBINAISON_OR :
           {
-            BUG (_1990_combinaisons_genere_or (p, niveau, groupe), FALSE)
+            BUG (_1990_combinaisons_genere_or (p, niveau, groupe), false)
             break;
           }
           case GROUPE_COMBINAISON_XOR :
           {
-            BUG (_1990_combinaisons_genere_xor (p, niveau, groupe), FALSE)
+            BUG (_1990_combinaisons_genere_xor (p, niveau, groupe), false)
             break;
           }
           case GROUPE_COMBINAISON_AND :
           {
-            BUG (_1990_combinaisons_genere_and (p, niveau, groupe), FALSE)
+            BUG (_1990_combinaisons_genere_and (p, niveau, groupe), false)
             break;
           }
           default :
           {
-            FAILCRIT (FALSE,
+            FAILCRIT (false,
                       (gettext ("Le type de combinaison %d est inconnu.\n"),
                                 groupe->type_combinaison); )
             break;
@@ -1313,12 +1315,12 @@ _1990_combinaisons_genere (Projet *p)
     
     // Génération des pondérations (avec les coefficients de sécurité partiels)
     // à partir des combinaisons.
-    BUG (_1990_ponderations_genere (p), FALSE)
-    BUG (_1990_groupe_affiche_tout (p), FALSE)
+    BUG (_1990_ponderations_genere (p), false)
+    BUG (_1990_groupe_affiche_tout (p), false)
   }
   // FinPour
   
-  return TRUE;
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

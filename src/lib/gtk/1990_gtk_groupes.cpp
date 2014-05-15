@@ -61,11 +61,11 @@ GTK_WINDOW_CLOSE(_1990, groupes);
  * \param iter : contient la ligne à étudier.
  * \return Le groupe.
  */
-void *
+Groupe *
 _1990_gtk_get_groupe (GtkTreeModel *tree_model,
                       GtkTreeIter  *iter)
 {
-  void       *retour;
+  Groupe     *retour;
   GtkTreeIter iter_parent;
   
   if (gtk_tree_model_iter_parent (tree_model, &iter_parent, iter))
@@ -169,7 +169,8 @@ GTK_WINDOW_DESTROY (
                           0,
                           0,
                           NULL,
-                          _1990_gtk_groupes_tree_view_etat_cursor_changed,
+                          (gpointer)
+                               _1990_gtk_groupes_tree_view_etat_cursor_changed,
                           NULL));
 );
 
@@ -179,7 +180,7 @@ GTK_WINDOW_DESTROY (
  * \param p : variable projet,
  * \param niveau : niveau à afficher.
  * \return
- *   Succès : TRUE.\n
+ *   Succès : true.\n
  *   Échec : FALSE :
  *     - p == NULL,
  *     - aucun niveau de groupes,
@@ -187,14 +188,14 @@ GTK_WINDOW_DESTROY (
  *     - niveau introuvable,
  *     - erreur d'allocation mémoire.
  */
-gboolean
+bool
 _1990_gtk_groupes_affiche_niveau (Projet  *p,
                                   uint16_t niveau)
 {
   Niveau_Groupe *niveau_groupe, *niveau_groupe_1;
-  uint32_t       dispo_max, i;
+  size_t         dispo_max, i;
   char          *dispos;
-  gboolean       premier = TRUE;
+  bool           premier = true;
   GtkTreePath   *path;
   
   std::list <Action *>::iterator it1;
@@ -220,7 +221,8 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
                            0,
                            0,
                            NULL,
-                           _1990_gtk_groupes_tree_view_etat_cursor_changed,
+                           (gpointer)
+                               _1990_gtk_groupes_tree_view_etat_cursor_changed,
                            NULL));
   
   // On supprime le contenu des deux composants tree_view.
@@ -231,7 +233,8 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
                            0,
                            0,
                            NULL,
-                           _1990_gtk_groupes_tree_view_etat_cursor_changed,
+                           (gpointer)
+                               _1990_gtk_groupes_tree_view_etat_cursor_changed,
                            NULL));
   gtk_tree_store_clear (UI_GRO.tree_store_dispo);
   
@@ -300,7 +303,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
       
       do
       {
-        Groupe *groupe2 = *it3;
+        Groupe *groupe2 = (Groupe *) *it3;
         
         // On signale que l'élément a déjà été inséré.
         if (niveau == 0)
@@ -357,7 +360,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
       gtk_tree_store_append (UI_GRO.tree_store_dispo, &Iter, NULL);
       
       // Sélection de la première ligne du tree_view_dispo.
-      if (premier == TRUE)
+      if (premier)
       {
         path = gtk_tree_model_get_path (GTK_TREE_MODEL (
                                                       UI_GRO.tree_store_dispo),
@@ -388,7 +391,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
 
   free (dispos);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -521,12 +524,12 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
  * \param data : l'élément,
  * \param niveau : niveau à étudier.
  * \return
- *   Succès : TRUE.\n
+ *   Succès : true.\n
  *   Échec : FALSE :
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
-gboolean
+bool
 _1990_gtk_insert_dispo (Projet        *p,
                         void          *data,
                         Niveau_Groupe *niveau)
@@ -549,7 +552,7 @@ _1990_gtk_insert_dispo (Projet        *p,
   
   gtk_tree_store_set (UI_GRO.tree_store_dispo, &iter, 0, data, -1);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -670,14 +673,14 @@ _1990_gtk_tree_view_dispo_drag (GtkWidget      *widget,
  *                 disponibles sélectionnés,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE.\n
+ *   Succès : true.\n
  *   Échec : FALSE :
  *     - p == NULL,
  *     - aucun niveau de groupes,
  *     - interface graphique non initialisée,
  *     - #_1990_groupe_ajout_element.
  */
-gboolean
+bool
 _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
                                    Projet *p)
 {
@@ -721,7 +724,7 @@ _1990_gtk_button_ajout_dispo_proc (Groupe *groupe,
   
   g_list_foreach (list_orig, (GFunc) gtk_tree_path_free, NULL);
   
-  return TRUE;
+  return true;
 }
 
 

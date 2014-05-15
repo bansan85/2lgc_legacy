@@ -36,11 +36,11 @@ Charge *EF_charge_noeud_ajout          (Projet                 *p,
 
 char *EF_charge_noeud_description      (Charge                 *charge)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_enleve_noeuds (Charge                 *charge,
+bool     EF_charge_noeud_enleve_noeuds (Charge                 *charge,
                                         std::list <EF_Noeud *> *noeuds,
                                         Projet                 *p)
                                        __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_free          (Charge                 *charge)
+bool     EF_charge_noeud_free          (Charge                 *charge)
                                        __attribute__((__warn_unused_result__));
 
 #endif

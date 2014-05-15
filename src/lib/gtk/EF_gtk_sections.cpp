@@ -61,7 +61,7 @@ GTK_WINDOW_KEY_PRESS (ef, sections);
  * \param event : Caractéristique de l'évènement,
  * \param p : la variable projet.
  * \return
- *   Succès : TRUE si la touche SUPPR est pressée, FALSE sinon.\n
+ *   Succès : true si la touche SUPPR est pressée, FALSE sinon.\n
  *   Echec : FALSE
  *     - p == NULL,
  *     - interface graphique non initialisée.
@@ -99,21 +99,21 @@ EF_gtk_sections_treeview_key_press (GtkTreeView *treeview,
     
     liste_sections.push_back (section);
     
-    if (_1992_1_1_barres_cherche_dependances (p,
-                                              NULL,
-                                              NULL,
-                                              &liste_sections,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              FALSE) == FALSE)
+    if (!_1992_1_1_barres_cherche_dependances (p,
+                                               NULL,
+                                               NULL,
+                                               &liste_sections,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               false))
     {
-      BUG (EF_sections_supprime (section, TRUE, p),
+      BUG (EF_sections_supprime (section, true, p),
            FALSE)
     }
     
@@ -197,7 +197,7 @@ EF_gtk_sections_select_changed (GtkTreeSelection *treeselection,
                                               NULL,
                                               NULL,
                                               NULL,
-                                              FALSE))
+                                              false))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                       UI_SEC.builder, "EF_sections_boutton_supprimer_direct")),
@@ -286,7 +286,7 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
                                              &liste_barres_dep,
                                              NULL,
                                              &liste_charges_dep,
-                                             FALSE),
+                                             false),
       , )
   
   if ((!liste_noeuds_dep->empty ()) ||
@@ -362,7 +362,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   {
     return;
   }
-  if (EF_sections_cherche_nom (p, new_text, FALSE))
+  if (EF_sections_cherche_nom (p, new_text, false))
   {
     return;
   }
@@ -474,7 +474,7 @@ EF_gtk_sections_supprimer_direct (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &section, -1);
   
-  BUG (EF_sections_supprime (section, TRUE, p), )
+  BUG (EF_sections_supprime (section, true, p), )
   
   return;
 }
@@ -515,7 +515,7 @@ EF_gtk_sections_supprimer_menu_barres (GtkButton *button,
   
   gtk_tree_model_get (model, &iter, 0, &section, -1);
   
-  BUG (EF_sections_supprime (section, FALSE, p), )
+  BUG (EF_sections_supprime (section, false, p), )
   
   BUG (m3d_rafraichit (p), )
   
@@ -721,7 +721,7 @@ EF_gtk_sections_dessin (Section *section,
     }
     case SECTION_PERSONNALISEE :
     {
-      Section_Personnalisee *data = section->data;
+      Section_Personnalisee *data = (Section_Personnalisee *) section->data;
       
       double aa;
       double xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
@@ -1475,12 +1475,12 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
  * \param forme : forme de la section. Contient une liste de groupe
  *                        formant chacun une section par une liste de points.
  * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
+ *   Succès : true.\n
+ *   Échec : false :
  *     - ligne == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-gboolean
+bool
 EF_gtk_sections_get_section (char    *ligne,
                              char   **nom,
                              double  *g,
@@ -1530,7 +1530,7 @@ EF_gtk_sections_get_section (char    *ligne,
   std::list <std::list <EF_Point *> *> *forme_;
   std::list <EF_Point *>               *points;
   
-  BUGPARAMCRIT (ligne, "%p", ligne, FALSE)
+  BUGPARAMCRIT (ligne, "%p", ligne, false)
   
   ligne_tmp = &ligne[strchr (ligne, '\t') - ligne + 1];
   INFO (sscanf (ligne_tmp,
@@ -1568,7 +1568,7 @@ EF_gtk_sections_get_section (char    *ligne,
                 &vzp_,
                 &vty_,
                 &vtz_) == 33,
-        FALSE,
+        false,
         (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
                   ligne); )
   
@@ -1622,7 +1622,7 @@ EF_gtk_sections_get_section (char    *ligne,
   while (ligne_tmp[0] != 0)
   {
     INFO (sscanf (ligne_tmp, "%lf\t%lf", &x, &y) == 2,
-          FALSE,
+          false,
           (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
                     ligne);
             for_each (points->begin (),
@@ -1652,17 +1652,7 @@ EF_gtk_sections_get_section (char    *ligne,
     {
       EF_Point *point;
       
-      BUGCRIT (point = malloc (sizeof (EF_Point)),
-               FALSE,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 for_each (points->begin (),
-                           points->end (),
-                           free);
-                 delete points;
-                 for_each (forme_->begin (),
-                           forme_->end (),
-                           EF_sections_personnalisee_free_forme1);
-                 delete forme_; )
+      point = new EF_Point;
       point->x = m_f (x, FLOTTANT_UTILISATEUR);
       point->y = m_f (y, FLOTTANT_UTILISATEUR);
       point->z = m_f (0., FLOTTANT_UTILISATEUR);
@@ -1690,14 +1680,14 @@ EF_gtk_sections_get_section (char    *ligne,
     delete points;
   }
   
-  if (!EF_sections_personnalisee_verif_forme (forme_, TRUE))
+  if (!EF_sections_personnalisee_verif_forme (forme_, true))
   {
     for_each (forme_->begin (),
               forme_->end (),
               EF_sections_personnalisee_free_forme1);
     delete forme_;
     
-    FAILINFO (FALSE,
+    FAILINFO (false,
               (gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"),
                         ligne); )
   }
@@ -1716,9 +1706,9 @@ EF_gtk_sections_get_section (char    *ligne,
   // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
   if (ligne != NULL)
   {
-    BUGCRIT (nom_ = malloc (sizeof (char) *
+    BUGCRIT (nom_ = (char *) malloc (sizeof (char) *
                        (long unsigned int) (strchr (ligne, '\t') - ligne + 1)),
-             FALSE,
+             false,
              (gettext ("Erreur d'allocation mémoire.\n"));
                 for_each (forme_->begin (),
                           forme_->end (),
@@ -1731,7 +1721,7 @@ EF_gtk_sections_get_section (char    *ligne,
     *nom = nom_;
   }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -2075,7 +2065,8 @@ EF_gtk_sections (Projet *p)
                                         NULL,
                                         &forme), 
           )
-      BUGCRIT (categorie = malloc (sizeof (char) * (strlen (nom_section) + 1)),
+      BUGCRIT (categorie = (char *) malloc (sizeof (char) *
+                                                   (strlen (nom_section) + 1)),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  fclose (file);
@@ -2104,7 +2095,8 @@ EF_gtk_sections (Projet *p)
         GtkWidget *grid;
         GtkWidget *label;
         
-        grid = gtk_container_get_children (GTK_CONTAINER (widget))->data;
+        grid = (GtkWidget *) gtk_container_get_children (
+                                                 GTK_CONTAINER (widget))->data;
         label = gtk_grid_get_child_at (GTK_GRID (grid), 1, 0);
         
         if (strcmp (categorie, gtk_label_get_text (GTK_LABEL (label))) == 0)
@@ -2171,7 +2163,7 @@ EF_gtk_sections (Projet *p)
   {
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_ajouter_menu_importee")),
-                              FALSE);
+                              false);
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_SEC.window),
