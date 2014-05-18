@@ -18,14 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <string.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -128,8 +125,8 @@ EF_gtk_rapport (Projet                     *p,
     gtk_list_store_set (UI_RAP.liste,
                         &Iter,
                         0, pixbuf,
-                        1, analyse->analyse,
-                        2, analyse->commentaire,
+                        1, analyse->analyse.c_str (),
+                        2, analyse->commentaire.c_str (),
                         -1);
     if (pixbuf != NULL)
     {
@@ -142,7 +139,5 @@ EF_gtk_rapport (Projet                     *p,
   gtk_window_set_transient_for (GTK_WINDOW (UI_RAP.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

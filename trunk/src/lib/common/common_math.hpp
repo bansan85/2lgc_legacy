@@ -51,15 +51,15 @@ bool errrel (double calc,
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 
-double common_math_arrondi_nombre  (double           nombre);
-void common_math_arrondi_triplet   (cholmod_triplet *triplet);
-void   common_math_arrondi_sparse  (cholmod_sparse  *sparse);
-void   common_math_double_to_char  (double           nombre,
-                                    char            *dest,
-                                    int8_t           decimales);
-void   conv_f_c                    (Flottant         nombre,
-                                    char            *dest,
-                                    uint8_t          decimales);
+double common_math_arrondi_nombre   (double           nombre);
+void   common_math_arrondi_triplet  (cholmod_triplet *triplet);
+void   common_math_arrondi_sparse   (cholmod_sparse  *sparse);
+void   common_math_double_to_string (double           nombre,
+                                     std::string     *dest,
+                                     int8_t           decimales);
+void   conv_f_c                     (Flottant         nombre,
+                                     std::string     *dest,
+                                     uint8_t          decimales);
 
 double   m_g     (Flottant      f);
 Flottant m_f     (double        f,

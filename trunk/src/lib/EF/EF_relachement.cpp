@@ -17,10 +17,9 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
+
 #include <string.h>
-#include <gmodule.h>
+#include <locale>
 
 #include "1992_1_1_barres.hpp"
 #include "common_projet.hpp"
@@ -98,7 +97,7 @@ EF_relachement_init (Projet *p)
  */
 EF_Relachement *
 EF_relachement_ajout (Projet             *p,
-                      const char         *nom,
+                      std::string        *nom,
                       EF_Relachement_Type rx_debut,
                       void               *rx_d_data,
                       EF_Relachement_Type ry_debut,
@@ -121,7 +120,7 @@ EF_relachement_ajout (Projet             *p,
           (rx_fin == EF_RELACHEMENT_LIBRE)),
         NULL,
         (gettext ("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); )
-  INFO (strcmp (gettext ("Aucun"), nom),
+  INFO (nom->compare (gettext ("Aucun")),
         NULL,
         (gettext ("Impossible d'utiliser comme nom 'Aucun'.\n")); )
   INFO (rx_debut != EF_RELACHEMENT_ELASTIQUE_LINEAIRE || rx_d_data != NULL,
@@ -156,17 +155,14 @@ EF_relachement_ajout (Projet             *p,
   relachement_nouveau->ry_f_data = ry_f_data;
   relachement_nouveau->rz_fin = rz_fin;
   relachement_nouveau->rz_f_data = rz_f_data;
-  BUGCRIT (relachement_nouveau->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             delete relachement_nouveau; )
+  relachement_nouveau->nom.assign (*nom);
   
   it = p->modele.relachements.begin ();
   while (it != p->modele.relachements.end ())
   {
     relachement_tmp = *it;
     
-    if (strcmp (relachement_nouveau->nom, relachement_tmp->nom) < 0)
+    if (relachement_nouveau->nom.compare (relachement_tmp->nom) < 0)
     {
       break;
     }
@@ -235,9 +231,9 @@ EF_relachement_ajout (Projet             *p,
  *     - relachement introuvable.
  */
 EF_Relachement *
-EF_relachement_cherche_nom (Projet     *p,
-                            const char *nom,
-                            bool        critique)
+EF_relachement_cherche_nom (Projet      *p,
+                            std::string *nom,
+                            bool         critique)
 {
   std::list <EF_Relachement *>::iterator it;
   
@@ -249,7 +245,7 @@ EF_relachement_cherche_nom (Projet     *p,
   {
     EF_Relachement *relachement = *it;
     
-    if (strcmp (relachement->nom, nom) == 0)
+    if (relachement->nom.compare (*nom) == 0)
     {
       return relachement;
     }
@@ -259,7 +255,9 @@ EF_relachement_cherche_nom (Projet     *p,
   
   if (critique)
   {
-    FAILINFO (NULL, (gettext ("Relachement '%s' introuvable.\n"), nom); )
+    FAILINFO (NULL,
+              (gettext ("Relachement '%s' introuvable.\n"),
+                        nom->c_str ()); )
   }
   else
   {
@@ -306,7 +304,7 @@ EF_relachement_cherche_nom (Projet     *p,
 bool
 EF_relachement_modif (Projet             *p,
                       EF_Relachement     *relachement,
-                      const char         *nom,
+                      std::string        *nom,
                       EF_Relachement_Type rx_debut,
                       void               *rx_d_data,
                       EF_Relachement_Type ry_debut,
@@ -446,24 +444,19 @@ EF_relachement_modif (Projet             *p,
   }
   delete liste_barres_dep;
   
-  if ((nom != NULL) && (strcmp (relachement->nom, nom) != 0))
+  if ((nom != NULL) && (relachement->nom.compare (*nom) != 0))
   {
     std::list <EF_Relachement *>::iterator it;
-    char  *tmp;
     
     INFO (!EF_relachement_cherche_nom (p, nom, false),
           false,
-          (gettext ("Le relâchement %s existe déjà.\n"), nom); )
-    tmp = relachement->nom;
-    BUGCRIT (relachement->nom = g_strdup_printf ("%s", nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               relachement->nom = tmp; )
-    free (tmp);
+          (gettext ("Le relâchement %s existe déjà.\n"),
+                    nom->c_str ()); )
+    relachement->nom.assign (*nom);
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_REL.liste_relachements,
                         &relachement->Iter_liste,
-                        0, relachement->nom,
+                        0, relachement->nom.c_str (),
                         -1);
 #endif
     
@@ -474,7 +467,7 @@ EF_relachement_modif (Projet             *p,
     {
       EF_Relachement *relachement_parcours = *it;
       
-      if (strcmp (relachement->nom, relachement_parcours->nom) < 0)
+      if (relachement->nom.compare (relachement_parcours->nom) < 0)
       {
         p->modele.relachements.insert (it, relachement);
         
@@ -667,26 +660,23 @@ EF_relachement_supprime (EF_Relachement *relachement,
   
   if ((annule_si_utilise) && (!liste_barres_dep->empty ()))
   {
-    char *liste;
+    std::string liste;
     
-    BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
-         false,
-         delete liste_barres_dep; )
+    liste = common_selection_barres_en_texte (liste_barres_dep);
+    
     if (liste_barres_dep->size () == 1)
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
-                          liste);
-                  delete liste_barres_dep;
-                  free (liste); )
+                          liste.c_str ());
+                  delete liste_barres_dep; )
     }
     else
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
-                          liste);
-                  delete liste_barres_dep;
-                  free (liste); )
+                          liste.c_str ());
+                  delete liste_barres_dep; )
     }
   }
   
@@ -695,7 +685,6 @@ EF_relachement_supprime (EF_Relachement *relachement,
        delete liste_barres_dep; )
   delete liste_barres_dep;
   
-  free (relachement->nom);
   delete relachement->rx_d_data;
   delete relachement->ry_d_data;
   delete relachement->rz_d_data;
@@ -744,8 +733,6 @@ EF_relachement_free (Projet *p)
     delete relachement->rx_f_data;
     delete relachement->ry_f_data;
     delete relachement->rz_f_data;
-    free (relachement->nom);
-    
     delete relachement;
     
     ++it;

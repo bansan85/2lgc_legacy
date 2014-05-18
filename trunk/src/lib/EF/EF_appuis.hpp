@@ -27,12 +27,12 @@ bool     EF_appuis_init         (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 EF_Appui* EF_appuis_cherche_nom (Projet       *p,
-                                 const char   *nom,
+                                 std::string  *nom,
                                  bool          critique)
                                        __attribute__((__warn_unused_result__));
 
 EF_Appui *EF_appuis_ajout       (Projet       *p,
-                                 const char   *nom,
+                                 std::string  *nom,
                                  Type_EF_Appui x,
                                  Type_EF_Appui y,
                                  Type_EF_Appui z,
@@ -47,7 +47,7 @@ bool     EF_appuis_edit         (EF_Appui     *appui,
                                  Projet       *p)
                                        __attribute__((__warn_unused_result__));
 bool     EF_appuis_renomme      (EF_Appui     *appui,
-                                 const char   *nom,
+                                 std::string  *nom,
                                  Projet       *p,
                                  bool          critique)
                                        __attribute__((__warn_unused_result__));

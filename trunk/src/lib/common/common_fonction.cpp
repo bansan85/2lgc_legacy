@@ -17,10 +17,10 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
+
+#include <locale>
+#include <memory>
 #include <string.h>
-#include <gmodule.h>
 #include <math.h>
 
 #include "1990_ponderations.hpp"
@@ -28,6 +28,7 @@
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
 #include "common_fonction.hpp"
+#include "common_text.hpp"
 
 /**
  * \brief Divise un tronçon en deux à la position coupure. Si la coupure est
@@ -708,7 +709,7 @@ common_fonction_cherche_zero (Fonction *fonction,
       }
     }
     
-    ecart_x = ABS (zero1_old - zero1) / 2.;
+    ecart_x = fabs (zero1_old - zero1) / 2.;
   }
   if ((zero1 < mini) || (zero1 > maxi))
   {
@@ -719,8 +720,8 @@ common_fonction_cherche_zero (Fonction *fonction,
   // Première vérification d'usage.
   if ((!isnan (zero1)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
-    xx1_2 = MAX (zero1 - ecart_x, mini);
-    xx3_2 = MIN (zero1 + ecart_x, maxi);
+    xx1_2 = std::max (zero1 - ecart_x, mini);
+    xx3_2 = std::min (zero1 + ecart_x, maxi);
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
@@ -795,13 +796,13 @@ common_fonction_cherche_zero (Fonction *fonction,
       }
     }
     
-    ecart_x = ABS (zero2_old - zero2) / 2.;
+    ecart_x = fabs (zero2_old - zero2) / 2.;
   }
   // Dicotomie
   if ((!isnan (zero2)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
-    xx1_2 = MAX (zero2 - ecart_x, mini);
-    xx3_2 = MIN (zero2 + ecart_x, maxi);
+    xx1_2 = std::max (zero2 - ecart_x, mini);
+    xx3_2 = std::min (zero2 + ecart_x, maxi);
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
@@ -1156,7 +1157,7 @@ common_fonction_caracteristiques (Fonction *fonction,
             }
           }
         }
-        ecart_x = ABS (zero1_old - zero1) / 4.;
+        ecart_x = fabs (zero1_old - zero1) / 4.;
         if (ecart_x > ecart_old)
         {
           // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à
@@ -1260,7 +1261,7 @@ common_fonction_caracteristiques (Fonction *fonction,
             }
           }
         }
-        ecart_x = ABS (zero2_old - zero2) / 4.;
+        ecart_x = fabs (zero2_old - zero2) / 4.;
         if (ecart_x > ecart_old)
         {
           // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à
@@ -1341,7 +1342,7 @@ common_fonction_caracteristiques (Fonction *fonction,
         {
           deriv_zero = - b / (2 * a);
         }
-        ecart_x = ABS (deriv_zero_old - deriv_zero) / 4.;
+        ecart_x = fabs (deriv_zero_old - deriv_zero) / 4.;
         if (ecart_x > ecart_old)
         {
           // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à
@@ -1508,46 +1509,28 @@ common_fonction_caracteristiques (Fonction *fonction,
  *     - fonction == NULL,
  *     - Echec de la fonction #common_fonction_caracteristiques
  */
-// coverity[+alloc]
-char *
+std::string
 common_fonction_affiche_caract (Fonction *fonction,
                                 uint8_t   decimales_x,
                                 uint8_t   decimales_y)
 {
-  double *pos, *val;
-  uint8_t nb_val, i;
-  char   *retour;
+  double     *pos, *val;
+  uint8_t     nb_val, i;
+  std::string retour;
   
   BUGPARAM (fonction, "%p", fonction, NULL)
   
   BUG (nb_val = common_fonction_caracteristiques (fonction, &pos, &val), NULL);
   
-  BUGCRIT (retour = g_strdup_printf("%.*lf : %.*lf",
-                                    decimales_x,
-                                    pos[0],
-                                    decimales_y,
-                                    val[0]),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (pos);
-             free (val); )
+  retour = format ("%.*lf : %.*lf", decimales_x, pos[0], decimales_y, val[0]);
   
   for (i = 1; i < nb_val; i++)
   {
-    char *tmp = retour;
-    
-    BUGCRIT (retour = g_strdup_printf ("%s\n%.*lf : %.*lf",
-                                       retour,
-                                       decimales_x,
-                                       pos[i],
-                                       decimales_y,
-                                       val[i]),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp);
-               free (pos);
-               free (val); )
-    free (tmp);
+    retour += "\n" + format ("%.*lf : %.*lf",
+                             decimales_x,
+                             pos[i],
+                             decimales_y,
+                             val[i]);
   }
   
   free (pos);
@@ -1758,23 +1741,23 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
     ++it;
   }
 
-  if (ABS (fy_max) < pow (10, -decimales))
+  if (fabs (fy_max) < pow (10, -decimales))
   {
     fy_max = 0.;
   }
-  if (ABS (fy_min) < pow (10, -decimales))
+  if (fabs (fy_min) < pow (10, -decimales))
   {
     fy_min = 0.;
   }
   
   cairo_new_path (cr);
   cairo_set_line_width (cr, 1.);
-  if ((ABS (fy_max) > pow (10, -decimales)) ||
-      (ABS (fy_min) > pow (10, -decimales)))
+  if ((fabs (fy_max) > pow (10, -decimales)) ||
+      (fabs (fy_min) > pow (10, -decimales)))
   {
     cairo_path_t *save_path;
     
-    echelle = ((height - 1.) / 2.) / MAX (ABS (fy_max), ABS (fy_min));
+    echelle = ((height - 1.) / 2.) / std::max (fabs (fy_max), fabs (fy_min));
     
     cairo_set_source_rgba (cr, 0.8, 0.8, 0.8, 1.);
     // On inverse le signe en y car au milieu, le fait d'ajouter fait descendre
@@ -1890,15 +1873,14 @@ common_fonction_conversion_combinaisons (
  *       différent du nombre de tronçons dans la fonction,
  *     - erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 common_fonction_renvoie (Fonction                                *fonction,
                          std::list <std::list <Ponderation *> *> *index,
                          int8_t                                   decimales)
 {
-  uint16_t i;
-  char    *retour;
-  double   minimum = pow (10, -decimales);
+  uint16_t    i;
+  std::string retour;
+  double      minimum = pow (10, -decimales);
   
   std::list <std::list <Ponderation *> *>::iterator it;
   
@@ -1911,16 +1893,7 @@ common_fonction_renvoie (Fonction                                *fonction,
   
   if (fonction->nb_troncons == 0)
   {
-    BUGCRIT (retour = g_strdup_printf ("%.*lf", decimales, 0.),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-  }
-  else
-  {
-    BUGCRIT (retour = (char *) malloc (sizeof (char)),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    retour[0] = 0;
+    retour = format ("%.*lf", decimales, 0.);
   }
   
   if (index != NULL)
@@ -1929,194 +1902,104 @@ common_fonction_renvoie (Fonction                                *fonction,
   }
   for (i = 0; i < fonction->nb_troncons; i++)
   {
-    char *tmp, *ajout;
+    std::string ajout;
     
     if (i != 0)
     {
-      tmp = retour;
-      BUGCRIT (retour = g_strdup_printf ("%s\n", retour),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp); )
-      free (tmp);
+      retour += "\n";
     }
     
     if (fonction->nb_troncons != 1)
     {
-      tmp = retour;
-      BUGCRIT (retour = g_strdup_printf (gettext("%sde %.*lfm à %.*lfm : "),
-                                         tmp,
-                                         DECIMAL_DISTANCE,
-                                         fonction->troncons[i].debut_troncon,
-                                         DECIMAL_DISTANCE,
-                                         fonction->troncons[i].fin_troncon),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp); )
-      free (tmp);
+      retour += format (gettext ("de %.*lfm à %.*lfm : "),
+                        DECIMAL_DISTANCE,
+                        fonction->troncons[i].debut_troncon,
+                        DECIMAL_DISTANCE,
+                        fonction->troncons[i].fin_troncon);
     }
     
-    BUGCRIT (ajout = (char *) malloc (sizeof (char)),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (retour); )
-    ajout[0] = 0;
-    
-    if (ABS (fonction->troncons[i].x0) > minimum)
+    if (fabs (fonction->troncons[i].x0) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%.*lf",
-                                        ajout,
-                                        decimales,
-                                        fonction->troncons[i].x0),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%.*lf",
+                       decimales,
+                       fonction->troncons[i].x0);
     }
     
-    if (ABS (fonction->troncons[i].x1) > minimum)
+    if (fabs (fonction->troncons[i].x1) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x",
-                                        ajout,
-                                        fonction->troncons[i].x1 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                          "",
-                                        decimales,
-                                        fonction->troncons[i].x1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x",
+                       fonction->troncons[i].x1 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x1);
     }
     
-    if (ABS (fonction->troncons[i].x2) > minimum)
+    if (fabs (fonction->troncons[i].x2) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x²",
-                                        ajout,
-                                        fonction->troncons[i].x2 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                          "",
-                                        decimales,
-                                        fonction->troncons[i].x2),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x²",
+                       fonction->troncons[i].x2 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x2);
     }
     
-    if (ABS (fonction->troncons[i].x3) > minimum)
+    if (fabs (fonction->troncons[i].x3) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x³",
-                                        ajout,
-                                        fonction->troncons[i].x3 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                        "",
-                                        decimales,
-                                        fonction->troncons[i].x3),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x³",
+                       fonction->troncons[i].x3 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x3);
     }
     
-    if (ABS (fonction->troncons[i].x4) > minimum)
+    if (fabs (fonction->troncons[i].x4) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁴",
-                                        ajout,
-                                        fonction->troncons[i].x4 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                          "",
-                                        decimales,
-                                        fonction->troncons[i].x4),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x⁴",
+                       fonction->troncons[i].x4 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x4);
     }
     
-    if (ABS (fonction->troncons[i].x5) > minimum)
+    if (fabs (fonction->troncons[i].x5) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁵",
-                                        ajout,
-                                        fonction->troncons[i].x5 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                          "",
-                                        decimales,
-                                        fonction->troncons[i].x5),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x⁵",
+                       fonction->troncons[i].x5 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x5);
     }
     
-    if (ABS (fonction->troncons[i].x6) > minimum)
+    if (fabs (fonction->troncons[i].x6) > minimum)
     {
-      tmp = ajout;
-      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁶",
-                                        ajout,
-                                        fonction->troncons[i].x6 > 0 ?
-                                          (strcmp(ajout, "") == 0 ? "" : "+") :
-                                          "",
-                                        decimales,
-                                        fonction->troncons[i].x6),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (retour); )
-      free (tmp);
+      ajout += format ("%s%.*lf*x⁶",
+                       fonction->troncons[i].x6 > 0 ?
+                         (ajout == "" ? "" : "+") :
+                         "",
+                       decimales,
+                       fonction->troncons[i].x6);
     }
     
-    if (strcmp (ajout, "") != 0)
+    if (ajout == "")
     {
-      tmp = retour;
-      BUGCRIT (retour = g_strdup_printf ("%s%s", retour, ajout),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (ajout); )
-      free (tmp);
-      free (ajout);
+      retour += format ("%.*lf", decimales, 0.);
     }
     else
     {
-      tmp = retour;
-      BUGCRIT (retour = g_strdup_printf ("%s%.*lf", retour, decimales, 0.),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (ajout); )
-      free (tmp);
-      free (ajout);
+      retour += ajout;
     }
     
     if (index != NULL)
     {
-      char *tmp2;
+      std::string tmp2;
       
-      BUGCRIT (tmp2 = _1990_ponderations_description (*it),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (retour); )
-      tmp = retour;
-      BUGCRIT (retour = g_strdup_printf ("%s (%s)", retour, tmp2),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (tmp2); )
-      free (tmp2);
-      free (tmp);
+      tmp2 = _1990_ponderations_description (*it);
+      retour += " (" + tmp2 + ")";
       
       ++it;
     }

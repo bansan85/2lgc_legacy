@@ -17,8 +17,8 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
+
+#include <locale>
 
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
@@ -109,7 +109,7 @@ _1990_duree_norme_fr (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
-char *
+std::string
 _1990_duree_norme_txt_eu (uint8_t type)
 {
   switch (type)
@@ -143,7 +143,7 @@ _1990_duree_norme_txt_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_duree_norme_txt.
  */
-char *
+std::string
 _1990_duree_norme_txt_fr (uint8_t type)
 {
   switch (type)
@@ -192,7 +192,7 @@ _1990_duree_norme (uint8_t type,
  *     - Pays inconnu,
  *     - erreur dans l'une des fonctions _1990_duree_norme_txt_PAYS.
  */
-char *
+std::string
 _1990_duree_norme_txt (uint8_t type,
                        Norme   norme)
 {

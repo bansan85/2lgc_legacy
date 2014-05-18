@@ -22,10 +22,10 @@
 #include "config.h"
 #include <cholmod.h>
 #include <umfpack.h>
-#include <stdint.h>
 
 #include <list>
 #include <vector>
+#include <string>
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
@@ -515,7 +515,7 @@ typedef struct
   /// Le type de matériau (Béton ou acier).
   Type_Materiau type;
   /// Son nom.
-  char         *nom;
+  std::string   nom;
   /// Les informations du matériau.
   /**
    * Soit Materiau_Acier ou Materiau_Beton.
@@ -569,23 +569,23 @@ typedef struct
 typedef struct
 {
   /// Sa description (plus longue que son nom).
-  char    *description;
+  std::string description;
   /// Inertie de torsion J en m4.
-  Flottant j;
+  Flottant    j;
   /// Inertie I selon l'axe y en m4.
-  Flottant iy;
+  Flottant    iy;
   /// Inertie I selon l'axe z en m4.
-  Flottant iz;
+  Flottant    iz;
   /// vy en m.
-  Flottant vy;
+  Flottant    vy;
   /// vy' en m.
-  Flottant vyp;
+  Flottant    vyp;
   /// vz en m.
-  Flottant vz;
+  Flottant    vz;
   /// vz' en m.
-  Flottant vzp;
+  Flottant    vzp;
   /// Surface en m2.
-  Flottant s;
+  Flottant    s;
   /// La forme de la section.
   /**
    * Une forme est une liste de forme élémentaire. Chaque forme élémentaire
@@ -605,7 +605,7 @@ typedef struct
   /// Le type de la section.
   Type_Section type;
   /// Son nom.
-  char        *nom;
+  std::string  nom;
 #ifdef ENABLE_GTK
   /// La ligne du treeview dans la fenêtre Action.
   GtkTreeIter  Iter_fenetre;
@@ -630,7 +630,7 @@ typedef struct
 #define ENTETE_CHARGES \
   Charge_Type type; \
   ENTETE_ITER \
-  char  *nom;
+  std::string nom;
 
 
 /**
@@ -657,15 +657,15 @@ typedef struct
 typedef struct
 {
   /// Contient la description de l'analyse
-  char   *analyse;
+  std::string analyse;
   /// Le résultat de l'analyse.
   /** - 0 : tout va bien.
    *  - 1 : attention mais problème non critique.
    *  - 2 : erreur critique.
    */
-  uint8_t resultat;
+  uint8_t     resultat;
   /// Contient le commentaire de l'analyse en cas d'erreur ou d'avertissement.
-  char   *commentaire;
+  std::string commentaire;
 } Analyse_Comm;
 
 
@@ -722,7 +722,7 @@ typedef struct
 
 
 #define ENTETE_ACTION_ET_GROUPE \
-  char  *nom; \
+  std::string nom; \
   ENTETE_ITER_GROUPE
 
 
@@ -784,7 +784,7 @@ typedef struct
   /// Le filtre des résultats.
   Filtres            filtre;
   /// Titre de l'onglet.
-  char              *nom;
+  std::string        nom;
 } Gtk_EF_Resultats_Tableau;
 
 
@@ -1434,7 +1434,7 @@ typedef struct
 typedef struct
 {
   /// Nom de l'appui.
-  char         *nom;
+  std::string   nom;
   /// Degré de liberté de la direction x.
   Type_EF_Appui ux;
   /// Données complémentaires si nécessaire pour ux.
@@ -1517,7 +1517,7 @@ typedef struct
 typedef struct
 {
   /// Nom du relâchement.
-  char               *nom;
+  std::string         nom;
   /// Type de relachement en rotation en rx en début de barre.
   EF_Relachement_Type rx_debut;
   /// Paramètres complémentaires au relachement à rx_debut.
@@ -1987,17 +1987,17 @@ typedef struct
 typedef struct
 {
   /// Numéro du département : 1 à 976, y compris 2A et 2B.
-  char    *departement;
+  std::string departement;
   /// Numéro de la commune du département.
   uint32_t commune;
   /// Nom du destinataire ou du client.
-  char    *destinataire;
+  std::string destinataire;
   /// Adresse du projet (rue, immeuble, …).
-  char    *adresse;
+  std::string adresse;
   /// Code postal du projet.
   uint32_t code_postal;
   /// Ville du projet.
-  char    *ville;
+  std::string ville;
 } Adresse;
 
 

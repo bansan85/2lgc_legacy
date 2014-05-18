@@ -17,18 +17,15 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <math.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
+#include "common_text.hpp"
 #ifdef ENABLE_GTK
 #include "common_gtk.hpp"
 #include "EF_gtk_charge_barre_repartie_uniforme.hpp"
@@ -88,7 +85,7 @@ EF_charge_barre_repartie_uniforme_ajout (Projet                 *p,
                                          Flottant                mx,
                                          Flottant                my,
                                          Flottant                mz,
-                                         const char             *nom)
+                                         std::string            *nom)
 {
   Charge                          *charge;
   Charge_Barre_Repartie_Uniforme  *charge_d;
@@ -175,60 +172,50 @@ EF_charge_barre_repartie_uniforme_ajout (Projet                 *p,
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 EF_charge_barre_repartie_uniforme_description (Charge *charge)
 {
   Charge_Barre_Repartie_Uniforme *charge_d;
   
-  char  txt_debut[30], txt_fin[30];
-  char  txt_fx[30], txt_fy[30], txt_fz[30];
-  char  txt_mx[30], txt_my[30], txt_mz[30];
-  char  *txt_liste_barres, *description;
+  std::string txt_debut, txt_fin, txt_liste_barres, description;
+  std::string txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz;
   
   BUGPARAM (charge, "%p", charge, NULL)
   
   charge_d = (Charge_Barre_Repartie_Uniforme *) charge->data;
   
-  BUG (txt_liste_barres = common_selection_barres_en_texte (&charge_d->barres),
-       NULL)
+  txt_liste_barres = common_selection_barres_en_texte (&charge_d->barres);
   
-  conv_f_c (charge_d->a, txt_debut, DECIMAL_DISTANCE);
-  conv_f_c (charge_d->b, txt_fin, DECIMAL_DISTANCE);
-  conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
-  conv_f_c (charge_d->fy, txt_fy, DECIMAL_FORCE);
-  conv_f_c (charge_d->fz, txt_fz, DECIMAL_FORCE);
-  conv_f_c (charge_d->mx, txt_mx, DECIMAL_MOMENT);
-  conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
-  conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
+  conv_f_c (charge_d->a, &txt_debut, DECIMAL_DISTANCE);
+  conv_f_c (charge_d->b, &txt_fin, DECIMAL_DISTANCE);
+  conv_f_c (charge_d->fx, &txt_fx, DECIMAL_FORCE);
+  conv_f_c (charge_d->fy, &txt_fy, DECIMAL_FORCE);
+  conv_f_c (charge_d->fz, &txt_fz, DECIMAL_FORCE);
+  conv_f_c (charge_d->mx, &txt_mx, DECIMAL_MOMENT);
+  conv_f_c (charge_d->my, &txt_my, DECIMAL_MOMENT);
+  conv_f_c (charge_d->mz, &txt_mz, DECIMAL_MOMENT);
   
-  BUGCRIT (description = g_strdup_printf (
-             "%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", //NS
-             strstr (txt_liste_barres, ";") == NULL ?
-               gettext ("Barre") :
-               gettext("Barres"),
-             txt_liste_barres,
-             gettext ("début"),
-             txt_debut,
-             gettext ("fin (par rapport à la fin)"),
-             txt_fin,
-             charge_d->projection ?
-               gettext ("projection : oui") :
-               gettext ("projection : non"),
-             charge_d->repere_local ?
-               gettext ("repère : local") :
-               gettext ("repère : global"),
-             txt_fx,
-             txt_fy,
-             txt_fz,
-             txt_mx,
-             txt_my,
-             txt_mz),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_barres); )
-  
-  free (txt_liste_barres);
+  description = format (gettext ("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m"),
+                        txt_liste_barres.find (';') == std::string::npos ?
+                          gettext ("Barre") :
+                          gettext("Barres"),
+                        txt_liste_barres.c_str (),
+                        gettext ("début"),
+                        txt_debut.c_str (),
+                        gettext ("fin (par rapport à la fin)"),
+                        txt_fin.c_str (),
+                        charge_d->projection ?
+                          gettext ("projection : oui") :
+                          gettext ("projection : non"),
+                        charge_d->repere_local ?
+                          gettext ("repère : local") :
+                          gettext ("repère : global"),
+                        txt_fx.c_str (),
+                        txt_fy.c_str (),
+                        txt_fz.c_str (),
+                        txt_mx.c_str (),
+                        txt_my.c_str (),
+                        txt_mz.c_str ());
   
   return description;
 }
@@ -2041,7 +2028,6 @@ EF_charge_barre_repartie_uniforme_free (Charge *charge)
   
   charge_d = (Charge_Barre_Repartie_Uniforme *) charge->data;
   
-  free (charge->nom);
   delete charge_d;
   delete charge;
   

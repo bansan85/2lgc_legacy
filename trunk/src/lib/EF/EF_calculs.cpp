@@ -17,13 +17,10 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <math.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
+#include <string.h>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
@@ -758,7 +755,7 @@ EF_calculs_resid (int    *Ap,
   norm = 0.;
   for (k = 0; k < n; k++)
   {
-  	norm = MAX (ABS (r[k]), norm);
+  	norm = std::max (fabs (r[k]), norm);
   }
   free (r);
   
@@ -880,7 +877,7 @@ EF_calculs_resoud_charge (Projet *p,
           while (it2 != charge_d->noeuds.end ())
           {
             EF_Noeud *noeud = *it2;
-            long      num = std::distance (
+            size_t    num = std::distance (
                               p->modele.noeuds.begin (),
                               std::find (p->modele.noeuds.begin (), 
                                          p->modele.noeuds.end (), 
@@ -1129,7 +1126,7 @@ EF_calculs_resoud_charge (Projet *p,
             a = m_g (charge_d->position) - debut_barre;
             fin_barre = EF_noeuds_distance (noeud_fin, element->noeud_debut);
             BUG (!isnan (fin_barre), false, FREE_ALL)
-            l = ABS (fin_barre - debut_barre);
+            l = fabs (fin_barre - debut_barre);
             b = l - a;
             
       //   Détermination des moments mx de rotation :
@@ -1756,7 +1753,7 @@ EF_calculs_resoud_charge (Projet *p,
               fin_barre = EF_noeuds_distance (noeud_fin,
                                               element->noeud_debut);
               BUG (!isnan (fin_barre), false, FREE_ALL)
-              l = ABS (fin_barre - debut_barre);
+              l = fabs (fin_barre - debut_barre);
               if (pos == j_f)
               {
                 fin_barre = EF_noeuds_distance (noeud_fin,
@@ -2426,7 +2423,7 @@ EF_calculs_resoud_charge (Projet *p,
   {
     EF_Barre *element = *it;
     double    S = m_g (EF_sections_s (element->section));
-    long      num = std::distance (p->modele.barres.begin (),
+    size_t    num = std::distance (p->modele.barres.begin (),
                                    std::find (p->modele.barres.begin (),
                                               p->modele.barres.end (),
                                               element));
@@ -2591,7 +2588,7 @@ EF_calculs_resoud_charge (Projet *p,
       l_fin = EF_noeuds_distance (noeud_fin, element->noeud_debut);
       BUG (!isnan (l_debut), false, FREE_ALL)
       BUG (!isnan (l_fin), false, FREE_ALL)
-      l = ABS (l_fin - l_debut);
+      l = fabs (l_fin - l_debut);
       
   //     Ajout des efforts entre deux noeuds dus à leur déplacement relatif,
   //     la courbe vient s'ajouter à la courbe (si existante) déja définie

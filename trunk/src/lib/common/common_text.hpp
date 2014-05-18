@@ -25,25 +25,28 @@
 void show_warranty ();
 void show_help     ();
 
-double   common_text_str_to_double (char          *texte,
-                                    double         val_min,
-                                    bool           min_include,
-                                    double         val_max,
-                                    bool           max_include)
+std::string format (const std::string fmt,
+                    ...);
+
+double   common_text_str_to_double  (char          *texte,
+                                     double         val_min,
+                                     bool           min_include,
+                                     double         val_max,
+                                     bool           max_include)
                                        __attribute__((__warn_unused_result__));
-wchar_t *strcasestr_internal       (const wchar_t *haystack,
-                                    const wchar_t *needle)
+wchar_t *strcasestr_internal        (const wchar_t *haystack,
+                                     const wchar_t *needle)
                                        __attribute__((__warn_unused_result__));
-char    *common_text_dependances   (std::list <EF_Noeud *> *liste_noeuds,
-                                    std::list <EF_Barre *> *liste_barres,
-                                    std::list <Charge   *> *liste_charges,
-                                    Projet                 *p)
+std::string common_text_dependances (std::list <EF_Noeud *> *liste_noeuds,
+                                     std::list <EF_Barre *> *liste_barres,
+                                     std::list <Charge   *> *liste_charges,
+                                     Projet                 *p)
                                        __attribute__((__warn_unused_result__));
-wchar_t *common_text_get_line      (FILE          *fichier)
+wchar_t *common_text_get_line       (FILE          *fichier)
                                        __attribute__((__warn_unused_result__));
-char    *common_text_wcstostr_dup  (const wchar_t *texte)
+char    *common_text_wcstostr_dup   (const wchar_t *texte)
                                        __attribute__((__warn_unused_result__));
-wchar_t *common_text_strtowcs_dup  (const char    *texte)
+wchar_t *common_text_strtowcs_dup   (const char    *texte)
                                        __attribute__((__warn_unused_result__));
 #endif
 

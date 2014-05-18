@@ -17,13 +17,9 @@
  */
 
 #include "config.h"
-#include <locale.h>
-#include <libintl.h>
-#include <math.h>
-#include <string.h>
-#include <gmodule.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_math.hpp"
@@ -88,7 +84,7 @@ EF_materiaux_insert (Projet      *p,
   {
     materiau_tmp = *it;
     
-    if (strcmp (materiau->nom, materiau_tmp->nom) < 0)
+    if (materiau->nom.compare (materiau_tmp->nom) < 0)
     {
       break;
     }
@@ -129,7 +125,7 @@ EF_materiaux_insert (Projet      *p,
 #ifdef ENABLE_GTK
   gtk_list_store_set (UI_MAT.liste_materiaux,
                       &materiau->Iter_liste,
-                      0, materiau->nom,
+                      0, materiau->nom.c_str (),
                       -1);
   if (UI_MAT.builder != NULL)
   {
@@ -171,7 +167,7 @@ EF_materiaux_repositionne (Projet      *p,
   {
     EF_Materiau *materiau_parcours = *it;
     
-    if (strcmp (materiau->nom, materiau_parcours->nom) < 0)
+    if (materiau->nom.compare (materiau_parcours->nom) < 0)
     {
       p->modele.materiaux.insert (it, materiau);
       
@@ -218,7 +214,7 @@ EF_materiaux_repositionne (Projet      *p,
         gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                         gtk_builder_get_object (UI_BET.builder,
                                          "_1992_1_1_materiaux_textview_nom"))),
-                                  materiau->nom,
+                                  materiau->nom.c_str (),
                                   -1);
       }
       break;
@@ -230,7 +226,7 @@ EF_materiaux_repositionne (Projet      *p,
         gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                         gtk_builder_get_object (UI_ACI.builder,
                                          "_1993_1_1_materiaux_textview_nom"))),
-                                  materiau->nom,
+                                  materiau->nom.c_str (),
                                   -1);
       }
       break;
@@ -250,7 +246,7 @@ EF_materiaux_repositionne (Projet      *p,
   }
   gtk_list_store_set (UI_MAT.liste_materiaux,
                       &materiau->Iter_liste,
-                      0, materiau->nom,
+                      0, materiau->nom.c_str (),
                       -1);
 #endif
   
@@ -270,9 +266,9 @@ EF_materiaux_repositionne (Projet      *p,
  *     - materiau introuvable.
  */
 EF_Materiau *
-EF_materiaux_cherche_nom (Projet     *p,
-                          const char *nom,
-                          bool        critique)
+EF_materiaux_cherche_nom (Projet      *p,
+                          std::string *nom,
+                          bool         critique)
 {
   std::list <EF_Materiau *>::iterator it;
   
@@ -284,7 +280,7 @@ EF_materiaux_cherche_nom (Projet     *p,
   {
     EF_Materiau *materiau = *it;
     
-    if (strcmp (materiau->nom, nom) == 0)
+    if (materiau->nom.compare (*nom) == 0)
     {
       return materiau;
     }
@@ -294,7 +290,9 @@ EF_materiaux_cherche_nom (Projet     *p,
   
   if (critique)
   {
-    FAILCRIT (NULL, (gettext ("Matériau '%s' introuvable.\n"), nom); )
+    FAILCRIT (NULL,
+              (gettext ("Matériau '%s' introuvable.\n"),
+                        nom->c_str ()); )
   }
   else
   {
@@ -313,8 +311,7 @@ EF_materiaux_cherche_nom (Projet     *p,
  *     - materiau == NULL,
  *     - erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 EF_materiaux_get_description (EF_Materiau *materiau)
 {
   switch (materiau->type)
@@ -437,8 +434,6 @@ EF_materiaux_free_un (EF_Materiau *materiau)
 {
   BUGPARAM (materiau, "%p", materiau, )
   
-  free (materiau->nom);
-  
   switch (materiau->type)
   {
     case MATERIAU_BETON :
@@ -505,24 +500,22 @@ EF_materiaux_supprime (EF_Materiau *materiau,
   
   if (!liste_barres_dep->empty ())
   {
-    char *liste;
+    std::string liste;
     
-    BUG (liste = common_selection_barres_en_texte (liste_barres_dep), false)
+    liste = common_selection_barres_en_texte (liste_barres_dep);
     
-    if (g_list_next (liste_barres_dep) == NULL)
+    if (liste_barres_dep->size () == 1)
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"),
-                          liste);
-                  free (liste);
+                          liste.c_str ());
                   delete liste_barres_dep; )
     }
     else
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"),
-                          liste);
-                  free (liste);
+                          liste.c_str ());
                   delete liste_barres_dep; )
     }
   }

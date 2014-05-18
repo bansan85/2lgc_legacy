@@ -18,15 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <string.h>
-#include <math.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -144,6 +140,8 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
   GtkTreePath  *path;
   EF_Materiau  *materiau;
   
+  std::string   str_tmp (new_text);
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_MATX.builder,
            ,
@@ -155,12 +153,12 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &materiau, -1);
-  if ((strcmp (materiau->nom, new_text) == 0) || (strcmp (new_text, "") == 0))
+  if ((materiau->nom.compare (new_text) == 0) || (strcmp (new_text, "") == 0))
   {
     return;
   }
   
-  if (EF_materiaux_cherche_nom (p, new_text, false))
+  if (EF_materiaux_cherche_nom (p, &str_tmp, false))
   {
     return;
   }
@@ -171,7 +169,7 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
     {
       BUG (_1992_1_1_materiaux_modif (p,
                                       materiau,
-                                      new_text,
+                                      &str_tmp,
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
@@ -194,7 +192,7 @@ EF_gtk_materiaux_edit_nom (GtkCellRendererText *cell,
     {
       BUG (_1993_1_1_materiaux_modif (p,
                                       materiau,
-                                      new_text,
+                                      &str_tmp,
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
                                       m_f (NAN, FLOTTANT_ORDINATEUR),
@@ -385,23 +383,15 @@ EF_gtk_materiaux_boutton_supprimer_menu (GtkButton *widget,
       (!liste_barres_dep->empty ()) ||
       (!liste_charges_dep->empty ()))
   {
-    char *desc;
+    std::string desc;
     
-    BUG (desc = common_text_dependances (liste_noeuds_dep,
-                                         liste_barres_dep,
-                                         liste_charges_dep,
-                                         p),
-         ,
-         delete liste_noeuds_dep;
-           delete liste_barres_dep;
-           delete liste_charges_dep; )
+    desc = common_text_dependances (liste_noeuds_dep,
+                                    liste_barres_dep,
+                                    liste_charges_dep,
+                                    p);
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                        UI_MATX.builder, "EF_materiaux_supprimer_menu_barres")),
-                             desc);
-    free (desc);
-    delete liste_noeuds_dep;
-    delete liste_barres_dep;
-    delete liste_charges_dep;
+                             desc.c_str ());
   }
   else
   {
@@ -544,7 +534,7 @@ EF_gtk_materiaux_render_0 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &materiau, -1);
   BUGPARAM (materiau, "%p", materiau, )
   
-  g_object_set (cell, "text", materiau->nom, NULL);
+  g_object_set (cell, "text", materiau->nom.c_str (), NULL);
   
   return;
 }
@@ -620,13 +610,10 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
     case MATERIAU_BETON :
     case MATERIAU_ACIER :
     {
-      char *c;
+      std::string c;
       
-      BUG (c = EF_materiaux_get_description (materiau),
-           ,
-           g_object_set (cell, "markup", gettext ("Inconnu"), NULL); )
-      g_object_set (cell, "markup", c, NULL);
-      free (c);
+      c = EF_materiaux_get_description (materiau);
+      g_object_set (cell, "markup", c.c_str (), NULL);
       
       break;
     }
@@ -836,8 +823,5 @@ EF_gtk_materiaux (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_MATX.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

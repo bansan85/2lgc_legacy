@@ -25,8 +25,8 @@
 uint16_t _1990_duree_norme (uint8_t type,
                             Norme   norme)
                                        __attribute__((__warn_unused_result__));
-char *_1990_duree_norme_txt (uint8_t type,
-                             Norme   norme)
+std::string _1990_duree_norme_txt (uint8_t type,
+                                   Norme   norme)
                                        __attribute__((__warn_unused_result__));
 
 #endif

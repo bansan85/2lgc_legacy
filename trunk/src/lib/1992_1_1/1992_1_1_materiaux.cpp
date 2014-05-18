@@ -17,18 +17,16 @@
  */
 
 #include "config.h"
-#include <locale.h>
-#include <libintl.h>
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 
 #include <memory>
+#include <locale>
+#include <math.h>
 
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
 #include "common_selection.hpp"
+#include "common_text.hpp"
 #include "1992_1_1_barres.hpp"
 #include "1992_1_1_materiaux.hpp"
 #include "EF_calculs.hpp"
@@ -230,7 +228,7 @@ _1992_1_1_materiaux_ecm (double fcm)
 double
 _1992_1_1_materiaux_ec1 (double fcm)
 {
-  return MIN (0.7 * pow (fcm, 0.31), 2.8) / 1000.;
+  return std::min (0.7 * pow (fcm, 0.31), 2.8) / 1000.;
 }
 
 
@@ -445,9 +443,9 @@ _1992_1_1_materiaux_gnu (double ecm,
  *     - en cas d'erreur d'allocation mémoire.
  */
 EF_Materiau *
-_1992_1_1_materiaux_ajout (Projet     *p,
-                           const char *nom,
-                           Flottant    fck)
+_1992_1_1_materiaux_ajout (Projet      *p,
+                           std::string *nom,
+                           Flottant     fck)
 {
   std::unique_ptr <EF_Materiau>    materiau_nouveau (new EF_Materiau);
   std::unique_ptr <Materiau_Beton> data_beton (new Materiau_Beton);
@@ -511,18 +509,15 @@ _1992_1_1_materiaux_ajout (Projet     *p,
        NULL)
   data_beton->nu = m_f (COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
   
-  BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  materiau_nouveau->nom.assign (*nom);
   
   mat = materiau_nouveau.release ();
   mat->data = data_beton.release ();
   
   BUG (EF_materiaux_insert (p, mat),
        NULL,
-       free (materiau_nouveau->nom);
          delete (Materiau_Beton *) mat->data;
-         delete mat;)
+         delete mat; )
   
   return mat;
 }
@@ -557,7 +552,7 @@ _1992_1_1_materiaux_ajout (Projet     *p,
 bool
 _1992_1_1_materiaux_modif (Projet      *p,
                            EF_Materiau *materiau,
-                           char        *nom,
+                           std::string *nom,
                            Flottant     fck,
                            Flottant     fckcube,
                            Flottant     fcm,
@@ -584,19 +579,13 @@ _1992_1_1_materiaux_modif (Projet      *p,
   
   data_beton = (Materiau_Beton *) materiau->data;
   
-  if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
+  if ((nom != NULL) && (materiau->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_materiaux_cherche_nom (p, nom, false),
           false,
-          (gettext ("Le matériau %s existe déjà.\n"), nom); )
-    tmp = materiau->nom;
-    BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               materiau->nom = tmp; )
-    free (tmp);
+          (gettext ("Le matériau %s existe déjà.\n"), nom->c_str ()); )
+    materiau->nom.assign (*nom);
+    
     BUG (EF_materiaux_repositionne (p, materiau), false)
   }
   
@@ -720,13 +709,12 @@ _1992_1_1_materiaux_modif (Projet      *p,
  *     - materiau == NULL,
  *     - erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
 {
-  char           *description;
-  char            fck[30], tmp1[30];
-  char           *complement = NULL, *tmp2;
+  std::string     description;
+  std::string     complement ("");
+  std::string     tmp1;
   Materiau_Beton *data_beton;
   
   BUGPARAM (materiau, "%p", materiau, NULL)
@@ -736,362 +724,180 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
   
   data_beton = (Materiau_Beton *) materiau->data;
   
-  conv_f_c (m_f (m_g (data_beton->fck) / 1000000., data_beton->fck.type),
-            fck,
-            DECIMAL_CONTRAINTE);
-  
   // On affiche les différences si le matériau a été personnalisé
   if (!errrel (m_g (data_beton->fckcube),
                _1992_1_1_materiaux_fckcube (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fckcube) / 1000000.,
               data_beton->fckcube.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    BUGCRIT (complement = g_strdup_printf (gettext ("f<sub>ck,cube</sub> : %s MPa"),
-                                           tmp1),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    complement = format (gettext ("f<sub>ck,cube</sub> : %s MPa"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->fcm),
                _1992_1_1_materiaux_fcm (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fcm) / 1000000., data_beton->fcm.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("f<sub>cm</sub> : %s MPa"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, f<sub>cm</sub> : %s MPa"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("f<sub>cm</sub> : %s MPa"), tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->fctm),
                _1992_1_1_materiaux_fctm (m_g (data_beton->fck) / 1000000.,
                                          m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctm) / 1000000., data_beton->fctm.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("f<sub>ctm</sub> : %s MPa"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, f<sub>ctm</sub> : %s MPa"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement + 
+                 complement == "" ? "" : ", " +
+                 format (gettext ("f<sub>ctm</sub> : %s MPa"), tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->fctk_0_05),
             _1992_1_1_materiaux_fctk_0_05 (m_g (data_beton->fctm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctk_0_05) / 1000000.,
                    data_beton->fctk_0_05.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("f<sub>ctk,0.05</sub> : %s MPa"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, f<sub>ctk,0.05</sub> : %s MPa"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("f<sub>ctk,0.05</sub> : %s MPa"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->fctk_0_95),
             _1992_1_1_materiaux_fctk_0_95 (m_g (data_beton->fctm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->fctk_0_95) / 1000000.,
                    data_beton->fctk_0_95.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("f<sub>ctk,0.95</sub> : %s MPa"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, f<sub>ctk,0.95</sub> : %s MPa"),
-                                            tmp2,
-                                            tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("f<sub>ctk,0.95</sub> : %s MPa"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ecm),
                _1992_1_1_materiaux_ecm (m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecm) / 1000000., data_beton->ecm.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("E<sub>cm</sub> : %s MPa"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, E<sub>cm</sub> : %s MPa"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("E<sub>cm</sub> : %s MPa"), tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ec1),
                _1992_1_1_materiaux_ec1 (m_g (data_beton->fcm) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec1) * 1000., data_beton->ec1.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>c1</sub> : %s ‰"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>c1</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>c1</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ecu1),
                _1992_1_1_materiaux_ecu1 (m_g (data_beton->fcm) / 1000000.,
                                          m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu1) * 1000., data_beton->ecu1.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>cu1</sub> : %s ‰"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>cu1</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>cu1</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ec2),
                _1992_1_1_materiaux_ec2 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec2) * 1000., data_beton->ec2.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>c2</sub> : %s ‰"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>c2</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>c2</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ecu2),
                _1992_1_1_materiaux_ecu2 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu2) * 1000., data_beton->ecu2.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>cu2</sub> : %s ‰"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>cu2</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>cu2</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ec3),
                _1992_1_1_materiaux_ec3 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ec3) * 1000., data_beton->ec3.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>c3</sub> : %s ‰"),
-                                             tmp1),
-               NULL, 
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>c3</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>c3</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->ecu3),
                _1992_1_1_materiaux_ecu3 (m_g (data_beton->fck) / 1000000.)))
   {
     conv_f_c (m_f (m_g (data_beton->ecu3) * 1000., data_beton->ecu3.type),
-              tmp1,
+              &tmp1,
               DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#949;<sub>cu3</sub> : %s ‰"),
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#949;<sub>cu3</sub> : %s ‰"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#949;<sub>cu3</sub> : %s ‰"),
+                                  tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->n),
                _1992_1_1_materiaux_n (m_g (data_beton->fck) / 1000000.)))
   {
-    conv_f_c (data_beton->n, tmp1, DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("n : %s"), tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, n : %s"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    conv_f_c (data_beton->n, &tmp1, DECIMAL_SANS_UNITE);
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("n : %s"), tmp1.c_str ());
   }
   if (!errrel (m_g (data_beton->nu), COEFFICIENT_NU_BETON))
   {
-    conv_f_c (data_beton->nu, tmp1, DECIMAL_SANS_UNITE);
-    if (complement == NULL)
-    {
-      BUGCRIT (complement = g_strdup_printf (gettext ("&#957; : %s"), tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
-    }
-    else
-    {
-      tmp2 = complement;
-      BUGCRIT (complement = g_strdup_printf (gettext ("%s, &#957; : %s"),
-                                             tmp2,
-                                             tmp1),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp2); )
-      free (tmp2);
-    }
+    conv_f_c (data_beton->nu, &tmp1, DECIMAL_SANS_UNITE);
+    
+    complement = complement +
+                 complement == "" ? "" : ", " +
+                 format (gettext ("&#957; : %s"), tmp1.c_str ());
   }
   
-  if (complement == NULL)
+  conv_f_c (m_f (m_g (data_beton->fck) / 1000000., data_beton->fck.type),
+            &tmp1,
+            DECIMAL_CONTRAINTE);
+  
+  if (complement == "")
   {
-    BUGCRIT (description = g_strdup_printf (gettext ("f<sub>ck</sub> : %s MPa"),
-                                            fck),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    description = format (gettext ("f<sub>ck</sub> : %s MPa"), tmp1.c_str ());
   }
   else
   {
-    BUGCRIT (description = g_strdup_printf (gettext ("f<sub>ck</sub> : %s MPa avec %s"),
-                                            fck,
-                                            complement),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (complement); )
-    free (complement);
+    description = format (gettext ("f<sub>ck</sub> : %s MPa avec "),
+                                   tmp1.c_str ()) + complement;
   }
   
   return description;

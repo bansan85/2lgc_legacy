@@ -23,18 +23,18 @@
 #include "common_projet.hpp"
 
 
-bool     _1992_1_1_barres_init  (Projet *p)
+bool _1992_1_1_barres_init  (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-bool     _1992_1_1_barres_ajout (Projet *p,
-                                 Type_Element    type,
-                                 Section        *section,
-                                 EF_Materiau    *materiau,
-                                 EF_Noeud       *noeud_debut,
-                                 EF_Noeud       *noeud_fin,
-                                 Flottant        angle,
-                                 EF_Relachement *relachement,
-                                 uint16_t        discretisation_element)
+bool _1992_1_1_barres_ajout (Projet *p,
+                             Type_Element    type,
+                             Section        *section,
+                             EF_Materiau    *materiau,
+                             EF_Noeud       *noeud_debut,
+                             EF_Noeud       *noeud_fin,
+                             Flottant        angle,
+                             EF_Relachement *relachement,
+                             uint16_t        discretisation_element)
                                        __attribute__((__warn_unused_result__));
 
 EF_Barre *_1992_1_1_barres_cherche_numero (Projet   *p,
@@ -42,24 +42,24 @@ EF_Barre *_1992_1_1_barres_cherche_numero (Projet   *p,
                                            bool  critique)
                                        __attribute__((__warn_unused_result__));
 bool _1992_1_1_barres_cherche_dependances (
-           Projet                       *p,
-           std::list <EF_Appui *>       *appuis,
-           std::list <EF_Noeud *>       *noeuds,
-           std::list <Section *>        *sections,
-           std::list <EF_Materiau *>    *materiaux,
-           std::list <EF_Relachement *> *relachements,
-           std::list <EF_Barre *>       *barres,
-           std::list <EF_Noeud *>      **noeuds_dep,
-           std::list <uint32_t>        **noeuds_dep_n,
-           std::list <EF_Barre *>      **barres_dep,
-           std::list <uint32_t>        **barres_dep_n,
-           std::list <Charge *>        **charges_dep,
-           bool                          origine)
+       Projet                       *p,
+       std::list <EF_Appui *>       *appuis,
+       std::list <EF_Noeud *>       *noeuds,
+       std::list <Section *>        *sections,
+       std::list <EF_Materiau *>    *materiaux,
+       std::list <EF_Relachement *> *relachements,
+       std::list <EF_Barre *>       *barres,
+       std::list <EF_Noeud *>      **noeuds_dep,
+       std::list <uint32_t>        **noeuds_dep_n,
+       std::list <EF_Barre *>      **barres_dep,
+       std::list <uint32_t>        **barres_dep_n,
+       std::list <Charge *>        **charges_dep,
+       bool                          origine)
                                        __attribute__((__warn_unused_result__));
-bool _1992_1_1_barres_angle_rotation      (EF_Noeud *debut,
-                                           EF_Noeud *fin,
-                                           double   *y,
-                                           double   *z)
+bool _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
+                                      EF_Noeud *fin,
+                                      double   *y,
+                                      double   *z)
                                        __attribute__((__warn_unused_result__));
 
 bool _1992_1_1_barres_change_type        (EF_Barre       *barre,

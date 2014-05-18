@@ -17,18 +17,15 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <math.h>
-#include <gmodule.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
+#include "common_text.hpp"
 #ifdef ENABLE_GTK
 #include "common_gtk.hpp"
 #include "EF_gtk_charge_barre_ponctuelle.hpp"
@@ -68,18 +65,18 @@
  *     - en cas d'erreur d'allocation mémoire
  */
 Charge *
-EF_charge_barre_ponctuelle_ajout (Projet     *p,
-                                  Action     *action,
+EF_charge_barre_ponctuelle_ajout (Projet                 *p,
+                                  Action                 *action,
                                   std::list <EF_Barre *> *barres,
-                                  bool        repere_local,
-                                  Flottant    a,
-                                  Flottant    fx,
-                                  Flottant    fy,
-                                  Flottant    fz,
-                                  Flottant    mx,
-                                  Flottant    my,
-                                  Flottant    mz,
-                                  const char *nom)
+                                  bool                    repere_local,
+                                  Flottant                a,
+                                  Flottant                fx,
+                                  Flottant                fy,
+                                  Flottant                fz,
+                                  Flottant                mx,
+                                  Flottant                my,
+                                  Flottant                mz,
+                                  std::string            *nom)
 {
   Charge                  *charge;
   Charge_Barre_Ponctuelle *charge_d;
@@ -145,52 +142,44 @@ EF_charge_barre_ponctuelle_ajout (Projet     *p,
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 EF_charge_barre_ponctuelle_description (Charge *charge)
 {
   Charge_Barre_Ponctuelle *charge_d;
-  char                     txt_pos[30];
-  char                     txt_fx[30], txt_fy[30], txt_fz[30];
-  char                     txt_mx[30], txt_my[30], txt_mz[30];
-  char                    *txt_liste_barres, *description;
+  
+  std::string txt_pos, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz;
+  std::string txt_liste_barres, description;
   
   BUGPARAM (charge, "%p", charge, NULL)
   charge_d = (Charge_Barre_Ponctuelle *) charge->data;
   
-  BUG (txt_liste_barres = common_selection_barres_en_texte (&charge_d->barres),
-       NULL)
-  conv_f_c (charge_d->position, txt_pos, DECIMAL_DISTANCE);
-  conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
-  conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
-  conv_f_c (charge_d->fy, txt_fy, DECIMAL_FORCE);
-  conv_f_c (charge_d->fz, txt_fz, DECIMAL_FORCE);
-  conv_f_c (charge_d->mx, txt_mx, DECIMAL_MOMENT);
-  conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
-  conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
+  txt_liste_barres = common_selection_barres_en_texte (&charge_d->barres);
   
-  BUGCRIT (description = g_strdup_printf (
-             "%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", // NS
-             strstr (txt_liste_barres, ";") == NULL ?
-               gettext ("Barre") :
-               gettext ("Barres"),
-             txt_liste_barres,
-             gettext ("position"),
-             txt_pos,
-             charge_d->repere_local ?
-               gettext ("repère : local") :
-               gettext ("repère : global"),
-             txt_fx,
-             txt_fy,
-             txt_fz,
-             txt_mx,
-             txt_my,
-             txt_mz),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_barres); )
+  conv_f_c (charge_d->position, &txt_pos, DECIMAL_DISTANCE);
+  conv_f_c (charge_d->fx, &txt_fx, DECIMAL_FORCE);
+  conv_f_c (charge_d->fx, &txt_fx, DECIMAL_FORCE);
+  conv_f_c (charge_d->fy, &txt_fy, DECIMAL_FORCE);
+  conv_f_c (charge_d->fz, &txt_fz, DECIMAL_FORCE);
+  conv_f_c (charge_d->mx, &txt_mx, DECIMAL_MOMENT);
+  conv_f_c (charge_d->my, &txt_my, DECIMAL_MOMENT);
+  conv_f_c (charge_d->mz, &txt_mz, DECIMAL_MOMENT);
   
-  free (txt_liste_barres);
+  description = format (gettext ("%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m"),
+                        txt_liste_barres.find (';') == std::string::npos ?
+                          gettext ("Barre") :
+                          gettext ("Barres"),
+                        txt_liste_barres.c_str (),
+                        gettext ("position"),
+                        txt_pos.c_str (),
+                        charge_d->repere_local ?
+                          gettext ("repère : local") :
+                          gettext ("repère : global"),
+                        txt_fx.c_str (),
+                        txt_fy.c_str (),
+                        txt_fz.c_str (),
+                        txt_mx.c_str (),
+                        txt_my.c_str (),
+                        txt_mz.c_str ());
   
   return description;
 }
@@ -1479,7 +1468,6 @@ EF_charge_barre_ponctuelle_free (Charge *charge)
   BUGPARAM (charge, "%p", charge, false)
   charge_d = (Charge_Barre_Ponctuelle *) charge->data;
   
-  free (charge->nom);
   delete charge_d;
   delete charge;
   

@@ -17,10 +17,10 @@
  */
 
 #include "config.h"
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+
 #include <gtk/gtk.h>
+
+#include <locale>
 
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -104,10 +104,10 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   }
   gtk_widget_set_tooltip_window (GTK_WIDGET (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_6_10")),
-                         GTK_WINDOW (common_tooltip_generation ("1990_6_10")));
+             GTK_WINDOW (common_tooltip_generation ((xmlChar *) "1990_6_10")));
   gtk_widget_set_tooltip_window (GTK_WIDGET (gtk_builder_get_object (
                UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")),
-                      GTK_WINDOW (common_tooltip_generation ("1990_6_10a_b")));
+          GTK_WINDOW (common_tooltip_generation ((xmlChar *) "1990_6_10a_b")));
   settings = gtk_widget_get_settings (GTK_WIDGET (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_6_10")));
   g_object_set (settings, "gtk-tooltip-timeout", 0, NULL);
@@ -154,8 +154,5 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   
   return;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

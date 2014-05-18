@@ -56,14 +56,14 @@ double _1992_1_1_materiaux_gnu       (double ecm,
                                       double nu)
                                        __attribute__((__warn_unused_result__));
 
-EF_Materiau *_1992_1_1_materiaux_ajout (Projet     *p,
-                                        const char *nom,
-                                        Flottant    fck)
+EF_Materiau *_1992_1_1_materiaux_ajout (Projet      *p,
+                                        std::string *nom,
+                                        Flottant     fck)
                                        __attribute__((__warn_unused_result__));
 
 bool _1992_1_1_materiaux_modif (Projet      *p,
                                 EF_Materiau *materiau,
-                                char        *nom,
+                                std::string *nom,
                                 Flottant     fck,
                                 Flottant     fckcube,
                                 Flottant     fcm,
@@ -81,7 +81,7 @@ bool _1992_1_1_materiaux_modif (Projet      *p,
                                 Flottant     nu)
                                        __attribute__((__warn_unused_result__));
 
-char *_1992_1_1_materiaux_get_description (EF_Materiau *materiau)
+std::string _1992_1_1_materiaux_get_description (EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 
 #endif

@@ -24,8 +24,10 @@
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
-GtkWindow *common_tooltip_generation (const char *nom)
+GtkWindow *common_tooltip_generation (xmlChar *nom)
                                        __attribute__((__warn_unused_result__));
 #endif
 

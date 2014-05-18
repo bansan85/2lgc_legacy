@@ -18,9 +18,8 @@
 
 #include "config.h"
 
-#include <libintl.h>
-#include <locale.h>
-#include <math.h>
+#include <cmath>
+#include <locale>
 
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"

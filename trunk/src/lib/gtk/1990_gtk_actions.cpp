@@ -18,13 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
 #include <gtk/gtk.h>
 
 #include <algorithm>
+#include <locale>
+#include <sstream>
 
 #include "1990_action.hpp"
 #include "common_erreurs.hpp"
@@ -304,7 +302,7 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
              FALSE,
              std::for_each (list_fixe.begin (),
                             list_fixe.end (),
-                            gtk_tree_row_reference_free);)
+                            gtk_tree_row_reference_free); )
       }
       ++it;
     }
@@ -409,6 +407,8 @@ _1990_gtk_actions_nom_edited (GtkCellRendererText *cell,
   GtkTreeIter iter;
   Action     *action;
   
+  std::string str_tmp;
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_ACT.builder,
            ,
@@ -427,7 +427,8 @@ _1990_gtk_actions_nom_edited (GtkCellRendererText *cell,
                       -1);
   
   // On modifie son nom
-  BUG (_1990_action_nom_change (p, action, new_text), )
+  str_tmp.assign (new_text);
+  BUG (_1990_action_nom_change (p, action, &str_tmp), )
   
   return;
 }
@@ -475,8 +476,8 @@ _1990_gtk_actions_type_edited (GtkCellRendererText *cell,
   
   for (type = 0; type < _1990_action_num_bat_txt (p->parametres.norme); type++)
   {
-    if (strcmp (new_text, _1990_action_bat_txt_type (type,
-                                                    p->parametres.norme)) == 0)
+    if (_1990_action_bat_txt_type (type,
+          p->parametres.norme).compare (new_text) == 0)
     {
       break;
     }
@@ -579,19 +580,15 @@ _1990_gtk_nouvelle_action (GtkWidget *menuitem,
     if ((GTK_IS_MENU_ITEM (menuitem)) &&
         (*it == menuitem))
     {
-      char        *tmp;
+      std::string  tmp;
       Action      *action;
       GtkTreePath *path;
       
-      BUGCRIT (tmp = g_strdup_printf ("%s %zu",
-                                      gettext ("Sans nom"),
-                                      p->actions.size ()),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      tmp = format ("%s %zu", gettext ("Sans nom"), p->actions.size ());
+      printf ("%s\n", tmp.c_str ());
       // On crée l'action en fonction de la catégorie sélectionnée dans le menu
       // déroulant.
-      BUG (action = _1990_action_ajout (p, type, tmp), , free (tmp); )
-      free (tmp);
+      BUG (action = _1990_action_ajout (p, type, &tmp), )
       
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (
                                                     UI_ACT.tree_store_actions),
@@ -739,6 +736,8 @@ _1990_gtk_tree_view_charges_description_edited (
   Action       *action;
   Charge       *charge;
   
+  std::string  str_tmp;
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_ACT.builder,
            ,
@@ -759,7 +758,8 @@ _1990_gtk_tree_view_charges_description_edited (
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &charge, -1);
   
-  BUG (EF_charge_renomme (p, charge, new_text), )
+  str_tmp.assign (new_text);
+  BUG (EF_charge_renomme (p, charge, &str_tmp), )
   
   return;
 }
@@ -1156,7 +1156,9 @@ _1990_gtk_actions_render_0 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
   BUGPARAM (action, "%p", action, )
   
-  g_object_set (cell, "text", _1990_action_nom_renvoie (action), NULL);
+  g_object_set (cell,
+                "text", _1990_action_nom_renvoie (action).c_str (),
+                NULL);
   
   return;
 }
@@ -1187,7 +1189,7 @@ _1990_gtk_actions_render_1 (GtkTreeViewColumn *tree_column,
   g_object_set (cell,
                 "text",
                 _1990_action_bat_txt_type (_1990_action_type_renvoie (action),
-                                           p->parametres.norme),
+                                           p->parametres.norme).c_str (),
                 NULL);
   
   return;
@@ -1211,15 +1213,17 @@ _1990_gtk_actions_render_2 (GtkTreeViewColumn *tree_column,
                             GtkTreeIter       *iter,
                             gpointer           data2)
 {
-  Action *action;
-  char    tmp[30];
+  Action     *action;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
   BUGPARAM (action, "%p", action, )
   
-  conv_f_c (_1990_action_psi_renvoie_0 (action), tmp, DECIMAL_SANS_UNITE);
+  conv_f_c (_1990_action_psi_renvoie_0 (action),
+            &tmp,
+            DECIMAL_SANS_UNITE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -1242,15 +1246,17 @@ _1990_gtk_actions_render_3 (GtkTreeViewColumn *tree_column,
                             GtkTreeIter       *iter,
                             gpointer           data2)
 {
-  Action *action;
-  char    tmp[30];
+  Action     *action;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
   BUGPARAM (action, "%p", action, )
   
-  conv_f_c (_1990_action_psi_renvoie_1 (action), tmp, DECIMAL_SANS_UNITE);
+  conv_f_c (_1990_action_psi_renvoie_1 (action),
+            &tmp,
+            DECIMAL_SANS_UNITE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -1273,15 +1279,17 @@ _1990_gtk_actions_render_4 (GtkTreeViewColumn *tree_column,
                             GtkTreeIter       *iter,
                             gpointer           data2)
 {
-  Action *action;
-  char    tmp[30];
+  Action     *action;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
   BUGPARAM (action, "%p", action, )
   
-  conv_f_c (_1990_action_psi_renvoie_2 (action), tmp, DECIMAL_SANS_UNITE);
+  conv_f_c (_1990_action_psi_renvoie_2 (action),
+            &tmp,
+            DECIMAL_SANS_UNITE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -1308,7 +1316,7 @@ _1990_gtk_actions_charge_render_0 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &charge, -1);
   BUGPARAM (charge, "%p", charge, )
   
-  g_object_set (cell, "text", charge->nom, NULL);
+  g_object_set (cell, "text", charge->nom.c_str (), NULL);
   
   return;
 }
@@ -1383,7 +1391,7 @@ _1990_gtk_actions_charge_render_2 (GtkTreeViewColumn *tree_column,
                                    gpointer           data2)
 {
   Charge *charge;
-  char   *tmp;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &charge, -1);
   BUGPARAM (charge, "%p", charge, )
@@ -1393,22 +1401,19 @@ _1990_gtk_actions_charge_render_2 (GtkTreeViewColumn *tree_column,
     case CHARGE_NOEUD :
     {
       tmp = EF_charge_noeud_description (charge);
-      g_object_set (cell, "text", tmp, NULL);
-      free (tmp);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       break;
     }
     case CHARGE_BARRE_PONCTUELLE :
     {
       tmp = EF_charge_barre_ponctuelle_description (charge);
-      g_object_set (cell, "text", tmp, NULL);
-      free (tmp);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       break;
     }
     case CHARGE_BARRE_REPARTIE_UNIFORME :
     {
       tmp = EF_charge_barre_repartie_uniforme_description (charge);
-      g_object_set (cell, "text", tmp, NULL);
-      free (tmp);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       break;
     }
     default :
@@ -1603,7 +1608,5 @@ _1990_gtk_actions (Projet *p)
   
   return;
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

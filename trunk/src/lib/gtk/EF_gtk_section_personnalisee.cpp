@@ -18,15 +18,13 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
-#include <gtk/gtk.h>
-#include <math.h>
 #include <string.h>
+
+#include <gtk/gtk.h>
 
 #include <algorithm>
 #include <memory>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -115,24 +113,25 @@ GTK_WINDOW_CLOSE (ef, section_personnalisee);
  */
 bool
 EF_gtk_section_personnalisee_recupere_donnees (
-  Projet   *p,
-  double   *j,
-  double   *iy,
-  double   *iz,
-  double   *vy,
-  double   *vyp,
-  double   *vz,
-  double   *vzp,
-  double   *s,
+  Projet      *p,
+  double      *j,
+  double      *iy,
+  double      *iz,
+  double      *vy,
+  double      *vyp,
+  double      *vz,
+  double      *vzp,
+  double      *s,
   std::list <std::list <EF_Point *> *> **forme,
-  bool     *ok_forme,
-  gchar   **nom,
-  gchar   **description)
+  bool        *ok_forme,
+  std::string *nom,
+  std::string *description)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
   bool           ok = true;
   GtkTreeIter    iter;
+  char          *txt;
   
   BUGPARAMCRIT (p, "%p", p, false)
   BUGPARAMCRIT (j, "%p", j, false)
@@ -277,20 +276,24 @@ EF_gtk_section_personnalisee_recupere_donnees (
                             "EF_section_personnalisee_textview_description")));
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
-  *description = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  txt = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  *description = txt;
+  free (txt);
   
   textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_PE.builder,
                                     "EF_section_personnalisee_textview_nom")));
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
-  *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  txt = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  *nom = txt;
+  free (txt);
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   
   if (UI_SEC_PE.section == NULL)
   {
-    if ((strcmp (*nom, "") == 0) || (EF_sections_cherche_nom (p, *nom, false)))
+    if ((nom->empty ()) || (EF_sections_cherche_nom (p, nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
       ok = false;
@@ -300,9 +303,9 @@ EF_gtk_section_personnalisee_recupere_donnees (
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
     }
   }
-  else if ((strcmp (*nom, "") == 0) ||
-           ((strcmp (UI_SEC_PE.section->nom, *nom) != 0) &&
-            (EF_sections_cherche_nom (p, *nom, false))))
+  else if ((nom->empty ()) ||
+           ((UI_SEC_PE.section->nom.compare (*nom) != 0) &&
+            (EF_sections_cherche_nom (p, nom, false))))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
     ok = false;
@@ -310,14 +313,6 @@ EF_gtk_section_personnalisee_recupere_donnees (
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
-  }
-  
-  if (!ok)
-  {
-    free (*nom);
-    *nom = NULL;
-    free (*description);
-    *description = NULL;
   }
   
   return ok;
@@ -341,7 +336,7 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
 {
   double                j, iy, iz, vy, vyp, vz, vzp, s;
   bool                  ok_forme;
-  char                 *nom = NULL, *description = NULL;
+  std::string           nom, description;
   Section               section;
   Section_Personnalisee data;
   GdkPixbuf            *pixbuf;
@@ -379,8 +374,6 @@ EF_gtk_section_personnalisee_check (GtkWidget *button,
                UI_SEC_PE.builder, "EF_section_personnalisee_button_add_edit")),
                               TRUE);
   }
-  free (nom);
-  free (description);
   
   if (!ok_forme)
   {
@@ -444,9 +437,9 @@ void
 EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
                                               Projet    *p)
 {
-  double    j, iy, iz, vy, vyp, vz, vzp, s;
-  bool      ok_forme;
-  gchar     *texte = NULL, *description = NULL;
+  double      j, iy, iz, vy, vyp, vz, vzp, s;
+  bool        ok_forme;
+  std::string texte, description;
   
   std::list <std::list <EF_Point *> *> *forme;
   
@@ -478,8 +471,8 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
   }
   
   BUG (EF_sections_personnalisee_ajout (p,
-                                        texte,
-                                        description,
+                                        &texte,
+                                        &description,
                                         m_f (j, FLOTTANT_UTILISATEUR),
                                         m_f (iy, FLOTTANT_UTILISATEUR),
                                         m_f (iz, FLOTTANT_UTILISATEUR),
@@ -490,15 +483,10 @@ EF_gtk_section_personnalisee_ajouter_clicked (GtkButton *button,
                                         m_f (s, FLOTTANT_UTILISATEUR),
                                         forme),
       ,
-      free (texte);
-        free (description);
-        for_each (forme->begin (),
-                  forme->end (),
-                  std::default_delete <std::list <EF_Point *> > ());
+      for_each (forme->begin (),
+                forme->end (),
+                std::default_delete <std::list <EF_Point *> > ());
         delete forme; )
-  
-  free (texte);
-  free (description);
   
   UI_SEC_PE.keep = true;
   gtk_widget_destroy (UI_SEC_PE.window);
@@ -520,9 +508,9 @@ void
 EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
                                                Projet    *p)
 {
-  double    j, iy, iz, vy, vyp, vz, vzp, s;
-  bool      ok_forme;
-  gchar    *texte, *description;
+  double      j, iy, iz, vy, vyp, vz, vzp, s;
+  bool        ok_forme;
+  std::string texte, description;
   
   std::list <std::list <EF_Point *> *> *forme;
   
@@ -555,8 +543,8 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
   
   BUG (EF_sections_personnalisee_modif (p,
                                         UI_SEC_PE.section,
-                                        texte,
-                                        description,
+                                        &texte,
+                                        &description,
                                         m_f (j, FLOTTANT_UTILISATEUR),
                                         m_f (iy, FLOTTANT_UTILISATEUR),
                                         m_f (iz, FLOTTANT_UTILISATEUR),
@@ -567,15 +555,10 @@ EF_gtk_section_personnalisee_modifier_clicked (GtkButton *button,
                                         m_f (s, FLOTTANT_UTILISATEUR),
                                         forme),
       ,
-      free (texte);
-        free (description);
-        for_each (forme->begin (),
-                  forme->end (),
-                  std::default_delete <std::list <EF_Point *> > ());
+      for_each (forme->begin (),
+                forme->end (),
+                std::default_delete <std::list <EF_Point *> > ());
         delete forme; )
-  
-  free (texte);
-  free (description);
   
   UI_SEC_PE.keep = true;
   gtk_widget_destroy (UI_SEC_PE.window);
@@ -605,6 +588,7 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
   char       *tmp;
   Projet     *p = (Projet *) data2;
   int32_t     nombre;
+  std::string rendu;
   
   // C'est une ligne de groupe de points
   if (!gtk_tree_model_iter_parent (UI_SEC_PE.model, &iter2, iter))
@@ -612,11 +596,8 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
     tmp = gtk_tree_model_get_string_from_iter (UI_SEC_PE.model, iter);
     nombre = atoi (tmp);
     g_free (tmp);
-    BUGCRIT (tmp = g_strdup_printf (gettext ("Groupe %d"), nombre + 1),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    g_object_set (cell, "text", tmp, NULL);
-    g_free (tmp);
+    rendu = format (gettext ("Groupe %d"), nombre + 1);
+    g_object_set (cell, "text", rendu.c_str (), NULL);
   }
   else
   {
@@ -625,12 +606,10 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
     tmp = gtk_tree_model_get_string_from_iter (UI_SEC_PE.model, iter);
     tmp2 = strchr (tmp, ':') + 1;
     nombre = atoi (tmp2);
-    BUGCRIT (tmp2 = g_strdup_printf (gettext ("Point %d"), nombre + 1),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    g_object_set (cell, "text", tmp2, NULL);
     g_free (tmp);
     g_free (tmp2);
+    rendu = format (gettext ("Point %d"), nombre + 1);
+    g_object_set (cell, "text", rendu.c_str (), NULL);
   }
   
   return;
@@ -653,8 +632,8 @@ EF_gtk_section_personnalisee_render_1 (GtkTreeViewColumn *tree_column,
                                        GtkTreeIter       *iter,
                                        gpointer           data2)
 {
-  EF_Point *point;
-  char      tmp[30];
+  EF_Point   *point;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &point, -1);
   
@@ -664,9 +643,9 @@ EF_gtk_section_personnalisee_render_1 (GtkTreeViewColumn *tree_column,
     return;
   }
   
-  conv_f_c (point->x, tmp, DECIMAL_DISTANCE);
+  conv_f_c (point->x, &tmp, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -688,8 +667,8 @@ EF_gtk_section_personnalisee_render_2 (GtkTreeViewColumn *tree_column,
                                        GtkTreeIter       *iter,
                                        gpointer           data2)
 {
-  EF_Point *point;
-  char      tmp[30];
+  EF_Point   *point;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &point, -1);
   
@@ -699,9 +678,9 @@ EF_gtk_section_personnalisee_render_2 (GtkTreeViewColumn *tree_column,
     return;
   }
   
-  conv_f_c (point->y, tmp, DECIMAL_DISTANCE);
+  conv_f_c (point->y, &tmp, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -1197,7 +1176,7 @@ EF_gtk_section_personnalisee (Projet  *p,
   }
   else
   {
-    gchar                  tmp[30];
+    std::string            tmp;
     Section_Personnalisee *data;
     
     std::list <std::list <EF_Point *> *>::iterator it;
@@ -1213,52 +1192,52 @@ EF_gtk_section_personnalisee (Projet  *p,
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_PE.builder,
                                     "EF_section_personnalisee_textview_nom"))),
-                              UI_SEC_PE.section->nom,
+                              UI_SEC_PE.section->nom.c_str (),
                               -1);
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_PE.builder,
                             "EF_section_personnalisee_textview_description"))),
-                              data->description,
+                              data->description.c_str (),
                               -1);
-    conv_f_c (data->j, tmp, DECIMAL_M4);
+    conv_f_c (data->j, &tmp, DECIMAL_M4);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                       UI_SEC_PE.builder, "EF_section_personnalisee_buffer_j")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->iy, tmp, DECIMAL_M4);
+    conv_f_c (data->iy, &tmp, DECIMAL_M4);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_iy")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->iz, tmp, DECIMAL_M4);
+    conv_f_c (data->iz, &tmp, DECIMAL_M4);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_iz")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->vy, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->vy, &tmp, DECIMAL_DISTANCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vy")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->vyp, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->vyp, &tmp, DECIMAL_DISTANCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                     UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vyp")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->vz, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->vz, &tmp, DECIMAL_DISTANCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vz")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->vzp, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->vzp, &tmp, DECIMAL_DISTANCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                     UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vzp")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (data->s, tmp, DECIMAL_SURFACE);
+    conv_f_c (data->s, &tmp, DECIMAL_SURFACE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                       UI_SEC_PE.builder, "EF_section_personnalisee_buffer_s")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
     
     it = data->forme.begin ();
@@ -1309,10 +1288,10 @@ EF_gtk_section_personnalisee (Projet  *p,
                             0, point_bis,
                             -1);
         
-        it2++;
+        ++it2;
       }
       
-      it++;
+      ++it;
     }
     
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (
@@ -1357,8 +1336,5 @@ EF_gtk_section_personnalisee (Projet  *p,
   
   return true;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

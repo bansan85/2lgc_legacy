@@ -36,9 +36,9 @@ Charge *EF_charge_barre_repartie_uniforme_ajout (
           Flottant                mx,
           Flottant                my,
           Flottant                mz,
-          const char             *nom)
+          std::string            *nom)
                                        __attribute__((__warn_unused_result__));
-char *EF_charge_barre_repartie_uniforme_description (Charge     *charge)
+std::string EF_charge_barre_repartie_uniforme_description (Charge *charge)
                                        __attribute__((__warn_unused_result__));
 
 bool EF_charge_barre_repartie_uniforme_mx     (EF_Barre    *barre,

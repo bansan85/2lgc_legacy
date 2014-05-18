@@ -19,14 +19,13 @@
 #include "config.h"
 #ifdef ENABLE_GTK
 
-#include <libintl.h>
-#include <locale.h>
-#include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <gtk/gtk.h>
+#include <locale>
 #include <string.h>
+
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
+#include "common_tooltip.hpp"
 
 /**
  * \brief Génère une fenêtre de type tooltip contenant les informations
@@ -39,8 +38,8 @@
  *     - en cas d'erreur d'allocation mémoire,
  *     - si le fichier n'est pas correct.
  */
-GtkWidget *
-common_tooltip_generation (const char *nom)
+GtkWindow *
+common_tooltip_generation (xmlChar *nom)
 {
   xmlDocPtr  doc;
   xmlNodePtr racine;
@@ -83,7 +82,7 @@ common_tooltip_generation (const char *nom)
           // Si la propriété "reference" d'un noeud "tooltip" correspond à
           // l'élément à afficher Alors
           nom1 = xmlGetProp (n1, BAD_CAST "reference");
-          if (strcmp ((char *) nom1, nom) == 0)
+          if (strcmp ((char *) nom1, (char *)nom) == 0)
           {
             GtkWidget *pwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
             GtkWidget *pgrid = gtk_grid_new ();
@@ -239,7 +238,7 @@ common_tooltip_generation (const char *nom)
             }
             xmlFreeDoc (doc);
             xmlCleanupParser ();
-            return pwindow;
+            return GTK_WINDOW (pwindow);
           }
           // FinSi
         }

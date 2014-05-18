@@ -17,18 +17,16 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_selection.hpp"
 #include "common_math.hpp"
+#include "common_text.hpp"
 #ifdef ENABLE_GTK
 #include "common_gtk.hpp"
 #include "EF_gtk_charge_noeud.hpp"
@@ -69,7 +67,7 @@ EF_charge_noeud_ajout (Projet                 *p,
                        Flottant                mx,
                        Flottant                my,
                        Flottant                mz,
-                       const char             *nom)
+                       std::string            *nom)
 {
   Charge       *charge;
   Charge_Noeud *charge_d;
@@ -108,45 +106,37 @@ EF_charge_noeud_ajout (Projet                 *p,
  *     - charge == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 EF_charge_noeud_description (Charge *charge)
 {
   Charge_Noeud *charge_d;
-  char  txt_fx[30], txt_fy[30], txt_fz[30];
-  char  txt_mx[30], txt_my[30], txt_mz[30];
-  char  *txt_liste_noeuds, *description;
+  
+  std::string txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz;
+  std::string txt_liste_noeuds, description;
   
   BUGPARAM (charge, "%p", charge, NULL)
   
   charge_d = (Charge_Noeud *) charge->data;
   
-  BUG (txt_liste_noeuds = common_selection_noeuds_en_texte (&charge_d->noeuds),
-       NULL)
-  conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
-  conv_f_c (charge_d->fy, txt_fy, DECIMAL_FORCE);
-  conv_f_c (charge_d->fz, txt_fz, DECIMAL_FORCE);
-  conv_f_c (charge_d->mx, txt_mx, DECIMAL_MOMENT);
-  conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
-  conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
+  txt_liste_noeuds = common_selection_noeuds_en_texte (&charge_d->noeuds);
+  conv_f_c (charge_d->fx, &txt_fx, DECIMAL_FORCE);
+  conv_f_c (charge_d->fy, &txt_fy, DECIMAL_FORCE);
+  conv_f_c (charge_d->fz, &txt_fz, DECIMAL_FORCE);
+  conv_f_c (charge_d->mx, &txt_mx, DECIMAL_MOMENT);
+  conv_f_c (charge_d->my, &txt_my, DECIMAL_MOMENT);
+  conv_f_c (charge_d->mz, &txt_mz, DECIMAL_MOMENT);
   
-  BUGCRIT (description = g_strdup_printf (
-             "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", // NS
-             strstr (txt_liste_noeuds, ";") == NULL ?
-               gettext ("Noeud") :
-               gettext ("Noeuds"),
-             txt_liste_noeuds,
-             txt_fx,
-             txt_fy,
-             txt_fz,
-             txt_mx,
-             txt_my,
-             txt_mz),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (txt_liste_noeuds); )
-  
-  free (txt_liste_noeuds);
+  description = format (gettext ( "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m"),
+                        txt_liste_noeuds.find (';') == std::string::npos ?
+                          gettext ("Noeud") :
+                          gettext ("Noeuds"),
+                        txt_liste_noeuds.c_str (),
+                        txt_fx.c_str (),
+                        txt_fy.c_str (),
+                        txt_fz.c_str (),
+                        txt_mx.c_str (),
+                        txt_my.c_str (),
+                        txt_mz.c_str ());
   
   return description;
 }
@@ -236,7 +226,6 @@ EF_charge_noeud_free (Charge *charge)
   BUGPARAM (charge, "%p", charge, false)
   charge_d = (Charge_Noeud *) charge->data;
   
-  free (charge->nom);
   delete charge_d;
   delete charge;
   

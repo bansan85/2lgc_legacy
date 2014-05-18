@@ -18,14 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
 #include <gtk/gtk.h>
-#include <string.h>
+
+#include <locale>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -64,16 +61,21 @@ EF_gtk_appuis_ajouter (GtkButton *button,
   GtkTreePath  *path;
   GtkTreeModel *model;
   
+  std::string   str_tmp;
+  
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_APP.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Appui"); )
   
-  if (EF_appuis_cherche_nom (p, gettext ("Sans nom"), false) == NULL)
+  str_tmp.assign (gettext ("Sans nom"));
+  if (EF_appuis_cherche_nom (p, 
+                             &str_tmp,
+                             false) == NULL)
   {
     BUG (appui = EF_appuis_ajout (p,
-                                  gettext ("Sans nom"),
+                                  &str_tmp,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
@@ -84,31 +86,23 @@ EF_gtk_appuis_ajouter (GtkButton *button,
   }
   else
   {
-    char    *nom;
     uint16_t i = 2;
     
-    BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    while (EF_appuis_cherche_nom (p, nom, false) != NULL)
+    str_tmp = format ("%s (%d)", gettext ("Sans nom"), i);
+    while (EF_appuis_cherche_nom (p, &str_tmp, false) != NULL)
     {
       i++;
-      free (nom);
-      BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      str_tmp = format ("%s (%d)", gettext ("Sans nom"), i);
     }
     BUG (appui = EF_appuis_ajout (p,
-                                  nom,
+                                  &str_tmp,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE,
                                   EF_APPUI_LIBRE),
-         ,
-         free (nom); )
-    free (nom);
+         , )
   }
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_APP.builder,
@@ -398,6 +392,8 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
   GtkTreePath  *path;
   EF_Appui     *appui;
   
+  std::string   str_tmp;
+  
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_APP.builder,
            ,
@@ -409,12 +405,13 @@ EF_gtk_appuis_edit_nom (GtkCellRendererText *cell,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &appui, -1);
-  if (strcmp (appui->nom, new_text) == 0)
+  if (appui->nom.compare (new_text) == 0)
   {
     return;
   }
 
-  if (EF_appuis_renomme (appui, new_text, p, false))
+  str_tmp.assign (new_text);
+  if (EF_appuis_renomme (appui, &str_tmp, p, false))
   {
     return;
   }
@@ -582,22 +579,16 @@ EF_gtk_appuis_boutton_supprimer_menu (GtkButton *widget,
       (!liste_barres_dep->empty ()) ||
       (!liste_charges_dep->empty ()))
   {
-    char *desc;
+    std::string desc;
     
-    BUGCRIT (desc = common_text_dependances (liste_noeuds_dep,
-                                             liste_barres_dep,
-                                             liste_charges_dep,
-                                             p),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               delete liste_noeuds_dep;
-               delete liste_barres_dep;
-               delete liste_charges_dep; )
-  
+    desc = common_text_dependances (liste_noeuds_dep,
+                                    liste_barres_dep,
+                                    liste_charges_dep,
+                                    p);
+    
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                       UI_APP.builder, "EF_appuis_supprimer_menu_suppr_noeud")),
-                             desc);
-    free (desc);
+                             desc.c_str ());
     
     delete liste_noeuds_dep;
     delete liste_barres_dep;
@@ -638,7 +629,7 @@ EF_gtk_appuis_render_0 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &appui, -1);
   BUGPARAM (appui, "%p", appui, )
   
-  g_object_set (cell, "text", appui->nom, NULL);
+  g_object_set (cell, "text", appui->nom.c_str (), NULL);
 }
 
 
@@ -649,8 +640,8 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
                             GtkTreeIter       *iter,        \
                             gpointer           data2) \
 { \
-  EF_Appui *appui; \
-  char     *txt; \
+  EF_Appui   *appui; \
+  std::string txt; \
   \
   gtk_tree_model_get (tree_model, iter, 0, &appui, -1); \
   BUGPARAM (appui, "%p", appui, ) \
@@ -659,7 +650,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
   { \
     case EF_APPUI_LIBRE : \
     { \
-      txt = gettext ("Libre"); \
+      txt.assign (gettext ("Libre")); \
       BUGCRIT (appui->DATA##_donnees == NULL, \
                , \
                (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
@@ -669,7 +660,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
     } \
     case EF_APPUI_BLOQUE : \
     { \
-      txt = gettext ("Bloqué"); \
+      txt.assign (gettext ("Bloqué")); \
       BUGCRIT (appui->DATA##_donnees == NULL, \
                , \
                (gettext ("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), \
@@ -686,7 +677,7 @@ EF_gtk_appuis_render_##NUM (GtkTreeViewColumn *tree_column, \
     } \
   } \
   \
-  g_object_set (cell, "text", txt, NULL); \
+  g_object_set (cell, "text", txt.c_str (), NULL); \
 }
 EF_GTK_APPUIS_RENDER (1, ux);
 EF_GTK_APPUIS_RENDER (2, uy);
@@ -859,7 +850,5 @@ EF_gtk_appuis (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_APP.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

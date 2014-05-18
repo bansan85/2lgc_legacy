@@ -164,26 +164,26 @@ gboolean common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
                                                     GdkEventButton *event,
                                                     Projet         *p);
 
-double       conv_buff_d           (GtkTextBuffer *textbuffer,
-                                    double         val_min,
-                                    bool           min_include,
-                                    double         val_max,
-                                    bool           max_include);
-uint32_t     conv_buff_u           (GtkTextBuffer *textbuffer,
-                                    uint32_t       val_min,
-                                    bool           min_include,
-                                    uint32_t       val_max,
-                                    bool           max_include);
-uint16_t     conv_buff_hu          (GtkTextBuffer *textbuffer,
-                                    uint16_t       val_min,
-                                    bool           min_include,
-                                    uint16_t       val_max,
-                                    bool           max_include);
-uint32_t common_gtk_entry_uint     (GtkEntry      *entry,
-                                    uint32_t       val_min,
-                                    bool           min_include,
-                                    uint32_t       val_max,
-                                    bool           max_include);
+double       conv_buff_d        (GtkTextBuffer *textbuffer,
+                                 double         val_min,
+                                 bool           min_include,
+                                 double         val_max,
+                                 bool           max_include);
+uint32_t     conv_buff_u        (GtkTextBuffer *textbuffer,
+                                 uint32_t       val_min,
+                                 bool           min_include,
+                                 uint32_t       val_max,
+                                 bool           max_include);
+uint16_t     conv_buff_hu       (GtkTextBuffer *textbuffer,
+                                 uint16_t       val_min,
+                                 bool           min_include,
+                                 uint16_t       val_max,
+                                 bool           max_include);
+uint32_t common_gtk_entry_uint  (GtkEntry      *entry,
+                                 uint32_t       val_min,
+                                 bool           min_include,
+                                 uint32_t       val_max,
+                                 bool           max_include);
 
 void common_gtk_render_double   (GtkTreeViewColumn *tree_column,
                                  GtkCellRenderer   *cell,
@@ -196,11 +196,11 @@ void common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
                                  GtkTreeIter       *iter,
                                  gpointer           data);
 
-GtkTreeViewColumn *common_gtk_cree_colonne (char    *nom,
-                                            GType    type,
-                                            uint32_t num_colonne,
-                                            float    xalign,
-                                            int8_t   num_decimales);
+GtkTreeViewColumn *common_gtk_cree_colonne (std::string *nom,
+                                            GType        type,
+                                            uint32_t     num_colonne,
+                                            float        xalign,
+                                            int8_t       num_decimales);
 
 #endif
 

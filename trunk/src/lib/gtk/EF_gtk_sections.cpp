@@ -18,18 +18,13 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <math.h>
-#include <inttypes.h>
-
+#include <locale>
 #include <algorithm>
 
-#include "common_m3d.hpp"
+#include <gtk/gtk.h>
+#include <inttypes.h>
 
+#include "common_m3d.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -293,20 +288,15 @@ EF_gtk_sections_boutton_supprimer_menu (GtkButton *widget,
       (!liste_barres_dep->empty ()) ||
       (!liste_charges_dep->empty ()))
   {
-    char *desc;
+    std::string desc;
     
-    BUG (desc = common_text_dependances (liste_noeuds_dep,
-                                         liste_barres_dep,
-                                         liste_charges_dep,
-                                         p),
-         ,
-         delete liste_noeuds_dep;
-           delete liste_barres_dep;
-           delete liste_charges_dep; )
+    desc = common_text_dependances (liste_noeuds_dep,
+                                    liste_barres_dep,
+                                    liste_charges_dep,
+                                    p);
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_SEC.builder, "EF_sections_supprimer_menu_barres")),
-                             desc);
-    free (desc);
+                             desc.c_str ());
   }
   else
   {
@@ -346,6 +336,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   GtkTreeIter   iter;
   GtkTreePath  *path;
   Section      *section;
+  std::string   nom (new_text);
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC.builder,
@@ -358,11 +349,11 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &section, -1);
-  if ((strcmp (section->nom, new_text) == 0) || (strcmp (new_text, "") == 0))
+  if ((section->nom.compare (new_text) == 0) || (nom.length () == 0))
   {
     return;
   }
-  if (EF_sections_cherche_nom (p, new_text, false))
+  if (EF_sections_cherche_nom (p, &nom, false))
   {
     return;
   }
@@ -373,7 +364,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     {
       BUG (EF_sections_rectangulaire_modif (p,
                                             section,
-                                            new_text,
+                                            &nom,
                                             m_f (NAN, FLOTTANT_ORDINATEUR),
                                             m_f (NAN, FLOTTANT_ORDINATEUR)),
           )
@@ -383,7 +374,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     {
       BUG (EF_sections_T_modif (p,
                                 section,
-                                new_text,
+                                &nom,
                                 m_f (NAN, FLOTTANT_ORDINATEUR),
                                 m_f (NAN, FLOTTANT_ORDINATEUR),
                                 m_f (NAN, FLOTTANT_ORDINATEUR),
@@ -395,7 +386,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     {
       BUG (EF_sections_carree_modif (p,
                                      section,
-                                     new_text,
+                                     &nom,
                                      m_f (NAN, FLOTTANT_ORDINATEUR)),
           )
       break;
@@ -404,7 +395,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     {
       BUG (EF_sections_circulaire_modif (p,
                                          section,
-                                         new_text,
+                                         &nom,
                                          m_f (NAN, FLOTTANT_ORDINATEUR)),
           )
       break;
@@ -413,7 +404,7 @@ EF_gtk_sections_edit_nom (GtkCellRendererText *cell,
     {
       BUG (EF_sections_personnalisee_modif (p,
                                             section,
-                                            new_text,
+                                            &nom,
                                             NULL,
                                             m_f (NAN, FLOTTANT_ORDINATEUR),
                                             m_f (NAN, FLOTTANT_ORDINATEUR),
@@ -1147,7 +1138,7 @@ EF_gtk_sections_render_1 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  g_object_set (cell, "text", section->nom, NULL);
+  g_object_set (cell, "text", section->nom.c_str (), NULL);
   
   return;
 }
@@ -1169,17 +1160,15 @@ EF_gtk_sections_render_2 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char    *description;
+  Section    *section;
+  std::string description;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  BUG (description = EF_sections_get_description (section), )
+  description = EF_sections_get_description (section);
   
-  g_object_set (cell, "text", description, NULL);
-  
-  free (description);
+  g_object_set (cell, "text", description.c_str (), NULL);
   
   return;
 }
@@ -1201,15 +1190,15 @@ EF_gtk_sections_render_3 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_j (section), c, DECIMAL_M4);
+  conv_f_c (EF_sections_j (section), &c, DECIMAL_M4);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1231,15 +1220,15 @@ EF_gtk_sections_render_4 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_iy (section), c, DECIMAL_M4);
+  conv_f_c (EF_sections_iy (section), &c, DECIMAL_M4);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1261,15 +1250,15 @@ EF_gtk_sections_render_5 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_iz (section), c, DECIMAL_M4);
+  conv_f_c (EF_sections_iz (section), &c, DECIMAL_M4);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1291,15 +1280,15 @@ EF_gtk_sections_render_6 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_s (section), c, DECIMAL_SURFACE);
+  conv_f_c (EF_sections_s (section), &c, DECIMAL_SURFACE);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1321,15 +1310,15 @@ EF_gtk_sections_render_7 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_vy (section), c, DECIMAL_DISTANCE);
+  conv_f_c (EF_sections_vy (section), &c, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1351,15 +1340,15 @@ EF_gtk_sections_render_8 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_vyp (section), c, DECIMAL_DISTANCE);
+  conv_f_c (EF_sections_vyp (section), &c, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1381,15 +1370,15 @@ EF_gtk_sections_render_9 (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_vz (section), c, DECIMAL_DISTANCE);
+  conv_f_c (EF_sections_vz (section), &c, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1411,15 +1400,15 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
                            GtkTreeIter       *iter,
                            gpointer           data2)
 {
-  Section *section;
-  char     c[30];
+  Section    *section;
+  std::string c;
   
   gtk_tree_model_get (tree_model, iter, 0, &section, -1);
   BUGPARAM (section, "%p", section, )
   
-  conv_f_c (EF_sections_vzp (section), c, DECIMAL_DISTANCE);
+  conv_f_c (EF_sections_vzp (section), &c, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", c, NULL);
+  g_object_set (cell, "text", c.c_str (), NULL);
   
   return;
 }
@@ -1481,51 +1470,51 @@ EF_gtk_sections_render_10 (GtkTreeViewColumn *tree_column,
  *     - en cas d'erreur d'allocation mémoire.
  */
 bool
-EF_gtk_sections_get_section (char    *ligne,
-                             char   **nom,
-                             double  *g,
-                             double  *h,
-                             double  *b,
-                             double  *tw,
-                             double  *tf,
-                             double  *r1,
-                             double  *r2,
-                             double  *A,
-                             double  *hi,
-                             double  *d,
-                             uint8_t *phi,
-                             double  *pmin,
-                             double  *pmax,
-                             double  *AL,
-                             double  *AG,
-                             double  *iiy,
-                             double  *Wely,
-                             double  *Wply,
-                             double  *iy,
-                             double  *Avz,
-                             double  *iiz,
-                             double  *Welz,
-                             double  *Wplz,
-                             double  *iz,
-                             double  *ss,
-                             double  *It,
-                             double  *Iw,
-                             double  *vy,
-                             double  *vyp,
-                             double  *vz,
-                             double  *vzp,
-                             double  *vty,
-                             double  *vtz,
+EF_gtk_sections_get_section (char        *ligne,
+                             std::string *nom,
+                             double      *g,
+                             double      *h,
+                             double      *b,
+                             double      *tw,
+                             double      *tf,
+                             double      *r1,
+                             double      *r2,
+                             double      *A,
+                             double      *hi,
+                             double      *d,
+                             uint8_t     *phi,
+                             double      *pmin,
+                             double      *pmax,
+                             double      *AL,
+                             double      *AG,
+                             double      *iiy,
+                             double      *Wely,
+                             double      *Wply,
+                             double      *iy,
+                             double      *Avz,
+                             double      *iiz,
+                             double      *Welz,
+                             double      *Wplz,
+                             double      *iz,
+                             double      *ss,
+                             double      *It,
+                             double      *Iw,
+                             double      *vy,
+                             double      *vyp,
+                             double      *vz,
+                             double      *vzp,
+                             double      *vty,
+                             double      *vtz,
                              std::list <std::list <EF_Point *> *> **forme)
 {
-  char    *nom_, *ligne_tmp;
-  double   g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_;
-  double   iiy_, Wely_, Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_;
-  double   Iw_, vy_, vyp_, vz_, vzp_, vty_, vtz_;
-  uint8_t  phi_;
-  
-  uint16_t i;
-  double   x, y;
+  std::string nom_;
+  char       *ligne_tmp;
+  double      g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_;
+  double      AG_, iiy_, Wely_, Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_;
+  double      ss_, It_, Iw_, vy_, vyp_, vz_, vzp_, vty_, vtz_;
+  uint8_t     phi_;
+  uint16_t    i;
+  double      x, y;
   
   std::list <std::list <EF_Point *> *> *forme_;
   std::list <EF_Point *>               *points;
@@ -1706,18 +1695,7 @@ EF_gtk_sections_get_section (char    *ligne,
   // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
   if (ligne != NULL)
   {
-    BUGCRIT (nom_ = (char *) malloc (sizeof (char) *
-                       (long unsigned int) (strchr (ligne, '\t') - ligne + 1)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-                for_each (forme_->begin (),
-                          forme_->end (),
-                          EF_sections_personnalisee_free_forme1);
-                delete forme_; )
-    
-    strncpy (nom_, ligne, (size_t) (strchr (ligne, '\t') - ligne));
-    nom_[strchr (ligne, '\t') - ligne] = 0;
-    
+    nom_.assign (ligne, (size_t) (strchr (ligne, '\t') - ligne));
     *nom = nom_;
   }
   
@@ -1738,9 +1716,9 @@ void
 EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
                                  Projet      *p)
 {
-  FILE    *file;
-  wchar_t *ligne_tmp;
-  char    *section;
+  FILE       *file;
+  wchar_t    *ligne_tmp;
+  std::string section;
   
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -1748,11 +1726,8 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
         ,
         (gettext ("Le fichier des sections est introuvable.\n")); )
   
-  BUGCRIT (section = g_strdup_printf ("%s\t",
-                                      gtk_menu_item_get_label (menuitem)),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             fclose (file); )
+  section = gtk_menu_item_get_label (menuitem);
+  section += "\t";
   
   ligne_tmp = common_text_get_line (file);
   free (ligne_tmp);
@@ -1765,13 +1740,12 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
     BUG (ligne = common_text_wcstostr_dup (ligne_tmp),
          ,
          fclose (file);
-           free (section);
            free (ligne_tmp); )
     free (ligne_tmp);
-    if (strncmp (ligne, section, strlen (section)) == 0)
+    if (strncmp (ligne, section.c_str (), section.length ()) == 0)
     {
       double j, iy, iz, vy, vyp, vz, vzp, s;
-      char  *desc;
+      std::string desc;
       
       std::list <std::list <EF_Point *> *> *forme;
       
@@ -1813,11 +1787,10 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
                                         &forme),
           ,
           fclose (file);
-            free (section);
             free (ligne); )
       BUG (EF_sections_personnalisee_ajout (p,
-                                            desc,
-                                            desc,
+                                            &desc,
+                                            &desc,
                                             m_f (j, FLOTTANT_ORDINATEUR),
                                             m_f (iy, FLOTTANT_ORDINATEUR),
                                             m_f (iz, FLOTTANT_ORDINATEUR),
@@ -1829,20 +1802,16 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
                                             forme),
           ,
           fclose (file);
-            free (section);
             free (ligne);
-            free (desc);
             for_each (forme->begin (),
                       forme->end (),
                       EF_sections_personnalisee_free_forme1);
             delete forme; )
-      free (desc);
     }
     free (ligne);
     ligne_tmp = common_text_get_line (file);
   }
   
-  free (section);
   fclose (file);
   
   return;
@@ -2016,7 +1985,7 @@ EF_gtk_sections (Projet *p)
     ligne_tmp = common_text_get_line (file);
     while (ligne_tmp != NULL)
     {
-      char      *nom_section, *categorie;
+      std::string nom_section, categorie;
       GtkWidget *menu, *categorie_menu = NULL;
       
       std::list <std::list <EF_Point *> *> *forme;
@@ -2065,27 +2034,13 @@ EF_gtk_sections (Projet *p)
                                         NULL,
                                         &forme), 
           )
-      BUGCRIT (categorie = (char *) malloc (sizeof (char) *
-                                                   (strlen (nom_section) + 1)),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 fclose (file);
-                 free (ligne);
-                 free (nom_section);
-                 for_each (forme->begin (),
-                           forme->end (),
-                           EF_sections_personnalisee_free_forme1);
-                 delete forme; )
-      if (strchr (nom_section, ' ') == NULL)
+      if (nom_section.find (' ') != std::string::npos)
       {
-        strcpy (categorie, nom_section);
+        categorie.assign (nom_section, 0, nom_section.find (' '));
       }
       else
       {
-        strncpy (categorie,
-                 nom_section,
-                 (size_t) (strchr (nom_section, ' ') - nom_section));
-        categorie[strchr (nom_section, ' ') - nom_section] = 0;
+        categorie.assign (nom_section);
       }
       
       it2 = list_categorie.begin ();
@@ -2099,7 +2054,7 @@ EF_gtk_sections (Projet *p)
                                                  GTK_CONTAINER (widget))->data;
         label = gtk_grid_get_child_at (GTK_GRID (grid), 1, 0);
         
-        if (strcmp (categorie, gtk_label_get_text (GTK_LABEL (label))) == 0)
+        if (categorie.compare (gtk_label_get_text (GTK_LABEL (label))) == 0)
         {
           categorie_menu = widget;
           break;
@@ -2120,7 +2075,7 @@ EF_gtk_sections (Projet *p)
         data.forme.assign (forme->begin (), forme->end ());
         
         categorie_menu = gtk_menu_item_new ();
-        label = gtk_label_new (categorie);
+        label = gtk_label_new (categorie.c_str ());
         image = gtk_image_new_from_pixbuf (EF_gtk_sections_dessin (&section,
                                                                    32,
                                                                    32));
@@ -2140,7 +2095,7 @@ EF_gtk_sections (Projet *p)
                 EF_sections_personnalisee_free_forme1);
       delete forme;
       
-      menu = gtk_menu_item_new_with_label (nom_section);
+      menu = gtk_menu_item_new_with_label (nom_section.c_str ());
       gtk_menu_shell_append (GTK_MENU_SHELL (gtk_menu_item_get_submenu (
                                               GTK_MENU_ITEM (categorie_menu))),
                              menu);
@@ -2150,8 +2105,6 @@ EF_gtk_sections (Projet *p)
                         p);
       
       free (ligne);
-      free (nom_section);
-      free (categorie);
       ligne_tmp = common_text_get_line (file);
     }
     
@@ -2169,7 +2122,5 @@ EF_gtk_sections (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_SEC.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

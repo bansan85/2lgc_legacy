@@ -27,7 +27,7 @@ bool     EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                            EF_Noeud             *noeud,
                                            uint8_t               indice,
                                            Projet               *p,
-                                           char                **texte,
+                                           std::string          *texte,
                                            double               *mini,
                                            double               *maxi)
                                        __attribute__((__warn_unused_result__));
@@ -35,7 +35,7 @@ bool     EF_resultat_noeud_deplacement    (std::list <Action *> *liste,
                                            EF_Noeud             *noeud,
                                            uint8_t               indice,
                                            Projet               *p,
-                                           char                **texte,
+                                           std::string          *texte,
                                            double               *mini,
                                            double               *maxi)
                                        __attribute__((__warn_unused_result__));

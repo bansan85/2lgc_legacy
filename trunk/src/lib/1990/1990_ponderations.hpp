@@ -23,14 +23,15 @@
 #include "common_projet.hpp"
 
 
-bool  _1990_ponderations_genere       (Projet *p)
+bool _1990_ponderations_genere       (Projet *p)
                                        __attribute__((__warn_unused_result__));
-char *_1990_ponderations_description  (std::list <Ponderation *> *ponderation)
+std::string _1990_ponderations_description (
+              std::list <Ponderation *> *ponderation)
                                        __attribute__((__warn_unused_result__));
-bool  _1990_ponderations_affiche_tout (Projet *p)
+bool _1990_ponderations_affiche_tout (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-void _1990_ponderations_free_1 (std::list <Ponderation *> *pond);
+void _1990_ponderations_free_1       (std::list <Ponderation *> *pond);
 #endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

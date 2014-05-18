@@ -33,11 +33,11 @@
 typedef struct
 {
   /// Le nom de la ville avec l'éventuel article.
-  char    *affichage;
+  std::string affichage;
   /// La population.
-  uint32_t population;
+  uint32_t    population;
   /// Le département.
-  char     departement[4];
+  std::string departement;
   /// Le numéro de la commune.
   uint32_t commune;
   /// Son code postal.

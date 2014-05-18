@@ -17,15 +17,11 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <cholmod.h>
-#include <string.h>
-#include <math.h>
-#include <stdint.h>
 
 #include <memory>
 #include <algorithm>
+#include <locale>
+#include <string.h>
 
 #include "1990_action_private.hpp"
 #include "common_projet.hpp"
@@ -76,7 +72,7 @@
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
-char *
+std::string const
 _1990_action_bat_txt_type_eu (uint8_t type)
 {
   switch (type)
@@ -143,7 +139,7 @@ _1990_action_bat_txt_type_eu (uint8_t type)
  * \warning Fonction interne. Il convient d'utiliser la fonction
  *          #_1990_action_bat_txt_type.
  */
-char *
+std::string const
 _1990_action_bat_txt_type_fr (uint8_t type)
 {
   switch (type)
@@ -186,7 +182,7 @@ _1990_action_bat_txt_type_fr (uint8_t type)
  *     - le type d'action n'existe pas,
  *     - la norme n'existe pas.
  */
-char *
+std::string const
 _1990_action_bat_txt_type (uint8_t type,
                            Norme   norme)
 {
@@ -345,7 +341,7 @@ _1990_action_num_bat_txt (Norme norme)
  * \brief Initialise la liste des actions.
  * \param p : la variable projet.
  * \return
- *   Succès : true\N
+ *   Succès : true\n
  *   Échec : false :
  *     - p == NULL.
  * \warning Fonction interne. Il convient d'utiliser la fonction #projet_init.
@@ -375,7 +371,7 @@ _1990_action_init (Projet *p)
     // Génération du menu contenant la liste des types d'action pour la
     // création d'une nouvelle action.
     w_temp = gtk_menu_item_new_with_label (
-                           _1990_action_bat_txt_type (i, p->parametres.norme));
+                  _1990_action_bat_txt_type (i, p->parametres.norme).c_str ());
     gtk_menu_shell_append (GTK_MENU_SHELL (UI_ACT.type_action), w_temp);
     UI_ACT.items_type_action.push_back (w_temp);
     gtk_widget_show (w_temp);
@@ -387,10 +383,11 @@ _1990_action_init (Projet *p)
     // Génération de la liste des types d'action pour la modification via le
     // treeview Action.
     gtk_list_store_append (UI_ACT.choix_type_action, &iter);
-    gtk_list_store_set (UI_ACT.choix_type_action,
-                        &iter,
-                        0, _1990_action_bat_txt_type (i, p->parametres.norme),
-                        -1);
+    gtk_list_store_set (
+      UI_ACT.choix_type_action,
+      &iter,
+      0, _1990_action_bat_txt_type (i, p->parametres.norme).c_str (),
+      -1);
   }
   
   UI_ACT.type_charges = GTK_MENU (gtk_menu_new ());
@@ -441,9 +438,9 @@ _1990_action_init (Projet *p)
  *     - erreur d'allocation mémoire.
  */
 Action *
-_1990_action_ajout (Projet     *p,
-                    uint8_t     type,
-                    const char *nom)
+_1990_action_ajout (Projet            *p,
+                    uint8_t            type,
+                    const std::string *nom)
 {
   std::unique_ptr <Action> action_nouveau (new Action);
 
@@ -472,9 +469,7 @@ _1990_action_ajout (Projet     *p,
                                                           p->parametres.norme),
                                      FLOTTANT_ORDINATEUR);
   BUG (!isnan (m_g (action_nouveau.get ()->psi2)), NULL)
-  BUGCRIT (action_nouveau->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  action_nouveau->nom.assign (*nom);
   action_nouveau->deplacement = NULL;
   action_nouveau->forces = NULL;
   action_nouveau->efforts_noeuds = NULL;
@@ -496,7 +491,10 @@ _1990_action_ajout (Projet     *p,
    
 #ifdef ENABLE_GTK
   gtk_list_store_append (UI_ACT.liste, &act->Iter_liste);
-  gtk_list_store_set (UI_ACT.liste, &act->Iter_liste, 0, act->nom, -1);
+  gtk_list_store_set (UI_ACT.liste,
+                      &act->Iter_liste,
+                      0, act->nom.c_str (),
+                      -1);
   
   if (UI_ACT.builder != NULL)
   {
@@ -533,7 +531,7 @@ _1990_action_ajout (Projet     *p,
  *   Échec : NULL :
  *     - action == NULL,
  */
-const char *
+const std::string
 _1990_action_nom_renvoie (Action *action)
 {
   BUGPARAM (action, "%p", action, NULL)
@@ -555,21 +553,20 @@ _1990_action_nom_renvoie (Action *action)
  *     - erreur d'allocation mémoire.
  */
 bool
-_1990_action_nom_change (Projet     *p,
-                         Action     *action,
-                         const char *nom)
+_1990_action_nom_change (Projet            *p,
+                         Action            *action,
+                         const std::string *nom)
 {
   BUGPARAM (p, "%p", p, false)
   BUGPARAM (action, "%p", action, false)
-  BUGPARAM (nom, "%p", nom, false)
   
-  free (action->nom);
-  BUGCRIT (action->nom = g_strdup_printf ("%s", nom),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  action->nom.assign (*nom);
   
 #ifdef ENABLE_GTK
-  gtk_list_store_set (UI_ACT.liste, &action->Iter_liste, 0, nom, -1);
+  gtk_list_store_set (UI_ACT.liste,
+                      &action->Iter_liste,
+                      0, (*nom).c_str (),
+                      -1);
   
   if (UI_ACT.builder != NULL)
   {
@@ -1209,7 +1206,9 @@ _1990_action_affiche_tout (Projet *p)
   {
     Action *action = *it;
     
-    printf (gettext ("Action '%s', type n°%d\n"), action->nom, action->type);
+    printf (gettext ("Action '%s', type n°%d\n"),
+                     action->nom.c_str (),
+                     action->type);
     
     ++it;
   }
@@ -1346,7 +1345,6 @@ _1990_action_ponderation_resultat_free_calculs (Action *action)
  *     - en cas d'erreur d'allocation mémoire (#_1990_action_fonction_init,
  *       #common_fonction_ajout_fonction).
  */
-// coverity[+alloc]
 Action *
 _1990_action_ponderation_resultat (std::list <Ponderation *> *ponderation,
                                    Projet                    *p)
@@ -1362,37 +1360,12 @@ _1990_action_ponderation_resultat (std::list <Ponderation *> *ponderation,
   
   // Initialisation de l'action
   action = new Action;
-  BUGCRIT (action->efforts_noeuds = (cholmod_sparse *) malloc (sizeof (
-                                                              cholmod_sparse)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             delete action; )
-  BUGCRIT (action->efforts_noeuds->x = (double *) malloc (sizeof (double) *
-                                                 p->modele.noeuds.size () * 6),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (action->efforts_noeuds);
-             delete action; )
-  memset (action->efforts_noeuds->x,
-          0,
-          sizeof (double) * p->modele.noeuds.size () * 6);
-  BUGCRIT (action->deplacement = (cholmod_sparse *) malloc (sizeof (cholmod_sparse)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (action->efforts_noeuds->x);
-             free (action->efforts_noeuds);
-             delete action; )
-  BUGCRIT (action->deplacement->x = malloc (sizeof (double) *
-                                                 p->modele.noeuds.size () * 6),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (action->deplacement);
-             free (action->efforts_noeuds->x);
-             free (action->efforts_noeuds);
-             delete action; )
-  memset (action->deplacement->x,
-          0,
-          sizeof (double) * p->modele.noeuds.size () * 6);
+  action->efforts_noeuds = new cholmod_sparse;
+  action->efforts_noeuds->x = new double [p->modele.noeuds.size () * 6];
+  memset (action->efforts_noeuds->x, 0, p->modele.noeuds.size () * 6);
+  action->deplacement = new cholmod_sparse;
+  action->deplacement->x = new double [p->modele.noeuds.size () * 6];
+  memset (action->deplacement->x, 0, p->modele.noeuds.size () * 6);
   BUG (_1990_action_fonction_init (p, action),
        NULL,
        _1990_action_ponderation_resultat_free_calculs (action);
@@ -1490,7 +1463,7 @@ _1990_action_ponderation_resultat (std::list <Ponderation *> *ponderation,
            FREE_ALL)
     }
     
-    it++;
+    ++it;
   }
   
 #undef FREE_ALL
@@ -1569,7 +1542,6 @@ _1990_action_free_1 (Projet *p,
   
   // On enlève l'action de la liste des actions
   p->actions.remove (action_free);
-  free (action_free->nom);
   
   it2 = action_free->charges.begin ();
   while (it2 != action_free->charges.end ())
@@ -1736,7 +1708,6 @@ _1990_action_free (Projet *p)
     Action *action = *it;
     std::list <Charge *>::iterator it2 = action->charges.begin ();
     
-    free (action->nom);
     while (it2 != action->charges.end ())
     {
       Charge *charge = *it2;

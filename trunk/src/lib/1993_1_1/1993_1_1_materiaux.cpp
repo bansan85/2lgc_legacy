@@ -17,18 +17,16 @@
  */
 
 #include "config.h"
-#include <locale.h>
-#include <libintl.h>
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 
 #include <memory>
+#include <locale>
+#include <cmath>
 
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
 #include "common_selection.hpp"
+#include "common_text.hpp"
 #include "1992_1_1_barres.hpp"
 #include "1993_1_1_materiaux.hpp"
 #include "EF_calculs.hpp"
@@ -52,10 +50,10 @@
  *     - en cas d'erreur d'allocation mémoire.
  */
 EF_Materiau *
-_1993_1_1_materiaux_ajout (Projet     *p,
-                           const char *nom,
-                           Flottant    fy,
-                           Flottant    fu)
+_1993_1_1_materiaux_ajout (Projet      *p,
+                           std::string *nom,
+                           Flottant     fy,
+                           Flottant     fu)
 {
   std::unique_ptr <EF_Materiau>    materiau_nouveau (new EF_Materiau);
   std::unique_ptr <Materiau_Acier> data_acier (new Materiau_Acier);
@@ -66,9 +64,7 @@ _1993_1_1_materiaux_ajout (Projet     *p,
   
   materiau_nouveau->type = MATERIAU_ACIER;
   
-  BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  materiau_nouveau->nom.assign (*nom);
   
   data_acier->fy = m_f (m_g (fy) * 1000000., fy.type);
   data_acier->fu = m_f (m_g (fu) * 1000000., fu.type);
@@ -80,7 +76,6 @@ _1993_1_1_materiaux_ajout (Projet     *p,
   
   BUG (EF_materiaux_insert (p, mat),
        NULL,
-       delete materiau_nouveau->nom;
          delete (Materiau_Acier *) mat->data;
          delete mat; )
   
@@ -106,7 +101,7 @@ _1993_1_1_materiaux_ajout (Projet     *p,
 bool
 _1993_1_1_materiaux_modif (Projet      *p,
                            EF_Materiau *materiau,
-                           char        *nom,
+                           std::string *nom,
                            Flottant     fy,
                            Flottant     fu,
                            Flottant     e,
@@ -122,19 +117,13 @@ _1993_1_1_materiaux_modif (Projet      *p,
   
   data_acier = (Materiau_Acier *) materiau->data;
   
-  if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
+  if ((nom != NULL) && (materiau->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_materiaux_cherche_nom (p, nom, false),
           false,
-          (gettext ("Le matériau %s existe déjà.\n"), nom); )
-    tmp = materiau->nom;
-    BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               materiau->nom = tmp; )
-    free (tmp);
+          (gettext ("Le matériau %s existe déjà.\n"), nom->c_str ()); )
+    materiau->nom.assign (*nom);
+    
     BUG (EF_materiaux_repositionne (p, materiau), false)
   }
   
@@ -208,13 +197,11 @@ _1993_1_1_materiaux_modif (Projet      *p,
  *     - materiau == NULL,
  *     - erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
 {
-  char           *description = NULL;
-  char            tmp1[30];
-  char           *tmp2;
+  std::string     description;
+  std::string     tmp1;
   Materiau_Acier *data_acier;
   
   BUGPARAM (materiau, "%p", materiau, NULL)
@@ -225,47 +212,29 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   data_acier = (Materiau_Acier *) materiau->data;
   
   conv_f_c (m_f (m_g (data_acier->fy) / 1000000., data_acier->fy.type),
-            tmp1,
+            &tmp1,
             DECIMAL_CONTRAINTE);
-  BUGCRIT (description = g_strdup_printf ("f<sub>y</sub> : %s MPa", tmp1),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  description = format (gettext ("f<sub>y</sub> : %s MPa"), tmp1.c_str ());
   
   // On affiche les différences si le matériau a été personnalisé
   conv_f_c (m_f (m_g (data_acier->fu) / 1000000., data_acier->fu.type),
-            tmp1,
+            &tmp1,
             DECIMAL_CONTRAINTE);
-  tmp2 = description;
-  BUGCRIT (description = g_strdup_printf ("%s, f<sub>u</sub> : %s MPa",
-                                          tmp2,
-                                          tmp1),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (tmp2); )
-  free (tmp2);
+  description += ", " + format (gettext ("f<sub>u</sub> : %s MPa"),
+                                         tmp1.c_str ());
   
   if (!errrel (m_g (data_acier->e), MODULE_YOUNG_ACIER))
   {
     conv_f_c (m_f (m_g (data_acier->e) / 1000000., data_acier->e.type),
-              tmp1,
+              &tmp1,
               DECIMAL_CONTRAINTE);
-    tmp2 = description;
-    BUGCRIT (description = g_strdup_printf ("%s, E : %s MPa", tmp2, tmp1),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp2); )
-    free (tmp2);
+    description += ", " + format (gettext ("E : %s MPa"), tmp1.c_str ());
   }
   
   if (!errrel (m_g (data_acier->nu), COEFFICIENT_NU_ACIER))
   {
-    conv_f_c (data_acier->nu, tmp1, DECIMAL_SANS_UNITE);
-    tmp2 = description;
-    BUGCRIT (description = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp2); )
-    free (tmp2);
+    conv_f_c (data_acier->nu, &tmp1, DECIMAL_SANS_UNITE);
+    description += ", " + format (gettext ("%s, &#957; : %s"), tmp1.c_str ());
   }
   
   return description;

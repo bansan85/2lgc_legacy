@@ -18,13 +18,9 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <math.h>
-#include <string.h>
-#include <wchar.h>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -64,15 +60,16 @@ GTK_WINDOW_CLOSE (common, informations);
  *     - en cas d'erreur d'allocation mémoire.
  */
 bool
-common_gtk_informations_recupere_donnees (Projet   *p,
-                                          char    **destinataire,
-                                          char    **adresse,
-                                          uint32_t *code_postal,
-                                          char    **ville)
+common_gtk_informations_recupere_donnees (Projet      *p,
+                                          std::string *destinataire,
+                                          std::string *adresse,
+                                          uint32_t    *code_postal,
+                                          std::string *ville)
 {
   bool           ok = true;
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
+  char          *tmp;
   
   BUGPARAM (p, "%p", p, false)
   BUGPARAM (destinataire, "%p", destinataire, false)
@@ -97,21 +94,21 @@ common_gtk_informations_recupere_donnees (Projet   *p,
                                    "common_informations_buffer_destinataire"));
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
-  *destinataire = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  destinataire->assign (tmp);
+  free (tmp);
   
   textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_INFO.builder,
                                         "common_informations_buffer_adresse"));
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
-  *adresse = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  adresse->assign (tmp);
+  free (tmp);
   
-  BUGCRIT (*ville = g_strdup (gtk_entry_buffer_get_text (GTK_ENTRY_BUFFER (
+  ville->assign (gtk_entry_buffer_get_text (GTK_ENTRY_BUFFER (
                                        gtk_builder_get_object (UI_INFO.builder,
-                                        "common_informations_buffer_ville")))),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (*destinataire);
-             free (*adresse); )
+                                        "common_informations_buffer_ville"))));
   
   return ok;
 }
@@ -132,8 +129,8 @@ void
 common_gtk_informations_check (GtkEntryBuffer *entrybuffer,
                                Projet         *p)
 {
-  uint32_t code_postal;
-  char    *destinataire = NULL, *adresse = NULL, *ville = NULL;
+  uint32_t    code_postal;
+  std::string destinataire, adresse, ville;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_INFO.builder,
@@ -156,9 +153,6 @@ common_gtk_informations_check (GtkEntryBuffer *entrybuffer,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                           UI_INFO.builder, "common_informations_button_edit")),
                               TRUE);
-    free (destinataire);
-    free (adresse);
-    free (ville);
   }
   
   return;
@@ -209,9 +203,7 @@ common_gtk_informations_free_adresse (void *data)
   
   BUGPARAM (adresse, "%p", adresse, )
   
-  free (adresse->affichage);
-  free (adresse->ville);
-  free (adresse);
+  delete adresse;
 }
 
 
@@ -367,28 +359,19 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
        )
     {
       Ligne_Adresse *adresse;
+      char           txt[5];
       
       adresse = new Ligne_Adresse;
-      BUGCRIT (adresse->affichage = (char *) malloc (sizeof (char) *
-                                     (wcslen (artmin) + wcslen (nccenr) + 20)),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 fclose (villes);
-                 free (ligne);
-                 free (code_postal2);
-                 free (minuscule);
-                 free (adresse);
-                 g_list_free_full (list, common_gtk_informations_free_adresse);
-                 free (ville);
-                 free (code_postal); )
-      sprintf (adresse->affichage,
-               "%d %ls%s%ls",
-               codepostal,
-               artmin,
-               ((article == 5) || (article == 1) || (article == 0)) ? "" : " ",
-               nccenr);
+      adresse->affichage = format ("%d %ls%s%ls",
+                                   codepostal,
+                                   artmin,
+                                   ((article == 5) || (article == 1) ||
+                                    (article == 0)) ? "" : " ",
+                                   nccenr);
       adresse->population = population;
-      wcstombs (adresse->departement, departement, 4);
+      wcstombs (txt, departement, 4);
+      txt[4] = '\00';
+      adresse->departement.assign (txt);
       adresse->commune = commune;
       adresse->code_postal = codepostal;
       adresse->ville = minuscule;
@@ -401,9 +384,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
       if (i > MAX_VILLES)
       {
         adresse = (Ligne_Adresse *) list->data;
-        free (adresse->affichage);
-        free (adresse->ville);
-        free (adresse);
+        delete adresse;
         
         list = g_list_delete_link (list, list);
         i--;
@@ -428,30 +409,25 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   while (list_parcours != NULL)
   {
     Ligne_Adresse *adresse = (Ligne_Adresse *) list_parcours->data;
-    char          *tmp, *ville_tmp2;
+    std::string    tmp;
+    char          *ville_tmp2;
     
-    BUGCRIT (tmp = g_strdup_printf ("%d", adresse->code_postal),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               fclose (villes);
-               g_list_free_full (list, common_gtk_informations_free_adresse); )
+    tmp = std::to_string (adresse->code_postal);
     gtk_list_store_append (UI_INFO.model_completion, &iter);
     BUG (ville_tmp2 = common_text_wcstostr_dup (adresse->ville),
          ,
          (gettext ("Erreur d'allocation mémoire.\n"));
            fclose (villes);
-           g_list_free_full (list, common_gtk_informations_free_adresse);
-           free (tmp); )
+           g_list_free_full (list, common_gtk_informations_free_adresse); )
     gtk_list_store_set (UI_INFO.model_completion,
                         &iter,
-                        0, adresse->affichage,
-                        1, tmp,
+                        0, adresse->affichage.c_str (),
+                        1, tmp.c_str (),
                         2, ville_tmp2,
-                        3, adresse->departement,
+                        3, adresse->departement.c_str (),
                         4, adresse->commune,
                         -1);
     
-    free (tmp);
     free (ville_tmp2);
     
     list_parcours = g_list_previous (list_parcours);
@@ -512,10 +488,10 @@ common_gtk_informations_match_selected (GtkEntryCompletion *widget,
                                         GtkTreeIter        *iter,
                                         Projet             *p)
 {
-  uint32_t commune;
-  char    *departement;
-  char    *ville_tmp;
-  wchar_t *ville;
+  uint32_t    commune;
+  std::string departement;
+  std::string ville_tmp;
+  wchar_t    *ville;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (iter, "%p", iter, FALSE)
@@ -532,13 +508,10 @@ common_gtk_informations_match_selected (GtkEntryCompletion *widget,
                       -1);
   
   free (UI_INFO.departement);
-  UI_INFO.departement = common_text_strtowcs_dup (departement);
-  free (departement);
+  UI_INFO.departement = common_text_strtowcs_dup (departement.c_str ());
   UI_INFO.commune = commune;
-  BUG (ville = common_text_strtowcs_dup (ville_tmp),
-       FALSE,
-       free (ville_tmp); )
-  free (ville_tmp);
+  BUG (ville = common_text_strtowcs_dup (ville_tmp.c_str ()),
+       FALSE)
   
   BUG (common_ville_set (p, UI_INFO.departement, ville, TRUE),
        FALSE,
@@ -568,11 +541,11 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
                                           Projet    *p)
 {
   uint32_t    code_postal;
-  char       *destinataire = NULL, *adresse = NULL, *ville = NULL;
+  std::string destinataire, adresse, ville;
   Type_Neige  neige;
   Type_Vent   vent;
   Type_Seisme seisme;
-  char       *txt1, *txt2, *message;
+  std::string txt1, txt2, message;
   const char *const_txt;
   wchar_t    *txt_tmp;
   
@@ -605,27 +578,17 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
   
   const_txt = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
                          UI_INFO.builder, "common_informations_entry_ville")));
-  BUG (txt_tmp = common_text_strtowcs_dup (const_txt),
-           ,
-           free (destinataire);
-             free (adresse);
-             free (ville); )
+  BUG (txt_tmp = common_text_strtowcs_dup (const_txt), )
   BUG (common_ville_set (p,
                          UI_INFO.departement,
                          txt_tmp,
                          FALSE),
       ,
-      free (destinataire);
-        free (adresse);
-        free (ville);
         free (txt_tmp); )
   free (txt_tmp);
-  free (p->parametres.adresse.destinataire);
   p->parametres.adresse.destinataire = destinataire;
-  free (p->parametres.adresse.adresse);
   p->parametres.adresse.adresse = adresse;
   p->parametres.adresse.code_postal = code_postal;
-  free (p->parametres.adresse.ville);
   p->parametres.adresse.ville = ville;
   
   gtk_combo_box_set_active (GTK_COMBO_BOX (gtk_builder_get_object (
@@ -641,85 +604,46 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
                                        "common_informations_seisme_combobox")),
                             seisme);
   
-  message = NULL;
   if (neige != p->parametres.neige)
   {
-    BUGCRIT (message = g_strdup_printf ("%s %s",
-                                        gettext ("Êtes-vous sûr de vouloir choisir pour"),
-                                        gettext ("la neige")),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    message = std::string (gettext ("Êtes-vous sûr de vouloir choisir pour")) +
+              " " + std::string (gettext ("la neige"));
   }
   if (vent != p->parametres.vent)
   {
-    if (message == NULL)
+    if (message.length () == 0)
     {
-      BUGCRIT (message = g_strdup_printf ("%s %s",
-                                          gettext ("Êtes-vous sûr de vouloir choisir pour"),
-                                          gettext ("le vent")),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      message = std::string (gettext ("Êtes-vous sûr de vouloir choisir pour")) +
+                " " + std::string (gettext ("le vent"));
     }
     else
     {
-      txt1 = message;
-      BUGCRIT (txt2 = g_strdup_printf (", %s", gettext ("le vent")),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (txt1); )
-      BUGCRIT (message = g_strconcat (txt1, txt2, NULL),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (txt1);
-                 free (txt2); )
-      free (txt1);
-      free (txt2);
+      message += ", " + std::string (gettext ("le vent"));
     }
   }
   if (seisme != p->parametres.seisme)
   {
-    if (message == NULL)
+    if (message.length () == 0)
     {
-      BUGCRIT (message = g_strdup_printf ("%s %s",
-                                          gettext ("Êtes-vous sûr de vouloir choisir pour"),
-                                          gettext ("le séisme")),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      message = std::string (gettext ("Êtes-vous sûr de vouloir choisir pour")) +
+                " " + std::string (gettext ("le séisme"));
     }
     else
     {
-      txt1 = message;
-      BUGCRIT (txt2 = g_strdup_printf (", %s", gettext("le séisme")),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (txt1); )
-      BUGCRIT (message = g_strconcat (txt1, txt2, NULL),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (txt1);
-                 free (txt2); )
-      free (txt1);
-      free (txt2);
+      message += ", " + std::string (gettext ("le séisme"));
     }
   }
-  if (message != NULL)
+  if (message.length () != 0)
   {
     GtkWidget *dialog;
     
-    txt1 = message;
-    BUGCRIT (message = g_strconcat (txt1,
-                                    gettext(" des paramètres de calculs différents que ceux imposés par les normes ?"),
-                                    NULL),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (txt1); )
-    free (txt1);
+    message += gettext(" des paramètres de calculs différents que ceux imposés par les normes ?");
     dialog = gtk_message_dialog_new (GTK_WINDOW (UI_INFO.window),
                                      GTK_DIALOG_MODAL,
                                      GTK_MESSAGE_WARNING,
                                      GTK_BUTTONS_YES_NO,
                                      "%s",
-                                     message);
+                                     message.c_str ());
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES)
     {
       p->parametres.neige = neige;
@@ -797,7 +721,7 @@ common_gtk_informations (Projet *p)
                      UI_INFO.builder, "common_informations_completion_model"));
   
   BUG (UI_INFO.departement =
-                  common_text_strtowcs_dup (p->parametres.adresse.departement),
+         common_text_strtowcs_dup (p->parametres.adresse.departement.c_str ()),
        false);
   UI_INFO.commune = p->parametres.adresse.commune;
   common_gtk_informations_check (NULL, p);
@@ -819,36 +743,33 @@ common_gtk_informations (Projet *p)
                                        NULL,
                                        NULL);
   
-  if (p->parametres.adresse.destinataire != NULL)
+  if (p->parametres.adresse.destinataire.length () != 0)
   {
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                   UI_INFO.builder, "common_informations_buffer_destinataire")),
-                              p->parametres.adresse.destinataire,
+                              p->parametres.adresse.destinataire.c_str (),
                               -1);
   }
-  if (p->parametres.adresse.adresse != NULL)
+  if (p->parametres.adresse.adresse.length () != 0)
   {
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                        UI_INFO.builder, "common_informations_buffer_adresse")),
-                              p->parametres.adresse.adresse, -1);
+                              p->parametres.adresse.adresse.c_str (), -1);
   }
   if (p->parametres.adresse.code_postal != 0)
   {
-    char *texte;
+    std::string texte;
     
-    BUGCRIT (texte = g_strdup_printf ("%d", p->parametres.adresse.code_postal),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    texte = std::to_string (p->parametres.adresse.code_postal);
     gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
-                        texte);
-    free (texte);
+                        texte.c_str ());
   }
-  if (p->parametres.adresse.ville != NULL)
+  if (p->parametres.adresse.ville.length () != 0)
   {
     gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_entry_ville")),
-                        p->parametres.adresse.ville);
+                        p->parametres.adresse.ville.c_str ());
   }
   
   g_object_set (gtk_builder_get_object (UI_INFO.builder,
@@ -879,6 +800,5 @@ common_gtk_informations (Projet *p)
   
   return true;
 }
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

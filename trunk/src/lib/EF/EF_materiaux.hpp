@@ -22,32 +22,32 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-bool     EF_materiaux_init            (Projet      *p)
+bool EF_materiaux_init         (Projet      *p)
                                        __attribute__((__warn_unused_result__));
 
-bool     EF_materiaux_insert          (Projet      *p,
-                                       EF_Materiau *materiau)
+bool EF_materiaux_insert       (Projet      *p,
+                                EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
-bool     EF_materiaux_repositionne    (Projet      *p,
-                                       EF_Materiau *materiau)
+bool EF_materiaux_repositionne (Projet      *p,
+                                EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 EF_Materiau *EF_materiaux_cherche_nom (Projet      *p,
-                                       const char  *nom,
+                                       std::string *nom,
                                        bool         critique)
                                        __attribute__((__warn_unused_result__));
-char *EF_materiaux_get_description    (EF_Materiau *materiau)
+std::string EF_materiaux_get_description (EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 
-Flottant EF_materiaux_E               (EF_Materiau *materiau)
+Flottant EF_materiaux_E    (EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
-Flottant EF_materiaux_G               (EF_Materiau *materiau,
+Flottant EF_materiaux_G    (EF_Materiau *materiau,
                                        bool         nu_null)
                                        __attribute__((__warn_unused_result__));
 
-bool     EF_materiaux_supprime        (EF_Materiau *materiau,
-                                       Projet      *p)
+bool EF_materiaux_supprime (EF_Materiau *materiau,
+                            Projet      *p)
                                        __attribute__((__warn_unused_result__));
-bool     EF_materiaux_free            (Projet      *p)
+bool EF_materiaux_free     (Projet      *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif
