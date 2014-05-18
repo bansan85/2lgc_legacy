@@ -17,12 +17,9 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -51,10 +48,10 @@
  *     - charge == NULL.
  */
 Charge *
-EF_charge_ajout (Projet     *p,
-                 Action     *action,
-                 Charge     *charge,
-                 const char *nom)
+EF_charge_ajout (Projet      *p,
+                 Action      *action,
+                 Charge      *charge,
+                 std::string *nom)
 {
 #ifdef ENABLE_GTK
   GtkTreeIter   iter_action;
@@ -65,9 +62,7 @@ EF_charge_ajout (Projet     *p,
   BUGPARAM (action, "%p", action, NULL)
   BUGPARAM (charge, "%p", charge, NULL)
   
-  BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  charge->nom.assign (*nom);
   
   _1990_action_charges_renvoie (action)->push_back (charge);
   
@@ -149,17 +144,14 @@ EF_charge_action (Projet *p,
  *     - erreur d'allocation mémoire.
  */
 bool
-EF_charge_renomme (Projet     *p,
-                   Charge     *charge,
-                   const char *nom)
+EF_charge_renomme (Projet      *p,
+                   Charge      *charge,
+                   std::string *nom)
 {
   BUGPARAM (p, "%p", p, false)
   BUGPARAM (charge, "%p", charge, false)
   
-  free (charge->nom);
-  BUGCRIT (charge->nom = g_strdup_printf ("%s", nom),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  charge->nom.assign (*nom);
   
 #ifdef ENABLE_GTK
   if (UI_ACT.builder != NULL)
@@ -242,8 +234,8 @@ EF_charge_deplace (Projet *p,
   INFO (charge_data,
         false,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
-                  charge_s->nom,
-                  _1990_action_nom_renvoie (action_src)); )
+                  charge_s->nom.c_str (),
+                  _1990_action_nom_renvoie (action_src).c_str ()); )
   
   // On insère la charge à la fin de la liste des charges dans l'action de
   // destination en modifiant son numéro.
@@ -338,8 +330,8 @@ EF_charge_supprime (Projet *p,
   INFO (charge_data,
         false,
         (gettext ("Charge '%s' de l'action %s introuvable.\n"),
-                  charge_s->nom,
-                  _1990_action_nom_renvoie (action)); )
+                  charge_s->nom.c_str (),
+                  _1990_action_nom_renvoie (action).c_str ()); )
   
   BUG (EF_calculs_free (p), false)
   

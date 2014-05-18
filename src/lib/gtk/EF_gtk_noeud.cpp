@@ -18,14 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <string.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -451,20 +448,15 @@ EF_gtk_noeuds_boutton_supprimer_menu (GtkButton *widget,
       (!liste_barres_dep->empty ()) ||
       (!liste_charges_dep->empty ()))
   {
-    char *desc;
+    std::string desc;
     
-    BUG (desc = common_text_dependances (liste_noeuds_dep,
-                                         liste_barres_dep,
-                                         liste_charges_dep,
-                                         p),
-         ,
-         delete liste_noeuds_dep;
-           delete liste_barres_dep;
-           delete liste_charges_dep; )
+    desc = common_text_dependances (liste_noeuds_dep,
+                                    liste_barres_dep,
+                                    liste_charges_dep,
+                                    p);
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                            UI_NOE.builder, "EF_noeuds_supprimer_menu_barres")),
-                             desc);
-    free (desc);
+                             desc.c_str ());
     delete liste_noeuds_dep;
     delete liste_barres_dep;
     delete liste_charges_dep;
@@ -825,9 +817,10 @@ EF_gtk_noeud_edit_noeud_appui (GtkCellRendererText *cell,
   }
   else
   {
-    EF_Appui *appui;
+    EF_Appui   *appui;
+    std::string str_tmp (new_text);
     
-    BUG (appui = EF_appuis_cherche_nom (p, new_text, true), )
+    BUG (appui = EF_appuis_cherche_nom (p, &str_tmp, true), )
     BUG (EF_noeuds_change_appui (p, noeud, appui), )
   }
   
@@ -978,18 +971,14 @@ EF_gtk_noeuds_render_0 (GtkTreeViewColumn *tree_column,
                         GtkTreeIter       *iter,
                         gpointer           data2)
 {
-  EF_Noeud *noeud;
-  char     *tmp;
+  EF_Noeud   *noeud;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
-  BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  tmp = std::to_string (noeud->numero);
   
-  g_object_set (cell, "text", tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1012,7 +1001,7 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Point        point;
-  char            tmp[30];
+  std::string     tmp;
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
@@ -1021,15 +1010,15 @@ EF_gtk_noeuds_render_1 (GtkTreeViewColumn *tree_column,
   data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
-    conv_f_c (data->x, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->x, &tmp, DECIMAL_DISTANCE);
   }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
-    conv_f_c (point.x, tmp, DECIMAL_DISTANCE);
+    conv_f_c (point.x, &tmp, DECIMAL_DISTANCE);
   }
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1052,7 +1041,7 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Point        point;
-  char            tmp[30];
+  std::string     tmp;
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
@@ -1061,15 +1050,15 @@ EF_gtk_noeuds_render_2 (GtkTreeViewColumn *tree_column,
   data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
-    conv_f_c (data->y, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->y, &tmp, DECIMAL_DISTANCE);
   }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
-    conv_f_c (point.y, tmp, DECIMAL_DISTANCE);
+    conv_f_c (point.y, &tmp, DECIMAL_DISTANCE);
   }
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1092,7 +1081,7 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Point        point;
-  char            tmp[30];
+  std::string     tmp;
   EF_Noeud_Libre *data;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
@@ -1101,15 +1090,15 @@ EF_gtk_noeuds_render_3 (GtkTreeViewColumn *tree_column,
   data = (EF_Noeud_Libre *) noeud->data;
   if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
   {
-    conv_f_c (data->z, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->z, &tmp, DECIMAL_DISTANCE);
   }
   else
   {
     BUG (EF_noeuds_renvoie_position (noeud, &point), )
-    conv_f_c (point.z, tmp, DECIMAL_DISTANCE);
+    conv_f_c (point.z, &tmp, DECIMAL_DISTANCE);
   }
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1137,7 +1126,9 @@ EF_gtk_noeuds_render_4 (GtkTreeViewColumn *tree_column,
   
   g_object_set (cell,
                 "text",
-                noeud->appui == NULL ? gettext ("Aucun") : noeud->appui->nom,
+                noeud->appui == NULL ?
+                  gettext ("Aucun") :
+                  noeud->appui->nom.c_str (),
                 NULL);
 }
 
@@ -1162,21 +1153,21 @@ EF_gtk_noeuds_render_libre5 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Noeud_Libre *data;
-  char           *tmp = NULL;
+  std::string     tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   data = (EF_Noeud_Libre *) noeud->data;
   if (data->relatif != NULL)
   {
-    BUGCRIT (tmp = g_strdup_printf ("%d", data->relatif->numero),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    tmp = std::to_string (data->relatif->numero);
+  }
+  else
+  {
+    tmp = std::string (gettext ("Aucun"));
   }
   
-  g_object_set (cell, "text", tmp == NULL ? gettext ("Aucun") : tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1201,18 +1192,14 @@ EF_gtk_noeuds_render_intermediaire5 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Noeud_Barre *data;
-  char           *tmp = NULL;
+  std::string     tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   data = (EF_Noeud_Barre *) noeud->data;
-  BUGCRIT (tmp = g_strdup_printf ("%d", data->barre->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  tmp = std::to_string (data->barre->numero);
   
-  g_object_set (cell, "text", tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1235,14 +1222,14 @@ EF_gtk_noeuds_render_intermediaire6 (GtkTreeViewColumn *tree_column,
 {
   EF_Noeud       *noeud;
   EF_Noeud_Barre *data;
-  char            tmp[30];
+  std::string     tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &noeud, -1);
   BUGPARAM (noeud, "%p", noeud, )
   data = (EF_Noeud_Barre *) noeud->data;
-  conv_f_c (data->position_relative_barre, tmp, DECIMAL_DISTANCE);
+  conv_f_c (data->position_relative_barre, &tmp, DECIMAL_DISTANCE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
 }
 
 
@@ -1461,7 +1448,5 @@ EF_gtk_noeud (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_NOE.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

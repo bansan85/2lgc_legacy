@@ -17,12 +17,9 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
-#include <gmodule.h>
 
 #include <memory>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -89,9 +86,9 @@ EF_appuis_init (Projet *p)
  *     - l'appui n'existe pas.
  */
 EF_Appui *
-EF_appuis_cherche_nom (Projet     *p,
-                       const char *nom,
-                       bool        critique)
+EF_appuis_cherche_nom (Projet      *p,
+                       std::string *nom,
+                       bool         critique)
 {
   std::list <EF_Appui *>::iterator it;
   
@@ -102,7 +99,7 @@ EF_appuis_cherche_nom (Projet     *p,
   {
     EF_Appui *appui = *it;
     
-    if (strcmp (appui->nom, nom) == 0)
+    if (appui->nom.compare (*nom) == 0)
     {
       return appui;
     }
@@ -112,7 +109,9 @@ EF_appuis_cherche_nom (Projet     *p,
   
   if (critique)
   {
-    FAILINFO (NULL, (gettext ("Appui '%s' est introuvable.\n"), nom); )
+    FAILINFO (NULL,
+              (gettext ("Appui '%s' est introuvable.\n"),
+                        nom->c_str ()); )
   }
   else
   {
@@ -141,7 +140,7 @@ EF_appuis_cherche_nom (Projet     *p,
  */
 EF_Appui *
 EF_appuis_ajout (Projet       *p,
-                 const char   *nom,
+                 std::string  *nom,
                  Type_EF_Appui x,
                  Type_EF_Appui y,
                  Type_EF_Appui z,
@@ -150,17 +149,19 @@ EF_appuis_ajout (Projet       *p,
                  Type_EF_Appui rz)
 {
   std::unique_ptr <EF_Appui> appui_nouveau (new EF_Appui);
-  EF_Appui *appui_parcours, *app;
   std::list <EF_Appui *>::iterator it;
   
+  EF_Appui *appui_parcours, *app;
+  
   BUGPARAM (p, "%p", p, NULL)
-  INFO (strcmp (nom, gettext ("Aucun")),
+  INFO (nom->compare (gettext ("Aucun")),
         NULL,
         (gettext ("Impossible d'utiliser comme nom 'Aucun'.\n")); )
   
   INFO (EF_appuis_cherche_nom (p, nom, false) == NULL,
         NULL,
-        (gettext ("L'appui '%s' existe déjà.\n"), nom); )
+        (gettext ("L'appui '%s' existe déjà.\n"),
+                  nom->c_str ()); )
    
   appui_nouveau.get ()->ux = x;
   switch (x)
@@ -259,15 +260,13 @@ EF_appuis_ajout (Projet       *p,
     }
   }
   
-  BUGCRIT (appui_nouveau.get ()->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  appui_nouveau.get ()->nom.assign (*nom);
   
   it = p->modele.appuis.begin ();
   while (it != p->modele.appuis.end ())
   {
     appui_parcours = *it;
-    if (strcmp (nom, appui_parcours->nom) < 0)
+    if (nom->compare (appui_parcours->nom) < 0)
     {
       break;
     }
@@ -310,7 +309,7 @@ EF_appuis_ajout (Projet       *p,
 #ifdef ENABLE_GTK
   gtk_list_store_set (UI_APP.liste_appuis,
                       &app->Iter_liste,
-                      0, nom,
+                      0, nom->c_str (),
                       -1);
   if (UI_APP.builder != NULL)
   {
@@ -445,10 +444,10 @@ EF_appuis_edit (EF_Appui     *appui,
  *     - appui possédant le nouveau nom est déjà existant.
  */
 bool
-EF_appuis_renomme (EF_Appui   *appui,
-                   const char *nom,
-                   Projet     *p,
-                   bool        critique)
+EF_appuis_renomme (EF_Appui    *appui,
+                   std::string *nom,
+                   Projet      *p,
+                   bool         critique)
 {
   std::list <EF_Appui *>::iterator it;
   
@@ -460,17 +459,15 @@ EF_appuis_renomme (EF_Appui   *appui,
   {
     INFO (EF_appuis_cherche_nom (p, nom, false) == NULL,
           false,
-          (gettext ("L'appui '%s' existe déjà.\n"), nom); )
+          (gettext ("L'appui '%s' existe déjà.\n"),
+                    nom->c_str ()); )
   }
   else if (EF_appuis_cherche_nom (p, nom, false) != NULL)
   {
     return false;
   }
   
-  free (appui->nom);
-  BUGCRIT (appui->nom = g_strdup_printf ("%s", nom),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  appui->nom.assign (*nom);
   
   // On réinsère l'appui au bon endroit
   p->modele.appuis.remove (appui);
@@ -479,7 +476,7 @@ EF_appuis_renomme (EF_Appui   *appui,
   {
     EF_Appui *appui_parcours = *it;
     
-    if (strcmp (nom, appui_parcours->nom) < 0)
+    if (nom->compare (appui_parcours->nom) < 0)
     {
       p->modele.appuis.insert (it, appui);
       
@@ -515,7 +512,10 @@ EF_appuis_renomme (EF_Appui   *appui,
   }
   
 #ifdef ENABLE_GTK
-  gtk_list_store_set (UI_APP.liste_appuis, &appui->Iter_liste, 0, nom, -1);
+  gtk_list_store_set (UI_APP.liste_appuis,
+                      &appui->Iter_liste,
+                      0, nom->c_str (),
+                      -1);
   if (UI_APP.builder != NULL)
   {
     GtkTreePath *path;
@@ -602,27 +602,22 @@ EF_appuis_supprime (EF_Appui *appui,
   
   if ((annule_si_utilise) && (!noeuds_suppr->empty ()))
   {
-    char *liste;
+    std::string liste;
     
-    BUGCRIT (liste = common_selection_noeuds_en_texte (noeuds_suppr),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               delete noeuds_suppr; )
+    liste = common_selection_noeuds_en_texte (noeuds_suppr);
 
     if (noeuds_suppr->size () == 1)
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"),
-                          liste);
-                  free (liste);
+                          liste.c_str ());
                   delete noeuds_suppr; )
     }
     else
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"),
-                          liste);
-                  free (liste);
+                          liste.c_str ());
                   delete noeuds_suppr; )
     }
   }
@@ -651,9 +646,6 @@ EF_appuis_supprime (EF_Appui *appui,
   }
   
   delete noeuds_suppr;
-  
-  free (appui->nom);
-  appui->nom = NULL;
   
   switch (appui->ux)
   {
@@ -770,7 +762,6 @@ EF_appuis_free (Projet *p)
   {
     EF_Appui *appui = *it;
     
-    free (appui->nom);
     delete appui;
     
     ++it;

@@ -17,13 +17,15 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <math.h>
-#include <gmodule.h>
+
+#include <locale>
+#include <cmath>
+#include <cfloat>
+
 #include "common_math.hpp"
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
+#include "common_text.hpp"
 
 
 /**
@@ -31,18 +33,18 @@
  *        Emet un message d'erreur si le nombre est supérieur à err_min * 1e14.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_min : le nombre minimum.
- * \return true si ABS (calc) <= err_moy * 1e-14.
+ * \return true si fabs (calc) <= err_moy * 1e-14.
  */
 bool
 errmin (double calc,
         double err_min)
 {
-  INFO (ABS (calc) <= err_min * 1e14,
+  INFO (fabs (calc) <= err_min * 1e14,
         true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_min * 1e14); )
-  return ABS (calc) <= err_min;
+  return fabs (calc) <= err_min;
 }
 
 
@@ -52,18 +54,18 @@ errmin (double calc,
  *        err_max.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_max : le nombre maximum.
- * \return true si ABS (calc) <= err_moy * 1e-14.
+ * \return true si fabs (calc) <= err_moy * 1e-14.
  */
 bool
 errmax (double calc,
         double err_max)
 {
-  INFO (ABS (calc) <= err_max,
+  INFO (fabs (calc) <= err_max,
         true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_max); )
-  return ABS (calc) <= err_max * 1e-14;
+  return fabs (calc) <= err_max * 1e-14;
 }
 
 
@@ -73,18 +75,18 @@ errmax (double calc,
  *        err_moy * 1e-7.
  * \param calc : le nombre 1 (nombre calculé).
  * \param err_moy : le nombre moyen.
- * \return true si ABS (calc) <= err_moy * 1e-7.
+ * \return true si fabs (calc) <= err_moy * 1e-7.
  */
 bool
 errmoy (double calc,
         double err_moy)
 {
-  INFO (ABS (calc) <= err_moy * 1e7,
+  INFO (fabs (calc) <= err_moy * 1e7,
         true,
         (gettext ("Comparaison hors limite : %lf > %lf.\n"),
                   calc,
                   err_moy * 1e7); )
-  return ABS (calc) <= err_moy * 1e-7;
+  return fabs (calc) <= err_moy * 1e-7;
 }
 
 
@@ -98,9 +100,9 @@ bool
 errrel (double calc,
         double theo)
 {
-  double err_max = MAX (ABS (calc), ABS (theo));
+  double err_max = std::max (fabs (calc), fabs (theo));
   
-  return ABS (calc - theo) <= err_max * 1e-14;
+  return fabs (calc - theo) <= err_max * 1e-14;
 }
 
 
@@ -117,11 +119,11 @@ common_math_arrondi_nombre (double nombre)
 {
   double puissance;
   
-  if (ABS (nombre) < DBL_MIN)
+  if (fabs (nombre) < DBL_MIN)
   {
     return 0.;
   }
-  puissance = ERREUR_RELATIVE_PUISSANCE - ceil (log10 (ABS (nombre)));
+  puissance = ERREUR_RELATIVE_PUISSANCE - ceil (log10 (fabs (nombre)));
   nombre = nombre * pow (10, puissance);
   modf (nombre, &nombre);
   
@@ -172,7 +174,7 @@ common_math_arrondi_sparse (cholmod_sparse *sparse)
 
 
 /**
- * \brief Converti un nombre double en char *.
+ * \brief Converti un nombre double en std::string.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
  * \param nombre : nombre à convertir,
  * \param dest : nombre converti,
@@ -180,9 +182,9 @@ common_math_arrondi_sparse (cholmod_sparse *sparse)
  * \return Rien.
  */
 void
-common_math_double_to_char (double nombre,
-                            char  *dest,
-                            int8_t decimales)
+common_math_double_to_string (double       nombre,
+                              std::string *dest,
+                              int8_t       decimales)
 {
 /*  double  test;
   int   width;*/
@@ -193,7 +195,7 @@ common_math_double_to_char (double nombre,
   }
   
 /*  // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
-  if (ABS(nombre) > 1e15)
+  if (fabs(nombre) > 1e15)
   {
     for (width = 0; width<=decimales; width++)
     {
@@ -214,14 +216,14 @@ common_math_double_to_char (double nombre,
         break;
     }
   }*/
-  sprintf (dest, "%.*lf", decimales, nombre);
+  *dest = format ("%.*lf", decimales, nombre);
   
   return;
 }
 
 
 /**
- * \brief Converti un nombre double en char *.
+ * \brief Converti un nombre double en std::string.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
  * \param nombre : nombre à convertir,
  * \param dest : nombre converti,
@@ -229,11 +231,11 @@ common_math_double_to_char (double nombre,
  * \return Rien.
  */
 void
-conv_f_c (Flottant nombre,
-          char    *dest,
-          uint8_t  decimales)
+conv_f_c (Flottant     nombre,
+          std::string *dest,
+          uint8_t      decimales)
 {
-  double test, f;
+  double f;
   
   if (decimales > 15)
   {
@@ -246,7 +248,7 @@ conv_f_c (Flottant nombre,
   {
     case FLOTTANT_ORDINATEUR :
     {
-      sprintf (dest, "%.*lf", decimales, f);
+      *dest = format ("%.*lf", decimales, f);
       break;
     }
     // Dans le cas d'un flottant utilisateur, on affiche toutes les décimales
@@ -255,13 +257,14 @@ conv_f_c (Flottant nombre,
     case FLOTTANT_UTILISATEUR :
     {
       uint8_t width;
+      double  test;
       
-      if (ABS (f) > 1e15)
+      if (fabs (f) > 1e15)
       {
         for (width = 0; width <= 15; width++)
         {
-          sprintf (dest, "%.*le", width, f);
-          sscanf (dest, "%le", &test);
+          *dest = format ("%.*le", width, f);
+          sscanf (dest->c_str (), "%le", &test);
           if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
               (fabs (test) <= fabs (f) * 1.000000000000001))
           {
@@ -274,8 +277,8 @@ conv_f_c (Flottant nombre,
       {
         for (width = 0; width <= 15; width++)
         {
-          sprintf (dest, "%.*lf", width, f);
-          sscanf (dest, "%lf", &test);
+          *dest = format ("%.*lf", width, f);
+          sscanf (dest->c_str (), "%lf", &test);
           if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
               (fabs (test) <= fabs (f) * 1.000000000000001))
           {
@@ -283,7 +286,7 @@ conv_f_c (Flottant nombre,
           }
         }
       }
-      sprintf (dest, "%.*lf", MAX (width, decimales), f);
+      *dest = format ("%.*lf", std::max (width, decimales), f);
       break;
     }
     default :

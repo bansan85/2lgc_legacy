@@ -34,9 +34,9 @@ Charge *EF_charge_barre_ponctuelle_ajout (Projet                 *p,
                                           Flottant                mx,
                                           Flottant                my,
                                           Flottant                mz,
-                                          const char              *nom)
+                                          std::string            *nom)
                                        __attribute__((__warn_unused_result__));
-char *EF_charge_barre_ponctuelle_description      (Charge      *charge)
+std::string EF_charge_barre_ponctuelle_description (Charge      *charge)
                                        __attribute__((__warn_unused_result__));
 
 bool EF_charge_barre_ponctuelle_mx            (EF_Barre    *barre,

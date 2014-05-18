@@ -26,20 +26,20 @@
 #define MODULE_YOUNG_ACIER 210000000000.
 
 EF_Materiau *_1993_1_1_materiaux_ajout (Projet      *p,
-                                        const char  *nom,
+                                        std::string *nom,
                                         Flottant     fy,
                                         Flottant     fu)
                                        __attribute__((__warn_unused_result__));
 bool         _1993_1_1_materiaux_modif (Projet      *p,
                                         EF_Materiau *materiau,
-                                        char        *nom,
+                                        std::string *nom,
                                         Flottant     fy,
                                         Flottant     fu,
                                         Flottant     e,
                                         Flottant     nu)
                                        __attribute__((__warn_unused_result__));
 
-char *_1993_1_1_materiaux_get_description (EF_Materiau *materiau)
+std::string _1993_1_1_materiaux_get_description (EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 
 #endif

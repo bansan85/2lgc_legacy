@@ -17,13 +17,11 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <math.h>
-#include <glib.h>
 
 #include <algorithm>
 #include <memory>
+#include <sstream>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -166,7 +164,7 @@ _1990_ponderations_duplique_sans_double (
       liste_dest->push_back (ponderation_destination);
     }
     
-    it++;
+    ++it;
   }
   
   return true;
@@ -1777,84 +1775,61 @@ _1990_ponderations_genere (Projet *p)
  *   Échec : NULL :
  *     - en cas d'erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 _1990_ponderations_description (std::list <Ponderation*> *ponderation)
 {
-  char *retour = NULL;
+  std::stringstream retour;
   
-  BUGCRIT (retour = (char *) malloc (sizeof (char)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  retour[0] = 0;
+  retour.precision (DECIMAL_SANS_UNITE);
+  retour.setf (std::ios::fixed, std::ios::floatfield);
   
+  retour << "test : ";
   if (ponderation != NULL)
   {
     std::list <Ponderation*>::iterator it = ponderation->begin ();
     
     while (it != ponderation->end ())
     {
-      char         psi[30];
+      std::string  psi;
       Ponderation *ponderation_element = *it;
-      char        *tmp = retour;
       
       if (ponderation_element->psi == 0)
       {
         conv_f_c (_1990_action_psi_renvoie_0 (ponderation_element->action),
-                  psi,
+                  &psi,
                   DECIMAL_SANS_UNITE);
       }
       else if (ponderation_element->psi == 1)
       {
         conv_f_c (_1990_action_psi_renvoie_1 (ponderation_element->action),
-                  psi,
+                  &psi,
                   DECIMAL_SANS_UNITE);
       }
       else if (ponderation_element->psi == 2)
       {
         conv_f_c (_1990_action_psi_renvoie_2 (ponderation_element->action),
-                  psi,
+                  &psi,
                   DECIMAL_SANS_UNITE);
       }
-      else
+      
+      if (it != ponderation->begin ())
       {
-        psi[0] = '\0';
+        retour << "+";
       }
+      retour << ponderation_element->ponderation << "*";
+      
       if (ponderation_element->psi != -1)
       {
-        BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s*%s", 
-                                          tmp,
-                                          tmp[0] != 0 ? "+" : "",
-                                          DECIMAL_SANS_UNITE,
-                                          ponderation_element->ponderation,
-                                          psi,
-                                          _1990_action_nom_renvoie(
-                                                 ponderation_element->action)),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp); )
-      }
-      else
-      {
-        BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s",
-                                          tmp,
-                                          tmp[0] != 0 ? "+" : "",
-                                          DECIMAL_SANS_UNITE,
-                                          ponderation_element->ponderation,
-                                          _1990_action_nom_renvoie
-                                                (ponderation_element->action)),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp); )
+        retour << psi << "*";
       }
       
-      free (tmp);
+      retour << _1990_action_nom_renvoie (ponderation_element->action);
       
       ++it;
     }
   }
   
-  return retour;
+  return retour.str ();
 }
 
 
@@ -1867,7 +1842,7 @@ void
 _1990_ponderations_affiche (
   std::list <std::list <Ponderation *> *> *ponderations)
 {
-  std::list <std::list <Ponderation *> *>::iterator it = ponderations->begin ();
+  std::list <std::list <Ponderation *> *>::iterator it;
   
   it = ponderations->begin ();
   
@@ -1883,14 +1858,16 @@ _1990_ponderations_affiche (
       if (std::next (it2) != ponderation->end ())
       {
         printf ("'%s'*%f(%d)+",
-                _1990_action_nom_renvoie (ponderation_element->action),
+                _1990_action_nom_renvoie (
+                                         ponderation_element->action).c_str (),
                 ponderation_element->ponderation,
                 ponderation_element->psi);
       }
       else
       {
         printf ("'%s'*%f(%d)",
-                _1990_action_nom_renvoie (ponderation_element->action),
+                _1990_action_nom_renvoie (
+                                         ponderation_element->action).c_str (),
                 ponderation_element->ponderation,
                 ponderation_element->psi);
       }

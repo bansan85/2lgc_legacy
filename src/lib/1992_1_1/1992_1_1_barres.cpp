@@ -17,15 +17,12 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
-#include <libintl.h>
-#include <cholmod.h>
-#include <string.h>
-#include <math.h>
 
 #include <memory>
 #include <algorithm>
 #include <iterator>
+#include <locale>
+#include <string.h>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
@@ -215,23 +212,20 @@ _1992_1_1_barres_ajout (Projet         *p,
     element_nouveau->numero = (*(--p->modele.barres.end ()))->numero + 1U;
   }
   
-  BUG (EF_calculs_free (p), false)
+  BUG (EF_calculs_free (p),
+       false,
+       delete element_nouveau->info_EF;
+         delete element_nouveau; )
   
 #ifdef ENABLE_GTK
   // On incrémente le numéro de la future barre
   if (UI_BARADD.builder != NULL)
   {
-    char *nb_barres;
+    std::string nb_barres = std::to_string (element_nouveau->numero + 1);
     
-    BUGCRIT (nb_barres = g_strdup_printf ("%d", element_nouveau->numero + 1),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               delete element_nouveau->info_EF;
-               delete element_nouveau; )
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_numero_label2")),
-                        nb_barres);
-    free (nb_barres);
+                        nb_barres.c_str ());
   }
   
   // On ajoute la ligne dans la liste des barres
@@ -240,15 +234,11 @@ _1992_1_1_barres_ajout (Projet         *p,
     char       *tmp;
     GtkTreeIter iter;
     
-    BUGCRIT (tmp = g_strdup_printf ("%d", (int) type),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               delete element_nouveau->info_EF;
-               delete element_nouveau; )
+    std::string txt = std::to_string ((int) type);
+    
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL ( UI_BAR.liste_types),
                                          &iter,
-                                         tmp);
-    free (tmp);
+                                         txt.c_str ());
     gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                         &iter,
                         0, &tmp,
@@ -844,15 +834,25 @@ _1992_1_1_barres_cherche_dependances (
   if (!verif)
   {
     if (noeuds_dep != NULL)
+    {
       *noeuds_dep = noeuds_dep_.release ();
+    }
     if (noeuds_dep_n != NULL)
+    {
       *noeuds_dep_n = noeuds_dep_n_.release ();
+    }
     if (barres_dep != NULL)
+    {
       *barres_dep = barres_dep_.release ();
+    }
     if (barres_dep_n != NULL)
+    {
       *barres_dep_n = barres_dep_n_.release ();
+    }
     if (charges_dep != NULL)
+    {
       *charges_dep = charges_dep_.release ();
+    }
     
     return true;
   }
@@ -2368,23 +2368,23 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
   }
   
 #ifdef ENABLE_GTK
-  if ((UI_APP.builder != NULL) && (noeuds_suppr != NULL))
+  if (UI_APP.builder != NULL)
   {
     EF_gtk_appuis_select_changed (NULL, p);
   }
-  if ((UI_NOE.builder != NULL) && (noeuds_suppr != NULL))
+  if (UI_NOE.builder != NULL)
   {
     EF_noeuds_set_supprimer_visible (true, p);
   }
-  if ((UI_SEC.builder != NULL) && (barres_suppr != NULL))
+  if (UI_SEC.builder != NULL)
   {
     EF_gtk_sections_select_changed (NULL, p);
   }
-  if ((UI_MAT.builder != NULL) && (barres_suppr != NULL))
+  if (UI_MAT.builder != NULL)
   {
     EF_gtk_materiaux_select_changed (NULL, p);
   }
-  if ((UI_REL.builder != NULL) && (barres_suppr != NULL))
+  if (UI_REL.builder != NULL)
   {
     EF_gtk_relachements_select_changed (NULL, p);
   }
@@ -2413,7 +2413,9 @@ _1992_1_1_barres_free (Projet *p)
   BUGPARAM (p, "%p", p, false)
   
   for (it = p->modele.barres.begin (); it != p->modele.barres.end (); ++it)
+  {
     _1992_1_1_barres_free_foreach (*it, p);
+  }
   
   p->modele.barres.clear ();
   

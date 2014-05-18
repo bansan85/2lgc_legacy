@@ -23,19 +23,19 @@
 #include "common_projet.hpp"
 
 
-Charge *EF_charge_ajout     (Projet     *p,
-                             Action     *action,
-                             Charge     *charge,
-                             const char *nom)
+Charge *EF_charge_ajout     (Projet      *p,
+                             Action      *action,
+                             Charge      *charge,
+                             std::string *nom)
                                        __attribute__((__warn_unused_result__));
 
 Action *EF_charge_action    (Projet     *p,
                              Charge     *charge)
                                        __attribute__((__warn_unused_result__));
 
-bool     EF_charge_renomme  (Projet     *p,
-                             Charge     *charge,
-                             const char *nom)
+bool     EF_charge_renomme  (Projet      *p,
+                             Charge      *charge,
+                             std::string *nom)
                                        __attribute__((__warn_unused_result__));
 bool     EF_charge_deplace  (Projet     *p,
                              Action     *action_src,

@@ -18,13 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
@@ -74,6 +72,8 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   GtkTreeModel   *model;
   GtkTreeIter     Iter;
   
+  std::string     str_tmp;
+  
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BARADD.builder,
            ,
@@ -90,7 +90,8 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (section = EF_sections_cherche_nom (p, nom, true),
+  str_tmp.assign (nom);
+  BUG (section = EF_sections_cherche_nom (p, &str_tmp, true),
        ,
        free (nom); )
   free (nom);
@@ -105,7 +106,8 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   }
   gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
   gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-  BUG (materiau = EF_materiaux_cherche_nom (p, nom, true),
+  str_tmp.assign (nom);
+  BUG (materiau = EF_materiaux_cherche_nom (p, &str_tmp, true),
        ,
        free (nom); )
   free (nom);
@@ -126,7 +128,8 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
   {
     gtk_tree_model_iter_nth_child (model, &Iter, NULL, type);
     gtk_tree_model_get (model, &Iter, 0, &nom, -1);
-    BUG (relachement = EF_relachement_cherche_nom (p, nom, true),
+    str_tmp.assign (nom);
+    BUG (relachement = EF_relachement_cherche_nom (p, &str_tmp, true),
          ,
          free (nom); )
     free (nom);
@@ -338,16 +341,12 @@ EF_gtk_barres_ajouter (GtkButton *button,
   
   if (!p->modele.barres.empty ())
   {
-    char *nb_barres;
+    std::string nb_barres;
     
-    BUGCRIT (nb_barres = g_strdup_printf ("%d",
-                                  (*(--p->modele.barres.end ()))->numero + 1),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    nb_barres = std::to_string ((*(--p->modele.barres.end ()))->numero + 1);
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (UI_BARADD.builder,
                                            "EF_gtk_barres_add_numero_label2")),
-                        nb_barres);
-    free (nb_barres);
+                        nb_barres.c_str ());
   }
   else
   {
@@ -363,7 +362,5 @@ EF_gtk_barres_ajouter (GtkButton *button,
   gtk_window_set_transient_for (GTK_WINDOW (UI_BARADD.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

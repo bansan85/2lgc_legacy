@@ -17,10 +17,9 @@
  */
 
 #include "config.h"
-#ifdef ENABLE_GTK
 
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
 
 #include "common_projet.hpp"
@@ -87,8 +86,5 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
   
   return;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

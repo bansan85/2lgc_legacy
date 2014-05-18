@@ -18,12 +18,9 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <math.h>
-#include <string.h>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -58,13 +55,14 @@ GTK_WINDOW_CLOSE (ef, section_circulaire);
  *     - en cas d'erreur d'allocation mémoire.
  */
 bool
-EF_gtk_section_circulaire_recupere_donnees (Projet *p,
-                                            double *diametre,
-                                            gchar **nom)
+EF_gtk_section_circulaire_recupere_donnees (Projet      *p,
+                                            double      *diametre,
+                                            std::string *nom)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
   bool           ok = true;
+  char          *txt;
   
   BUGPARAMCRIT (p, "%p", p, false)
   BUGPARAMCRIT (diametre, "%p", diametre, false)
@@ -90,13 +88,15 @@ EF_gtk_section_circulaire_recupere_donnees (Projet *p,
   
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
-  *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  txt = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  *nom = txt;
+  free (txt);
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   
   if (UI_SEC_CI.section == NULL)
   {
-    if ((strcmp (*nom, "") == 0) || (EF_sections_cherche_nom (p, *nom, false)))
+    if ((nom->empty ()) || (EF_sections_cherche_nom (p, nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
       ok = false;
@@ -106,9 +106,9 @@ EF_gtk_section_circulaire_recupere_donnees (Projet *p,
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
     }
   }
-  else if ((strcmp (*nom, "") == 0) ||
-           ((strcmp (UI_SEC_CI.section->nom, *nom) != 0) &&
-            (EF_sections_cherche_nom (p, *nom, false))))
+  else if ((nom->empty ()) ||
+           ((UI_SEC_CI.section->nom.compare (*nom) != 0) &&
+            (EF_sections_cherche_nom (p, nom, false))))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
     ok = false;
@@ -116,12 +116,6 @@ EF_gtk_section_circulaire_recupere_donnees (Projet *p,
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
-  }
-  
-  if (!ok)
-  {
-    free (*nom);
-    *nom = NULL;
   }
   
   return ok;
@@ -143,8 +137,8 @@ void
 EF_gtk_section_circulaire_check (GtkWidget *button,
                                  Projet    *p)
 {
-  double diametre;
-  char  *nom;
+  double      diametre;
+  std::string nom;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_CI.builder,
@@ -163,7 +157,6 @@ EF_gtk_section_circulaire_check (GtkWidget *button,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                   UI_SEC_CI.builder, "EF_section_circulaire_button_add_edit")),
                               TRUE);
-    free (nom);
   }
   
   return;
@@ -184,8 +177,8 @@ void
 EF_gtk_section_circulaire_ajouter_clicked (GtkButton *button,
                                            Projet    *p)
 {
-  double diametre;
-  gchar *texte;
+  double      diametre;
+  std::string texte;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_CI.builder,
@@ -201,11 +194,9 @@ EF_gtk_section_circulaire_ajouter_clicked (GtkButton *button,
   gtk_widget_destroy (UI_SEC_CI.window);
   
   BUG (EF_sections_circulaire_ajout (p,
-                                     texte,
+                                     &texte,
                                      m_f (diametre, FLOTTANT_UTILISATEUR)),
       )
-  
-  free (texte);
   
   return;
 }
@@ -224,8 +215,8 @@ void
 EF_gtk_section_circulaire_modifier_clicked (GtkButton *button,
                                             Projet *p)
 {
-  double diametre;
-  gchar *texte;
+  double      diametre;
+  std::string texte;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_SEC_CI.builder,
@@ -240,11 +231,9 @@ EF_gtk_section_circulaire_modifier_clicked (GtkButton *button,
   
   BUG (EF_sections_circulaire_modif (p,
                                      UI_SEC_CI.section,
-                                     texte,
+                                     &texte,
                                      m_f (diametre, FLOTTANT_UTILISATEUR)),
       )
-  
-  free (texte);
   
   gtk_widget_destroy (UI_SEC_CI.window);
   
@@ -309,7 +298,7 @@ EF_gtk_section_circulaire (Projet  *p,
   }
   else
   {
-    gchar               tmp[30];
+    std::string         tmp;
     Section_Circulaire *data;
     
     gtk_window_set_title (GTK_WINDOW (UI_SEC_CI.window),
@@ -323,12 +312,12 @@ EF_gtk_section_circulaire (Projet  *p,
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_CI.builder,
                                        "EF_section_circulaire_textview_nom"))),
-                              UI_SEC_CI.section->nom,
+                              UI_SEC_CI.section->nom.c_str (),
                               -1);
-    conv_f_c (data->diametre, tmp, DECIMAL_DISTANCE);
+    conv_f_c (data->diametre, &tmp, DECIMAL_DISTANCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                   UI_SEC_CI.builder, "EF_section_circulaire_buffer_diametre")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
     
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (
@@ -347,8 +336,5 @@ EF_gtk_section_circulaire (Projet  *p,
   
   return true;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

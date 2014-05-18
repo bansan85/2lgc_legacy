@@ -17,12 +17,13 @@
  */
 
 #include "config.h"
+/*
 #include <libintl.h>
-#include <locale.h>
 #include <string.h>
 #include <gmodule.h>
-
+*/
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
@@ -168,14 +169,14 @@ common_selection_ajout_nombre (Charge               *charge,
   std::list <Charge *>::iterator it;
   
   Action *action = NULL;
-  long    pos_act, pos_cha;
+  size_t  pos_act, pos_cha;
   
   BUGPARAM (liste, "%p", liste, )
   BUGPARAM (p, "%p", p, )
   
   BUG (action = EF_charge_action (p, charge), )
   
-  if (liste == NULL)
+  if (liste->empty ())
   {
     liste->push_back (charge);
     return;
@@ -206,7 +207,7 @@ common_selection_ajout_nombre (Charge               *charge,
     else if ((std::distance (p->actions.begin (),
                              std::find (p->actions.begin (),
                                         p->actions.end (),
-                                        action_en_cours))> pos_act) ||
+                                        action_en_cours)) > pos_act) ||
              ((action_en_cours == action) &&
               (std::distance (_1990_action_charges_renvoie (action)->begin (),
                  std::find (_1990_action_charges_renvoie (action)->begin (),
@@ -228,7 +229,7 @@ common_selection_ajout_nombre (Charge               *charge,
 /**
  * \brief Renvoie une liste de numéros sous forme de texte. Par exemple, le
  *        texte "1;2;3-4;6-9;10-20/2" donne les numéros
- *        "1 2 3 4 6 7 8 9 10 12 14 16 18 20" via la fonction GUINT_TO_POINTER.
+ *        "1 2 3 4 6 7 8 9 10 12 14 16 18 20".
  *        La virgule "," est considérée comme un point virgule ";" et les
  *        espaces négligés.
  * \param texte : le texte à convertir en numéros.
@@ -239,9 +240,9 @@ common_selection_ajout_nombre (Charge               *charge,
  *     - Format de texte illisible.
  */
 std::list <uint32_t> *
-common_selection_renvoie_numeros (const char *texte)
+common_selection_renvoie_numeros (const std::string *texte)
 {
-  char                 *texte_clean;
+  std::string           texte_clean;
   std::list <uint32_t> *list;
   uint32_t              i, j;
   
@@ -250,48 +251,36 @@ common_selection_renvoie_numeros (const char *texte)
     return NULL;
   }
   
-  BUGCRIT (texte_clean = (char *) malloc (sizeof (char) *
-                                                         (strlen (texte) + 1)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  
   // On vérifie si le texte contient bien une liste correcte de numéros
-  i = 0;
-  for (j = 0; j < strlen (texte); j++)
+  for (j = 0; j < texte->length (); j++)
   {
     // Les caractères autorisées sont ,;-/0123456789
-    if ((texte[j] == ';') ||
-        (texte[j] == '-') ||
-        (texte[j] == '/') ||
-        (('0' <= texte[j]) && (texte[j] <= '9')))
+    if (((*texte)[j] == ';') ||
+        ((*texte)[j] == '-') ||
+        ((*texte)[j] == '/') ||
+        (('0' <= (*texte)[j]) && ((*texte)[j] <= '9')))
     {
-      texte_clean[i] = texte[j];
-      i++;
+      texte_clean += texte[j];
     }
-    else if (texte[j] == ',')
+    else if ((*texte)[j] == ',')
     {
-      texte_clean[i] = ';';
-      i++;
+      texte_clean += ';';
     }
     // On remplace par défaut les espaces par des ;
-    else if (texte[j] == ' ')
+    else if ((*texte)[j] == ' ')
     {
-      texte_clean[i] = ';';
-      i++;
+      texte_clean += ';';
     }
     // En cas de caractères inconnus, on ne fait rien
     else
     {
-      free (texte_clean);
-      return NULL;
+      return new std::list <uint32_t> ();
     }
   }
   
-  texte_clean[i] = 0;
-  if (i == 0)
+  if (texte_clean == "")
   {
-    free (texte_clean);
-    return NULL;
+    return new std::list <uint32_t> ();
   }
   
   list = new std::list <uint32_t> ();
@@ -315,27 +304,19 @@ common_selection_renvoie_numeros (const char *texte)
       // Il y a quelque chose à faire
       if ((j > i) || (texte_clean[i] != ';'))
       {
-        char    *tmp;
+        std::string tmp;
         char    *fake;
         uint32_t debut, fin, pas;
         
-        BUGCRIT (tmp = (char *) malloc (sizeof (char) * (j - i + 2U)),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (texte_clean);
-                   delete list; )
         BUGCRIT (fake = (char *) malloc (sizeof (char) * (j - i + 2U)),
                  NULL,
                  (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (texte_clean);
-                   free (tmp);
                    delete list; )
         
-        strncpy (tmp, texte_clean + i, j - i + 1U);
-        tmp[j - i + 1] = 0;
+        tmp.assign (texte_clean, i, j - i + 1);
         
         // Si c'est du format debut-fin/pas
-        if (sscanf (tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
+        if (sscanf (tmp.c_str (), "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
         {
           for (i = debut; i <= fin; i = i + pas)
           {
@@ -343,7 +324,7 @@ common_selection_renvoie_numeros (const char *texte)
           }
         }
         // Si c'est du format debut-fin
-        else if (sscanf (tmp, "%u-%u%s", &debut, &fin, fake) == 2)
+        else if (sscanf (tmp.c_str (), "%u-%u%s", &debut, &fin, fake) == 2)
         {
           for (i = debut; i <= fin; i++)
           {
@@ -351,29 +332,24 @@ common_selection_renvoie_numeros (const char *texte)
           }
         }
         // Si c'est du format nombre simple
-        else if (sscanf (tmp, "%u%s", &debut, fake) == 1)
+        else if (sscanf (tmp.c_str (), "%u%s", &debut, fake) == 1)
         {
           common_selection_ajout_nombre (debut, list);
         }
         // Le format est inconnu.
         else
         {
-          free (tmp);
           free (fake);
           delete list;
-          free (texte_clean);
           return NULL;
         }
         
-        free (tmp);
         free (fake);
       }
       i = j + 1;
     }
   }
-  while (i < strlen (texte_clean));
-  
-  free (texte_clean);
+  while (i < texte_clean.length ());
   
   return list;
 }
@@ -467,48 +443,30 @@ common_selection_numeros_en_barres (std::list <uint32_t> *liste_numeros,
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire,
  */
-// coverity[+alloc]
-char *
+std::string
 common_selection_noeuds_en_texte (std::list <EF_Noeud *> *liste)
 {
-  char *tmp = NULL, *tmp2 = NULL;
-  
   if (!liste->empty ())
   {
-    std::list <EF_Noeud *>::iterator it;
-    EF_Noeud *noeud;
+    std::list <EF_Noeud *>::iterator it = liste->begin ();
+    EF_Noeud   *noeud;
+    std::string retour;
     
-    it = liste->begin ();
     noeud = *it;
-    BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    if (std::next (it) != liste->end ())
+    retour = std::to_string (noeud->numero);
+    ++it;
+    while (it != liste->end ())
     {
+      noeud = *it;
+      retour += ";" + std::to_string (noeud->numero);
       ++it;
-      do
-      {
-        noeud = *it;
-        BUGCRIT (tmp2 = g_strdup_printf ("%s;%d", tmp, noeud->numero),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                  free (tmp); )
-        free (tmp);
-        tmp = tmp2;
-        tmp2 = NULL;
-        ++it;
-      }
-      while (it != liste->end ());
     }
+    return retour;
   }
   else
   {
-    BUGCRIT (tmp = g_strdup_printf (" "),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    return std::string ();
   }
-  
-  return tmp;
 }
 
 
@@ -521,45 +479,30 @@ common_selection_noeuds_en_texte (std::list <EF_Noeud *> *liste)
  *     - Erreur d'allocation mémoire.
  */
 // coverity[+alloc]
-char *
+std::string
 common_selection_barres_en_texte (std::list <EF_Barre *> *liste_barres)
 {
-  char *tmp, *tmp2;
-  
   if (!liste_barres->empty ())
   {
     std::list <EF_Barre *>::iterator it = liste_barres->begin ();
-    
-    EF_Barre *barre;
+    EF_Barre   *barre;
+    std::string retour;
     
     barre = *it;
-    BUGCRIT (tmp = g_strdup_printf ("%u", barre->numero),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    
+    retour = std::to_string (barre->numero);
     ++it;
     while (it != liste_barres->end ())
     {
       barre = *it;
-      BUGCRIT (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp); )
-      free (tmp);
-      tmp = tmp2;
-      tmp2 = NULL;
-      
+      retour += ";" + std::to_string (barre->numero);
       ++it;
     }
+    return retour;
   }
   else
   {
-    BUGCRIT (tmp = g_strdup_printf (" "),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    return std::string ();
   }
-  
-  return tmp;
 }
 
 
@@ -573,86 +516,70 @@ common_selection_barres_en_texte (std::list <EF_Barre *> *liste_barres)
  *     - Erreur d'allocation mémoire.
  */
 // coverity[+alloc]
-char *
+std::string
 common_selection_charges_en_texte (std::list <Charge *> *liste_charges,
                                    Projet               *p)
 {
-  char *tmp, *tmp2;
-  
   if (!liste_charges->empty ())
   {
     std::list <Charge *>::iterator it;
-    Charge *charge;
-    Action *action = NULL;
+    Charge     *charge;
+    Action     *action = NULL;
+    std::string retour;
     
     it = liste_charges->begin ();
     charge = *it;
     
     BUG (action = EF_charge_action (p, charge), NULL)
     
-    BUGCRIT (tmp = g_strdup_printf ("%lu:%lu",
-                                    std::distance (p->actions.begin (),
+    retour = std::to_string (std::distance (p->actions.begin (),
+                                            std::find (p->actions.begin (),
+                                                       p->actions.end (),
+                                                       action))) + ":" +
+             std::to_string (
+               std::distance (_1990_action_charges_renvoie (action)->begin (),
+                 std::find (_1990_action_charges_renvoie (action)->begin (),
+                            _1990_action_charges_renvoie (action)->end (),
+                            charge)));
+    ++it;
+    while (it != liste_charges->end ())
+    {
+      std::list <Action *>::iterator it2 = p->actions.begin ();
+      
+      charge = *it;
+      // On cherche dans la liste des actions laquelle possède la charge.
+      while (it2 != p->actions.end ())
+      {
+        action = *it2;
+        
+        if (std::find (_1990_action_charges_renvoie(action)->begin (),
+                       _1990_action_charges_renvoie(action)->end (),
+                       charge) !=
+                                _1990_action_charges_renvoie(action)->end ())
+        {
+          break;
+        }
+         
+        ++it2;
+      }
+      retour += ";" + std::to_string (std::distance (p->actions.begin (),
                                       std::find (p->actions.begin (),
                                                  p->actions.end (),
-                                                 action)),
-                std::distance (_1990_action_charges_renvoie (action)->begin (),
+                                                 action))) + ":" +
+                std::to_string (
+                  std::distance (_1990_action_charges_renvoie (action)->
+                                                                      begin (),
                   std::find (_1990_action_charges_renvoie (action)->begin (),
                              _1990_action_charges_renvoie (action)->end (),
-                             charge))),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    if (std::next (it) != liste_charges->end ())
-    {
+                             charge)));
       ++it;
-      while (it != liste_charges->end ())
-      {
-        std::list <Action *>::iterator it2 = p->actions.begin ();
-        
-        charge = *it;
-        // On cherche dans la liste des actions laquelle possède la charge.
-        while (it2 != p->actions.end ())
-        {
-          action = *it2;
-          
-          if (std::find (_1990_action_charges_renvoie(action)->begin (),
-                         _1990_action_charges_renvoie(action)->end (),
-                         charge) !=
-                                  _1990_action_charges_renvoie(action)->end ())
-          {
-            break;
-          }
-           
-          ++it2;
-        }
-        BUGCRIT (tmp2 = g_strdup_printf ("%s;%lu:%lu",
-                                         tmp,
-                                         std::distance (p->actions.begin (),
-                                           std::find (p->actions.begin (),
-                                                      p->actions.end (),
-                                                      action)),
-                std::distance (_1990_action_charges_renvoie (action)->begin (),
-                  std::find (_1990_action_charges_renvoie (action)->begin (),
-                             _1990_action_charges_renvoie (action)->end (),
-                             charge))),
-                 NULL,
-                 (gettext ("Erreur d'allocation mémoire.\n"));
-                   free (tmp); )
-        free (tmp);
-        tmp = tmp2;
-        tmp2 = NULL;
-        
-        ++it;
-      }
     }
+    return retour;
   }
   else
   {
-    BUGCRIT (tmp = g_strdup_printf (" "),
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    return std::string ();
   }
-  
-  return tmp;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

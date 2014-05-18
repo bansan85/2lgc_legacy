@@ -17,11 +17,8 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
-#include <cholmod.h>
-#include <gmodule.h>
+
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"

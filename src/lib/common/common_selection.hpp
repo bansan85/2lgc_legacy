@@ -33,7 +33,8 @@ void common_selection_ajout_nombre  (EF_Barre *              barre,
 void common_selection_ajout_nombre  (Charge               *charge,
                                      std::list <Charge *> *liste,
                                      Projet               *p);
-std::list <uint32_t>   *common_selection_renvoie_numeros (const char *texte)
+std::list <uint32_t> *common_selection_renvoie_numeros (
+                        const std::string *texte)
                                        __attribute__((__warn_unused_result__));
 
 std::list <EF_Noeud *> *common_selection_numeros_en_noeuds (
@@ -44,13 +45,13 @@ std::list <EF_Barre *> *common_selection_numeros_en_barres (
                           std::list <uint32_t> *liste_numeros,
                           Projet               *p)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_noeuds_en_texte   (std::list <EF_Noeud *> *liste)
+std::string common_selection_noeuds_en_texte   (std::list <EF_Noeud *> *liste)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_barres_en_texte   (std::list <EF_Barre *> *liste)
+std::string common_selection_barres_en_texte   (std::list <EF_Barre *> *liste)
                                        __attribute__((__warn_unused_result__));
-char    *common_selection_charges_en_texte  (
-           std::list <Charge *> *liste_charges,
-           Projet               *p)
+std::string common_selection_charges_en_texte  (
+              std::list <Charge *> *liste_charges,
+              Projet               *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

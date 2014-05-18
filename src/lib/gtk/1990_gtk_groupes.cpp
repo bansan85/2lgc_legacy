@@ -17,13 +17,11 @@
  */
 
 #include "config.h"
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+
 #include <gtk/gtk.h>
-#include <math.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "1990_groupe.hpp"
@@ -150,7 +148,7 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
     {
       FAILCRIT ( ,
                 (gettext ("Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"),
-                          groupe->nom); )
+                          groupe->nom.c_str ()); )
       break;
     }
   }
@@ -194,7 +192,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
 {
   Niveau_Groupe *niveau_groupe, *niveau_groupe_1;
   size_t         dispo_max, i;
-  char          *dispos;
+  bool          *dispos;
   bool           premier = true;
   GtkTreePath   *path;
   
@@ -258,12 +256,12 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
   // sont les éléments du niveau n-1 encore non placés.
   if (dispo_max != 0)
   {
-    BUGCRIT (dispos = (char *) malloc (sizeof (char) * dispo_max),
+    BUGCRIT (dispos = (bool *) malloc (sizeof (bool) * dispo_max),
              FALSE,
              (gettext ("Erreur d'allocation mémoire.\n")); )
     for (i = 0; i < dispo_max; i++)
     {
-      dispos[i] = 0;
+      dispos[i] = true;
     }
   }
   else
@@ -311,14 +309,14 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
           dispos[std::distance (p->actions.begin (),
                                 std::find (p->actions.begin (), 
                                            p->actions.end (), 
-                                           (Action *)groupe2))] = 1;
+                                           (Action *)groupe2))] = false;
         }
         else
         {
           dispos[std::distance (niveau_groupe->groupes.begin (),
                                 std::find (niveau_groupe->groupes.begin (), 
                                            niveau_groupe->groupes.end (), 
-                                           groupe2))] = 1;
+                                           groupe2))] = false;
         }
         
         gtk_tree_store_append (UI_GRO.tree_store_etat,
@@ -353,7 +351,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
   // On affiche tous les éléments disponibles dans le tree_view_dispo.
   for (i = 0; i < dispo_max; i++)
   {
-    if (dispos[i] == 0)
+    if (dispos[i])
     {
       GtkTreeIter Iter;
       
@@ -499,19 +497,22 @@ void
 _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
                                        Projet    *p)
 {
+  std::string tmp;
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Groupes"); )
   
+  tmp.assign (gettext ("Sans nom"));
   BUG (_1990_groupe_ajout_groupe (p,
                                   *std::next (p->niveaux_groupes.begin (),
                                               GTK_COMMON_SPINBUTTON_AS_UINT (
                                                 GTK_SPIN_BUTTON (
                                                 UI_GRO.spin_button_niveau))),
                                   GROUPE_COMBINAISON_AND,
-                                  gettext ("Sans nom")), )
+                                  &tmp), )
   
   return;
 }
@@ -1354,11 +1355,15 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
   uint32_t      niveau;
   GtkTreeIter   iter_parent;
   
+  std::string   str_tmp;
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Groupes"); )
+  
+  str_tmp.assign (new_text);
   
   path = gtk_tree_path_new_from_string (path_string);
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (UI_GRO.tree_view_etat));
@@ -1378,7 +1383,7 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
     BUG (_1990_groupe_modifie_nom (*std::next (p->niveaux_groupes.begin (),
                                                niveau),
                                    groupe,
-                                   new_text,
+                                   &str_tmp,
                                    p),
         )
   }
@@ -1390,7 +1395,7 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
       Action *action;
       
       gtk_tree_model_get (model, &iter, 0, &action, -1);
-      BUG (_1990_action_nom_change (p, action, new_text), )
+      BUG (_1990_action_nom_change (p, action, &str_tmp), )
     }
     else // Le nom est celui d'un groupe du niveau n-1
     {
@@ -1400,7 +1405,7 @@ _1990_gtk_tree_view_etat_cell_edited (GtkCellRendererText *cell,
       BUG (_1990_groupe_modifie_nom (*std::next (p->niveaux_groupes.begin (),
                                                  niveau - 1),
                                      groupe,
-                                     new_text,
+                                     &str_tmp,
                                      p),
           )
     }
@@ -1434,6 +1439,8 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
   GtkTreeModel *model;
   uint32_t      niveau;
   
+  std::string   str_tmp;
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_GRO.builder,
            ,
@@ -1450,12 +1457,13 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
                                                    UI_GRO.spin_button_niveau));
   
   // Le nom est celui d'une action
+  str_tmp.assign (new_text);
   if (niveau == 0)
   {
     Action *action;
     
     gtk_tree_model_get (model, &iter, 0, &action, -1);
-    BUG (_1990_action_nom_change (p, action, new_text), )
+    BUG (_1990_action_nom_change (p, action, &str_tmp), )
   }
   else // Le nom est celui d'un groupe du niveau n-1
   {
@@ -1465,7 +1473,7 @@ _1990_gtk_tree_view_dispo_cell_edited (GtkCellRendererText *cell,
     BUG (_1990_groupe_modifie_nom (*std::next (p->niveaux_groupes.begin (),
                                                niveau - 1U),
                                    groupe,
-                                   new_text,
+                                   &str_tmp,
                                    p),
         )
   }
@@ -1603,7 +1611,7 @@ EF_gtk_noeuds_render_etat (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &groupe, -1);
   BUGPARAM (groupe, "%p", groupe, )
-  g_object_set (cell, "text", groupe->nom, NULL);
+  g_object_set (cell, "text", groupe->nom.c_str (), NULL);
   
   return;
 }
@@ -1629,7 +1637,7 @@ EF_gtk_noeuds_render_dispo (GtkTreeViewColumn *tree_column,
   
   gtk_tree_model_get (tree_model, iter, 0, &groupe, -1);
   BUGPARAM (groupe, "%p", groupe, )
-  g_object_set (cell, "text", groupe->nom, NULL);
+  g_object_set (cell, "text", groupe->nom.c_str (), NULL);
   
   return;
 }
@@ -1754,7 +1762,5 @@ _1990_gtk_groupes (Projet *p)
   
   return;
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

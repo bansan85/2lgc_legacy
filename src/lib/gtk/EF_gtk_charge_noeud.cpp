@@ -18,14 +18,10 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <math.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -86,9 +82,10 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                               double                  *mx,
                               double                  *my,
                               double                  *mz,
-                              gchar                  **nom)
+                              std::string             *nom)
 {
-  std::list <unsigned int> *num_noeuds;
+  std::list <uint32_t> *num_noeuds;
+  std::string           str_tmp;
   
   GtkTextIter    start, end;
   gchar         *texte_tmp;
@@ -181,7 +178,9 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
   texte_tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
-  num_noeuds = common_selection_renvoie_numeros (texte_tmp);
+  str_tmp.assign (texte_tmp);
+  num_noeuds = common_selection_renvoie_numeros (&str_tmp);
+  free (texte_tmp);
   if (num_noeuds == NULL)
   {
     ok = false;
@@ -205,16 +204,12 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
       gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
       *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
      
-      if (strcmp (*nom, "") == 0)
+      if (nom->length () == 0)
       {
-        free (*nom);
-        *nom = NULL;
         ok = false;
       }
     }
   }
-  
-  free (texte_tmp);
   
   return ok;
 }
@@ -235,9 +230,9 @@ void
 EF_gtk_charge_noeud_check (GtkWidget *button,
                            Projet    *p)
 {
-  Action *action;
-  double  fx, fy, fz, mx, my, mz;
-  gchar  *nom = NULL;
+  Action     *action;
+  double      fx, fy, fz, mx, my, mz;
+  std::string nom;
   
   std::list <EF_Noeud *> *noeuds;
   
@@ -270,8 +265,6 @@ EF_gtk_charge_noeud_check (GtkWidget *button,
     delete noeuds;
   }
   
-  g_free (nom);
-  
   return;
 }
 
@@ -289,9 +282,9 @@ void
 EF_gtk_charge_noeud_ajouter (GtkButton *button,
                              Projet    *p)
 {
-  double  fx, fy, fz, mx, my, mz;
-  Action *action;
-  gchar  *texte;
+  double      fx, fy, fz, mx, my, mz;
+  Action     *action;
+  std::string texte;
   
   std::list <EF_Noeud *> *noeuds;
   
@@ -323,11 +316,8 @@ EF_gtk_charge_noeud_ajouter (GtkButton *button,
                               m_f (mx, FLOTTANT_UTILISATEUR),
                               m_f (my, FLOTTANT_UTILISATEUR),
                               m_f (mz, FLOTTANT_UTILISATEUR),
-                              texte),
-      ,
-      free (texte); )
-  
-  free (texte);
+                              &texte),
+      , )
   
   gtk_widget_destroy (UI_CHNO.window);
   
@@ -350,7 +340,7 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
 {
   double        fx, fy, fz, mx, my, mz;
   Action       *action;
-  gchar        *texte;
+  std::string   texte;
   Charge_Noeud *charge_d;
   
   std::list <EF_Noeud *> *noeuds;
@@ -374,8 +364,7 @@ EF_gtk_charge_noeud_editer (GtkButton *button,
        )
   
   // Création de la nouvelle charge nodale
-  free (UI_CHNO.charge->nom);
-  UI_CHNO.charge->nom = texte;
+  UI_CHNO.charge->nom.assign (texte);
   charge_d = (Charge_Noeud *) UI_CHNO.charge->data;
   charge_d->fx = m_f (fx, FLOTTANT_UTILISATEUR);
   charge_d->fy = m_f (fy, FLOTTANT_UTILISATEUR);
@@ -467,53 +456,59 @@ EF_gtk_charge_noeud (Projet *p,
   if (charge != NULL)
   {
     Charge_Noeud *charge_d;
-    char          tmp[30], *tmp2;
+    std::string   tmp;
     
     charge_d = (Charge_Noeud *) charge->data;
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                        gtk_builder_get_object (UI_CHNO.builder,
                                      "EF_charge_noeud_textview_description"))),
-                              charge->nom,
+                              charge->nom.c_str (),
                               -1);
-    conv_f_c (charge_d->fx, tmp, DECIMAL_FORCE);
+    conv_f_c (charge_d->fx, &tmp, DECIMAL_FORCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_fx")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (charge_d->fy, tmp, DECIMAL_FORCE);
+    conv_f_c (charge_d->fy, &tmp, DECIMAL_FORCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_fy")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (charge_d->fz, tmp, DECIMAL_FORCE);
+    conv_f_c (charge_d->fz, &tmp, DECIMAL_FORCE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_fz")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (charge_d->mx, tmp, DECIMAL_MOMENT);
+    conv_f_c (charge_d->mx, &tmp, DECIMAL_MOMENT);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_mx")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (charge_d->my, tmp, DECIMAL_MOMENT);
+    conv_f_c (charge_d->my, &tmp, DECIMAL_MOMENT);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_my")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    conv_f_c (charge_d->mz, tmp, DECIMAL_MOMENT);
+    conv_f_c (charge_d->mz, &tmp, DECIMAL_MOMENT);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                 UI_CHNO.builder, "EF_charge_noeud_buffer_mz")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
-    BUG (tmp2 = common_selection_noeuds_en_texte (&charge_d->noeuds), false)
+    tmp = common_selection_noeuds_en_texte (&charge_d->noeuds);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_CHNO.builder, "EF_charge_noeud_buffer_noeuds")),
-                              tmp2,
+                              tmp.c_str (),
                               -1);
-    free (tmp2);
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_CHNO.builder,
+                                           "EF_charge_noeud_button_add_edit")),
+                          gettext ("_Modifier"));
+    g_signal_connect (gtk_builder_get_object (UI_CHNO.builder,
+                                            "EF_charge_noeud_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (EF_gtk_charge_noeud_editer),
+                      p);
   }
-  
-  if (charge == NULL)
+  else
   {
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_CHNO.builder,
                                            "EF_charge_noeud_button_add_edit")),
@@ -522,17 +517,6 @@ EF_gtk_charge_noeud (Projet *p,
                                             "EF_charge_noeud_button_add_edit"),
                       "clicked",
                       G_CALLBACK (EF_gtk_charge_noeud_ajouter),
-                      p);
-  }
-  else
-  {
-    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_CHNO.builder,
-                                           "EF_charge_noeud_button_add_edit")),
-                          gettext ("_Modifier"));
-    g_signal_connect (gtk_builder_get_object (UI_CHNO.builder,
-                                            "EF_charge_noeud_button_add_edit"),
-                      "clicked",
-                      G_CALLBACK (EF_gtk_charge_noeud_editer),
                       p);
   }
   
@@ -551,8 +535,5 @@ EF_gtk_charge_noeud (Projet *p,
   
   return true;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -18,12 +18,9 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
 #include <gtk/gtk.h>
-#include <math.h>
-#include <string.h>
+
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -61,12 +58,12 @@ GTK_WINDOW_CLOSE (_1993_1_1, materiaux);
  *     - en cas d'erreur d'allocation mémoire.
  */
 bool
-_1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
-                                          char  **nom,
-                                          double *fy,
-                                          double *fu,
-                                          double *e,
-                                          double *nu)
+_1993_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
+                                          std::string *nom,
+                                          double      *fy,
+                                          double      *fu,
+                                          double      *e,
+                                          double      *nu)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -160,8 +157,8 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   
   if (UI_ACI.materiau == NULL)
   {
-    if ((strcmp (*nom, "") == 0) ||
-        (EF_materiaux_cherche_nom (p, *nom, false)))
+    if ((nom->length () == 0) ||
+        (EF_materiaux_cherche_nom (p, nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
       ok = false;
@@ -171,9 +168,8 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
     }
   }
-  else if ((strcmp (*nom, "") == 0) || 
-    ((strcmp (UI_ACI.materiau->nom, *nom) != 0) &&
-     (EF_materiaux_cherche_nom (p, *nom, false))))
+  else if ((UI_ACI.materiau->nom.compare (*nom) != 0) &&
+     (EF_materiaux_cherche_nom (p, nom, false)))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
     ok = false;
@@ -181,11 +177,6 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
-  }
-  
-  if (!ok)
-  {
-    free (*nom);
   }
   
   return ok;
@@ -207,8 +198,8 @@ void
 _1993_1_1_gtk_materiaux_check (GtkWidget *object,
                                Projet    *p)
 {
-  char  *nom;
-  double fy, fu, e, nu;
+  std::string nom;
+  double      fy, fu, e, nu;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_ACI.builder,
@@ -227,7 +218,6 @@ _1993_1_1_gtk_materiaux_check (GtkWidget *object,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                        UI_ACI.builder, "_1993_1_1_materiaux_button_add_edit")),
                               TRUE);
-    free (nom);
   }
   
   return;
@@ -249,7 +239,7 @@ void
 _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
                                          Projet    *p)
 {
-  char        *nom;
+  std::string  nom;
   double       fy, fu, e, nu;
   EF_Materiau *materiau;
   
@@ -267,12 +257,10 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   // Création de la nouvelle charge ponctuelle au noeud
   BUG (materiau = _1993_1_1_materiaux_ajout (
          p,
-         nom,
+         &nom,
          m_f (fy / 1000000., FLOTTANT_UTILISATEUR),
          m_f (fu / 1000000., FLOTTANT_UTILISATEUR)),
-      ,
-      free (nom); )
-  free (nom);
+      , )
   BUG (_1993_1_1_materiaux_modif (p,
                                   materiau,
                                   NULL,
@@ -302,8 +290,8 @@ void
 _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
                                           Projet    *p)
 {
-  char  *nom;
-  double fy, fu, e, nu;
+  std::string nom;
+  double      fy, fu, e, nu;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_ACI.builder,
@@ -318,15 +306,12 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   
   BUG (_1993_1_1_materiaux_modif (p,
                                   UI_ACI.materiau,
-                                  nom,
+                                  &nom,
                                   m_f (fy, FLOTTANT_UTILISATEUR),
                                   m_f (fu, FLOTTANT_UTILISATEUR),
                                   m_f (e, FLOTTANT_UTILISATEUR),
                                   m_f (nu, FLOTTANT_UTILISATEUR)),
-       ,
-       free (nom); )
-  
-  free (nom);
+       , )
   
   gtk_widget_destroy (UI_ACI.window);
   
@@ -353,7 +338,7 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   gboolean        check = gtk_check_menu_item_get_active(checkmenuitem);
   EF_Materiau    *mat;
   Materiau_Acier *acier_data;
-  char            tmp[30];
+  std::string     tmp;
   
   BUGPARAM (p, "%p", p, )
   
@@ -374,11 +359,11 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (acier_data->fu) / 1000000., acier_data->fu.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                     builder, "_1993_1_1_materiaux_buffer_fu")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     
@@ -395,11 +380,11 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (acier_data->e) / 1000000000., acier_data->e.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                      builder, "_1993_1_1_materiaux_buffer_e")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -414,10 +399,10 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   {
     if (check && mat)
     {
-      conv_f_c (acier_data->nu, tmp, DECIMAL_SANS_UNITE);
+      conv_f_c (acier_data->nu, &tmp, DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                     builder, "_1993_1_1_materiaux_buffer_nu")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -512,7 +497,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   }
   else
   {
-    gchar tmp[30];
+    std::string tmp;
     
     BUGCRIT (materiau->type == MATERIAU_ACIER,
              false,
@@ -525,21 +510,21 @@ _1993_1_1_gtk_materiaux (Projet      *p,
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                  gtk_builder_get_object (UI_ACI.builder,
                                          "_1993_1_1_materiaux_textview_nom"))),
-                              materiau->nom,
+                              materiau->nom.c_str (),
                               -1);
     conv_f_c (m_f (m_g (acier_data->fy) / 1000000., acier_data->fy.type),
-              tmp,
+              &tmp,
               DECIMAL_CONTRAINTE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_ACI.builder, "_1993_1_1_materiaux_buffer_fy")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
     conv_f_c (m_f (m_g (acier_data->fu) / 1000000., acier_data->fu.type),
-              tmp,
+              &tmp,
               DECIMAL_CONTRAINTE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_ACI.builder, "_1993_1_1_materiaux_buffer_fu")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
     
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_ACI.builder,
@@ -591,8 +576,5 @@ _1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
   
   BUG (_1993_1_1_gtk_materiaux (p, NULL), )
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

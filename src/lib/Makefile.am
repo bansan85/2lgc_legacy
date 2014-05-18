@@ -13,7 +13,7 @@ libeurocodes_la_LIBADD		=	@BLAS_LIBS@ -lgfortran @XML_LIBS@
 if ENABLE_GTK
 libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GTK_CFLAGS@
 else
-libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GLIB_CFLAGS@
+libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS)
 endif
 libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
@@ -40,15 +40,15 @@ libeurocodes_la_SOURCES 	=	1990/1990_action.cpp \
 							common/common_ville.cpp \
 							EF/EF_appuis.cpp \
 							EF/EF_calculs.cpp \
-							EF/EF_charge.cpp \
 							EF/EF_charge_barre_ponctuelle.cpp \
 							EF/EF_charge_barre_repartie_uniforme.cpp \
+							EF/EF_charge.cpp \
 							EF/EF_charge_noeud.cpp \
 							EF/EF_materiaux.cpp \
 							EF/EF_noeuds.cpp \
 							EF/EF_relachement.cpp \
-							EF/EF_rigidite.cpp \
 							EF/EF_resultat.cpp \
+							EF/EF_rigidite.cpp \
 							EF/EF_sections.cpp \
 							EF/EF_verif.cpp
 
@@ -72,15 +72,15 @@ libeurocodes_la_HEADERS =	1990/1990_action.hpp \
 							common/common_ville.hpp \
 							EF/EF_appuis.hpp \
 							EF/EF_calculs.hpp \
-							EF/EF_charge.hpp \
 							EF/EF_charge_barre_ponctuelle.hpp \
 							EF/EF_charge_barre_repartie_uniforme.hpp \
+							EF/EF_charge.hpp \
 							EF/EF_charge_noeud.hpp \
 							EF/EF_materiaux.hpp \
 							EF/EF_noeuds.hpp \
 							EF/EF_relachement.hpp \
-							EF/EF_rigidite.hpp \
 							EF/EF_resultat.hpp \
+							EF/EF_rigidite.hpp \
 							EF/EF_sections.hpp \
 							EF/EF_verif.hpp
 
@@ -93,14 +93,14 @@ libeurocodes_gtk_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -
 libeurocodes_gtk_la_CPPFLAGS	=	@XML_CPPFLAGS@ @GTK_CFLAGS@
 libeurocodes_gtk_ladir = $(includedir)/2lgc
 
-libeurocodes_gtk_la_SOURCES 	=	gtk/common_m3d.cpp \
-							gtk/1990_gtk_groupes.cpp \
+libeurocodes_gtk_la_SOURCES 	=	gtk/1990_gtk_groupes.cpp \
 							gtk/1990_gtk_groupes_options.cpp \
 							gtk/1990_gtk_actions.cpp \
 							gtk/1992_1_1_gtk_materiaux.cpp \
 							gtk/1993_1_1_gtk_materiaux.cpp \
 							gtk/common_gtk.cpp \
 							gtk/common_gtk_informations.cpp \
+							gtk/common_m3d.cpp \
 							gtk/ressources.cpp \
 							gtk/EF_gtk_charge_noeud.cpp \
 							gtk/EF_gtk_charge_barre_ponctuelle.cpp \
@@ -121,14 +121,14 @@ libeurocodes_gtk_la_SOURCES 	=	gtk/common_m3d.cpp \
 							gtk/EF_gtk_relachement.cpp \
 							gtk/EF_gtk_resultats.cpp
 
-libeurocodes_gtk_la_HEADERS =	gtk/common_m3d.hpp \
-							gtk/1990_gtk_groupes.hpp \
+libeurocodes_gtk_la_HEADERS =	gtk/1990_gtk_groupes.hpp \
 							gtk/1990_gtk_groupes_options.hpp \
 							gtk/1990_gtk_actions.hpp \
 							gtk/1992_1_1_gtk_materiaux.hpp \
 							gtk/1993_1_1_gtk_materiaux.hpp \
 							gtk/common_gtk.hpp \
 							gtk/common_gtk_informations.hpp \
+							gtk/common_m3d.hpp \
 							gtk/ressources.hpp \
 							gtk/EF_gtk_charge_noeud.hpp \
 							gtk/EF_gtk_charge_barre_ponctuelle.hpp \
@@ -164,6 +164,3 @@ CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) $(libeurocodes_gtk_la_SOURCES) &> ../../cppcheck.log
 	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
-
-kernel_sparse :
-	find . -name "*.c" -exec sparse {} @GTK_CFLAGS@ $(DEFAULT_INCLUDES) \; &> ../../sparse.log

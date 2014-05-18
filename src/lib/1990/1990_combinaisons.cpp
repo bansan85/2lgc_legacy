@@ -17,12 +17,11 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
 
 #include <memory>
 #include <algorithm>
 #include <iterator>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"

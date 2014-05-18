@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-05-14 22:14+0200\n"
-"PO-Revision-Date: 2014-05-14 14:20+0100\n"
+"POT-Creation-Date: 2014-05-17 13:26+0200\n"
+"PO-Revision-Date: 2014-05-18 22:00+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -99,9 +99,6 @@ msgstr "ELS permanent"
 #, c-format
 msgid "Le type de combinaison %d est inconnu.\n"
 msgstr "Le type de combinaison %d est inconnu.\n"
-
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
 
 msgid ""
 "Le projet ne possède pas de niveaux de groupes permettant de regrouper "
@@ -314,112 +311,60 @@ msgid "f<sub>cm</sub> : %s MPa"
 msgstr "f<sub>cm</sub> : %s MPa"
 
 #, c-format
-msgid "%s, f<sub>cm</sub> : %s MPa"
-msgstr "%s, f<sub>cm</sub> : %s MPa"
-
-#, c-format
 msgid "f<sub>ctm</sub> : %s MPa"
 msgstr "f<sub>ctm</sub> : %s MPa"
-
-#, c-format
-msgid "%s, f<sub>ctm</sub> : %s MPa"
-msgstr "%s, f<sub>ctm</sub> : %s MPa"
 
 #, c-format
 msgid "f<sub>ctk,0.05</sub> : %s MPa"
 msgstr "f<sub>ctk,0.05</sub> : %s MPa"
 
 #, c-format
-msgid "%s, f<sub>ctk,0.05</sub> : %s MPa"
-msgstr "%s, f<sub>ctk,0.05</sub> : %s MPa"
-
-#, c-format
 msgid "f<sub>ctk,0.95</sub> : %s MPa"
 msgstr "f<sub>ctk,0.95</sub> : %s MPa"
-
-#, c-format
-msgid "%s, f<sub>ctk,0.95</sub> : %s MPa"
-msgstr "%s, f<sub>ctk,0.95</sub> : %s MPa"
 
 #, c-format
 msgid "E<sub>cm</sub> : %s MPa"
 msgstr "E<sub>cm</sub> : %s MPa"
 
 #, c-format
-msgid "%s, E<sub>cm</sub> : %s MPa"
-msgstr "%s, E<sub>cm</sub> : %s MPa"
-
-#, c-format
 msgid "&#949;<sub>c1</sub> : %s ‰"
 msgstr "&#949;<sub>c1</sub> : %s ‰"
-
-#, c-format
-msgid "%s, &#949;<sub>c1</sub> : %s ‰"
-msgstr "%s, &#949;<sub>c1</sub> : %s ‰"
 
 #, c-format
 msgid "&#949;<sub>cu1</sub> : %s ‰"
 msgstr "&#949;<sub>cu1</sub> : %s ‰"
 
 #, c-format
-msgid "%s, &#949;<sub>cu1</sub> : %s ‰"
-msgstr "%s, &#949;<sub>cu1</sub> : %s ‰"
-
-#, c-format
 msgid "&#949;<sub>c2</sub> : %s ‰"
 msgstr "&#949;<sub>c2</sub> : %s ‰"
-
-#, c-format
-msgid "%s, &#949;<sub>c2</sub> : %s ‰"
-msgstr "%s, &#949;<sub>c2</sub> : %s ‰"
 
 #, c-format
 msgid "&#949;<sub>cu2</sub> : %s ‰"
 msgstr "&#949;<sub>cu2</sub> : %s ‰"
 
 #, c-format
-msgid "%s, &#949;<sub>cu2</sub> : %s ‰"
-msgstr "%s, &#949;<sub>cu2</sub> : %s ‰"
-
-#, c-format
 msgid "&#949;<sub>c3</sub> : %s ‰"
 msgstr "&#949;<sub>c3</sub> : %s ‰"
-
-#, c-format
-msgid "%s, &#949;<sub>c3</sub> : %s ‰"
-msgstr "%s, &#949;<sub>c3</sub> : %s ‰"
 
 #, c-format
 msgid "&#949;<sub>cu3</sub> : %s ‰"
 msgstr "&#949;<sub>cu3</sub> : %s ‰"
 
 #, c-format
-msgid "%s, &#949;<sub>cu3</sub> : %s ‰"
-msgstr "%s, &#949;<sub>cu3</sub> : %s ‰"
-
-#, c-format
 msgid "n : %s"
 msgstr "n : %s"
-
-#, c-format
-msgid "%s, n : %s"
-msgstr "%s, n : %s"
 
 #, c-format
 msgid "&#957; : %s"
 msgstr "&#957; : %s"
 
 #, c-format
-msgid "%s, &#957; : %s"
-msgstr "%s, &#957; : %s"
-
-#, c-format
 msgid "f<sub>ck</sub> : %s MPa"
 msgstr "f<sub>ck</sub> : %s MPa"
 
 #, c-format
-msgid "f<sub>ck</sub> : %s MPa avec %s"
-msgstr "f<sub>ck</sub> : %s MPa avec %s"
+msgid "f<sub>ck</sub> : %s MPa avec "
+msgstr "f<sub>ck</sub> : %s MPa avec "
 
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
@@ -462,6 +407,9 @@ msgstr ""
 
 msgid "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
 msgstr "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
+
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
 
 #, c-format
 msgid "Relachement %d inconnu."
@@ -742,9 +690,8 @@ msgstr "charge"
 msgid "charges"
 msgstr "charges"
 
-#, c-format
-msgid "et ces dépendances (%s)"
-msgstr "et ces dépendances (%s)"
+msgid "et ces dépendances"
+msgstr "et ces dépendances"
 
 #, c-format
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
@@ -793,8 +740,8 @@ msgid "La hauteur du dessin ne peut être nulle.\n"
 msgstr "La hauteur du dessin ne peut être nulle.\n"
 
 #, c-format
-msgid "%sde %.*lfm à %.*lfm : "
-msgstr "%sde %.*lfm à %.*lfm : "
+msgid "de %.*lfm à %.*lfm : "
+msgstr "de %.*lfm à %.*lfm : "
 
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
@@ -983,6 +930,14 @@ msgstr ""
 "Le début %f et la fin %f de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
+#, c-format
+msgid ""
+"%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/"
+"m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m"
+msgstr ""
+"%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/"
+"m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m"
+
 msgid "Barre"
 msgstr "Barre"
 
@@ -1059,6 +1014,14 @@ msgstr ""
 "Le début %f et la fin %f de la charge répartie uniformément sont incorrecte "
 "avec la longueur de la barre qui est de %f m.\n"
 
+#, c-format
+msgid ""
+"%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s "
+"N.m"
+msgstr ""
+"%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s "
+"N.m"
+
 msgid "Noeud"
 msgstr "Noeud"
 
@@ -1075,11 +1038,8 @@ msgid "Structure en un seul bloc"
 msgstr "Structure en un seul bloc"
 
 #, c-format
-msgid "%s%sBloc %d :"
-msgstr "%s%sBloc %d :"
-
-msgid "Structure bloquée en déplacement"
-msgstr "Structure bloquée en déplacement"
+msgid "Bloc %d :"
+msgstr "Bloc %d :"
 
 msgid "Aucun appui ne permet de bloquer le déplacement vers x."
 msgstr "Aucun appui ne permet de bloquer le déplacement vers x."
@@ -1110,14 +1070,6 @@ msgstr ""
 msgid "Les noeuds %d et %d ont les mêmes coordonnées."
 msgstr "Les noeuds %d et %d ont les mêmes coordonnées."
 
-#, c-format
-msgid ""
-"%s\n"
-"Les noeuds %d et %d ont les mêmes coordonnées."
-msgstr ""
-"%s\n"
-"Les noeuds %d et %d ont les mêmes coordonnées."
-
 msgid ""
 "Vérification des barres :\n"
 "\t- Longueur nulle."
@@ -1130,14 +1082,6 @@ msgid "La longueur de la barre %d est nulle."
 msgstr "La longueur de la barre %d est nulle."
 
 #, c-format
-msgid ""
-"%s\n"
-"La longueur de la barre %d est nulle."
-msgstr ""
-"%s\n"
-"La longueur de la barre %d est nulle."
-
-#, c-format
 msgid "La position de la charge ponctuelle %f est incorrecte.\n"
 msgstr "La position de la charge ponctuelle %f est incorrecte.\n"
 
@@ -1148,6 +1092,14 @@ msgid ""
 msgstr ""
 "La position de la charge ponctuelle %f est incorrecte.\n"
 "La longueur de la barre %d est de %f m.\n"
+
+#, c-format
+msgid ""
+"%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : "
+"%s N.m, Mz : %s N.m"
+msgstr ""
+"%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : "
+"%s N.m, Mz : %s N.m"
 
 msgid "position"
 msgstr "position"
@@ -1262,11 +1214,19 @@ msgstr "La section doit être de type personnalisée.\n"
 msgid "Section '%s' introuvable.\n"
 msgstr "Section '%s' introuvable.\n"
 
+#, c-format
+msgid "%s : %s m, %s : %s m"
+msgstr "%s : %s m, %s : %s m"
+
 msgid "Largeur"
 msgstr "Largeur"
 
 msgid "Hauteur"
 msgstr "Hauteur"
+
+#, c-format
+msgid "%s : %s m, %s : %s m, %s : %s m, %s : %s m"
+msgstr "%s : %s m, %s : %s m, %s : %s m, %s : %s m"
 
 msgid "Largeur table"
 msgstr "Largeur table"
@@ -1279,6 +1239,10 @@ msgstr "Largeur retombée"
 
 msgid "Hauteur retombée"
 msgstr "Hauteur retombée"
+
+#, c-format
+msgid "%s : %s m"
+msgstr "%s : %s m"
 
 msgid "Coté"
 msgstr "Coté"
@@ -1324,6 +1288,22 @@ msgstr "Type d'élément %d inconnu.\n"
 
 msgid "Le matériau n'est pas en acier.\n"
 msgstr "Le matériau n'est pas en acier.\n"
+
+#, c-format
+msgid "f<sub>y</sub> : %s MPa"
+msgstr "f<sub>y</sub> : %s MPa"
+
+#, c-format
+msgid "f<sub>u</sub> : %s MPa"
+msgstr "f<sub>u</sub> : %s MPa"
+
+#, c-format
+msgid "E : %s MPa"
+msgstr "E : %s MPa"
+
+#, c-format
+msgid "%s, &#957; : %s"
+msgstr "%s, &#957; : %s"
 
 #, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
@@ -1806,14 +1786,64 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
+#~ msgid "Structure bloquée en déplacement"
+#~ msgstr "Structure bloquée en déplacement"
+
+#~ msgid ""
+#~ "%s\n"
+#~ "Les noeuds %d et %d ont les mêmes coordonnées."
+#~ msgstr ""
+#~ "%s\n"
+#~ "Les noeuds %d et %d ont les mêmes coordonnées."
+
+#~ msgid ""
+#~ "%s\n"
+#~ "La longueur de la barre %d est nulle."
+#~ msgstr ""
+#~ "%s\n"
+#~ "La longueur de la barre %d est nulle."
+
+#~ msgid "%s, f<sub>cm</sub> : %s MPa"
+#~ msgstr "%s, f<sub>cm</sub> : %s MPa"
+
+#~ msgid "%s, f<sub>ctm</sub> : %s MPa"
+#~ msgstr "%s, f<sub>ctm</sub> : %s MPa"
+
+#~ msgid "%s, f<sub>ctk,0.05</sub> : %s MPa"
+#~ msgstr "%s, f<sub>ctk,0.05</sub> : %s MPa"
+
+#~ msgid "%s, f<sub>ctk,0.95</sub> : %s MPa"
+#~ msgstr "%s, f<sub>ctk,0.95</sub> : %s MPa"
+
+#~ msgid "%s, E<sub>cm</sub> : %s MPa"
+#~ msgstr "%s, E<sub>cm</sub> : %s MPa"
+
+#~ msgid "%s, &#949;<sub>c1</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>c1</sub> : %s ‰"
+
+#~ msgid "%s, &#949;<sub>cu1</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>cu1</sub> : %s ‰"
+
+#~ msgid "%s, &#949;<sub>c2</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>c2</sub> : %s ‰"
+
+#~ msgid "%s, &#949;<sub>cu2</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>cu2</sub> : %s ‰"
+
+#~ msgid "%s, &#949;<sub>c3</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>c3</sub> : %s ‰"
+
+#~ msgid "%s, &#949;<sub>cu3</sub> : %s ‰"
+#~ msgstr "%s, &#949;<sub>cu3</sub> : %s ‰"
+
+#~ msgid "et ces dépendances (%s)"
+#~ msgstr "et ces dépendances (%s)"
+
 #~ msgid "Le type %d de la liste est inconnu.\n"
 #~ msgstr "Le type %d de la liste est inconnu.\n"
 
 #~ msgid "Impossible de trouver le niveau précédent le niveau.\n"
 #~ msgstr "Impossible de trouver le niveau précédent le niveau.\n"
-
-#~ msgid "et ces dépendances."
-#~ msgstr "et ces dépendances."
 
 #~ msgid "Numéro"
 #~ msgstr "Numéro"

@@ -22,15 +22,11 @@
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
 #include "common_text.hpp"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include <wchar.h>
 
+#include <string.h>
+#include <locale>
+#include <cmath>
+#include <cstdarg>
 
 /**
  * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la
@@ -91,6 +87,44 @@ show_help ()
 
 
 /**
+ * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais
+ *        en version std::string. Honteusement volé de
+ *        http://stackoverflow.com/questions/2342162#3742999.
+ * \param fmt : le texte à formater,
+ * \param ... : les divers paramètres.
+ * \return Le texte formaté en format std::string.
+ */
+std::string
+format (const std::string fmt,
+        ...)
+{
+  int         size = 1024;
+  bool        b = false;
+  va_list     marker;
+  std::string s;
+  
+  while (!b)
+  {
+    int         n;
+    
+    s.resize (size);
+    va_start (marker, fmt);
+    n = vsnprintf ((char *) s.c_str (), size, fmt.c_str (), marker);
+    va_end (marker);
+    if ((n > 0) && ((b = (n < size)) == true))
+    {
+      s.resize (n);
+    }
+    else
+    {
+      size = size * 2;
+    }
+  }
+  return s;
+}
+
+
+/**
  * \brief Sur la base d'une chaîne de caractères, renvoie un nombre flottant
  *        compris entre les valeurs val_min et val_max. S'il ne contient pas de
  *        nombre ou hors domaine, la valeur renvoyée est NAN.
@@ -119,10 +153,11 @@ common_text_str_to_double (char    *texte,
   BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
            NAN,
            (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (textebis = g_strdup (texte),
+  BUGCRIT (textebis = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
            NAN,
            (gettext ("Erreur d'allocation mémoire.\n"));
              free (fake); )
+  strcpy (textebis, texte);
   
   // On remplace par la bonne décimale.
   locale_conv = localeconv ();
@@ -303,129 +338,70 @@ strcasestr_internal (const wchar_t *haystack,
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
-// coverity[+alloc]
-char *
+std::string
 common_text_dependances (std::list <EF_Noeud *> *liste_noeuds,
                          std::list <EF_Barre *> *liste_barres,
                          std::list <Charge   *> *liste_charges,
                          Projet                 *p)
 {
-  char *retour = NULL;
-  char *tmp;
+  std::string retour, tmp;
   
   if (!liste_noeuds->empty ())
   {
-    BUG (tmp = common_selection_noeuds_en_texte (liste_noeuds), NULL)
+    tmp = common_selection_noeuds_en_texte (liste_noeuds);
     if (std::next (liste_noeuds->begin ()) == liste_noeuds->end ())
     {
-      retour = g_strdup_printf ("%s : %s", gettext ("noeud"), tmp);
+      retour = std::string (gettext ("noeud")) + " : " + tmp;
     }
     else
     {
-      retour = g_strdup_printf ("%s : %s", gettext ("noeuds"), tmp);
+      retour = std::string (gettext ("noeuds")) + " : " + tmp;
     }
-    BUGCRIT (retour,
-             NULL,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               free (tmp); )
-    free(tmp);
-  }
-  if (!liste_barres->empty ())
-  {
-    BUG (tmp = common_selection_barres_en_texte (liste_barres), NULL)
-    if (retour == NULL)
-    {
-      if (std::next (liste_barres->begin ()) == liste_barres->end ())
-      {
-        retour = g_strdup_printf ("%s : %s", gettext ("barre"), tmp);
-      }
-      else
-      {
-        retour = g_strdup_printf ("%s : %s", gettext ("barres"), tmp);
-      }
-      BUGCRIT (retour, 
-               NULL, 
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp); )
-    }
-    else
-    {
-      char *tmp2;
-      
-      tmp2 = retour;
-      if (std::next (liste_barres->begin ()) == liste_barres->end ())
-      {
-        retour = g_strdup_printf ("%s, %s : %s", tmp2, gettext ("barre"), tmp);
-      }
-      else
-      {
-        retour = g_strdup_printf ("%s, %s : %s",
-                                  tmp2,
-                                  gettext ("barres"),
-                                  tmp);
-      }
-      BUGCRIT (retour,
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (tmp2); )
-      free (tmp2);
-    }
-    free (tmp);
-  }
-  if (liste_charges != NULL)
-  {
-    BUG (tmp = common_selection_charges_en_texte (liste_charges, p), NULL)
-    if (retour == NULL)
-    {
-      if (liste_charges->size () == 1)
-      {
-        retour = g_strdup_printf ("%s : %s", gettext ("charge"), tmp);
-      }
-      else
-      {
-        retour = g_strdup_printf ("%s : %s", gettext ("charges"), tmp);
-      }
-      BUGCRIT (retour,
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp); )
-    }
-    else
-    {
-      char *tmp2;
-      
-      tmp2 = retour;
-      if (liste_charges->size () == 1)
-      {
-        retour = g_strdup_printf ("%s, %s : %s",
-                                  tmp2,
-                                  gettext ("charge"),
-                                  tmp);
-      }
-      else
-      {
-        retour = g_strdup_printf ("%s, %s : %s",
-                                  tmp2,
-                                  gettext ("charges"),
-                                  tmp);
-      }
-      BUGCRIT (retour,
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n"));
-                 free (tmp);
-                 free (tmp2); )
-      free (tmp2);
-    }
-    free (tmp);
   }
   
-  tmp = retour;
-  BUGCRIT (retour = g_strdup_printf (gettext ("et ces dépendances (%s)"), tmp),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (tmp); )
-  free (tmp);
+  if (!liste_barres->empty ())
+  {
+    tmp = common_selection_barres_en_texte (liste_barres);
+    
+    if (retour != "")
+    {
+      retour += ", ";
+    }
+    
+    if (std::next (liste_barres->begin ()) == liste_barres->end ())
+    {
+      retour += std::string (gettext ("barre"));
+    }
+    else
+    {
+      retour += std::string (gettext ("barres"));
+    }
+    
+    retour += " : " + tmp;
+  }
+  
+  if (liste_charges != NULL)
+  {
+    tmp = common_selection_charges_en_texte (liste_charges, p);
+    
+    if (retour != "")
+    {
+      retour += ", ";
+    }
+    
+    if (std::next (liste_charges->begin ()) == liste_charges->end ())
+    {
+      retour += std::string (gettext ("charge"));
+    }
+    else
+    {
+      retour += std::string (gettext ("charges"));
+    }
+    
+    retour += " : " + tmp;
+  }
+  
+  retour = std::string (gettext ("et ces dépendances")) + " (" + tmp + ")";
   
   return retour;
 }
@@ -440,7 +416,6 @@ common_text_dependances (std::list <EF_Noeud *> *liste_noeuds,
  *     - fichier == NULL,
  *     - Erreur d'allocation mémoire.
  */
-// coverity[+alloc]
 wchar_t *
 common_text_get_line (FILE *fichier)
 {
@@ -463,7 +438,8 @@ common_text_get_line (FILE *fichier)
     ligne_tmp = retour;
     if (ligne_tmp == NULL)
     {
-      BUGCRIT (retour = (wchar_t *) malloc (sizeof (wchar_t) * (wcslen (buffer) + 1)),
+      BUGCRIT (retour = (wchar_t *) malloc (sizeof (wchar_t) *
+                                                        (wcslen (buffer) + 1)),
                NULL,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (buffer); )
@@ -503,7 +479,6 @@ common_text_get_line (FILE *fichier)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
-// coverity[+alloc]
 char *
 common_text_wcstostr_dup (const wchar_t *texte)
 {
@@ -533,7 +508,6 @@ common_text_wcstostr_dup (const wchar_t *texte)
  *   Échec : NULL :
  *     - Erreur d'allocation mémoire.
  */
-// coverity[+alloc]
 wchar_t *
 common_text_strtowcs_dup (const char *texte)
 {
@@ -552,5 +526,6 @@ common_text_strtowcs_dup (const char *texte)
   
   return tmp;
 }
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

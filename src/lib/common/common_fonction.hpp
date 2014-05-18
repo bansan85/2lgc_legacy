@@ -23,34 +23,34 @@
 #include "common_projet.hpp"
 
 
-bool     common_fonction_scinde_troncon       (Fonction    *fonction,
-                                               double       coupure)
+bool   common_fonction_scinde_troncon       (Fonction *fonction,
+                                             double    coupure)
                                        __attribute__((__warn_unused_result__));
 
-bool     common_fonction_ajout_poly           (Fonction    *fonction,
-                                               double       debut_troncon,
-                                               double       fin_troncon,
-                                               double       coef_0,
-                                               double       coef_x,
-                                               double       coef_x2,
-                                               double       coef_x3,
-                                               double       coef_x4,
-                                               double       coef_x5,
-                                               double       coef_x6,
-                                               double       translate)
+bool   common_fonction_ajout_poly           (Fonction *fonction,
+                                             double    debut_troncon,
+                                             double    fin_troncon,
+                                             double    coef_0,
+                                             double    coef_x,
+                                             double    coef_x2,
+                                             double    coef_x3,
+                                             double    coef_x4,
+                                             double    coef_x5,
+                                             double    coef_x6,
+                                             double    translate)
                                        __attribute__((__warn_unused_result__));
 
-bool     common_fonction_ajout_fonction       (Fonction    *fonction,
-                                               Fonction *fonction_a_ajouter,
-                                               double       multi)
+bool   common_fonction_ajout_fonction       (Fonction *fonction,
+                                             Fonction *fonction_a_ajouter,
+                                             double    multi)
                                        __attribute__((__warn_unused_result__));
 
-double   common_fonction_y                    (Fonction    *fonction,
-                                               double       x_,
-                                               int8_t       position)
+double common_fonction_y                    (Fonction *fonction,
+                                             double    x_,
+                                             int8_t    position)
                                        __attribute__((__warn_unused_result__));
 
-bool     common_fonction_affiche              (Fonction    *fonction)
+bool   common_fonction_affiche              (Fonction *fonction)
                                        __attribute__((__warn_unused_result__));
 
 #ifdef ENABLE_GTK
@@ -61,9 +61,9 @@ GdkPixbuf *common_fonction_dessin (std::list <Fonction *> *fonctions,
                                        __attribute__((__warn_unused_result__));
 #endif
 
-char *common_fonction_affiche_caract          (Fonction    *fonction,
-                                               uint8_t      decimales_x,
-                                               uint8_t      decimales_y)
+std::string common_fonction_affiche_caract (Fonction *fonction,
+                                            uint8_t   decimales_x,
+                                            uint8_t   decimales_y)
                                        __attribute__((__warn_unused_result__));
 
 bool  common_fonction_conversion_combinaisons (
@@ -72,10 +72,10 @@ bool  common_fonction_conversion_combinaisons (
         std::list <std::list <Ponderation *> *> **liste)
                                        __attribute__((__warn_unused_result__));
 
-char *common_fonction_renvoie                 (
-        Fonction                                *fonction,
-        std::list <std::list <Ponderation *> *> *index,
-        int8_t                                   decimales)
+std::string common_fonction_renvoie (
+              Fonction                                *fonction,
+              std::list <std::list <Ponderation *> *> *index,
+              int8_t                                   decimales)
                                        __attribute__((__warn_unused_result__));
 
 bool  common_fonction_renvoie_enveloppe       (

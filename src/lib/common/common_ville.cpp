@@ -17,12 +17,8 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <string.h>
-#include <wchar.h>
 
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -52,12 +48,12 @@ common_ville_init (Projet *p)
   
   BUGPARAM (p, "%p", p, false)
   
-  p->parametres.adresse.departement = NULL;
+  p->parametres.adresse.departement.clear ();
   p->parametres.adresse.commune = 0;
-  p->parametres.adresse.destinataire = NULL;
-  p->parametres.adresse.adresse = NULL;
+  p->parametres.adresse.destinataire.clear ();
+  p->parametres.adresse.adresse.clear ();
   p->parametres.adresse.code_postal = 0;
-  p->parametres.adresse.ville = NULL;
+  p->parametres.adresse.ville.clear ();
   
   // On initialise au moins à une valeur par défaut
   p->parametres.neige = NEIGE_A1;
@@ -470,19 +466,12 @@ common_ville_set (Projet  *p,
       // Ville et code postal.
       if (!graphique_seul)
       {
-        free (p->parametres.adresse.departement);
-        BUG (p->parametres.adresse.departement =
-                                        common_text_wcstostr_dup (departement),
-             false,
-             free (ligne);
-               fclose (villes); )
+        p->parametres.adresse.departement =
+                          std::string (common_text_wcstostr_dup (departement));
         p->parametres.adresse.commune = com;
         p->parametres.adresse.code_postal = code_postal;
-        free (p->parametres.adresse.ville);
-        BUG (p->parametres.adresse.ville = common_text_wcstostr_dup (tmp),
-             false,
-             free (ligne);
-               fclose (villes); )
+        p->parametres.adresse.ville =
+                                  std::string (common_text_wcstostr_dup (tmp));
       }
       
       free (ligne);
@@ -543,13 +532,9 @@ common_ville_set (Projet  *p,
             (void *) common_gtk_informations_entry_del_char,
             NULL));
         
-        BUGCRIT (code_postal2 = g_strdup_printf ("%d", code_postal),
-                 false,
-                 (gettext ("Erreur d'allocation mémoire.\n")); )
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
-                            code_postal2);
-        free (code_postal2);
+                            std::to_string (code_postal).c_str ());
         BUG (code_postal2 = common_text_wcstostr_dup (tmp), false)
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_entry_ville")),
@@ -1300,14 +1285,12 @@ common_ville_free (Projet *p)
 {
   BUGPARAM (p, "%p", p, false)
   
-  free (p->parametres.adresse.departement);
-  p->parametres.adresse.departement = NULL;
-  free (p->parametres.adresse.destinataire);
-  p->parametres.adresse.destinataire = NULL;
-  free (p->parametres.adresse.adresse);
-  p->parametres.adresse.adresse = NULL;
-  free (p->parametres.adresse.ville);
-  p->parametres.adresse.ville = NULL;
+  p->parametres.adresse.departement.clear ();
+  p->parametres.adresse.commune = 0;
+  p->parametres.adresse.destinataire.clear ();
+  p->parametres.adresse.adresse.clear ();
+  p->parametres.adresse.code_postal = 0;
+  p->parametres.adresse.ville.clear ();
   
   return true;
 }

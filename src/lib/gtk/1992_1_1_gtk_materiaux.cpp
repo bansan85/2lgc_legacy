@@ -18,12 +18,9 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
 #include <gtk/gtk.h>
-#include <math.h>
-#include <string.h>
+
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -83,23 +80,23 @@ GTK_WINDOW_CLOSE (_1992_1_1, materiaux);
  *     - en cas d'erreur d'allocation mémoire.
  */
 bool
-_1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
-                                          char  **nom,
-                                          double *fck,
-                                          double *fckcube,
-                                          double *fcm,
-                                          double *fctm,
-                                          double *fctk_0_05,
-                                          double *fctk_0_95,
-                                          double *ecm,
-                                          double *ec1,
-                                          double *ecu1,
-                                          double *ec2,
-                                          double *ecu2,
-                                          double *n,
-                                          double *ec3,
-                                          double *ecu3,
-                                          double *nu)
+_1992_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
+                                          std::string *nom,
+                                          double      *fck,
+                                          double      *fckcube,
+                                          double      *fcm,
+                                          double      *fctm,
+                                          double      *fctk_0_05,
+                                          double      *fctk_0_95,
+                                          double      *ecm,
+                                          double      *ec1,
+                                          double      *ecu1,
+                                          double      *ec2,
+                                          double      *ecu2,
+                                          double      *n,
+                                          double      *ec3,
+                                          double      *ecu3,
+                                          double      *nu)
 {
   GtkTextIter    start, end;
   GtkTextBuffer *textbuffer;
@@ -446,8 +443,8 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   
   if (UI_BET.materiau == NULL)
   {
-    if ((strcmp (*nom, "") == 0) ||
-        (EF_materiaux_cherche_nom (p, *nom, false)))
+    if ((nom->length () == 0) ||
+        (EF_materiaux_cherche_nom (p, nom, false)))
     {
       gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
       ok = false;
@@ -457,9 +454,9 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
       gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
     }
   }
-  else if ((strcmp(*nom, "") == 0) || 
-    ((strcmp (UI_BET.materiau->nom, *nom) != 0) &&
-     (EF_materiaux_cherche_nom (p, *nom, false))))
+  else if ((nom->length () == 0) || 
+    ((UI_BET.materiau->nom.compare (*nom) != 0) &&
+     (EF_materiaux_cherche_nom (p, nom, false))))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
     ok = false;
@@ -467,11 +464,6 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   else
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
-  }
-  
-  if (!ok)
-  {
-    free (*nom);
   }
   
   return ok;
@@ -493,7 +485,7 @@ void
 _1992_1_1_gtk_materiaux_check (GtkWidget *object,
                                Projet    *p)
 {
-  char  *nom;
+  std::string nom;
   double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
   double ecm;
   double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
@@ -531,7 +523,6 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
                        UI_BET.builder, "_1992_1_1_materiaux_button_add_edit")),
                               TRUE);
-    free (nom);
   }
   
   return;
@@ -553,7 +544,7 @@ void
 _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
                                          Projet    *p)
 {
-  char        *nom;
+  std::string  nom;
   double       fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
   double       ecm;
   double       ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
@@ -588,11 +579,9 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   
   // Création de la nouvelle charge ponctuelle au noeud
   BUG (materiau = _1992_1_1_materiaux_ajout (p,
-                                             nom,
+                                             &nom,
                                              m_f (fck, FLOTTANT_UTILISATEUR)),
-      ,
-      free (nom); )
-  free (nom);
+      , )
   
   BUG (_1992_1_1_materiaux_modif (
          p,
@@ -635,7 +624,7 @@ void
 _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
                                           Projet    *p)
 {
-  char  *nom;
+  std::string nom;
   double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
   double ecm;
   double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
@@ -670,7 +659,7 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   BUG (_1992_1_1_materiaux_modif (
          p,
          UI_BET.materiau,
-         nom,
+         &nom,
          m_f (fck * 1000000., FLOTTANT_UTILISATEUR),
          m_f (fckcube,        FLOTTANT_UTILISATEUR),
          m_f (fcm,            FLOTTANT_UTILISATEUR),
@@ -686,9 +675,7 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
          m_f (ec3,            FLOTTANT_UTILISATEUR),
          m_f (ecu3,           FLOTTANT_UTILISATEUR),
          m_f (nu,             FLOTTANT_UTILISATEUR)),
-      free (nom); )
-  
-  free (nom);
+      )
   
   gtk_widget_destroy (UI_BET.window);
   
@@ -715,7 +702,7 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   gboolean        check = gtk_check_menu_item_get_active (checkmenuitem);
   EF_Materiau    *mat;
   Materiau_Beton *beton_data;
-  char            tmp[30];
+  std::string     tmp;
   
   BUGPARAMCRIT (p, "%p", p, )
   
@@ -737,11 +724,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     {
       conv_f_c (m_f (m_g (beton_data->fckcube) / 1000000.,
                      beton_data->fckcube.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                               builder, "_1992_1_1_materiaux_buffer_fck_cube")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     
@@ -758,11 +745,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->fcm) / 1000000., beton_data->fcm.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                    builder, "_1992_1_1_materiaux_buffer_fcm")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -778,11 +765,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->fctm) / 1000000., beton_data->fctm.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                   builder, "_1992_1_1_materiaux_buffer_fctm")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -799,11 +786,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     {
       conv_f_c (m_f (m_g (beton_data->fctk_0_05) / 1000000.,
                      beton_data->fctk_0_05.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                              builder, "_1992_1_1_materiaux_buffer_fctk_0_05")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -820,11 +807,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     {
       conv_f_c (m_f (m_g (beton_data->fctk_0_95) / 1000000.,
                      beton_data->fctk_0_95.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                              builder, "_1992_1_1_materiaux_buffer_fctk_0_95")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -841,11 +828,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     {
       conv_f_c (m_f (m_g (beton_data->ecm) / 1000000000.,
                      beton_data->ecm.type),
-                tmp,
+                &tmp,
                 DECIMAL_CONTRAINTE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                    builder, "_1992_1_1_materiaux_buffer_Ecm")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -861,11 +848,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ec1) * 1000, beton_data->ec1.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                    builder, "_1992_1_1_materiaux_buffer_ec1")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -881,11 +868,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ecu1) * 1000, beton_data->ecu1.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                   builder, "_1992_1_1_materiaux_buffer_ecu1")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -901,11 +888,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ec2) * 1000, beton_data->ec2.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                    builder, "_1992_1_1_materiaux_buffer_ec2")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -921,11 +908,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ecu2) * 1000, beton_data->ecu2.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                   builder, "_1992_1_1_materiaux_buffer_ecu2")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -940,10 +927,10 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   {
     if (check && mat)
     {
-      conv_f_c (beton_data->n, tmp, DECIMAL_SANS_UNITE);
+      conv_f_c (beton_data->n, &tmp, DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                      builder, "_1992_1_1_materiaux_buffer_n")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -959,11 +946,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ec3) * 1000, beton_data->ec3.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                    builder, "_1992_1_1_materiaux_buffer_ec3")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -979,11 +966,11 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
     if (check && mat)
     {
       conv_f_c (m_f (m_g (beton_data->ecu3) * 1000, beton_data->ecu3.type),
-                tmp,
+                &tmp,
                 DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                   builder, "_1992_1_1_materiaux_buffer_ecu3")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -998,10 +985,10 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   {
     if (check && mat)
     {
-      conv_f_c (beton_data->nu, tmp, DECIMAL_SANS_UNITE);
+      conv_f_c (beton_data->nu, &tmp, DECIMAL_SANS_UNITE);
       gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                                     builder, "_1992_1_1_materiaux_buffer_nu")),
-                                tmp,
+                                tmp.c_str (),
                                 -1);
     }
     gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
@@ -1091,7 +1078,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
   }
   else
   {
-    gchar tmp[30];
+    std::string tmp;
     
     BUGCRIT (materiau->type == MATERIAU_BETON,
              false,
@@ -1104,14 +1091,14 @@ _1992_1_1_gtk_materiaux (Projet      *p,
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                  gtk_builder_get_object (UI_BET.builder,
                                          "_1992_1_1_materiaux_textview_nom"))),
-                              materiau->nom,
+                              materiau->nom.c_str (),
                               -1);
     conv_f_c (m_f (m_g (beton_data->fck) / 1000000., beton_data->fck.type),
-              tmp,
+              &tmp,
               DECIMAL_CONTRAINTE);
     gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
                             UI_BET.builder, "_1992_1_1_materiaux_buffer_fck")),
-                              tmp,
+                              tmp.c_str (),
                               -1);
     
     gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_BET.builder,
@@ -1240,8 +1227,5 @@ _1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
   
   BUG (_1992_1_1_gtk_materiaux (p, NULL), )
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

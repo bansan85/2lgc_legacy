@@ -17,18 +17,15 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <math.h>
-#include <string.h>
-#include <gmodule.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
 #include "common_selection.hpp"
+#include "common_text.hpp"
 #include "EF_noeuds.hpp"
 #include "EF_calculs.hpp"
 #include "1992_1_1_barres.hpp"
@@ -90,7 +87,7 @@ EF_sections_insert (Projet  *p,
   {
     section_tmp = *it;
     
-    if (strcmp (section->nom, section_tmp->nom) < 0)
+    if (section->nom.compare (section_tmp->nom) < 0)
     {
       break;
     }
@@ -128,7 +125,7 @@ EF_sections_insert (Projet  *p,
 #ifdef ENABLE_GTK
   gtk_list_store_set (UI_SEC.liste_sections,
                       &section->Iter_liste,
-                      0, section->nom,
+                      0, section->nom.c_str (),
                       -1);
   if (UI_SEC.builder != NULL)
   {
@@ -170,7 +167,7 @@ EF_sections_repositionne (Projet  *p,
   {
     Section *section_parcours = *it;
     
-    if (strcmp (section->nom, section_parcours->nom) < 0)
+    if (section->nom.compare (section_parcours->nom) < 0)
     {
       p->modele.sections.insert (it, section);
       
@@ -215,14 +212,14 @@ EF_sections_repositionne (Projet  *p,
   }
   gtk_list_store_set (UI_SEC.liste_sections,
                       &section->Iter_liste,
-                      0, section->nom,
+                      0, section->nom.c_str (),
                       -1);
   if ((UI_SEC_RE.builder != NULL) && (UI_SEC_RE.section == section))
   {
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_RE.builder,
                                     "EF_section_rectangulaire_textview_nom"))),
-                              section->nom, -1);
+                              section->nom.c_str (), -1);
   }
 #endif
   
@@ -238,15 +235,11 @@ EF_sections_repositionne (Projet  *p,
   BUGPARAM (nom, "%p", nom, NULL) \
   INFO (!EF_sections_cherche_nom (p, nom, false), \
         NULL, \
-        (gettext ("La section %s existe déjà.\n"), nom); ) \
+        (gettext ("La section %s existe déjà.\n"), nom->c_str ()); ) \
   section_nouvelle = new Section; \
   section_data = new TYPE; \
   section_nouvelle->data = section_data; \
-  BUGCRIT (section_nouvelle->nom = g_strdup (nom), \
-           NULL, \
-           (gettext ("Erreur d'allocation mémoire.\n")); \
-             delete section_data; \
-             delete section_nouvelle; )
+  section_nouvelle->nom.assign (*nom);
 
 
 /**
@@ -264,10 +257,10 @@ EF_sections_repositionne (Projet  *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 Section *
-EF_sections_rectangulaire_ajout (Projet     *p,
-                                 const char *nom,
-                                 Flottant    l,
-                                 Flottant    h)
+EF_sections_rectangulaire_ajout (Projet      *p,
+                                 std::string *nom,
+                                 Flottant     l,
+                                 Flottant     h)
 {
   SECTION_AJOUT (Section_T)
   
@@ -280,7 +273,6 @@ EF_sections_rectangulaire_ajout (Projet     *p,
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
        delete section_data;
-         free (section_nouvelle->nom);
          delete section_nouvelle; )
   
   return section_nouvelle;
@@ -387,11 +379,11 @@ EF_sections_rectangulaire_ajout (Projet     *p,
  *     - section->type != RECTANGULAIRE.
  */
 bool
-EF_sections_rectangulaire_modif (Projet     *p,
-                                 Section    *section,
-                                 const char *nom,
-                                 Flottant    l,
-                                 Flottant    h)
+EF_sections_rectangulaire_modif (Projet      *p,
+                                 Section     *section,
+                                 std::string *nom,
+                                 Flottant     l,
+                                 Flottant     h)
 {
   Section_T *section_data = (Section_T *) section->data;
   
@@ -401,19 +393,12 @@ EF_sections_rectangulaire_modif (Projet     *p,
         false,
         (gettext ("La section doit être de type rectangulaire.\n")); )
   
-  if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
+  if ((nom != NULL) && (section->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_sections_cherche_nom (p, nom, false),
           false,
-          (gettext ("La section %s existe déjà.\n"), nom); )
-    tmp = section->nom;
-    INFO (section->nom = g_strdup (nom),
-          false,
-          (gettext ("Erreur d'allocation mémoire.\n"));
-            section->nom = tmp; )
-    free (tmp);
+          (gettext ("La section %s existe déjà.\n"), nom->c_str ()); )
+    section->nom.assign (*nom);
     BUG (EF_sections_repositionne (p, section), false)
   }
   
@@ -447,12 +432,12 @@ EF_sections_rectangulaire_modif (Projet     *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 Section *
-EF_sections_T_ajout (Projet     *p,
-                     const char *nom,
-                     Flottant    lt,
-                     Flottant    lr,
-                     Flottant    ht,
-                     Flottant    hr)
+EF_sections_T_ajout (Projet      *p,
+                     std::string *nom,
+                     Flottant     lt,
+                     Flottant     lr,
+                     Flottant     ht,
+                     Flottant     hr)
 {
   SECTION_AJOUT (Section_T)
   
@@ -488,7 +473,6 @@ EF_sections_T_ajout (Projet     *p,
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
        delete section_data;
-         free (section_nouvelle->nom);
          delete section_nouvelle; )
   
   return section_nouvelle;
@@ -511,13 +495,13 @@ EF_sections_T_ajout (Projet     *p,
  *     - section == NULL, 
  *     - section->type != T.
  */
-bool     EF_sections_T_modif (Projet     *p,
-                              Section    *section,
-                              const char *nom,
-                              Flottant    lt,
-                              Flottant    lr,
-                              Flottant    ht,
-                              Flottant    hr)
+bool     EF_sections_T_modif (Projet      *p,
+                              Section     *section,
+                              std::string *nom,
+                              Flottant     lt,
+                              Flottant     lr,
+                              Flottant     ht,
+                              Flottant     hr)
 {
   Section_T *section_data = (Section_T *) section->data;
   
@@ -527,31 +511,24 @@ bool     EF_sections_T_modif (Projet     *p,
         false,
         (gettext ("La section doit être de type en T.\n")); )
   
-  if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
+  if ((nom != NULL) && (section->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_sections_cherche_nom (p, nom, false),
           false,
-          (gettext ("La section %s existe déjà.\n"), nom); )
-    tmp = section->nom;
-    BUGCRIT (section->nom = g_strdup (nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp; )
-    free (tmp);
+          (gettext ("La section %s existe déjà.\n"), nom->c_str ()); )
+    section->nom.assign (*nom);
     BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
-                        0, section->nom,
+                        0, section->nom.c_str (),
                         -1);
     if ((UI_SEC_T.builder != NULL) && (UI_SEC_T.section == section))
     {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                       gtk_builder_get_object (UI_SEC_T.builder,
                                                 "EF_section_T_textview_nom"))),
-                                nom,
+                                nom->c_str (),
                                 -1);
     }
 #endif
@@ -586,9 +563,9 @@ bool     EF_sections_T_modif (Projet     *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 Section *
-EF_sections_carree_ajout (Projet    *p,
-                          const char *nom,
-                          Flottant    cote)
+EF_sections_carree_ajout (Projet      *p,
+                          std::string *nom,
+                          Flottant     cote)
 {
   SECTION_AJOUT (Section_T)
   
@@ -601,7 +578,6 @@ EF_sections_carree_ajout (Projet    *p,
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
        delete section_data;
-         free (section_nouvelle->nom);
          delete section_nouvelle; )
   
   return section_nouvelle;
@@ -622,10 +598,10 @@ EF_sections_carree_ajout (Projet    *p,
  *     - section->type != CARREE.
  */
 bool
-EF_sections_carree_modif (Projet     *p,
-                          Section    *section,
-                          const char *nom,
-                          Flottant    cote)
+EF_sections_carree_modif (Projet      *p,
+                          Section     *section,
+                          std::string *nom,
+                          Flottant     cote)
 {
   Section_T *section_data = (Section_T *) section->data;
   
@@ -635,31 +611,24 @@ EF_sections_carree_modif (Projet     *p,
         false,
         (gettext ("La section doit être de type carrée.\n")); )
   
-  if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
+  if ((nom != NULL) && (section->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_sections_cherche_nom (p, nom, false),
           false,
-          (gettext ("La section %s existe déjà.\n"), nom); )
-    tmp = section->nom;
-    BUGCRIT (section->nom = g_strdup (nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp; )
-    free (section->nom);
+          (gettext ("La section %s existe déjà.\n"), nom->c_str ()); )
+    section->nom.assign (*nom);
     BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
-                        0, section->nom,
+                        0, section->nom.c_str (),
                         -1);
     if ((UI_SEC_CA.builder != NULL) && (UI_SEC_CA.section == section))
     {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_CA.builder,
                                            "EF_section_carree_textview_nom"))),
-                                nom,
+                                nom->c_str (),
                                 -1);
     }
 #endif
@@ -691,9 +660,9 @@ EF_sections_carree_modif (Projet     *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 Section *
-EF_sections_circulaire_ajout (Projet     *p,
-                              const char *nom,
-                              Flottant    diametre)
+EF_sections_circulaire_ajout (Projet      *p,
+                              std::string *nom,
+                              Flottant     diametre)
 {
   SECTION_AJOUT (Section_Circulaire)
   
@@ -713,7 +682,6 @@ EF_sections_circulaire_ajout (Projet     *p,
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
        delete section_data;
-         free (section_nouvelle->nom);
          delete section_nouvelle; )
   
   return section_nouvelle;
@@ -734,10 +702,10 @@ EF_sections_circulaire_ajout (Projet     *p,
  *     - section->type != CIRCULAIRE.
  */
 bool
-EF_sections_circulaire_modif (Projet     *p,
-                              Section    *section,
-                              const char *nom,
-                              Flottant    diametre)
+EF_sections_circulaire_modif (Projet      *p,
+                              Section     *section,
+                              std::string *nom,
+                              Flottant     diametre)
 {
   Section_Circulaire *section_data = (Section_Circulaire *) section->data;
   
@@ -747,31 +715,24 @@ EF_sections_circulaire_modif (Projet     *p,
         false,
         (gettext ("La section doit être de type circulaire.\n")); )
   
-  if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
+  if ((nom != NULL) && (section->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_sections_cherche_nom (p, nom, false),
           false,
-          (gettext ("La section %s existe déjà.\n"), nom); )
-    tmp = section->nom;
-    BUGCRIT (section->nom = g_strdup (nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp; )
-    free (tmp);
+          (gettext ("La section %s existe déjà.\n"), nom->c_str ()); )
+    section->nom.assign (*nom);
     BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
-                        0, section->nom,
+                        0, section->nom.c_str (),
                         -1);
     if ((UI_SEC_CI.builder != NULL) && (UI_SEC_CI.section == section))
     {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
                                      gtk_builder_get_object (UI_SEC_CI.builder,
                                        "EF_section_circulaire_textview_nom"))),
-                                nom,
+                                nom->c_str (),
                                 -1);
     }
 #endif
@@ -939,14 +900,14 @@ EF_sections_personnalisee_verif_forme (
                      (m_g (point3->x) - m_g (point4->x));
           }
           
-          xmin1 = MIN (m_g (point1->x), m_g (point2->x));
-          xmax1 = MAX (m_g (point1->x), m_g (point2->x));
-          xmin2 = MIN (m_g (point3->x), m_g (point4->x));
-          xmax2 = MAX (m_g (point3->x), m_g (point4->x));
-          ymin1 = MIN (m_g (point1->y), m_g (point2->y));
-          ymax1 = MAX (m_g (point1->y), m_g (point2->y));
-          ymin2 = MIN (m_g (point3->y), m_g (point4->y));
-          ymax2 = MAX (m_g (point3->y), m_g (point4->y));
+          xmin1 = std::min (m_g (point1->x), m_g (point2->x));
+          xmax1 = std::max (m_g (point1->x), m_g (point2->x));
+          xmin2 = std::min (m_g (point3->x), m_g (point4->x));
+          xmax2 = std::max (m_g (point3->x), m_g (point4->x));
+          ymin1 = std::min (m_g (point1->y), m_g (point2->y));
+          ymax1 = std::max (m_g (point1->y), m_g (point2->y));
+          ymin2 = std::min (m_g (point3->y), m_g (point4->y));
+          ymax2 = std::max (m_g (point3->y), m_g (point4->y));
           
           if ((errrel (xmax1, xmin2)) || (errrel (xmax2, xmin1)))
           {
@@ -1219,17 +1180,17 @@ EF_sections_personnalisee_verif_forme (
  *     - en cas d'erreur d'allocation mémoire.
  */
 Section *
-EF_sections_personnalisee_ajout (Projet     *p,
-                                 const char *nom,
-                                 const char *description,
-                                 Flottant    j,
-                                 Flottant    iy,
-                                 Flottant    iz,
-                                 Flottant    vy,
-                                 Flottant    vyp,
-                                 Flottant    vz,
-                                 Flottant    vzp,
-                                 Flottant    s,
+EF_sections_personnalisee_ajout (Projet      *p,
+                                 std::string *nom,
+                                 std::string *description,
+                                 Flottant     j,
+                                 Flottant     iy,
+                                 Flottant     iz,
+                                 Flottant     vy,
+                                 Flottant     vyp,
+                                 Flottant     vz,
+                                 Flottant     vzp,
+                                 Flottant     s,
                                  std::list <std::list <EF_Point *> *> *forme)
 {
   SECTION_AJOUT (Section_Personnalisee)
@@ -1238,16 +1199,10 @@ EF_sections_personnalisee_ajout (Projet     *p,
         NULL,
         (gettext ("La forme est incorrecte.\n"));
           delete section_data;
-          free (section_nouvelle->nom);
           delete section_nouvelle; )
   
   section_nouvelle->type = SECTION_PERSONNALISEE;
-  BUGCRIT (section_data->description = g_strdup (description),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             delete section_data;
-             free (section_nouvelle->nom);
-             delete section_nouvelle; )
+  section_data->description.assign (*description);
   section_data->j = j;
   section_data->iy = iy;
   section_data->iz = iz;
@@ -1260,8 +1215,6 @@ EF_sections_personnalisee_ajout (Projet     *p,
   
   BUG (EF_sections_insert (p, section_nouvelle),
        NULL,
-       free (section_data->description);
-         free (section_nouvelle->nom);
          delete section_data;
          delete section_nouvelle; )
   
@@ -1312,18 +1265,18 @@ void EF_sections_personnalisee_free_forme1 (std::list <EF_Point *> *forme_e)
  *     - section->type != SECTION_PERSONNALISEE.
  */
 bool
-EF_sections_personnalisee_modif (Projet     *p,
-                                 Section    *section,
-                                 const char *nom,
-                                 const char *description,
-                                 Flottant    j,
-                                 Flottant    iy,
-                                 Flottant    iz,
-                                 Flottant    vy,
-                                 Flottant    vyp,
-                                 Flottant    vz,
-                                 Flottant    vzp,
-                                 Flottant    s,
+EF_sections_personnalisee_modif (Projet      *p,
+                                 Section     *section,
+                                 std::string *nom,
+                                 std::string *description,
+                                 Flottant     j,
+                                 Flottant     iy,
+                                 Flottant     iz,
+                                 Flottant     vy,
+                                 Flottant     vyp,
+                                 Flottant     vz,
+                                 Flottant     vzp,
+                                 Flottant     s,
                                  std::list <std::list <EF_Point *> *> *forme)
 {
   Section_Personnalisee *section_data = (Section_Personnalisee *)
@@ -1341,47 +1294,33 @@ EF_sections_personnalisee_modif (Projet     *p,
           false,
           (gettext ("La forme est incorrecte.\n")); )
   }
-  if ((nom != NULL) && (strcmp (section->nom, nom) != 0))
+  if ((nom != NULL) && (section->nom.compare (*nom) != 0))
   {
-    char *tmp;
-    
     INFO (!EF_sections_cherche_nom (p, nom, false),
           false,
-          (gettext ("La section %s existe déjà.\n"), nom); )
-    tmp = section->nom;
-    BUGCRIT (section->nom = g_strdup (nom),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               section->nom = tmp; )
-    free (tmp);
+          (gettext ("La section %s existe déjà.\n"), nom->c_str ()); )
+    section->nom.assign (*nom);
     BUG (EF_sections_repositionne (p, section), false)
 #ifdef ENABLE_GTK
     gtk_list_store_set (UI_SEC.liste_sections,
                         &section->Iter_liste,
-                        0, section->nom,
+                        0, section->nom.c_str (),
                         -1);
     if ((UI_SEC_PE.builder != NULL) && (UI_SEC_PE.section == section))
     {
       gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW
                                     (gtk_builder_get_object (UI_SEC_PE.builder,
                                     "EF_section_personnalisee_textview_nom"))),
-                                nom,
+                                nom->c_str (),
                                 -1);
     }
 #endif
   }
   
   if ((description != NULL) &&
-      (strcmp (section_data->description, description) != 0))
+      (section_data->description.compare (*description) != 0))
   {
-    char *tmp;
-    
-    tmp = section_data->description;
-    BUGCRIT (section_data->description = g_strdup (description),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               section_data->description = tmp; )
-    free (tmp);
+    section_data->description.assign (*description);
   }
   
   SECTION_MODIF (j, j)
@@ -1485,9 +1424,9 @@ EF_sections_personnalisee_modif (Projet     *p,
  *     - section introuvable.
  */
 Section *
-EF_sections_cherche_nom (Projet     *p,
-                         const char *nom,
-                         bool        critique)
+EF_sections_cherche_nom (Projet      *p,
+                         std::string *nom,
+                         bool         critique)
 {
   std::list <Section *>::iterator it;
   
@@ -1498,7 +1437,7 @@ EF_sections_cherche_nom (Projet     *p,
   {
     Section *section = *it;
     
-    if (strcmp (section->nom, nom) == 0)
+    if (section->nom.compare (*nom) == 0)
     {
       return section;
     }
@@ -1508,7 +1447,7 @@ EF_sections_cherche_nom (Projet     *p,
   
   if (critique)
   {
-    FAILINFO (NULL, (gettext ("Section '%s' introuvable.\n"), nom); )
+    FAILINFO (NULL, (gettext ("Section '%s' introuvable.\n"), nom->c_str ()); )
   }
   else
   {
@@ -1527,10 +1466,10 @@ EF_sections_cherche_nom (Projet     *p,
  *     - sect == NULL,
  *     - erreur d'allocation mémoire.
  */
-char *
+std::string
 EF_sections_get_description (Section *sect)
 {
-  char *description;
+  std::string description;
   
   BUGPARAM (sect, "%p", sect, NULL)
   
@@ -1538,69 +1477,63 @@ EF_sections_get_description (Section *sect)
   {
     case SECTION_RECTANGULAIRE :
     {
-      char       larg[30], haut[30];
+      std::string larg, haut;
+      
       Section_T *section = (Section_T *) sect->data;
       
-      conv_f_c (section->largeur_retombee, larg, DECIMAL_DISTANCE);
-      conv_f_c (section->hauteur_retombee, haut, DECIMAL_DISTANCE);
-      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m",
-                                              gettext ("Largeur"),
-                                              larg,
-                                              gettext ("Hauteur"),
-                                              haut),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      conv_f_c (section->largeur_retombee, &larg, DECIMAL_DISTANCE);
+      conv_f_c (section->hauteur_retombee, &haut, DECIMAL_DISTANCE);
+      description = format (gettext ("%s : %s m, %s : %s m"),
+                                     gettext ("Largeur"),
+                                     larg.c_str (),
+                                     gettext ("Hauteur"),
+                                     haut.c_str ());
       
       return description;
     }
     case SECTION_T :
     {
-      char       larg_t[30], haut_t[30], larg_r[30], haut_r[30];
-      Section_T *section = (Section_T *) sect->data;
+      std::string larg_t, haut_t, larg_r, haut_r;
+      Section_T  *section = (Section_T *) sect->data;
       
-      conv_f_c (section->largeur_table, larg_t, DECIMAL_DISTANCE);
-      conv_f_c (section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
-      conv_f_c (section->hauteur_table, haut_t, DECIMAL_DISTANCE);
-      conv_f_c (section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
-      BUGCRIT (description = g_strdup_printf ("%s : %s m, %s : %s m, %s : %s m, %s : %s m", //NS
-                                              gettext ("Largeur table"),
-                                              larg_t,
-                                              gettext ("Hauteur table"),
-                                              haut_t,
-                                              gettext ("Largeur retombée"),
-                                              larg_r,
-                                              gettext ("Hauteur retombée"),
-                                              haut_r),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      conv_f_c (section->largeur_table, &larg_t, DECIMAL_DISTANCE);
+      conv_f_c (section->largeur_retombee, &larg_r, DECIMAL_DISTANCE);
+      conv_f_c (section->hauteur_table, &haut_t, DECIMAL_DISTANCE);
+      conv_f_c (section->hauteur_retombee, &haut_r, DECIMAL_DISTANCE);
+      description = format (gettext ("%s : %s m, %s : %s m, %s : %s m, %s : %s m"),
+                                     gettext ("Largeur table"),
+                                     larg_t.c_str (),
+                                     gettext ("Hauteur table"),
+                                     haut_t.c_str (),
+                                     gettext ("Largeur retombée"),
+                                     larg_r.c_str (),
+                                     gettext ("Hauteur retombée"),
+                                     haut_r.c_str ());
       
       return description;
     }
     case SECTION_CARREE :
     {
-      char       cote[30];
-      Section_T *section = (Section_T *) sect->data;
+      std::string cote;
+      Section_T  *section = (Section_T *) sect->data;
       
-      conv_f_c (section->largeur_table, cote, DECIMAL_DISTANCE);
-      BUGCRIT (description = g_strdup_printf ("%s : %s m",
-                                              gettext ("Coté"),
-                                              cote),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      conv_f_c (section->largeur_table, &cote, DECIMAL_DISTANCE);
+      description = format (gettext ("%s : %s m"),
+                                     gettext ("Coté"),
+                                     cote.c_str ());
       
       return description;
     }
     case SECTION_CIRCULAIRE :
     {
-      char                diam[30];
+      std::string diam;
+      
       Section_Circulaire *section = (Section_Circulaire *) sect->data;
       
-      conv_f_c (section->diametre, diam, DECIMAL_DISTANCE);
-      BUGCRIT (description = g_strdup_printf ("%s : %s m",
-                                              gettext ("Diamètre"),
-                                              diam),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      conv_f_c (section->diametre, &diam, DECIMAL_DISTANCE);
+      description = format (gettext ("%s : %s m"),
+                                     gettext ("Diamètre"),
+                                     diam.c_str ());
       
       return description;
     }
@@ -1608,9 +1541,7 @@ EF_sections_get_description (Section *sect)
     {
       Section_Personnalisee *section = (Section_Personnalisee *) sect->data;
       
-      BUGCRIT (description = g_strdup (section->description),
-               NULL,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      description.assign (section->description);
       
       return description;
     }
@@ -1646,7 +1577,6 @@ EF_sections_free_un (Section *section)
       Section_Personnalisee *section2 = (Section_Personnalisee *)
                                                                  section->data;
       
-      free (section2->description);
       for_each (section2->forme.begin (),
                 section2->forme.end (),
                 EF_sections_personnalisee_free_forme1);
@@ -1663,7 +1593,6 @@ EF_sections_free_un (Section *section)
     }
   }
   delete section->data;
-  free (section->nom);
   delete section;
   
   return;
@@ -1717,26 +1646,23 @@ EF_sections_supprime (Section *section,
   
   if ((annule_si_utilise) && (!liste_barres_dep->empty()))
   {
-    char *liste;
+    std::string liste;
     
-    BUG (liste = common_selection_barres_en_texte (liste_barres_dep),
-         false,
-         delete liste_barres_dep; )
+    liste = common_selection_barres_en_texte (liste_barres_dep);
+    
     if (liste_barres_dep->size () == 1)
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"),
-                          liste);
-                  delete liste_barres_dep;
-                  free (liste); )
+                          liste.c_str ());
+                  delete liste_barres_dep; )
     }
     else
     {
       FAILINFO (false,
                 (gettext ("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"),
-                          liste);
-                  delete liste_barres_dep;
-                  free (liste); )
+                          liste.c_str ());
+                  delete liste_barres_dep; )
     }
   }
   
@@ -2070,8 +1996,8 @@ EF_sections_vy (Section *sect)
     {
       Section_T *section = (Section_T *) sect->data;
       
-      return m_f (MAX (m_g (section->largeur_table),
-                       m_g (section->largeur_retombee)) / 2.,
+      return m_f (std::max (m_g (section->largeur_table),
+                            m_g (section->largeur_retombee)) / 2.,
                   FLOTTANT_ORDINATEUR);
     }
     case SECTION_CIRCULAIRE :
@@ -2119,8 +2045,8 @@ EF_sections_vyp (Section *sect)
     {
       Section_T *section = (Section_T *) sect->data;
       
-      return m_f (MAX (m_g (section->largeur_table),
-                       m_g (section->largeur_retombee)) / 2.,
+      return m_f (std::max (m_g (section->largeur_table),
+                            m_g (section->largeur_retombee)) / 2.,
                   FLOTTANT_ORDINATEUR);
     }
     case SECTION_CIRCULAIRE :

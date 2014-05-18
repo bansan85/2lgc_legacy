@@ -17,11 +17,11 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gtk/gtk.h>
-#include <math.h>
+
+#include <locale>
+
 #include <string.h>
+
 #include "common_selection.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
@@ -391,7 +391,7 @@ common_gtk_render_double (GtkTreeViewColumn *tree_column,
                           GtkTreeIter       *iter,
                           gpointer           data)
 {
-  gchar  texte[30];
+  std::string texte;
   gint   colonne;
   double nombre;
   int8_t decimales = (int8_t) GPOINTER_TO_INT (data);
@@ -403,8 +403,8 @@ common_gtk_render_double (GtkTreeViewColumn *tree_column,
   colonne = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   gtk_tree_model_get (tree_model, iter, colonne, &nombre, -1);
   
-  common_math_double_to_char (nombre, texte, decimales);
-  g_object_set (GTK_CELL_RENDERER_TEXT (cell), "text", texte, NULL);
+  common_math_double_to_string (nombre, &texte, decimales);
+  g_object_set (GTK_CELL_RENDERER_TEXT (cell), "text", texte.c_str (), NULL);
   
   return;
 }
@@ -426,16 +426,16 @@ common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
                             GtkTreeIter       *iter,
                             gpointer           data)
 {
-  gchar     texte[30];
-  gint      colonne;
-  Flottant *nombre;
-  gint      decimales = GPOINTER_TO_INT(data);
+  std::string texte;
+  gint        colonne;
+  Flottant   *nombre;
+  gint        decimales = GPOINTER_TO_INT(data);
   
   colonne = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   gtk_tree_model_get (tree_model, iter, colonne, &nombre, -1);
   
-  conv_f_c (*nombre, texte, (uint8_t) decimales);
-  g_object_set (GTK_CELL_RENDERER_TEXT (cell), "text", texte, NULL);
+  conv_f_c (*nombre, &texte, (uint8_t) decimales);
+  g_object_set (GTK_CELL_RENDERER_TEXT (cell), "text", texte.c_str (), NULL);
   
   return;
 }
@@ -452,11 +452,11 @@ common_gtk_render_flottant (GtkTreeViewColumn *tree_column,
  * \return Un pointeur vers la nouvelle colonne.
  */
 GtkTreeViewColumn *
-common_gtk_cree_colonne (char    *nom,
-                         GType    type,
-                         uint32_t num_colonne,
-                         float    xalign,
-                         int8_t   num_decimales)
+common_gtk_cree_colonne (std::string *nom,
+                         GType        type,
+                         uint32_t     num_colonne,
+                         float        xalign,
+                         int8_t       num_decimales)
 {
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *column;
@@ -476,7 +476,7 @@ common_gtk_cree_colonne (char    *nom,
   gtk_cell_renderer_set_alignment (cell, xalign, 0.5);
   
   label = gtk_label_new ("");
-  gtk_label_set_markup (GTK_LABEL (label), nom);
+  gtk_label_set_markup (GTK_LABEL (label), nom->c_str ());
   gtk_widget_set_visible (label, TRUE);
   
   column = gtk_tree_view_column_new ();

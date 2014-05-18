@@ -17,13 +17,10 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <math.h>
 
 #include <algorithm>
 #include <memory>
+#include <locale>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -116,7 +113,7 @@ Groupe *
 _1990_groupe_ajout_groupe (Projet                 *p,
                            Niveau_Groupe          *niveau_groupe,
                            Type_Groupe_Combinaison type_combinaison,
-                           const char             *nom)
+                           const std::string      *nom)
 {
   Groupe *groupe_nouveau;
   
@@ -124,10 +121,7 @@ _1990_groupe_ajout_groupe (Projet                 *p,
   BUGPARAM (niveau_groupe, "%p", niveau_groupe, NULL)
   groupe_nouveau = new Groupe;
   
-  BUGCRIT (groupe_nouveau->nom = g_strdup_printf ("%s", nom),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             delete groupe_nouveau; )
+  groupe_nouveau->nom.assign (*nom);
   groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
   groupe_nouveau->Iter_expand = 1;
@@ -339,24 +333,16 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
  *     - erreur d'allocation mémoire.
  */
 bool
-_1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
-                          Groupe        *groupe,
-                          const char    *nom,
-                          Projet        *p)
+_1990_groupe_modifie_nom (Niveau_Groupe     *groupe_niveau,
+                          Groupe            *groupe,
+                          const std::string *nom,
+                          Projet            *p)
 {
-  char *tmp;
-  
   BUGPARAM (groupe_niveau, "%p", groupe_niveau, false, )
   BUGPARAM (groupe, "%p", groupe, false)
-  BUGPARAM (nom, "%p", groupe, false)
   BUGPARAM (p, "%p", p, false)
   
-  tmp = groupe->nom;
-  BUGCRIT (groupe->nom = g_strdup_printf ("%s", nom),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             groupe->nom = tmp; )
-  free (tmp);
+  groupe->nom.assign (*nom);
   
 #ifdef ENABLE_GTK
   if (UI_GRO.builder != NULL)
@@ -427,7 +413,8 @@ _1990_groupe_affiche_tout (Projet *p)
       
       std::list <std::list <Combinaison *> *>::iterator it3;
       
-      printf (gettext ("\tgroupe : '%s', combinaison : "), groupe->nom);
+      printf (gettext ("\tgroupe : '%s', combinaison : "),
+                       groupe->nom.c_str ());
       switch (groupe->type_combinaison)
       {
         case GROUPE_COMBINAISON_OR :
@@ -469,13 +456,13 @@ _1990_groupe_affiche_tout (Projet *p)
         {
           Action *action = static_cast <Action *> (*it5);
           
-          printf("'%s' ", _1990_action_nom_renvoie (action));
+          printf("'%s' ", _1990_action_nom_renvoie (action).c_str ());
         }
         else
         {
           Groupe *groupe_n_1 = static_cast <Groupe *> (*it5);
           
-          printf("'%s' ", groupe_n_1->nom);
+          printf("'%s' ", groupe_n_1->nom.c_str ());
         }
         
         ++it5;
@@ -498,7 +485,7 @@ _1990_groupe_affiche_tout (Projet *p)
           Action      *action = (Action *) comb_element->action;
           
           printf("'%s'(%u) ",
-                 _1990_action_nom_renvoie (action),
+                 _1990_action_nom_renvoie (action).c_str (),
                  comb_element->flags);
           
           ++it4;
@@ -625,8 +612,6 @@ _1990_groupe_free_niveau (Projet        *p,
     while (it2 != niveau_groupe->groupes.end ())
     {
       Groupe *groupe = *it2;
-      
-      free (groupe->nom);
       
       // On libère tous les éléments contenus dans le groupe
       groupe->elements.clear ();
@@ -774,8 +759,6 @@ _1990_groupe_free_groupe (Projet        *p,
     }
   }
 #endif
-  
-  free (groupe->nom);
   
   // On libère tous les éléments contenus dans le groupe.
   groupe->elements.clear ();

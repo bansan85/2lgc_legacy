@@ -17,13 +17,10 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h> 
-#include <string.h>
-#include <math.h>
 
 #include <algorithm>
+#include <locale>
+#include <string.h>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -610,8 +607,8 @@ EF_noeuds_change_appui (Projet   *p,
       gtk_tree_model_get (model, &Iter, 0, &appui2, -1);
       
       if (((noeud->appui != NULL) &&
-           (strcmp (appui2->nom, noeud->appui->nom) == 0)) ||
-          ((appui_old != NULL) && (strcmp (appui2->nom, appui_old->nom) == 0)))
+           (appui2->nom.compare (noeud->appui->nom) == 0)) ||
+          ((appui_old != NULL) && (appui2->nom.compare (appui_old->nom) == 0)))
       {
         EF_gtk_appuis_select_changed (NULL, p);
       }

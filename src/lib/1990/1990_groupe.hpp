@@ -22,48 +22,50 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-bool     _1990_groupe_init (Projet *p) __attribute__((__warn_unused_result__));
+bool _1990_groupe_init (Projet *p) __attribute__((__warn_unused_result__));
 
-bool     _1990_groupe_ajout_niveau  (Projet                 *p)
+bool _1990_groupe_ajout_niveau  (Projet                 *p)
                                        __attribute__((__warn_unused_result__));
 Groupe * _1990_groupe_ajout_groupe  (Projet                 *p,
                                      Niveau_Groupe          *niveau_groupe,
                                      Type_Groupe_Combinaison type_combinaison,
-                                     const char             *nom)
+                                     const std::string      *nom)
                                        __attribute__((__warn_unused_result__));
-bool     _1990_groupe_ajout_element (Projet                 *p,
-                                     Niveau_Groupe          *niveau_groupe,
-                                     Groupe                 *groupe,
-                                     void                   *element_add)
+bool _1990_groupe_ajout_element (Projet                 *p,
+                                 Niveau_Groupe          *niveau_groupe,
+                                 Groupe                 *groupe,
+                                 void                   *element_add)
                                        __attribute__((__warn_unused_result__));
-bool     _1990_groupe_modifie_combinaison (Groupe           *groupe,
-                                     Type_Groupe_Combinaison type_combinaison)
+bool _1990_groupe_modifie_combinaison (
+       Groupe                 *groupe,
+       Type_Groupe_Combinaison type_combinaison)
                                        __attribute__((__warn_unused_result__));
-bool     _1990_groupe_modifie_nom   (Niveau_Groupe          *groupe_niveau,
-                                     Groupe                 *groupe,
-                                     const char             *nom,
-                                     Projet                 *p)
-                                       __attribute__((__warn_unused_result__));
-
-bool     _1990_groupe_free_combinaisons (
-           std::list <std::list <Combinaison *> *> *liste);
-bool     _1990_groupe_free_niveau          (Projet        *p,
-                                            Niveau_Groupe *niveau_groupe,
-                                            bool           accept_vide)
-                                       __attribute__((__warn_unused_result__));
-bool     _1990_groupe_free_groupe          (Projet        *p,
-                                            Niveau_Groupe *niveau_groupe,
-                                            Groupe        *groupe)
-                                       __attribute__((__warn_unused_result__));
-bool     _1990_groupe_retire_element       (Projet        *p,
-                                            Niveau_Groupe *niveau_groupe,
-                                            Groupe        *groupe,
-                                            void          *element)
-                                       __attribute__((__warn_unused_result__));
-bool     _1990_groupe_free                 (Projet        *p)
+bool _1990_groupe_modifie_nom    (Niveau_Groupe     *groupe_niveau,
+                                  Groupe            *groupe,
+                                  const std::string *nom,
+                                  Projet            *p)
                                        __attribute__((__warn_unused_result__));
 
-bool     _1990_groupe_affiche_tout         (Projet *p)
+bool _1990_groupe_free_combinaisons (
+       std::list <std::list <Combinaison *> *> *liste);
+
+bool _1990_groupe_free_niveau    (Projet        *p,
+                                  Niveau_Groupe *niveau_groupe,
+                                  bool           accept_vide)
+                                       __attribute__((__warn_unused_result__));
+bool _1990_groupe_free_groupe    (Projet        *p,
+                                  Niveau_Groupe *niveau_groupe,
+                                  Groupe        *groupe)
+                                       __attribute__((__warn_unused_result__));
+bool _1990_groupe_retire_element (Projet        *p,
+                                  Niveau_Groupe *niveau_groupe,
+                                  Groupe        *groupe,
+                                  void          *element)
+                                       __attribute__((__warn_unused_result__));
+bool _1990_groupe_free           (Projet        *p)
+                                       __attribute__((__warn_unused_result__));
+
+bool _1990_groupe_affiche_tout   (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

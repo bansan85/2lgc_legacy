@@ -18,14 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <string.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
@@ -158,6 +155,8 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
   EF_Barre     *barre = NULL;
   Section      *section;
   
+  std::string   str_tmp (new_text);
+  
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
            ,
@@ -173,7 +172,7 @@ EF_gtk_barres_edit_section (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  BUG (section = EF_sections_cherche_nom (p, new_text, true), )
+  BUG (section = EF_sections_cherche_nom (p, &str_tmp, true), )
   BUG (_1992_1_1_barres_change_section (barre, section, p), )
   
   return;
@@ -203,6 +202,8 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
   EF_Barre     *barre = NULL;
   EF_Materiau  *materiau;
   
+  std::string   str_tmp (new_text);
+  
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
            ,
@@ -218,7 +219,9 @@ EF_gtk_barres_edit_materiau (GtkCellRendererText *cell,
   gtk_tree_model_get_iter_from_string (model, &iter, path_string);
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
-  BUG (materiau = EF_materiaux_cherche_nom (p, new_text, true), )
+  BUG (materiau = EF_materiaux_cherche_nom (p,
+                                            &str_tmp,
+                                            true), )
   BUG (_1992_1_1_barres_change_materiau (barre, materiau, p), )
   
   return;
@@ -269,8 +272,11 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   else
   {
     EF_Relachement *relachement;
+    std::string     str_tmp (new_text);
     
-    BUG (relachement = EF_relachement_cherche_nom (p, new_text, true), )
+    BUG (relachement = EF_relachement_cherche_nom (p,
+                                                   &str_tmp,
+                                                   true), )
     BUG (_1992_1_1_barres_change_relachement (barre, relachement, p), )
   }
   
@@ -626,7 +632,7 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
   GtkTreeModel *model;
   GtkTreeIter   Iter;
   EF_Barre     *barre;
-  char         *desc;
+  std::string   desc;
   
   std::list <EF_Barre *>  liste_barres;
   std::list <EF_Noeud *> *liste_noeuds_dep;
@@ -671,18 +677,13 @@ EF_gtk_barres_boutton_supprimer_menu (GtkButton *widget,
            ,
            (gettext ("L'élément ne possède aucune dépendance.\n")); )
 
-  BUG (desc = common_text_dependances (liste_noeuds_dep,
-                                       liste_barres_dep,
-                                       liste_charges_dep,
-                                       p),
-       ,
-       delete liste_noeuds_dep;
-         delete liste_barres_dep;
-         delete liste_charges_dep; )
+  desc = common_text_dependances (liste_noeuds_dep,
+                                  liste_barres_dep,
+                                  liste_charges_dep,
+                                  p);
   gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                          UI_BAR.builder, "EF_barres_supprimer_menu_barres")),
-                           desc);
-  free (desc);
+                           desc.c_str ());
   
   delete liste_noeuds_dep;
   delete liste_barres_dep;
@@ -709,18 +710,11 @@ EF_gtk_barres_render_0 (GtkTreeViewColumn *tree_column,
                         gpointer           data2)
 {
   EF_Barre *barre;
-  char     *tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  BUGCRIT (tmp = g_strdup_printf ("%d", barre->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  
-  g_object_set (cell, "text", tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", std::to_string (barre->numero).c_str (), NULL);
   
   return;
 }
@@ -744,6 +738,7 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
 {
   EF_Barre   *barre;
   char       *tmp;
+  std::string tmp2;
   GtkTreeIter iter2;
   Projet     *p = (Projet *) data2;
   
@@ -752,13 +747,11 @@ EF_gtk_barres_render_1 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  tmp2 = std::to_string ((int) barre->type);
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                        &iter2,
-                                       tmp);
-  free (tmp);
+                                       tmp2.c_str ());
+  
   gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                       &iter2,
                       0,
@@ -794,7 +787,7 @@ EF_gtk_barres_render_2 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  g_object_set (cell, "text", barre->section->nom, NULL);
+  g_object_set (cell, "text", barre->section->nom.c_str (), NULL);
   
   return;
 }
@@ -821,7 +814,7 @@ EF_gtk_barres_render_3 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  g_object_set (cell, "text", barre->materiau->nom, NULL);
+  g_object_set (cell, "text", barre->materiau->nom.c_str (), NULL);
   
   return;
 }
@@ -843,19 +836,15 @@ EF_gtk_barres_render_4 (GtkTreeViewColumn *tree_column,
                         GtkTreeIter       *iter,
                         gpointer           data2)
 {
-  EF_Barre *barre;
-  char     *tmp;
+  EF_Barre   *barre;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_debut->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  tmp = std::to_string (barre->noeud_debut->numero);
   
-  g_object_set (cell, "text", tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -877,19 +866,15 @@ EF_gtk_barres_render_5 (GtkTreeViewColumn *tree_column,
                         GtkTreeIter       *iter,
                         gpointer           data2)
 {
-  EF_Barre *barre;
-  char     *tmp;
+  EF_Barre   *barre;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  BUGCRIT (tmp = g_strdup_printf ("%d", barre->noeud_fin->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  tmp = std::to_string (barre->noeud_fin->numero);
   
-  g_object_set (cell, "text", tmp, NULL);
-  
-  free (tmp);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -911,15 +896,15 @@ EF_gtk_barres_render_6 (GtkTreeViewColumn *tree_column,
                         GtkTreeIter       *iter,
                         gpointer           data2)
 {
-  EF_Barre *barre;
-  char      tmp[30];
+  EF_Barre   *barre;
+  std::string tmp;
   
   gtk_tree_model_get (tree_model, iter, 0, &barre, -1);
   BUGPARAM (barre, "%p", barre, )
   
-  conv_f_c (barre->angle, tmp, DECIMAL_ANGLE);
+  conv_f_c (barre->angle, &tmp, DECIMAL_ANGLE);
   
-  g_object_set (cell, "text", tmp, NULL);
+  g_object_set (cell, "text", tmp.c_str (), NULL);
   
   return;
 }
@@ -952,7 +937,7 @@ EF_gtk_barres_render_7 (GtkTreeViewColumn *tree_column,
   }
   else
   {
-    g_object_set (cell, "text", barre->relachement->nom, NULL);
+    g_object_set (cell, "text", barre->relachement->nom.c_str (), NULL);
   }
   
   return;
@@ -1092,15 +1077,12 @@ EF_gtk_barres (Projet *p)
   {
     EF_Barre   *barre = *it;
     GtkTreeIter iter;
-    char       *tmp;
+    std::string tmp;
     
-    BUGCRIT (tmp = g_strdup_printf ("%d", (int) barre->type),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    tmp = std::to_string ((int) barre->type);
     gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (UI_BAR.liste_types),
                                          &iter,
-                                         tmp);
-    free (tmp);
+                                         tmp.c_str ());
     
     gtk_tree_store_append (GTK_TREE_STORE (gtk_builder_get_object (
                                        UI_BAR.builder, "EF_barres_treestore")),
@@ -1118,7 +1100,5 @@ EF_gtk_barres (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_BAR.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

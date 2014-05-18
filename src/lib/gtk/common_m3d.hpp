@@ -48,8 +48,8 @@ gboolean m3d_draw (GtkWidget      *drawing,
                    gpointer       *data);
 
 gboolean     m3d_key_press (GtkWidget   *widget,
-                        GdkEventKey *event,
-                        Projet      *p);
+                            GdkEventKey *event,
+                            Projet      *p);
 
 bool m3d_camera_axe_x_z_y  (Projet *p)
                                        __attribute__((__warn_unused_result__));

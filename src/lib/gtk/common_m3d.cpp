@@ -17,27 +17,23 @@
  */
 
 #include "config.h"
-#ifdef ENABLE_GTK
-#include <M3d++.hpp>
 
+#include <M3d++.hpp>
 #include <gtk/gtk.h>
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
+
+#include <locale>
+
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_math.hpp"
 #include "common_gtk.hpp"
 #include "common_selection.hpp"
+#include "common_text.hpp"
 #include "EF_noeuds.hpp"
 #include "1992_1_1_barres.hpp"
 #include "common_m3d.hpp"
 
 
-gboolean
-m3d_configure_event (GtkWidget         *drawing,
-                     GdkEventConfigure *ev,
-                     gpointer          *data2)
 /**
  * \brief Configuration de la caméra en fonction de la taille du composant
  *        graphique.
@@ -48,6 +44,10 @@ m3d_configure_event (GtkWidget         *drawing,
  *   Echec : FALSE :
  *     - interface graphique non initialisée.
  */
+gboolean
+m3d_configure_event (GtkWidget         *drawing,
+                     GdkEventConfigure *ev,
+                     gpointer          *data2)
 {
   Projet      *p = (Projet *) data2;
   SGlobalData *data = (SGlobalData *) UI_M3D.data;
@@ -55,16 +55,20 @@ m3d_configure_event (GtkWidget         *drawing,
   BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "principale");)
+                     "principale"); )
   
   data->camera->set_size_of_window (ev->width, ev->height);
   
   if (data->camera->get_window_height () < data->camera->get_window_width ())
+  {
     data->camera->set_d (data->camera->get_window_height () /
                                    (2 * tan (data->camera->get_angle () / 2)));
+  }
   else
+  {
     data->camera->set_d (data->camera->get_window_width () /
                                    (2 * tan (data->camera->get_angle () / 2)));
+  }
   
   data->scene->rendering (*data->camera);
   
@@ -72,8 +76,6 @@ m3d_configure_event (GtkWidget         *drawing,
 }
 
 
-bool
-m3d_init (Projet *p)
 /**
  * \brief Initialise l'affichage graphique de la structure.
  * \param p : la variable projet.
@@ -83,6 +85,8 @@ m3d_init (Projet *p)
  *     - p == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+bool
+m3d_init (Projet *p)
 {
   SGlobalData *global_data;
   CM3dLight    light;
@@ -94,7 +98,7 @@ m3d_init (Projet *p)
   gtk_widget_add_events(UI_M3D.drawing, GDK_BUTTON_PRESS_MASK);
   BUGCRIT (UI_M3D.data = malloc (sizeof (SGlobalData)),
            false,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+           (gettext ("Erreur d'allocation mémoire.\n")); )
   
   global_data = (SGlobalData *) UI_M3D.data;
   global_data->scene = new CM3dScene ();
@@ -128,10 +132,6 @@ m3d_init (Projet *p)
 }
 
 
-gboolean
-m3d_draw (GtkWidget      *drawing,
-          GdkEventExpose *ev,
-          gpointer       *data)
 /**
  * \brief Rendu de l'image 3D dans le widget Zone-dessin.
  * \param drawing : composant graphique,
@@ -139,6 +139,10 @@ m3d_draw (GtkWidget      *drawing,
  * \param data : données SGlobalData.
  * \return FALSE.
  */
+gboolean
+m3d_draw (GtkWidget      *drawing,
+          GdkEventExpose *ev,
+          gpointer       *data)
 {
   SGlobalData *data2 = (SGlobalData *) data;
 
@@ -148,10 +152,6 @@ m3d_draw (GtkWidget      *drawing,
 }
 
 
-gboolean
-m3d_key_press (GtkWidget   *widget,
-               GdkEventKey *event,
-               Projet      *p)
 /**
  * \brief Gestion des touches pour la navigation 3D :\n
  *        - + pour zoomer,
@@ -166,6 +166,10 @@ m3d_key_press (GtkWidget   *widget,
  *     - p == NULL,
  *     - interface graphique non initialisée.
  */
+gboolean
+m3d_key_press (GtkWidget   *widget,
+               GdkEventKey *event,
+               Projet      *p)
 {
   SGlobalData *data  = (SGlobalData *) UI_M3D.data;
   
@@ -173,7 +177,7 @@ m3d_key_press (GtkWidget   *widget,
   BUGCRIT (UI_GTK.window,
            FALSE,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "principale");)
+                     "principale"); )
   
   if (event->type == GDK_KEY_PRESS)
   {
@@ -244,12 +248,6 @@ m3d_key_press (GtkWidget   *widget,
 }
 
 
-bool
-m3d_get_rect (double *xmin,
-              double *xmax,
-              double *ymin,
-              double *ymax,
-              Projet *p)
 /**
  * \brief Renvoie le rectangle anglobant la structure dans le cas d'une
  *        projection en 2D en fonction de la caméra en cours.
@@ -269,6 +267,12 @@ m3d_get_rect (double *xmin,
  *     - Aucun noeud n'existe,
  *     - interface graphique non initialisée.
  */
+bool
+m3d_get_rect (double *xmin,
+              double *xmax,
+              double *ymin,
+              double *ymax,
+              Projet *p)
 {
   SGlobalData *vue;
   EF_Noeud    *noeud;
@@ -285,11 +289,11 @@ m3d_get_rect (double *xmin,
   BUGPARAM (ymax, "%p", ymax, false)
   INFO (!p->modele.noeuds.empty (),
         false,
-        (gettext ("Aucun noeud n'est existant.\n"));)
+        (gettext ("Aucun noeud n'est existant.\n")); )
   BUGCRIT (UI_GTK.window,
            false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "principale");)
+                     "principale"); )
   
   vue = (SGlobalData *) UI_M3D.data;
   
@@ -319,13 +323,21 @@ m3d_get_rect (double *xmin,
     delete v3;
     
     if (*xmin > x1)
+    {
       *xmin = x1;
+    }
     if (*xmax < x1)
+    {
       *xmax = x1;
+    }
     if (*ymin > y1)
+    {
       *ymin = y1;
+    }
     if (*ymax < y1)
+    {
       *ymax = y1;
+    }
     
     ++it;
   }
@@ -334,8 +346,6 @@ m3d_get_rect (double *xmin,
 }
 
 
-bool
-m3d_camera_zoom_all (Projet *p)
 /**
  * \brief Modifie la position de la caméra en x, y et z pour voir l'ensemble de
  *        la structure.
@@ -346,6 +356,8 @@ m3d_camera_zoom_all (Projet *p)
  *     -  p == NULL,
  *     - interface graphique non initialisée.
  */
+bool
+m3d_camera_zoom_all (Projet *p)
 {
   SGlobalData  *vue;
   double        x, y, z;       // Les coordonnées de la caméra
@@ -360,7 +372,7 @@ m3d_camera_zoom_all (Projet *p)
   double        dx, dy, dz, dztmp;
   double        xmin2, xmax2, ymin2, ymax2;
   double        yymin;
-  int           i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
+  int32_t       i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
   
   std::list<EF_Noeud*>::iterator it; // Noeud en cours d'étude
   
@@ -368,13 +380,15 @@ m3d_camera_zoom_all (Projet *p)
   BUGCRIT (UI_GTK.window,
            false,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "principale");)
+                     "principale"); )
   
   vue = (SGlobalData *) UI_M3D.data;
   
   // Aucune noeud, on ne fait rien
   if (p->modele.noeuds.empty ())
+  {
     return true;
+  }
   
   // Un seul noeud, on l'affiche en gros plan.
   noeud = *p->modele.noeuds.begin ();
@@ -410,15 +424,25 @@ m3d_camera_zoom_all (Projet *p)
     v2->get_coordinates (&tmpx, &tmpy, &tmpz);
     delete v2;
     if (xmin > tmpx)
+    {
       xmin = tmpx;
+    }
     if (xmax < tmpx)
+    {
       xmax = tmpx;
+    }
     if (ymin > tmpy)
+    {
       ymin = tmpy;
+    }
     if (ymax < tmpy)
+    {
       ymax = tmpy;
+    }
     if (zmin > tmpz)
+    {
       zmin = tmpz;
+    }
     
     ++it;
   }
@@ -472,7 +496,9 @@ m3d_camera_zoom_all (Projet *p)
         z = z + tmpz * 5.;
       }
       else
+      {
         break;
+      }
       vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), false)
@@ -505,7 +531,9 @@ m3d_camera_zoom_all (Projet *p)
         z = z + tmpz * 5.;
       }
       else
+      {
         break;
+      }
       vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), false)
@@ -555,19 +583,25 @@ m3d_camera_zoom_all (Projet *p)
         // schéma 2D en XZ avec la vue en YZ.
         dztmp = NAN;
         if (!errrel (xmax - xmin - (xmax2 - xmin2), allocation.width))
+        {
           dztmp = dz * (xmax2 - xmin2) * (xmax - xmin - allocation.width) /
                   ((xmax - xmin - (xmax2 - xmin2)) * allocation.width) / 5.;
+        }
         if (!errrel (ymax - ymin - (ymax2 - ymin2), allocation.height))
         {
           if (isnan (dztmp))
+          {
             dztmp = dz * (ymax2 - ymin2) * (ymax - ymin - allocation.height) /
                     ((ymax - ymin - (ymax2 - ymin2)) * allocation.height) / 5.;
+          }
           else
+          {
             dztmp = MIN(dz * (ymax2 - ymin2) * (ymax - ymin -
                                                 allocation.height) /
                           ((ymax - ymin - (ymax2 - ymin2)) * allocation.height)
                           / 5.,
                         dztmp);
+          }
         }
         dz = dztmp;
         // L'extrapolation dit qu'il faut plutôt avancer de dz*5.
@@ -577,8 +611,10 @@ m3d_camera_zoom_all (Projet *p)
         // ne se trouve dans le plan XZ.
         // Normalement, ça ne devrait pas se produire mais c'est une sécurité.
         if (dz * 5. > yymin)
+        {
           // Oups, on avance trop. On bride à yymin / 5.5 * 5.
           dz = yymin / 5.5;
+        }
         x = x + dz * cx * 5.;
         y = y + dz * cy * 5.;
         z = z + dz * cz * 5.;
@@ -587,7 +623,9 @@ m3d_camera_zoom_all (Projet *p)
         // Maintenant, on ne peut pas avancer de plus de yymin.
       }
       else
+      {
         break;
+      }
       vue->camera->set_position (x, y, z);
       vue->camera->set_target (x + cx, y + cy, z + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), false)
@@ -598,19 +636,37 @@ m3d_camera_zoom_all (Projet *p)
     // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
     i++;
     if (i == 100)
+    {
       break;
+    }
   } while ((fabs (xmax2 + xmin2 - allocation.width) > 1.) ||
            (fabs (ymax2 + ymin2 - allocation.height) > 1.));
   
   BUG (m3d_rafraichit (p), false)
   
   if (i == 100)
+  {
     FAILCRIT (false,
-              (gettext ("La fonction \"zoom tout\" vient de tourner en boucle.\n"));)
+              (gettext ("La fonction \"zoom tout\" vient de tourner en boucle.\n")); )
+  }
   
   return true;
 }
 
+/**
+ * \def M3D_CAMERA(NOM, CX, CY, CZ)
+ * \brief Positionne la caméra pour voir toute la structure dans le plan xz
+ *        vers la direction y.
+ * \param NOM : nom de la fonctior,
+ * \param CX : direction de la caméra en x,
+ * \param CY : direction de la caméra en y,
+ * \param CZ : direction de la caméra en z,
+ * \return
+ *   Succès : true.\n
+ *   Échec : false :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
+ */
 #define M3D_CAMERA(NOM, CX, CY, CZ) \
 bool \
 m3d_camera_axe_##NOM (Projet *p) \
@@ -626,7 +682,7 @@ m3d_camera_axe_##NOM (Projet *p) \
   BUGCRIT (UI_GTK.window, \
            false, \
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), \
-                     "principale");) \
+                     "principale"); ) \
   \
   vue = (SGlobalData *) UI_M3D.data; \
   \
@@ -648,20 +704,6 @@ m3d_camera_axe_##NOM (Projet *p) \
   \
   return true; \
 }
-/**
- * \def M3D_CAMERA(NOM, CX, CY, CZ)
- * \brief Positionne la caméra pour voir toute la structure dans le plan xz
- *        vers la direction y.
- * \param NOM : nom de la fonctior,
- * \param CX : direction de la caméra en x,
- * \param CY : direction de la caméra en y,
- * \param CZ : direction de la caméra en z,
- * \return
- *   Succès : true.\n
- *   Échec : false :
- *     - p == NULL,
- *     - interface graphique non initialisée.
- */
 
 
 M3D_CAMERA (x_z_y,   0., 1.,   0.);
@@ -672,10 +714,6 @@ M3D_CAMERA (x_y_z,   0., 0.,   1.);
 M3D_CAMERA (x_y__z,  0., 0.,  -1.);
 
 
-bool
-m3d_actualise_graphique (Projet                 *p,
-                         std::list <EF_Noeud *> *noeuds,
-                         std::list <EF_Barre *> *barres)
 /**
  * \brief Met à jour l'affichage graphique en actualisant l'affichage des
  *        noeuds et barres passés en argument. Les listes contient une série de
@@ -688,6 +726,10 @@ m3d_actualise_graphique (Projet                 *p,
  *   Échec : false :
  *     - p == NULL.
  */
+bool
+m3d_actualise_graphique (Projet                 *p,
+                         std::list <EF_Noeud *> *noeuds,
+                         std::list <EF_Barre *> *barres)
 {
   std::list <EF_Noeud *> *noeuds_dep;
   std::list <EF_Barre *> *barres_dep;
@@ -739,8 +781,6 @@ m3d_actualise_graphique (Projet                 *p,
 }
 
 
-bool
-m3d_rafraichit (Projet *p)
 /**
  * \brief Force le rafraichissement de l'affichage graphique. Nécessaire après
  *        l'utilisation d'une des fonctions d'actualisation de l'affichage
@@ -751,9 +791,11 @@ m3d_rafraichit (Projet *p)
  *   Échec : false :
  *     - p == NULL.
  */
+bool
+m3d_rafraichit (Projet *p)
 {
   SGlobalData *vue;
-  CM3dVertex A,B;
+  CM3dVertex   A, B;
   
   BUGPARAM (p, "%p", p, false)
   vue = (SGlobalData *) UI_M3D.data;
@@ -768,9 +810,6 @@ m3d_rafraichit (Projet *p)
 }
 
 
-bool
-m3d_noeud (void     *donnees_m3d,
-           EF_Noeud *noeud)
 /**
  * \brief Crée un noeud dans l'affichage graphique. Si le noeud existe, il est
  *        détruit au préalable.
@@ -783,10 +822,13 @@ m3d_noeud (void     *donnees_m3d,
  *     - donnees_m3d == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+bool
+m3d_noeud (void     *donnees_m3d,
+           EF_Noeud *noeud)
 {
   CM3dCube     cube;
   CM3dObject  *cube_old;
-  char        *nom;
+  std::string  nom;
   EF_Point     point;
   SGlobalData *vue;
   
@@ -794,31 +836,26 @@ m3d_noeud (void     *donnees_m3d,
   BUGPARAM (donnees_m3d, "%p", donnees_m3d, false)
   
   BUG (EF_noeuds_renvoie_position (noeud, &point), false);
-  BUGCRIT (nom = g_strdup_printf ("noeud %u", noeud->numero),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+  nom = format ("noeud %u", noeud->numero);
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
   cube_old = vue->scene->get_object_by_name (nom);
   if (cube_old != NULL)
+  {
     vue->scene->remove_object (*cube_old);
+  }
   
-  cube.set_all_datas (nom, .1);
+  cube.set_all_datas (nom.c_str (), .1);
   cube.set_ambient_reflexion (1.);
   cube.set_smooth (GOURAUD);
   cube.set_position (m_g (point.x), m_g (point.y), m_g (point.z));
   vue->scene->add_object (cube);
   
-  free (nom);
-  
   return true;
 }
 
 
-void
-m3d_noeud_free (void     *donnees_m3d,
-                EF_Noeud *noeud)
 /**
  * \brief Supprimer un noeud dans l'affichage graphique.
  * \param donnees_m3d : données SGlobalData,
@@ -830,32 +867,28 @@ m3d_noeud_free (void     *donnees_m3d,
  *     - donnees_m3d == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+m3d_noeud_free (void     *donnees_m3d,
+                EF_Noeud *noeud)
 {
   CM3dObject  *cube;
-  char        *nom;
+  std::string  nom;
   SGlobalData *vue;
   
   BUGPARAM (noeud, "%p", noeud, )
   BUGPARAM (donnees_m3d, "%p", donnees_m3d, )
   
-  BUGCRIT (nom = g_strdup_printf ("noeud %u", noeud->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+  nom = format ("noeud %u", noeud->numero);
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
   cube = vue->scene->get_object_by_name (nom);
   vue->scene->remove_object (*cube);
   
-  free (nom);
-  
   return;
 }
 
 
-bool
-m3d_barre_finition (CM3dObject *objet,
-                    EF_Barre   *barre)
 /**
  * \brief Applique une liste d'instructions commune à une barre. Fonction
  *        interne à #m3d_barre.
@@ -867,6 +900,9 @@ m3d_barre_finition (CM3dObject *objet,
  *     - barre == NULL,
  *     - objet == NULL.
  */
+bool
+m3d_barre_finition (CM3dObject *objet,
+                    EF_Barre   *barre)
 {
   double   y, z;
   double   x1, y1, z1;
@@ -901,7 +937,7 @@ m3d_barre_finition (CM3dObject *objet,
     {
       FAILCRIT (false,
                 (gettext ("Type de section %d inconnu.\n"),
-                          barre->section->type);)
+                          barre->section->type); )
       break;
     }
   }
@@ -925,9 +961,6 @@ m3d_barre_finition (CM3dObject *objet,
 }
 
 
-bool
-m3d_barre (void     *donnees_m3d,
-           EF_Barre *barre)
 /**
  * \brief Crée une barre dans l'affichage graphique. Si la barre existe, elle
  *        est détruite au préalable.
@@ -942,10 +975,13 @@ m3d_barre (void     *donnees_m3d,
  *     - le type de barre est inconnu,
  *     - en cas d'erreur d'allocation mémoire.
  */
+bool
+m3d_barre (void     *donnees_m3d,
+           EF_Barre *barre)
 {
   SGlobalData *vue;
   CM3dObject  *objet;
-  char        *tmp;
+  std::string  tmp;
   CM3dObject  *tout;
   double       longueur;
   
@@ -955,19 +991,21 @@ m3d_barre (void     *donnees_m3d,
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
   // On supprime l'élément s'il existe déjà
-  BUGCRIT (tmp = g_strdup_printf ("barre %u", barre->numero),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+  tmp = format ("barre %u", barre->numero);
   
   objet = vue->scene->get_object_by_name(tmp);
   if (objet != NULL)
+  {
     vue->scene->remove_object(*objet);
+  }
   
   longueur = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
-  BUG (!isnan (longueur), false, free (tmp););
+  BUG (!isnan (longueur), false)
   
   if (errmoy (longueur, ERRMOY_DIST))
+  {
     return true;
+  }
   
   switch (barre->section->type)
   {
@@ -991,7 +1029,12 @@ m3d_barre (void     *donnees_m3d,
       haut.rotations (90., 0., 0.);
       haut.set_position (0., 0., m_g (section->hauteur_retombee) / 2.);
       
-      tout = M3d_object_new_group (tmp, &droite, &gauche, &bas, &haut, NULL);
+      tout = M3d_object_new_group (tmp.c_str (),
+                                   &droite,
+                                   &gauche,
+                                   &bas,
+                                   &haut,
+                                   NULL);
       
       m3d_barre_finition (tout, barre);
       vue->scene->add_object (*tout);
@@ -1002,13 +1045,13 @@ m3d_barre (void     *donnees_m3d,
     {
       Section_T *section = (Section_T *) barre->section->data;
       
-      double      lt   = m_g (section->largeur_table);
-      double      lr   = m_g (section->largeur_retombee);
-      double      ht   = m_g (section->hauteur_table);
-      double      hr   = m_g (section->hauteur_retombee);
-      double      cdgh = (lt * ht * ht / 2. + lr * hr * (ht + hr / 2.)) /
-                         (lt * ht + lr * hr);
-      double      cdgb = (ht + hr) - cdgh;
+      double     lt   = m_g (section->largeur_table);
+      double     lr   = m_g (section->largeur_retombee);
+      double     ht   = m_g (section->hauteur_table);
+      double     hr   = m_g (section->hauteur_retombee);
+      double     cdgh = (lt * ht * ht / 2. + lr * hr * (ht + hr / 2.)) /
+                        (lt * ht + lr * hr);
+      double     cdgb = (ht + hr) - cdgh;
       
       CM3dPlan retombee_inf, retombee_droite, retombee_gauche,
                dalle_bas_droite, dalle_bas_gauche, dalle_droite,
@@ -1046,7 +1089,7 @@ m3d_barre (void     *donnees_m3d,
       dalle_sup.rotations (90., 0., 0.);
       dalle_sup.set_position (0., 0, -cdgb + hr + ht);
       
-      tout = M3d_object_new_group (tmp,
+      tout = M3d_object_new_group (tmp.c_str (),
                                    &retombee_inf,
                                    &retombee_droite,
                                    &retombee_gauche,
@@ -1082,7 +1125,12 @@ m3d_barre (void     *donnees_m3d,
       haut.rotations (90., 0., 0.);
       haut.set_position (0., 0., m_g (section->largeur_table) / 2.);
       
-      tout = M3d_object_new_group (tmp, &droite, &gauche, &bas, &haut, NULL);
+      tout = M3d_object_new_group (tmp.c_str (),
+                                   &droite,
+                                   &gauche,
+                                   &bas,
+                                   &haut,
+                                   NULL);
       
       m3d_barre_finition (tout, barre);
       vue->scene->add_object (*tout);
@@ -1096,9 +1144,12 @@ m3d_barre (void     *donnees_m3d,
       
       section = (Section_Circulaire *) barre->section->data;
       
-      cylindre.set_all_datas (tmp, m_g (section->diametre) / 2., longueur, 12);
+      cylindre.set_all_datas (tmp.c_str (),
+                              m_g (section->diametre) / 2.,
+                              longueur,
+                              12);
       
-      tout = M3d_object_new_group (tmp, &cylindre, NULL);
+      tout = M3d_object_new_group (tmp.c_str (), &cylindre, NULL);
       tout->rotations (0., 0., 90.);
       
       m3d_barre_finition (tout, barre);
@@ -1138,19 +1189,25 @@ m3d_barre (void     *donnees_m3d,
         while ((it2 != forme_e->end ()) || (last))
         {
           if (point2 == NULL)
+          {
             point2 = *it2;
+          }
           else
           {
             point1 = point2;
             if (!last)
+            {
               point2 = *it2;
+            }
             else
+            {
               point2 = *forme_e->begin ();
+            }
             
             BUGCRIT (point2,
                      false,
                      (gettext ("Impossible\n"));
-                       delete tout;)
+                       delete tout; )
             angle = atan2 (m_g (point2->y) - m_g (point1->y),
                            m_g (point2->x) - m_g (point1->x)) / M_PI * 180.;
             angle1 = angle2;
@@ -1159,9 +1216,13 @@ m3d_barre (void     *donnees_m3d,
             {
               angle = angle2 - angle1;
               if (angle > 180.)
+              {
                 angle = angle - 180.;
+              }
               if (angle < -180.)
+              {
                 angle = angle + 180.;
+              }
               
               somme_angle = somme_angle + angle;
             }
@@ -1171,10 +1232,14 @@ m3d_barre (void     *donnees_m3d,
           {
             ++it2;
             if (it2 == forme_e->end ())
+            {
               last = true;
+            }
           }
           else
+          {
             last = false;
+          }
         }
         
         // Puis on dessine
@@ -1185,7 +1250,9 @@ m3d_barre (void     *donnees_m3d,
         while ((it2 != forme_e->end ()) || (last))
         {
           if (point2 == NULL)
+          {
             point2 = *it2;
+          }
           else
           {
             std::vector <CM3dPolygon*>::iterator it3;
@@ -1193,19 +1260,25 @@ m3d_barre (void     *donnees_m3d,
             
             point1 = point2;
             if (!last)
+            {
               point2 = *it2;
+            }
             else
+            {
               point2 = *forme_e->begin ();
+            }
             BUGCRIT (point2,
                      false,
                      (gettext ("Impossible\n"));
-                       delete tout;)
+                       delete tout; )
             
             angle = atan2 (m_g (point2->y) - m_g (point1->y),
                            m_g (point2->x) - m_g (point1->x))
                     / M_PI * 180. - 180.;
             if (somme_angle < 0)
+            {
               angle = angle + 180.;
+            }
             
             object_tmp.set_all_datas ("",
                                       longueur,
@@ -1230,16 +1303,20 @@ m3d_barre (void     *donnees_m3d,
           {
             ++it2;
             if (it2 == forme_e->end ())
+            {
               last = true;
+            }
           }
           else
+          {
             last = false;
+          }
         }
         
         ++it;
       }
       tout->rotations (90., 0., 0.);
-      tout->set_name (tmp);
+      tout->set_name (tmp.c_str ());
       
       m3d_barre_finition (tout, barre);
       vue->scene->add_object (*tout);
@@ -1250,21 +1327,15 @@ m3d_barre (void     *donnees_m3d,
     {
       FAILCRIT (false,
                 (gettext ("Type de section %d inconnu.\n"),
-                          barre->section->type);
-                  free (tmp);)
+                          barre->section->type); )
       break;
     }
   }
-  
-  free (tmp);
   
   return true;
 }
 
 
-void
-m3d_barre_free (void     *donnees_m3d,
-                EF_Barre *barre)
 /**
  * \brief Supprimer une barre dans l'affichage graphique.
  * \param donnees_m3d : données SGlobalData,
@@ -1276,31 +1347,28 @@ m3d_barre_free (void     *donnees_m3d,
  *     - donnees_m3d == NULL,
  *     - en cas d'erreur d'allocation mémoire.
  */
+void
+m3d_barre_free (void     *donnees_m3d,
+                EF_Barre *barre)
 {
   CM3dObject  *cube;
-  char        *nom;
+  std::string  nom;
   SGlobalData *vue;
   
   BUGPARAM (barre, "%p", barre, )
   BUGPARAM (donnees_m3d, "%p", donnees_m3d, )
   
-  BUGCRIT (nom = g_strdup_printf ("barre %u", barre->numero),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+  nom = format ("barre %u", barre->numero);
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
-  cube = vue->scene->get_object_by_name (nom);
+  cube = vue->scene->get_object_by_name (nom.c_str ());
   vue->scene->remove_object (*cube);
-  
-  free (nom);
   
   return;
 }
 
 
-bool
-m3d_free (Projet *p)
 /**
  * \brief Libère l'espace mémoire alloué pour l'affichage graphique de la
  *        structure.
@@ -1310,6 +1378,8 @@ m3d_free (Projet *p)
  *   Échec : false :
  *     - p == NULL.
  */
+bool
+m3d_free (Projet *p)
 {
   SGlobalData *global_data;
   BUGPARAM (p, "%p", p, false)
@@ -1324,8 +1394,5 @@ m3d_free (Projet *p)
   
   return true;
 }
-
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

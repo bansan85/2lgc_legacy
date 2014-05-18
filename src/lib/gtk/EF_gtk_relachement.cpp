@@ -18,14 +18,11 @@
 
 #include "config.h"
 
-#ifdef ENABLE_GTK
-#include <libintl.h>
-#include <locale.h>
+#include <locale>
+
 #include <gtk/gtk.h>
-#include <string.h>
 
 #include "common_m3d.hpp"
-
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
 #include "common_gtk.hpp"
@@ -354,23 +351,15 @@ EF_gtk_relachements_boutton_supprimer_menu (GtkButton *widget,
       (!liste_barres_dep->empty ()) ||
       (!liste_charges_dep->empty ()))
   {
-    char *desc;
+    std::string desc;
     
-    BUG (desc = common_text_dependances (liste_noeuds_dep,
-                                         liste_barres_dep,
-                                         liste_charges_dep,
-                                         p),
-         ,
-         delete liste_noeuds_dep;
-           delete liste_barres_dep;
-           delete liste_charges_dep; )
+    desc = common_text_dependances (liste_noeuds_dep,
+                                    liste_barres_dep,
+                                    liste_charges_dep,
+                                    p);
     gtk_menu_item_set_label (GTK_MENU_ITEM (gtk_builder_get_object (
                      UI_REL.builder, "EF_relachements_supprimer_menu_barres")),
-                             desc);
-    free (desc);
-    delete liste_noeuds_dep;
-    delete liste_barres_dep;
-    delete liste_charges_dep;
+                             desc.c_str ());
   }
   else
   {
@@ -408,6 +397,8 @@ EF_gtk_relachements_edit_nom (GtkCellRendererText *cell,
   GtkTreePath    *path;
   EF_Relachement *relachement;
   
+  std::string     str_tmp (new_text);
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_REL.builder,
            ,
@@ -419,19 +410,19 @@ EF_gtk_relachements_edit_nom (GtkCellRendererText *cell,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
   gtk_tree_model_get (model, &iter, 0, &relachement, -1);
-  if ((strcmp (relachement->nom, new_text) == 0) ||
+  if ((relachement->nom.compare (new_text) == 0) ||
       (strcmp (new_text, "") == 0))
   {
     return;
   }
-  if (EF_relachement_cherche_nom (p, new_text, false))
+  if (EF_relachement_cherche_nom (p, &str_tmp, false))
   {
     return;
   }
 
   BUG (EF_relachement_modif (p,
                              relachement,
-                             new_text,
+                             &str_tmp,
                              EF_RELACHEMENT_UNTOUCH,
                              NULL,
                              EF_RELACHEMENT_UNTOUCH,
@@ -617,16 +608,20 @@ void
 EF_gtk_relachements_ajouter (GtkButton *button,
                              Projet    *p)
 {
+  std::string str_tmp (gettext ("Sans nom"));
+  
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_REL.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Relâchement"); )
   
-  if (EF_relachement_cherche_nom (p, gettext ("Sans nom"), false) == NULL)
+  if (EF_relachement_cherche_nom (p,
+                                  &str_tmp,
+                                  false) == NULL)
   {
     BUG (EF_relachement_ajout (p,
-                               gettext ("Sans nom"),
+                               &str_tmp,
                                EF_RELACHEMENT_BLOQUE,
                                NULL,
                                EF_RELACHEMENT_BLOQUE,
@@ -643,22 +638,16 @@ EF_gtk_relachements_ajouter (GtkButton *button,
   }
   else
   {
-    char    *nom;
-    uint16_t i = 2;
+    uint16_t    i = 2;
     
-    BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    while (EF_relachement_cherche_nom (p, nom, false) != NULL)
+    str_tmp = format ("%s (%d)", gettext ("Sans nom"), i);
+    while (EF_relachement_cherche_nom (p, &str_tmp, false) != NULL)
     {
       i++;
-      free (nom);
-      BUGCRIT (nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i),
-               ,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      str_tmp = format ("%s (%d)", gettext ("Sans nom"), i);
     }
     BUG (EF_relachement_ajout (p,
-                               nom,
+                               &str_tmp,
                                EF_RELACHEMENT_BLOQUE,
                                NULL,
                                EF_RELACHEMENT_BLOQUE,
@@ -671,9 +660,7 @@ EF_gtk_relachements_ajouter (GtkButton *button,
                                NULL,
                                EF_RELACHEMENT_BLOQUE,
                                NULL),
-        ,
-        free (nom); )
-    free (nom);
+        , )
   }
   
   return;
@@ -1223,7 +1210,7 @@ EF_gtk_relachements_render_0 (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, 0, &relachement, -1);
   BUGPARAM (relachement, "%p", relachement, )
   
-  g_object_set (cell, "text", relachement->nom, NULL);
+  g_object_set (cell, "text", relachement->nom.c_str (), NULL);
   
   return;
 }
@@ -1312,12 +1299,12 @@ EF_gtk_relachements_render_2 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->rx_d_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -1416,12 +1403,12 @@ EF_gtk_relachements_render_4 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->ry_d_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -1520,12 +1507,12 @@ EF_gtk_relachements_render_6 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->rz_d_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -1624,12 +1611,12 @@ EF_gtk_relachements_render_8 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->rx_f_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -1728,12 +1715,12 @@ EF_gtk_relachements_render_10 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->ry_f_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -1832,12 +1819,12 @@ EF_gtk_relachements_render_12 (GtkTreeViewColumn *tree_column,
     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
     {
       EF_Relachement_Donnees_Elastique_Lineaire *data;
-      char tmp[30];
+      std::string tmp;
       
       data = (EF_Relachement_Donnees_Elastique_Lineaire *)
                                                         relachement->rz_f_data;
-      conv_f_c (data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
-      g_object_set (cell, "text", tmp, NULL);
+      conv_f_c (data->raideur, &tmp, DECIMAL_NEWTON_PAR_METRE);
+      g_object_set (cell, "text", tmp.c_str (), NULL);
       
       break;
     }
@@ -2062,7 +2049,5 @@ EF_gtk_relachement (Projet *p)
   gtk_window_set_transient_for (GTK_WINDOW (UI_REL.window),
                                 GTK_WINDOW (UI_GTK.window));
 }
-
-#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

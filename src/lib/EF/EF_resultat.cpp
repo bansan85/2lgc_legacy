@@ -17,18 +17,16 @@
  */
 
 #include "config.h"
-#include <libintl.h>
-#include <locale.h>
-#include <gmodule.h>
-#include <string.h>
 
 #include <algorithm>
+#include <locale>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
 #include "common_math.hpp"
 #include "common_erreurs.hpp"
 #include "common_fonction.hpp"
+#include "common_text.hpp"
 #include "EF_resultat.hpp"
 
 
@@ -62,13 +60,13 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
                                   EF_Noeud             *noeud,
                                   uint8_t               indice,
                                   Projet               *p,
-                                  char                **texte,
+                                  std::string          *texte,
                                   double               *mini,
                                   double               *maxi)
 {
   std::list <Action*>::iterator it;
   
-  long    i;
+  size_t  i;
   double  mi, ma;
   double *x;
   Action *action;
@@ -83,13 +81,11 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
   {
     if (texte != NULL)
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_FORCE :
-                                           DECIMAL_MOMENT,
-                                         0.),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf",
+                       indice < 3 ?
+                         DECIMAL_FORCE :
+                         DECIMAL_MOMENT,
+                       0.);
     }
     if (mini != NULL)
     {
@@ -143,27 +139,23 @@ EF_resultat_noeud_reaction_appui (std::list <Action *> *liste,
   {
     if (!errrel (mi, ma))
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_FORCE :
-                                           DECIMAL_MOMENT,
-                                         mi,
-                                         indice < 3 ?
-                                           DECIMAL_FORCE :
-                                           DECIMAL_MOMENT,
-                                         ma),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf/%.*lf",
+                       indice < 3 ?
+                         DECIMAL_FORCE :
+                         DECIMAL_MOMENT,
+                       mi,
+                       indice < 3 ?
+                         DECIMAL_FORCE :
+                         DECIMAL_MOMENT,
+                       ma);
     }
     else
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_FORCE :
-                                           DECIMAL_MOMENT,
-                                         mi),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf",
+                       indice < 3 ?
+                         DECIMAL_FORCE :
+                         DECIMAL_MOMENT,
+                       mi);
     }
   }
   
@@ -201,13 +193,13 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
                                EF_Noeud             *noeud,
                                uint8_t               indice,
                                Projet               *p,
-                               char                **texte,
+                               std::string          *texte,
                                double               *mini,
                                double               *maxi)
 {
   std::list <Action*>::iterator it;
   
-  long    i;
+  size_t  i;
   double  mi, ma;
   double *x;
   Action *action;
@@ -222,13 +214,11 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
   {
     if (texte != NULL)
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_DEPLACEMENT :
-                                           DECIMAL_ROTATION,
-                                         0.),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf",
+                       indice < 3 ?
+                         DECIMAL_DEPLACEMENT :
+                         DECIMAL_ROTATION,
+                       0.);
     }
     if (mini != NULL)
     {
@@ -282,27 +272,23 @@ EF_resultat_noeud_deplacement (std::list <Action *> *liste,
   {
     if (!errrel (mi, ma))
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf/%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_DEPLACEMENT :
-                                           DECIMAL_ROTATION,
-                                         mi,
-                                         indice < 3 ?
-                                           DECIMAL_DEPLACEMENT :
-                                           DECIMAL_ROTATION,
-                                         ma),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf/%.*lf",
+                       indice < 3 ?
+                         DECIMAL_DEPLACEMENT :
+                         DECIMAL_ROTATION,
+                       mi,
+                       indice < 3 ?
+                         DECIMAL_DEPLACEMENT :
+                         DECIMAL_ROTATION,
+                       ma);
     }
     else
     {
-      BUGCRIT (*texte = g_strdup_printf ("%.*lf",
-                                         indice < 3 ?
-                                           DECIMAL_DEPLACEMENT :
-                                           DECIMAL_ROTATION,
-                                         mi),
-               false,
-               (gettext ("Erreur d'allocation mémoire.\n")); )
+      *texte = format ("%.*lf",
+                       indice < 3 ?
+                         DECIMAL_DEPLACEMENT :
+                         DECIMAL_ROTATION,
+                       mi);
     }
   }
   
