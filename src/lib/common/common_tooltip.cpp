@@ -19,9 +19,11 @@
 #include "config.h"
 #ifdef ENABLE_GTK
 
-#include <libxml/tree.h>
 #include <locale>
+#include <memory>
+
 #include <string.h>
+#include <libxml/tree.h>
 
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
@@ -199,30 +201,23 @@ common_tooltip_generation (xmlChar *nom)
                 //     FinSi
                 else if (strcmp ((char *) n2->name, "dimensions") == 0)
                 {
-                  char   *fake;
                   int16_t largeur, hauteur;
                   
-                  BUGCRIT (fake = (char *) malloc (sizeof (char) *
-                                              (strlen ((char *) contenu) + 1)),
-                           NULL,
-                           (gettext ("Erreur d'allocation mémoire.\n"));
-                             xmlFree (contenu);
-                             xmlFreeDoc (doc);
-                             xmlCleanupParser (); )
+                  std::unique_ptr <char> fake
+                                    (new char [strlen ((char *) contenu) + 1]);
                   
                   if (sscanf ((char *) contenu,
                               "%hdx%hd %s",
                               &largeur,
                               &hauteur,
-                              fake) != 2)
+                              fake.get ()) != 2)
                   {
                     FAILINFO (NULL,
                               (gettext ("'%s' n'est pas de la forme 'largeurxhauteur'.\n"),
                                         (char *) contenu);
                                 xmlFree (contenu);
                                 xmlFreeDoc (doc);
-                                xmlCleanupParser ();
-                                free (fake); )
+                                xmlCleanupParser (); )
                   }
                   else
                   {
@@ -230,7 +225,6 @@ common_tooltip_generation (xmlChar *nom)
                                                  largeur,
                                                  hauteur);
                   }
-                  free (fake);
                 }
                 xmlFree (contenu);
               }

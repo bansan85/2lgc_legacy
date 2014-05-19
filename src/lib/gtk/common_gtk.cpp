@@ -19,6 +19,8 @@
 #include "config.h"
 
 #include <locale>
+#include <cmath>
+#include <memory>
 
 #include <string.h>
 
@@ -167,10 +169,7 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
   texte = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-           UINT_MAX,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (texte); )
+  fake = new char [strlen (texte) + 1];
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
@@ -200,7 +199,7 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   }
   
   free (texte);
-  free (fake);
+  delete [] fake;
   
   if ((min_check) && (max_check))
   {
@@ -250,10 +249,7 @@ conv_buff_hu (GtkTextBuffer *textbuffer,
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
   texte = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-           UINT16_MAX,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             free (texte); )
+  fake = new char [strlen (texte) + 1];
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%hu%s", &nombre, fake) != 1)
@@ -283,7 +279,7 @@ conv_buff_hu (GtkTextBuffer *textbuffer,
   }
   
   free (texte);
-  free (fake);
+  delete fake;
   
   if ((min_check) && (max_check))
   {
@@ -328,9 +324,7 @@ common_gtk_entry_uint (GtkEntry *entry,
   BUGPARAMCRIT (entry, "%p", entry, UINT_MAX)
   
   texte = gtk_entry_get_text (entry);
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-           UINT_MAX,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  fake = new char[strlen (texte) + 1];
   
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
   {
@@ -358,7 +352,7 @@ common_gtk_entry_uint (GtkEntry *entry,
     }
   }
   
-  free (fake);
+  delete [] fake;
   
   if ((min_check) && (max_check))
   {

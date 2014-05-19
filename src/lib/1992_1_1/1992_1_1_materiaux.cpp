@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <locale>
-#include <math.h>
+#include <cmath>
 
 #include "common_projet.hpp"
 #include "common_math.hpp"

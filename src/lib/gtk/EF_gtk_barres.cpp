@@ -19,6 +19,8 @@
 #include "config.h"
 
 #include <locale>
+#include <cmath>
+#include <memory>
 
 #include <gtk/gtk.h>
 
@@ -304,10 +306,11 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
 {
   GtkTreeModel *model;
   GtkTreeIter   iter;
-  char         *fake;
   uint32_t      conversion;
   gint          column;
   EF_Barre     *barre;
+  
+  std::unique_ptr <char> fake;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_BAR.builder,
@@ -315,9 +318,7 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
                      "Barres"); )
   
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  fake = std::unique_ptr <char> (new char [strlen (new_text) + 1]);
   column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   
   model = GTK_TREE_MODEL (gtk_builder_get_object (UI_BAR.builder,
@@ -327,11 +328,9 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   // On vérifie si le texte contient bien un nombre entier
-  if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
+  if (sscanf (new_text, "%u%s", &conversion, fake.get ()) == 1)
   {
     EF_Noeud *noeud;
-    
-    free (fake);
     
     BUG (noeud = EF_noeuds_cherche_numero (p, conversion, true), )
     
@@ -343,10 +342,6 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
     {
       BUG (_1992_1_1_barres_change_noeud (barre, noeud, false, p), )
     }
-  }
-  else
-  {
-    free (fake);
   }
    
   return;

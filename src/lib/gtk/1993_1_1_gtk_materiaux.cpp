@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 
 #include <locale>
+#include <cmath>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"

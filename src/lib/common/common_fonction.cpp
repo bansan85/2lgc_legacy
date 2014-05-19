@@ -21,7 +21,7 @@
 #include <locale>
 #include <memory>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "1990_ponderations.hpp"
 #include "common_projet.hpp"
@@ -254,9 +254,7 @@ common_fonction_ajout_poly (Fonction *fonction,
   //   Attribution des coefficients de la fonction.
   if (fonction->nb_troncons == 0)
   {
-    BUGCRIT (fonction->troncons = (Troncon *) malloc (sizeof (Troncon)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    fonction->troncons = new Troncon;
     fonction->nb_troncons = 1;
     fonction->troncons[0].debut_troncon = debut_troncon;
     fonction->troncons[0].fin_troncon = fin_troncon;
@@ -725,8 +723,8 @@ common_fonction_cherche_zero (Fonction *fonction,
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
-      if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
-                              signbit (common_fonction_y (fonction, xx2_2, 0)))
+      if (std::signbit (common_fonction_y (fonction, xx1_2, 1)) ==
+                         std::signbit (common_fonction_y (fonction, xx2_2, 0)))
       {
         xx1_2 = xx2_2;
       }
@@ -806,8 +804,8 @@ common_fonction_cherche_zero (Fonction *fonction,
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (! (errmoy (xx3_2 - xx1_2, ERRMOY_DIST)))
     {
-      if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
-                              signbit (common_fonction_y (fonction, xx2_2, 0)))
+      if (std::signbit (common_fonction_y (fonction, xx1_2, 1)) ==
+                         std::signbit (common_fonction_y (fonction, xx2_2, 0)))
       {
         xx1_2 = xx2_2;
       }
@@ -989,7 +987,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                                      fonction->troncons[i].debut_troncon,
                                      1)) / dx;
         
-        if (signbit (fprim1) != signbit (fprim2))
+        if (std::signbit (fprim1) != std::signbit (fprim2))
         {
           nb++;
           tmp = pos_tmp;
@@ -1169,8 +1167,8 @@ common_fonction_caracteristiques (Fonction *fonction,
           // La méthode est un peu plus longue mais est moins problématique.
           while (true)
           {
-            if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
-                              signbit (common_fonction_y (fonction, xx2_2, 0)))
+            if (std::signbit (common_fonction_y (fonction, xx1_2, 1)) ==
+                         std::signbit (common_fonction_y (fonction, xx2_2, 0)))
             {
               xx1_2 = xx2_2;
             }
@@ -1273,8 +1271,8 @@ common_fonction_caracteristiques (Fonction *fonction,
           // La méthode est un peu plus longue mais est moins problématique.
           while (true)
           {
-            if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
-                              signbit (common_fonction_y (fonction, xx2_2, 0)))
+            if (std::signbit (common_fonction_y (fonction, xx1_2, 1)) ==
+                         std::signbit (common_fonction_y (fonction, xx2_2, 0)))
             {
               xx1_2 = xx2_2;
             }
@@ -1361,7 +1359,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                                         common_fonction_y (fonction, xx2_2, 0);
             c = common_fonction_y (fonction, xx3_2, -1) -
                      common_fonction_y (fonction, xx3_2 - ecart_old / 10., -1);
-            if (signbit (a) == signbit (b))
+            if (std::signbit (a) == std::signbit (b))
             {
               xx1_2 = xx2_2;
             }
@@ -1769,7 +1767,7 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
       cairo_rel_line_to (cr, 1., - (mi[x] - mi[x - 1]) * echelle);
     }
     
-    if (g_list_next (fonctions) != NULL)
+    if (fonctions->size () == 1)
     {
       cairo_rel_line_to (cr, 0., - (ma[width - 1] - mi[width - 1]) * echelle);
       for (x = (uint16_t) (width - 1U); x > 0; x--)

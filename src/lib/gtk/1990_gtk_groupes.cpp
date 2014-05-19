@@ -256,9 +256,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
   // sont les éléments du niveau n-1 encore non placés.
   if (dispo_max != 0)
   {
-    BUGCRIT (dispos = (bool *) malloc (sizeof (bool) * dispo_max),
-             FALSE,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
+    dispos = new bool [dispo_max];
     for (i = 0; i < dispo_max; i++)
     {
       dispos[i] = true;
@@ -387,7 +385,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
     }
   }
 
-  free (dispos);
+  delete dispos;
   
   return true;
 }
