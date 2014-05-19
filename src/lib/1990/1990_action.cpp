@@ -1152,8 +1152,6 @@ _1990_action_fonction_init (Projet *p,
     {
       Fonction *fn = new Fonction;
       
-      fn->nb_troncons = 0;
-      fn->troncons = NULL;
       action->efforts[i].push_back (fn);
     }
   }
@@ -1165,13 +1163,9 @@ _1990_action_fonction_init (Projet *p,
       Fonction *fn;
       
       fn = new Fonction;
-      fn->nb_troncons = 0;
-      fn->troncons = NULL;
       action->deformation[i].push_back (fn);
       
       fn = new Fonction;
-      fn->nb_troncons = 0;
-      fn->troncons = NULL;
       action->rotation[i].push_back (fn);
     }
   }

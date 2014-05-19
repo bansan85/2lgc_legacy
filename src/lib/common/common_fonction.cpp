@@ -22,6 +22,7 @@
 #include <memory>
 #include <string.h>
 #include <cmath>
+#include <algorithm>
 
 #include "1990_ponderations.hpp"
 #include "common_projet.hpp"
@@ -50,44 +51,36 @@ bool
 common_fonction_scinde_troncon (Fonction *fonction,
                                 double    coupure)
 {
-  uint16_t i;
-  
   BUGPARAM (fonction, "%p", fonction, false)
-  INFO (fonction->nb_troncons,
+  INFO (fonction->t.size () != 0,
         false,
         (gettext ("Impossible de scinder une fonction vide\n")); )
   
   // Si la coupure est égale au début du premier tronçon Alors
   //   Fin.
-  if (errrel (fonction->troncons[0].debut_troncon, coupure))
+  if (errrel ((*fonction->t.begin ())->debut_troncon, coupure))
   {
     return true;
   }
   // Sinon Si la coupure est inférieure au début du premier troncon Alors
   //   Insertion d'un tronçon en première position.
   //   Initialisation de tous les coefficients à 0.
-  else if (coupure < fonction->troncons[0].debut_troncon)
+  else if (coupure < (*fonction->t.begin ())->debut_troncon)
   {
-    BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                              (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    fonction->nb_troncons++;
-    for (i = (uint16_t) (fonction->nb_troncons - 1U); i > 0; i--)
-    {
-      memcpy (&(fonction->troncons[i]),
-              &(fonction->troncons[i-1]),
-              sizeof (Troncon));
-    }
-    fonction->troncons[0].debut_troncon = coupure;
-    fonction->troncons[0].fin_troncon = fonction->troncons[1].debut_troncon;
-    fonction->troncons[0].x0 = 0.;
-    fonction->troncons[0].x1 = 0.;
-    fonction->troncons[0].x2 = 0.;
-    fonction->troncons[0].x3 = 0.;
-    fonction->troncons[0].x4 = 0.;
-    fonction->troncons[0].x5 = 0.;
-    fonction->troncons[0].x6 = 0.;
+    Troncon *t_new = new Troncon;
+    
+    t_new->debut_troncon = coupure;
+    t_new->fin_troncon = (*fonction->t.begin ())->debut_troncon;
+    t_new->x0 = 0.;
+    t_new->x1 = 0.;
+    t_new->x2 = 0.;
+    t_new->x3 = 0.;
+    t_new->x4 = 0.;
+    t_new->x5 = 0.;
+    t_new->x6 = 0.;
+    
+    fonction->t.push_front (t_new);
+    
     return true;
   }
   else
@@ -103,32 +96,35 @@ common_fonction_scinde_troncon (Fonction *fonction,
   //     FinSi
   //   FinPour
   // FinSi
-    for (i = 0; i < fonction->nb_troncons; i++)
+    std::list <Troncon *>::iterator it = fonction->t.begin ();
+    Troncon *t_new;
+    
+    while (it != fonction->t.end ())
     {
-      if (errrel (fonction->troncons[i].fin_troncon, coupure))
+      if (errrel ((*it)->fin_troncon, coupure))
       {
         return true;
       }
-      else if (fonction->troncons[i].fin_troncon > coupure)
+      else if ((*it)->fin_troncon > coupure)
       {
-        uint16_t j;
+        t_new = new Troncon;
         
-        BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                              (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-                 false,
-                 (gettext ("Erreur d'allocation mémoire.\n")); )
-        fonction->nb_troncons++;
-        for (j = (uint16_t) (fonction->nb_troncons - 1U); j > i; j--)
-        {
-          memcpy (&(fonction->troncons[j]),
-                  &(fonction->troncons[j - 1]),
-                  sizeof (Troncon));
-        }
-        fonction->troncons[i + 1].debut_troncon = coupure;
-        fonction->troncons[i].fin_troncon = coupure;
+        t_new->debut_troncon = (*it)->debut_troncon;
+        t_new->fin_troncon = coupure;
+        t_new->x0 = (*it)->x0;
+        t_new->x1 = (*it)->x1;
+        t_new->x2 = (*it)->x2;
+        t_new->x3 = (*it)->x3;
+        t_new->x4 = (*it)->x4;
+        t_new->x5 = (*it)->x5;
+        t_new->x6 = (*it)->x6;
+        
+        fonction->t.insert (it, t_new);
         
         return true;
       }
+      
+      ++it;
     }
   // Si la position de la coupure est au-delà à la borne supérieure du dernier
   // tronçon
@@ -136,21 +132,21 @@ common_fonction_scinde_troncon (Fonction *fonction,
   //   Initialisation de tous les coefficients à 0.
   //   Fin.
   // FinSi
-    BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                              (fonction->nb_troncons + 1U) * sizeof (Troncon)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
-    fonction->nb_troncons++;
-    fonction->troncons[fonction->nb_troncons - 1].debut_troncon =
-                     fonction->troncons[fonction->nb_troncons - 2].fin_troncon;
-    fonction->troncons[fonction->nb_troncons-1].fin_troncon = coupure;
-    fonction->troncons[fonction->nb_troncons-1].x0 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x1 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x2 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x3 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x4 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x5 = 0.;
-    fonction->troncons[fonction->nb_troncons-1].x6 = 0.;
+    
+    t_new = new Troncon;
+    
+    --it;
+    
+    t_new->debut_troncon = (*it)->fin_troncon;
+    t_new->fin_troncon = coupure;
+    t_new->x0 = 0.;
+    t_new->x1 = 0.;
+    t_new->x2 = 0.;
+    t_new->x3 = 0.;
+    t_new->x4 = 0.;
+    t_new->x5 = 0.;
+    
+    fonction->t.push_back (t_new);
     
     return true;
   }
@@ -252,20 +248,24 @@ common_fonction_ajout_poly (Fonction *fonction,
   // Si aucun troncon n'est présent (fonction vide) Alors
   //   Création d'un tronçon avec pour borne debut_troncon .. fin_troncon.
   //   Attribution des coefficients de la fonction.
-  if (fonction->nb_troncons == 0)
+  if (fonction->t.size () == 0)
   {
-    fonction->troncons = new Troncon;
-    fonction->nb_troncons = 1;
-    fonction->troncons[0].debut_troncon = debut_troncon;
-    fonction->troncons[0].fin_troncon = fin_troncon;
-    fonction->troncons[0].x0 = x0_t;
-    fonction->troncons[0].x1 = x1_t;
-    fonction->troncons[0].x2 = x2_t;
-    fonction->troncons[0].x3 = x3_t;
-    fonction->troncons[0].x4 = x4_t;
-    fonction->troncons[0].x5 = x5_t;
-    fonction->troncons[0].x6 = x6_t;
+    Troncon *t_new;
     
+    t_new = new Troncon;
+    
+    t_new->debut_troncon = debut_troncon;
+    t_new->fin_troncon = fin_troncon;
+    t_new->x0 = x0_t;
+    t_new->x1 = x1_t;
+    t_new->x2 = x2_t;
+    t_new->x3 = x3_t;
+    t_new->x4 = x4_t;
+    t_new->x5 = x5_t;
+    t_new->x6 = x6_t;
+    
+    fonction->t.push_back (t_new);
+
     return true;
   }
   // Sinon
@@ -278,28 +278,29 @@ common_fonction_ajout_poly (Fonction *fonction,
   // FinSi
   else
   {
-    uint16_t i = 0;
+    std::list <Troncon *>::iterator it = fonction->t.begin ();
     
     BUG (common_fonction_scinde_troncon (fonction, debut_troncon), false)
     BUG (common_fonction_scinde_troncon (fonction, fin_troncon), false)
-    while ((i < fonction->nb_troncons))
+    while (it != fonction->t.end ())
     {
-      if (errrel (fonction->troncons[i].debut_troncon, fin_troncon))
+      if (errrel ((*it)->debut_troncon, fin_troncon))
       {
         return true;
       }
-      else if ((errrel (fonction->troncons[i].debut_troncon, debut_troncon)) ||
-               (fonction->troncons[i].debut_troncon > debut_troncon))
+      else if ((errrel ((*it)->debut_troncon, debut_troncon)) ||
+               ((*it)->debut_troncon > debut_troncon))
       {
-        fonction->troncons[i].x0 += x0_t;
-        fonction->troncons[i].x1 += x1_t;
-        fonction->troncons[i].x2 += x2_t;
-        fonction->troncons[i].x3 += x3_t;
-        fonction->troncons[i].x4 += x4_t;
-        fonction->troncons[i].x5 += x5_t;
-        fonction->troncons[i].x6 += x6_t;
+        (*it)->x0 += x0_t;
+        (*it)->x1 += x1_t;
+        (*it)->x2 += x2_t;
+        (*it)->x3 += x3_t;
+        (*it)->x4 += x4_t;
+        (*it)->x5 += x5_t;
+        (*it)->x6 += x6_t;
       }
-      i++;
+      
+      ++it;
     }
     return true;
   }
@@ -323,26 +324,27 @@ common_fonction_ajout_fonction (Fonction *fonction,
                                 Fonction *fonction_a_ajouter,
                                 double    multi)
 {
-  uint16_t i;
+  std::list <Troncon *>::iterator it;
   
   BUGPARAM (fonction, "%p", fonction, false)
   BUGPARAM (fonction_a_ajouter, "%p", fonction_a_ajouter, false)
   
-  for (i = 0; i < fonction_a_ajouter->nb_troncons; i++)
+  it = fonction_a_ajouter->t.begin ();
+  while (it != fonction_a_ajouter->t.end ())
   {
-    BUG (common_fonction_ajout_poly (
-                                 fonction,
-                                 fonction_a_ajouter->troncons[i].debut_troncon,
-                                 fonction_a_ajouter->troncons[i].fin_troncon,
-                                 multi*fonction_a_ajouter->troncons[i].x0,
-                                 multi*fonction_a_ajouter->troncons[i].x1,
-                                 multi*fonction_a_ajouter->troncons[i].x2,
-                                 multi*fonction_a_ajouter->troncons[i].x3,
-                                 multi*fonction_a_ajouter->troncons[i].x4,
-                                 multi*fonction_a_ajouter->troncons[i].x5,
-                                 multi*fonction_a_ajouter->troncons[i].x6,
-                                 0.),
+    BUG (common_fonction_ajout_poly (fonction,
+                                     (*it)->debut_troncon,
+                                     (*it)->fin_troncon,
+                                     multi*(*it)->x0,
+                                     multi*(*it)->x1,
+                                     multi*(*it)->x2,
+                                     multi*(*it)->x3,
+                                     multi*(*it)->x4,
+                                     multi*(*it)->x5,
+                                     multi*(*it)->x6,
+                                     0.),
          false)
+    ++it;
   }
   
   return true;
@@ -363,71 +365,49 @@ bool
 common_fonction_compacte (Fonction *fonction,
                           Fonction *index)
 {
-  uint16_t i; /* Numéro du tronçon en cours */
-  uint16_t j; /* Nombre de tronçons à conserver */
-  uint16_t k; /* Numéro du précédent tronçon identique */
+  std::list <Troncon *>::iterator it_f_1;
+  std::list <Troncon *>::iterator it_f;
+  std::list <Troncon *>::iterator it_i;
   
   BUGPARAM (fonction, "%p", fonction, false)
   
-  if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
+  if (fonction->t.size () <= 1)
   {
     return true;
   }
   
-  j = 1;
-  k = 0;
-  for (i = 1; i < fonction->nb_troncons; i++)
+  it_f_1 = fonction->t.begin ();
+  it_f = std::next (it_f_1);
+  if (index != NULL)
+    it_i = std::next (index->t.begin ());
+  
+  while (it_f != fonction->t.end ())
   {
-    if ((errrel (fonction->troncons[i].x0, fonction->troncons[k].x0)) &&
-        (errrel (fonction->troncons[i].x1, fonction->troncons[k].x1)) &&
-        (errrel (fonction->troncons[i].x2, fonction->troncons[k].x2)) &&
-        (errrel (fonction->troncons[i].x3, fonction->troncons[k].x3)) &&
-        (errrel (fonction->troncons[i].x4, fonction->troncons[k].x4)) &&
-        (errrel (fonction->troncons[i].x5, fonction->troncons[k].x5)) &&
-        (errrel (fonction->troncons[i].x6, fonction->troncons[k].x6)) &&
+    if ((errrel ((*it_f)->x0, (*it_f_1)->x0)) &&
+        (errrel ((*it_f)->x1, (*it_f_1)->x1)) &&
+        (errrel ((*it_f)->x2, (*it_f_1)->x2)) &&
+        (errrel ((*it_f)->x3, (*it_f_1)->x3)) &&
+        (errrel ((*it_f)->x4, (*it_f_1)->x4)) &&
+        (errrel ((*it_f)->x5, (*it_f_1)->x5)) &&
+        (errrel ((*it_f)->x6, (*it_f_1)->x6)) &&
         ((index == NULL) ||
-         (errrel (index->troncons[i].x0, index->troncons[k].x0))))
+         (errrel ((*it_i)->x0, (*std::prev (it_i))->x0))))
     {
-      fonction->troncons[j - 1].fin_troncon =
-                                             fonction->troncons[i].fin_troncon;
+      (*it_f_1)->fin_troncon = (*it_f)->fin_troncon;
       if (index != NULL)
       {
-        index->troncons[j - 1].fin_troncon = index->troncons[i].fin_troncon;
+        (*std::prev (it_i))->fin_troncon = (*it_i)->fin_troncon;
       }
+      it_f = fonction->t.erase (it_f);
+      it_i = fonction->t.erase (it_i);
     }
     else
     {
-      j++;
-      if (j - 1 != i)
-      {
-        memcpy (&(fonction->troncons[j - 1]),
-                &(fonction->troncons[i]),
-                sizeof (Troncon));
-        if (index != NULL)
-        {
-          memcpy (&(index->troncons[j - 1]),
-                  &(index->troncons[i]),
-                  sizeof (Troncon));
-        }
-      }
-      k = i;
+      ++it_f_1;
+      ++it_f;
+      if (index != NULL)
+        ++it_i;
     }
-  }
-  fonction->nb_troncons = j;
-  if (index != NULL)
-  {
-    index->nb_troncons = j;
-  }
-  BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                                         sizeof (Troncon) * j),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  if (index != NULL)
-  {
-    BUGCRIT (index->troncons = (Troncon *) realloc (index->troncons,
-                                                    sizeof (Troncon) * j),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n")); )
   }
   
   return true;
@@ -509,56 +489,59 @@ common_fonction_y (Fonction *fonction,
                    double    x_,
                    int8_t    position)
 {
-  uint16_t    i;
   long double x = x_; // NS (nsiqcppstyle)
   long double y; // NS (nsiqcppstyle)
+  
+  std::list <Troncon *>::iterator it;
   
   BUGPARAM (fonction, "%p", fonction, NAN)
   BUGPARAM (position, "%d", ((-1 <= position) && (position <= 1)), NAN)
   
-  if (fonction->nb_troncons == 0)
+  if (fonction->t.size () == 0)
   {
     return NAN;
   }
   
-  if ((errrel (fonction->troncons[0].debut_troncon, x_)) &&
+  if ((errrel ((*fonction->t.begin ())->debut_troncon, x_)) &&
       (position == -1))
   {
     return NAN;
   }
   
-  for (i = 0; i < fonction->nb_troncons; i++)
+  it = fonction->t.begin ();
+  while (it != fonction->t.end ())
   {
-    if (x <= fonction->troncons[i].fin_troncon)
+    if (x <= (*it)->fin_troncon)
     {
-      if (x < fonction->troncons[i].debut_troncon)
+      if (x < (*it)->debut_troncon)
       {
         return NAN;
       }
       else
       {
-        if ((errrel (fonction->troncons[i].fin_troncon, x_)) &&
+        if ((errrel ((*it)->fin_troncon, x_)) &&
             (position == 1))
         {
-          if (i == fonction->nb_troncons  -1)
+          if (std::next (it) == fonction->t.end ())
           {
             return NAN;
           }
           else
           {
-            i++;
+            ++it;
           }
         }
-        y = fonction->troncons[i].x0 +
-            fonction->troncons[i].x1 * x +
-            fonction->troncons[i].x2 * x * x +
-            fonction->troncons[i].x3 * x * x * x +
-            fonction->troncons[i].x4 * x * x * x * x +
-            fonction->troncons[i].x5 * x * x * x * x * x +
-            fonction->troncons[i].x6 * x * x * x * x * x * x;
+        y = (*it)->x0 +
+            (*it)->x1 * x +
+            (*it)->x2 * x * x +
+            (*it)->x3 * x * x * x +
+            (*it)->x4 * x * x * x * x +
+            (*it)->x5 * x * x * x * x * x +
+            (*it)->x6 * x * x * x * x * x * x;
         return (double) y;
       }
     }
+    ++it;
   }
   
   return NAN;
@@ -877,53 +860,55 @@ common_fonction_caracteristiques (Fonction *fonction,
                                   double  **val)
 {
   uint8_t  nb = 0;
-  uint16_t i;
   uint8_t  j;
   double  *pos_tmp = NULL, *val_tmp = NULL;
   void    *tmp;
+  
+  std::list <Troncon *>::iterator it;
   
   BUGPARAM (fonction, "%p", fonction, 0)
   BUGPARAM (pos, "%p", pos, 0)
   BUGPARAM (val, "%p", val, 0)
   
-  if (fonction->nb_troncons == 0)
+  if (fonction->t.size () == 0)
   {
     *pos = NULL;
     *val = NULL;
     return 0;
   }
   
-  for (i = 0; i < fonction->nb_troncons; i++)
+  it = fonction->t.begin ();
+  while (it != fonction->t.end ())
   {
     // On commence par s'occuper du début du tronçon. 
     
     // On ajoute si c'est le début de la fonction
-    if (i == 0)
+    if (it == fonction->t.begin ())
     {
       BUGCRIT (pos_tmp = (double *) malloc (sizeof (double)),
                0,
                (gettext ("Erreur d'allocation mémoire.\n")); )
-      pos_tmp[0] = fonction->troncons[0].debut_troncon;
+      pos_tmp[0] = (*it)->debut_troncon;
       BUGCRIT (val_tmp = (double *) malloc (sizeof (double)),
                0,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  free (pos_tmp); )
       val_tmp[0] = common_fonction_y (fonction,
-                                      fonction->troncons[0].debut_troncon,
+                                      (*it)->debut_troncon,
                                       1);
       nb = 1;
     }
     else
     {
       // On vérifie si la fonction est discontinue en x
-      if ((!errrel (fonction->troncons[i].debut_troncon,
-                    fonction->troncons[i-1].fin_troncon)) ||
+      if ((!errrel ((*it)->debut_troncon,
+                    (*std::prev (it))->fin_troncon)) ||
       // ou si elle est discontinue en y
           (!errrel (common_fonction_y (fonction,
-                                       fonction->troncons[i].debut_troncon,
+                                       (*it)->debut_troncon,
                                        -1),
                     common_fonction_y (fonction,
-                                       fonction->troncons[i].debut_troncon,
+                                       (*it)->debut_troncon,
                                        1))))
       {
         nb++;
@@ -933,7 +918,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
-        pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
+        pos_tmp[nb - 1] = (*it)->debut_troncon;
         tmp = val_tmp;
         BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
@@ -941,7 +926,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (pos_tmp);
                    free (tmp); )
         val_tmp[nb - 1] = common_fonction_y (fonction,
-                                           fonction->troncons[i].debut_troncon,
+                                             (*it)->debut_troncon,
                                              -1);
         nb++;
         tmp = pos_tmp;
@@ -950,7 +935,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    free (tmp);
                    free (val_tmp); )
-        pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
+        pos_tmp[nb - 1] = (*it)->debut_troncon;
         tmp = val_tmp;
         BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
                  0,
@@ -958,7 +943,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (pos_tmp);
                    free (tmp); )
         val_tmp[nb - 1] = common_fonction_y (fonction,
-                                           fonction->troncons[i].debut_troncon,
+                                             (*it)->debut_troncon,
                                              1);
       }
       // Si elle est continue, elle est un point caractéristique si sa dérivée
@@ -969,23 +954,15 @@ common_fonction_caracteristiques (Fonction *fonction,
         double dx;
         double fprim1, fprim2;
         
-        dx = (fonction->troncons[i - 1].fin_troncon -
-                                fonction->troncons[i-1].debut_troncon) / 1000.;
-        fprim1 = (common_fonction_y (fonction,
-                                     fonction->troncons[i].debut_troncon,
-                                     -1) -
-                  common_fonction_y (fonction,
-                                     fonction->troncons[i].debut_troncon - dx,
-                                     0)) / dx;
+        dx = ((*std::prev (it))->fin_troncon -
+                                     (*std::prev (it))->debut_troncon) / 1000.;
+        fprim1 = (common_fonction_y (fonction, (*it)->debut_troncon, -1) -
+                  common_fonction_y (fonction, (*it)->debut_troncon - dx, 0)) /
+                 dx;
         
-        dx = (fonction->troncons[i].fin_troncon -
-                                  fonction->troncons[i].debut_troncon) / 1000.;
-        fprim2 = (common_fonction_y (fonction,
-                                     fonction->troncons[i].debut_troncon + dx,
-                                     0) -
-                  common_fonction_y (fonction,
-                                     fonction->troncons[i].debut_troncon,
-                                     1)) / dx;
+        dx = ((*it)->fin_troncon - (*it)->debut_troncon) / 1000.;
+        fprim2 = (common_fonction_y (fonction, (*it)->debut_troncon + dx, 0) -
+                  common_fonction_y (fonction, (*it)->debut_troncon, 1)) / dx;
         
         if (std::signbit (fprim1) != std::signbit (fprim2))
         {
@@ -997,7 +974,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    (gettext ("Erreur d'allocation mémoire.\n"));
                      free (tmp);
                      free (val_tmp); )
-          pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
+          pos_tmp[nb - 1] = (*it)->debut_troncon;
           tmp = val_tmp;
           BUGCRIT (val_tmp = (double *) realloc (val_tmp,
                                                  sizeof (double) * nb),
@@ -1006,7 +983,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                      free (pos_tmp);
                      free (tmp); )
           val_tmp[nb - 1] = common_fonction_y (fonction,
-                                           fonction->troncons[i].debut_troncon,
+                                               (*it)->debut_troncon,
                                                -1);
         }
       }
@@ -1028,15 +1005,12 @@ common_fonction_caracteristiques (Fonction *fonction,
       // ne connait pas l'erreur de l'approximation faite. Il se pourrait
       // qu'avec l'approximation de base x soit dans l'intervalle mais que,
       // suite à l'affinement x en sorte.
-      xx1 = fonction->troncons[i].debut_troncon +
-              (fonction->troncons[i].fin_troncon -
-               fonction->troncons[i].debut_troncon) / 10. * j;
-      xx2 = fonction->troncons[i].debut_troncon +
-              (fonction->troncons[i].fin_troncon -
-               fonction->troncons[i].debut_troncon) / 10. * (j + 1);
-      xx3 = fonction->troncons[i].debut_troncon +
-              (fonction->troncons[i].fin_troncon -
-               fonction->troncons[i].debut_troncon) / 10. * (j + 2.);
+      xx1 = (*it)->debut_troncon +
+              ((*it)->fin_troncon - (*it)->debut_troncon) / 10. * j;
+      xx2 = (*it)->debut_troncon +
+              ((*it)->fin_troncon - (*it)->debut_troncon) / 10. * (j + 1);
+      xx3 = (*it)->debut_troncon +
+              ((*it)->fin_troncon - (*it)->debut_troncon) / 10. * (j + 2.);
       
       common_fonction_ax2_bx_c (xx1,
                                 common_fonction_y (fonction, xx1, 1),
@@ -1465,10 +1439,13 @@ common_fonction_caracteristiques (Fonction *fonction,
         val_tmp[nb - 1] = common_fonction_y (fonction, c, 0);
       }
     }
+    
+    ++it;
   }
   
+  it = std::prev (fonction->t.end ());
   if (!errrel (pos_tmp[nb - 1],
-               fonction->troncons[fonction->nb_troncons - 1].fin_troncon))
+               (*it)->fin_troncon))
   {
     nb++;
     tmp = pos_tmp;
@@ -1477,16 +1454,14 @@ common_fonction_caracteristiques (Fonction *fonction,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (tmp);
                free (val_tmp); )
-    pos_tmp[nb - 1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
+    pos_tmp[nb - 1] = (*it)->fin_troncon;
     tmp = val_tmp;
     BUGCRIT (val_tmp = (double *) realloc (val_tmp, sizeof (double) * nb),
              0,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (pos_tmp);
                free (tmp); )
-    val_tmp[nb - 1] = common_fonction_y (fonction,
-                     fonction->troncons[fonction->nb_troncons - 1].fin_troncon,
-                                         -1);
+    val_tmp[nb - 1] = common_fonction_y (fonction, (*it)->fin_troncon, -1);
   }
   
   *pos = pos_tmp;
@@ -1550,40 +1525,54 @@ common_fonction_affiche_caract (Fonction *fonction,
 bool
 common_fonction_affiche (Fonction *fonction)
 {
-  uint16_t i;
+  std::list <Troncon *>::iterator it;
   
   BUGPARAM (fonction, "%p", fonction, false)
   
-  INFO (fonction->nb_troncons, false, (gettext ("Fonction indéfinie.\n")); )
+  INFO (fonction->t.size () != 0, false, (gettext ("Fonction indéfinie.\n")); )
   
-  for (i = 0; i < fonction->nb_troncons; i++)
+  it = fonction->t.begin ();
+  while (it != fonction->t.end ())
   {
     printf (gettext ("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n"),
-      fonction->troncons[i].debut_troncon,
-      fonction->troncons[i].fin_troncon,
-      fonction->troncons[i].x0,
-      fonction->troncons[i].x1,
-      fonction->troncons[i].x2,
-      fonction->troncons[i].x3,
-      fonction->troncons[i].x4,
-      fonction->troncons[i].x5,
-      fonction->troncons[i].x6,
-      fonction->troncons[i].debut_troncon,
-      fonction->troncons[i].x0 +
-        fonction->troncons[i].x1 * fonction->troncons[i].debut_troncon +
-        fonction->troncons[i].x2 * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x3 * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x4 * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x5 * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x6 * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon * fonction->troncons[i].debut_troncon, // NS (nsiqcppstyle)
-      fonction->troncons[i].fin_troncon,
-      fonction->troncons[i].x0 +
-        fonction->troncons[i].x1 * fonction->troncons[i].fin_troncon +
-        fonction->troncons[i].x2 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x3 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x4 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x5 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon + // NS (nsiqcppstyle)
-        fonction->troncons[i].x6 * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon * fonction->troncons[i].fin_troncon); // NS (nsiqcppstyle)
+      (*it)->debut_troncon,
+      (*it)->fin_troncon,
+      (*it)->x0,
+      (*it)->x1,
+      (*it)->x2,
+      (*it)->x3,
+      (*it)->x4,
+      (*it)->x5,
+      (*it)->x6,
+      (*it)->debut_troncon,
+      (*it)->x0 +
+        (*it)->x1 * (*it)->debut_troncon +
+        (*it)->x2 * (*it)->debut_troncon * (*it)->debut_troncon +
+        (*it)->x3 * (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon +
+        (*it)->x4 * (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon * (*it)->debut_troncon +
+        (*it)->x5 * (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon +
+        (*it)->x6 * (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon * (*it)->debut_troncon *
+                    (*it)->debut_troncon * (*it)->debut_troncon,
+      (*it)->fin_troncon,
+      (*it)->x0 +
+        (*it)->x1 * (*it)->fin_troncon +
+        (*it)->x2 * (*it)->fin_troncon * (*it)->fin_troncon +
+        (*it)->x3 * (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon +
+        (*it)->x4 * (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon * (*it)->fin_troncon +
+        (*it)->x5 * (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon +
+        (*it)->x6 * (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon * (*it)->fin_troncon *
+                    (*it)->fin_troncon * (*it)->fin_troncon);
+    ++it;
   }
   
   return true;
@@ -1689,9 +1678,9 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
   {
     mi[x] = common_fonction_y (
       fonction,
-      fonction->troncons[0].debut_troncon +
-        x * (fonction->troncons[fonction->nb_troncons - 1].fin_troncon -
-                            fonction->troncons[0].debut_troncon) / (width - 1),
+      (*fonction->t.begin ())->debut_troncon +
+        x * ((*std::prev (fonction->t.end ()))->fin_troncon -
+                         (*fonction->t.begin ())->debut_troncon) / (width - 1),
       0);
     ma[x] = mi[x];
     
@@ -1713,9 +1702,9 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
     {
       echelle = common_fonction_y (
         fonction,
-        fonction->troncons[0].debut_troncon +
-          x * (fonction->troncons[fonction->nb_troncons - 1].fin_troncon -
-                            fonction->troncons[0].debut_troncon) / (width - 1),
+        (*fonction->t.begin ())->debut_troncon +
+          x * ((*std::prev (fonction->t.end ()))->fin_troncon -
+                            (*fonction->t.begin ())->debut_troncon) / (width - 1),
         0);
       if (echelle > ma[x])
       {
@@ -1835,7 +1824,7 @@ common_fonction_conversion_combinaisons (
   std::list <std::list <Ponderation *> *> **liste)
 {
   std::list <std::list <Ponderation *> *> *list_tmp;
-  uint16_t i;
+  std::list <Troncon *>::iterator          it;
   
   BUGPARAM (fonction, "%p", fonction, false)
   BUGPARAM (ponderations, "%p", ponderations, false)
@@ -1843,11 +1832,14 @@ common_fonction_conversion_combinaisons (
   
   list_tmp = new std::list <std::list <Ponderation *> *> ();
   
-  for (i = 0; i < fonction->nb_troncons; i++)
+  it = fonction->t.begin ();
+  while (it != fonction->t.end ())
   {
-    uint16_t numero = (uint16_t) fonction->troncons[i].x0;
+    uint16_t numero = (uint16_t) (*it)->x0;
     
     list_tmp->push_back (*std::next (ponderations->begin (), numero));
+    
+    ++it;
   }
   
   *liste = list_tmp;
@@ -1876,20 +1868,20 @@ common_fonction_renvoie (Fonction                                *fonction,
                          std::list <std::list <Ponderation *> *> *index,
                          int8_t                                   decimales)
 {
-  uint16_t    i;
   std::string retour;
   double      minimum = pow (10, -decimales);
   
   std::list <std::list <Ponderation *> *>::iterator it;
+  std::list <Troncon *>::iterator                   it2;
   
   BUGPARAM (fonction, "%p", fonction, NULL)
   BUGPARAM (index,
             "%p",
             (index == NULL) ||
-            ((index != NULL) && (fonction->nb_troncons == index->size ())),
+            ((index != NULL) && (fonction->t.size () == index->size ())),
             NULL)
   
-  if (fonction->nb_troncons == 0)
+  if (fonction->t.size () == 0)
   {
     retour = format ("%.*lf", decimales, 0.);
   }
@@ -1898,89 +1890,91 @@ common_fonction_renvoie (Fonction                                *fonction,
   {
     it = index->begin ();
   }
-  for (i = 0; i < fonction->nb_troncons; i++)
+  
+  it2 = fonction->t.begin ();
+  while (it2 != fonction->t.end ())
   {
     std::string ajout;
     
-    if (i != 0)
+    if (it2 != fonction->t.begin ())
     {
       retour += "\n";
     }
     
-    if (fonction->nb_troncons != 1)
+    if (fonction->t.size () != 1)
     {
       retour += format (gettext ("de %.*lfm à %.*lfm : "),
                         DECIMAL_DISTANCE,
-                        fonction->troncons[i].debut_troncon,
+                        (*it2)->debut_troncon,
                         DECIMAL_DISTANCE,
-                        fonction->troncons[i].fin_troncon);
+                        (*it2)->fin_troncon);
     }
     
-    if (fabs (fonction->troncons[i].x0) > minimum)
+    if (fabs ((*it2)->x0) > minimum)
     {
       ajout += format ("%.*lf",
                        decimales,
-                       fonction->troncons[i].x0);
+                       (*it2)->x0);
     }
     
-    if (fabs (fonction->troncons[i].x1) > minimum)
+    if (fabs ((*it2)->x1) > minimum)
     {
       ajout += format ("%s%.*lf*x",
-                       fonction->troncons[i].x1 > 0 ?
+                       (*it2)->x1 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x1);
+                       (*it2)->x1);
     }
     
-    if (fabs (fonction->troncons[i].x2) > minimum)
+    if (fabs ((*it2)->x2) > minimum)
     {
       ajout += format ("%s%.*lf*x²",
-                       fonction->troncons[i].x2 > 0 ?
+                       (*it2)->x2 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x2);
+                       (*it2)->x2);
     }
     
-    if (fabs (fonction->troncons[i].x3) > minimum)
+    if (fabs ((*it2)->x3) > minimum)
     {
       ajout += format ("%s%.*lf*x³",
-                       fonction->troncons[i].x3 > 0 ?
+                       (*it2)->x3 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x3);
+                       (*it2)->x3);
     }
     
-    if (fabs (fonction->troncons[i].x4) > minimum)
+    if (fabs ((*it2)->x4) > minimum)
     {
       ajout += format ("%s%.*lf*x⁴",
-                       fonction->troncons[i].x4 > 0 ?
+                       (*it2)->x4 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x4);
+                       (*it2)->x4);
     }
     
-    if (fabs (fonction->troncons[i].x5) > minimum)
+    if (fabs ((*it2)->x5) > minimum)
     {
       ajout += format ("%s%.*lf*x⁵",
-                       fonction->troncons[i].x5 > 0 ?
+                       (*it2)->x5 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x5);
+                       (*it2)->x5);
     }
     
-    if (fabs (fonction->troncons[i].x6) > minimum)
+    if (fabs ((*it2)->x6) > minimum)
     {
       ajout += format ("%s%.*lf*x⁶",
-                       fonction->troncons[i].x6 > 0 ?
+                       (*it2)->x6 > 0 ?
                          (ajout == "" ? "" : "+") :
                          "",
                        decimales,
-                       fonction->troncons[i].x6);
+                       (*it2)->x6);
     }
     
     if (ajout == "")
@@ -2001,6 +1995,7 @@ common_fonction_renvoie (Fonction                                *fonction,
       
       ++it;
     }
+    ++it2;
   }
   
   return retour;
@@ -2038,24 +2033,40 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
   
   BUGPARAM (fonctions, "%p", fonctions, false)
   BUGPARAM (fonction_min, "%p", fonction_min, false)
+  BUGPARAM (fonction_min->t.size () == 0,
+            "%zu",
+            fonction_min->t.size (),
+            false)
   BUGPARAM (fonction_max, "%p", fonction_max, false)
+  BUGPARAM (fonction_max->t.size () == 0,
+            "%zu",
+            fonction_max->t.size (),
+            false)
   BUGPARAM (comb_min, "%p", comb_min, false)
+  BUGPARAM (comb_min->t.size () == 0,
+            "%zu",
+            comb_min->t.size (),
+            false)
   BUGPARAM (comb_max, "%p", comb_max, false)
+  BUGPARAM (comb_max->t.size () == 0,
+            "%zu",
+            comb_max->t.size (),
+            false)
   
 #define FREE_ALL { \
-  free (fonction_min->troncons); \
-  free (fonction_max->troncons); \
-  free (comb_min->troncons); \
-  free (comb_max->troncons); \
+  for_each (fonction_min->t.begin (), \
+            fonction_min->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (fonction_max->t.begin (), \
+            fonction_max->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (comb_min->t.begin (), \
+            comb_min->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (comb_max->t.begin (), \
+            comb_max->t.end (), \
+            std::default_delete <Troncon> ()); \
 }
-  fonction_min->nb_troncons = 0;
-  fonction_min->troncons = NULL;
-  fonction_max->nb_troncons = 0;
-  fonction_max->troncons = NULL;
-  comb_min->nb_troncons = 0;
-  comb_min->troncons = NULL;
-  comb_max->nb_troncons = 0;
-  comb_max->troncons = NULL;
   
   it = fonctions->begin ();
   fonction = *it;
@@ -2078,23 +2089,35 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
   num = 1;
   while (it != fonctions->end ())
   {
-    uint16_t i, k;
     uint8_t  j;
     double   val[10], x[10];
     Fonction fonction_moins, fonction_bis;
     double   x_base, tmp;
     
+    std::list <Troncon *>::iterator it_m, it_b;
+    std::list <Troncon *>::iterator it_k, it_c;
+    
     fonction = *it;
     
-    memset (&fonction_moins, 0, sizeof (fonction_moins));
-    memset (&fonction_bis, 0, sizeof (fonction_bis));
 #define FREE_ALL { \
-  free (fonction_min->troncons); \
-  free (fonction_max->troncons); \
-  free (comb_min->troncons); \
-  free (comb_max->troncons); \
-  free (fonction_bis.troncons); \
-  free (fonction_moins.troncons); \
+  for_each (fonction_min->t.begin (), \
+            fonction_min->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (fonction_max->t.begin (), \
+            fonction_max->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (comb_min->t.begin (), \
+            comb_min->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (comb_max->t.begin (), \
+            comb_max->t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (fonction_bis.t.begin (), \
+            fonction_bis.t.end (), \
+            std::default_delete <Troncon> ()); \
+  for_each (fonction_moins.t.begin (), \
+            fonction_moins.t.end (), \
+            std::default_delete <Troncon> ()); \
 }
     BUG (common_fonction_ajout_fonction (&fonction_moins, fonction, 1.),
          false,
@@ -2105,12 +2128,15 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
     BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
          false,
          FREE_ALL)
-    for (i = 0; i < fonction_moins.nb_troncons; i++)
+    
+    it_m = fonction_moins.t.begin ();
+    it_b = fonction_bis.t.begin ();
+    while (it_m != fonction_moins.t.end ())
     {
       int8_t modif;
       double zero1, zero2;
       
-      x_base = fonction_moins.troncons[i].debut_troncon;
+      x_base = (*it_m)->debut_troncon;
       BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
            false,
            FREE_ALL)
@@ -2128,12 +2154,12 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       val[0] = common_fonction_y (&fonction_moins, x[0], 1);
       for (j = 1; j < 9; j++)
       {
-        x[j] = fonction_moins.troncons[i].debut_troncon +
-               j * (fonction_moins.troncons[i].fin_troncon -
-                    fonction_moins.troncons[i].debut_troncon) / 9.;
+        x[j] = (*it_m)->debut_troncon +
+               j * ((*it_m)->fin_troncon -
+                    (*it_m)->debut_troncon) / 9.;
         val[j] = common_fonction_y (&fonction_moins, x[j], 0);
       }
-      x[9] = fonction_moins.troncons[i].fin_troncon;
+      x[9] = (*it_m)->fin_troncon;
       val[9] = common_fonction_y (&fonction_moins, x[9], -1);
       
       // On vérifie en 10 points si la fonction est toujours inférieure à
@@ -2223,23 +2249,28 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                false,
                FREE_ALL)
           
-          for (k = 0; k < fonction_max->nb_troncons; k++)
+          it_k = fonction_max->t.begin ();
+          it_c = comb_max->t.begin ();
+          while (it_k != fonction_max->t.end ())
           {
-            if (fonction_max->troncons[k].fin_troncon > zero1)
+            if ((*it_k)->fin_troncon > zero1)
             {
               break;
             }
-            if (fonction_max->troncons[k].fin_troncon > x_base)
+            if ((*it_k)->fin_troncon > x_base)
             {
-              fonction_max->troncons[k].x0 = fonction_bis.troncons[i].x0;
-              fonction_max->troncons[k].x1 = fonction_bis.troncons[i].x1;
-              fonction_max->troncons[k].x2 = fonction_bis.troncons[i].x2;
-              fonction_max->troncons[k].x3 = fonction_bis.troncons[i].x3;
-              fonction_max->troncons[k].x4 = fonction_bis.troncons[i].x4;
-              fonction_max->troncons[k].x5 = fonction_bis.troncons[i].x5;
-              fonction_max->troncons[k].x6 = fonction_bis.troncons[i].x6;
-              comb_max->troncons[k].x0 = num;
+              (*it_k)->x0 = (*it_b)->x0;
+              (*it_k)->x1 = (*it_b)->x1;
+              (*it_k)->x2 = (*it_b)->x2;
+              (*it_k)->x3 = (*it_b)->x3;
+              (*it_k)->x4 = (*it_b)->x4;
+              (*it_k)->x5 = (*it_b)->x5;
+              (*it_k)->x6 = (*it_b)->x6;
+              (*it_c)->x0 = num;
             }
+            
+            ++it_k;
+            ++it_c;
           }
           x_base = zero1;
           modif = 0;
@@ -2248,7 +2279,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       }
       if (modif == 1)
       {
-        tmp = fonction_moins.troncons[i].fin_troncon;
+        tmp = (*it_m)->fin_troncon;
         BUG (common_fonction_scinde_troncon (fonction_max, tmp),
              false,
              FREE_ALL)
@@ -2262,36 +2293,48 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
              false,
              FREE_ALL)
         
-        for (k = 0; k < fonction_max->nb_troncons; k++)
+        it_k = fonction_max->t.begin ();
+        it_c = comb_max->t.begin ();
+        while (it_k != fonction_max->t.end ())
         {
-          if (fonction_max->troncons[k].fin_troncon > tmp)
+          if ((*it_k)->fin_troncon > tmp)
           {
             break;
           }
-          if (fonction_max->troncons[k].fin_troncon > x_base)
+          if ((*it_k)->fin_troncon > x_base)
           {
-            fonction_max->troncons[k].x0 = fonction_bis.troncons[i].x0;
-            fonction_max->troncons[k].x1 = fonction_bis.troncons[i].x1;
-            fonction_max->troncons[k].x2 = fonction_bis.troncons[i].x2;
-            fonction_max->troncons[k].x3 = fonction_bis.troncons[i].x3;
-            fonction_max->troncons[k].x4 = fonction_bis.troncons[i].x4;
-            fonction_max->troncons[k].x5 = fonction_bis.troncons[i].x5;
-            fonction_max->troncons[k].x6 = fonction_bis.troncons[i].x6;
-            comb_max->troncons[k].x0 = num;
+            (*it_k)->x0 = (*it_b)->x0;
+            (*it_k)->x1 = (*it_b)->x1;
+            (*it_k)->x2 = (*it_b)->x2;
+            (*it_k)->x3 = (*it_b)->x3;
+            (*it_k)->x4 = (*it_b)->x4;
+            (*it_k)->x5 = (*it_b)->x5;
+            (*it_k)->x6 = (*it_b)->x6;
+            (*it_c)->x0 = num;
           }
+          
+          ++it_k;
+          ++it_c;
         }
       }
+      
+      ++it_m;
+      ++it_b;
     }
     BUG (common_fonction_compacte (fonction_max, comb_max), false, FREE_ALL)
-    free (fonction_moins.troncons);
-    free (fonction_bis.troncons);
+    for_each (fonction_bis.t.begin (), \
+              fonction_bis.t.end (), \
+              std::default_delete <Troncon> ()); \
+    for_each (fonction_moins.t.begin (), \
+              fonction_moins.t.end (), \
+              std::default_delete <Troncon> ()); \
+    fonction_moins.t.clear ();
+    fonction_bis.t.clear ();
     
     // On passe à la courbe enveloppe inférieure. On utilise exactement le même
     // code que ci-dessus sauf qu'on fait -fonction+fonction_min à la place de
     // fonction-fonction_max. On remplace les fonction_max par fonction_min.
     // C'est tout !
-    memset (&fonction_moins, 0, sizeof (fonction_moins));
-    memset (&fonction_bis, 0, sizeof (fonction_bis));
     BUG (common_fonction_ajout_fonction (&fonction_moins,
                                          fonction,
                                          -1.),
@@ -2305,12 +2348,15 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
     BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
          false,
          FREE_ALL)
-    for (i = 0; i < fonction_moins.nb_troncons; i++)
+    
+    it_m = fonction_moins.t.begin ();
+    it_b = fonction_bis.t.begin ();
+    while (it_m != fonction_moins.t.end ())
     {
       int8_t modif;
       double zero1, zero2;
       
-      x_base = fonction_moins.troncons[i].debut_troncon;
+      x_base = (*it_m)->debut_troncon;
       BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
            false,
            FREE_ALL)
@@ -2326,12 +2372,12 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       val[0] = common_fonction_y (&fonction_moins, x[0], 1);
       for (j = 1; j < 9; j++)
       {
-        x[j] = fonction_moins.troncons[i].debut_troncon +
-               j * (fonction_moins.troncons[i].fin_troncon -
-                    fonction_moins.troncons[i].debut_troncon) / 9.;
+        x[j] = (*it_m)->debut_troncon +
+               j * ((*it_m)->fin_troncon -
+                    (*it_m)->debut_troncon) / 9.;
         val[j] = common_fonction_y (&fonction_moins, x[j], 0);
       }
-      x[9] = fonction_moins.troncons[i].fin_troncon;
+      x[9] = (*it_m)->fin_troncon;
       val[9] = common_fonction_y (&fonction_moins, x[9], -1);
       
       // On vérifie en 10 points si la fonction est toujours inférieure à
@@ -2422,23 +2468,28 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                false,
                FREE_ALL)
           
-          for (k = 0; k < fonction_min->nb_troncons; k++)
+          it_k = fonction_min->t.begin ();
+          it_c = comb_min->t.begin ();
+          while (it_k != fonction_min->t.end ())
           {
-            if (fonction_min->troncons[k].fin_troncon > zero1)
+            if ((*it_k)->fin_troncon > zero1)
             {
               break;
             }
-            if (fonction_min->troncons[k].fin_troncon > x_base)
+            if ((*it_k)->fin_troncon > x_base)
             {
-              fonction_min->troncons[k].x0 = fonction_bis.troncons[i].x0;
-              fonction_min->troncons[k].x1 = fonction_bis.troncons[i].x1;
-              fonction_min->troncons[k].x2 = fonction_bis.troncons[i].x2;
-              fonction_min->troncons[k].x3 = fonction_bis.troncons[i].x3;
-              fonction_min->troncons[k].x4 = fonction_bis.troncons[i].x4;
-              fonction_min->troncons[k].x5 = fonction_bis.troncons[i].x5;
-              fonction_min->troncons[k].x6 = fonction_bis.troncons[i].x6;
-              comb_min->troncons[k].x0 = num;
+              (*it_k)->x0 = (*it_b)->x0;
+              (*it_k)->x1 = (*it_b)->x1;
+              (*it_k)->x2 = (*it_b)->x2;
+              (*it_k)->x3 = (*it_b)->x3;
+              (*it_k)->x4 = (*it_b)->x4;
+              (*it_k)->x5 = (*it_b)->x5;
+              (*it_k)->x6 = (*it_b)->x6;
+              (*it_c)->x0 = num;
             }
+            
+            ++it_k;
+            ++it_c;
           }
           x_base = zero1;
           modif = 0;
@@ -2447,7 +2498,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
       }
       if (modif == 1)
       {
-        tmp = fonction_moins.troncons[i].fin_troncon;
+        tmp = (*it_m)->fin_troncon;
         BUG (common_fonction_scinde_troncon (fonction_min, tmp),
              false,
              FREE_ALL)
@@ -2459,29 +2510,42 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
              false,
              FREE_ALL)
         
-        for (k = 0; k < fonction_min->nb_troncons; k++)
+        
+        it_k = fonction_min->t.begin ();
+        it_c = comb_min->t.begin ();
+        while (it_k != fonction_min->t.end ())
         {
-          if (fonction_min->troncons[k].fin_troncon > tmp)
+          if ((*it_k)->fin_troncon > tmp)
           {
             break;
           }
-          if (fonction_min->troncons[k].fin_troncon > x_base)
+          if ((*it_k)->fin_troncon > x_base)
           {
-            fonction_min->troncons[k].x0 = fonction_bis.troncons[i].x0;
-            fonction_min->troncons[k].x1 = fonction_bis.troncons[i].x1;
-            fonction_min->troncons[k].x2 = fonction_bis.troncons[i].x2;
-            fonction_min->troncons[k].x3 = fonction_bis.troncons[i].x3;
-            fonction_min->troncons[k].x4 = fonction_bis.troncons[i].x4;
-            fonction_min->troncons[k].x5 = fonction_bis.troncons[i].x5;
-            fonction_min->troncons[k].x6 = fonction_bis.troncons[i].x6;
-            comb_min->troncons[k].x0 = num;
+            (*it_k)->x0 = (*it_b)->x0;
+            (*it_k)->x1 = (*it_b)->x1;
+            (*it_k)->x2 = (*it_b)->x2;
+            (*it_k)->x3 = (*it_b)->x3;
+            (*it_k)->x4 = (*it_b)->x4;
+            (*it_k)->x5 = (*it_b)->x5;
+            (*it_k)->x6 = (*it_b)->x6;
+            (*it_c)->x0 = num;
           }
         }
       }
+      
+      ++it_m;
+      ++it_b;
     }
     BUG (common_fonction_compacte (fonction_min, comb_min), false, FREE_ALL)
-    free (fonction_moins.troncons);
-    free (fonction_bis.troncons);
+    
+    for_each (fonction_bis.t.begin (), \
+              fonction_bis.t.end (), \
+              std::default_delete <Troncon> ()); \
+    for_each (fonction_moins.t.begin (), \
+              fonction_moins.t.end (), \
+              std::default_delete <Troncon> ()); \
+    fonction_moins.t.clear ();
+    fonction_bis.t.clear ();
     
     ++it;
     num++;
