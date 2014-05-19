@@ -300,7 +300,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
     uint16_t article;
     uint32_t codepostal, population;
     wchar_t *minuscule;
-    wchar_t *code_postal2;
+    wchar_t  code_postal2[11];
     wchar_t  departement[4];
     uint32_t commune;
     
@@ -326,25 +326,8 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
            g_list_free_full (list, common_gtk_informations_free_adresse);
            free (ville);
            free (code_postal); )
-    BUGCRIT (code_postal2 = (wchar_t *) malloc (sizeof (wchar_t) * 11),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               fclose (villes);
-               free (ligne);
-               g_list_free_full (list, common_gtk_informations_free_adresse);
-               free (ville);
-               free (code_postal); )
     swprintf (code_postal2, 11, L"%d", codepostal);
-    BUGCRIT (minuscule = (wchar_t *) malloc (sizeof (wchar_t) *
-                                      (wcslen (artmin) + wcslen (nccenr) + 2)),
-             ,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               fclose (villes);
-               free (ligne);
-               free (code_postal2);
-               g_list_free_full (list, common_gtk_informations_free_adresse);
-               free (ville);
-               free (code_postal); )
+    minuscule = new wchar_t [wcslen (artmin) + wcslen (nccenr) + 2];
     wcscpy (minuscule, artmin);
     wcscat (minuscule,
             (article == 5) || (article == 1) || (article == 0) ? L"" : L" ");
@@ -395,10 +378,9 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
     }
     else
     {
-      free (minuscule);
+      delete minuscule;
     }
     free (ligne);
-    free (code_postal2);
     ligne = common_text_get_line (villes);
   }
   free (code_postal);

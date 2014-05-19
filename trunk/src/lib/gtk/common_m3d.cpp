@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 #include <locale>
+#include <cmath>
 
 #include "common_projet.hpp"
 #include "common_erreurs.hpp"
@@ -96,9 +97,7 @@ m3d_init (Projet *p)
   UI_M3D.drawing = gtk_drawing_area_new ();
   gtk_widget_add_events(UI_M3D.drawing, GDK_POINTER_MOTION_MASK);
   gtk_widget_add_events(UI_M3D.drawing, GDK_BUTTON_PRESS_MASK);
-  BUGCRIT (UI_M3D.data = malloc (sizeof (SGlobalData)),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  UI_M3D.data = new SGlobalData;
   
   global_data = (SGlobalData *) UI_M3D.data;
   global_data->scene = new CM3dScene ();

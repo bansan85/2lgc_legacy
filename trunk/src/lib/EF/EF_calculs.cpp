@@ -165,32 +165,17 @@ EF_calculs_initialise (Projet *p)
   // degré de liberté des noeuds (via n_part et
   // n_comp) dans la matrice de rigidité globale partielle et
   // complète.
-  BUGCRIT (p->calculs.n_part = (uint32_t **)
-             malloc (sizeof (uint32_t *) * nb_noeuds),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  p->calculs.n_part = new uint32_t * [nb_noeuds];
   memset (p->calculs.n_part, 0, sizeof (uint32_t *) * nb_noeuds);
   for (i = 0; i < nb_noeuds; i++)
   {
-    BUGCRIT (p->calculs.n_part[i] = (uint32_t *)
-               malloc (6 * sizeof (uint32_t)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               EF_calculs_free (p); )
+    p->calculs.n_part[i] = new uint32_t [6];
   }
-  BUGCRIT (p->calculs.n_comp = (uint32_t **)
-             malloc (sizeof (uint32_t *) * nb_noeuds),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             EF_calculs_free (p); )
+  p->calculs.n_comp = new uint32_t *[nb_noeuds];
   memset (p->calculs.n_comp, 0, sizeof (uint32_t *) * nb_noeuds);
   for (i = 0; i < nb_noeuds; i++)
   {
-    BUGCRIT (p->calculs.n_comp[i] = (uint32_t *)
-               malloc (6 * sizeof (uint32_t)),
-             false,
-             (gettext ("Erreur d'allocation mémoire.\n"));
-               EF_calculs_free (p); )
+    p->calculs.n_comp[i] = new uint32_t [6];
   }
   // Détermination du nombre de colonnes pour la matrice de rigidité complète et
   // partielle :
@@ -469,18 +454,9 @@ EF_calculs_genere_mat_rig (Projet *p)
            (gettext ("Erreur d'allocation mémoire.\n")); )
   
   // Factorisation de la matrice de rigidité partielle.
-  BUGCRIT (p->calculs.ap = (int *) malloc (sizeof (int) *
-                                                (p->calculs.t_part->ncol + 1)),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (p->calculs.ai = (int *) malloc (sizeof (int) *
-                                                       p->calculs.t_part->nnz),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
-  BUGCRIT (p->calculs.ax = (double *) malloc (sizeof (double) *
-                                                       p->calculs.t_part->nnz),
-           false,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  p->calculs.ap = new int [p->calculs.t_part->ncol + 1];
+  p->calculs.ai = new int [p->calculs.t_part->nnz],
+  p->calculs.ax = new double [p->calculs.t_part->nnz];
   ai = (uint32_t *) p->calculs.t_part->i;
   aj = (uint32_t *) p->calculs.t_part->j;
   ax = (double *) p->calculs.t_part->x;
@@ -737,9 +713,8 @@ EF_calculs_resid (int    *Ap,
   BUGPARAM (Ax, "%p", Ax, NAN)
   BUGPARAM (b, "%p", b, NAN)
   BUGPARAM (x, "%p", x, NAN)
-  BUGCRIT (r = (double *) malloc (sizeof (double) * n),
-           NAN,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  r = new double [n];
   
   for (k = 0; k < n; k++)
   {
@@ -757,7 +732,7 @@ EF_calculs_resid (int    *Ap,
   {
   	norm = std::max (fabs (r[k]), norm);
   }
-  free (r);
+  delete [] r;
   
   return norm;
 }

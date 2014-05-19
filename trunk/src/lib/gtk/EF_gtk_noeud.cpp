@@ -19,6 +19,8 @@
 #include "config.h"
 
 #include <locale>
+#include <cmath>
+#include <memory>
 
 #include <gtk/gtk.h>
 
@@ -706,9 +708,10 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   GtkTreeModel *model;
   GtkTreePath  *path;
   GtkTreeIter   iter;
-  char         *fake;
   uint32_t      conversion;
   EF_Noeud     *noeud;
+  
+  std::unique_ptr <char> fake;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
@@ -720,9 +723,7 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
            (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
   
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  fake = std::unique_ptr <char> (new char [strlen (new_text) + 1]);
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_libre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -734,25 +735,17 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   // On vérifie si le texte contient bien un nombre flottant
   if (strcmp (new_text, "") == 0)
   {
-    BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL),
-         ,
-         free (fake); )
+    BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL), )
   }
-  else if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
+  else if (sscanf (new_text, "%u%s", &conversion, fake.get ()) == 1)
   {
     EF_Noeud *noeud2;
     
-    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, true),
-         ,
-         free (fake); )
+    BUG (noeud2 = EF_noeuds_cherche_numero (p, conversion, true), )
     
-    BUG (EF_noeuds_change_noeud_relatif (p, noeud, noeud2),
-         ,
-         free (fake); )
+    BUG (EF_noeuds_change_noeud_relatif (p, noeud, noeud2), )
   }
   
-  free (fake);
-   
   return;
 }
 
@@ -851,11 +844,12 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
                                      const gchar         *new_text,
                                      Projet              *p)
 {
-  char         *fake;
   uint32_t      conversion;
   GtkTreeModel *model;
   GtkTreePath  *path;
   GtkTreeIter   iter;
+  
+  std::unique_ptr <char> fake;
   
   BUGPARAMCRIT (p, "%p", p, )
   BUGCRIT (UI_NOE.builder,
@@ -866,9 +860,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
            ,
            (gettext ("Aucun noeud n'est existant.\n")); )
   BUGPARAMCRIT (new_text, "%p", new_text, )
-  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (new_text) + 1)),
-           ,
-           (gettext ("Erreur d'allocation mémoire.\n")); )
+  fake = std::unique_ptr <char> (new char [strlen (new_text) + 1]);
   
   model = GTK_TREE_MODEL (UI_NOE.tree_store_barre);
   path = gtk_tree_path_new_from_string (path_string);
@@ -877,7 +869,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
   
   // On vérifie si le texte contient bien un numéro
-  if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
+  if (sscanf (new_text, "%u%s", &conversion, fake.get ()) == 1)
   {
     EF_Barre *barre;
     EF_Noeud *noeud;
@@ -886,9 +878,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     
     // On modifie l'action
     gtk_tree_model_get (model, &iter, 0, &noeud, -1);
-    BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, true),
-         ,
-         free (fake); )
+    BUG (barre = _1992_1_1_barres_cherche_numero (p, conversion, true), )
     
     if (noeud->type == NOEUD_BARRE)
     {
@@ -896,7 +886,7 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
       
       std::list <EF_Noeud *>::iterator it;
       
-      BUG (EF_calculs_free (p), , free (fake); )
+      BUG (EF_calculs_free (p), )
       
       info->barre->discretisation_element--;
       info->barre->nds_inter.remove (noeud);
@@ -904,16 +894,14 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
-              (gettext ("Erreur d'allocation mémoire.\n"));
-                free (fake); )
+              (gettext ("Erreur d'allocation mémoire.\n")); )
       info->barre = barre;
       info->barre->discretisation_element++;
       BUGCRIT (info->barre->info_EF = (Barre_Info_EF *) realloc (
         info->barre->info_EF,
         sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
               ,
-              (gettext ("Erreur d'allocation mémoire.\n"));
-                free (fake); )
+              (gettext ("Erreur d'allocation mémoire.\n")); )
       memset (barre->info_EF,
               0,
               sizeof (Barre_Info_EF) *
@@ -931,22 +919,14 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
     }
     else
     {
-      FAILCRIT ( ,
-                (gettext ("Le noeud doit être de type intermédiaire.\n"));
-                  free (fake); )
+      FAILCRIT ( , (gettext ("Le noeud doit être de type intermédiaire.\n")); )
     }
     
     liste_noeuds.push_back (noeud);
     
-    BUG (m3d_actualise_graphique (p, &liste_noeuds, NULL),
-         ,
-         free (fake); )
-    BUG (m3d_rafraichit (p),
-         ,
-         free (fake); )
+    BUG (m3d_actualise_graphique (p, &liste_noeuds, NULL), )
+    BUG (m3d_rafraichit (p), )
   }
-  
-  free (fake);
   
   return;
 }

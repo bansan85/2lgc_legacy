@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <locale>
+#include <cmath>
 
 #include <gtk/gtk.h>
 
