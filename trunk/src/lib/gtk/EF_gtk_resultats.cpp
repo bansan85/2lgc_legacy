@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <locale>
+#include <memory>
 
 #include "1990_action.hpp"
 #include "1990_ponderations.hpp"
@@ -579,16 +580,19 @@ EF_gtk_resultats_remplit_page (Gtk_EF_Resultats_Tableau *res,
             
             std::list <Action *>::iterator it2;
             
-    #define FREE_ALL2 free (comb_min.troncons); \
-    free (comb_max.troncons); \
-    free (f_min.troncons); \
-    free (f_max.troncons); \
-    delete converti;
-            
-            comb_min.troncons = NULL;
-            comb_max.troncons = NULL;
-            f_min.troncons = NULL;
-            f_max.troncons = NULL;
+    #define FREE_ALL2 delete converti; \
+    for_each (comb_min.t.begin (), \
+              comb_min.t.end (), \
+              std::default_delete <Troncon> ()); \
+    for_each (comb_max.t.begin (), \
+              comb_max.t.end (), \
+              std::default_delete <Troncon> ()); \
+    for_each (f_min.t.begin (), \
+              f_min.t.end (), \
+              std::default_delete <Troncon> ()); \
+    for_each (f_max.t.begin (), \
+              f_max.t.end (), \
+              std::default_delete <Troncon> ());
             
             switch (res->col_tab[j])
             {

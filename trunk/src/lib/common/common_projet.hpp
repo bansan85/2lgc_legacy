@@ -707,10 +707,8 @@ typedef struct
  */
 typedef struct
 {
-  /// nb_troncons défini le nombre de tronçons que possède la fonction.
-  uint16_t nb_troncons;
   /// Tableau dynamique contenant les fonctions continues par tronçon.
-  Troncon *troncons;
+  std::list <Troncon *> t;
 } Fonction;
 
 
