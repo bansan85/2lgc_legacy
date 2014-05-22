@@ -279,7 +279,7 @@ conv_buff_hu (GtkTextBuffer *textbuffer,
   }
   
   free (texte);
-  delete fake;
+  delete [] fake;
   
   if ((min_check) && (max_check))
   {
