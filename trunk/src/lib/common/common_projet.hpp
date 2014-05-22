@@ -314,23 +314,6 @@ typedef enum
 
 
 /**
- * \enum Type_Liste
- * \brief Type de liste pour common_selection.
- */
-typedef enum
-{
-  /// Nombre non signé.
-  LISTE_UINT = 0,
-  /// Noeuds.
-  LISTE_NOEUDS,
-  /// Barres.
-  LISTE_BARRES,
-  /// Charges.
-  LISTE_CHARGES
-} Type_Liste;
-
-
-/**
  * \enum Type_Materiau
  * \brief Le type du matériau.
  */

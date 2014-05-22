@@ -378,7 +378,7 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
     }
     else
     {
-      delete minuscule;
+      delete [] minuscule;
     }
     free (ligne);
     ligne = common_text_get_line (villes);
@@ -527,7 +527,7 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
   Type_Neige  neige;
   Type_Vent   vent;
   Type_Seisme seisme;
-  std::string txt1, txt2, message;
+  std::string message;
   const char *const_txt;
   wchar_t    *txt_tmp;
   

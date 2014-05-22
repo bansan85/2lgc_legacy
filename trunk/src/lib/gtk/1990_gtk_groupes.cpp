@@ -385,7 +385,7 @@ _1990_gtk_groupes_affiche_niveau (Projet  *p,
     }
   }
 
-  delete dispos;
+  delete [] dispos;
   
   return true;
 }
