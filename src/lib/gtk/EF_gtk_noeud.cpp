@@ -890,32 +890,26 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
       
       info->barre->discretisation_element--;
       info->barre->nds_inter.remove (noeud);
-      BUGCRIT (info->barre->info_EF = (Barre_Info_EF *) realloc (
-        info->barre->info_EF,
-        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
-              ,
-              (gettext ("Erreur d'allocation mémoire.\n")); )
-      info->barre = barre;
-      info->barre->discretisation_element++;
-      BUGCRIT (info->barre->info_EF = (Barre_Info_EF *) realloc (
-        info->barre->info_EF,
-        sizeof (Barre_Info_EF) * (info->barre->discretisation_element + 1U)),
-              ,
-              (gettext ("Erreur d'allocation mémoire.\n")); )
-      memset (barre->info_EF,
+      info->barre->info_EF.resize (info->barre->discretisation_element + 1U);
+      memset (&info->barre->info_EF[0],
               0,
-              sizeof (Barre_Info_EF) *
-                                   (info->barre->discretisation_element + 1U));
+              sizeof (Barre_Info_EF) * info->barre->info_EF.size ());
+      info->barre = barre;
+      barre->discretisation_element++;
+      barre->info_EF.resize (barre->discretisation_element + 1U);
+      memset (&barre->info_EF[0],
+              0,
+              sizeof (Barre_Info_EF) * barre->info_EF.size ());
       
-      it = info->barre->nds_inter.begin ();
-      while ((it != info->barre->nds_inter.end ()) &&
+      it = barre->nds_inter.begin ();
+      while ((it != barre->nds_inter.end ()) &&
              (m_g (((EF_Noeud_Barre *) (*it)->data)->position_relative_barre) <
                                           m_g (info->position_relative_barre)))
       {
         ++it;
       }
       
-      info->barre->nds_inter.insert (it, noeud);
+      barre->nds_inter.insert (it, noeud);
     }
     else
     {

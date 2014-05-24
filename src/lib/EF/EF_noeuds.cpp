@@ -284,13 +284,8 @@ EF_noeuds_ajout_noeud_barre (Projet   *p,
   
   barre->nds_inter.insert (it, noeud_nouveau);
   
-  BUGCRIT (barre->info_EF = (Barre_Info_EF *) realloc (barre->info_EF,
-                sizeof (Barre_Info_EF) * (barre->discretisation_element + 1U)),
-           NULL,
-           (gettext ("Erreur d'allocation mémoire.\n"));
-             delete data;
-             delete noeud_nouveau; )
-  memset (barre->info_EF,
+  barre->info_EF.resize (barre->discretisation_element + 1U);
+  memset (&barre->info_EF[0],
           0,
           sizeof (Barre_Info_EF) * (barre->discretisation_element + 1U));
   
@@ -874,15 +869,10 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
               "%d",
               infos->barre->discretisation_element + 1,
               )
-    BUGCRIT (infos->barre->info_EF =
-                              (Barre_Info_EF *) realloc (infos->barre->info_EF,
-         sizeof (Barre_Info_EF) * (infos->barre->discretisation_element + 1U)),
-             ,
-             (gettext("Erreur d'allocation mémoire.\n")); )
-    memset (infos->barre->info_EF,
+    infos->barre->info_EF.resize (infos->barre->discretisation_element + 1U);
+    memset (&infos->barre->info_EF[0],
             0,
-            sizeof (Barre_Info_EF) *
-                                  (infos->barre->discretisation_element + 1U));
+            sizeof (Barre_Info_EF) * infos->barre->info_EF.size ());
   }
   
 #ifdef ENABLE_GTK
