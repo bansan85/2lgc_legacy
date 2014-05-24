@@ -118,7 +118,6 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
   {
     cholmod_free_sparse (&barre->m_rot_t, p->calculs.c);
   }
-  delete barre->info_EF;
   
 #ifdef ENABLE_GTK
   if (UI_BAR.builder != NULL)
@@ -197,8 +196,8 @@ _1992_1_1_barres_ajout (Projet         *p,
   element_nouveau->relachement = relachement;
   element_nouveau->discretisation_element = 0;
   
-  element_nouveau->info_EF = new Barre_Info_EF;
-  memset (element_nouveau->info_EF, 0, sizeof (Barre_Info_EF));
+  element_nouveau->info_EF = std::vector <Barre_Info_EF> (1);
+  memset (&element_nouveau->info_EF[0], 0, sizeof (Barre_Info_EF));
   
   element_nouveau->m_rot = NULL;
   element_nouveau->m_rot_t = NULL;
@@ -214,8 +213,7 @@ _1992_1_1_barres_ajout (Projet         *p,
   
   BUG (EF_calculs_free (p),
        false,
-       delete element_nouveau->info_EF;
-         delete element_nouveau; )
+       delete element_nouveau; )
   
 #ifdef ENABLE_GTK
   // On incrémente le numéro de la future barre

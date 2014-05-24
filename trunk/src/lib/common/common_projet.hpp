@@ -1610,7 +1610,7 @@ typedef struct
    */
   std::list <EF_Noeud *> nds_inter;
   /// Une info de calcul par élément discrétisé.
-  Barre_Info_EF  *info_EF;
+  std::vector <Barre_Info_EF> info_EF;
 #ifdef ENABLE_GTK
   /// L'affichage graphique dans la fenêtre graphique.
   GtkTreeIter     Iter;
