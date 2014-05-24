@@ -264,8 +264,6 @@ EF_noeuds_ajout_noeud_barre (Projet   *p,
   
   p->modele.noeuds.push_back (noeud_nouveau);
   
-  barre->discretisation_element++;
-  
   it = barre->nds_inter.begin ();
   while (it != barre->nds_inter.end ())
   {
@@ -284,10 +282,10 @@ EF_noeuds_ajout_noeud_barre (Projet   *p,
   
   barre->nds_inter.insert (it, noeud_nouveau);
   
-  barre->info_EF.resize (barre->discretisation_element + 1U);
+  barre->info_EF.resize (barre->nds_inter.size () + 1U);
   memset (&barre->info_EF[0],
           0,
-          sizeof (Barre_Info_EF) * (barre->discretisation_element + 1U));
+          sizeof (Barre_Info_EF) * (barre->nds_inter.size () + 1U));
   
 #ifdef ENABLE_GTK
   BUG (m3d_noeud (&UI_M3D, noeud_nouveau),
@@ -855,8 +853,7 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
     EF_Noeud_Barre *infos = (EF_Noeud_Barre *) noeud->data;
     uint16_t        i;
     
-    infos->barre->nds_inter.remove (noeud);
-    for (i = 0; i <= infos->barre->discretisation_element; i++)
+    for (i = 0; i <= infos->barre->nds_inter.size (); i++)
     {
       if (infos->barre->info_EF[i].m_rig_loc != NULL)
       {
@@ -864,12 +861,14 @@ EF_noeuds_free_foreach (EF_Noeud *noeud,
                              p->calculs.c);
       }
     }
-    infos->barre->discretisation_element--;
-    BUGPARAM (infos->barre->discretisation_element + 1,
+    
+    infos->barre->nds_inter.remove (noeud);
+    
+    BUGPARAM (infos->barre->nds_inter.size () + 1,
               "%d",
-              infos->barre->discretisation_element + 1,
+              infos->barre->nds_inter.size () + 1,
               )
-    infos->barre->info_EF.resize (infos->barre->discretisation_element + 1U);
+    infos->barre->info_EF.resize (infos->barre->nds_inter.size () + 1U);
     memset (&infos->barre->info_EF[0],
             0,
             sizeof (Barre_Info_EF) * infos->barre->info_EF.size ());

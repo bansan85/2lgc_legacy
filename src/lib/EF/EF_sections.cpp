@@ -2189,7 +2189,7 @@ EF_sections_vzp (Section *sect)
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation <= barre->discretisation_element,
+ *     - discretisation <= barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2201,11 +2201,11 @@ EF_sections_ay (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2224,7 +2224,7 @@ EF_sections_ay (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2254,7 +2254,7 @@ EF_sections_ay (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2266,11 +2266,11 @@ EF_sections_by (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2289,7 +2289,7 @@ EF_sections_by (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2319,7 +2319,7 @@ EF_sections_by (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2331,11 +2331,11 @@ EF_sections_cy (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2354,7 +2354,7 @@ EF_sections_cy (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2384,7 +2384,7 @@ EF_sections_cy (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2396,11 +2396,11 @@ EF_sections_az (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient a est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2419,7 +2419,7 @@ EF_sections_az (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2449,7 +2449,7 @@ EF_sections_az (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2461,11 +2461,11 @@ EF_sections_bz (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient b est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2484,7 +2484,7 @@ EF_sections_bz (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2514,7 +2514,7 @@ EF_sections_bz (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnu.
  */
 double
@@ -2526,11 +2526,11 @@ EF_sections_cz (EF_Barre *barre,
   double    E;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le coefficient c est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2549,7 +2549,7 @@ EF_sections_cz (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -2641,7 +2641,7 @@ EF_sections_s (Section *sect)
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - debut>fin,
  *     - type de section inconnue.
  */
@@ -2652,11 +2652,11 @@ EF_sections_es_l (EF_Barre *barre,
                   double    f)
 {
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (d <= f,
         NAN,
         (gettext ("La fin doit être après le début.\n")); )
@@ -2679,7 +2679,7 @@ EF_sections_es_l (EF_Barre *barre,
  *   Succès : Résultat.\n
  *   Échec : NAN :
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - type de section inconnue.
  */
 double
@@ -2690,11 +2690,11 @@ EF_sections_gj_l (EF_Barre *barre,
   double    ll;
   
   BUGPARAM (barre, "%p", barre, NAN)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         NAN,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   
   // Le facteur GJ/L est défini par la formule :
   // \end{verbatim}\begin{displaymath}
@@ -2713,7 +2713,7 @@ EF_sections_gj_l (EF_Barre *barre,
     std::advance (it, discretisation - 1U);
     debut = *it;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
