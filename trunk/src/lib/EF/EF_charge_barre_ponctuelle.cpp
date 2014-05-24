@@ -205,7 +205,7 @@ EF_charge_barre_ponctuelle_description (Charge *charge)
  *     - infos == NULL,
  *     - ma == NULL,
  *     - mb == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l
  */
@@ -225,11 +225,11 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   BUGPARAM (infos, "%p", infos, false)
   BUGPARAM (ma, "%p", ma, false)
   BUGPARAM (mb, "%p", mb, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
         false,
@@ -259,7 +259,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -331,7 +331,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
  *     - barre == NULL,
  *     - phia == NULL,
  *     - phib == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - a < 0. ou a > l.
  */
 bool
@@ -349,11 +349,11 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   BUGPARAM (barre, "%p", barre, false)
   BUGPARAM (phia, "%p", phia, false)
   BUGPARAM (phib, "%p", phib, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (a >= 0.,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
@@ -396,7 +396,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -461,7 +461,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
  *     - barre == NULL,
  *     - phia == NULL,
  *     - phib == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - a < 0. ou a > l.
  */
 bool
@@ -477,11 +477,11 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   double    l, b, E, I;
   
   BUGPARAM (barre, "%p", barre, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   BUGPARAM (phia, "%p", phia, false)
   BUGPARAM (phib, "%p", phib, false)
   INFO (a >= 0.,
@@ -525,7 +525,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -587,7 +587,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
  *   Échec : false :
  *     - fonction == NULL,
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - kAx == kBx == MAXDOUBLE,
  *     - a < 0. ou a > l.
  */
@@ -606,11 +606,11 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   
   BUGPARAM (fonction, "%p", fonction, false)
   BUGPARAM (barre, "%p", barre, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   infos = &(barre->info_EF[discretisation]);
   INFO (!((errrel (infos->kAx, MAXDOUBLE)) &&
           (errrel (infos->kBx, MAXDOUBLE))),
@@ -652,7 +652,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -762,7 +762,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
  *     - f_rotation == NULL,
  *     - f_deform == NULL,
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
@@ -784,11 +784,11 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   BUGPARAM (f_rotation, "%p", f_rotation, false)
   BUGPARAM (f_deform, "%p", f_deform, false)
   BUGPARAM (barre, "%p", barre, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (a >= 0.,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
@@ -876,7 +876,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -1072,7 +1072,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
  *     - f_rotation == NULL,
  *     - f_deform == NULL,
  *     - barre == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
@@ -1094,11 +1094,11 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   BUGPARAM (f_rotation, "%p", f_rotation, false)
   BUGPARAM (f_deform, "%p", f_deform, false)
   BUGPARAM (barre, "%p", barre, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (a >= 0.,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
@@ -1125,7 +1125,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }
@@ -1278,7 +1278,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
  *   Échec : false :
  *     - barre == NULL,
  *     - fonction == NULL,
- *     - discretisation>barre->discretisation_element,
+ *     - discretisation>barre->nds_inter.size (),
  *     - a < 0. ou a > l,
  *     - en cas d'erreur due à une fonction interne.
  */
@@ -1296,11 +1296,11 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
   
   BUGPARAM (fonction, "%p", fonction, false)
   BUGPARAM (barre, "%p", barre, false)
-  INFO (discretisation <= barre->discretisation_element,
+  INFO (discretisation <= barre->nds_inter.size (),
         false,
         (gettext ("La discrétisation %d souhaitée est hors domaine %d.\n"),
                   discretisation,
-                  barre->discretisation_element); )
+                  barre->nds_inter.size ()); )
   INFO (a >= 0.,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"),
@@ -1328,7 +1328,7 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
     std::advance (it_t, discretisation - 1U);
     debut = *it_t;
   }
-  if (discretisation == barre->discretisation_element)
+  if (discretisation == barre->nds_inter.size ())
   {
     fin = barre->noeud_fin;
   }

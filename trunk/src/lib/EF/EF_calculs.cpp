@@ -78,7 +78,7 @@ EF_calculs_free (Projet *p)
     EF_Barre *barre = *it2;
     uint16_t  i;
     
-    for (i = 0; i <= barre->discretisation_element; i++)
+    for (i = 0; i <= barre->nds_inter.size (); i++)
     {
       if (barre->info_EF[i].m_rig_loc != NULL)
       {
@@ -308,7 +308,7 @@ EF_calculs_initialise (Projet *p)
   {
     EF_Barre *element = *it2;
     
-    nnz_max += 12 * 12U * (element->discretisation_element + 1U);
+    nnz_max += 12 * 12U * (element->nds_inter.size () + 1U);
     
     ++it2;
   }
@@ -1023,7 +1023,7 @@ EF_calculs_resoud_charge (Projet *p,
       //   Détermination des deux noeuds se situant directement avant et
       //   après la charge ponctuelle (est différent des deux noeuds
       //   définissant la barre si elle est discrétisée).
-            if (element->discretisation_element == 0)
+            if (element->nds_inter.size () == 0)
             /* Pas de discrétisation */
             {
               pos = 0;
@@ -1038,10 +1038,10 @@ EF_calculs_resoud_charge (Projet *p,
               // On regarde pour chaque noeud intermédiaire si la position de
               // la charge devient inférieure à la distance entre le noeud de
               // départ et le noeud intermédiaire.
-              while ((pos <= element->discretisation_element) &&
+              while ((pos <= element->nds_inter.size ()) &&
                      (l < m_g (charge_d->position)))
               {
-                if (pos == element->discretisation_element)
+                if (pos == element->nds_inter.size ())
                 {
                   l = EF_noeuds_distance (element->noeud_fin,
                                           element->noeud_debut);
@@ -1067,7 +1067,7 @@ EF_calculs_resoud_charge (Projet *p,
               }
               // Alors la position de la charge est compris entre le dernier
               // noeud intermédiaire et le noeud de fin de la barre
-              else if (pos == element->discretisation_element)
+              else if (pos == element->nds_inter.size ())
               {
                 std::list <EF_Noeud *>::iterator it_t;
                 
@@ -1610,7 +1610,7 @@ EF_calculs_resoud_charge (Projet *p,
       
       //   Détermination des deux barres discrétisées (j_d et j_f) qui
       //   entoure la charge répartie.
-            if (element->discretisation_element == 0)
+            if (element->nds_inter.size () == 0)
             // Pas de discrétisation
             {
               j_d = 0;
@@ -1624,10 +1624,10 @@ EF_calculs_resoud_charge (Projet *p,
               // On regarde pour chaque noeud intermédiaire si la position de
               // la charge devient inférieure à la distance entre le noeud de
               // départ et le noeud intermédiaire.
-              while ((j_d <= element->discretisation_element) && 
+              while ((j_d <= element->nds_inter.size ()) && 
                      (l < m_g (charge_d->a)))
               {
-                if (j_d == element->discretisation_element)
+                if (j_d == element->nds_inter.size ())
                 {
                   l = EF_noeuds_distance (element->noeud_fin,
                                           element->noeud_debut);
@@ -1649,10 +1649,10 @@ EF_calculs_resoud_charge (Projet *p,
               // On regarde pour chaque noeud intermédiaire si la position de
               // la charge devient inférieur à la distance entre le noeud de
               // départ et le noeud intermédiaire.
-              while ((j_f <= element->discretisation_element) &&
+              while ((j_f <= element->nds_inter.size ()) &&
                      (l < ll - m_g (charge_d->b)))
               {
-                if (j_f == element->discretisation_element)
+                if (j_f == element->nds_inter.size ())
                 {
                   l = EF_noeuds_distance (element->noeud_fin,
                                           element->noeud_debut);
@@ -1702,7 +1702,7 @@ EF_calculs_resoud_charge (Projet *p,
                 std::advance (it_t, pos - 1U);
                 noeud_debut = *it_t;
               }
-              if (pos == element->discretisation_element)
+              if (pos == element->nds_inter.size ())
               {
                 noeud_fin = element->noeud_fin;
               }
@@ -2404,7 +2404,7 @@ EF_calculs_resoud_charge (Projet *p,
                                               element));
     
   //   Pour chaque discrétisation de la barre
-    for (j = 0; j <= element->discretisation_element; j++)
+    for (j = 0; j <= element->nds_inter.size (); j++)
     {
       EF_Noeud        *noeud_debut, *noeud_fin; // Le noeud de départ et le
       // noeud de fin, nécessaire en cas de discrétisation
@@ -2443,7 +2443,7 @@ EF_calculs_resoud_charge (Projet *p,
         std::advance (it_t, j - 1);
         noeud_debut = *it_t;
       }
-      if (j == element->discretisation_element)
+      if (j == element->nds_inter.size ())
       {
         noeud_fin = element->noeud_fin;
       }

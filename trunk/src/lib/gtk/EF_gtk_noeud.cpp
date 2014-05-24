@@ -888,15 +888,13 @@ EF_gtk_noeud_edit_noeud_barre_barre (GtkCellRendererText *cell,
       
       BUG (EF_calculs_free (p), )
       
-      info->barre->discretisation_element--;
       info->barre->nds_inter.remove (noeud);
-      info->barre->info_EF.resize (info->barre->discretisation_element + 1U);
+      info->barre->info_EF.resize (info->barre->nds_inter.size () + 1U);
       memset (&info->barre->info_EF[0],
               0,
               sizeof (Barre_Info_EF) * info->barre->info_EF.size ());
       info->barre = barre;
-      barre->discretisation_element++;
-      barre->info_EF.resize (barre->discretisation_element + 1U);
+      barre->info_EF.resize (barre->nds_inter.size () + 1U);
       memset (&barre->info_EF[0],
               0,
               sizeof (Barre_Info_EF) * barre->info_EF.size ());

@@ -194,7 +194,6 @@ _1992_1_1_barres_ajout (Projet         *p,
   element_nouveau->noeud_debut = noeud_debut;
   element_nouveau->noeud_fin = noeud_fin;
   element_nouveau->relachement = relachement;
-  element_nouveau->discretisation_element = 0;
   
   element_nouveau->info_EF = std::vector <Barre_Info_EF> (1);
   memset (&element_nouveau->info_EF[0], 0, sizeof (Barre_Info_EF));
@@ -1408,7 +1407,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   // la matrice de rigidité élémentaire dans le repère local. La poutre pouvant
   // être discrétisée, une matrice de rigidité élémentaire est déterminée pour
   // chaque tronçon.
-  for (j = 0; j < element->discretisation_element + 1; j++)
+  for (j = 0; j < element->nds_inter.size () + 1; j++)
   {
     double          MA, MB;
     double          phia_iso, phib_iso;
@@ -1426,7 +1425,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     if (j == 0)
     {
       noeud1 = element->noeud_debut;
-      if (element->discretisation_element != 0)
+      if (element->nds_inter.size () != 0)
       {
         noeud2 = *element->nds_inter.begin ();
       }
@@ -1435,7 +1434,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
         noeud2 = element->noeud_fin;
       }
     }
-    else if (j == element->discretisation_element)
+    else if (j == element->nds_inter.size ())
     {
       std::list <EF_Noeud *>::iterator it;
       
@@ -2033,7 +2032,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
     if (((j == 0) && (element->relachement != NULL) &&
         (element->relachement->rx_debut == EF_RELACHEMENT_LIBRE)) ||
-        ((j == element->discretisation_element) &&
+        ((j == element->nds_inter.size ()) &&
          (element->relachement != NULL) &&
          (element->relachement->rx_fin == EF_RELACHEMENT_LIBRE)))
     {

@@ -1600,8 +1600,6 @@ typedef struct
   Flottant        angle;
   /// Relâchement de la barre. NULL si aucun.
   EF_Relachement *relachement;
-  /// Nombre de noeuds intermédiaires.
-  uint16_t        discretisation_element;
   /// Noeuds intermédiaires le long de la barre.
   /**
    * Lorsque des noeuds intermédiaires sont ajoutés, ils le sont dans
