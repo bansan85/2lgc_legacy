@@ -36,7 +36,7 @@
 #include "EF_gtk_materiaux.hpp"
 #include "EF_gtk_relachement.hpp"
 #include "EF_gtk_resultats.hpp"
-#include "ressources.h"
+#include "ressources.hpp"
 #include "common_gtk_informations.hpp"
 #endif
 
