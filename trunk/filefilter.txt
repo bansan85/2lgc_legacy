@@ -48,7 +48,7 @@
 
 - config.h
 - files/
-- src/lib/gtk/ressources.c
-- src/lib/gtk/ressources.h
+- src/lib/gtk/ressources.cpp
+- src/lib/gtk/ressources.hpp
 - src/test
 - cov-int/
