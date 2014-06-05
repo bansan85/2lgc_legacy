@@ -3114,7 +3114,7 @@
         <dia:string>#SBarreInfoEF#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAStruct#</dia:string>
+        <dia:string>#struct#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>##</dia:string>
@@ -16600,7 +16600,7 @@
         <dia:string>#ETypeCombinaison#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#La méthode de combinaison des actions d'un groupe.#</dia:string>
@@ -17026,7 +17026,7 @@
         <dia:string>#EUnite#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#L'unité du nombre#</dia:string>
@@ -34550,7 +34550,7 @@ class CUndoManager;#</dia:string>
         <dia:string>#Norme#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Spécifie la norme et l'annexe nationnale à utiliser.#</dia:string>
@@ -34711,7 +34711,7 @@ class CUndoManager;#</dia:string>
         <dia:string>#Neige#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Zonage de la neige selon l'EC1.#</dia:string>
@@ -35010,7 +35010,7 @@ class CUndoManager;#</dia:string>
         <dia:string>#Vent#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Zonage du vent selon l'EC1.#</dia:string>
@@ -35433,7 +35433,7 @@ class CUndoManager;#</dia:string>
         <dia:string>#Seisme#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#CORBAEnum#</dia:string>
+        <dia:string>#enum#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Zonage sismique selon l'EC8.#</dia:string>
