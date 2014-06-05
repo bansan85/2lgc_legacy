@@ -108,6 +108,8 @@ endif
 	rm -Rf codegui
 
 checkcode :
+	@(cd files/uml && $(MAKE) clean && $(MAKE) $@)
+	
 	$(MAKE) clean
 	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
