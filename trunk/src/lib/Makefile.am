@@ -84,6 +84,11 @@ libeurocodes_la_HEADERS =	1990/1990_action.hpp \
 							EF/EF_sections.hpp \
 							EF/EF_verif.hpp
 
+$(libeurocodes_la_SOURCES) : uml
+
+uml :
+	/usr/bin/dia2code -l ../../files/uml/COPYING.head -t cpp -ext hpp -d . ../../files/uml/codegui.dia
+
 if ENABLE_GTK
 DEFAULT_INCLUDES	+=	-Igtk
 lib_LTLIBRARIES += libeurocodes-gtk.la
@@ -159,7 +164,7 @@ gtk/ressources.cpp: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
 endif
 
-CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp
+CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp *.hpp
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) $(libeurocodes_gtk_la_SOURCES) &> ../../cppcheck.log

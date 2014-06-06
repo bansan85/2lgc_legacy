@@ -16106,7 +16106,7 @@
         <dia:point val="158.933,-4.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="158.882,-30;173.05,-3.7"/>
+        <dia:rectangle val="158.883,-30;173.05,-3.7"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -33463,7 +33463,7 @@ class CUndoManager;#</dia:string>
         <dia:point val="214.36,-25.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="214.31,-26.8;255.273,80.05"/>
+        <dia:rectangle val="214.31,-26.8;255.272,80.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -35209,8 +35209,8 @@ class CUndoManager;#</dia:string>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="34.5859,-134.825"/>
-        <dia:point val="34.0134,-134.825"/>
-        <dia:point val="34.0134,-135.4"/>
+        <dia:point val="37.593,-134.825"/>
+        <dia:point val="37.593,-135.4"/>
         <dia:point val="41,-135.4"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -35219,7 +35219,7 @@ class CUndoManager;#</dia:string>
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
-        <dia:boolean val="false"/>
+        <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
