@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Fichier généré automatiquement avec dia2code 0.8.6.
+
 //#include "config.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
