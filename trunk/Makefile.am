@@ -1,8 +1,8 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS =	po \
-			src \
 			files \
+			src \
 			docs
 
 if PLATFORM_WIN32

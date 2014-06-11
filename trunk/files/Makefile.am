@@ -1,4 +1,5 @@
-SUBDIRS = uml
+SUBDIRS =	ui \
+					uml
 
 applicationdir		=	$(datadir)/2lgc
 application_DATA	=	formules/1990_6_10.svg \
@@ -11,5 +12,3 @@ application_DATA	=	formules/1990_6_10.svg \
 						csv/france_vent.csv \
 						csv/france_seisme.csv \
 						csv/profiles_acier.csv
-
-CLEANFILES = ui/*.ui.h

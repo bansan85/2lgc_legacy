@@ -161,6 +161,7 @@ common/common_projet.cpp: gtk/ressources.hpp gtk/ressources.cpp
 gtk/ressources.hpp: ../../files/ressources.xml gtk/ressources.cpp
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
 gtk/ressources.cpp: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
+	$(MAKE) -C ../../files/ui
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
 endif
 
