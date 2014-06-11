@@ -17,4 +17,4 @@ comp_hpp_cpp : $(OBJ_CPP)
 	echo -e "#include \"$^\" \nint main () { };" > $@
 	g++ $@ -std=c++11 -c -o $@.o &> $@.log
 
-CLEANFILES = *.cpp.log log *.cpp *.hpp *.cpp.o
+CLEANFILES = *.cpp.log log *.cpp *.hpp *.cpp.o codegui.dia~
