@@ -16,6 +16,7 @@ La description des messages doit toujours commencer par :
 [CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, ...).
 [INTERFACE] : tout ce qui concerne une modification de l'interface graphique.
 [UML] : Modification du diagramme UML.
+[CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
 
 
 Performances :
