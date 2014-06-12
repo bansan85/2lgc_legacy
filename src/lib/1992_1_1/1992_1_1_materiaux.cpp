@@ -462,50 +462,50 @@ _1992_1_1_materiaux_ajout (Projet      *p,
   data_beton->fck = m_f (m_g (fck) * 1000000., fck.type);
   data_beton->fckcube = m_f (_1992_1_1_materiaux_fckcube (m_g (fck)),
                              FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fckcube)), NULL)
+  BUG (!std::isnan (m_g (data_beton->fckcube)), NULL)
   data_beton->fcm = m_f (_1992_1_1_materiaux_fcm (m_g (fck)),
                     FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fcm)), NULL)
+  BUG (!std::isnan (m_g (data_beton->fcm)), NULL)
   data_beton->fctm = m_f (_1992_1_1_materiaux_fctm (m_g (fck),
                                              m_g (data_beton->fcm) / 1000000.),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctm)), NULL)
+  BUG (!std::isnan (m_g (data_beton->fctm)), NULL)
   data_beton->fctk_0_05 = m_f (_1992_1_1_materiaux_fctk_0_05 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_05)), NULL)
+  BUG (!std::isnan (m_g (data_beton->fctk_0_05)), NULL)
   data_beton->fctk_0_95 = m_f (_1992_1_1_materiaux_fctk_0_95 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_95)), NULL)
+  BUG (!std::isnan (m_g (data_beton->fctk_0_95)), NULL)
   data_beton->ecm = m_f (_1992_1_1_materiaux_ecm (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecm)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ecm)), NULL)
   data_beton->ec1 = m_f (_1992_1_1_materiaux_ec1 (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec1)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ec1)), NULL)
   data_beton->ecu1 = m_f (_1992_1_1_materiaux_ecu1 (
                                               m_g (data_beton->fcm) / 1000000.,
                                                     m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu1)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ecu1)), NULL)
   data_beton->ec2 = m_f (_1992_1_1_materiaux_ec2 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec2)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ec2)), NULL)
   data_beton->ecu2 = m_f (_1992_1_1_materiaux_ecu2 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu2)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ecu2)), NULL)
   data_beton->ec3 = m_f (_1992_1_1_materiaux_ec3 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec3)), NULL)
+  BUG (!std::isnan (m_g (data_beton->ec3)), NULL)
   data_beton->ecu3 = m_f (_1992_1_1_materiaux_ecu3 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu3)),
+  BUG (!std::isnan (m_g (data_beton->ecu3)),
        NULL)
   data_beton->n = m_f (_1992_1_1_materiaux_n (m_g (fck)), FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->n)),
+  BUG (!std::isnan (m_g (data_beton->n)),
        NULL)
   data_beton->nu = m_f (COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
   
@@ -589,75 +589,75 @@ _1992_1_1_materiaux_modif (Projet      *p,
     BUG (EF_materiaux_repositionne (p, materiau), false)
   }
   
-  if (!isnan (m_g (fck)))
+  if (!std::isnan (m_g (fck)))
   {
     data_beton->fck = fck;
   }
-  if (!isnan (m_g (fckcube)))
+  if (!std::isnan (m_g (fckcube)))
   {
     data_beton->fckcube = fckcube;
   }
-  if (!isnan (m_g (fcm)))
+  if (!std::isnan (m_g (fcm)))
   {
     data_beton->fcm = fcm;
   }
-  if (!isnan (m_g (fctm)))
+  if (!std::isnan (m_g (fctm)))
   {
     data_beton->fctm = fctm;
   }
-  if (!isnan (m_g (fctk_0_05)))
+  if (!std::isnan (m_g (fctk_0_05)))
   {
     data_beton->fctk_0_05 = fctk_0_05;
   }
-  if (!isnan (m_g (fctk_0_95)))
+  if (!std::isnan (m_g (fctk_0_95)))
   {
     data_beton->fctk_0_95 = fctk_0_95;
   }
-  if (!isnan (m_g (ecm)))
+  if (!std::isnan (m_g (ecm)))
   {
     data_beton->ecm = ecm;
   }
-  if (!isnan (m_g (ec1)))
+  if (!std::isnan (m_g (ec1)))
   {
     data_beton->ec1 = ec1;
   }
-  if (!isnan (m_g (ecu1)))
+  if (!std::isnan (m_g (ecu1)))
   {
     data_beton->ecu1 = ecu1;
   }
-  if (!isnan (m_g (ec2)))
+  if (!std::isnan (m_g (ec2)))
   {
     data_beton->ec2 = ec2;
   }
-  if (!isnan (m_g (ecu2)))
+  if (!std::isnan (m_g (ecu2)))
   {
     data_beton->ecu2 = ecu2;
   }
-  if (!isnan (m_g (ec3)))
+  if (!std::isnan (m_g (ec3)))
   {
     data_beton->ec3 = ec3;
   }
-  if (!isnan (m_g (ecu3)))
+  if (!std::isnan (m_g (ecu3)))
   {
     data_beton->ecu3 = ecu3;
   }
-  if (!isnan (m_g (n)))
+  if (!std::isnan (m_g (n)))
   {
     data_beton->n = n;
   }
-  if (!isnan (m_g (nu)))
+  if (!std::isnan (m_g (nu)))
   {
     data_beton->nu = nu;
   }
   
-  if ((!isnan (m_g (fck)))       || (!isnan (m_g (fckcube)))   ||
-      (!isnan (m_g (fcm)))       || (!isnan (m_g (fctm)))      ||
-      (!isnan (m_g (fctk_0_05))) || (!isnan (m_g (fctk_0_95))) ||
-      (!isnan (m_g (ecm)))       || (!isnan (m_g (ec1)))       ||
-      (!isnan (m_g (ecu1)))      || (!isnan (m_g (ec2)))       ||
-      (!isnan (m_g (ecu2)))      || (!isnan (m_g (ec3)))       ||
-      (!isnan (m_g (ecu3)))      || (!isnan (m_g (n)))         ||
-      (!isnan (m_g (nu))))
+  if ((!std::isnan (m_g (fck)))       || (!std::isnan (m_g (fckcube)))   ||
+      (!std::isnan (m_g (fcm)))       || (!std::isnan (m_g (fctm)))      ||
+      (!std::isnan (m_g (fctk_0_05))) || (!std::isnan (m_g (fctk_0_95))) ||
+      (!std::isnan (m_g (ecm)))       || (!std::isnan (m_g (ec1)))       ||
+      (!std::isnan (m_g (ecu1)))      || (!std::isnan (m_g (ec2)))       ||
+      (!std::isnan (m_g (ecu2)))      || (!std::isnan (m_g (ec3)))       ||
+      (!std::isnan (m_g (ecu3)))      || (!std::isnan (m_g (n)))         ||
+      (!std::isnan (m_g (nu))))
   {
     std::list <EF_Materiau *> liste_materiaux;
     std::list <EF_Barre *>   *liste_barres_dep;

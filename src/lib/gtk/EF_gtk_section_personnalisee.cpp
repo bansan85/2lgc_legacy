@@ -154,7 +154,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                                          "EF_section_personnalisee_buffer_j")),
                     0, false,
                     INFINITY, false);
-  if (isnan (*j))
+  if (std::isnan (*j))
   {
     ok = false;
   }
@@ -163,7 +163,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_iy")),
                      0, false,
                      INFINITY, false);
-  if (isnan (*iy))
+  if (std::isnan (*iy))
   {
     ok = false;
   }
@@ -172,7 +172,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_iz")),
                      0, false,
                      INFINITY, false);
-  if (isnan (*iz))
+  if (std::isnan (*iz))
   {
     ok = false;
   }
@@ -181,7 +181,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vy")),
                      0, false,
                      INFINITY, false);
-  if (isnan (*vy))
+  if (std::isnan (*vy))
   {
     ok = false;
   }
@@ -190,7 +190,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                     UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vyp")),
                     0, false,
                     INFINITY, false);
-  if (isnan (*vyp))
+  if (std::isnan (*vyp))
   {
     ok = false;
   }
@@ -199,7 +199,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                      UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vz")),
                      0, false,
                      INFINITY, false);
-  if (isnan (*vz))
+  if (std::isnan (*vz))
   {
     ok = false;
   }
@@ -208,7 +208,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                     UI_SEC_PE.builder, "EF_section_personnalisee_buffer_vzp")),
                       0, false,
                       INFINITY, false);
-  if (isnan (*vzp))
+  if (std::isnan (*vzp))
   {
     ok = false;
   }
@@ -217,7 +217,7 @@ EF_gtk_section_personnalisee_recupere_donnees (
                                          "EF_section_personnalisee_buffer_s")),
                     0, false,
                     INFINITY, false);
-  if (isnan (*s))
+  if (std::isnan (*s))
   {
     ok = false;
   }
@@ -1059,7 +1059,7 @@ EF_gtk_section_personnalisee_edit_x (GtkCellRendererText *cell,
   conversion = common_text_str_to_double (new_text,
                                           -INFINITY, false,
                                           INFINITY, false);
-  if (!isnan (conversion))
+  if (!std::isnan (conversion))
   {
     point->x = m_f (conversion, FLOTTANT_UTILISATEUR);
   }
@@ -1104,7 +1104,7 @@ EF_gtk_section_personnalisee_edit_y (GtkCellRendererText *cell,
   conversion = common_text_str_to_double (new_text,
                                           -INFINITY, false,
                                           INFINITY, false);
-  if (!isnan (conversion))
+  if (!std::isnan (conversion))
   {
     point->y = m_f (conversion, FLOTTANT_UTILISATEUR);
   }

@@ -273,7 +273,7 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
@@ -283,8 +283,8 @@ EF_charge_barre_ponctuelle_mx (EF_Barre      *barre,
   G = m_g (EF_materiaux_G (barre->materiau, false));
   J = m_g (EF_sections_j (barre->section));
   
-  BUG (!isnan (G), false)
-  BUG (!isnan (J), false)
+  BUG (!std::isnan (G), false)
+  BUG (!std::isnan (J), false)
   
   // Pour une section section constante, les moments valent :\end{verbatim}
   // \begin{displaymath}
@@ -410,7 +410,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
@@ -421,8 +421,8 @@ EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre *barre,
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
-  BUG (!isnan (I), false)
-  BUG (!isnan (E), false)
+  BUG (!std::isnan (I), false)
+  BUG (!std::isnan (E), false)
   
   // Pour une section constante, les angles valent :\end{verbatim}
   // \begin{align*}
@@ -539,7 +539,7 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   }
   
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
@@ -550,8 +550,8 @@ EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre *barre,
   
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
-  BUG (!isnan (E), false)
-  BUG (!isnan (I), false)
+  BUG (!std::isnan (E), false)
+  BUG (!std::isnan (I), false)
   
   // Pour une section constante, les angles valent :\end{verbatim}
   // \begin{displaymath}
@@ -667,7 +667,7 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
@@ -677,8 +677,8 @@ EF_charge_barre_ponctuelle_fonc_rx (Fonction *fonction,
   
   G = m_g (EF_materiaux_G (barre->materiau, false));
   J = m_g (EF_sections_j (barre->section));
-  BUG (!isnan (G), false)
-  BUG (!isnan (J), false)
+  BUG (!std::isnan (G), false)
+  BUG (!std::isnan (J), false)
   
   if (errrel (infos->kBx, MAXDOUBLE))
   {
@@ -891,7 +891,7 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\n"
@@ -902,8 +902,8 @@ EF_charge_barre_ponctuelle_fonc_ry (Fonction *f_rotation,
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iy (barre->section));
-  BUG (!isnan (E), false)
-  BUG (!isnan (I), false)
+  BUG (!std::isnan (E), false)
+  BUG (!std::isnan (I), false)
   
   BUG (common_fonction_ajout_poly (
          f_rotation,
@@ -1140,7 +1140,7 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
@@ -1150,8 +1150,8 @@ EF_charge_barre_ponctuelle_fonc_rz (Fonction *f_rotation,
   b = l - a;
   E = m_g (EF_materiaux_E (barre->materiau));
   I = m_g (EF_sections_iz (barre->section));
-  BUG (!isnan (E), false)
-  BUG (!isnan (I), false)
+  BUG (!std::isnan (E), false)
+  BUG (!std::isnan (I), false)
   
   BUG (common_fonction_ajout_poly (
          f_rotation,
@@ -1343,7 +1343,7 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
   
   debut_barre = EF_noeuds_distance (barre->noeud_debut, debut);
   l = EF_noeuds_distance (debut, fin);
-  BUG (!isnan (l), false)
+  BUG (!std::isnan (l), false)
   INFO (a <= l,
         false,
         (gettext ("La position de la charge ponctuelle %f est incorrecte.\nLa longueur de la barre est de %f m.\n"),
@@ -1352,8 +1352,8 @@ EF_charge_barre_ponctuelle_n (Fonction *fonction,
   
   E = m_g (EF_materiaux_E (barre->materiau));
   S = m_g (EF_sections_s (barre->section));
-  BUG (!isnan (E), false)
-  BUG (!isnan (S), false)
+  BUG (!std::isnan (E), false)
+  BUG (!std::isnan (S), false)
   
   // Pour une section constante, les déformations valent :\end{verbatim}
   // \begin{align*}

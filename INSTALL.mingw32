@@ -27,9 +27,9 @@ sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/libz.dll && \
 sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/ && \
 sudo cp libz.dll.a /usr/i686-pc-mingw32/usr/lib/ && \
 cd .. && \
-(test -f libffi-3.0.13.tar.gz || wget ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz) && \
-tar xvzf libffi-3.0.13.tar.gz && \
-cd libffi-3.0.13 && \
+(test -f libffi-3.1.tar.gz || wget ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz) && \
+tar xvzf libffi-3.1.tar.gz && \
+cd libffi-3.1 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libiconv-1.14.tar.gz || wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz) && \
@@ -41,13 +41,13 @@ make -j9 && sudo make install && cd .. && \
 sudo unzip gettext-runtime_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
 (test -f gettext-runtime-dev_0.18.1.1-2_win32.zip || wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-dev_0.18.1.1-2_win32.zip) && \
 sudo unzip gettext-runtime-dev_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
-(test -f glib-2.38.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.38/glib-2.38.2.tar.xz) && \
-tar xvaf glib-2.38.2.tar.xz && \
-cd glib-2.38.2 && \
+(test -f glib-2.40.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz) && \
+tar xvaf glib-2.40.0.tar.xz && \
+cd glib-2.40.0 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
 sed -i 's/tests$//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
 sed -i 's/tests $//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" LIBFFI_CFLAGS="-I/usr/i686-pc-mingw32/usr/lib/libffi-3.0.13/include" LIBFFI_LIBS="-lffi" ./configure --disable-static --enable-shared --with-threads=win32 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" LIBFFI_CFLAGS="-I/usr/i686-pc-mingw32/usr/lib/libffi-3.1/include" LIBFFI_LIBS="-lffi" ./configure --disable-static --enable-shared --with-threads=win32 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && \
 tar xvzf libxml2-2.9.1.tar.gz && \
@@ -65,14 +65,14 @@ tar xvzf tiff-4.0.3.tar.gz && \
 cd tiff-4.0.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f libpng-1.6.8.tar.xz || wget ftp://ftp.simplesystems.org/pub/png/src/libpng16/libpng-1.6.8.tar.xz) && \
-tar xvaf libpng-1.6.8.tar.xz && \
-cd libpng-1.6.8 && \
+(test -f libpng-1.6.11.tar.xz || wget http://downloads.sourceforge.net/project/libpng/libpng16/1.6.11/libpng-1.6.11.tar.xz) && \
+tar xvaf libpng-1.6.11.tar.xz && \
+cd libpng-1.6.11 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gdk-pixbuf-2.30.3.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.3.tar.xz) && \
-tar xvaf gdk-pixbuf-2.30.3.tar.xz && \
-cd gdk-pixbuf-2.30.3 && \
+(test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && \
+tar xvaf gdk-pixbuf-2.30.8.tar.xz && \
+cd gdk-pixbuf-2.30.8 && \
 (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
@@ -83,17 +83,17 @@ cd pixman-0.32.4 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -mstackrealign" ./configure --disable-static --enable-shared --enable-sse2 --enable-ssse3 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 sed -i "s/demos test//g" Makefile.am Makefile.in && \
 make -j9 && sudo make install && cd .. && \
-(test -f freetype-2.5.2.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.5.2/freetype-2.5.2.tar.bz2) && \
-tar xvjf freetype-2.5.2.tar.bz2 && \
-cd freetype-2.5.2 && \
+(test -f freetype-2.5.3.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.5.3/freetype-2.5.3.tar.bz2) && \
+tar xvjf freetype-2.5.3.tar.bz2 && \
+cd freetype-2.5.3 && \
 LIBPNG_CFLAGS="-I/usr/i686-pc-mingw32/usr/include/libpng16" LIBPNG_LDFLAGS="-lpng16" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f fontconfig-2.10.2.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.10.2.tar.gz) && \
-tar xvzf fontconfig-2.10.2.tar.gz && \
-cd fontconfig-2.10.2 && \
+(test -f fontconfig-2.11.1.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz) && \
+tar xvzf fontconfig-2.11.1.tar.gz && \
+cd fontconfig-2.11.1 && \
 sed -i 's/$(DOCSRC) test//g' Makefile.in Makefile.am && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --enable-libxml2 --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
-make -j9 && sudo make install && cd .. && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --enable-libxml2 --disable-docs --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+make -j9 ; autoreconf --force -i && make -j9 && sudo make install && cd .. && \
 (test -f pthreads-w32-2-9-1-release.tar.gz || wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz) && \
 tar xvzf pthreads-w32-2-9-1-release.tar.gz && \
 cd pthreads-w32-2-9-1-release && \
@@ -118,15 +118,15 @@ sed -i 's#test "$cross_compiling" = yes &&##g' ./configure && \
 sed -i 's#as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5##g' ./configure && \
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" && sudo make install && cd .. && \
-(test -f harfbuzz-0.9.26.tar.gz || wget http://cgit.freedesktop.org/harfbuzz/snapshot/harfbuzz-0.9.26.tar.gz) && \
-tar xvzf harfbuzz-0.9.26.tar.gz && \
-cd harfbuzz-0.9.26 && \
+(test -f harfbuzz-0.9.29.tar.gz || wget http://cgit.freedesktop.org/harfbuzz/snapshot/harfbuzz-0.9.29.tar.gz) && \
+tar xvzf harfbuzz-0.9.29.tar.gz && \
+cd harfbuzz-0.9.29 && \
 ./autogen.sh && \
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-icu=no --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f pango-1.36.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.1.tar.xz) && \
-tar xvaf pango-1.36.1.tar.xz && \
-cd pango-1.36.1 && \
+(test -f pango-1.36.3.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.3.tar.xz) && \
+tar xvaf pango-1.36.3.tar.xz && \
+cd pango-1.36.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-included-modules=basic-win32 --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libcroco-0.6.8.tar.xz || wget http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.8.tar.xz) && \
@@ -134,19 +134,19 @@ tar xvaf libcroco-0.6.8.tar.xz && \
 cd libcroco-0.6.8 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f poppler-0.24.5.tar.xz || wget http://poppler.freedesktop.org/poppler-0.24.5.tar.xz) && \
-tar xvaf poppler-0.24.5.tar.xz && \
-cd poppler-0.24.5 && \
+(test -f poppler-0.26.1.tar.xz || wget http://poppler.freedesktop.org/poppler-0.26.1.tar.xz) && \
+tar xvaf poppler-0.26.1.tar.xz && \
+cd poppler-0.26.1 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f atk-2.10.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.10/atk-2.10.0.tar.xz) && \
-tar xvaf atk-2.10.0.tar.xz && \
-cd atk-2.10.0 && \
+(test -f atk-2.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.12/atk-2.12.0.tar.xz) && \
+tar xvaf atk-2.12.0.tar.xz && \
+cd atk-2.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gtk+-3.10.7.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.10/gtk+-3.10.7.tar.xz) && \
-tar xvaf gtk+-3.10.7.tar.xz && \
-cd gtk+-3.10.7 && \
+(test -f gtk+-3.12.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.12/gtk+-3.12.2.tar.xz) && \
+tar xvaf gtk+-3.12.2.tar.xz && \
+cd gtk+-3.12.2 && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
 PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency --enable-debug=yes && \
 make -j9 && sudo make install && cd .. && \
@@ -155,19 +155,19 @@ tar xvzf icon-naming-utils-0.8.90.tar.gz && \
 cd icon-naming-utils-0.8.90 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gnome-icon-theme-3.10.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme/3.10/gnome-icon-theme-3.10.0.tar.xz) && \
-tar xvaf gnome-icon-theme-3.10.0.tar.xz && \
-cd gnome-icon-theme-3.10.0 && \
+(test -f gnome-icon-theme-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme/3.12/gnome-icon-theme-3.12.0.tar.xz) && \
+tar xvaf gnome-icon-theme-3.12.0.tar.xz && \
+cd gnome-icon-theme-3.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gnome-icon-theme-symbolic-3.9.91.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.9/gnome-icon-theme-symbolic-3.9.91.tar.xz) && \
-tar xvaf gnome-icon-theme-symbolic-3.9.91.tar.xz && \
-cd gnome-icon-theme-symbolic-3.9.91 && \
+(test -f gnome-icon-theme-symbolic-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.12/gnome-icon-theme-symbolic-3.12.0.tar.xz) && \
+tar xvaf gnome-icon-theme-symbolic-3.12.0.tar.xz && \
+cd gnome-icon-theme-symbolic-3.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f librsvg-2.40.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.1.tar.xz) && \
-tar xvaf librsvg-2.40.1.tar.xz && \
-cd librsvg-2.40.1 && \
+(test -f librsvg-2.40.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.2.tar.xz) && \
+tar xvaf librsvg-2.40.2.tar.xz && \
+cd librsvg-2.40.2 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-introspection=no --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f SuiteSparse_config-4.2.1.tar.gz || wget http://www.cise.ufl.edu/research/sparse/UFconfig/SuiteSparse_config-4.2.1.tar.gz) && \
@@ -297,6 +297,7 @@ Pour la version sans débug :
 
 Compilation du programme
 ========================
+BUG : si error: 'to_string' is not a member of 'std' : http://tehsausage.com/mingw-to-string
 
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
 

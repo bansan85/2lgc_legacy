@@ -89,7 +89,7 @@ EF_gtk_section_T_recupere_donnees (Projet      *p,
                                                     "EF_section_T_buffer_lr")),
                      0., false,
                      INFINITY, false);
-  if (isnan (*lr))
+  if (std::isnan (*lr))
   {
     ok = false;
   }
@@ -98,7 +98,7 @@ EF_gtk_section_T_recupere_donnees (Projet      *p,
                                                     "EF_section_T_buffer_hr")),
                      0., false,
                      INFINITY, false);
-  if (isnan (*hr))
+  if (std::isnan (*hr))
   {
     ok = false;
   }
@@ -107,7 +107,7 @@ EF_gtk_section_T_recupere_donnees (Projet      *p,
                                                     "EF_section_T_buffer_lt")),
                      0., false,
                      INFINITY, false);
-  if (isnan (*lt))
+  if (std::isnan (*lt))
   {
     ok = false;
   }
@@ -116,7 +116,7 @@ EF_gtk_section_T_recupere_donnees (Projet      *p,
                                                     "EF_section_T_buffer_ht")),
                      0., false,
                      INFINITY, false);
-  if (isnan (*ht))
+  if (std::isnan (*ht))
   {
     ok = false;
   }

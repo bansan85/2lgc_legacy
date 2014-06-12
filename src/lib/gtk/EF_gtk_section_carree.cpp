@@ -77,7 +77,7 @@ EF_gtk_section_carree_recupere_donnees (Projet      *p,
                           UI_SEC_CA.builder, "EF_section_carree_buffer_cote")),
                        0, false,
                        INFINITY, false);
-  if (isnan (*cote))
+  if (std::isnan (*cote))
   {
     ok = false;
   }

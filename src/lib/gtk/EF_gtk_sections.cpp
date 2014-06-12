@@ -22,7 +22,6 @@
 #include <algorithm>
 
 #include <gtk/gtk.h>
-#include <inttypes.h>
 
 #include "common_m3d.hpp"
 #include "common_projet.hpp"
@@ -731,7 +730,7 @@ EF_gtk_sections_dessin (Section *section,
         {
           EF_Point *point = *it2;
           
-          if (isnan (xmin))
+          if (std::isnan (xmin))
           {
             xmin = m_g (point->x);
             xmax = m_g (point->x);
@@ -1523,7 +1522,7 @@ EF_gtk_sections_get_section (char        *ligne,
   
   ligne_tmp = &ligne[strchr (ligne, '\t') - ligne + 1];
   INFO (sscanf (ligne_tmp,
-                "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%" SCNu8 "\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", //NS
+                "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%hhu\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", //NS
                 &g_,
                 &h_,
                 &b_,
@@ -1624,7 +1623,7 @@ EF_gtk_sections_get_section (char        *ligne,
             delete forme_; )
     
     // Nouveau groupe de points
-    if ((isnan (x)) && (isnan (y)))
+    if ((std::isnan (x)) && (std::isnan (y)))
     {
       // On n'ajoute pas un groupe de point vide
       if (!points->empty ())

@@ -588,7 +588,7 @@ m3d_camera_zoom_all (Projet *p)
         }
         if (!errrel (ymax - ymin - (ymax2 - ymin2), allocation.height))
         {
-          if (isnan (dztmp))
+          if (std::isnan (dztmp))
           {
             dztmp = dz * (ymax2 - ymin2) * (ymax - ymin - allocation.height) /
                     ((ymax - ymin - (ymax2 - ymin2)) * allocation.height) / 5.;
@@ -999,7 +999,7 @@ m3d_barre (void     *donnees_m3d,
   }
   
   longueur = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
-  BUG (!isnan (longueur), false)
+  BUG (!std::isnan (longueur), false)
   
   if (errmoy (longueur, ERRMOY_DIST))
   {
@@ -1211,7 +1211,7 @@ m3d_barre (void     *donnees_m3d,
                            m_g (point2->x) - m_g (point1->x)) / M_PI * 180.;
             angle1 = angle2;
             angle2 = angle;
-            if (!isnan (angle1))
+            if (!std::isnan (angle1))
             {
               angle = angle2 - angle1;
               if (angle > 180.)

@@ -534,7 +534,7 @@ _1990_gtk_tree_view_actions_psi_edited (GtkCellRendererText *cell,
   
   // On vérifie si le texte contient bien un nombre flottant
   convertion = common_text_str_to_double (new_text, 0, true, 1., true);
-  if (!isnan (convertion))
+  if (!std::isnan (convertion))
   {
     BUG (_1990_action_psi_change (p,
                                   action,

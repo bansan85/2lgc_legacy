@@ -121,7 +121,7 @@ conv_buff_d (GtkTextBuffer *textbuffer,
   
   free (texte);
   
-  if (!isnan (nombre))
+  if (!std::isnan (nombre))
   {
     gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
   }

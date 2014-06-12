@@ -21,7 +21,7 @@
 
 #include "config.h"
 #include <stdio.h>
-
+#include <libintl.h>
 
 #define PRINTF(...) printf (__VA_ARGS__)
 

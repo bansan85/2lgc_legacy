@@ -387,15 +387,15 @@ EF_noeuds_change_pos_abs (Projet   *p,
   
   point = (EF_Noeud_Libre *) noeud->data;
   
-  if (!isnan (m_g (x)))
+  if (!std::isnan (m_g (x)))
   {
     point->x = x;
   }
-  if (!isnan (m_g (y)))
+  if (!std::isnan (m_g (y)))
   {
     point->y = y;
   }
-  if (!isnan (m_g (z)))
+  if (!std::isnan (m_g (z)))
   {
     point->z = z;
   }

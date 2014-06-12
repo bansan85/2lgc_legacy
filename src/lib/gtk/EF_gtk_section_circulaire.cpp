@@ -77,7 +77,7 @@ EF_gtk_section_circulaire_recupere_donnees (Projet      *p,
                   UI_SEC_CI.builder, "EF_section_circulaire_buffer_diametre")),
                            0, false,
                            INFINITY, false);
-  if (isnan (*diametre))
+  if (std::isnan (*diametre))
   {
     ok = false;
   }

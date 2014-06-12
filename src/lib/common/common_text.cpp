@@ -194,7 +194,7 @@ common_text_str_to_double (char    *texte,
   }
   else
   {
-    if (isinf (val_min) == -1)
+    if (std::isinf (val_min) == -1)
     {
       min_check = true;
     }
@@ -211,7 +211,7 @@ common_text_str_to_double (char    *texte,
       min_check = false;
     }
       
-    if (isinf (val_max) == 1)
+    if (std::isinf (val_max) == 1)
     {
       max_check = true;
     }

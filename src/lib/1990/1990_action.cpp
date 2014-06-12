@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <locale>
 #include <string.h>
+#include <math.h>
 
 #include "1990_action_private.hpp"
 #include "common_projet.hpp"
@@ -460,15 +461,15 @@ _1990_action_ajout (Projet            *p,
   action_nouveau.get ()->psi0 = m_f (_1990_coef_psi0_bat (type,
                                                           p->parametres.norme),
                                      FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau.get ()->psi0)), NULL)
+  BUG (!std::isnan (m_g (action_nouveau.get ()->psi0)), NULL)
   action_nouveau.get ()->psi1 = m_f (_1990_coef_psi1_bat (type,
                                                           p->parametres.norme),
                                      FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau.get ()->psi1)), NULL)
+  BUG (!std::isnan (m_g (action_nouveau.get ()->psi1)), NULL)
   action_nouveau.get ()->psi2 = m_f (_1990_coef_psi2_bat (type,
                                                           p->parametres.norme),
                                      FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau.get ()->psi2)), NULL)
+  BUG (!std::isnan (m_g (action_nouveau.get ()->psi2)), NULL)
   action_nouveau->nom.assign (*nom);
   action_nouveau->deplacement = NULL;
   action_nouveau->forces = NULL;
@@ -633,13 +634,13 @@ _1990_action_type_change (Projet *p,
   
   psi0 = m_f (_1990_coef_psi0_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi0)), false)
+  BUG (!std::isnan (m_g (psi0)), false)
   psi1 = m_f (_1990_coef_psi1_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi1)), false)
+  BUG (!std::isnan (m_g (psi1)), false)
   psi2 = m_f (_1990_coef_psi2_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi2)), false)
+  BUG (!std::isnan (m_g (psi2)), false)
   
   BUG (EF_calculs_free (p), false)
   

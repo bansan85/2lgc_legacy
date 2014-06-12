@@ -127,25 +127,25 @@ _1993_1_1_materiaux_modif (Projet      *p,
     BUG (EF_materiaux_repositionne (p, materiau), false)
   }
   
-  if (!isnan (m_g (fy)))
+  if (!std::isnan (m_g (fy)))
   {
     data_acier->fy = fy;
   }
-  if (!isnan (m_g (fu)))
+  if (!std::isnan (m_g (fu)))
   {
     data_acier->fu = fu;
   }
-  if (!isnan (m_g (e)))
+  if (!std::isnan (m_g (e)))
   {
     data_acier->e = e;
   }
-  if (!isnan (m_g (nu)))
+  if (!std::isnan (m_g (nu)))
   {
     data_acier->nu = nu;
   }
   
-  if ((!isnan (m_g (fy))) || (!isnan (m_g (fu))) ||
-      (!isnan (m_g (e))) || (!isnan (m_g (nu))))
+  if ((!std::isnan (m_g (fy))) || (!std::isnan (m_g (fu))) ||
+      (!std::isnan (m_g (e))) || (!std::isnan (m_g (nu))))
   {
     std::list <EF_Materiau *> liste_materiaux;
     std::list <EF_Barre *>   *liste_barres_dep;

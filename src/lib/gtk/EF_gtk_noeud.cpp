@@ -563,7 +563,7 @@ EF_gtk_noeud_edit_pos_abs (GtkCellRendererText *cell,
                                           -INFINITY, false,
                                           INFINITY, false);
   
-  if (!isnan (conversion))
+  if (!std::isnan (conversion))
   {
     EF_Noeud *noeud;
     
@@ -660,7 +660,7 @@ EF_gtk_noeud_edit_pos_relat (GtkCellRendererText *cell,
   
   // On vérifie si le texte contient bien un nombre flottant
   conversion = common_text_str_to_double (new_text, 0, true, 1., true);
-  if (!isnan (conversion))
+  if (!std::isnan (conversion))
   {
     EF_Noeud *noeud;
     

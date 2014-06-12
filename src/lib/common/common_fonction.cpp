@@ -584,9 +584,9 @@ common_fonction_cherche_zero (Fonction *fonction,
   xx1_2 = mini;
   xx3_2 = maxi;
   xx2_2 = (xx1_2 + xx3_2) / 2.;
-  BUG (!isnan (yy1 = common_fonction_y (fonction, xx1_2,  1)), false)
-  BUG (!isnan (yy2 = common_fonction_y (fonction, xx2_2,  0)), false)
-  BUG (!isnan (yy3 = common_fonction_y (fonction, xx3_2, -1)), false)
+  BUG (!std::isnan (yy1 = common_fonction_y (fonction, xx1_2,  1)), false)
+  BUG (!std::isnan (yy2 = common_fonction_y (fonction, xx2_2,  0)), false)
+  BUG (!std::isnan (yy3 = common_fonction_y (fonction, xx3_2, -1)), false)
   
   common_fonction_ax2_bx_c (xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
   
@@ -635,7 +635,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   // première estimation précise des zéro avec l'écart. Pour la suite, on le
   // fait par le biais d'une recherche dicotomique.
   ecart_x = (maxi - mini) / 4.;
-  if (!isnan (zero1))
+  if (!std::isnan (zero1))
   {
     double zero1_old = zero1;
     
@@ -699,7 +699,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   // Recherche dicotomique du zero1
   // Première vérification d'usage.
-  if ((!isnan (zero1)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
+  if ((!std::isnan (zero1)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
     xx1_2 = std::max (zero1 - ecart_x, mini);
     xx3_2 = std::min (zero1 + ecart_x, maxi);
@@ -722,7 +722,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   // On passe à la recherche du zero2 par la même méthode de travail
   ecart_x = (maxi - mini) / 4.;
-  if (!isnan (zero2))
+  if (!std::isnan (zero2))
   {
     double zero2_old = zero2;
     
@@ -780,7 +780,7 @@ common_fonction_cherche_zero (Fonction *fonction,
     ecart_x = fabs (zero2_old - zero2) / 2.;
   }
   // Dicotomie
-  if ((!isnan (zero2)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
+  if ((!std::isnan (zero2)) && (!(errmoy (ecart_x, ERRMOY_DIST))))
   {
     xx1_2 = std::max (zero2 - ecart_x, mini);
     xx3_2 = std::min (zero2 + ecart_x, maxi);
@@ -806,17 +806,17 @@ common_fonction_cherche_zero (Fonction *fonction,
     zero2 = NAN;
   }
   
-  if ((isnan (zero1)) && (isnan (zero2)))
+  if ((std::isnan (zero1)) && (std::isnan (zero2)))
   {
     *zero_1 = NAN;
     *zero_2 = NAN;
   }
-  else if ((isnan (zero1)) && (!isnan (zero2)))
+  else if ((std::isnan (zero1)) && (!std::isnan (zero2)))
   {
     *zero_1 = zero2;
     *zero_2 = NAN;
   }
-  else if ((!isnan (zero1)) && (isnan (zero2)))
+  else if ((!std::isnan (zero1)) && (std::isnan (zero2)))
   {
     *zero_1 = zero1;
     *zero_2 = NAN;
@@ -832,7 +832,7 @@ common_fonction_cherche_zero (Fonction *fonction,
     *zero_2 = zero2;
   }
   
-  if ((isnan (*zero_1)) || (!isnan (*zero_2)))
+  if ((std::isnan (*zero_1)) || (!std::isnan (*zero_2)))
   {
     return false;
   }
@@ -1067,7 +1067,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (zero1)) && (!errmoy (ecart_x, ERRMOY_DIST)))
+      while ((!std::isnan (zero1)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         double zero1_old = zero1;
         
@@ -1172,7 +1172,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (zero2)) && (!errmoy (ecart_x, ERRMOY_DIST)))
+      while ((!std::isnan (zero2)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         zero2_old = zero2;
         if (zero2 - ecart_x < xx1)
@@ -1275,7 +1275,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       
       ecart_old = xx3 - xx1;
       ecart_x = (xx3 - xx1) / 4.;
-      while ((!isnan (deriv_zero)) && (!errmoy (ecart_x, ERRMOY_DIST)))
+      while ((!std::isnan (deriv_zero)) && (!errmoy (ecart_x, ERRMOY_DIST)))
       {
         deriv_zero_old = deriv_zero;
         if (deriv_zero - ecart_x < xx1)
@@ -1384,7 +1384,7 @@ common_fonction_caracteristiques (Fonction *fonction,
         c = ecart_x;
       }
       
-      if ((!isnan (a)) && (!errmoy (pos_tmp [nb - 1] - a, ERRMOY_DIST)))
+      if ((!std::isnan (a)) && (!errmoy (pos_tmp [nb - 1] - a, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -1402,7 +1402,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (tmp); )
         val_tmp[nb - 1] = common_fonction_y (fonction, a, 0);
       }
-      if ((!isnan (b)) && (!errmoy (pos_tmp[nb - 1] - b, ERRMOY_DIST)))
+      if ((!std::isnan (b)) && (!errmoy (pos_tmp[nb - 1] - b, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -1420,7 +1420,7 @@ common_fonction_caracteristiques (Fonction *fonction,
                    free (tmp); )
         val_tmp[nb - 1] = common_fonction_y (fonction, b, 0);
       }
-      if ((!isnan (c)) && (!errmoy (pos_tmp [nb - 1] - c, ERRMOY_DIST)))
+      if ((!std::isnan (c)) && (!errmoy (pos_tmp [nb - 1] - c, ERRMOY_DIST)))
       {
         nb++;
         tmp = pos_tmp;
@@ -2196,7 +2196,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              &zero2),
                false,
                FREE_ALL)
-          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+          BUGCRIT ((!std::isnan (zero1)) && (std::isnan (zero2)),
                    false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
@@ -2232,7 +2232,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              &zero2),
                false,
                FREE_ALL)
-          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+          BUGCRIT ((!std::isnan (zero1)) && (std::isnan (zero2)),
                    false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
@@ -2415,7 +2415,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              &zero2),
                false,
                FREE_ALL)
-          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+          BUGCRIT ((!std::isnan (zero1)) && (std::isnan (zero2)),
                    false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)
@@ -2451,7 +2451,7 @@ common_fonction_renvoie_enveloppe (std::list <Fonction *> *fonctions,
                                              &zero2),
                false,
                FREE_ALL)
-          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+          BUGCRIT ((!std::isnan (zero1)) && (std::isnan (zero2)),
                    false,
                    (gettext ("Zéro impossible à trouver.\n"));
                      FREE_ALL)

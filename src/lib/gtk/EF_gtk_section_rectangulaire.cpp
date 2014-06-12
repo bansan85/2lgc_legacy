@@ -81,7 +81,7 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet      *p,
                 UI_SEC_RE.builder, "EF_section_rectangulaire_buffer_largeur")),
                           0, false,
                           INFINITY, false);
-  if (isnan (*largeur))
+  if (std::isnan (*largeur))
   {
     ok = false;
   }
@@ -90,7 +90,7 @@ EF_gtk_section_rectangulaire_recupere_donnees (Projet      *p,
                 UI_SEC_RE.builder, "EF_section_rectangulaire_buffer_hauteur")),
                           0, false,
                           INFINITY, false);
-  if (isnan (*hauteur))
+  if (std::isnan (*hauteur))
   {
     ok = false;
   }
