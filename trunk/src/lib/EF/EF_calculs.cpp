@@ -1054,7 +1054,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, pos);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), false, FREE_ALL)
+                BUG (!std::isnan (l), false, FREE_ALL)
                 pos++;
               }
               pos--;
@@ -1097,10 +1097,10 @@ EF_calculs_resoud_charge (Projet *p,
                                               noeud_fin));
             debut_barre = EF_noeuds_distance (noeud_debut,
                                               element->noeud_debut);
-            BUG (!isnan (debut_barre), false, FREE_ALL)
+            BUG (!std::isnan (debut_barre), false, FREE_ALL)
             a = m_g (charge_d->position) - debut_barre;
             fin_barre = EF_noeuds_distance (noeud_fin, element->noeud_debut);
-            BUG (!isnan (fin_barre), false, FREE_ALL)
+            BUG (!std::isnan (fin_barre), false, FREE_ALL)
             l = fabs (fin_barre - debut_barre);
             b = l - a;
             
@@ -1167,7 +1167,7 @@ EF_calculs_resoud_charge (Projet *p,
             // \begin{verbatim}
             FAx = ax2[0] * EF_sections_es_l (element, pos, 0, l) /
                     EF_sections_es_l (element, pos, a, l);
-            BUG (!isnan (FAx), false, FREE_ALL)
+            BUG (!std::isnan (FAx), false, FREE_ALL)
             FBx = ax2[0] - FAx;
             FAy_i = ax2[1] * b / l - ax2[5] / l;
             FAy_h = (MBz + MAz) / l;
@@ -1501,7 +1501,7 @@ EF_calculs_resoud_charge (Projet *p,
                                            &xx,
                                            &yy,
                                            &zz);
-            BUG (!isnan (ll),
+            BUG (!std::isnan (ll),
                  false,
                  cholmod_free_triplet (&t_for_part, p->calculs.c);
                    cholmod_free_triplet (&t_for_comp, p->calculs.c); )
@@ -1640,7 +1640,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, j_d);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), false, FREE_ALL)
+                BUG (!std::isnan (l), false, FREE_ALL)
                 j_d++;
               }
               j_d--;
@@ -1665,7 +1665,7 @@ EF_calculs_resoud_charge (Projet *p,
                   std::advance (it_t, j_f);
                   l = EF_noeuds_distance (*it_t, element->noeud_debut);
                 }
-                BUG (!isnan (l), false, FREE_ALL)
+                BUG (!std::isnan (l), false, FREE_ALL)
                 j_f++;
               }
               j_f--;
@@ -1716,7 +1716,7 @@ EF_calculs_resoud_charge (Projet *p,
               }
               debut_barre = EF_noeuds_distance (noeud_debut,
                                                 element->noeud_debut);
-              BUG (!isnan (debut_barre), false, FREE_ALL)
+              BUG (!std::isnan (debut_barre), false, FREE_ALL)
               if (pos == j_d)
               {
                 a = m_g (charge_d->a) - debut_barre;
@@ -1727,7 +1727,7 @@ EF_calculs_resoud_charge (Projet *p,
               }
               fin_barre = EF_noeuds_distance (noeud_fin,
                                               element->noeud_debut);
-              BUG (!isnan (fin_barre), false, FREE_ALL)
+              BUG (!std::isnan (fin_barre), false, FREE_ALL)
               l = fabs (fin_barre - debut_barre);
               if (pos == j_f)
               {
@@ -1829,7 +1829,7 @@ EF_calculs_resoud_charge (Projet *p,
                         b,
                         l),
                       l);
-              BUG (!isnan (FAx), false, FREE_ALL)
+              BUG (!std::isnan (FAx), false, FREE_ALL)
               FBx = ax2[0] * (l - a - b) - FAx;
               FAy_i = ax2[1] * (l - a - b) * (l - a + b) / (2. * l) -
                       ax2[5] * (l - a - b) / l;
@@ -2300,7 +2300,7 @@ EF_calculs_resoud_charge (Projet *p,
                                           ax2,
                                           p->calculs.t_part->nrow,
                                           ax);
-    BUG (!isnan (p->calculs.residu),
+    BUG (!std::isnan (p->calculs.residu),
          false,
          cholmod_free_triplet (&t_for_part, p->calculs.c);
            cholmod_free_triplet (&t_dep_part, p->calculs.c); )
@@ -2419,13 +2419,13 @@ EF_calculs_resoud_charge (Projet *p,
       double           Iy = m_g (EF_sections_iy (element->section));
       double           Iz = m_g (EF_sections_iz (element->section));
       
-      BUG (!isnan (J),
+      BUG (!std::isnan (J),
            false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
-      BUG (!isnan (Iy),
+      BUG (!std::isnan (Iy),
            false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
-      BUG (!isnan (Iz),
+      BUG (!std::isnan (Iz),
            false,
            cholmod_free_triplet (&t_dep_tot, p->calculs.c); )
       
@@ -2561,8 +2561,8 @@ EF_calculs_resoud_charge (Projet *p,
       ax2 = (double *) s_eff_loc->x;
       l_debut = EF_noeuds_distance (noeud_debut, element->noeud_debut);
       l_fin = EF_noeuds_distance (noeud_fin, element->noeud_debut);
-      BUG (!isnan (l_debut), false, FREE_ALL)
-      BUG (!isnan (l_fin), false, FREE_ALL)
+      BUG (!std::isnan (l_debut), false, FREE_ALL)
+      BUG (!std::isnan (l_fin), false, FREE_ALL)
       l = fabs (l_fin - l_debut);
       
   //     Ajout des efforts entre deux noeuds dus à leur déplacement relatif,

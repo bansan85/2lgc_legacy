@@ -123,7 +123,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_fx")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*fx))
+  if (std::isnan (*fx))
   {
     ok = false;
   }
@@ -132,7 +132,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_fy")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*fy))
+  if (std::isnan (*fy))
   {
     ok = false;
   }
@@ -141,7 +141,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_fz")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*fz))
+  if (std::isnan (*fz))
   {
     ok = false;
   }
@@ -150,7 +150,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_mx")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*mx))
+  if (std::isnan (*mx))
   {
     ok = false;
   }
@@ -159,7 +159,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_my")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*my))
+  if (std::isnan (*my))
   {
     ok = false;
   }
@@ -168,7 +168,7 @@ EF_gtk_charge_noeud_recupere (Projet                  *p,
                                                  "EF_charge_noeud_buffer_mz")),
                      -INFINITY, false,
                      INFINITY, false);
-  if (isnan (*mz))
+  if (std::isnan (*mz))
   {
     ok = false;
   }

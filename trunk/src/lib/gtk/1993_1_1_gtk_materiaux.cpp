@@ -88,7 +88,7 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
                                              "_1993_1_1_materiaux_buffer_fy")),
                      0., false,
                      INFINITY, false) * 1000000.;
-  if (isnan (*fy))
+  if (std::isnan (*fy))
   {
     ok = false;
   }
@@ -99,7 +99,7 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
                                              "_1993_1_1_materiaux_buffer_fu")),
                        0., false,
                        INFINITY, false) * 1000000.;
-    if (isnan (*fu))
+    if (std::isnan (*fu))
     {
       ok = false;
     }
@@ -114,7 +114,7 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
                                               "_1993_1_1_materiaux_buffer_e")),
                         0., false,
                         INFINITY, false) * 1000000000.;
-      if (isnan (*e))
+      if (std::isnan (*e))
       {
         ok = false;
       }
@@ -134,7 +134,7 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet      *p,
                                              "_1993_1_1_materiaux_buffer_nu")),
                          0., true,
                          0.5, false);
-      if (isnan (*nu))
+      if (std::isnan (*nu))
       {
         ok = false;
       }

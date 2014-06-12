@@ -280,7 +280,7 @@ EF_sections_rectangulaire_ajout (Projet      *p,
 
 
 #define SECTION_MODIF(QUOI, PAR) \
-  if ((!isnan (m_g (PAR))) && \
+  if ((!std::isnan (m_g (PAR))) && \
       (!errrel (m_g (section_data->QUOI), m_g (PAR)))) \
     section_data->QUOI = PAR; \
   else \
@@ -407,7 +407,7 @@ EF_sections_rectangulaire_modif (Projet      *p,
   SECTION_MODIF (hauteur_retombee, h)
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  if ((!isnan (m_g (l))) || (!isnan (m_g (h))))
+  if ((!std::isnan (m_g (l))) || (!std::isnan (m_g (h))))
   {
     SECTION_MODIF2
   }
@@ -539,10 +539,10 @@ bool     EF_sections_T_modif (Projet      *p,
   SECTION_MODIF (hauteur_table, ht)
   SECTION_MODIF (hauteur_retombee, hr)
   
-  if ((!isnan (m_g (lt))) ||
-      (!isnan (m_g (lr))) ||
-      (!isnan (m_g (ht))) ||
-      (!isnan (m_g (hr))))
+  if ((!std::isnan (m_g (lt))) ||
+      (!std::isnan (m_g (lr))) ||
+      (!std::isnan (m_g (ht))) ||
+      (!std::isnan (m_g (hr))))
   {
     SECTION_MODIF2
   }
@@ -639,7 +639,7 @@ EF_sections_carree_modif (Projet      *p,
   SECTION_MODIF (largeur_table, cote)
   section_data->hauteur_table = m_f (0., FLOTTANT_ORDINATEUR);
   
-  if (!isnan (m_g (cote)))
+  if (!std::isnan (m_g (cote)))
   {
     SECTION_MODIF2
   }
@@ -740,7 +740,7 @@ EF_sections_circulaire_modif (Projet      *p,
   
   SECTION_MODIF (diametre, diametre)
   
-  if (!isnan (m_g (diametre)))
+  if (!std::isnan (m_g (diametre)))
   {
     SECTION_MODIF2
   }
@@ -913,7 +913,7 @@ EF_sections_personnalisee_verif_forme (
           {
             // Alors, le seul moyen qu'il y ait une collision est que
             // les deux segments soient verticaux.
-            if ((isnan (a)) && (isnan (a2)))
+            if ((std::isnan (a)) && (std::isnan (a2)))
             {
               // Si les deux segments se suivent
               if ((errrel (ymax1, ymin2)) || (errrel (ymax2, ymin1)))
@@ -955,7 +955,7 @@ EF_sections_personnalisee_verif_forme (
             }
           }
           // si le segment 1 est vertical et que le deuxième non
-          else if (isnan (a))
+          else if (std::isnan (a))
           {
             double y_b;
             
@@ -995,7 +995,7 @@ EF_sections_personnalisee_verif_forme (
             }
           }
           // si le segment 2 est vertical et que le premier non
-          else if (isnan (a2))
+          else if (std::isnan (a2))
           {
             double y_b;
             
@@ -1342,14 +1342,14 @@ EF_sections_personnalisee_modif (Projet      *p,
   }
   
   // Ici, il n'est pas possible d'utiliser SECTION_MODIF2 à cause de forme.
-  if ((!isnan (m_g (j))) ||
-      (!isnan (m_g (iy))) ||
-      (!isnan (m_g (iz))) ||
-      (!isnan (m_g (vy))) ||
-      (!isnan (m_g (vyp))) ||
-      (!isnan (m_g (vz))) ||
-      (!isnan (m_g (vzp))) ||
-      (!isnan (m_g (s))) ||
+  if ((!std::isnan (m_g (j))) ||
+      (!std::isnan (m_g (iy))) ||
+      (!std::isnan (m_g (iz))) ||
+      (!std::isnan (m_g (vy))) ||
+      (!std::isnan (m_g (vyp))) ||
+      (!std::isnan (m_g (vz))) ||
+      (!std::isnan (m_g (vzp))) ||
+      (!std::isnan (m_g (s))) ||
       ((forme != NULL) && (!forme->empty ())))
   {
     std::list <Section *>   liste_sections;
@@ -1385,14 +1385,14 @@ EF_sections_personnalisee_modif (Projet      *p,
       }
 #endif
       delete liste_barres_dep;
-      if ((!isnan (m_g (j))) ||
-          (!isnan (m_g (iy))) ||
-          (!isnan (m_g (iz))) ||
-          (!isnan (m_g (vy))) ||
-          (!isnan (m_g (vyp))) ||
-          (!isnan (m_g (vz))) ||
-          (!isnan (m_g (vzp))) ||
-          (!isnan (m_g (s))))
+      if ((!std::isnan (m_g (j))) ||
+          (!std::isnan (m_g (iy))) ||
+          (!std::isnan (m_g (iz))) ||
+          (!std::isnan (m_g (vy))) ||
+          (!std::isnan (m_g (vyp))) ||
+          (!std::isnan (m_g (vz))) ||
+          (!std::isnan (m_g (vzp))) ||
+          (!std::isnan (m_g (s))))
         {
           BUG (EF_calculs_free (p), false)
         }
@@ -2238,9 +2238,9 @@ EF_sections_ay (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (3. * E * m_g (EF_sections_iy (barre->section)));
 }
@@ -2303,9 +2303,9 @@ EF_sections_by (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (6. * E * m_g (EF_sections_iy (barre->section)));
 }
@@ -2368,9 +2368,9 @@ EF_sections_cy (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (3. * E * m_g (EF_sections_iy (barre->section)));
 }
@@ -2433,9 +2433,9 @@ EF_sections_az (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (3. * E * m_g (EF_sections_iz (barre->section)));
 }
@@ -2498,9 +2498,9 @@ EF_sections_bz (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (6. * E * m_g (EF_sections_iz (barre->section)));
 }
@@ -2563,9 +2563,9 @@ EF_sections_cz (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   E = m_g (EF_materiaux_E (barre->materiau));
-  BUG (!isnan (E), NAN)
+  BUG (!std::isnan (E), NAN)
   
   return ll / (3. * E * m_g (EF_sections_iz (barre->section)));
 }
@@ -2727,7 +2727,7 @@ EF_sections_gj_l (EF_Barre *barre,
   }
   
   ll = EF_noeuds_distance (fin, debut);
-  BUG (!isnan (ll), NAN)
+  BUG (!std::isnan (ll), NAN)
   
   return m_g (EF_materiaux_G (barre->materiau, false)) *
          m_g (EF_sections_j (barre->section)) / ll;

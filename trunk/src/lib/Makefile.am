@@ -15,7 +15,7 @@ libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GTK_CFLAGS@
 else
 libeurocodes_la_CXXFLAGS	=	$(AM_CXXFLAGS)
 endif
-libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
+libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -version-info 0:0:0 -Wl,-O0 -no-undefined
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 if ENABLE_GTK
 libeurocodes_la_CPPFLAGS	+=	@GTK_CFLAGS@
@@ -94,7 +94,7 @@ DEFAULT_INCLUDES	+=	-Igtk
 lib_LTLIBRARIES += libeurocodes-gtk.la
 libeurocodes_gtk_la_LIBADD		=	@GTK_LIBS@
 libeurocodes_gtk_la_CXXFLAGS	=	$(AM_CXXFLAGS) @GTK_CFLAGS@
-libeurocodes_gtk_la_LDFLAGS		= $(AM_LDFLAGS) -no-undefined -version-info 0:0:0 -Wl,-O0
+libeurocodes_gtk_la_LDFLAGS		= $(AM_LDFLAGS) -version-info 0:0:0 -Wl,-O0 -no-undefined
 libeurocodes_gtk_la_CPPFLAGS	=	@XML_CPPFLAGS@ @GTK_CFLAGS@
 libeurocodes_gtk_ladir = $(includedir)/2lgc
 
@@ -158,11 +158,11 @@ endif
 if ENABLE_GTK
 common/common_projet.cpp: gtk/ressources.hpp gtk/ressources.cpp
 
-gtk/ressources.hpp: ../../files/ressources.xml gtk/ressources.cpp
-	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
-gtk/ressources.cpp: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
+gtk/ressources.hpp: ../../files/ui/ressources.xml gtk/ressources.cpp
+	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-header --manual-register
+gtk/ressources.cpp: ../../files/ui/ressources.xml $(wildcard ../../files/ui/*.ui)
 	$(MAKE) -C ../../files/ui
-	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
+	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-source --manual-register
 endif
 
 CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp *.hpp

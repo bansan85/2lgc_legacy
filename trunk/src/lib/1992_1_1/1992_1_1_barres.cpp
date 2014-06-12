@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <iterator>
 #include <locale>
-#include <string.h>
+#include <string>
 
 #include "1990_action.hpp"
 #include "common_projet.hpp"
@@ -218,7 +218,7 @@ _1992_1_1_barres_ajout (Projet         *p,
   // On incrémente le numéro de la future barre
   if (UI_BARADD.builder != NULL)
   {
-    std::string nb_barres = std::to_string (element_nouveau->numero + 1);
+    std::string nb_barres = std::to_string (element_nouveau->numero + 1U);
     
     gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (
                         UI_BARADD.builder, "EF_gtk_barres_add_numero_label2")),
@@ -893,7 +893,7 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
   
   ll = EF_noeuds_distance_x_y_z (debut, fin, &xx, &yy, &zz);
   
-  BUG (!isnan(ll), false)
+  BUG (!std::isnan(ll), false)
   INFO (!errmoy (ll, ERRMOY_DIST),
         false,
         (gettext ("La distance entre les noeuds %d et %d est nulle\n"),
@@ -1465,7 +1465,7 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     
     // Calcul des L_x, L_y, L_z et L.
     ll = EF_noeuds_distance (noeud2, noeud1);
-    BUG (!isnan(ll), false)
+    BUG (!std::isnan(ll), false)
     
     // Détermination des paramètres de souplesse de l'élément de barre par
     // l'utilisation des fonctions EF_sections_ay, by, cy, az, bz et cz.
@@ -1758,7 +1758,9 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
     es_l = EF_sections_es_l (element, j, 0., ll);
-    BUG (!isnan (es_l), false, cholmod_free_triplet (&triplet, p->calculs.c); )
+    BUG (!std::isnan (es_l),
+         false,
+         cholmod_free_triplet (&triplet, p->calculs.c); )
     ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
     ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
     ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;

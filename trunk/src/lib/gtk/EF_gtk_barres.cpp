@@ -384,7 +384,7 @@ EF_gtk_barres_edit_angle (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   conversion = common_text_str_to_double (new_text, -360., false, 360., false);
-  if (isnan (conversion))
+  if (std::isnan (conversion))
   {
     return;
   }

@@ -709,7 +709,7 @@ EF_gtk_relachements_edit_clicked (GtkCellRendererText *cell,
   
   conversion = common_text_str_to_double (new_text, 0., true, INFINITY, false);
   
-  if (isnan (conversion))
+  if (std::isnan (conversion))
   {
     return;
   }

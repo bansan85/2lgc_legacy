@@ -154,7 +154,7 @@ EF_gtk_barres_add_add_clicked (GtkButton *button,
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
                        -360., false,
                        360., false);
-  if (isnan (angle))
+  if (std::isnan (angle))
   {
     return;
   }
@@ -274,7 +274,7 @@ EF_gtk_barres_add_check_add (GtkWidget *widget,
   {
     ok = false;
   }
-  if (isnan (conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+  if (std::isnan (conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
                          UI_BARADD.builder, "EF_gtk_barres_add_angle_buffer")),
              -360., false,
              360., false)))
