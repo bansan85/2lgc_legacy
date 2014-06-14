@@ -1,14 +1,16 @@
-all : dia2code
-	mv *.hpp ../../src/lib
+all : ../../src/lib/codegui.hpp
 
-checkcode : dia2code
+checkcode : ../../src/lib/codegui.hpp
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
 
-dia2code :
+../../src/lib/codegui.hpp : codegui.dia
+	rm -f *.hpp ../../src/lib/*.hpp
 	/usr/bin/dia2code -l COPYING.head -t cpp -ext hpp -d . codegui.dia
+	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> codegui.hpp \;
+	mv *.hpp ../../src/lib
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)
