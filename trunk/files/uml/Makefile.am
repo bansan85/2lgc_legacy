@@ -1,3 +1,6 @@
+all : dia2code
+	mv *.hpp ../../src/lib
+
 checkcode : dia2code
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués

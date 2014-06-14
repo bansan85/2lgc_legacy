@@ -22,9 +22,6 @@
 #include "config.h"
 #include "common_projet.hpp"
 
-void show_warranty ();
-void show_help     ();
-
 std::string format (const std::string fmt,
                     ...);
 
