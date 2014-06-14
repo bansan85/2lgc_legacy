@@ -19,16 +19,15 @@ endif
 
 libeurocodes_ladir 				= 	$(includedir)/2lgc
 
-libeurocodes_la_SOURCES 	=		CProjet.cpp
+libeurocodes_la_SOURCES 	=		CProjet.cpp \
+															CCalculs.cpp
 
-libeurocodes_la_HEADERS 	=		CProjet.hpp
+libeurocodes_la_HEADERS 	=		$(wildcard *.hpp)
 
 $(libeurocodes_la_SOURCES) : 	uml
 
 uml :
-	/usr/bin/dia2code -l ../../files/uml/COPYING.head -t cpp -ext hpp -d . ../../files/uml/codegui.dia
-	rm -f codegui.hpp
-	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> codegui.hpp \;
+	$(MAKE) -C ../../files/uml
 
 
 if ENABLE_GTK

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-05-17 13:26+0200\n"
+"POT-Creation-Date: 2014-06-14 11:56+0200\n"
 "PO-Revision-Date: 2014-05-18 22:00+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -12,9 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
-
-msgid "Impossible d'initialiser gtk.\n"
-msgstr "Impossible d'initialiser gtk.\n"
 
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
@@ -283,6 +280,227 @@ msgstr "Flag %d inconnu.\n"
 msgid "Norme %d inconnue.\n"
 msgstr "Norme %d inconnue.\n"
 
+msgid "15. Disclaimer of Warranty.\n"
+msgstr ""
+"15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
+
+msgid "\n"
+msgstr "\n"
+
+msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
+msgstr ""
+"IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
+
+msgid ""
+"APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
+msgstr ""
+"PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
+"ÉCRIT,\n"
+
+msgid ""
+"HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
+msgstr ""
+"LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
+"PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
+
+msgid ""
+"OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
+msgstr ""
+"D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
+"LIMITER À CELLES-CI,\n"
+
+msgid ""
+"THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
+msgstr ""
+"LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
+"OBJECTIF\n"
+
+msgid ""
+"PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
+msgstr ""
+"PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
+"PERFORMANCES\n"
+
+msgid ""
+"IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
+msgstr ""
+"DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
+"VOUS ASSUMEZ LES COÛTS DE\n"
+
+msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
+msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
+
+msgid "16. Limitation of Liability.\n"
+msgstr "16. Limitation de responsabilité.\n"
+
+msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
+msgstr ""
+"EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
+"ACCORDÉES PAR ÉCRIT,\n"
+
+msgid ""
+"WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
+msgstr ""
+"UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
+"ACHEMINE\n"
+
+msgid ""
+"THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
+msgstr ""
+"LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
+"ENVERS VOUS POUR LES DOMMAGES,\n"
+
+msgid ""
+"GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
+msgstr ""
+"INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
+"SUITE DE\n"
+
+msgid ""
+"USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
+msgstr ""
+"L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
+"LIMITER À CELLES-CI, LA PERTE\n"
+
+msgid ""
+"DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
+msgstr ""
+"DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
+"VOUS OU DES PARTIES\n"
+
+msgid ""
+"PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
+msgstr ""
+"TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
+"PROGRAMME),\n"
+
+msgid ""
+"EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
+msgstr ""
+"MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
+"POSSIBILITÉ.\n"
+
+msgid "SUCH DAMAGES.\n"
+msgstr "DE TELS DOMMAGES\n"
+
+msgid "17. Interpretation of Sections 15 and 16.\n"
+msgstr "17. Interprétation des sections 15 et 16.\n"
+
+msgid "If the disclaimer of warranty and limitation of liability provided\n"
+msgstr ""
+"Si la déclaration d’absence de garantie et la limitation de responsabilité "
+"fournies\n"
+
+msgid "above cannot be given local legal effect according to their terms,\n"
+msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
+
+msgid "reviewing courts shall apply local law that most closely approximates\n"
+msgstr ""
+"les cours de justice qui les examinent doivent appliquer la législation "
+"locale qui approche au\n"
+
+msgid "an absolute waiver of all civil liability in connection with the\n"
+msgstr ""
+"plus près possible une levée absolue de toute responsabilité civile liée au\n"
+
+msgid "Program, unless a warranty or assumption of liability accompanies a\n"
+msgstr ""
+"Programme, à moins qu’une garantie ou assumation de responsabilité "
+"accompagne\n"
+
+msgid "copy of the Program in return for a fee.\n"
+msgstr "une copie du Programme en échange d’un paiement.\n"
+
+msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
+msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
+
+msgid "Options :\n"
+msgstr "Options :\n"
+
+msgid "\t-h, --help : affiche le présent menu\n"
+msgstr "\t-h, --help : affiche le présent menu\n"
+
+msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
+msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
+
+msgid "Fichier"
+msgstr "Fichier"
+
+msgid "Informations"
+msgstr "Informations"
+
+msgid "Quitter"
+msgstr "Quitter"
+
+msgid "Affichage"
+msgstr "Affichage"
+
+msgid "Vues"
+msgstr "Vues"
+
+msgid "XZ vers Y+"
+msgstr "XZ vers Y+"
+
+msgid "XZ vers Y-"
+msgstr "XZ vers Y-"
+
+msgid "YZ vers X+"
+msgstr "YZ vers X+"
+
+msgid "YZ vers X-"
+msgstr "YZ vers X-"
+
+msgid "XY vers Z+"
+msgstr "XY vers Z+"
+
+msgid "XY vers Z-"
+msgstr "XY vers Z-"
+
+msgid "Modélisation"
+msgstr "Modélisation"
+
+msgid "Noeuds"
+msgstr "Noeuds"
+
+msgid "Appuis..."
+msgstr "Appuis..."
+
+msgid "Gestion des noeuds..."
+msgstr "Gestion des noeuds..."
+
+msgid "Barres"
+msgstr "Barres"
+
+msgid "Sections..."
+msgstr "Sections..."
+
+msgid "Matériaux..."
+msgstr "Matériaux..."
+
+msgid "Relâchements..."
+msgstr "Relâchements..."
+
+msgid "Gestion des barres..."
+msgstr "Gestion des barres..."
+
+msgid "Charges"
+msgstr "Charges"
+
+msgid "Actions..."
+msgstr "Actions..."
+
+msgid "Groupes..."
+msgstr "Groupes..."
+
+msgid "Résultats"
+msgstr "Résultats"
+
+msgid "Calculer"
+msgstr "Calculer"
+
+msgid "Afficher"
+msgstr "Afficher"
+
 msgid ""
 "La résistance caractéristique à la compression du béton doit être inférieure "
 "ou égale à 90 MPa.\n"
@@ -495,180 +713,6 @@ msgstr "Le fichier '%s' est corrompu.\n"
 msgid "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
 msgstr "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
 
-#, c-format
-msgid "15. Disclaimer of Warranty.\n"
-msgstr ""
-"15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
-
-#, c-format
-msgid "\n"
-msgstr "\n"
-
-#, c-format
-msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
-msgstr ""
-"IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
-
-#, c-format
-msgid ""
-"APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
-msgstr ""
-"PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
-"ÉCRIT,\n"
-
-#, c-format
-msgid ""
-"HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
-msgstr ""
-"LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
-"PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
-
-#, c-format
-msgid ""
-"OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
-msgstr ""
-"D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
-"LIMITER À CELLES-CI,\n"
-
-#, c-format
-msgid ""
-"THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
-msgstr ""
-"LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
-"OBJECTIF\n"
-
-#, c-format
-msgid ""
-"PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
-msgstr ""
-"PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
-"PERFORMANCES\n"
-
-#, c-format
-msgid ""
-"IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
-msgstr ""
-"DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
-"VOUS ASSUMEZ LES COÛTS DE\n"
-
-#, c-format
-msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
-msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
-
-#, c-format
-msgid "16. Limitation of Liability.\n"
-msgstr "16. Limitation de responsabilité.\n"
-
-#, c-format
-msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
-msgstr ""
-"EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
-"ACCORDÉES PAR ÉCRIT,\n"
-
-#, c-format
-msgid ""
-"WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
-msgstr ""
-"UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
-"ACHEMINE\n"
-
-#, c-format
-msgid ""
-"THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
-msgstr ""
-"LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
-"ENVERS VOUS POUR LES DOMMAGES,\n"
-
-#, c-format
-msgid ""
-"GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
-msgstr ""
-"INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
-"SUITE DE\n"
-
-#, c-format
-msgid ""
-"USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
-msgstr ""
-"L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
-"LIMITER À CELLES-CI, LA PERTE\n"
-
-#, c-format
-msgid ""
-"DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
-msgstr ""
-"DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
-"VOUS OU DES PARTIES\n"
-
-#, c-format
-msgid ""
-"PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
-msgstr ""
-"TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
-"PROGRAMME),\n"
-
-#, c-format
-msgid ""
-"EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
-msgstr ""
-"MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
-"POSSIBILITÉ.\n"
-
-#, c-format
-msgid "SUCH DAMAGES.\n"
-msgstr "DE TELS DOMMAGES\n"
-
-#, c-format
-msgid "17. Interpretation of Sections 15 and 16.\n"
-msgstr "17. Interprétation des sections 15 et 16.\n"
-
-#, c-format
-msgid "If the disclaimer of warranty and limitation of liability provided\n"
-msgstr ""
-"Si la déclaration d’absence de garantie et la limitation de responsabilité "
-"fournies\n"
-
-#, c-format
-msgid "above cannot be given local legal effect according to their terms,\n"
-msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
-
-#, c-format
-msgid "reviewing courts shall apply local law that most closely approximates\n"
-msgstr ""
-"les cours de justice qui les examinent doivent appliquer la législation "
-"locale qui approche au\n"
-
-#, c-format
-msgid "an absolute waiver of all civil liability in connection with the\n"
-msgstr ""
-"plus près possible une levée absolue de toute responsabilité civile liée au\n"
-
-#, c-format
-msgid "Program, unless a warranty or assumption of liability accompanies a\n"
-msgstr ""
-"Programme, à moins qu’une garantie ou assumation de responsabilité "
-"accompagne\n"
-
-#, c-format
-msgid "copy of the Program in return for a fee.\n"
-msgstr "une copie du Programme en échange d’un paiement.\n"
-
-#, c-format
-msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
-msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
-
-#, c-format
-msgid "Options :\n"
-msgstr "Options :\n"
-
-#, c-format
-msgid "\t-h, --help : affiche le présent menu\n"
-msgstr "\t-h, --help : affiche le présent menu\n"
-
-#, c-format
-msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
-msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
-
 msgid "Impossible de déterminer le caractère décimal.\n"
 msgstr "Impossible de déterminer le caractère décimal.\n"
 
@@ -745,84 +789,6 @@ msgstr "de %.*lfm à %.*lfm : "
 
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
-
-msgid "Fichier"
-msgstr "Fichier"
-
-msgid "Informations"
-msgstr "Informations"
-
-msgid "Quitter"
-msgstr "Quitter"
-
-msgid "Affichage"
-msgstr "Affichage"
-
-msgid "Vues"
-msgstr "Vues"
-
-msgid "XZ vers Y+"
-msgstr "XZ vers Y+"
-
-msgid "XZ vers Y-"
-msgstr "XZ vers Y-"
-
-msgid "YZ vers X+"
-msgstr "YZ vers X+"
-
-msgid "YZ vers X-"
-msgstr "YZ vers X-"
-
-msgid "XY vers Z+"
-msgstr "XY vers Z+"
-
-msgid "XY vers Z-"
-msgstr "XY vers Z-"
-
-msgid "Modélisation"
-msgstr "Modélisation"
-
-msgid "Noeuds"
-msgstr "Noeuds"
-
-msgid "Appuis..."
-msgstr "Appuis..."
-
-msgid "Gestion des noeuds..."
-msgstr "Gestion des noeuds..."
-
-msgid "Barres"
-msgstr "Barres"
-
-msgid "Sections..."
-msgstr "Sections..."
-
-msgid "Matériaux..."
-msgstr "Matériaux..."
-
-msgid "Relâchements..."
-msgstr "Relâchements..."
-
-msgid "Gestion des barres..."
-msgstr "Gestion des barres..."
-
-msgid "Charges"
-msgstr "Charges"
-
-msgid "Actions..."
-msgstr "Actions..."
-
-msgid "Groupes..."
-msgstr "Groupes..."
-
-msgid "Résultats"
-msgstr "Résultats"
-
-msgid "Calculer"
-msgstr "Calculer"
-
-msgid "Afficher"
-msgstr "Afficher"
 
 #, c-format
 msgid "Le type de noeud %d est inconnu.\n"
@@ -1785,6 +1751,9 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
+
+#~ msgid "Impossible d'initialiser gtk.\n"
+#~ msgstr "Impossible d'initialiser gtk.\n"
 
 #~ msgid "Structure bloquée en déplacement"
 #~ msgstr "Structure bloquée en déplacement"

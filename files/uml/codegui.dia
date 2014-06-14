@@ -3288,25 +3288,25 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="191,-151"/>
+        <dia:point val="191,-157"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="190.95,-151.05;206.252,-124.1"/>
+        <dia:rectangle val="190.95,-157.05;213.88,-123.7"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="191,-151"/>
+        <dia:point val="191,-157"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="15.202500000000001"/>
+        <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="26.850000000000009"/>
+        <dia:real val="33.250000000000007"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#SBarreInfoEF#</dia:string>
+        <dia:string>#CBarreInfoEF#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#struct#</dia:string>
+        <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>##</dia:string>
@@ -3693,7 +3693,164 @@
           </dia:attribute>
         </dia:composite>
       </dia:attribute>
-      <dia:attribute name="operations"/>
+      <dia:attribute name="operations">
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#CBarreInfoEF#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Constructeur d'une classe CBarreInfoEF.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#CBarreInfoEF#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe CBarreInfoEF.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CBarreInfoEF &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator =#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#CBarreInfoEF &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Assignment operator de CBarreInfoEF.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CBarreInfoEF &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#~CBarreInfoEF#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Destructeur d'une classe CBarreInfoEF.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+      </dia:attribute>
       <dia:attribute name="template">
         <dia:boolean val="false"/>
       </dia:attribute>
@@ -14954,7 +15111,7 @@
         <dia:point val="155,-136"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="154.95,-136.05;184.475,-83.4"/>
+        <dia:rectangle val="154.95,-136.05;184.475,-82"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="155,-136"/>
@@ -14963,7 +15120,7 @@
         <dia:real val="29.425000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="52.550000000000004"/>
+        <dia:real val="53.950000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CCalculs#</dia:string>
@@ -15081,10 +15238,10 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#n_part#</dia:string>
+            <dia:string>#n_part [6]#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint32_t **#</dia:string>
+            <dia:string>#std::vector &lt;uint32_t&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -15104,10 +15261,10 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#n_comp#</dia:string>
+            <dia:string>#n_comp [6]#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint32_t **#</dia:string>
+            <dia:string>#std::vector &lt;uint32_t&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -15383,7 +15540,7 @@
             <dia:string>#info_EF#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::vector &lt; std::vector &lt;SBarreInfoEF&gt; * &gt;#</dia:string>
+            <dia:string>#std::vector &lt; std::vector &lt;CBarreInfoEF&gt; &gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -15493,7 +15650,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CCalculs.#</dia:string>
+            <dia:string>#Duplication d'une classe CCalculs. Les résultats n'étant pas dupliqués, la variable cholmod_common (c) est simplement initialisée à zéro et les paramètres des pondérations est conservés.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -15541,7 +15698,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CCalculs.#</dia:string>
+            <dia:string>#Assignment operator de CCalculs. Les résultats n'étant pas dupliqués, la variable cholmod_common (c) est simplement initialisée à zéro et les paramètres des pondérations est conservés.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -17273,7 +17430,7 @@
         <dia:point val="139.135,-110.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="138.385,-111.66;186.74,-30.2"/>
+        <dia:rectangle val="138.385,-111.65;186.74,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17355,7 +17512,7 @@
         <dia:point val="139.135,-109.05"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="138.385,-109.81;154.05,-30.16"/>
+        <dia:rectangle val="138.385,-109.8;154.05,-30.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17435,7 +17592,7 @@
         <dia:point val="119,-112.75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="116.947,-113.51;119.75,-30.2"/>
+        <dia:rectangle val="116.947,-113.5;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17517,7 +17674,7 @@
         <dia:point val="119,-114.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="103.78,-115.36;119.75,-30.2"/>
+        <dia:rectangle val="103.78,-115.35;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17599,7 +17756,7 @@
         <dia:point val="119,-116.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="76.31,-117.21;119.75,-30.2"/>
+        <dia:rectangle val="76.31,-117.2;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17681,7 +17838,7 @@
         <dia:point val="119,-118.3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="58.31,-119.06;119.75,-30.2"/>
+        <dia:rectangle val="58.31,-119.05;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17763,7 +17920,7 @@
         <dia:point val="119,-120.15"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.94,-120.91;119.75,-30.2"/>
+        <dia:rectangle val="41.94,-120.9;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17845,7 +18002,7 @@
         <dia:point val="119,-122"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.78,-122.76;119.75,-30.2"/>
+        <dia:rectangle val="22.78,-122.75;119.75,-30.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18090,7 +18247,7 @@
         <dia:point val="58.36,-29.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="58.31,-32.76;117.45,-24.7"/>
+        <dia:rectangle val="58.31,-32.75;117.45,-24.7"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18147,7 +18304,7 @@
         <dia:point val="76.36,-29.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="76.31,-34.76;117.45,-22.85"/>
+        <dia:rectangle val="76.31,-34.75;117.45,-22.85"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18257,7 +18414,7 @@
         <dia:point val="117,-14.05"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.94,-39.76;117.75,-13.21"/>
+        <dia:rectangle val="41.94,-39.75;117.75,-13.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18339,7 +18496,7 @@
         <dia:point val="184.425,-96.3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="183.675,-150.66;191.05,-95.46"/>
+        <dia:rectangle val="183.675,-157.05;191.05,-95.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18347,8 +18504,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="184.425,-96.3"/>
         <dia:point val="187,-96.3"/>
-        <dia:point val="187,-149.9"/>
-        <dia:point val="191,-149.9"/>
+        <dia:point val="187,-156.3"/>
+        <dia:point val="191,-156.3"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -18499,7 +18656,7 @@
         <dia:point val="208.6,-24"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="207.85,-26.71;212.05,-23.16"/>
+        <dia:rectangle val="207.85,-26.7;212.05,-23.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18579,7 +18736,7 @@
         <dia:point val="208.6,-9.65"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="207.85,-10.41;212.05,-8.71"/>
+        <dia:rectangle val="207.85,-10.4;212.05,-8.7"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18839,7 +18996,7 @@
         <dia:point val="184.425,-94.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="183.675,-110.46;191.05,-93.61"/>
+        <dia:rectangle val="183.675,-110.45;191.05,-93.6"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18919,7 +19076,7 @@
         <dia:point val="178.83,18.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="178.08,17.94;185.05,39.94"/>
+        <dia:rectangle val="178.08,17.95;185.05,39.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18999,7 +19156,7 @@
         <dia:point val="-33.95,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-34,-40.76;27.45,-30.55"/>
+        <dia:rectangle val="-34,-40.75;27.45,-30.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -19052,7 +19209,7 @@
         <dia:point val="-33.95,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-34,-40.76;44.45,-30.55"/>
+        <dia:rectangle val="-34,-40.75;44.45,-30.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -19105,7 +19262,7 @@
         <dia:point val="-33.95,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-34,-40.76;62.45,-30.55"/>
+        <dia:rectangle val="-34,-40.75;62.45,-30.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -19616,7 +19773,7 @@
         <dia:point val="240.6,-131.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="239.85,-132.66;248.05,-129.41"/>
+        <dia:rectangle val="239.85,-132.65;248.05,-129.4"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -20955,7 +21112,7 @@ class IUndoable;#</dia:string>
         <dia:point val="91.415,-92"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="91.365,-150.61;120.45,-91.95"/>
+        <dia:rectangle val="91.365,-150.6;120.45,-91.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -21006,7 +21163,7 @@ class IUndoable;#</dia:string>
         <dia:point val="80,-66.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="74.815,-88.01;80.75,-65.86"/>
+        <dia:rectangle val="74.815,-88;80.75,-65.85"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -21086,7 +21243,7 @@ class IUndoable;#</dia:string>
         <dia:point val="-33.95,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-34,-40.76;-20.2525,-30.55"/>
+        <dia:rectangle val="-34,-40.75;-20.2525,-30.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -39419,7 +39576,7 @@ class CUndoManager;#</dia:string>
         <dia:point val="25.5859,-133.825"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="25.5359,-134.873;32.45,-133.273"/>
+        <dia:rectangle val="25.5359,-134.863;32.45,-133.263"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -40081,7 +40238,7 @@ class CUndoManager;#</dia:string>
         <dia:point val="66,192.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-11.455,-30.71;66.75,193.04"/>
+        <dia:rectangle val="-11.455,-30.7;66.75,193.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
