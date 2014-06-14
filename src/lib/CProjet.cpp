@@ -18,106 +18,21 @@
 
 #include "config.h"
 
+#include "CProjet.hpp"
+
+#include <iostream>
 #include <locale>
 
-#include "common_erreurs.hpp"
-#include "common_math.hpp"
-
-#ifdef ENABLE_GTK
-#include "common_m3d.hpp"
-#include "common_gtk.hpp"
-#include "1990_gtk_groupes.hpp"
-#include "1990_gtk_actions.hpp"
-#include "EF_gtk_noeud.hpp"
-#include "EF_gtk_appuis.hpp"
-#include "EF_gtk_calculs.hpp"
-#include "EF_gtk_sections.hpp"
-#include "EF_gtk_barres.hpp"
-#include "EF_gtk_materiaux.hpp"
-#include "EF_gtk_relachement.hpp"
-#include "EF_gtk_resultats.hpp"
-#include "ressources.hpp"
-#include "common_gtk_informations.hpp"
-#endif
-
-#include "common_ville.hpp"
-#include "EF_appuis.hpp"
-#include "EF_materiaux.hpp"
-#include "EF_noeuds.hpp"
-#include "EF_rigidite.hpp"
-#include "EF_relachement.hpp"
-#include "EF_sections.hpp"
-#include "EF_calculs.hpp"
-#include "1990_action.hpp"
-#include "1990_action_private.hpp"
-#include "1990_groupe.hpp"
-#include "1990_combinaisons.hpp"
-#include "1992_1_1_barres.hpp"
-#include "1992_1_1_materiaux.hpp"
-
-
 /**
- * \brief Libère les allocations mémoires de l'ensemble de la variable projet.
- * \param p : la variable projet.
- * \return
- *   Succès : true.\n
- *   Échec : false :
- *     - p == NULL.
+ * \brief Initialise la classe CProjet.
  */
-bool
-projet_free (Projet *p)
+CProjet::CProjet () :
+  parametres (NULL),
+  modele (),
+  calculs (),
+  undo ()
 {
-  // Action doit être libéré avant p->modele.barres
-  
-  BUGPARAM (p, "%p", p, false)
-  
-  BUG (EF_calculs_free (p), false)
-  BUG (common_ville_free (p), false)
-  BUG (_1990_action_free (p), false)
-  BUG (_1990_groupe_free (p), false)
-  BUG (_1990_combinaisons_free (p), false)
-  // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
-  // il est nécessaire d'avoir accès aux informations contenues dans les
-  // noeuds.
-  BUG (EF_calculs_free (p), false)
-  BUG (EF_sections_free (p), false)
-  BUG (EF_noeuds_free (p), false)
-  BUG (_1992_1_1_barres_free (p), false)
-  BUG (EF_appuis_free (p), false)
-  BUG (EF_materiaux_free (p), false)
-  BUG (EF_relachement_free (p), false)
-#ifdef ENABLE_GTK
-  UI_RES.tableaux.clear ();
-  if (UI_M3D.data != NULL)
-  {
-    BUG (m3d_free (p), false)
-  }
-  EF_gtk_resultats_free (p);
-  
-  _2lgc_unregister_resource ();
-#endif
-  
-  cholmod_finish (p->calculs.c);
-  
-  delete p;
-  
-  return true;
-}
-
-
-/**
- * \brief Initialise la variable projet.
- * \param norme : norme de calcul.
- * \return
- *   Succès : Un pointeur vers une zone mémoire projet.
- *   Échec : NULL :
- *     - en cas d'erreur d'allocation mémoire.
- */
-// coverity[+alloc]
-Projet *
-projet_init (Norme norme)
-{
-  Projet         *p;
+#if 0
 #ifdef ENABLE_GTK
   GtkCssProvider *provider = gtk_css_provider_new ();
   GdkDisplay     *display;
@@ -125,11 +40,6 @@ projet_init (Norme norme)
   
   _2lgc_register_resource ();
 #endif
-  
-  // Alloue toutes les zones mémoires du projet à savoir (par module) :
-  p = new Projet;
-  
-  p->parametres.norme = norme;
   
   BUG (common_ville_init (p), NULL, delete p; )
   
@@ -195,13 +105,167 @@ projet_init (Norme norme)
        projet_free (p); )
   POPWARNING
   
-  p->calculs.c = &(p->calculs.Common);
-  cholmod_start (p->calculs.c);
-  
-  return p;
+#endif
 }
 
 
+/**
+ * \brief Duplication d'une classe CProjet.
+ * \param other (in) La classe à dupliquer.
+ */
+CProjet::CProjet (const CProjet & other) :
+  parametres (other.parametres),
+  modele (other.modele),
+  calculs (other.calculs),
+  undo (other.undo)
+{
+}
+
+
+/**
+ * \brief Assignment operator de CProjet.
+ * \param other (in) La classe à dupliquer.
+ */
+CProjet &
+CProjet::operator = (const CProjet & other)
+{
+  this->parametres = other.parametres;
+  this->modele = other.modele;
+  this->calculs = other.calculs;
+  this->undo = other.undo;
+  
+  return *this;
+}
+
+
+/**
+ * \brief Libère une classe CProjet avec tout le contenu.
+ */
+CProjet::~CProjet ()
+{
+  delete parametres;
+  
+#if 0
+  BUG (EF_calculs_free (p), false)
+  BUG (common_ville_free (p), false)
+  BUG (_1990_action_free (p), false)
+  BUG (_1990_groupe_free (p), false)
+  BUG (_1990_combinaisons_free (p), false)
+  // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
+  // il est nécessaire d'avoir accès aux informations contenues dans les
+  // noeuds.
+  BUG (EF_calculs_free (p), false)
+  BUG (EF_sections_free (p), false)
+  BUG (EF_noeuds_free (p), false)
+  BUG (_1992_1_1_barres_free (p), false)
+  BUG (EF_appuis_free (p), false)
+  BUG (EF_materiaux_free (p), false)
+  BUG (EF_relachement_free (p), false)
+#ifdef ENABLE_GTK
+  UI_RES.tableaux.clear ();
+  if (UI_M3D.data != NULL)
+  {
+    BUG (m3d_free (p), false)
+  }
+  EF_gtk_resultats_free (p);
+  
+  _2lgc_unregister_resource ();
+#endif
+#endif
+}
+
+
+/**
+ * \brief Renvoie les paramètres du projet.
+ */
+IParametres &
+CProjet::getParametres ()
+{
+  return *parametres;
+}
+
+
+/**
+ * \brief Renvoie le modèle de calcul.
+ */
+CModele &
+CProjet::getModele ()
+{
+  return modele;
+}
+
+
+/**
+ * \brief Renvoie les résultats des calculs.
+ */
+CCalculs &
+CProjet::getCalculs ()
+{
+  return calculs;
+}
+
+
+/**
+ * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la
+ *        licence GPL).
+ * \return Rien.
+ */
+void
+CProjet::showWarranty ()
+{
+  std::cout << gettext ("15. Disclaimer of Warranty.\n")
+    << gettext ("\n")
+    << gettext ("THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n")
+    << gettext ("APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n")
+    << gettext ("HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n")
+    << gettext ("OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n")
+    << gettext ("THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n")
+    << gettext ("PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n")
+    << gettext ("IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n")
+    << gettext ("ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n")
+    << gettext ("\n")
+    << gettext ("16. Limitation of Liability.\n")
+    << gettext ("\n")
+    << gettext ("IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n")
+    << gettext ("WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n")
+    << gettext ("THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n")
+    << gettext ("GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n")
+    << gettext ("USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n")
+    << gettext ("DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n")
+    << gettext ("PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n")
+    << gettext ("EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n")
+    << gettext ("SUCH DAMAGES.\n")
+    << gettext ("\n")
+    << gettext ("17. Interpretation of Sections 15 and 16.\n")
+    << gettext ("\n")
+    << gettext ("If the disclaimer of warranty and limitation of liability provided\n")
+    << gettext ("above cannot be given local legal effect according to their terms,\n")
+    << gettext ("reviewing courts shall apply local law that most closely approximates\n")
+    << gettext ("an absolute waiver of all civil liability in connection with the\n")
+    << gettext ("Program, unless a warranty or assumption of liability accompanies a\n")
+    << gettext ("copy of the Program in return for a fee.\n");
+  
+  return;
+}
+
+/**
+ * \brief Affiche l'aide lorsque l'utilisateur lance le programme avec l'option
+ *        -h.
+ * \return Rien.
+ */
+void
+CProjet::showHelp ()
+{
+  std::cout << gettext ("Utilisation : codegui [OPTION]... [FILE]...\n")
+    << gettext ("Options :\n")
+    << gettext ("\t-h, --help : affiche le présent menu\n")
+    << gettext ("\t-w, --warranty : affiche les limites de garantie du logiciel\n");
+  
+  return;
+}
+
+
+#if 0
 #ifdef ENABLE_GTK
 /**
  * \brief Évenement lors de la fermeture de la fenêtre principale.
@@ -508,6 +572,8 @@ projet_init_graphique (Projet *p)
   
   return true;
 }
+#endif
+
 #endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

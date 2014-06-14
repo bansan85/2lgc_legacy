@@ -18,51 +18,55 @@
 
 #include "config.h"
 
-#include <locale>
+#include <algorithm>
+#include <memory>
 
-#include "common_projet.hpp"
-#include "common_erreurs.hpp"
-#include "EF_rigidite.hpp"
+#include "CUndoManager.hpp"
+#include "IUndoable.hpp"
+
 
 /**
- * \brief Initialise à NULL les différentes matrices de rigidité.
- * \param p : la variable projet.
- * \return
- *   Succès : true.\n
- *   Échec : false :
- *     - p == NULL.
+ * \brief Initialise le système de gestion de l'historique et de la gestion des
+ *        annuler / répéter.
  */
-bool
-EF_rigidite_init (Projet *p)
+CUndoManager::CUndoManager () :
+  pos (0),
+  ref (0),
+  tmp_liste (NULL)
 {
-  BUGPARAM (p, "%p", p, false)
-  
-  p->calculs.m_part = NULL;
-  p->calculs.m_comp = NULL;
-  p->calculs.numeric = NULL;
-  p->calculs.ap = NULL;
-  p->calculs.ai = NULL;
-  p->calculs.ax = NULL;
-  p->calculs.t_part = NULL;
-  p->calculs.t_comp = NULL;
-  p->calculs.n_comp = NULL;
-  p->calculs.n_part = NULL;
-  
-  return true;
 }
 
 
 /**
- * \brief Libère la liste contenant la matrice de rigidité.
- * \param p : la variable projet.
- * \return
- *   Succès : true.\n
- *   Échec : false :
- *     - p == NULL.
+ * \brief Libère une liste de IUndoable *. Le pointeur envoyé est également
+ *        "delete".
  */
-bool
-EF_rigidite_free (Projet *p)
+static void deleteListIUndoable (std::list <IUndoable *> * liste)
 {
+  if (liste == NULL)
+  {
+    return;
+  }
+  
+  for_each (liste->begin (),
+            liste->end (),
+            std::default_delete <IUndoable>);
+  
+  delete liste;
 }
+
+
+/**
+ * \brief Libère l'historique du projet.
+ */
+CUndoManager::~CUndoManager ()
+{
+  for_each (liste->begin (),
+            liste->end (),
+            deleteListIUndoable);
+  
+  deleteListIUndoable (tmp_liste);
+}
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
