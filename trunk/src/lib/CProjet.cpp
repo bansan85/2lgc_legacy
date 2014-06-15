@@ -18,10 +18,10 @@
 
 #include "config.h"
 
-#include "CProjet.hpp"
-
 #include <iostream>
 #include <locale>
+
+#include "CProjet.hpp"
 
 /**
  * \brief Initialise la classe CProjet.

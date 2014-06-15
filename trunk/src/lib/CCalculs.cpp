@@ -18,10 +18,10 @@
 
 #include "config.h"
 
-#include "CCalculs.hpp"
-
 #include <cmath>
 #include <umfpack.h>
+
+#include "CCalculs.hpp"
 
 /**
  * \brief Initialise les variables de calcul globales et les résultats.

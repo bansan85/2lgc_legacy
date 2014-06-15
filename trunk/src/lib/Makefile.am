@@ -19,8 +19,12 @@ endif
 
 libeurocodes_ladir 				= 	$(includedir)/2lgc
 
-libeurocodes_la_SOURCES 	=		CProjet.cpp \
-															CCalculs.cpp
+libeurocodes_la_SOURCES 	=		CBarreInfoEF \
+															CCalculs.cpp \
+															CModele.cpp \
+															CPonderations.cpp \
+															CProjet.cpp \
+															CUndoManager.cpp
 
 libeurocodes_la_HEADERS 	=		$(wildcard *.hpp)
 

@@ -30,6 +30,7 @@
  *        annuler / répéter.
  */
 CUndoManager::CUndoManager () :
+  liste (),
   pos (0),
   ref (0),
   tmp_liste (NULL)
@@ -38,8 +39,38 @@ CUndoManager::CUndoManager () :
 
 
 /**
+ * \brief Duplication d'une classe CUndoManager.
+ * \param other (in) La classe à dupliquer.
+ */
+CUndoManager::CUndoManager (const CUndoManager & other) :
+  // TODO
+  liste (),
+  pos (0),
+  ref (0),
+  tmp_liste (NULL)
+{
+}
+
+
+/**
+ * \brief Assignment operator de CUndoManager.
+ * \param other (in) La classe à dupliquer.
+ */
+CUndoManager &
+CUndoManager::operator = (const CUndoManager & other)
+{
+  this->pos = 0;
+  this->ref = 0;
+  this->tmp_liste = NULL;
+  
+  return *this;
+}
+
+
+/**
  * \brief Libère une liste de IUndoable *. Le pointeur envoyé est également
  *        "delete".
+ * \param liste Liste à supprimer.
  */
 static void deleteListIUndoable (std::list <IUndoable *> * liste)
 {
@@ -50,7 +81,7 @@ static void deleteListIUndoable (std::list <IUndoable *> * liste)
   
   for_each (liste->begin (),
             liste->end (),
-            std::default_delete <IUndoable>);
+            std::default_delete <IUndoable> ());
   
   delete liste;
 }
@@ -61,11 +92,11 @@ static void deleteListIUndoable (std::list <IUndoable *> * liste)
  */
 CUndoManager::~CUndoManager ()
 {
-  for_each (liste->begin (),
-            liste->end (),
+  for_each (this->liste.begin (),
+            this->liste.end (),
             deleteListIUndoable);
   
-  deleteListIUndoable (tmp_liste);
+  deleteListIUndoable (this->tmp_liste);
 }
 
 
