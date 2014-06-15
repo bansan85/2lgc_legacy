@@ -373,6 +373,7 @@ m3d_camera_zoom_all (Projet *p)
   double        yymin;
   int32_t       i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
   
+  // TODO : améliorer le système de zoom.
   std::list<EF_Noeud*>::iterator it; // Noeud en cours d'étude
   
   BUGPARAM (p, "%p", p, false)
