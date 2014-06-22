@@ -58,11 +58,11 @@
 */
 
 int
-main (int32_t   argc,
-      char     *argv[])
+main (int32_t argc,
+      char   *argv[])
 {
   /* Variables */
-  CProjet projet ();
+  CProjet projet;
 //  GList   *tmp1, *tmp2;
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -104,13 +104,14 @@ main (int32_t   argc,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
   // Création des actions
-/*  BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1) // Poids propre
-  BUG(_1990_action_ajout(projet, 2, "Chargement"), -1) // 2 Exploitation
-  BUG(_1990_action_ajout(projet, 16, "Neige"), -1) // 3 Neige
-  BUG(_1990_action_ajout(projet, 17, "Vent"), -1) // 4 Vent
+  std::list<ICharge *> liste;
+  projet.addAction (new CAction ("Poids propre", 0, liste, NULL)); // 0 Poids propre
+  projet.addAction (new CAction ("Chargement", 2, liste, NULL)); // 2 Exploitation
+  projet.addAction (new CAction ("Neige", 16, liste, NULL)); // 16 Neige
+  projet.addAction (new CAction ("Vent", 17, liste, NULL)); // 17 Vent
   
   // Création des groupes d'actions
-  BUG(_1990_groupe_ajout_niveau(projet), -1)
+/*  BUG(_1990_groupe_ajout_niveau(projet), -1)
   BUG(_1990_groupe_ajout_niveau(projet), -1)
   BUG(_1990_groupe_ajout_niveau(projet), -1)
   BUG(_1990_groupe_ajout_niveau(projet), -1)

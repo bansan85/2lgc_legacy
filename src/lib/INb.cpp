@@ -16,20 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Fichier généré automatiquement avec dia2code 0.8.6.
-
 #include "config.h"
-#ifdef ENABLE_GTK
-#include <gtk/gtk.h>
-#define EGTK(...) __VA_ARGS__
-#else
-#define EGTK(...)
-#endif
 
-#include <string>
-#include <vector>
-#include <stack>
-#include <list>
-#include <cstdint>
-#include <cholmod.h>
+#include "INb.hpp"
 
+/**
+ * \brief Destructeur d'une classe INb.
+ */
+INb::~INb ()
+{
+}
+
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

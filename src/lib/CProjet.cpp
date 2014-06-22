@@ -27,10 +27,10 @@
  * \brief Initialise la classe CProjet.
  */
 CProjet::CProjet () :
-  parametres (NULL),
-  modele (),
-  calculs (),
-  undo ()
+  CCalculs (),
+  CModele (),
+  CUndoManager (),
+  parametres (NULL)
 {
 #if 0
 #ifdef ENABLE_GTK
@@ -114,10 +114,10 @@ CProjet::CProjet () :
  * \param other (in) La classe à dupliquer.
  */
 CProjet::CProjet (const CProjet & other) :
-  parametres (other.parametres),
-  modele (other.modele),
-  calculs (other.calculs),
-  undo (other.undo)
+  CCalculs (),
+  CModele (),
+  CUndoManager (),
+  parametres (other.parametres)
 {
 }
 
@@ -130,9 +130,7 @@ CProjet &
 CProjet::operator = (const CProjet & other)
 {
   this->parametres = other.parametres;
-  this->modele = other.modele;
-  this->calculs = other.calculs;
-  this->undo = other.undo;
+  //TODO
   
   return *this;
 }
@@ -182,26 +180,6 @@ IParametres &
 CProjet::getParametres ()
 {
   return *parametres;
-}
-
-
-/**
- * \brief Renvoie le modèle de calcul.
- */
-CModele &
-CProjet::getModele ()
-{
-  return modele;
-}
-
-
-/**
- * \brief Renvoie les résultats des calculs.
- */
-CCalculs &
-CProjet::getCalculs ()
-{
-  return calculs;
 }
 
 
