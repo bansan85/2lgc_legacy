@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <cmath>
+
 #include "CBarreInfoEF.hpp"
 
 /**
@@ -72,8 +74,8 @@ CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) :
  * \brief Assignment operator de CBarreInfoEF.
  * \param other (in) La classe à dupliquer.
  */
-CCalculs &
-CCalculs::operator = (const CCalculs & other)
+CBarreInfoEF &
+CBarreInfoEF::operator = (const CBarreInfoEF & other)
 {
   // TODO
   this->m_rig_loc = NULL;

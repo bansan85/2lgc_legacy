@@ -72,7 +72,7 @@ CUndoManager::operator = (const CUndoManager & other)
  *        "delete".
  * \param liste Liste à supprimer.
  */
-static void deleteListIUndoable (std::list <IUndoable *> * liste)
+static void deleteListCUndoData (std::list <CUndoData *> * liste)
 {
   if (liste == NULL)
   {
@@ -81,7 +81,7 @@ static void deleteListIUndoable (std::list <IUndoable *> * liste)
   
   for_each (liste->begin (),
             liste->end (),
-            std::default_delete <IUndoable> ());
+            std::default_delete <CUndoData> ());
   
   delete liste;
 }
@@ -94,9 +94,9 @@ CUndoManager::~CUndoManager ()
 {
   for_each (this->liste.begin (),
             this->liste.end (),
-            deleteListIUndoable);
+            deleteListCUndoData);
   
-  deleteListIUndoable (this->tmp_liste);
+  deleteListCUndoData (this->tmp_liste);
 }
 
 

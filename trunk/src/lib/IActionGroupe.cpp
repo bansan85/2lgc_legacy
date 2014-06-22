@@ -16,20 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Fichier généré automatiquement avec dia2code 0.8.6.
-
 #include "config.h"
+
+#include "IActionGroupe.hpp"
+
+
+/**
+ * \brief Constructeur d'une interface IActionGroupe.
+ * \param nom_ (in) Le nom de l'action / groupe.
+ * \param undo_ (in) Le gestionnaire des modifications.
+ */
+IActionGroupe::IActionGroupe (std::string    nom_,
+                              CUndoManager * undo_) :
+  IUndoable (undo_)
+  , nom (nom_)
 #ifdef ENABLE_GTK
-#include <gtk/gtk.h>
-#define EGTK(...) __VA_ARGS__
-#else
-#define EGTK(...)
+  , Iter_fenetre_gr (NULL)
 #endif
+{
+}
 
-#include <string>
-#include <vector>
-#include <stack>
-#include <list>
-#include <cstdint>
-#include <cholmod.h>
 
+/**
+ * \brief Destructeur d'une classe IActionGroupe.
+ */
+IActionGroupe::~IActionGroupe ()
+{
+}
+
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

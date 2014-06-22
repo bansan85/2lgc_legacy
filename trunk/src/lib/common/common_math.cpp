@@ -251,44 +251,6 @@ conv_f_c (Flottant     nombre,
       *dest = format ("%.*lf", decimales, f);
       break;
     }
-    // Dans le cas d'un flottant utilisateur, on affiche toutes les décimales
-    // afin d'afficher le nombre exact qu'il a saisi afin d'éviter qu'il pense
-    // que des informations ont été tronquées.
-    case FLOTTANT_UTILISATEUR :
-    {
-      uint8_t width;
-      double  test;
-      
-      if (fabs (f) > 1e15)
-      {
-        for (width = 0; width <= 15; width++)
-        {
-          *dest = format ("%.*le", width, f);
-          sscanf (dest->c_str (), "%le", &test);
-          if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
-              (fabs (test) <= fabs (f) * 1.000000000000001))
-          {
-            break;
-          }
-        }
-      }
-      // Sinon on affiche sous forme normale
-      else
-      {
-        for (width = 0; width <= 15; width++)
-        {
-          *dest = format ("%.*lf", width, f);
-          sscanf (dest->c_str (), "%lf", &test);
-          if ((fabs (f) * 0.999999999999999 <= fabs (test)) &&
-              (fabs (test) <= fabs (f) * 1.000000000000001))
-          {
-            break;
-          }
-        }
-      }
-      *dest = format ("%.*lf", std::max (width, decimales), f);
-      break;
-    }
     default :
     {
       FAILCRIT ( , (gettext ("Type de nombre est inconnu.\n")); )

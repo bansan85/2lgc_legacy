@@ -29,44 +29,6 @@
 #include <cstdarg>
 
 /**
- * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais
- *        en version std::string. Honteusement volé de
- *        http://stackoverflow.com/questions/2342162#3742999.
- * \param fmt : le texte à formater,
- * \param ... : les divers paramètres.
- * \return Le texte formaté en format std::string.
- */
-std::string
-format (const std::string fmt,
-        ...)
-{
-  int         size = 1024;
-  bool        b = false;
-  va_list     marker;
-  std::string s;
-  
-  while (!b)
-  {
-    int         n;
-    
-    s.resize (size);
-    va_start (marker, fmt);
-    n = vsnprintf ((char *) s.c_str (), size, fmt.c_str (), marker);
-    va_end (marker);
-    if ((n > 0) && ((b = (n < size)) == true))
-    {
-      s.resize (n);
-    }
-    else
-    {
-      size = size * 2;
-    }
-  }
-  return s;
-}
-
-
-/**
  * \brief Sur la base d'une chaîne de caractères, renvoie un nombre flottant
  *        compris entre les valeurs val_min et val_max. S'il ne contient pas de
  *        nombre ou hors domaine, la valeur renvoyée est NAN.

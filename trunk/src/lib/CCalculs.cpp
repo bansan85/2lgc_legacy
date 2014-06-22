@@ -41,8 +41,8 @@ CCalculs::CCalculs () :
   ai (NULL),
   ax (NULL),
   residu (NAN),
-  info_EF (),
   rapport (),
+  info_EF (),
   ponderations (1, 1, 1, 1)
 {
   cholmod_start (c);
@@ -70,8 +70,8 @@ CCalculs::CCalculs (const CCalculs & other) :
   ai (NULL),
   ax (NULL),
   residu (NAN),
-  info_EF (),
   rapport (),
+  info_EF (),
   ponderations (other.ponderations)
 {
   cholmod_start (c);
@@ -111,14 +111,14 @@ CCalculs::operator = (const CCalculs & other)
  */
 CCalculs::~CCalculs ()
 {
-  cholmod_finish (c);
-  delete c;
-  
   cholmod_free_triplet (&t_part, c);
   cholmod_free_triplet (&t_comp, c);
   
   cholmod_free_sparse (&m_comp, c);
   cholmod_free_sparse (&m_part, c);
+  
+  cholmod_finish (c);
+  delete c;
   
   umfpack_di_free_numeric (&numeric);
   

@@ -101,4 +101,17 @@ CModele::~CModele ()
 }
 
 
+/**
+ * \brief Ajout d'une action.
+ * \param action (in) L'action à ajouter.
+ */
+bool
+CModele::addAction (CAction * action)
+{
+  actions.push_back (action);
+  
+  return true;
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
