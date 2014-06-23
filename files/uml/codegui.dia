@@ -17194,16 +17194,16 @@
         <dia:point val="81.985,-136.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="81.935,-157.85;97.45,-136.9"/>
+        <dia:rectangle val="81.935,-157.85;101.45,-136.9"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="81.985,-136.95"/>
-        <dia:point val="88,-136.95"/>
-        <dia:point val="88,-157.4"/>
-        <dia:point val="97,-157.4"/>
+        <dia:point val="91.2925,-136.95"/>
+        <dia:point val="91.2925,-157.4"/>
+        <dia:point val="101,-157.4"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -17211,7 +17211,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
-        <dia:boolean val="false"/>
+        <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
@@ -19642,18 +19642,18 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O59">
       <dia:attribute name="obj_pos">
-        <dia:point val="110.608,-158.95"/>
+        <dia:point val="114.608,-158.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="110.558,-159;120.45,-154.95"/>
+        <dia:rectangle val="114.558,-159;120.45,-154.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="110.608,-158.95"/>
-        <dia:point val="115.104,-158.95"/>
-        <dia:point val="115.104,-155.4"/>
+        <dia:point val="114.608,-158.95"/>
+        <dia:point val="117.104,-158.95"/>
+        <dia:point val="117.104,-155.4"/>
         <dia:point val="120,-155.4"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -21191,19 +21191,19 @@ class CUndoData;#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O67">
       <dia:attribute name="obj_pos">
-        <dia:point val="83,-197"/>
+        <dia:point val="79,-197"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="82.95,-197.05;99.915,-183.1"/>
+        <dia:rectangle val="78.95,-197.05;99.57,-179.4"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="83,-197"/>
+        <dia:point val="79,-197"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="16.865000000000002"/>
+        <dia:real val="20.52"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="13.849999999999998"/>
+        <dia:real val="17.549999999999997"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IUndoable#</dia:string>
@@ -21372,6 +21372,102 @@ class CUndoManager;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
+            <dia:string>#IUndoable#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe IUndoable.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const IUndoable &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator =#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#IUndoable &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Assignment operator de IUndoable.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const IUndoable &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
             <dia:string>#~IUndoable#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -21486,17 +21582,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O68">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="69.9425,-183.2;92.2825,-92.15"/>
+        <dia:rectangle val="69.9425,-179.5;90.11,-92.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-93"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-93"/>
         <dia:point val="69.9925,-93"/>
         <dia:point val="69.9925,-96.2"/>
       </dia:attribute>
@@ -21536,17 +21632,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O69">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.365,-183.2;92.2825,-30.95"/>
+        <dia:rectangle val="11.365,-179.5;90.11,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="11.415,-43"/>
         <dia:point val="11.415,-31"/>
       </dia:attribute>
@@ -21586,17 +21682,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O70">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="34.445,-183.2;92.2825,-30.95"/>
+        <dia:rectangle val="34.445,-179.5;90.11,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="34.495,-43"/>
         <dia:point val="34.495,-31"/>
       </dia:attribute>
@@ -21636,17 +21732,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O71">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="51.13,-183.2;92.2825,-30.95"/>
+        <dia:rectangle val="51.13,-179.5;90.11,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="51.18,-43"/>
         <dia:point val="51.18,-31"/>
       </dia:attribute>
@@ -21686,17 +21782,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O72">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="69.13,-183.2;92.2825,-30.95"/>
+        <dia:rectangle val="69.13,-179.5;90.11,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="69.18,-43"/>
         <dia:point val="69.18,-31"/>
       </dia:attribute>
@@ -21736,17 +21832,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O73">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;126.733,-30.95"/>
+        <dia:rectangle val="88.41,-179.5;126.733,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="126.683,-43"/>
         <dia:point val="126.683,-31"/>
       </dia:attribute>
@@ -21786,17 +21882,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O74">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;92.465,-30.95"/>
+        <dia:rectangle val="88.41,-179.5;92.465,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="92.415,-43"/>
         <dia:point val="92.415,-31"/>
       </dia:attribute>
@@ -21836,17 +21932,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O75">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;165.465,-30.95"/>
+        <dia:rectangle val="88.41,-179.5;165.465,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="165.415,-43"/>
         <dia:point val="165.415,-31"/>
       </dia:attribute>
@@ -21886,17 +21982,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O76">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;181.265,-6.95"/>
+        <dia:rectangle val="88.41,-179.5;181.265,-6.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="179,-43"/>
         <dia:point val="179,-7"/>
         <dia:point val="181.215,-7"/>
@@ -21938,17 +22034,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O77">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;111.23,54.05"/>
+        <dia:rectangle val="88.41,-179.5;111.23,54.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="107,-43"/>
         <dia:point val="107,30"/>
         <dia:point val="111.18,30"/>
@@ -21992,17 +22088,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O78">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.5825,-183.2;219.23,-26.95"/>
+        <dia:rectangle val="88.41,-179.5;219.23,-26.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-43"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-43"/>
         <dia:point val="219.18,-43"/>
         <dia:point val="219.18,-27"/>
       </dia:attribute>
@@ -22042,13 +22138,13 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O79">
       <dia:attribute name="obj_pos">
-        <dia:point val="97,-160"/>
+        <dia:point val="101,-160"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="96.95,-160.05;110.657,-151.9"/>
+        <dia:rectangle val="100.95,-160.05;114.657,-151.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="97,-160"/>
+        <dia:point val="101,-160"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="13.607499999999998"/>
@@ -22240,16 +22336,16 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O80">
       <dia:attribute name="obj_pos">
-        <dia:point val="97,-158.95"/>
+        <dia:point val="101,-158.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.825,-159.8;97.05,-138.95"/>
+        <dia:rectangle val="41.825,-159.8;101.05,-138.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="97,-158.95"/>
+        <dia:point val="101,-158.95"/>
         <dia:point val="41.875,-158.95"/>
         <dia:point val="41.875,-139"/>
       </dia:attribute>
@@ -22288,18 +22384,18 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O81">
       <dia:attribute name="obj_pos">
-        <dia:point val="99.865,-195.25"/>
+        <dia:point val="99.52,-195.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="99.815,-195.3;104.45,-188.55"/>
+        <dia:rectangle val="99.47,-195.3;104.45,-188.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="99.865,-195.25"/>
-        <dia:point val="101.733,-195.25"/>
-        <dia:point val="101.733,-189"/>
+        <dia:point val="99.52,-195.25"/>
+        <dia:point val="101.56,-195.25"/>
+        <dia:point val="101.56,-189"/>
         <dia:point val="104,-189"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -22341,17 +22437,17 @@ class CUndoManager;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O82">
       <dia:attribute name="obj_pos">
-        <dia:point val="91.4325,-183.15"/>
+        <dia:point val="89.26,-179.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.825,-183.2;92.2825,-92.15"/>
+        <dia:rectangle val="41.825,-179.5;90.11,-92.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="91.4325,-183.15"/>
-        <dia:point val="91.4325,-93"/>
+        <dia:point val="89.26,-179.45"/>
+        <dia:point val="89.26,-93"/>
         <dia:point val="41.875,-93"/>
         <dia:point val="41.875,-97.2"/>
       </dia:attribute>
@@ -22842,16 +22938,16 @@ class IUndoable;#</dia:string>
         <dia:point val="130,-203.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="99.415,-203.3;130.05,-196.55"/>
+        <dia:rectangle val="99.07,-203.3;130.05,-196.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="130,-203.25"/>
-        <dia:point val="115.132,-203.25"/>
-        <dia:point val="115.132,-197"/>
-        <dia:point val="99.865,-197"/>
+        <dia:point val="114.96,-203.25"/>
+        <dia:point val="114.96,-197"/>
+        <dia:point val="99.52,-197"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
