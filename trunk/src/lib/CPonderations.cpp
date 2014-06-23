@@ -26,26 +26,26 @@
  * \param elugeostr (in) ELU_GEO/STR : si 0 approche 1, 1 : approche 2 et
  *                       2 : approche 3.
  * \param eluacc (in) ELU_ACC : 0 si psi1,1 et 1 si psi2,1.
- * \param form_6_10 (in) Si 0, utilisation des formules 6.10a et b.
+ * \param form6_10 (in) Si 0, utilisation des formules 6.10a et b.
  *                       Si 1 alors formule 6.10.
  */
 CPonderations::CPonderations (uint8_t eluequ,
                               uint8_t elugeostr,
                               uint8_t eluacc,
                               uint8_t form6_10) :
-  elu_equ_methode (eluequ & 1),
-  elu_geo_str_methode (elugeostr & 3),
-  elu_acc_psi (eluacc & 1),
-  form_6_10 (form6_10 & 1),
-  elu_equ (),
-  elu_str (),
-  elu_geo (),
-  elu_fat (),
-  elu_acc (),
-  elu_sis (),
-  els_car (),
-  els_freq (),
-  els_perm ()
+  elu_equ_methode (eluequ & 1)
+  , elu_geo_str_methode (elugeostr & 3)
+  , elu_acc_psi (eluacc & 1)
+  , form_6_10 (form6_10 & 1)
+  , elu_equ ()
+  , elu_str ()
+  , elu_geo ()
+  , elu_fat ()
+  , elu_acc ()
+  , elu_sis ()
+  , els_car ()
+  , els_freq ()
+  , els_perm ()
 #ifdef ENABLE_GTK
   , list_el_desc (NULL)
   // TODO
@@ -59,19 +59,19 @@ CPonderations::CPonderations (uint8_t eluequ,
  * \param other (in) La classe à dupliquer.
  */
 CPonderations::CPonderations (const CPonderations & other) :
-  elu_equ_methode (other.elu_equ_methode),
-  elu_geo_str_methode (other.elu_geo_str_methode),
-  elu_acc_psi (other.elu_acc_psi),
-  form_6_10 (other.form_6_10),
-  elu_equ (),
-  elu_str (),
-  elu_geo (),
-  elu_fat (),
-  elu_acc (),
-  elu_sis (),
-  els_car (),
-  els_freq (),
-  els_perm ()
+  elu_equ_methode (other.elu_equ_methode)
+  , elu_geo_str_methode (other.elu_geo_str_methode)
+  , elu_acc_psi (other.elu_acc_psi)
+  , form_6_10 (other.form_6_10)
+  , elu_equ ()
+  , elu_str ()
+  , elu_geo ()
+  , elu_fat ()
+  , elu_acc ()
+  , elu_sis ()
+  , els_car ()
+  , els_freq ()
+  , els_perm ()
 #ifdef ENABLE_GTK
   , list_el_desc (NULL)
   // TODO

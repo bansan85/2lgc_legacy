@@ -41,10 +41,10 @@ CAction::undoToString ()
  * \brief Constructeur d'une classe CAction. Par défaut, les coefficients psi
  *        sont défini à NAN. Les valeurs sont automatiquement déterminés lors
  *        de l'insertion dans le projet en fonction de la norme du projet.
- * \param nom (in) Le nom de l'action.
- * \param type (in) Le type d'action, cf. _1990_action_bat_txt_type.
- * \param charges (in) Les charges à classer dans l'action.
- * \param undo (in) Le gestionnaire des modifications.
+ * \param nom_ (in) Le nom de l'action.
+ * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
+ * \param charges_ (in) Les charges à classer dans l'action.
+ * \param undo_ (in) Le gestionnaire des modifications.
  */
 CAction::CAction (std::string             nom_,
                   uint8_t                 type_,

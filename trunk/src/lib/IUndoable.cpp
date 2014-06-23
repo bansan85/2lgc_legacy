@@ -31,6 +31,29 @@ IUndoable::IUndoable (CUndoManager * undo_) :
 
 
 /**
+ * \brief Duplication d'une classe IUndoable.
+ * \param other (in) La classe à dupliquer.
+ */
+IUndoable::IUndoable (const IUndoable & other) :
+  undoManager ()
+{
+  // TODO.
+}
+
+
+/**
+ * \brief Assignment operator de IUndoable.
+ * \param other (in) La classe à dupliquer.
+ */
+IUndoable &
+IUndoable::operator = (const IUndoable & other)
+{
+  return *this;
+  // TODO.
+}
+
+
+/**
  * \brief Destructeur d'une classe IUndoable.
  */
 IUndoable::~IUndoable ()
