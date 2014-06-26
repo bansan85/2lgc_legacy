@@ -21,6 +21,7 @@
 #include <cmath>
 #include <algorithm>
 #include <memory>
+#include <iostream>
 
 #include "CAction.hpp"
 #include "CNbUser.hpp"
@@ -33,6 +34,7 @@ std::string
 CAction::undoToString ()
 {
   // TODO
+  std::cout << __func__ ;
   return "";
 }
 
@@ -95,6 +97,7 @@ CAction::CAction (const CAction & other) :
   , Iter_liste (NULL)
 #endif
 {
+  std::cout << __func__ ;
 }
 
 
@@ -106,6 +109,7 @@ CAction &
 CAction::operator = (const CAction & other)
 {
   // TODO
+  std::cout << __func__ ;
   
   return *this;
 }
@@ -135,6 +139,7 @@ bool
 CAction::change (IUndoable * apres)
 {
   // TODO
+  std::cout << __func__ ;
   return true;
 }
 

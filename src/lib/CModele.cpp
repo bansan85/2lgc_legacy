@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <iostream>
 
 #include "CModele.hpp"
 
@@ -53,6 +54,7 @@ CModele::CModele (const CModele & other) :
   actions (),
   niveaux_groupes ()
 {
+  std::cout << __func__ ;
   //TODO : A FINIR.
 }
 
@@ -64,6 +66,7 @@ CModele::CModele (const CModele & other) :
 CModele &
 CModele::operator = (const CModele & other)
 {
+  std::cout << __func__ ;
   //TODO : A FINIR.
   return *this;
 }

@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <iostream>
 
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
@@ -49,6 +50,7 @@ CUndoManager::CUndoManager (const CUndoManager & other) :
   ref (0),
   tmp_liste (NULL)
 {
+  std::cout << __func__ ;
 }
 
 

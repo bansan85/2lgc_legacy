@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <iostream>
+
 #include "CPonderations.hpp"
 
 /**
@@ -51,6 +53,9 @@ CPonderations::CPonderations (uint8_t eluequ,
   // TODO
 #endif
 {
+#ifdef ENABLE_GTK
+  std::cout << __func__ ;
+#endif
 }
 
 
@@ -77,6 +82,7 @@ CPonderations::CPonderations (const CPonderations & other) :
   // TODO
 #endif
 {
+  std::cout << __func__ ;
 }
 
 
@@ -95,6 +101,7 @@ CPonderations::operator = (const CPonderations & other)
 #ifdef ENABLE_GTK
   this->list_el_desc = NULL;
 #endif
+  std::cout << __func__ ;
   
   return *this;
 }

@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "CBarreInfoEF.hpp"
 
@@ -67,6 +68,7 @@ CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) :
   kBy (NAN),
   kBz (NAN)
 {
+  std::cout << __func__ ;
 }
 
 
@@ -94,6 +96,7 @@ CBarreInfoEF::operator = (const CBarreInfoEF & other)
   this->kBy = NAN;
   this->kBz = NAN;
   
+  std::cout << __func__ ;
   return *this;
 }
 
@@ -104,6 +107,7 @@ CBarreInfoEF::operator = (const CBarreInfoEF & other)
 CBarreInfoEF::~CBarreInfoEF ()
 {
   // TODO
+  std::cout << __func__ ;
 }
 
 
