@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <iostream>
+
 #include "IUndoable.hpp"
 
 /**
@@ -37,6 +39,7 @@ IUndoable::IUndoable (CUndoManager * undo_) :
 IUndoable::IUndoable (const IUndoable & other) :
   undoManager ()
 {
+  std::cout << __func__ ;
   // TODO.
 }
 
@@ -48,6 +51,7 @@ IUndoable::IUndoable (const IUndoable & other) :
 IUndoable &
 IUndoable::operator = (const IUndoable & other)
 {
+  std::cout << __func__ ;
   return *this;
   // TODO.
 }

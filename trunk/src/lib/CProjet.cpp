@@ -130,6 +130,7 @@ CProjet &
 CProjet::operator = (const CProjet & other)
 {
   this->parametres = other.parametres;
+  std::cout << __func__ ;
   //TODO
   
   return *this;
