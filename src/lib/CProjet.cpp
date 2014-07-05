@@ -113,13 +113,7 @@ CProjet::CProjet () :
  * \brief Duplication d'une classe CProjet.
  * \param other (in) La classe à dupliquer.
  */
-CProjet::CProjet (const CProjet & other) :
-  CCalculs (),
-  CModele (),
-  CUndoManager (*this),
-  parametres (other.parametres)
-{
-}
+CProjet::CProjet (const CProjet & other) = delete;
 
 
 /**
@@ -127,14 +121,7 @@ CProjet::CProjet (const CProjet & other) :
  * \param other (in) La classe à dupliquer.
  */
 CProjet &
-CProjet::operator = (const CProjet & other)
-{
-  this->parametres = other.parametres;
-  std::cout << __func__ ;
-  //TODO
-  
-  return *this;
-}
+CProjet::operator = (const CProjet & other) = delete;
 
 
 /**

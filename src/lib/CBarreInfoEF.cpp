@@ -50,26 +50,7 @@ CBarreInfoEF::CBarreInfoEF () :
  * \brief Duplication d'une classe CBarreInfoEF.
  * \param other (in) La classe à dupliquer.
  */
-CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) :
-  // TODO
-  m_rig_loc (NULL),
-  m_rot (NULL),
-  m_rot_t (NULL),
-  ay (NAN),
-  by (NAN),
-  cy (NAN),
-  az (NAN),
-  bz (NAN),
-  cz (NAN),
-  kAx (NAN),
-  kAy (NAN),
-  kAz (NAN),
-  kBx (NAN),
-  kBy (NAN),
-  kBz (NAN)
-{
-  std::cout << __func__ ;
-}
+CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) = delete;
 
 
 /**
@@ -77,28 +58,7 @@ CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) :
  * \param other (in) La classe à dupliquer.
  */
 CBarreInfoEF &
-CBarreInfoEF::operator = (const CBarreInfoEF & other)
-{
-  // TODO
-  this->m_rig_loc = NULL;
-  this->m_rot = NULL;
-  this->m_rot_t = NULL;
-  this->ay = NAN;
-  this->by = NAN;
-  this->cy = NAN;
-  this->az = NAN;
-  this->bz = NAN;
-  this->cz = NAN;
-  this->kAx = NAN;
-  this->kAy = NAN;
-  this->kAz = NAN;
-  this->kBx = NAN;
-  this->kBy = NAN;
-  this->kBz = NAN;
-  
-  std::cout << __func__ ;
-  return *this;
-}
+CBarreInfoEF::operator = (const CBarreInfoEF & other) = delete;
 
 
 /**
