@@ -32,7 +32,7 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															INb.cpp \
 															IUndoable.cpp
 
-libeurocodes_la_HEADERS 	=		$(wildcard *.hpp)
+libeurocodes_la_HEADERS 	=		$(wildcard *.hpp *.hh)
 
 $(libeurocodes_la_SOURCES) : 	uml
 

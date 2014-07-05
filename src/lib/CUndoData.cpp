@@ -20,11 +20,33 @@
 
 #include "CUndoData.hpp"
 
+
+/**
+ * \brief Constructeur d'une classe CUndoData.
+ */
+CUndoData::CUndoData () :
+  annule (),
+  repete (),
+  suppr (),
+  sauve (),
+  heure (0)
+{
+}
+
+
+CUndoData::CUndoData (const CUndoData & other) = delete;
+CUndoData & CUndoData::operator = (const CUndoData & other) = delete;
+
+
 /**
  * \brief Destructeur d'une classe CUndoData.
  */
 CUndoData::~CUndoData ()
 {
+  for (std::function <void ()> f: this->suppr)
+  {
+    f ();
+  }
 }
 
 

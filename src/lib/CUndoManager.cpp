@@ -21,7 +21,9 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
+#include <locale>
 
+#include "MErreurs.hh"
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
 
@@ -30,11 +32,13 @@
  * \brief Initialise le système de gestion de l'historique et de la gestion des
  *        annuler / répéter.
  */
-CUndoManager::CUndoManager () :
+CUndoManager::CUndoManager (CProjet & proj) :
   liste (),
   pos (0),
-  ref (0),
-  tmp_liste (NULL)
+  count (0),
+  tmpListe (NULL),
+  projet (proj),
+  modif (true)
 {
 }
 
@@ -47,8 +51,10 @@ CUndoManager::CUndoManager (const CUndoManager & other) :
   // TODO
   liste (),
   pos (0),
-  ref (0),
-  tmp_liste (NULL)
+  count (0),
+  tmpListe (NULL),
+  projet (other.projet),
+  modif (true)
 {
   std::cout << __func__ ;
 }
@@ -61,31 +67,15 @@ CUndoManager::CUndoManager (const CUndoManager & other) :
 CUndoManager &
 CUndoManager::operator = (const CUndoManager & other)
 {
+  // TODO
   this->pos = 0;
-  this->ref = 0;
-  this->tmp_liste = NULL;
+  this->count = 0;
+  this->tmpListe = NULL;
+  this->modif = true;
+  
+  std::cout << __func__ ;
   
   return *this;
-}
-
-
-/**
- * \brief Libère une liste de IUndoable *. Le pointeur envoyé est également
- *        "delete".
- * \param liste Liste à supprimer.
- */
-static void deleteListCUndoData (std::list <CUndoData *> * liste)
-{
-  if (liste == NULL)
-  {
-    return;
-  }
-  
-  for_each (liste->begin (),
-            liste->end (),
-            std::default_delete <CUndoData> ());
-  
-  delete liste;
 }
 
 
@@ -96,9 +86,168 @@ CUndoManager::~CUndoManager ()
 {
   for_each (this->liste.begin (),
             this->liste.end (),
-            deleteListCUndoData);
+            std::default_delete <CUndoData> ());
   
-  deleteListCUndoData (this->tmp_liste);
+  delete (this->tmpListe);
+}
+
+
+/**
+ * \brief Ajoute une modification à la liste.
+ * \param annule (in) La fonction à lancer pour annuler la modification.
+ * \param repete (in) La fonction à lancer pour répéter la modification.
+ */
+bool
+CUndoManager::push (std::function <bool ()>           annule,
+                    std::function <bool ()>           repete,
+                    std::function <void ()>           suppr,
+                    std::function <void (xmlNodePtr)> sauve)
+{
+  if (modif)
+  {
+    BUGPARAMCRIT (tmpListe, "%p", tmpListe, false);
+    
+    tmpListe->annule.push_back (annule);
+    tmpListe->repete.push_back (repete);
+    if (suppr != NULL)
+      tmpListe->suppr.push_back (suppr);
+    if (sauve != NULL)
+      tmpListe->sauve.push_back (sauve);
+  }
+  
+  return true;
+}
+
+
+/**
+ * \brief Annule la dernière modification de la liste.
+ */
+bool
+CUndoManager::undo ()
+{
+  CUndoData * undoData;
+  std::list <CUndoData *>::iterator it;
+  
+  if (liste.size () == pos)
+    return false;
+  
+  modif = false;
+  
+  it = liste.end ();
+  std::advance (it, -static_cast<ssize_t>(pos) - 1);
+  undoData = *it;
+  
+  for (std::function <void ()> f: undoData->annule)
+  {
+    f ();
+  }
+  
+  ++pos;
+  
+  modif = true;
+  
+  return true;
+}
+
+
+/**
+ * \brief Rétablit la dernière modification de la liste.
+ */
+bool
+CUndoManager::redo ()
+{
+  CUndoData * undoData;
+  std::list <CUndoData *>::iterator it;
+  
+  if (pos == 0)
+    return false;
+  
+  modif = false;
+  
+  it = liste.end ();
+  std::advance (it, -static_cast<ssize_t>(pos));
+  undoData = *it;
+  
+  for (std::function <void ()> f: undoData->repete)
+  {
+    f ();
+  }
+  
+  --pos;
+  
+  modif = true;
+  
+  return true;
+}
+
+
+/**
+ * \brief Renvoie l'état du gestionnaire des annulations.
+ */
+EUndoEtat
+CUndoManager::getEtat ()
+{
+  if (count == 0)
+  {
+    return UNDO_NONE;
+  }
+  else if (modif)
+  {
+    return UNDO_MODIF;
+  }
+  else
+  {
+    return UNDO_REVERT;
+  }
+}
+
+
+/**
+ * \brief Augmente le count de 1.
+ */
+bool
+CUndoManager::ref ()
+{
+  BUGCRIT (count != 255,
+        false,
+        (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
+  
+  if (!modif)
+    return true;
+  
+  if (count == 0)
+  {
+    tmpListe = new CUndoData ();
+  }
+  
+  ++count;
+  
+  return true;
+}
+
+
+/**
+ * \brief Diminue le count de 1.
+ */
+bool
+CUndoManager::unref ()
+{
+  if (!modif)
+    return true;
+  
+  BUG (count != 0,
+       false,
+       (gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n")); )
+  
+  --count;
+  
+  if (count == 0)
+  {
+    liste.push_back (tmpListe);
+    tmpListe = NULL;
+  }
+  
+  return true;
 }
 
 
