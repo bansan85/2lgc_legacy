@@ -18,51 +18,33 @@
 
 #include "config.h"
 
-#include <algorithm>
+#include <cmath>
 #include <iostream>
-#include <functional>
 
-#include "CModele.hpp"
+#include "CModeleSections.hpp"
 
 /**
- * \brief Initialise le modèle de calcul.
+ * \brief Constructeur d'une classe CModeleSections.
  */
-CModele::CModele () :
-  CModeleActions (),
-  CModeleBarres (),
-  CModeleRelachements (),
-  CModeleMateriaux (),
-  CModeleSections (),
-  CModeleNoeuds (),
-  CModeleAppuis (),
-  niveaux_groupes ()
+CModeleSections::CModeleSections () :
+  sections ()
 {
 }
 
 
 /**
- * \brief Duplication d'une classe CModele.
+ * \brief Duplication d'une classe CModeleSections.
  * \param other (in) La classe à dupliquer.
  */
-CModele::CModele (const CModele & other) = delete;
+CModeleSections::CModeleSections (const CModeleSections & other) = delete;
 
 
 /**
- * \brief Assignment operator de CModele.
+ * \brief Assignment operator de CModeleSections.
  * \param other (in) La classe à dupliquer.
  */
-CModele &
-CModele::operator = (const CModele & other) = delete;
-
-
-/**
- * \brief Libère le modèle de calcul.
- */
-CModele::~CModele ()
-{
-  // Ce n'est pas modèle qui libère la mémoire, c'est le gestionnaire
-  // d'annulation.
-}
+CModeleSections &
+CModeleSections::operator = (const CModeleSections & other) = delete;
 
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

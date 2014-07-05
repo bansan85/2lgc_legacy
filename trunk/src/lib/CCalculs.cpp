@@ -55,27 +55,7 @@ CCalculs::CCalculs () :
  *        à zéro et les paramètres des pondérations est conservés.
  * \param other (in) La classe à dupliquer.
  */
-CCalculs::CCalculs (const CCalculs & other) :
-  c (new cholmod_common),
-  n_part {{}, {}, {}, {}, {}, {}},
-  n_comp {{}, {}, {}, {}, {}, {}},
-  t_part (NULL),
-  t_comp (NULL),
-  t_part_en_cours (0),
-  t_comp_en_cours (0),
-  m_part (NULL),
-  m_comp (NULL),
-  numeric (NULL),
-  ap (NULL),
-  ai (NULL),
-  ax (NULL),
-  residu (NAN),
-  rapport (),
-  info_EF (),
-  ponderations (other.ponderations)
-{
-  cholmod_start (c);
-}
+CCalculs::CCalculs (const CCalculs & other) = delete;
 
 
 /**
@@ -85,25 +65,7 @@ CCalculs::CCalculs (const CCalculs & other) :
  * \param other (in) La classe à dupliquer.
  */
 CCalculs &
-CCalculs::operator = (const CCalculs & other)
-{
-  this->c = new cholmod_common;
-  cholmod_start (c);
-  this->t_part = NULL;
-  this->t_comp = NULL;
-  this->t_part_en_cours = 0;
-  this->t_comp_en_cours = 0;
-  this->m_part = NULL;
-  this->m_comp = NULL;
-  this->numeric = NULL;
-  this->ap = NULL;
-  this->ai = NULL;
-  this->ax = NULL;
-  this->residu = NAN;
-  this->ponderations = other.ponderations;
-  
-  return *this;
-}
+CCalculs::operator = (const CCalculs & other) = delete;
 
 
 /**

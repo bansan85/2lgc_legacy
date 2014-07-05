@@ -47,17 +47,7 @@ CUndoManager::CUndoManager (CProjet & proj) :
  * \brief Duplication d'une classe CUndoManager.
  * \param other (in) La classe à dupliquer.
  */
-CUndoManager::CUndoManager (const CUndoManager & other) :
-  // TODO
-  liste (),
-  pos (0),
-  count (0),
-  tmpListe (NULL),
-  projet (other.projet),
-  modif (true)
-{
-  std::cout << __func__ ;
-}
+CUndoManager::CUndoManager (const CUndoManager & other) = delete;
 
 
 /**
@@ -65,18 +55,7 @@ CUndoManager::CUndoManager (const CUndoManager & other) :
  * \param other (in) La classe à dupliquer.
  */
 CUndoManager &
-CUndoManager::operator = (const CUndoManager & other)
-{
-  // TODO
-  this->pos = 0;
-  this->count = 0;
-  this->tmpListe = NULL;
-  this->modif = true;
-  
-  std::cout << __func__ ;
-  
-  return *this;
-}
+CUndoManager::operator = (const CUndoManager & other) = delete;
 
 
 /**

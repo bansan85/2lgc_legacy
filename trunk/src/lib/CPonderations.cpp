@@ -63,27 +63,7 @@ CPonderations::CPonderations (uint8_t eluequ,
  * \brief Duplication d'une classe CPonderations.
  * \param other (in) La classe à dupliquer.
  */
-CPonderations::CPonderations (const CPonderations & other) :
-  elu_equ_methode (other.elu_equ_methode)
-  , elu_geo_str_methode (other.elu_geo_str_methode)
-  , elu_acc_psi (other.elu_acc_psi)
-  , form_6_10 (other.form_6_10)
-  , elu_equ ()
-  , elu_str ()
-  , elu_geo ()
-  , elu_fat ()
-  , elu_acc ()
-  , elu_sis ()
-  , els_car ()
-  , els_freq ()
-  , els_perm ()
-#ifdef ENABLE_GTK
-  , list_el_desc (NULL)
-  // TODO
-#endif
-{
-  std::cout << __func__ ;
-}
+CPonderations::CPonderations (const CPonderations & other) = delete;
 
 
 /**
@@ -91,20 +71,7 @@ CPonderations::CPonderations (const CPonderations & other) :
  * \param other (in) La classe à dupliquer.
  */
 CPonderations &
-CPonderations::operator = (const CPonderations & other)
-{
-  this->elu_equ_methode = other.elu_equ_methode;
-  this->elu_geo_str_methode = other.elu_geo_str_methode;
-  this->elu_acc_psi = other.elu_acc_psi;
-  this->form_6_10 = other.form_6_10;
-  //TODO : A FINIR.
-#ifdef ENABLE_GTK
-  this->list_el_desc = NULL;
-#endif
-  std::cout << __func__ ;
-  
-  return *this;
-}
+CPonderations::operator = (const CPonderations & other) = delete;
 
 
 /**

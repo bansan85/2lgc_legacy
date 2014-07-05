@@ -63,28 +63,7 @@ CAction::CAction (std::string             nom_,
  * \brief Duplication d'une classe CAction.
  * \param other (in) La classe à dupliquer.
  */
-CAction::CAction (const CAction & other) :
-  // TODO
-  IActionGroupe (other)
-  , type (other.type)
-  , action_predominante (other.action_predominante)
-  , charges ()
-  , psi0 (other.psi0)
-  , psi1 (other.psi1)
-  , psi2 (other.psi2)
-  , deplacement (NULL)
-  , forces (NULL)
-  , efforts_noeuds (NULL)
-  , efforts {{}, {}, {}, {}, {}, {}}
-  , deformation {{}, {}, {}}
-  , rotation {{}, {}, {}}
-#ifdef ENABLE_GTK
-  , Iter_fenetre_ac (NULL)
-  , Iter_liste (NULL)
-#endif
-{
-  std::cout << __func__ ;
-}
+CAction::CAction (const CAction & other) = delete;
 
 
 /**
@@ -92,13 +71,7 @@ CAction::CAction (const CAction & other) :
  * \param other (in) La classe à dupliquer.
  */
 CAction &
-CAction::operator = (const CAction & other)
-{
-  // TODO
-  std::cout << __func__ ;
-  
-  return *this;
-}
+CAction::operator = (const CAction & other) = delete;
 
 
 /**

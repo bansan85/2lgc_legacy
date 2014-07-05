@@ -18,51 +18,33 @@
 
 #include "config.h"
 
-#include <algorithm>
+#include <cmath>
 #include <iostream>
-#include <functional>
 
-#include "CModele.hpp"
+#include "CModeleMateriaux.hpp"
 
 /**
- * \brief Initialise le modèle de calcul.
+ * \brief Constructeur d'une classe CModeleMateriaux.
  */
-CModele::CModele () :
-  CModeleActions (),
-  CModeleBarres (),
-  CModeleRelachements (),
-  CModeleMateriaux (),
-  CModeleSections (),
-  CModeleNoeuds (),
-  CModeleAppuis (),
-  niveaux_groupes ()
+CModeleMateriaux::CModeleMateriaux () :
+  materiaux ()
 {
 }
 
 
 /**
- * \brief Duplication d'une classe CModele.
+ * \brief Duplication d'une classe CModeleMateriaux.
  * \param other (in) La classe à dupliquer.
  */
-CModele::CModele (const CModele & other) = delete;
+CModeleMateriaux::CModeleMateriaux (const CModeleMateriaux & other) = delete;
 
 
 /**
- * \brief Assignment operator de CModele.
+ * \brief Assignment operator de CModeleMateriaux.
  * \param other (in) La classe à dupliquer.
  */
-CModele &
-CModele::operator = (const CModele & other) = delete;
-
-
-/**
- * \brief Libère le modèle de calcul.
- */
-CModele::~CModele ()
-{
-  // Ce n'est pas modèle qui libère la mémoire, c'est le gestionnaire
-  // d'annulation.
-}
+CModeleMateriaux &
+CModeleMateriaux::operator = (const CModeleMateriaux & other) = delete;
 
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

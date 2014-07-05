@@ -36,12 +36,7 @@ IUndoable::IUndoable (CUndoManager & undo_) :
  * \brief Duplication d'une classe IUndoable.
  * \param other (in) La classe à dupliquer.
  */
-IUndoable::IUndoable (const IUndoable & other) :
-  undoManager (other.undoManager)
-{
-  std::cout << __func__ ;
-  // TODO.
-}
+IUndoable::IUndoable (const IUndoable & other) = delete;
 
 
 /**
@@ -49,12 +44,7 @@ IUndoable::IUndoable (const IUndoable & other) :
  * \param other (in) La classe à dupliquer.
  */
 IUndoable &
-IUndoable::operator = (const IUndoable & other)
-{
-  std::cout << __func__ ;
-  return *this;
-  // TODO.
-}
+IUndoable::operator = (const IUndoable & other) = delete;
 
 
 /**
