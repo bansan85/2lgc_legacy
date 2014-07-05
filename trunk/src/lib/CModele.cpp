@@ -21,7 +21,9 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
+#include <functional>
 
+#include "MErreurs.hh"
 #include "CModele.hpp"
 
 /**
@@ -77,41 +79,93 @@ CModele::operator = (const CModele & other)
  */
 CModele::~CModele ()
 {
-  for_each (niveaux_groupes.begin (),
-            niveaux_groupes.end (),
-            std::default_delete <CNiveauGroupe> ());
-  for_each (actions.begin (),
-            actions.end (),
-            std::default_delete <CAction> ());
-  for_each (barres.begin (),
-            barres.end (),
-            std::default_delete <CBarre> ());
-  for_each (relachements.begin (),
-            relachements.end (),
-            std::default_delete <CRelachement> ());
-  for_each (materiaux.begin (),
-            materiaux.end (),
-            std::default_delete <IMateriau> ());
-  for_each (sections.begin (),
-            sections.end (),
-            std::default_delete <ISection> ());
-  for_each (noeuds.begin (),
-            noeuds.end (),
-            std::default_delete <INoeud> ());
-  for_each (appuis.begin (),
-            appuis.end (),
-            std::default_delete <CAppui> ());
+  // Ce n'est pas modèle qui libère la mémoire, c'est le gestionnaire
+  // d'annulation.
 }
 
 
 /**
  * \brief Ajout d'une action.
  * \param action (in) L'action à ajouter.
+ * \return false en cas de problème.
  */
 bool
 CModele::addAction (CAction * action)
 {
+  BUGPARAMCRIT (action, "%p", action, false)
+  
+  BUGCRIT (actions.max_size () != actions.size (),
+           false,
+           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n"));
+             if (action->getUndoManager ().getEtat () != UNDO_REVERT)
+             {
+               delete action;
+             } )
+  
+  //TODO : Empêcher les actions avec le même nom.
+  BUG (action->emptyCharges (),
+       false,
+       (gettext ("L'action doit être ajoutée sans action. Les charges doivent être ajoutées ensuite.\n"));
+         if (action->getUndoManager ().getEtat () != UNDO_REVERT)
+         {
+           delete action;
+         } )
+  
+  action->getUndoManager().ref ();
+  
   actions.push_back (action);
+  action->getUndoManager().push (
+    std::bind (static_cast <bool (CModele::*)
+                                             (CAction *)> (&CModele::rmAction),
+               this,
+               action),
+    std::bind (&CModele::addAction, this, action),
+    std::bind (std::default_delete <CAction> (), action),
+    NULL);
+  
+  action->getUndoManager().unref ();
+  
+  return true;
+}
+
+
+/**
+ * \brief Renvoie le nombre d'actions.
+ */
+size_t
+CModele::getActionCount ()
+{
+  return actions.size ();
+}
+
+
+/**
+ * \brief Supprime d'une action.
+ * \param action (in) L'action à supprimer.
+ * \return false en cas de problème.
+ */
+bool
+CModele::rmAction (CAction * action)
+{
+  BUGPARAMCRIT (action, "%p", action, false)
+  
+  BUG (action->emptyCharges (),
+       false,
+       (gettext ("L'action doit être supprimée sans action. Les charges doivent être supprimées avant.\n")); )
+  
+  action->getUndoManager().ref ();
+  
+  actions.remove (action);
+  action->getUndoManager().push (
+    std::bind (&CModele::addAction, this, action),
+    std::bind (static_cast <bool (CModele::*) (CAction *)>
+                                                          (&CModele::rmAction),
+               this,
+               action),
+    NULL,
+    NULL);
+  
+  action->getUndoManager().unref ();
   
   return true;
 }

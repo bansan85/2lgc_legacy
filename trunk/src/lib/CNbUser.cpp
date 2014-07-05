@@ -88,7 +88,10 @@ format (const std::string fmt,
     
     s.resize (size);
     va_start (marker, fmt);
-    n = vsnprintf (const_cast <char *> (s.c_str ()), size, fmt.c_str (), marker);
+    n = vsnprintf (const_cast <char *> (s.c_str ()),
+                   size,
+                   fmt.c_str (),
+                   marker);
     va_end (marker);
     if ((n > 0) && ((b = (n < size)) == true))
     {

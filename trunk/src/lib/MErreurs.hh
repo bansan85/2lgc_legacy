@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_ERREURS_H
-#define __COMMON_ERREURS_H
+#ifndef __MERREURS_HH
+#define __MERREURS_HH
 
 #include "config.h"
-#include <stdio.h>
+
+#include <cstdio>
 #include <libintl.h>
 
 #define PRINTF(...) printf (__VA_ARGS__)

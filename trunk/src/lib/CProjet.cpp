@@ -29,7 +29,7 @@
 CProjet::CProjet () :
   CCalculs (),
   CModele (),
-  CUndoManager (),
+  CUndoManager (*this),
   parametres (NULL)
 {
 #if 0
@@ -116,7 +116,7 @@ CProjet::CProjet () :
 CProjet::CProjet (const CProjet & other) :
   CCalculs (),
   CModele (),
-  CUndoManager (),
+  CUndoManager (*this),
   parametres (other.parametres)
 {
 }

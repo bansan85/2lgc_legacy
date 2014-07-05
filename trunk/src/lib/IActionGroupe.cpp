@@ -27,7 +27,7 @@
  * \param undo_ (in) Le gestionnaire des modifications.
  */
 IActionGroupe::IActionGroupe (std::string    nom_,
-                              CUndoManager * undo_) :
+                              CUndoManager & undo_) :
   IUndoable (undo_)
   , nom (nom_)
 #ifdef ENABLE_GTK

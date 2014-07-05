@@ -103,12 +103,44 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  // Création des actions
-  std::list<ICharge *> liste;
-  projet.addAction (new CAction ("Poids propre", 0, liste, NULL)); // 0 Poids propre
-  projet.addAction (new CAction ("Chargement", 2, liste, NULL)); // 2 Exploitation
-  projet.addAction (new CAction ("Neige", 16, liste, NULL)); // 16 Neige
-  projet.addAction (new CAction ("Vent", 17, liste, NULL)); // 17 Vent
+  if  (projet.getActionCount () != 0)
+    printf ("OUPS1\n");
+  // 0 Poids propre
+  projet.addAction (new CAction ("Poids propre",
+                                 0,
+                                 dynamic_cast <CUndoManager &> (projet)));
+  if  (projet.getActionCount () != 1)
+    printf ("OUPS2\n");
+  // 2 Exploitation
+  projet.addAction (new CAction ("Chargement",
+                                 2,
+                                 dynamic_cast <CUndoManager &> (projet)));
+  if  (projet.getActionCount () != 2)
+    printf ("OUPS3\n");
+  // 16 Neige
+  projet.addAction (new CAction ("Neige",
+                                 16,
+                                 dynamic_cast <CUndoManager &> (projet)));
+  if  (projet.getActionCount () != 3)
+    printf ("OUPS4\n");
+  // 17 Vent
+  projet.addAction (new CAction ("Vent",
+                                 17,
+                                 dynamic_cast <CUndoManager &> (projet)));
+  if  (projet.getActionCount () != 4)
+    printf ("OUPS5\n");
+  projet.undo();
+  if  (projet.getActionCount () != 3)
+    printf ("OUPS6\n");
+  projet.undo();
+  if  (projet.getActionCount () != 2)
+    printf ("OUPS7\n");
+  projet.undo();
+  if  (projet.getActionCount () != 1)
+    printf ("OUPS8\n");
+  projet.undo();
+  if  (projet.getActionCount () != 0)
+    printf ("OUPS9\n");
   
   // Création des groupes d'actions
 /*  BUG(_1990_groupe_ajout_niveau(projet), -1)

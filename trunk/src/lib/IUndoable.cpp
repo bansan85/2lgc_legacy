@@ -26,7 +26,7 @@
  * \brief Constructeur d'une classe IUndoable.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-IUndoable::IUndoable (CUndoManager * undo_) :
+IUndoable::IUndoable (CUndoManager & undo_) :
   undoManager (undo_)
 {
 }
@@ -37,7 +37,7 @@ IUndoable::IUndoable (CUndoManager * undo_) :
  * \param other (in) La classe à dupliquer.
  */
 IUndoable::IUndoable (const IUndoable & other) :
-  undoManager ()
+  undoManager (other.undoManager)
 {
   std::cout << __func__ ;
   // TODO.
@@ -62,6 +62,16 @@ IUndoable::operator = (const IUndoable & other)
  */
 IUndoable::~IUndoable ()
 {
+}
+
+
+/**
+ * \brief Renvoie le gestionnaire d'annulations.
+ */
+CUndoManager &
+IUndoable::getUndoManager ()
+{
+  return undoManager;
 }
 
 
