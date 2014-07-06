@@ -26,6 +26,8 @@
 #define EGTK(...)
 #endif
 
+#define CHK __attribute__ ((__warn_unused_result__))
+
 #include <string>
 #include <vector>
 #include <stack>

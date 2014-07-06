@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "codegui.hpp"
+#include "MErreurs.hh"
 
 #include <stdint.h>
 #include <libintl.h>
@@ -103,44 +104,43 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  if  (projet.getActionCount () != 0)
-    printf ("OUPS1\n");
+  BUG (projet.getActionCount () == 0, -1)
   // 0 Poids propre
-  projet.addAction (new CAction ("Poids propre",
-                                 0,
-                                 dynamic_cast <CUndoManager &> (projet)));
-  if  (projet.getActionCount () != 1)
-    printf ("OUPS2\n");
+  BUG (projet.addAction (
+         new CAction ("Poids propre",
+                      0,
+                      dynamic_cast <CUndoManager &> (projet))),
+       -1)
+  BUG (projet.getActionCount () == 1, -1)
   // 2 Exploitation
-  projet.addAction (new CAction ("Chargement",
-                                 2,
-                                 dynamic_cast <CUndoManager &> (projet)));
-  if  (projet.getActionCount () != 2)
-    printf ("OUPS3\n");
+  BUG (projet.addAction (
+         new CAction ("Chargement",
+                      2,
+                      dynamic_cast <CUndoManager &> (projet))),
+       -1)
+  BUG (projet.getActionCount () == 2, -1)
   // 16 Neige
-  projet.addAction (new CAction ("Neige",
-                                 16,
-                                 dynamic_cast <CUndoManager &> (projet)));
-  if  (projet.getActionCount () != 3)
-    printf ("OUPS4\n");
+  BUG (projet.addAction (
+         new CAction ("Neige",
+                      16,
+                      dynamic_cast <CUndoManager &> (projet))),
+       -1)
+  BUG (projet.getActionCount () == 3, -1)
   // 17 Vent
-  projet.addAction (new CAction ("Vent",
-                                 17,
-                                 dynamic_cast <CUndoManager &> (projet)));
-  if  (projet.getActionCount () != 4)
-    printf ("OUPS5\n");
-  projet.undo();
-  if  (projet.getActionCount () != 3)
-    printf ("OUPS6\n");
-  projet.undo();
-  if  (projet.getActionCount () != 2)
-    printf ("OUPS7\n");
-  projet.undo();
-  if  (projet.getActionCount () != 1)
-    printf ("OUPS8\n");
-  projet.undo();
-  if  (projet.getActionCount () != 0)
-    printf ("OUPS9\n");
+  BUG (projet.addAction (
+         new CAction ("Vent",
+                      17,
+                      dynamic_cast <CUndoManager &> (projet))),
+       -1)
+  BUG (projet.getActionCount () == 4, -1)
+  BUG (projet.undo (), -1)
+  BUG (projet.getActionCount () == 3, -1)
+  BUG (projet.undo (), -1)
+  BUG (projet.getActionCount () == 2, -1)
+  BUG (projet.undo (), -1)
+  BUG (projet.getActionCount () == 1, -1)
+  BUG (projet.undo (), -1)
+  BUG (projet.getActionCount () == 0, -1)
   
   // Création des groupes d'actions
 /*  BUG(_1990_groupe_ajout_niveau(projet), -1)
