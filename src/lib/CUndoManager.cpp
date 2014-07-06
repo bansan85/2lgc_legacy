@@ -89,9 +89,13 @@ CUndoManager::push (std::function <bool ()>           annule,
     tmpListe->annule.push_back (annule);
     tmpListe->repete.push_back (repete);
     if (suppr != NULL)
+    {
       tmpListe->suppr.push_back (suppr);
+    }
     if (sauve != NULL)
+    {
       tmpListe->sauve.push_back (sauve);
+    }
   }
   
   return true;
@@ -194,7 +198,9 @@ CUndoManager::ref ()
            (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie ou réduisez la complexité des modifications.\n")); )
   
   if (!modif)
+  {
     return true;
+  }
   
   if (count == 0)
   {
@@ -214,7 +220,9 @@ bool
 CUndoManager::unref ()
 {
   if (!modif)
+  {
     return true;
+  }
   
   BUGCRIT (count != 0,
            false,
