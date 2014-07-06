@@ -77,14 +77,14 @@ std::string
 format (const std::string fmt,
         ...)
 {
-  int         size = 1024;
+  uint32_t    size = 1024;
   bool        b = false;
   va_list     marker;
   std::string s;
   
   while (!b)
   {
-    int         n;
+    uint32_t n;
     
     s.resize (size);
     va_start (marker, fmt);
