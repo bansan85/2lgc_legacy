@@ -27,13 +27,3 @@
 #endif
 
 #define CHK __attribute__ ((__warn_unused_result__))
-
-#include <string>
-#include <vector>
-#include <stack>
-#include <list>
-#include <cstdint>
-#include <functional>
-#include <cholmod.h>
-#include <libxml/tree.h>
-
