@@ -76,19 +76,20 @@ CModeleActions::addAction (CAction * action)
            delete action;
          } )
   
-  action->getUndoManager().ref ();
+  BUG (action->getUndoManager ().ref (), false)
   
   actions.push_back (action);
-  action->getUndoManager().push (
-    std::bind (static_cast <bool (CModeleActions::*)
+  BUG (action->getUndoManager ().push (
+         std::bind (static_cast <bool (CModeleActions::*)
                                       (CAction *)> (&CModeleActions::rmAction),
-               this,
-               action),
-    std::bind (&CModeleActions::addAction, this, action),
-    std::bind (std::default_delete <CAction> (), action),
-    NULL);
+                    this,
+                    action),
+         std::bind (&CModeleActions::addAction, this, action),
+         std::bind (std::default_delete <CAction> (), action),
+         NULL),
+       false)
   
-  action->getUndoManager().unref ();
+  BUG (action->getUndoManager ().unref (), false)
   
   return true;
 }
@@ -118,19 +119,20 @@ CModeleActions::rmAction (CAction * action)
        false,
        (gettext ("L'action doit être supprimée sans action. Les charges doivent être supprimées avant.\n")); )
   
-  action->getUndoManager().ref ();
+  BUG (action->getUndoManager().ref (), false)
   
   actions.remove (action);
-  action->getUndoManager().push (
-    std::bind (&CModeleActions::addAction, this, action),
-    std::bind (static_cast <bool (CModeleActions::*) (CAction *)>
+  BUG (action->getUndoManager ().push (
+         std::bind (&CModeleActions::addAction, this, action),
+         std::bind (static_cast <bool (CModeleActions::*) (CAction *)>
                                                    (&CModeleActions::rmAction),
-               this,
-               action),
-    NULL,
-    NULL);
+                    this,
+                    action),
+         NULL,
+         NULL),
+       false)
   
-  action->getUndoManager().unref ();
+  BUG (action->getUndoManager ().unref (), false);
   
   return true;
 }

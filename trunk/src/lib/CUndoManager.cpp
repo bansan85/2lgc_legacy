@@ -107,8 +107,9 @@ CUndoManager::undo ()
   CUndoData * undoData;
   std::list <CUndoData *>::iterator it;
   
-  if (liste.size () == pos)
-    return false;
+  BUG (liste.size () != pos,
+       false,
+       (gettext ("Il n'y a plus rien à annuler.\n")); )
   
   modif = false;
   
@@ -138,8 +139,9 @@ CUndoManager::redo ()
   CUndoData * undoData;
   std::list <CUndoData *>::iterator it;
   
-  if (pos == 0)
-    return false;
+  BUG (pos != 0,
+       false,
+       (gettext ("Il n'y a plus rien à rétablir.\n")); )
   
   modif = false;
   
@@ -188,8 +190,8 @@ bool
 CUndoManager::ref ()
 {
   BUGCRIT (count != 255,
-        false,
-        (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
+           false,
+           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie ou réduisez la complexité des modifications.\n")); )
   
   if (!modif)
     return true;
@@ -214,9 +216,9 @@ CUndoManager::unref ()
   if (!modif)
     return true;
   
-  BUG (count != 0,
-       false,
-       (gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n")); )
+  BUGCRIT (count != 0,
+           false,
+           (gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n")); )
   
   --count;
   
