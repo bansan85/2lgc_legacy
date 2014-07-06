@@ -11,5 +11,3 @@ clean-local:
 	rm -Rf html latex
 
 endif 
-
-#CLEANFILES = *.log *.aux manuel.pdf *.out *.tmp *.toc *.bbl *.blg html latex

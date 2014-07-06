@@ -2,8 +2,11 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS =	po \
 			files \
-			src \
-			docs
+			src
+
+if HAVE_DOXYGEN
+SUBDIRS += docs
+endif
 
 if PLATFORM_WIN32
 CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=i686 -mms-bitfields

@@ -21,7 +21,7 @@ automake --add-missing --copy
 autoconf
 
 Avec gcc :
-./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gtk --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 make -j9 && sudo make install && /usr/local/bin/codegui

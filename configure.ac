@@ -17,12 +17,14 @@ AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
 AC_PROG_F77
 AC_PROG_LIBTOOL
+
+# libxml2
 LIBXML_REQUIRED_VERSION=2.8.0
 AC_SUBST(XML_CPPFLAGS)
 AC_SUBST(XML_LIBS)
 AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
-GLIB_REQUIRED_VERSION=2.38.0
-AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
+
+# debug
 AC_ARG_WITH(debug,  [  --with-debug           build with debug support], [withdebug=true], [withdebug=false])
 AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-debug $withdebug
@@ -31,17 +33,22 @@ AM_CONDITIONAL(ENABLE_DEBUG, test x$withdebug = xtrue)
 if test x$withdebug = xtrue; then
 AC_DEFINE(ENABLE_DEBUG, 1, [Défini si les options de débug doivent être activés])
 fi
+
+# GTK+-3
 AC_ARG_WITH(gtk,  [  --with-gtk           build with gtk support], [withgtk=true], [withgtk=false])
 AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-gtk $withgtk
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
 AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
 if test x$withgtk = xtrue; then
-GTK_REQUIRED_VERSION=3.6.0
-AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
-AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
-AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
+  GLIB_REQUIRED_VERSION=2.38.0
+  AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
+  GTK_REQUIRED_VERSION=3.6.0
+  AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
+  AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
+  AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
 fi
+
 AM_GNU_GETTEXT([external])
 ALL_LINGUAS="fr"
 PKG_PROG_PKG_CONFIG
@@ -65,11 +72,17 @@ AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
 AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "no")
 
 # Vérification de la possibilité de compiler la documentation via doxygen
+AC_ARG_WITH(doc,  [  --with-doc           build with doc support], [withdoc=true], [withdoc=false])
+AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+with-doc $withdoc
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test -z "$DOXYGEN";
+if test x$withgtk = xtrue; then
+  if test -z "$DOXYGEN";
     then AC_MSG_WARN([Doxygen introuvable - documentation non compilable])
+  fi
 fi
-AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+AM_CONDITIONAL(HAVE_DOXYGEN, test x$withdoc = xtrue && test -n "$DOXYGEN")
 
 # Checks for libraries.
 AC_CHECK_LIB(m, sqrt)
