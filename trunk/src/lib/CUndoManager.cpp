@@ -232,6 +232,7 @@ CUndoManager::unref ()
   
   if (count == 0)
   {
+    time (&tmpListe->heure);
     liste.push_back (tmpListe);
     tmpListe = NULL;
   }
