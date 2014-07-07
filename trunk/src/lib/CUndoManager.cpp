@@ -75,12 +75,17 @@ CUndoManager::~CUndoManager ()
  * \brief Ajoute une modification à la liste.
  * \param annule (in) La fonction à lancer pour annuler la modification.
  * \param repete (in) La fonction à lancer pour répéter la modification.
+ * \param suppr (in) La fonction à lancer pour libérer la mémoire. Cette
+ *                   fonction est définie lorsqu'il y a ajout d'un élément en
+ *                   mémoire uniquement.
+ * \param sauve (in) La fonction à lancer pour enregistrer dans un fichier
+ *                   l'historique.
  */
 bool
 CUndoManager::push (std::function <bool ()>           annule,
                     std::function <bool ()>           repete,
                     std::function <void ()>           suppr,
-                    std::function <void (xmlNodePtr)> sauve)
+                    std::function <bool (xmlNodePtr)> sauve)
 {
   if (modif)
   {
@@ -118,12 +123,12 @@ CUndoManager::undo ()
   modif = false;
   
   it = liste.end ();
-  std::advance (it, -static_cast<ssize_t>(pos) - 1);
+  std::advance (it, -static_cast <ssize_t> (pos) - 1);
   undoData = *it;
   
-  for (std::function <void ()> f: undoData->annule)
+  for (std::function <bool ()> f: undoData->annule)
   {
-    f ();
+    BUG (f (), false)
   }
   
   ++pos;
@@ -150,12 +155,12 @@ CUndoManager::redo ()
   modif = false;
   
   it = liste.end ();
-  std::advance (it, -static_cast<ssize_t>(pos));
+  std::advance (it, -static_cast <ssize_t> (pos));
   undoData = *it;
   
-  for (std::function <void ()> f: undoData->repete)
+  for (std::function <bool ()> f: undoData->repete)
   {
-    f ();
+    BUG (f (), false)
   }
   
   --pos;
@@ -236,6 +241,36 @@ CUndoManager::unref ()
     liste.push_back (tmpListe);
     tmpListe = NULL;
   }
+  
+  return true;
+}
+
+
+/**
+ * \brief Renvoie les informations du gestionnaire d'annulation sous forme XML.
+ */
+bool
+CUndoManager::undoToXML (xmlNodePtr root)
+{
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("UndoManager")),
+    xmlFreeNode);
+  
+  BUG (node.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  for (CUndoData * data: liste)
+  {
+    for (std::function <bool (xmlNodePtr)> f: data->sauve)
+    {
+      BUG (f (node.get ()), false)
+    }
+  }
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  
+  node.release ();
   
   return true;
 }

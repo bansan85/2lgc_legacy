@@ -142,6 +142,8 @@ main (int32_t argc,
   BUG (projet.undo (), -1)
   BUG (projet.getActionCount () == 0, -1)
   
+  BUG (projet.enregistre ("test.xml"), -1)
+  
   // Création des groupes d'actions
 /*  BUG(_1990_groupe_ajout_niveau(projet), -1)
   BUG(_1990_groupe_ajout_niveau(projet), -1)

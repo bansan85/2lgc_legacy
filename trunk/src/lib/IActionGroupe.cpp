@@ -45,4 +45,14 @@ IActionGroupe::~IActionGroupe ()
 }
 
 
+/**
+ * \brief Renvoie le nom.
+ */
+std::string const &
+IActionGroupe::getNom () const
+{
+  return nom;
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

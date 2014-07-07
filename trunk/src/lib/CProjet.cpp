@@ -20,8 +20,10 @@
 
 #include <iostream>
 #include <locale>
+#include <memory>
 
 #include "CProjet.hpp"
+#include "MErreurs.hh"
 
 /**
  * \brief Initialise la classe CProjet.
@@ -32,6 +34,8 @@ CProjet::CProjet () :
   CUndoManager (*this),
   parametres (NULL)
 {
+  LIBXML_TEST_VERSION
+  
 #if 0
 #ifdef ENABLE_GTK
   GtkCssProvider *provider = gtk_css_provider_new ();
@@ -131,6 +135,8 @@ CProjet::~CProjet ()
 {
   delete parametres;
   
+  xmlCleanupParser();
+  
 #if 0
   BUG (EF_calculs_free (p), false)
   BUG (common_ville_free (p), false)
@@ -168,6 +174,37 @@ IParametres &
 CProjet::getParametres ()
 {
   return *parametres;
+}
+
+
+/**
+ * \brief Enregistre le projet.
+ * \param fichier (in) Le nom du fichier.
+ */
+bool
+CProjet::enregistre (std::string fichier)
+{
+  std::unique_ptr <xmlDoc, void (*)(xmlDocPtr)> doc (
+    xmlNewDoc (reinterpret_cast <const xmlChar *> ("1.0")),
+    xmlFreeDoc);
+  xmlNodePtr root_node;
+  
+  BUG (doc.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  BUG (root_node = xmlNewNode (NULL,
+                               reinterpret_cast <const xmlChar *> ("Projet")),
+       false,
+       (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  xmlDocSetRootElement (doc.get (), root_node);
+  
+  BUG (this->undoToXML (root_node), false)
+  
+  BUG (xmlSaveFormatFileEnc (fichier.c_str (), doc.get (), "UTF-8", 1) != -1,
+       false,
+       (gettext ("Echec lors de l'enregistrement.\n")); )
+  
+  return true;
 }
 
 
