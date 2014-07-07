@@ -86,10 +86,44 @@ CModeleActions::addAction (CAction * action)
                     action),
          std::bind (&CModeleActions::addAction, this, action),
          std::bind (std::default_delete <CAction> (), action),
-         NULL),
+         std::bind (&CModeleActions::addActionXML,
+                    this,
+                    std::placeholders::_1,
+                    action)),
        false)
   
   BUG (action->getUndoManager ().unref (), false)
+  
+  return true;
+}
+
+
+/**
+ * \brief Converti la fonction d'ajout d'une action sous format XML..
+ * \param root (in) Le noeud dans lequel doit être inséré l'action.
+ */
+bool
+CModeleActions::addActionXML (xmlNodePtr root, CAction * action)
+{
+  BUGPARAMCRIT (action, "%p", action, false)
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
+    xmlFreeNode);
+  
+  BUG (node.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  BUG (xmlSetProp (
+         node.get (),
+         reinterpret_cast <const xmlChar *> ("Nom"),
+         reinterpret_cast <const xmlChar *> (action->getNom ().c_str ())),
+       false)
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  
+  node.release ();
   
   return true;
 }

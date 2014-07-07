@@ -35,9 +35,9 @@
  * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-CAction::CAction (std::string             nom_,
-                  uint8_t                 type_,
-                  CUndoManager          & undo_) :
+CAction::CAction (std::string    nom_,
+                  uint8_t        type_,
+                  CUndoManager & undo_) :
   IActionGroupe (nom_, undo_)
   , type (type_)
   , action_predominante (false)
