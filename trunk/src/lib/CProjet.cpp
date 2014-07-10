@@ -202,7 +202,7 @@ CProjet::enregistre (std::string fichier)
   
   BUG (xmlSaveFormatFileEnc (fichier.c_str (), doc.get (), "UTF-8", 1) != -1,
        false,
-       (gettext ("Echec lors de l'enregistrement.\n")); )
+       (gettext ("Échec lors de l'enregistrement.\n")); )
   
   return true;
 }

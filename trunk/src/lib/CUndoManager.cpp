@@ -89,9 +89,12 @@ CUndoManager::push (std::function <bool ()>           annule,
 {
   if (modif)
   {
+    BUG (count != 0,
+         false,
+         (gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n")); )
     BUGPARAMCRIT (tmpListe, "%p", tmpListe, false);
     
-    tmpListe->annule.push_back (annule);
+    tmpListe->annule.push_front (annule);
     tmpListe->repete.push_back (repete);
     if (suppr != NULL)
     {
@@ -200,7 +203,7 @@ CUndoManager::ref ()
 {
   BUGCRIT (count != 255,
            false,
-           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie ou réduisez la complexité des modifications.\n")); )
+           (gettext ("La librairie est arrivée au boût de ces limites. Il faut réduire le nombre d'imbrication de fonctions appelant d'autres fonctions modifiantes.\n")); )
   
   if (!modif)
   {

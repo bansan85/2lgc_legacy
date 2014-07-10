@@ -61,20 +61,12 @@ CModeleActions::addAction (CAction * action)
   
   BUGCRIT (actions.max_size () != actions.size (),
            false,
-           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n"));
-             if (action->getUndoManager ().getEtat () != UNDO_REVERT)
-             {
-               delete action;
-             } )
+           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
   
   //TODO : Empêcher les actions avec le même nom.
   BUG (action->emptyCharges (),
        false,
-       (gettext ("L'action doit être ajoutée sans action. Les charges doivent être ajoutées ensuite.\n"));
-         if (action->getUndoManager ().getEtat () != UNDO_REVERT)
-         {
-           delete action;
-         } )
+       (gettext ("L'action doit être ajoutée sans action. Les charges doivent être ajoutées ensuite.\n")); )
   
   BUG (action->getUndoManager ().ref (), false)
   
