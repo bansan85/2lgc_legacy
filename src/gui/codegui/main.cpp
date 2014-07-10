@@ -64,6 +64,7 @@ main (int32_t argc,
 {
   /* Variables */
   CProjet projet;
+  std::unique_ptr <CAction> action;
 //  GList   *tmp1, *tmp2;
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -106,32 +107,32 @@ main (int32_t argc,
   
   BUG (projet.getActionCount () == 0, -1)
   // 0 Poids propre
-  BUG (projet.addAction (
-         new CAction ("Poids propre",
-                      0,
-                      dynamic_cast <CUndoManager &> (projet))),
-       -1)
+  action.reset (new CAction ("Poids propre",
+                             0,
+                             dynamic_cast <CUndoManager &> (projet)));
+  BUG (projet.addAction (action.get ()), -1)
+  action.release ();
   BUG (projet.getActionCount () == 1, -1)
   // 2 Exploitation
-  BUG (projet.addAction (
-         new CAction ("Chargement",
-                      2,
-                      dynamic_cast <CUndoManager &> (projet))),
-       -1)
+  action.reset (new CAction ("Chargement",
+                             2,
+                             dynamic_cast <CUndoManager &> (projet)));
+  BUG (projet.addAction (action.get ()), -1)
+  action.release ();
   BUG (projet.getActionCount () == 2, -1)
   // 16 Neige
-  BUG (projet.addAction (
-         new CAction ("Neige",
-                      16,
-                      dynamic_cast <CUndoManager &> (projet))),
-       -1)
+  action.reset (new CAction ("Neige",
+                             16,
+                             dynamic_cast <CUndoManager &> (projet)));
+  BUG (projet.addAction (action.get ()), -1)
+  action.release ();
   BUG (projet.getActionCount () == 3, -1)
   // 17 Vent
-  BUG (projet.addAction (
-         new CAction ("Vent",
-                      17,
-                      dynamic_cast <CUndoManager &> (projet))),
-       -1)
+  action.reset (new CAction ("Vent",
+                             17,
+                             dynamic_cast <CUndoManager &> (projet)));
+  BUG (projet.addAction (action.get ()), -1)
+  action.release ();
   BUG (projet.getActionCount () == 4, -1)
   BUG (projet.undo (), -1)
   BUG (projet.getActionCount () == 3, -1)
