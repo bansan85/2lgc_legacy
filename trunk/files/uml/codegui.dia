@@ -18596,7 +18596,7 @@
         <dia:point val="130,-213"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="129.95,-213.05;153.558,-165.9"/>
+        <dia:rectangle val="129.95,-213.05;153.558,-164.05"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="130,-213"/>
@@ -18605,7 +18605,7 @@
         <dia:real val="23.5075"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="47.050000000000011"/>
+        <dia:real val="48.900000000000013"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoManager#</dia:string>
@@ -19405,6 +19405,36 @@ class CProjet;#</dia:string>
               </dia:attribute>
             </dia:composite>
           </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#rollback#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Annule les modifications en cours sur la base de ceux dans la liste tmpListe.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
         </dia:composite>
       </dia:attribute>
       <dia:attribute name="template">
@@ -21268,18 +21298,18 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Generalization" version="1" id="O85">
       <dia:attribute name="obj_pos">
-        <dia:point val="141.754,-165.95"/>
+        <dia:point val="141.754,-164.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="129.44,-166;142.604,-157.95"/>
+        <dia:rectangle val="129.44,-164.15;142.604,-157.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="141.754,-165.95"/>
-        <dia:point val="141.754,-161.575"/>
-        <dia:point val="129.49,-161.575"/>
+        <dia:point val="141.754,-164.1"/>
+        <dia:point val="141.754,-160.65"/>
+        <dia:point val="129.49,-160.65"/>
         <dia:point val="129.49,-158"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

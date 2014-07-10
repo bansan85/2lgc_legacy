@@ -91,8 +91,9 @@ CUndoManager::push (std::function <bool ()>           annule,
   {
     BUG (count != 0,
          false,
+         this,
          (gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n")); )
-    BUGPARAMCRIT (tmpListe, "%p", tmpListe, false);
+    BUGPARAMCRIT (tmpListe, "%p", tmpListe, false, this)
     
     tmpListe->annule.push_front (annule);
     tmpListe->repete.push_back (repete);
@@ -121,6 +122,7 @@ CUndoManager::undo ()
   
   BUG (liste.size () != pos,
        false,
+       this,
        (gettext ("Il n'y a plus rien à annuler.\n")); )
   
   modif = false;
@@ -131,7 +133,7 @@ CUndoManager::undo ()
   
   for (std::function <bool ()> f: undoData->annule)
   {
-    BUG (f (), false)
+    BUG (f (), false, this)
   }
   
   ++pos;
@@ -153,6 +155,7 @@ CUndoManager::redo ()
   
   BUG (pos != 0,
        false,
+       this,
        (gettext ("Il n'y a plus rien à rétablir.\n")); )
   
   modif = false;
@@ -163,7 +166,7 @@ CUndoManager::redo ()
   
   for (std::function <bool ()> f: undoData->repete)
   {
-    BUG (f (), false)
+    BUG (f (), false, this)
   }
   
   --pos;
@@ -203,6 +206,7 @@ CUndoManager::ref ()
 {
   BUGCRIT (count != 255,
            false,
+           this,
            (gettext ("La librairie est arrivée au boût de ces limites. Il faut réduire le nombre d'imbrication de fonctions appelant d'autres fonctions modifiantes.\n")); )
   
   if (!modif)
@@ -234,6 +238,7 @@ CUndoManager::unref ()
   
   BUGCRIT (count != 0,
            false,
+           this,
            (gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n")); )
   
   --count;
@@ -259,21 +264,58 @@ CUndoManager::undoToXML (xmlNodePtr root)
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("UndoManager")),
     xmlFreeNode);
   
-  BUG (node.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUG (node.get (),
+       false,
+       this,
+       (gettext ("Erreur d'allocation mémoire.\n")); )
   
   for (CUndoData * data: liste)
   {
     for (std::function <bool (xmlNodePtr)> f: data->sauve)
     {
-      BUG (f (node.get ()), false)
+      BUG (f (node.get ()), false, this)
     }
   }
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
+           this,
            (gettext ("Erreur lors de la génération du fichier XML.\n")); )
   
   node.release ();
+  
+  return true;
+}
+
+
+/**
+ * \brief Annule les modifications en cours sur la base de ceux dans la liste
+ *        tmpListe.
+ */
+bool
+CUndoManager::rollback ()
+{
+  modif = true;
+  
+  count = 0;
+  
+  if (tmpListe == NULL)
+    return true;
+  
+  for (std::function <bool ()> f: tmpListe->annule)
+  {
+    BUGCRIT (f (),
+             false,
+             NULL,
+             (gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n")); )
+  }
+  for (std::function <void ()> f: tmpListe->suppr)
+  {
+    f ();
+  }
+  
+  delete tmpListe;
+  tmpListe = NULL;
   
   return true;
 }

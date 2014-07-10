@@ -57,18 +57,22 @@ CModeleActions::operator = (const CModeleActions & other) = delete;
 bool
 CModeleActions::addAction (CAction * action)
 {
-  BUGPARAMCRIT (action, "%p", action, false)
+  BUGPARAMCRIT (action, "%p", action, false, &action->getUndoManager ())
   
   BUGCRIT (actions.max_size () != actions.size (),
            false,
+           &action->getUndoManager (),
            (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
   
   //TODO : Empêcher les actions avec le même nom.
   BUG (action->emptyCharges (),
        false,
+       &action->getUndoManager (),
        (gettext ("L'action doit être ajoutée sans action. Les charges doivent être ajoutées ensuite.\n")); )
   
-  BUG (action->getUndoManager ().ref (), false)
+  BUG (action->getUndoManager ().ref (),
+       false,
+       &action->getUndoManager ())
   
   actions.push_back (action);
   BUG (action->getUndoManager ().push (
@@ -82,9 +86,12 @@ CModeleActions::addAction (CAction * action)
                     this,
                     std::placeholders::_1,
                     action)),
-       false)
+       false,
+       &action->getUndoManager ())
   
-  BUG (action->getUndoManager ().unref (), false)
+  BUG (action->getUndoManager ().unref (),
+       false,
+       &action->getUndoManager ())
   
   return true;
 }
@@ -97,22 +104,27 @@ CModeleActions::addAction (CAction * action)
 bool
 CModeleActions::addActionXML (xmlNodePtr root, CAction * action)
 {
-  BUGPARAMCRIT (action, "%p", action, false)
+  BUGPARAMCRIT (action, "%p", action, false, &action->getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
     xmlFreeNode);
   
-  BUG (node.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUG (node.get (),
+       false,
+       &action->getUndoManager (),
+       (gettext ("Erreur d'allocation mémoire.\n")); )
   
   BUG (xmlSetProp (
          node.get (),
          reinterpret_cast <const xmlChar *> ("Nom"),
          reinterpret_cast <const xmlChar *> (action->getNom ().c_str ())),
-       false)
+       false,
+       &action->getUndoManager ())
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
+           &action->getUndoManager (),
            (gettext ("Erreur lors de la génération du fichier XML.\n")); )
   
   node.release ();
@@ -139,13 +151,16 @@ CModeleActions::getActionCount ()
 bool
 CModeleActions::rmAction (CAction * action)
 {
-  BUGPARAMCRIT (action, "%p", action, false)
+  BUGPARAMCRIT (action, "%p", action, false, &action->getUndoManager ())
   
   BUG (action->emptyCharges (),
        false,
+       &action->getUndoManager (),
        (gettext ("L'action doit être supprimée sans action. Les charges doivent être supprimées avant.\n")); )
   
-  BUG (action->getUndoManager().ref (), false)
+  BUG (action->getUndoManager ().ref (),
+       false,
+       &action->getUndoManager ())
   
   actions.remove (action);
   BUG (action->getUndoManager ().push (
@@ -156,9 +171,12 @@ CModeleActions::rmAction (CAction * action)
                     action),
          NULL,
          NULL),
-       false)
+       false,
+       &action->getUndoManager ())
   
-  BUG (action->getUndoManager ().unref (), false);
+  BUG (action->getUndoManager ().unref (),
+       false,
+       &action->getUndoManager ());
   
   return true;
 }
