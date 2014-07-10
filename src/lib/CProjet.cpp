@@ -189,19 +189,26 @@ CProjet::enregistre (std::string fichier)
     xmlFreeDoc);
   xmlNodePtr root_node;
   
-  BUG (doc.get (), false, (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUG (doc.get (),
+       false,
+       dynamic_cast <CUndoManager *> (this),
+       (gettext ("Erreur d'allocation mémoire.\n")); )
   
   BUG (root_node = xmlNewNode (NULL,
                                reinterpret_cast <const xmlChar *> ("Projet")),
        false,
+       dynamic_cast <CUndoManager *> (this),
        (gettext ("Erreur d'allocation mémoire.\n")); )
   
   xmlDocSetRootElement (doc.get (), root_node);
   
-  BUG (this->undoToXML (root_node), false)
+  BUG (this->undoToXML (root_node),
+       false,
+       dynamic_cast <CUndoManager *> (this))
   
   BUG (xmlSaveFormatFileEnc (fichier.c_str (), doc.get (), "UTF-8", 1) != -1,
        false,
+       dynamic_cast <CUndoManager *> (this),
        (gettext ("Échec lors de l'enregistrement.\n")); )
   
   return true;

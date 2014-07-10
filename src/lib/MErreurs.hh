@@ -26,7 +26,7 @@
 
 #define PRINTF(...) printf (__VA_ARGS__)
 
-#define NOTE(X, ...) { \
+/*#define NOTE(X, ...) { \
   if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
@@ -36,33 +36,35 @@
             #X); \
     PRINTF (__VA_ARGS__); \
   } \
-}
+}*/
 
 
 #define NOWARNING _Pragma("GCC diagnostic push")\
   _Pragma("GCC diagnostic ignored \"-Wunused-result\"")
 #define POPWARNING _Pragma("GCC diagnostic pop")
 
-#define FAILINFO(Y, ...) { \
+#define FAILINFO(Y, MANAGER, ...) { \
   PRINTF (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
           __FILE__, \
           __FUNCTION__, \
           __LINE__); \
+  if ((MANAGER) != NULL) \
+    (static_cast <CUndoManager *> (MANAGER))->rollback (); \
   printf __VA_ARGS__ \
   return Y; \
 }
 
-#define FAILPARAM(PARAM, TYPE, Y, ...) { \
+#define FAILPARAM(PARAM, TYPE, Y, MANAGER, ...) { \
   PRINTF ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
-  FAILINFO (Y, ("\n"); __VA_ARGS__) \
+  FAILINFO (Y, MANAGER, ("\n"); __VA_ARGS__) \
 }
 
-#define FAILCRIT(Y, ...) { \
+#define FAILCRIT(Y, MANAGER, ...) { \
   PRINTF (gettext ("Erreur critique. ")); \
-  FAILINFO (Y, __VA_ARGS__) \
+  FAILINFO (Y, MANAGER, __VA_ARGS__) \
 }
 
-#define BUG(X, Y, ...) { \
+#define BUG(X, Y, MANAGER, ...) { \
   if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
@@ -70,6 +72,8 @@
             __FUNCTION__, \
             __LINE__, \
             #X); \
+    if ((MANAGER) != NULL) \
+      (static_cast <CUndoManager *> (MANAGER))->rollback (); \
     __VA_ARGS__ \
     return Y; \
   } \
@@ -84,7 +88,7 @@
  *              la mémoire, ...). Ne pas oublier le ; final.
  */
 
-#define INFO(X, Y, ...) { \
+/*#define INFO(X, Y, ...) { \
   if (!(X)) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s, texte : "), \
@@ -95,7 +99,7 @@
     printf __VA_ARGS__ \
     return Y; \
   } \
-}
+}*/
 /**
  * \def INFO(X, Y, ...)
  * \brief Cette macro est identique à la commande #BUG mais ajoute un message
@@ -123,10 +127,10 @@
  */
 
 
-#define BUGPARAM(PARAM, TYPE, X, Y, ...) { \
+#define BUGPARAM(PARAM, TYPE, X, Y, MANAGER, ...) { \
   if (!(X)) \
   { \
-    FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
+    FAILPARAM (PARAM, TYPE, Y, MANAGER, __VA_ARGS__) \
   } \
 }
 /**
@@ -142,11 +146,11 @@
  */
 
 
-#define BUGPARAMCRIT(PARAM, TYPE, X, Y, ...) { \
+#define BUGPARAMCRIT(PARAM, TYPE, X, Y, MANAGER, ...) { \
   if (!(X)) \
   { \
     PRINTF (gettext ("Erreur critique. ")); \
-    FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
+    FAILPARAM (PARAM, TYPE, Y, MANAGER, __VA_ARGS__) \
   } \
 }
 /**
@@ -162,11 +166,11 @@
  */
 
 
-#define BUGCRIT(X, Y, ...) { \
+#define BUGCRIT(X, Y, MANAGER, ...) { \
   if (!(X)) \
   { \
     PRINTF (gettext ("Erreur critique. ")); \
-    FAILINFO (Y, __VA_ARGS__) \
+    FAILINFO (Y, MANAGER, __VA_ARGS__) \
   } \
 }
 /**

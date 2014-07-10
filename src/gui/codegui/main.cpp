@@ -105,45 +105,45 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUG (projet.getActionCount () == 0, -1)
+  BUG (projet.getActionCount () == 0, -1, NULL)
   // 0 Poids propre
   action.reset (new CAction ("Poids propre",
                              0,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1)
+  BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
-  BUG (projet.getActionCount () == 1, -1)
+  BUG (projet.getActionCount () == 1, -1, NULL)
   // 2 Exploitation
   action.reset (new CAction ("Chargement",
                              2,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1)
+  BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
-  BUG (projet.getActionCount () == 2, -1)
+  BUG (projet.getActionCount () == 2, -1, NULL)
   // 16 Neige
   action.reset (new CAction ("Neige",
                              16,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1)
+  BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
-  BUG (projet.getActionCount () == 3, -1)
+  BUG (projet.getActionCount () == 3, -1, NULL)
   // 17 Vent
   action.reset (new CAction ("Vent",
                              17,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1)
+  BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
-  BUG (projet.getActionCount () == 4, -1)
-  BUG (projet.undo (), -1)
-  BUG (projet.getActionCount () == 3, -1)
-  BUG (projet.undo (), -1)
-  BUG (projet.getActionCount () == 2, -1)
-  BUG (projet.undo (), -1)
-  BUG (projet.getActionCount () == 1, -1)
-  BUG (projet.undo (), -1)
-  BUG (projet.getActionCount () == 0, -1)
+  BUG (projet.getActionCount () == 4, -1, NULL)
+  BUG (projet.undo (), -1, NULL)
+  BUG (projet.getActionCount () == 3, -1, NULL)
+  BUG (projet.undo (), -1, NULL)
+  BUG (projet.getActionCount () == 2, -1, NULL)
+  BUG (projet.undo (), -1, NULL)
+  BUG (projet.getActionCount () == 1, -1, NULL)
+  BUG (projet.undo (), -1, NULL)
+  BUG (projet.getActionCount () == 0, -1, NULL)
   
-  BUG (projet.enregistre ("test.xml"), -1)
+  BUG (projet.enregistre ("test.xml"), -1, NULL)
   
   // Création des groupes d'actions
 /*  BUG(_1990_groupe_ajout_niveau(projet), -1)
