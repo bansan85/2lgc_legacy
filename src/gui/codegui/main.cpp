@@ -120,16 +120,16 @@ main (int32_t argc,
   BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUG (projet.getActionCount () == 2, -1, NULL)
-  // 16 Neige
+  // 18 Neige
   action.reset (new CAction ("Neige",
-                             16,
+                             18,
                              dynamic_cast <CUndoManager &> (projet)));
   BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUG (projet.getActionCount () == 3, -1, NULL)
-  // 17 Vent
+  // 19 Vent
   action.reset (new CAction ("Vent",
-                             17,
+                             19,
                              dynamic_cast <CUndoManager &> (projet)));
   BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();

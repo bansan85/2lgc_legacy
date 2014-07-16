@@ -38,7 +38,7 @@ CUSTOM_CXXFLAGS += -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" 
 endif
 endif
 
-AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -fpermissive -D__STRICT_ANSI__
+AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
 export AM_CXXFLAGS
 
