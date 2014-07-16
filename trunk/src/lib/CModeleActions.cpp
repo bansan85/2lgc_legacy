@@ -122,6 +122,14 @@ CModeleActions::addActionXML (xmlNodePtr root, CAction * action)
        false,
        &action->getUndoManager ())
   
+  BUG (xmlSetProp (
+         node.get (),
+         reinterpret_cast <const xmlChar *> ("Type"),
+         reinterpret_cast <const xmlChar *> (
+	                                  action->getDescription ().c_str ())),
+       false,
+       &action->getUndoManager ())
+  
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
            &action->getUndoManager (),

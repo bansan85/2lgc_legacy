@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
+#include <locale>
 
 #include "CAction.hpp"
 #include "CNbUser.hpp"
@@ -92,6 +93,118 @@ bool
 CAction::emptyCharges ()
 {
   return this->charges.size () == 0;
+}
+
+
+/**
+ * \brief Renvoie le type de l'action sous forme de texte.
+ */
+std::string
+CAction::getDescription ()
+{
+  switch (type)
+  {
+    case 0 :
+    {
+      return gettext ("Permanente");
+    }
+    case 1 :
+    {
+      return gettext ("Précontrainte");
+    }
+    case 2 :
+    {
+      return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles");
+    }
+    case 3 :
+    {
+      return gettext ("Exploitation : Catégorie B : bureaux");
+    }
+    case 4 :
+    {
+      return gettext ("Exploitation : Catégorie C : lieux de réunion");
+    }
+    case 5 :
+    {
+      return gettext ("Exploitation : Catégorie D : commerces");
+    }
+    case 6 :
+    {
+      return gettext ("Exploitation : Catégorie E : stockage");
+    }
+    case 7 :
+    {
+      return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN");
+    }
+    case 8 :
+    {
+      return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN");
+    }
+    case 9 :
+    {
+      return gettext ("Exploitation : Catégorie H : toits");
+    }
+    case 10 :
+    {
+      return gettext ("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B");
+    }
+    case 11 :
+    {
+      return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B");
+    }
+    case 12 :
+    {
+      return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D");
+    }
+    case 13 :
+    {
+      return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture");
+    }
+    case 14 :
+    {
+      return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)");
+    }
+    case 15 :
+    {
+      return gettext ("Neige : Finlande, Islande, Norvège, Suède");
+    }
+    case 16 :
+    {
+      return gettext ("Neige : Saint-Pierre-et-Miquelon");
+    }
+    case 17 :
+    {
+      return gettext ("Neige : Autres états membres CEN, altitude > 1000 m");
+    }
+    case 18 :
+    {
+      return gettext ("Neige : Autres états membres CEN, altitude <= 1000 m");
+    }
+    case 19 :
+    {
+      return gettext ("Vent");
+    }
+    case 20 :
+    {
+      return gettext ("Température (hors incendie)");
+    }
+    case 21 :
+    {
+      return gettext ("Accidentelle");
+    }
+    case 22 :
+    {
+      return gettext ("Sismique");
+    }
+    case 23 :
+    {
+      return gettext ("Eaux souterraines");
+    }
+    default :
+    {
+      return NULL;
+    }
+  }
 }
 
 
