@@ -68,7 +68,7 @@ CModeleActions::addAction (CAction * action)
   BUG (action->emptyCharges (),
        false,
        &action->getUndoManager (),
-       (gettext ("L'action doit être ajoutée sans action. Les charges doivent être ajoutées ensuite.\n")); )
+       (gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n")); )
   
   BUG (action->getUndoManager ().ref (),
        false,
@@ -156,7 +156,7 @@ CModeleActions::rmAction (CAction * action)
   BUG (action->emptyCharges (),
        false,
        &action->getUndoManager (),
-       (gettext ("L'action doit être supprimée sans action. Les charges doivent être supprimées avant.\n")); )
+       (gettext ("L'action doit être supprimée sans charges. Elles doivent être supprimées avant.\n")); )
   
   BUG (action->getUndoManager ().ref (),
        false,
