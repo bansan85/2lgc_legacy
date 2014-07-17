@@ -20,8 +20,13 @@
 
 #include <cmath>
 #include <cstdarg>
+#include <memory>
+#include <locale>
+#include <sstream>
 
 #include "CNbUser.hpp"
+#include "EUnite.hh"
+#include "MErreurs.hh"
 
 
 /**
@@ -146,6 +151,47 @@ CNbUser::toString () const
   }
   
   return format ("%.*lf", width, this->val);
+}
+
+
+bool CHK
+CNbUser::newXML (xmlNodePtr root) const
+{
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addNbUser")),
+    xmlFreeNode);
+  
+  BUG (node.get (),
+       false,
+       NULL,
+       (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  std::ostringstream oss;
+  
+  oss << std::scientific << this->val;
+  
+  BUG (xmlSetProp (
+         node.get (),
+         reinterpret_cast <const xmlChar *> ("valeur"),
+         reinterpret_cast <const xmlChar *> (oss.str ().c_str ())),
+       false,
+       NULL)
+  
+  BUG (xmlSetProp (
+         node.get (),
+         reinterpret_cast <const xmlChar *> ("unite"),
+         reinterpret_cast <const xmlChar *> (EUniteConst[unite].c_str ())),
+       false,
+       NULL)
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           NULL,
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  
+  node.release ();
+  
+  return true;
 }
 
 

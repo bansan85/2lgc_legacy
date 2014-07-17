@@ -88,10 +88,40 @@ CAction::~CAction ()
 
 
 /**
+ * \brief Renvoie le cœfficient psi0.
+ */
+INb const &
+CAction::getpsi0 () const
+{
+  return *this->psi0;
+}
+
+
+/**
+ * \brief Renvoie le cœfficient psi1.
+ */
+INb const &
+CAction::getpsi1 () const
+{
+  return *this->psi1;
+}
+
+
+/**
+ * \brief Renvoie le cœfficient psi2.
+ */
+INb const &
+CAction::getpsi2 () const
+{
+  return *this->psi2;
+}
+
+
+/**
  * \brief Renvoie true si aucune charge n'est présente.
  */
 bool
-CAction::emptyCharges ()
+CAction::emptyCharges () const
 {
   return this->charges.size () == 0;
 }
@@ -239,6 +269,59 @@ CAction::addXML (xmlNodePtr root)
 	                                  this->getDescription ().c_str ())),
        false,
        &this->getUndoManager ())
+  
+  // psi0
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi0")),
+    xmlFreeNode);
+  BUG (node0.get (),
+       false,
+       &this->getUndoManager (),
+       (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  BUG (this->getpsi0 ().newXML (node0.get ()),
+       false,
+       &this->getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &this->getUndoManager (),
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  node0.release ();
+  
+  // psi1
+  node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi1")));
+  BUG (node0.get (),
+       false,
+       &this->getUndoManager (),
+       (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  BUG (this->getpsi1 ().newXML (node0.get ()),
+       false,
+       &this->getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &this->getUndoManager (),
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  node0.release ();
+  
+  // psi2
+  node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi2")));
+  BUG (node0.get (),
+       false,
+       &this->getUndoManager (),
+       (gettext ("Erreur d'allocation mémoire.\n")); )
+  
+  BUG (this->getpsi2 ().newXML (node0.get ()),
+       false,
+       &this->getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &this->getUndoManager (),
+           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+  node0.release ();
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
