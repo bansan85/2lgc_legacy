@@ -88,6 +88,8 @@ CModeleActions::addAction (CAction * action)
        false,
        &action->getUndoManager ())
   
+  //TODO : Modifier les coefficients psi.
+  
   BUG (action->getUndoManager ().unref (),
        false,
        &action->getUndoManager ())

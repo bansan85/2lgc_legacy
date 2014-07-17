@@ -24,6 +24,8 @@
 #include <cstdio>
 #include <libintl.h>
 
+#include "CUndoManager.hpp"
+
 #define PRINTF(...) printf (__VA_ARGS__)
 
 /*#define NOTE(X, ...) { \
