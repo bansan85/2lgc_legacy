@@ -131,7 +131,7 @@ CUndoManager::undo ()
   std::advance (it, -static_cast <ssize_t> (pos) - 1);
   undoData = *it;
   
-  for (std::function <bool ()> f: undoData->annule)
+  for (std::function <bool ()> f : undoData->annule)
   {
     BUG (f (), false, this)
   }
@@ -164,7 +164,7 @@ CUndoManager::redo ()
   std::advance (it, -static_cast <ssize_t> (pos));
   undoData = *it;
   
-  for (std::function <bool ()> f: undoData->repete)
+  for (std::function <bool ()> f : undoData->repete)
   {
     BUG (f (), false, this)
   }
@@ -269,9 +269,9 @@ CUndoManager::undoToXML (xmlNodePtr root)
        this,
        (gettext ("Erreur d'allocation mémoire.\n")); )
   
-  for (CUndoData * data: liste)
+  for (CUndoData * data : liste)
   {
-    for (std::function <bool (xmlNodePtr)> f: data->sauve)
+    for (std::function <bool (xmlNodePtr)> f : data->sauve)
     {
       BUG (f (node.get ()), false, this)
     }
@@ -302,14 +302,14 @@ CUndoManager::rollback ()
   if (tmpListe == NULL)
     return true;
   
-  for (std::function <bool ()> f: tmpListe->annule)
+  for (std::function <bool ()> f : tmpListe->annule)
   {
     BUGCRIT (f (),
              false,
              NULL,
              (gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n")); )
   }
-  for (std::function <void ()> f: tmpListe->suppr)
+  for (std::function <void ()> f : tmpListe->suppr)
   {
     f ();
   }

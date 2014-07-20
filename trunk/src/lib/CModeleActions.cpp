@@ -73,6 +73,12 @@ CModeleActions::addAction (CAction * action)
            (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
   
   //TODO : Empêcher les actions avec le même nom.
+  if (this->getAction (action->getNom ()) != NULL)
+  {
+    printf("auieauie %s %s\n", this->getAction (action->getNom ())->getNom ().c_str (), action->getNom ().c_str ());
+    return false;
+  }
+  
   BUG (action->emptyCharges (),
        false,
        &action->getUndoManager (),
@@ -103,6 +109,23 @@ CModeleActions::addAction (CAction * action)
        &action->getUndoManager ())
   
   return true;
+}
+
+
+/**
+ * \brief Recherche une action.
+ * \param nom (in) Le nom de l'action.
+ */
+CAction *
+CModeleActions::getAction (std::string nom)
+{
+  for (CAction * action : this->actions)
+  {
+    if (nom.compare (action->getNom ()) == 0)
+      return action;
+  }
+  
+  return NULL;
 }
 
 
