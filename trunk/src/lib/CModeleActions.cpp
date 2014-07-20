@@ -72,12 +72,10 @@ CModeleActions::addAction (CAction * action)
            &action->getUndoManager (),
            (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
   
-  //TODO : Empêcher les actions avec le même nom.
-  if (this->getAction (action->getNom ()) != NULL)
-  {
-    printf("auieauie %s %s\n", this->getAction (action->getNom ())->getNom ().c_str (), action->getNom ().c_str ());
-    return false;
-  }
+  BUG (this->getAction (action->getNom ()) == NULL,
+       false,
+       &action->getUndoManager (),
+       (gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n")); )
   
   BUG (action->emptyCharges (),
        false,
