@@ -295,7 +295,7 @@ CUndoManager::undoToXML (xmlNodePtr root)
 bool
 CUndoManager::rollback ()
 {
-  modif = true;
+  modif = false;
   
   count = 0;
   
