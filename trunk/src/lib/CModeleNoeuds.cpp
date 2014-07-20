@@ -47,4 +47,12 @@ CModeleNoeuds &
 CModeleNoeuds::operator = (const CModeleNoeuds & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleNoeuds.
+ */
+CModeleNoeuds::~CModeleNoeuds ()
+{
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

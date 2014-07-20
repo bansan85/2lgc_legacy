@@ -25,7 +25,7 @@ CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CXXFLAGS	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wno-format-zero-length -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Winline -Wpointer-arith -std=c++11 -Weffc++
+CUSTOM_CXXFLAGS	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Winline -Wpointer-arith -Weffc++
 #-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wpedantic -Weffc++
 
 if PLATFORM_WIN32
@@ -42,7 +42,7 @@ AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
 export AM_CXXFLAGS
 
-EXTRA_DIST = config.rpath
+EXTRA_DIST = config.rpath  config.rpath
 
 package_win :
 if PLATFORM_WIN32

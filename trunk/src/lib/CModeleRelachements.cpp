@@ -48,4 +48,12 @@ CModeleRelachements &
 CModeleRelachements::operator = (const CModeleRelachements & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleRelachements.
+ */
+CModeleRelachements::~CModeleRelachements ()
+{
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

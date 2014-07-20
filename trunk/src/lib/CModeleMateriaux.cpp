@@ -47,4 +47,12 @@ CModeleMateriaux &
 CModeleMateriaux::operator = (const CModeleMateriaux & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleMateriaux.
+ */
+CModeleMateriaux::~CModeleMateriaux ()
+{
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
