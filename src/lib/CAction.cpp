@@ -88,6 +88,16 @@ CAction::~CAction ()
 
 
 /**
+ * \brief Renvoie le type de l'action.
+ */
+uint8_t
+CAction::getType () const
+{
+  return type;
+}
+
+
+/**
  * \brief Renvoie le cœfficient psi0.
  */
 INb const &
@@ -131,9 +141,9 @@ CAction::emptyCharges () const
  * \brief Renvoie le type de l'action sous forme de texte.
  */
 std::string
-CAction::getDescription ()
+CAction::getDescription (uint8_t type_)
 {
-  switch (type)
+  switch (type_)
   {
     case 0 :
     {
@@ -233,7 +243,7 @@ CAction::getDescription ()
     }
     default :
     {
-      return NULL;
+      return std::string ();
     }
   }
 }
@@ -266,7 +276,7 @@ CAction::addXML (xmlNodePtr root)
          node.get (),
          reinterpret_cast <const xmlChar *> ("Type"),
          reinterpret_cast <const xmlChar *> (
-	                                  this->getDescription ().c_str ())),
+                         CAction::getDescription (this->getType ()).c_str ())),
        false,
        &this->getUndoManager ())
   

@@ -8,25 +8,31 @@ if HAVE_DOXYGEN
 SUBDIRS += docs
 endif
 
+if ENABLE_DEBUG
+CUSTOM_CXXFLAGS	= --coverage
+else
+CUSTOM_CXXFLAGS	=
+endif
+
 if PLATFORM_WIN32
-CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=i686 -mms-bitfields
+CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=i686 -mms-bitfields
 else
 if PLATFORM_WIN64
-CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=x86-64 -mms-bitfields
+CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=x86-64 -mms-bitfields
 else
-CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=native
+CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=native
 endif
 endif
 
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
+CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -fprofile-arcs -ftest-coverage
 else
 CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CXXFLAGS	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Winline -Wpointer-arith -Weffc++
-#-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wpedantic -Weffc++
+CUSTOM_CXXFLAGS	+= -fno-inline -Wall -Wextra -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Winline -Wpointer-arith -Weffc++ -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
+#-Wpedantic
 
 if PLATFORM_WIN32
 CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
@@ -39,6 +45,10 @@ endif
 endif
 
 AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
+
+if ENABLE_DEBUG
+AM_LDFLAGS			= -fprofile-arcs -ftest-coverage
+endif
 
 export AM_CXXFLAGS
 

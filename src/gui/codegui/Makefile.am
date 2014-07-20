@@ -11,7 +11,7 @@ if ENABLE_GTK
 codegui_CXXFLAGS	+=	@GTK_CFLAGS@
 codegui_LDADD			+=	@GTK_LIBS@ ../../lib/libeurocodes-gtk.la
 endif
-codegui_LDFLAGS		=   $(AM_LDFLAGS) -no-undefined
+codegui_LDFLAGS		=   $(AM_LDFLAGS) -Wl,-O0 -no-undefined
 
 if !ENABLE_DEBUG
 if !PLATFORM_LINUX
