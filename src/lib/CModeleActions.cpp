@@ -50,6 +50,14 @@ CModeleActions::operator = (const CModeleActions & other) = delete;
 
 
 /**
+ * \brief Destructeur d'une classe CModeleActions.
+ */
+CModeleActions::~CModeleActions ()
+{
+}
+
+
+/**
  * \brief Ajout d'une action.
  * \param action (in) L'action à ajouter.
  * \return false en cas de problème.

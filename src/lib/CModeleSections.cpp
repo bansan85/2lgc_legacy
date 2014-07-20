@@ -47,4 +47,12 @@ CModeleSections &
 CModeleSections::operator = (const CModeleSections & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleSections.
+ */
+CModeleSections::~CModeleSections ()
+{
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

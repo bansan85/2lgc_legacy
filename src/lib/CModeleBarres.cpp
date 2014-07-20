@@ -48,4 +48,13 @@ CModeleBarres &
 CModeleBarres::operator = (const CModeleBarres & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleBarres.
+ */
+CModeleBarres::~CModeleBarres ()
+{
+}
+
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

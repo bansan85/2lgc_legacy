@@ -18,6 +18,21 @@ AM_PROG_CC_C_O
 AC_PROG_F77
 AC_PROG_LIBTOOL
 
+AC_LANG(C++)
+old_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS -std=c++11"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+                                   [[return 1;]])],
+                  [],
+                  [
+                    CXXFLAGS="$old_CXXFLAGS -std=c++0x"
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+                                                       [[return 1;]])],
+                                      [],
+                                      [AC_MSG_ERROR(g++ ne supporte pas la norme c++11.)])
+                  ])
+
+
 # libxml2
 LIBXML_REQUIRED_VERSION=2.8.0
 AC_SUBST(XML_CPPFLAGS)

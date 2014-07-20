@@ -47,4 +47,12 @@ CModeleAppuis &
 CModeleAppuis::operator = (const CModeleAppuis & other) = delete;
 
 
+/**
+ * \brief Destructeur d'une classe CModeleAppuis.
+ */
+CModeleAppuis::~CModeleAppuis ()
+{
+}
+
+
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
