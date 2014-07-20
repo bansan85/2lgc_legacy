@@ -1,21 +1,11 @@
 DEFAULT_INCLUDES	=	-I../.. \
 										-I../lib
 
-TESTS	=	1990__1_actions \
-				1990__1_coef_psi \
-				1990__1_combinaisons_groupes \
-				1990__1_duree
+TESTS	=	coverage
 
-1990__1_actions_SOURCES	=	1990__1_actions.c
-1990__1_actions_LDADD		=	../lib/libeurocodes.la
-
-1990__1_coef_psi_SOURCES	=	1990__1_coef_psi.c
-1990__1_coef_psi_LDADD		=	../lib/libeurocodes.la
-
-1990__1_combinaisons_groupes_SOURCES	=	1990__1_combinaisons_groupes.c
-1990__1_combinaisons_groupes_LDADD		=	../lib/libeurocodes.la
-
-1990__1_duree_SOURCES	=	1990__1_duree.c
-1990__1_duree_LDADD		=	../lib/libeurocodes.la
+coverage_SOURCES	=	coverage.cpp
+coverage_LDADD		=	../lib/libeurocodes.la
+coverage_CXXFLAGS	=	$(AM_CXXFLAGS) --coverage
+coverage_CPPFLAGS	=	$(AM_CPPFLAGS) @XML_CPPFLAGS@
 
 EXTRA_PROGRAMS = $(TESTS)

@@ -6,12 +6,18 @@ AUTOMAKE_OPTIONS					= 	subdir-objects
 lib_LTLIBRARIES						= 	libeurocodes.la
 
 libeurocodes_la_LIBADD		=		@BLAS_LIBS@ -lgfortran @XML_LIBS@
+if ENABLE_DEBUG
+libeurocodes_la_LIBADD    +=	-lgcov
+endif
+
 if ENABLE_GTK
 libeurocodes_la_CXXFLAGS	=		$(AM_CXXFLAGS) @GTK_CFLAGS@
 else
 libeurocodes_la_CXXFLAGS	=		$(AM_CXXFLAGS)
 endif
+
 libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -version-info 0:0:0 -Wl,-O0 -no-undefined
+
 libeurocodes_la_CPPFLAGS	=		@XML_CPPFLAGS@
 if ENABLE_GTK
 libeurocodes_la_CPPFLAGS	+=	@GTK_CFLAGS@
