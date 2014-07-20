@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=CodeGUI
+Comment=Logiciel de calcul de structure
+Exec=codegui
+Icon=codegui.png
+Terminal=false

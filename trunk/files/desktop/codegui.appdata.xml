@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Vincent LE GARREC <contact@2lgc.com> -->
+<application>
+ <id type="desktop">codegui.desktop</id>
+ <metadata_license>CC-BY-SA</metadata_license>
+ <project_license>GPL-3.0+</project_license>
+ <name>CodeGUI</name>
+ <summary>Logiciel de calcul de structure</summary>
+ <description>
+  <p>
+   CodeGUI est un logiciel de calcul de structure appliqué au génie civil.
+   Il permet de modéliser des structures à barres et de déterminer les
+   efforts et déformation conformément aux normes Eurocodes.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="624" height="351">screenshot.png</screenshot>
+ </screenshots>
+ <url type="homepage">http://2lgc.org</url>
+ <updatecontact>contact@2lgc.com</updatecontact>
+</application>

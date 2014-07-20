@@ -112,6 +112,7 @@ AC_CHECK_FUNCS([localeconv memset modf pow setlocale sqrt strchr strstr])
 AC_CONFIG_FILES([Makefile po/Makefile.in
                  docs/Makefile
                  files/Makefile
+                 files/desktop/Makefile
                  files/ui/Makefile
                  files/uml/Makefile
                  src/Makefile
