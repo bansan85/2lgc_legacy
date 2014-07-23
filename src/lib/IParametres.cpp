@@ -16,22 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1990_COEF_PSI_H
-#define __1990_COEF_PSI_H
-
 #include "config.h"
-#include "common_projet.hpp"
 
-double _1990_coef_psi0_bat (uint8_t type,
-                            Norme   norme)
-                                       __attribute__((__warn_unused_result__));
-double _1990_coef_psi1_bat (uint8_t type,
-                            Norme   norme)
-                                       __attribute__((__warn_unused_result__));
-double _1990_coef_psi2_bat (uint8_t type,
-                            Norme   norme)
-                                       __attribute__((__warn_unused_result__));
+#include "IParametres.hpp"
 
-#endif
+
+/**
+ * \brief Destructeur d'une classe IParametres.
+ */
+IParametres::~IParametres ()
+{
+}
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

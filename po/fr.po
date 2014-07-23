@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-07-20 11:17+0200\n"
-"PO-Revision-Date: 2014-07-16 19:38+0100\n"
+"POT-Creation-Date: 2014-07-24 00:51+0200\n"
+"PO-Revision-Date: 2014-07-22 08:39+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -168,104 +168,6 @@ msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
 
-msgid "Permanente"
-msgstr "Permanente"
-
-msgid "Précontrainte"
-msgstr "Précontrainte"
-
-msgid "Exploitation : Catégorie A : habitation, zones résidentielles"
-msgstr "Exploitation : Catégorie A : habitation, zones résidentielles"
-
-msgid "Exploitation : Catégorie B : bureaux"
-msgstr "Exploitation : Catégorie B : bureaux"
-
-msgid "Exploitation : Catégorie C : lieux de réunion"
-msgstr "Exploitation : Catégorie C : lieux de réunion"
-
-msgid "Exploitation : Catégorie D : commerces"
-msgstr "Exploitation : Catégorie D : commerces"
-
-msgid "Exploitation : Catégorie E : stockage"
-msgstr "Exploitation : Catégorie E : stockage"
-
-msgid ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
-msgstr ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
-
-msgid ""
-"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
-"et 160 kN"
-msgstr ""
-"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
-"et 160 kN"
-
-msgid "Exploitation : Catégorie H : toits"
-msgstr "Exploitation : Catégorie H : toits"
-
-msgid "Neige : Finlande, Islande, Norvège, Suède"
-msgstr "Neige : Finlande, Islande, Norvège, Suède"
-
-msgid "Neige : Autres états membres CEN, altitude > 1000 m"
-msgstr "Neige : Autres états membres CEN, altitude > 1000 m"
-
-msgid "Neige : Autres états membres CEN, altitude <= 1000 m"
-msgstr "Neige : Autres états membres CEN, altitude <= 1000 m"
-
-msgid "Vent"
-msgstr "Vent"
-
-msgid "Température (hors incendie)"
-msgstr "Température (hors incendie)"
-
-msgid "Accidentelle"
-msgstr "Accidentelle"
-
-msgid "Sismique"
-msgstr "Sismique"
-
-msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
-msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
-
-msgid ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
-msgstr ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
-
-msgid ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"C ou D"
-msgstr ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"C ou D"
-
-msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture"
-msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture"
-
-msgid ""
-"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
-"(fret, personnel, accessoires ou équipements divers)"
-msgstr ""
-"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
-"(fret, personnel, accessoires ou équipements divers)"
-
-msgid "Neige : Saint-Pierre-et-Miquelon"
-msgstr "Neige : Saint-Pierre-et-Miquelon"
-
-msgid "Neige : Altitude > 1000 m"
-msgstr "Neige : Altitude > 1000 m"
-
-msgid "Neige : Altitude <= 1000 m"
-msgstr "Neige : Altitude <= 1000 m"
-
-msgid "Eaux souterraines"
-msgstr "Eaux souterraines"
-
 msgid "Charge nodale"
 msgstr "Charge nodale"
 
@@ -315,6 +217,9 @@ msgstr "Flag %d inconnu.\n"
 #, c-format
 msgid "Norme %d inconnue.\n"
 msgstr "Norme %d inconnue.\n"
+
+msgid "Impossible de créer ce projet. La norme est inconnue.\n"
+msgstr "Impossible de créer ce projet. La norme est inconnue.\n"
 
 msgid "Échec lors de l'enregistrement.\n"
 msgstr "Échec lors de l'enregistrement.\n"
@@ -1307,6 +1212,104 @@ msgstr "E : %s MPa"
 msgid "%s, &#957; : %s"
 msgstr "%s, &#957; : %s"
 
+msgid "Permanente"
+msgstr "Permanente"
+
+msgid "Précontrainte"
+msgstr "Précontrainte"
+
+msgid "Exploitation : Catégorie A : habitation, zones résidentielles"
+msgstr "Exploitation : Catégorie A : habitation, zones résidentielles"
+
+msgid "Exploitation : Catégorie B : bureaux"
+msgstr "Exploitation : Catégorie B : bureaux"
+
+msgid "Exploitation : Catégorie C : lieux de réunion"
+msgstr "Exploitation : Catégorie C : lieux de réunion"
+
+msgid "Exploitation : Catégorie D : commerces"
+msgstr "Exploitation : Catégorie D : commerces"
+
+msgid "Exploitation : Catégorie E : stockage"
+msgstr "Exploitation : Catégorie E : stockage"
+
+msgid ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
+msgstr ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
+
+msgid ""
+"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
+"et 160 kN"
+msgstr ""
+"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
+"et 160 kN"
+
+msgid "Exploitation : Catégorie H : toits"
+msgstr "Exploitation : Catégorie H : toits"
+
+msgid "Neige : Finlande, Islande, Norvège, Suède"
+msgstr "Neige : Finlande, Islande, Norvège, Suède"
+
+msgid "Neige : Autres états membres CEN, altitude > 1000 m"
+msgstr "Neige : Autres états membres CEN, altitude > 1000 m"
+
+msgid "Neige : Autres états membres CEN, altitude <= 1000 m"
+msgstr "Neige : Autres états membres CEN, altitude <= 1000 m"
+
+msgid "Vent"
+msgstr "Vent"
+
+msgid "Température (hors incendie)"
+msgstr "Température (hors incendie)"
+
+msgid "Accidentelle"
+msgstr "Accidentelle"
+
+msgid "Sismique"
+msgstr "Sismique"
+
+msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
+msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
+
+msgid ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
+msgstr ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
+
+msgid ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"C ou D"
+msgstr ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"C ou D"
+
+msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture"
+msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture"
+
+msgid ""
+"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
+"(fret, personnel, accessoires ou équipements divers)"
+msgstr ""
+"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
+"(fret, personnel, accessoires ou équipements divers)"
+
+msgid "Neige : Saint-Pierre-et-Miquelon"
+msgstr "Neige : Saint-Pierre-et-Miquelon"
+
+msgid "Neige : Altitude > 1000 m"
+msgstr "Neige : Altitude > 1000 m"
+
+msgid "Neige : Altitude <= 1000 m"
+msgstr "Neige : Altitude <= 1000 m"
+
+msgid "Eaux souterraines"
+msgstr "Eaux souterraines"
+
 #, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
@@ -1794,6 +1797,14 @@ msgid ""
 msgstr ""
 "Le programme est arrivé au boût de ces limites. Contactez le concepteur de "
 "la librairie.\n"
+
+#, c-format
+msgid ""
+"L'action '%s' existe déjà.\n"
+"Impossible de l'ajouter.\n"
+msgstr ""
+"L'action '%s' existe déjà.\n"
+"Impossible de l'ajouter.\n"
 
 msgid ""
 "L'action doit être ajoutée sans charge. Elles doivent être ajoutées "

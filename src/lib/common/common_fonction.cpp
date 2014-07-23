@@ -379,7 +379,9 @@ common_fonction_compacte (Fonction *fonction,
   it_f_1 = fonction->t.begin ();
   it_f = std::next (it_f_1);
   if (index != NULL)
+  {
     it_i = std::next (index->t.begin ());
+  }
   
   while (it_f != fonction->t.end ())
   {
@@ -406,7 +408,9 @@ common_fonction_compacte (Fonction *fonction,
       ++it_f_1;
       ++it_f;
       if (index != NULL)
+      {
         ++it_i;
+      }
     }
   }
   
@@ -1704,7 +1708,7 @@ common_fonction_dessin (std::list <Fonction *> *fonctions,
         fonction,
         (*fonction->t.begin ())->debut_troncon +
           x * ((*std::prev (fonction->t.end ()))->fin_troncon -
-                            (*fonction->t.begin ())->debut_troncon) / (width - 1),
+                         (*fonction->t.begin ())->debut_troncon) / (width - 1),
         0);
       if (echelle > ma[x])
       {

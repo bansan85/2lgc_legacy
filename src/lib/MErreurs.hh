@@ -67,7 +67,23 @@
 }
 
 #define BUG(X, Y, MANAGER, ...) { \
-  if (!(X)) \
+  try \
+  { \
+    bool tmp_x = (X); \
+    if (!tmp_x) \
+    { \
+      PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
+              __FILE__, \
+              __FUNCTION__, \
+              __LINE__, \
+              #X); \
+      if ((MANAGER) != NULL) \
+        (static_cast <CUndoManager *> (MANAGER))->rollback (); \
+      __VA_ARGS__ \
+      return Y; \
+    } \
+  } \
+  catch (...) \
   { \
     PRINTF (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
             __FILE__, \

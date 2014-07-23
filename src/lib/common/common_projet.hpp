@@ -214,29 +214,6 @@ typedef enum
 
 
 /**
- * \enum Action_Categorie
- * \brief Le type d'action.
- */
-typedef enum
-{
-  /// Poids propre.
-  ACTION_POIDS_PROPRE = 0,
-  /// Précontrainte.
-  ACTION_PRECONTRAINTE,
-  /// Variable.
-  ACTION_VARIABLE,
-  /// Accidentelle.
-  ACTION_ACCIDENTELLE,
-  /// Sismique.
-  ACTION_SISMIQUE,
-  /// Eaux souterraines.
-  ACTION_EAUX_SOUTERRAINES,
-  /// Action inconnue.
-  ACTION_INCONNUE
-} Action_Categorie;
-
-
-/**
  * \enum Type_EF_Appui
  * \brief Type d'appui.
  */

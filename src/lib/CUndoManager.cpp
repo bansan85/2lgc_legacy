@@ -300,7 +300,9 @@ CUndoManager::rollback ()
   count = 0;
   
   if (tmpListe == NULL)
+  {
     return true;
+  }
   
   for (std::function <bool ()> f : tmpListe->annule)
   {

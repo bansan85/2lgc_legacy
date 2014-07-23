@@ -22,13 +22,15 @@
 #include <locale>
 #include <memory>
 
+#include "CParamEC.hpp"
 #include "CProjet.hpp"
 #include "MErreurs.hh"
 
 /**
- * \brief Initialise la classe CProjet.
+ * \brief Constructeur d'une classe CProjet.
+ * \param norme (in) La norme du projet.
  */
-CProjet::CProjet () :
+CProjet::CProjet (ENorme norme) :
   CCalculs (),
   CModele (),
   CUndoManager (*this),
@@ -36,6 +38,18 @@ CProjet::CProjet () :
 {
   LIBXML_TEST_VERSION
   
+  switch (norme)
+  {
+    case NORME_EC :
+    {
+      parametres = new CParamEC (NORMEEUAC_EU, 0);
+      break;
+    }
+    default :
+    {
+      throw gettext ("Impossible de créer ce projet. La norme est inconnue.\n");
+    }
+  }
 #if 0
 #ifdef ENABLE_GTK
   GtkCssProvider *provider = gtk_css_provider_new ();
