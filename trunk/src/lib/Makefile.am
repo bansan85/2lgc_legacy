@@ -37,12 +37,14 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CModeleRelachements.cpp \
 															CModeleSections.cpp \
 															CNbUser.cpp \
+															CParamEC.cpp \
 															CPonderations.cpp \
 															CProjet.cpp \
 															CUndoData.cpp \
 															CUndoManager.cpp \
 															IActionGroupe.cpp \
 															INb.cpp \
+															IParametres.cpp \
 															IUndoable.cpp
 
 libeurocodes_la_HEADERS 	=		$(wildcard *.hpp *.hh)

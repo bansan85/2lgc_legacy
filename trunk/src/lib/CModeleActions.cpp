@@ -120,7 +120,9 @@ CModeleActions::getAction (std::string nom)
   for (CAction * action : this->actions)
   {
     if (nom.compare (action->getNom ()) == 0)
+    {
       return action;
+    }
   }
   
   return NULL;

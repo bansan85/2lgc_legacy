@@ -64,7 +64,6 @@ main (int32_t argc,
 {
   /* Variables */
   CProjet projet (NORME_EC);
-  std::unique_ptr <CAction> action;
 //  GList   *tmp1, *tmp2;
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -105,43 +104,53 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUG (projet.getActionCount () == 0, -1, NULL)
-  // 0 Poids propre
-  action.reset (new CAction ("Poids propre",
+  BUG (projet.ref (), -1, NULL)
+  
+  std::unique_ptr <CAction> action;
+  for (uint8_t i = 0; i <= 22; i++)
+  {
+    action.reset (new CAction (CAction::getDescription (i),
+                               0,
+                               dynamic_cast <CUndoManager &> (projet)));
+    
+    BUG (projet.addAction (action.get ()), -1, NULL)
+    
+    action.release ();
+  }
+  
+  BUG (projet.getEtat () == UNDO_MODIF, -1, NULL)
+  BUG (projet.unref (), -1, NULL)
+  
+  
+  BUG (projet.ref (), -1, NULL)
+  
+  action.reset (new CAction (CAction::getDescription (23),
                              0,
                              dynamic_cast <CUndoManager &> (projet)));
   BUG (projet.addAction (action.get ()), -1, NULL)
   action.release ();
-  BUG (projet.getActionCount () == 1, -1, NULL)
-  // 2 Exploitation
-  action.reset (new CAction ("Chargement",
-                             2,
+  
+  action.reset (new CAction (CAction::getDescription (2),
+                             0,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1, NULL)
+  //Ici, il y a un traitement volontaire de l'erreur.
+  if (!projet.addAction (action.get ()))
+  {
+    free (action.get ());
+    dynamic_cast <CUndoManager &> (projet).rollback ();
+  }
   action.release ();
-  BUG (projet.getActionCount () == 2, -1, NULL)
-  // 18 Neige
-  action.reset (new CAction ("Neige",
-                             18,
-                             dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1, NULL)
-  action.release ();
-  BUG (projet.getActionCount () == 3, -1, NULL)
-  // 19 Vent
-  action.reset (new CAction ("Vent",
-                             19,
-                             dynamic_cast <CUndoManager &> (projet)));
-  BUG (projet.addAction (action.get ()), -1, NULL)
-  action.release ();
-  BUG (projet.getActionCount () == 4, -1, NULL)
-  BUG (projet.undo (), -1, NULL)
-  BUG (projet.getActionCount () == 3, -1, NULL)
-  BUG (projet.undo (), -1, NULL)
-  BUG (projet.getActionCount () == 2, -1, NULL)
-  BUG (projet.undo (), -1, NULL)
-  BUG (projet.getActionCount () == 1, -1, NULL)
+  
+  BUG (projet.ref (), -1, NULL)
+  
+  
+  BUG (CAction::getDescription (24).empty (), -1, NULL)
+  BUG (projet.getActionCount () == 23, -1, NULL)
   BUG (projet.undo (), -1, NULL)
   BUG (projet.getActionCount () == 0, -1, NULL)
+  BUG (projet.redo (), -1, NULL)
+  BUG (projet.getActionCount () == 23, -1, NULL)
+  BUG (projet.getEtat () == UNDO_NONE, -1, NULL)
   
   BUG (projet.enregistre ("test.xml"), -1, NULL)
   
