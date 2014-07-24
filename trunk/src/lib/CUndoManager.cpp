@@ -22,6 +22,7 @@
 #include <memory>
 #include <iostream>
 #include <locale>
+#include <sys/types.h>
 
 #include "MErreurs.hh"
 #include "CUndoManager.hpp"

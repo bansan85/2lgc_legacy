@@ -8,8 +8,13 @@ if HAVE_DOXYGEN
 SUBDIRS += docs
 endif
 
+if PLATFORM_LINUX
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	= --coverage
+CUSTOM_CXXFLAGS	= --coverage -fprofile-arcs -ftest-coverage
+AM_LDFLAGS			= -fprofile-arcs -ftest-coverage
+else
+CUSTOM_CXXFLAGS	=
+endif
 else
 CUSTOM_CXXFLAGS	=
 endif
@@ -25,7 +30,7 @@ endif
 endif
 
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -fprofile-arcs -ftest-coverage
+CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
 else
 CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
@@ -45,10 +50,6 @@ endif
 endif
 
 AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
-
-if ENABLE_DEBUG
-AM_LDFLAGS			= -fprofile-arcs -ftest-coverage
-endif
 
 export AM_CXXFLAGS
 
@@ -82,9 +83,9 @@ endif
 
 	rm -Rf codegui
 	cp -R $(PREFIX) codegui
-	cp $(prefix)/bin/libeurocodes-0.dll codegui/
+	cp $(prefix)/bin/{libeurocodes-0.dll,codegui.exe} codegui/
 if ENABLE_GTK
-	cp $(prefix)/bin/{libeurocodes-gtk-0.dll} codegui/
+	cp $(prefix)/bin/libeurocodes-gtk-0.dll codegui/
 endif
 	cp files/xml/*.xml codegui/files
 	cp files/formules/*.svg codegui/files
