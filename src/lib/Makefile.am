@@ -5,9 +5,11 @@ AUTOMAKE_OPTIONS					= 	subdir-objects
 
 lib_LTLIBRARIES						= 	libeurocodes.la
 
-libeurocodes_la_LIBADD		=		@BLAS_LIBS@ -lgfortran @XML_LIBS@
+libeurocodes_la_LIBADD		=		@BLAS_LIBS@ -lgfortran @XML_LIBS@ -lintl
+if PLATFORM_LINUX
 if ENABLE_DEBUG
 libeurocodes_la_LIBADD    +=	-lgcov
+endif
 endif
 
 if ENABLE_GTK
