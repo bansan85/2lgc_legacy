@@ -51,10 +51,13 @@ CUndoData::operator = (const CUndoData & other) = delete;
 
 /**
  * \brief Destructeur d'une classe CUndoData.
- *        C'est au gestionnaire d'annulation d'exécuter la liste de "suppr".
  */
 CUndoData::~CUndoData ()
 {
+  for (std::function <void ()> f : this->suppr)
+  {
+    f ();
+  }
 }
 
 

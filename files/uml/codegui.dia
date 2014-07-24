@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true">
+  <dia:layer name="Classes principales" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -20609,7 +20609,7 @@ class CProjet;#</dia:string>
         <dia:point val="102,-204"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="101.95,-204.05;123.34,-179.9"/>
+        <dia:rectangle val="101.95,-204.05;123.34,-180.6"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="102,-204"/>
@@ -20618,7 +20618,7 @@ class CProjet;#</dia:string>
         <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="24.050000000000001"/>
+        <dia:real val="23.350000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoData#</dia:string>
@@ -20968,7 +20968,7 @@ class CProjet;#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Destructeur d'une classe CUndoData. C'est au gestionnaire d'annulation d'exécuter la liste de "suppr".#</dia:string>
+            <dia:string>#Destructeur d'une classe CUndoData.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -40378,7 +40378,7 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Connection classes principales-dérivées" visible="true" active="true">
+  <dia:layer name="Connection classes principales-dérivées" visible="true">
     <dia:object type="UML - Dependency" version="1" id="O142">
       <dia:attribute name="obj_pos">
         <dia:point val="129.03,30.55"/>
