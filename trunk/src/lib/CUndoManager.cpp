@@ -311,10 +311,6 @@ CUndoManager::rollback ()
              NULL,
              (gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n")); )
   }
-  for (std::function <void ()> f : tmpListe->suppr)
-  {
-    f ();
-  }
   
   delete tmpListe;
   tmpListe = NULL;

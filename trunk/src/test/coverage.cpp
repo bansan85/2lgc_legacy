@@ -136,10 +136,11 @@ main (int32_t argc,
   //Ici, il y a un traitement volontaire de l'erreur.
   if (!projet.addAction (action.get ()))
   {
-    free (action.get ());
+    action.reset ();
     dynamic_cast <CUndoManager &> (projet).rollback ();
   }
-  action.release ();
+  else
+    action.release ();
   
   BUG (projet.ref (), -1, NULL)
   
