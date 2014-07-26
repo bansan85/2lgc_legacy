@@ -36,8 +36,8 @@
  */
 CNbUser::CNbUser (double valeur,
                   EUnite unit) :
-  val (valeur)
-  , unite (unit)
+  val (valeur),
+  unite (unit)
 {
 }
 
@@ -161,33 +161,35 @@ CNbUser::newXML (xmlNodePtr root) const
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addNbUser")),
     xmlFreeNode);
   
-  BUG (node.get (),
-       false,
-       NULL,
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node.get (),
+           false,
+           NULL,
+           gettext ("Erreur d'allocation mémoire.\n"))
   
   std::ostringstream oss;
   
   oss << std::scientific << this->val;
   
-  BUG (xmlSetProp (
-         node.get (),
-         reinterpret_cast <const xmlChar *> ("valeur"),
-         reinterpret_cast <const xmlChar *> (oss.str ().c_str ())),
-       false,
-       NULL)
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("valeur"),
+             reinterpret_cast <const xmlChar *> (oss.str ().c_str ())),
+           false,
+           NULL,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUG (xmlSetProp (
-         node.get (),
-         reinterpret_cast <const xmlChar *> ("unite"),
-         reinterpret_cast <const xmlChar *> (EUniteConst[unite].c_str ())),
-       false,
-       NULL)
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("unite"),
+             reinterpret_cast <const xmlChar *> (EUniteConst[unite].c_str ())),
+           false,
+           NULL,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
            NULL,
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();
   

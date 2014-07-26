@@ -29,7 +29,9 @@
  * \param annexe (in) Le choix de l'annexe nationale.
  */
 CParamEC::CParamEC (ENormeEcAc annexe_,
-                    uint16_t   variante_) :
+                    uint16_t   variante_,
+                    CUndoManager & undo_) :
+  IParametres (undo_),
   annexe (annexe_),
   variante (variante_)
 {
@@ -82,7 +84,11 @@ CParamEC::getpsiN () const
     {
       return 22;
     }
-    default : { FAILPARAM (annexe, "%u", 255, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, 0, &this->getUndoManager ())
+      break;
+    }
   }
 }
 
@@ -120,7 +126,7 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        FAILPARAM (type, "%u", ACTION_INCONNUE, NULL)
+        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
       }
     }
     case NORMEEUAC_FR :
@@ -151,10 +157,14 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        FAILPARAM (type, "%u", ACTION_INCONNUE, NULL)
+        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
       }
     }
-    default : { FAILPARAM (type, "%u", ACTION_INCONNUE, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
+      break;
+    }
   }
 }
 
@@ -189,7 +199,11 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 14 : return gettext ("Température (hors incendie)");
         case 15 : return gettext ("Accidentelle");
         case 16 : return gettext ("Sismique");
-        default : { FAILPARAM (type, "%u", NULL, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NULL, &this->getUndoManager ())
+          break;
+        }
       }
     }
     case NORMEEUAC_FR :
@@ -218,10 +232,18 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 19 : return gettext ("Accidentelle");
         case 20 : return gettext ("Sismique");
         case 21 : return gettext ("Eaux souterraines");
-        default : { FAILPARAM (type, "%u", NULL, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NULL, &this->getUndoManager ())
+          break;
+        }
       }
     }
-    default : { FAILPARAM (type, "%u", NULL, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, NULL, &this->getUndoManager ())
+      break;
+    }
   }
 }
 
@@ -256,7 +278,11 @@ CParamEC::getpsi0 (uint8_t type) const
         case 14 : return 0.6;
         case 15 : return 0.0;
         case 16 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
     case NORMEEUAC_FR :
@@ -285,10 +311,18 @@ CParamEC::getpsi0 (uint8_t type) const
         case 19 : return 0.0;
         case 20 : return 0.0;
         case 21 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
-    default : { FAILPARAM (annexe, "%u", NAN, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      break;
+    }
   }
 }
 
@@ -323,7 +357,11 @@ CParamEC::getpsi1 (uint8_t type) const
         case 14 : return 0.5;
         case 15 : return 0.0;
         case 16 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
     case NORMEEUAC_FR :
@@ -352,10 +390,18 @@ CParamEC::getpsi1 (uint8_t type) const
         case 19 : return 0.0;
         case 20 : return 0.0;
         case 21 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
-    default : { FAILPARAM (annexe, "%u", NAN, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      break;
+    }
   }
 }
 
@@ -390,7 +436,11 @@ CParamEC::getpsi2 (uint8_t type) const
         case 14 : return 0.0;
         case 15 : return 0.0;
         case 16 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
     case NORMEEUAC_FR :
@@ -419,10 +469,18 @@ CParamEC::getpsi2 (uint8_t type) const
         case 19 : return 0.0;
         case 20 : return 0.0;
         case 21 : return 0.0;
-        default : { FAILPARAM (type, "%u", NAN, NULL) break; }
+        default :
+        {
+          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          break;
+        }
       }
     }
-    default : { FAILPARAM (annexe, "%u", NAN, NULL) break; }
+    default :
+    {
+      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      break;
+    }
   }
 }
 

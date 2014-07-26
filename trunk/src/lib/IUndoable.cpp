@@ -59,7 +59,7 @@ IUndoable::~IUndoable ()
  * \brief Renvoie le gestionnaire d'annulations.
  */
 CUndoManager &
-IUndoable::getUndoManager ()
+IUndoable::getUndoManager () const
 {
   return undoManager;
 }
