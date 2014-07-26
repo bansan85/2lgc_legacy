@@ -260,83 +260,85 @@ CAction::addXML (xmlNodePtr root)
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
     xmlFreeNode);
   
-  BUG (node.get (),
-       false,
-       &this->getUndoManager (),
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUG (xmlSetProp (
-         node.get (),
-         reinterpret_cast <const xmlChar *> ("Nom"),
-         reinterpret_cast <const xmlChar *> (this->getNom ().c_str ())),
-       false,
-       &this->getUndoManager ())
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Nom"),
+             reinterpret_cast <const xmlChar *> (this->getNom ().c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUG (xmlSetProp (
-         node.get (),
-         reinterpret_cast <const xmlChar *> ("Type"),
-         reinterpret_cast <const xmlChar *> (
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Type"),
+             reinterpret_cast <const xmlChar *> (
                          CAction::getDescription (this->getType ()).c_str ())),
-       false,
-       &this->getUndoManager ())
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   // psi0
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi0")),
     xmlFreeNode);
-  BUG (node0.get (),
-       false,
-       &this->getUndoManager (),
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node0.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUG (this->getpsi0 ().newXML (node0.get ()),
-       false,
-       &this->getUndoManager ())
+  BUGCONT (this->getpsi0 ().newXML (node0.get ()),
+           false,
+           &this->getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()),
            false,
            &this->getUndoManager (),
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
   // psi1
   node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi1")));
-  BUG (node0.get (),
-       false,
-       &this->getUndoManager (),
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node0.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUG (this->getpsi1 ().newXML (node0.get ()),
-       false,
-       &this->getUndoManager ())
+  BUGCONT (this->getpsi1 ().newXML (node0.get ()),
+           false,
+           &this->getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()),
            false,
            &this->getUndoManager (),
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
   // psi2
   node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi2")));
-  BUG (node0.get (),
-       false,
-       &this->getUndoManager (),
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node0.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUG (this->getpsi2 ().newXML (node0.get ()),
-       false,
-       &this->getUndoManager ())
+  BUGCONT (this->getpsi2 ().newXML (node0.get ()),
+           false,
+           &this->getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()),
            false,
            &this->getUndoManager (),
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
            &this->getUndoManager (),
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();
   

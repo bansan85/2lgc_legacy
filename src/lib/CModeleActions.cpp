@@ -65,46 +65,47 @@ CModeleActions::~CModeleActions ()
 bool
 CModeleActions::addAction (CAction * action)
 {
-  BUGPARAMCRIT (action, "%p", action, false, &action->getUndoManager ())
+  BUGPARAM (action, "%p", action, false, &action->getUndoManager ())
   
   BUGCRIT (actions.max_size () != actions.size (),
            false,
            &action->getUndoManager (),
-           (gettext ("Le programme est arrivé au boût de ces limites. Contactez le concepteur de la librairie.\n")); )
+           gettext ("Le programme est à ses limites.\n"))
   
-  BUG (this->getAction (action->getNom ()) == NULL,
-       false,
-       &action->getUndoManager (),
-       (gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n")); )
+  BUGUSER (this->getAction (action->getNom ()) == NULL,
+           false,
+           &action->getUndoManager (),
+           gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n"),
+             action->getNom ().c_str ())
   
-  BUG (action->emptyCharges (),
-       false,
-       &action->getUndoManager (),
-       (gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n")); )
+  BUGPROG (action->emptyCharges (),
+           false,
+           &action->getUndoManager (),
+           gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n"))
   
-  BUG (action->getUndoManager ().ref (),
-       false,
-       &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().ref (),
+           false,
+           &action->getUndoManager ())
   
   actions.push_back (action);
-  BUG (action->getUndoManager ().push (
-         std::bind (static_cast <bool (CModeleActions::*)
-                                      (CAction *)> (&CModeleActions::rmAction),
-                    this,
-                    action),
-         std::bind (&CModeleActions::addAction, this, action),
-         std::bind (std::default_delete <CAction> (), action),
-         std::bind (&CAction::addXML,
-                    action,
-                    std::placeholders::_1)),
-       false,
-       &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().push (
+             std::bind (static_cast <bool (CModeleActions::*) (CAction *)>
+                                                   (&CModeleActions::rmAction),
+                        this,
+                        action),
+             std::bind (&CModeleActions::addAction, this, action),
+             std::bind (std::default_delete <CAction> (), action),
+             std::bind (&CAction::addXML,
+                        action,
+                        std::placeholders::_1)),
+           false,
+           &action->getUndoManager ())
   
   //TODO : Modifier les coefficients psi.
   
-  BUG (action->getUndoManager ().unref (),
-       false,
-       &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().unref (),
+           false,
+           &action->getUndoManager ())
   
   return true;
 }
@@ -147,32 +148,32 @@ CModeleActions::getActionCount ()
 bool
 CModeleActions::rmAction (CAction * action)
 {
-  BUGPARAMCRIT (action, "%p", action, false, &action->getUndoManager ())
+  BUGPARAM (action, "%p", action, false, &action->getUndoManager ())
   
-  BUG (action->emptyCharges (),
-       false,
-       &action->getUndoManager (),
-       (gettext ("L'action doit être supprimée sans charges. Elles doivent être supprimées avant.\n")); )
+  BUGPROG (action->emptyCharges (),
+           false,
+           &action->getUndoManager (),
+           gettext ("L'action doit être supprimée sans charges. Elles doivent être supprimées avant.\n"))
   
-  BUG (action->getUndoManager ().ref (),
-       false,
-       &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().ref (),
+           false,
+           &action->getUndoManager ())
   
   actions.remove (action);
-  BUG (action->getUndoManager ().push (
-         std::bind (&CModeleActions::addAction, this, action),
-         std::bind (static_cast <bool (CModeleActions::*) (CAction *)>
+  BUGCONT (action->getUndoManager ().push (
+             std::bind (&CModeleActions::addAction, this, action),
+             std::bind (static_cast <bool (CModeleActions::*) (CAction *)>
                                                    (&CModeleActions::rmAction),
-                    this,
-                    action),
-         NULL,
-         NULL),
-       false,
-       &action->getUndoManager ())
+                        this,
+                        action),
+             NULL,
+             NULL),
+           false,
+           &action->getUndoManager ())
   
-  BUG (action->getUndoManager ().unref (),
-       false,
-       &action->getUndoManager ());
+  BUGCONT (action->getUndoManager ().unref (),
+           false,
+           &action->getUndoManager ());
   
   return true;
 }

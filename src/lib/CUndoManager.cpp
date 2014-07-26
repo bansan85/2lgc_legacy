@@ -90,11 +90,11 @@ CUndoManager::push (std::function <bool ()>           annule,
 {
   if (modif)
   {
-    BUG (count != 0,
-         false,
-         this,
-         (gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n")); )
-    BUGPARAMCRIT (tmpListe, "%p", tmpListe, false, this)
+    BUGPROG (count != 0,
+             false,
+             this,
+             gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
+    BUGPARAM (tmpListe, "%p", tmpListe, false, this)
     
     tmpListe->annule.push_front (annule);
     tmpListe->repete.push_back (repete);
@@ -121,10 +121,10 @@ CUndoManager::undo ()
   CUndoData * undoData;
   std::list <CUndoData *>::iterator it;
   
-  BUG (liste.size () != pos,
-       false,
-       this,
-       (gettext ("Il n'y a plus rien à annuler.\n")); )
+  BUGPROG (liste.size () != pos,
+           false,
+           this,
+           gettext ("Il n'y a plus rien à annuler.\n"))
   
   modif = false;
   
@@ -134,7 +134,10 @@ CUndoManager::undo ()
   
   for (std::function <bool ()> f : undoData->annule)
   {
-    BUG (f (), false, this)
+    BUGCRIT (f (),
+             false,
+             this,
+             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
   }
   
   ++pos;
@@ -154,10 +157,10 @@ CUndoManager::redo ()
   CUndoData * undoData;
   std::list <CUndoData *>::iterator it;
   
-  BUG (pos != 0,
-       false,
-       this,
-       (gettext ("Il n'y a plus rien à rétablir.\n")); )
+  BUGPROG (pos != 0,
+           false,
+           this,
+           gettext ("Il n'y a plus rien à rétablir.\n"))
   
   modif = false;
   
@@ -167,7 +170,10 @@ CUndoManager::redo ()
   
   for (std::function <bool ()> f : undoData->repete)
   {
-    BUG (f (), false, this)
+    BUGCRIT (f (),
+             false,
+             this,
+             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
   }
   
   --pos;
@@ -208,7 +214,7 @@ CUndoManager::ref ()
   BUGCRIT (count != 255,
            false,
            this,
-           (gettext ("La librairie est arrivée au boût de ces limites. Il faut réduire le nombre d'imbrication de fonctions appelant d'autres fonctions modifiantes.\n")); )
+           gettext ("Le programme est à ses limites.\n"))
   
   if (!modif)
   {
@@ -237,10 +243,10 @@ CUndoManager::unref ()
     return true;
   }
   
-  BUGCRIT (count != 0,
+  BUGPROG (count != 0,
            false,
            this,
-           (gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n")); )
+           gettext ("Impossible d'appeler unref alors que le compteur vaut 0.\n"))
   
   --count;
   
@@ -265,23 +271,26 @@ CUndoManager::undoToXML (xmlNodePtr root)
     xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("UndoManager")),
     xmlFreeNode);
   
-  BUG (node.get (),
-       false,
-       this,
-       (gettext ("Erreur d'allocation mémoire.\n")); )
+  BUGCRIT (node.get (),
+           false,
+           this,
+           gettext ("Erreur d'allocation mémoire.\n"))
   
   for (CUndoData * data : liste)
   {
     for (std::function <bool (xmlNodePtr)> f : data->sauve)
     {
-      BUG (f (node.get ()), false, this)
+      BUGCRIT (f (node.get ()),
+               false,
+               this,
+               gettext ("Erreur lors de la génération du fichier XML.\n"))
     }
   }
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
            this,
-           (gettext ("Erreur lors de la génération du fichier XML.\n")); )
+           gettext ("Erreur lors de la génération du fichier XML.\n"))
   
   node.release ();
   
@@ -310,7 +319,7 @@ CUndoManager::rollback ()
     BUGCRIT (f (),
              false,
              NULL,
-             (gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n")); )
+             gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n"))
   }
   
   delete tmpListe;
