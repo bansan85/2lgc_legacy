@@ -13,7 +13,9 @@ sed -i 's/intl.dll/libintl-8.dll/g' INSTALL.mingw64
 Si la compilation est en version débug, il faut -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields
 Si en version de production : -march=i686 -O2 -fomit-frame-pointer -pipe
 
-GENTOO : sudo crossdev i686-pc-mingw32
+GENTOO :
+sudo crossdev i686-pc-mingw32
+sudo mkdir /usr/i686-pc-mingw32/usr/bin
 
 (test -d comp32debug || mkdir comp32debug) && \
 cd comp32debug && \
@@ -42,6 +44,9 @@ make -j9 && sudo make install && cd .. && \
 sudo unzip gettext-runtime_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
 (test -f gettext-runtime-dev_0.18.1.1-2_win32.zip || wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-dev_0.18.1.1-2_win32.zip) && \
 sudo unzip gettext-runtime-dev_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
+
+GENTOO : (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
+
 (test -f glib-2.40.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz) && \
 tar xvaf glib-2.40.0.tar.xz && \
 cd glib-2.40.0 && \
@@ -86,9 +91,6 @@ make -j9 && sudo make install && cd .. && \
 (test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && \
 tar xvaf gdk-pixbuf-2.30.8.tar.xz && \
 cd gdk-pixbuf-2.30.8 && \
-
-GENTOO : (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
-
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
