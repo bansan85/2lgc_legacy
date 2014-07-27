@@ -143,7 +143,7 @@ main (int32_t argc,
   BUGCONT (projet.undo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
   
-  BUGCONT (projet.enregistre ("/test.xml"), -1, NULL)
+  BUGCONT (projet.enregistre ("test.xml"), -1, NULL)
   
   // Création des groupes d'actions
 /*  BUGCONT(_1990_groupe_ajout_niveau(projet), -1)
