@@ -1,6 +1,6 @@
 Compilation de l'environnement sous Gentoo
 ==========================================
-Pour avoir ce script en version 64bit, il faut lancer les commandes suivantes :
+Pour avoir ce script en version Gentoo 64bit, il faut lancer les commandes suivantes :
 cp INSTALL.mingw32 INSTALL.mingw64
 sed -i 's/i686-pc-mingw32/x86_64-w64-mingw32/g' INSTALL.mingw64
 sed -i 's/march=i686/march=x86-64/g' INSTALL.mingw64
@@ -10,12 +10,27 @@ sed -i 's/OPT="-O0/OPT="-march=x86-64 -O0/g' INSTALL.mingw64
 sed -i 's/comp32/comp64/g' INSTALL.mingw64
 sed -i 's/intl.dll/libintl-8.dll/g' INSTALL.mingw64
 
+Pour avoir ce script en version MinGW 32bit, il faut lancer les commandes suivantes :
+sed -i 's#/usr/i686-pc-mingw32/usr#/mingw/#g' INSTALL.mingw
+sed -i 's/i686-pc-mingw32-//g' INSTALL.mingw
+sed -i 's/sudo //g' INSTALL.mingw
+sed -i 's/--build=x86_64-pc-linux-gnu --host=i686-pc-mingw32//g' INSTALL.mingw
+sed -i 's/make -j9/make/g' INSTALL.mingw
+
 Si la compilation est en version débug, il faut -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields
 Si en version de production : -march=i686 -O2 -fomit-frame-pointer -pipe
 
 GENTOO :
 sudo crossdev i686-pc-mingw32
 sudo mkdir /usr/i686-pc-mingw32/usr/bin
+
+MINGW :
+mingw-get install msys-wget msys-vim msys-base mingw32-gcc-g++ mingw32-gcc mingw32-libz msys-unzip mingw32-gettext
+lancer C:\MinGW\msys\1.0\msys
+vim /etc/fstab.sample
+Commenter perl et quitter
+mv /etc/fstab.sample /etc/fstab
+quitter la console et la relancer
 
 (test -d comp32debug || mkdir comp32debug) && \
 cd comp32debug && \
@@ -65,6 +80,10 @@ TOUT : patch : glib/grand.c
 +  for (i = 0; i < G_N_ELEMENTS (seed); i++)
 +    seed[i] = rand ();
 +#endif
+
+MINGW :
+sed -i 's#/home/keith/staged/mingw32#/mingw#g' /mingw/lib/*.la
+
 
 make -j9 && sudo make install && cd .. && \
 (test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && \
