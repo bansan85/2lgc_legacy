@@ -278,13 +278,29 @@ CUndoManager::undoToXML (xmlNodePtr root)
   
   for (CUndoData * data : liste)
   {
+    std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+      xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("Bloc")),
+      xmlFreeNode);
+    
+    BUGCRIT (node.get (),
+             false,
+             this,
+             gettext ("Erreur d'allocation mémoire.\n"))
+    
     for (std::function <bool (xmlNodePtr)> f : data->sauve)
     {
-      BUGCRIT (f (node.get ()),
+      BUGCRIT (f (node0.get ()),
                false,
                this,
                gettext ("Erreur lors de la génération du fichier XML.\n"))
     }
+    
+    BUGCRIT (xmlAddChild (root, node0.get ()),
+             false,
+             this,
+             gettext ("Erreur lors de la génération du fichier XML.\n"))
+    
+    node0.release ();
   }
   
   BUGCRIT (xmlAddChild (root, node.get ()),

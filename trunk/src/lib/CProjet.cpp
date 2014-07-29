@@ -222,11 +222,11 @@ CProjet::enregistre (std::string fichier)
   BUGCONT (this->undoToXML (root_node),
            false,
            dynamic_cast <CUndoManager *> (this))
+  xmlSetCompressMode (0);
   
-  BUGUSER (xmlSaveFormatFileEnc (fichier.c_str (),
-                                 doc.get (),
-                                 "UTF-8",
-                                 1) != -1,
+  BUGUSER (xmlSaveFormatFile (fichier.c_str (),
+                              doc.get (),
+                              1) != -1,
            false,
            dynamic_cast <CUndoManager *> (this),
            gettext ("Échec lors de l'enregistrement.\n"))
