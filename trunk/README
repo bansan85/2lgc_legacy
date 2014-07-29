@@ -17,6 +17,7 @@ La description des messages doit toujours commencer par :
 [INTERFACE] : tout ce qui concerne une modification de l'interface graphique.
 [UML] : Modification du diagramme UML.
 [CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
+[TEST] : Ajout / Modification de tests.
 
 
 Performances :
