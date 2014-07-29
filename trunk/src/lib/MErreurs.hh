@@ -73,7 +73,7 @@
     FAILINFO (Y, \
               MANAGER, \
               gettext ("Erreur de programmation."), \
-              "%s" #PARAM " = " TYPE ".\n", gettext ("Erreur de programmation. Paramètre incorrect : "), PARAM) \
+              "%s" #PARAM " = " TYPE ".\n", gettext ("Paramètre incorrect : "), PARAM) \
   } \
 }
 /**

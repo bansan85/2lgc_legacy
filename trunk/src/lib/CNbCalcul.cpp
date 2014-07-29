@@ -23,41 +23,43 @@
 #include <memory>
 #include <locale>
 #include <sstream>
-#include <iostream>
 
-#include "CNbUser.hpp"
+#include "CNbCalcul.hpp"
 #include "EUnite.hh"
 #include "MErreurs.hh"
 
 
 /**
- * \brief Constructeur d'une classe CNbUser.
+ * \brief Constructeur d'une classe CNbCalcul.
  * \param valeur (in) La valeur initiale.
  * \param unit (in) L'unité du nombre.
  */
-CNbUser::CNbUser (double valeur,
-                  EUnite unit) :
+CNbCalcul::CNbCalcul (double   valeur,
+                      EUnite   unit,
+                      uint8_t *decimales_) :
   val (valeur),
-  unite (unit)
+  unite (unit),
+  decimales (decimales_)
 {
 }
 
 
 /**
- * \brief Constructeur d'une classe CNbUser.
+ * \brief Constructeur d'une classe CNbCalcul.
  * \param nb Le nombre à copier.
  */
-CNbUser::CNbUser (CNbUser & nb) :
+CNbCalcul::CNbCalcul (CNbCalcul & nb) :
   val (nb.val),
-  unite (nb.unite)
+  unite (nb.unite),
+  decimales (nb.decimales)
 {
 }
 
 
 /**
- * \brief Libère une classe CNbUser.
+ * \brief Libère une classe CNbCalcul.
  */
-CNbUser::~CNbUser ()
+CNbCalcul::~CNbCalcul ()
 {
 }
 
@@ -66,7 +68,7 @@ CNbUser::~CNbUser ()
  * \brief Renvoie la valeur du nombre.
  */
 double
-CNbUser::getVal () const
+CNbCalcul::getVal () const
 {
   return this->val;
 }
@@ -76,101 +78,34 @@ CNbUser::getVal () const
  * \brief Renvoie l'unité du nombre.
  */
 EUnite
-CNbUser::getUnite () const
+CNbCalcul::getUnite () const
 {
   return this->unite;
 }
 
 
 /**
- * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais
- *        en version std::string. Honteusement volé de
- *        http://stackoverflow.com/questions/2342162#3742999.
- * \param fmt : le texte à formater,
- * \param ... : les divers paramètres.
- * \return Le texte formaté en format std::string.
- */
-std::string
-format (const std::string fmt,
-        ...)
-{
-  uint32_t    size = 1024;
-  bool        b = false;
-  va_list     marker;
-  std::string s;
-  
-  while (!b)
-  {
-    uint32_t n;
-    
-    s.resize (size);
-    va_start (marker, fmt);
-    n = vsnprintf (const_cast <char *> (s.c_str ()),
-                   size,
-                   fmt.c_str (),
-                   marker);
-    va_end (marker);
-    if ((n > 0) && ((b = (n < size)) == true))
-    {
-      s.resize (n);
-    }
-    else
-    {
-      size = size * 2;
-    }
-  }
-  return s;
-}
-
-
-/**
- * \brief Renvoie le nombre sous forme de texte sans respecter le nombre de
+ * \brief Renvoie le nombre sous forme de texte en respectant le nombre de
  *        décimales..
  */
 std::string
-CNbUser::toString () const
+CNbCalcul::toString () const
 {
+  std::ostringstream oss;
   std::string retour;
-  uint8_t     width;
-  double      test;
   
-  if (fabs (this->val) > 1e15)
-  {
-    for (width = 0; width <= 15; width++)
-    {
-      retour = format ("%.*le", width, this->val);
-      sscanf (retour.c_str (), "%le", &test);
-      if ((fabs (this->val) * 0.999999999999999 <= fabs (test)) &&
-          (fabs (test) <= fabs (this->val) * 1.000000000000001))
-      {
-        break;
-      }
-    }
-  }
-  // Sinon on affiche sous forme normale
-  else
-  {
-    for (width = 0; width <= 15; width++)
-    {
-      retour = format ("%.*lf", width, this->val);
-      sscanf (retour.c_str (), "%lf", &test);
-      if ((fabs (this->val) * 0.999999999999999 <= fabs (test)) &&
-          (fabs (test) <= fabs (this->val) * 1.000000000000001))
-      {
-        break;
-      }
-    }
-  }
+  oss.precision (*decimales);
+  oss << std::fixed << val;
   
-  return format ("%.*lf", width, this->val);
+  return oss.str ();
 }
 
 
 bool CHK
-CNbUser::newXML (xmlNodePtr root) const
+CNbCalcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("NbUser")),
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("NbCalcul")),
     xmlFreeNode);
   
   BUGCRIT (node.get (),

@@ -19,6 +19,32 @@
 #include "config.h"
 
 #include "INb.hpp"
+#include "CNbCalcul.hpp"
+#include "CNbUser.hpp"
+
+
+/**
+ * \brief Constructeur d'une classe INb.
+ * \param nb Le nombre à dupliquer.
+ */
+INb *
+INb::newINb (INb * nb)
+{
+  if (dynamic_cast <CNbCalcul *> (nb) != NULL)
+  {
+    return new CNbCalcul (*dynamic_cast <CNbCalcul *> (nb));
+  }
+  else if (dynamic_cast <CNbUser *> (nb) != NULL)
+  {
+    return new CNbUser (*dynamic_cast <CNbUser *> (nb));
+  }
+  else
+  {
+    printf ("auie\n");
+    return NULL;
+  }
+}
+
 
 /**
  * \brief Destructeur d'une classe INb.
