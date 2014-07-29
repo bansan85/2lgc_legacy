@@ -8,6 +8,8 @@ if HAVE_DOXYGEN
 SUBDIRS += docs
 endif
 
+AM_CPPFLAGS			= @XML_CPPFLAGS@
+
 if PLATFORM_LINUX
 if ENABLE_DEBUG
 CUSTOM_CXXFLAGS	= --coverage -fprofile-arcs -ftest-coverage
@@ -51,7 +53,7 @@ endif
 
 AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
-export AM_CXXFLAGS
+export AM_CXXFLAGS AM_CPPFLAGS
 
 EXTRA_DIST = config.rpath  config.rpath
 
