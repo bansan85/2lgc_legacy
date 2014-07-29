@@ -25,7 +25,7 @@ sudo crossdev i686-pc-mingw32
 sudo mkdir /usr/i686-pc-mingw32/usr/bin
 
 MINGW :
-mingw-get install msys-wget msys-vim msys-base mingw32-gcc-g++ mingw32-gcc mingw32-libz msys-unzip mingw32-gettext
+mingw-get install msys-wget msys-vim msys-base mingw32-gcc-g++ mingw32-gcc mingw32-libz msys-unzip mingw32-gettext msys-perl mingw32-autoconf mingw32-automake mingw32-libtool
 lancer C:\MinGW\msys\1.0\msys
 vim /etc/fstab.sample
 Commenter perl et quitter
@@ -83,7 +83,9 @@ TOUT : patch : glib/grand.c
 
 MINGW :
 sed -i 's#/home/keith/staged/mingw32#/mingw#g' /mingw/lib/*.la
-
+installer https://www.python.org/ftp/python/2.7.8/python-2.7.8.amd64.msi
+dans MinGW : export PATH=$PATH:/c/Python27
+sed -i 's#/usr/bin/env python2.5#python#g' gio/gdbus-2.0/codegen/Makefile && \
 
 make -j9 && sudo make install && cd .. && \
 (test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && \
@@ -107,6 +109,12 @@ tar xvaf libpng-1.6.12.tar.xz && \
 cd libpng-1.6.12 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
+
+MinGW :
+http://win32builder.gnome.org/packages/3.6/pkg-config_0.28-1_win32.zip
+http://win32builder.gnome.org/packages/3.6/pkg-config-dev_0.28-1_win32.zip
+et extraire dans C:/MinGW
+
 (test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && \
 tar xvaf gdk-pixbuf-2.30.8.tar.xz && \
 cd gdk-pixbuf-2.30.8 && \
@@ -130,6 +138,14 @@ cd fontconfig-2.11.1 && \
 sed -i 's/test doc//g' Makefile.in && \
 sed -i 's/d test/d/g' Makefile.in Makefile.am && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --enable-libxml2 --disable-docs --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+autoreconf --force -i
+
+MinGW :
+vim src/fcatomic.h
+66gg
+-#define fc_atomic_ptr_get(P) …
++#define fc_atomic_ptr_get(P) ((void *) *(P))
+
 make -j9 && sudo make install && cd .. && \
 (test -f pthreads-w32-2-9-1-release.tar.gz || wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz) && \
 tar xvzf pthreads-w32-2-9-1-release.tar.gz && \

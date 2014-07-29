@@ -40,6 +40,7 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CModeleNoeuds.cpp \
 															CModeleRelachements.cpp \
 															CModeleSections.cpp \
+															CNbCalcul.cpp \
 															CNbUser.cpp \
 															CParamEC.cpp \
 															CPonderations.cpp \

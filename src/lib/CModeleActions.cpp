@@ -23,6 +23,8 @@
 #include <memory>
 
 #include "CModeleActions.hpp"
+#include "CNbUser.hpp"
+#include "CProjet.hpp"
 #include "MErreurs.hh"
 
 /**
@@ -97,11 +99,27 @@ CModeleActions::addAction (CAction * action)
              std::bind (std::default_delete <CAction> (), action),
              std::bind (&CAction::addXML,
                         action,
+                        action->getNom (),
+                        action->getType (),
                         std::placeholders::_1)),
            false,
            &action->getUndoManager ())
   
-  //TODO : Modifier les coefficients psi.
+  BUGCONT (action->setpsi0 (new CNbUser (dynamic_cast <CProjet *> (this)->
+                                 getParametres ().getpsi0 (action->getType ()),
+                                         U_)),
+           false,
+           &action->getUndoManager ())
+  BUGCONT (action->setpsi1 (new CNbUser (dynamic_cast <CProjet *> (this)->
+                                 getParametres ().getpsi1 (action->getType ()),
+                                         U_)),
+           false,
+           &action->getUndoManager ())
+  BUGCONT (action->setpsi2 (new CNbUser (dynamic_cast <CProjet *> (this)->
+                                 getParametres ().getpsi2 (action->getType ()),
+                                         U_)),
+           false,
+           &action->getUndoManager ())
   
   BUGCONT (action->getUndoManager ().unref (),
            false,

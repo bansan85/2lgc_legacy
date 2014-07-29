@@ -44,9 +44,9 @@ CAction::CAction (std::string    nom_,
   , type (type_)
   , action_predominante (false)
   , charges ()
-  , psi0 (new CNbUser (NAN, U_))
-  , psi1 (new CNbUser (NAN, U_))
-  , psi2 (new CNbUser (NAN, U_))
+  , psi0 (NULL)
+  , psi1 (NULL)
+  , psi2 (NULL)
   , deplacement (NULL)
   , forces (NULL)
   , efforts_noeuds (NULL)
@@ -65,7 +65,26 @@ CAction::CAction (std::string    nom_,
  * \brief Duplication d'une classe CAction.
  * \param other (in) La classe à dupliquer.
  */
-CAction::CAction (const CAction & other) = delete;
+CAction::CAction (const CAction & other) :
+  IActionGroupe (other.getNom (), other.getUndoManager ())
+  , type (other.type)
+  , action_predominante (false)
+  , charges ()
+  , psi0 (NULL)
+  , psi1 (NULL)
+  , psi2 (NULL)
+  , deplacement (NULL)
+  , forces (NULL)
+  , efforts_noeuds (NULL)
+  , efforts {{}, {}, {}, {}, {}, {}}
+  , deformation {{}, {}, {}}
+  , rotation {{}, {}, {}}
+#ifdef ENABLE_GTK
+  , Iter_fenetre_ac (NULL)
+  , Iter_liste (NULL)
+#endif
+{
+}
 
 
 /**
@@ -81,9 +100,54 @@ CAction::operator = (const CAction & other) = delete;
  */
 CAction::~CAction ()
 {
-  delete this->psi0;
-  delete this->psi1;
-  delete this->psi2;
+}
+
+
+/**
+ * \brief Converti la fonction d'ajout d'une action sous format XML..
+ * \param root Le noeud dans lequel doit être inséré l'action.
+ */
+bool
+CAction::addXML (std::string nom_,
+                 uint8_t     type_,
+                 xmlNodePtr  root)
+{
+  BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
+    xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Nom"),
+             reinterpret_cast <const xmlChar *> (nom_.c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Type"),
+             reinterpret_cast <const xmlChar *> (
+                                    CAction::getDescription (type_).c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  node.release ();
+  
+  return true;
 }
 
 
@@ -98,12 +162,110 @@ CAction::getType () const
 
 
 /**
+ * \brief Converti la fonction de modification du psi d'une action sous format
+ *        XML.
+ * \param psi Le coefficient psi à changer (0, 1 ou 2).
+ * \param Le noeud dans lequel doit être inséré la branche.
+ */
+bool CHK
+CAction::setpsiXML (uint8_t    psi,
+                    INb       *psin,
+                    xmlNodePtr root)
+{
+  BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
+  BUGPARAM (psi, "%u", psi <= 2, false, &this->getUndoManager ())
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("setpsi")),
+    xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("psi"),
+             reinterpret_cast <const xmlChar *> (psi == 0 ? "0" :
+                                                 psi == 1 ? "1" : "2")),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Nom"),
+             reinterpret_cast <const xmlChar *> (this->getNom ().c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("val")),
+    xmlFreeNode);
+  
+  BUGCRIT (node0.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCONT (psin->newXML (node0.get ()),
+           false,
+           &this->getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node0.release ();
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node.release ();
+  
+  return true;
+}
+
+
+/**
  * \brief Renvoie le cœfficient psi0.
  */
 INb const &
 CAction::getpsi0 () const
 {
   return *this->psi0;
+}
+
+
+/**
+ * \brief Défini le cœfficient psi0.
+ * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
+ *        l'action.
+ */
+bool CHK
+CAction::setpsi0 (INb * val)
+{
+  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  
+  BUGCONT (this->getUndoManager ().push (
+             std::bind (&CAction::setpsi0, this, psi0),
+             std::bind (&CAction::setpsi0, this, val),
+             std::bind (std::default_delete <INb> (), val),
+             std::bind (&CAction::setpsiXML,
+                        this,
+                        0,
+                        val,
+                        std::placeholders::_1)),
+           false,
+           &this->getUndoManager ())
+  this->psi0 = val;
+  
+  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  
+  return true;
 }
 
 
@@ -118,12 +280,70 @@ CAction::getpsi1 () const
 
 
 /**
+ * \brief Défini le cœfficient psi1.
+ * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
+ *        l'action.
+ */
+bool CHK
+CAction::setpsi1 (INb * val)
+{
+  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  
+  BUGCONT (this->getUndoManager ().push (
+             std::bind (&CAction::setpsi1, this, psi1),
+             std::bind (&CAction::setpsi1, this, val),
+             std::bind (std::default_delete <INb> (), val),
+             std::bind (&CAction::setpsiXML,
+                        this,
+                        1,
+                        val,
+                        std::placeholders::_1)),
+           false,
+           &this->getUndoManager ())
+  this->psi1 = val;
+  
+  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  
+  return true;
+}
+
+
+/**
  * \brief Renvoie le cœfficient psi2.
  */
 INb const &
 CAction::getpsi2 () const
 {
   return *this->psi2;
+}
+
+
+/**
+ * \brief Défini le cœfficient psi2.
+ * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
+ *        l'action.
+ */
+bool CHK
+CAction::setpsi2 (INb * val)
+{
+  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  
+  BUGCONT (this->getUndoManager ().push (
+             std::bind (&CAction::setpsi2, this, psi2),
+             std::bind (&CAction::setpsi2, this, val),
+             std::bind (std::default_delete <INb> (), val),
+             std::bind (&CAction::setpsiXML,
+                        this,
+                        2,
+                        val,
+                        std::placeholders::_1)),
+           false,
+           &this->getUndoManager ())
+  this->psi2 = val;
+  
+  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  
+  return true;
 }
 
 
@@ -246,103 +466,6 @@ CAction::getDescription (uint8_t type_)
       return std::string ();
     }
   }
-}
-
-
-/**
- * \brief Converti la fonction d'ajout d'une action sous format XML..
- * \param root (in) Le noeud dans lequel doit être inséré l'action.
- */
-bool
-CAction::addXML (xmlNodePtr root)
-{
-  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
-    xmlFreeNode);
-  
-  BUGCRIT (node.get (),
-           false,
-           &this->getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
-  
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (this->getNom ().c_str ())),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Type"),
-             reinterpret_cast <const xmlChar *> (
-                         CAction::getDescription (this->getType ()).c_str ())),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  
-  // psi0
-  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi0")),
-    xmlFreeNode);
-  BUGCRIT (node0.get (),
-           false,
-           &this->getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
-  
-  BUGCONT (this->getpsi0 ().newXML (node0.get ()),
-           false,
-           &this->getUndoManager ())
-  
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  node0.release ();
-  
-  // psi1
-  node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi1")));
-  BUGCRIT (node0.get (),
-           false,
-           &this->getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
-  
-  BUGCONT (this->getpsi1 ().newXML (node0.get ()),
-           false,
-           &this->getUndoManager ())
-  
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  node0.release ();
-  
-  // psi2
-  node0.reset (xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("psi2")));
-  BUGCRIT (node0.get (),
-           false,
-           &this->getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
-  
-  BUGCONT (this->getpsi2 ().newXML (node0.get ()),
-           false,
-           &this->getUndoManager ())
-  
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  node0.release ();
-  
-  BUGCRIT (xmlAddChild (root, node.get ()),
-           false,
-           &this->getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  
-  node.release ();
-  
-  return true;
 }
 
 

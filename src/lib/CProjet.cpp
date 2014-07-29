@@ -42,7 +42,7 @@ CProjet::CProjet (ENorme norme) :
   {
     case NORME_EC :
     {
-      parametres = new CParamEC (NORMEEUAC_EU,
+      parametres = new CParamEC (NORMEEUAC_FR,
                                  0,
                                  dynamic_cast <CUndoManager &> (*this));
       break;
