@@ -74,31 +74,6 @@ main (int32_t argc,
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   textdomain (PACKAGE);
   
-  // On traite les arguments du programme
-  switch (argc)
-  {
-    case 2:
-    {
-      if ((strcmp (argv[1], "-w") == 0) ||
-          (strcmp (argv[1], "--warranty") == 0))
-      {
-        CProjet::showWarranty ();
-        return 0;
-      }
-      else if ((strcmp (argv[1], "-h") == 0) ||
-               (strcmp (argv[1], "--help") == 0))
-      {
-        CProjet::showHelp ();
-        return 0;
-      }
-      break;
-    }
-    default:
-    {
-      break;
-    }
-  }
-  
   // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
 /*  INFO (gtk_init_check (&argc, &argv),
         -1,

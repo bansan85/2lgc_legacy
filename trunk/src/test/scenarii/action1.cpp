@@ -39,31 +39,6 @@ main (int32_t argc,
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   textdomain (PACKAGE);
   
-  // On traite les arguments du programme
-  switch (argc)
-  {
-    case 2:
-    {
-      if ((strcmp (argv[1], "-w") == 0) ||
-          (strcmp (argv[1], "--warranty") == 0))
-      {
-        CProjet::showWarranty ();
-        return 0;
-      }
-      else if ((strcmp (argv[1], "-h") == 0) ||
-               (strcmp (argv[1], "--help") == 0))
-      {
-        CProjet::showHelp ();
-        return 0;
-      }
-      break;
-    }
-    default:
-    {
-      break;
-    }
-  }
-  
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
   // 0 Poids propre
   action.reset (new CAction ("Poids propre",
