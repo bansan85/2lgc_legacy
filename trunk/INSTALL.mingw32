@@ -16,6 +16,7 @@ sed -i 's/i686-pc-mingw32-//g' INSTALL.mingw
 sed -i 's/sudo //g' INSTALL.mingw
 sed -i 's/--build=x86_64-pc-linux-gnu --host=i686-pc-mingw32//g' INSTALL.mingw
 sed -i 's/make -j9/make/g' INSTALL.mingw
+sed -i 's#/usr/bin/pkg-config#/mingw/bin/pkg-config#g' INSTALL.mingw
 
 Si la compilation est en version débug, il faut -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields
 Si en version de production : -march=i686 -O2 -fomit-frame-pointer -pipe
@@ -196,7 +197,7 @@ make -j9 && sudo make install && cd .. && \
 tar xvaf gtk+-3.12.2.tar.xz && \
 cd gtk+-3.12.2 && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
-PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency --enable-debug=yes && \
+PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency --enable-debug=yes && \
 
 TOUT : gdk/Makefile :
 -am__append_6 = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
@@ -234,6 +235,10 @@ TOUT : gtk/Makefile :
 
 -uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
 +uninstall-local: uninstall-ms-lib uninstall-mac-key-theme
+
+MINGW : gtk/Makefile :
+commenter tout ce qui est en dessous de gtkbuiltincache.h: stamp-icons
+dans MinGW (si nécessaire) : export PATH=$PATH:/c/Python27
 
 make -j9 && sudo make install && cd .. && \
 (test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && \

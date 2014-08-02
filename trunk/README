@@ -18,6 +18,7 @@ La description des messages doit toujours commencer par :
 [UML] : Modification du diagramme UML.
 [CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
 [TEST] : Ajout / Modification de tests.
+[WIN] : Tout ce qui concerne la compatibilité avec Windows.
 
 
 Performances :

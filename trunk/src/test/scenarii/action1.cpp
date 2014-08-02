@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Test les fonctions de base d'une classe CAction.
+
 #include "config.h"
 
 #include "codegui.hpp"

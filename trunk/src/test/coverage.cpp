@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Très gros exemple devant couvrir tout le code de la librairie en une fois.
+
 #include "config.h"
 
 #include "codegui.hpp"
