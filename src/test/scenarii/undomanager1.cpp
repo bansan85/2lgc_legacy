@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Test les fonctionnalités de base de gestionnaire d'annulation.
+
 #include "config.h"
 
 #include "codegui.hpp"
@@ -76,6 +78,14 @@ main (int32_t argc,
   BUGCONT (projet.getActionCount () == 1, -1, NULL)
   BUGCONT (projet.undo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
+  BUGCONT (projet.getActionCount () == 1, -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
+  BUGCONT (projet.getActionCount () == 2, -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
+  BUGCONT (projet.getActionCount () == 3, -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
+  BUGCONT (projet.getActionCount () == 4, -1, NULL)
   
   BUGCONT (projet.enregistre ("test.xml"), -1, NULL)
   

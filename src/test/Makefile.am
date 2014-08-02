@@ -1,4 +1,5 @@
-SUBDIRS = scenarii
+SUBDIRS = scenarii \
+					static
 
 DEFAULT_INCLUDES	=	-I../.. \
 										-I../lib
