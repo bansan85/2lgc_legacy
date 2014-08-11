@@ -57,6 +57,21 @@ CNbCalcul::CNbCalcul (CNbCalcul & nb) :
 
 
 /**
+ * \brief Assignment operator de CProjet.
+ * \param other La classe à dupliquer.
+ */
+CNbCalcul &
+CNbCalcul::operator = (const CNbCalcul & other)
+{
+  this->val = other.val;
+  this->unite = other.unite;
+  this->decimales = other.decimales;
+  
+  return *this;
+}
+
+
+/**
  * \brief Libère une classe CNbCalcul.
  */
 CNbCalcul::~CNbCalcul ()
@@ -92,7 +107,6 @@ std::string
 CNbCalcul::toString () const
 {
   std::ostringstream oss;
-  std::string retour;
   
   oss.precision (*decimales);
   oss << std::fixed << val;

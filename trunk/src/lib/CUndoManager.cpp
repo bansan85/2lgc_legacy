@@ -39,7 +39,7 @@ CUndoManager::CUndoManager (CProjet & proj) :
   count (0),
   tmpListe (NULL),
   projet (proj),
-  modif (true)
+  insertion (true)
 {
 }
 
@@ -88,24 +88,26 @@ CUndoManager::push (std::function <bool ()>           annule,
                     std::function <void ()>           suppr,
                     std::function <bool (xmlNodePtr)> sauve)
 {
-  if (modif)
+  if (!insertion)
   {
-    BUGPROG (count != 0,
-             false,
-             this,
-             gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
-    BUGPARAM (tmpListe, "%p", tmpListe, false, this)
-    
-    tmpListe->annule.push_front (annule);
-    tmpListe->repete.push_back (repete);
-    if (suppr != NULL)
-    {
-      tmpListe->suppr.push_back (suppr);
-    }
-    if (sauve != NULL)
-    {
-      tmpListe->sauve.push_back (sauve);
-    }
+    return true;
+  }
+  
+  BUGPROG (count != 0,
+           false,
+           this,
+           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
+  BUGPARAM (tmpListe, "%p", tmpListe, false, this)
+  
+  tmpListe->annule.push_front (annule);
+  tmpListe->repete.push_back (repete);
+  if (suppr != NULL)
+  {
+    tmpListe->suppr.push_back (suppr);
+  }
+  if (sauve != NULL)
+  {
+    tmpListe->sauve.push_back (sauve);
   }
   
   return true;
@@ -126,7 +128,7 @@ CUndoManager::undo ()
            this,
            gettext ("Il n'y a plus rien à annuler.\n"))
   
-  modif = false;
+  insertion = false;
   
   it = liste.end ();
   std::advance (it, -static_cast <ssize_t> (pos) - 1);
@@ -142,7 +144,7 @@ CUndoManager::undo ()
   
   ++pos;
   
-  modif = true;
+  insertion = true;
   
   return true;
 }
@@ -162,7 +164,7 @@ CUndoManager::redo ()
            this,
            gettext ("Il n'y a plus rien à rétablir.\n"))
   
-  modif = false;
+  insertion = false;
   
   it = liste.end ();
   std::advance (it, -static_cast <ssize_t> (pos));
@@ -178,7 +180,7 @@ CUndoManager::redo ()
   
   --pos;
   
-  modif = true;
+  insertion = true;
   
   return true;
 }
@@ -188,13 +190,13 @@ CUndoManager::redo ()
  * \brief Renvoie l'état du gestionnaire des annulations.
  */
 EUndoEtat
-CUndoManager::getEtat ()
+CUndoManager::getEtat () const
 {
   if (count == 0)
   {
     return UNDO_NONE;
   }
-  else if (modif)
+  else if (insertion)
   {
     return UNDO_MODIF;
   }
@@ -216,7 +218,7 @@ CUndoManager::ref ()
            this,
            gettext ("Le programme est à ses limites.\n"))
   
-  if (!modif)
+  if (!insertion)
   {
     return true;
   }
@@ -238,7 +240,7 @@ CUndoManager::ref ()
 bool
 CUndoManager::unref ()
 {
-  if (!modif)
+  if (!insertion)
   {
     return true;
   }
@@ -321,14 +323,14 @@ CUndoManager::undoToXML (xmlNodePtr root)
 bool
 CUndoManager::rollback ()
 {
-  modif = false;
-  
   count = 0;
   
   if (tmpListe == NULL)
   {
     return true;
   }
+  
+  insertion = false;
   
   for (std::function <bool ()> f : tmpListe->annule)
   {
@@ -340,6 +342,8 @@ CUndoManager::rollback ()
   
   delete tmpListe;
   tmpListe = NULL;
+  
+  insertion = true;
   
   return true;
 }

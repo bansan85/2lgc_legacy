@@ -42,9 +42,18 @@ CProjet::CProjet (ENorme norme) :
   {
     case NORME_EC :
     {
-      parametres = new CParamEC (NORMEEUAC_FR,
-                                 0,
-                                 dynamic_cast <CUndoManager &> (*this));
+      std::unique_ptr <CParamEC> param
+        (new CParamEC ("Eurocode, annexe nationale",
+         NORMEEUAC_FR,
+         0,
+         *this));
+      
+      if (!setParametres (param.get ()))
+      {
+        throw gettext ("Impossible de créer ce projet. Echec lors de la sélection de la norme.\n");
+      }
+      param.release ();
+      
       break;
     }
     default :
@@ -149,8 +158,6 @@ CProjet::operator = (const CProjet & other) = delete;
  */
 CProjet::~CProjet ()
 {
-  delete parametres;
-  
   xmlCleanupParser();
   
 #if 0
@@ -186,10 +193,109 @@ CProjet::~CProjet ()
 /**
  * \brief Renvoie les paramètres du projet.
  */
-IParametres &
+IParametres *
 CProjet::getParametres ()
 {
-  return *parametres;
+  return parametres;
+}
+
+
+/**
+ * \brief Défini les paramètres de calculs du projet.
+ * \param param Les nouveaux paramètres.
+ */
+bool CHK
+CProjet::setParametres (IParametres * param)
+{
+  BUGCONT (this->ref (), false, this)
+  
+  BUGCONT (this->push (
+             std::bind (&CProjet::setParametres, this, parametres),
+             std::bind (&CProjet::setParametres, this, param),
+             std::bind (std::default_delete <IParametres> (), param),
+             std::bind (&CProjet::setParametresXML,
+                        this,
+                        param,
+                        param->getNom (),
+                        param->getVariante (),
+                        std::placeholders::_1)
+                        ),
+           false,
+           this)
+  
+  parametres = param;
+  
+  BUGCONT (this->unref (), false, this)
+  
+  return true;
+}
+
+
+/**
+ * \brief Converti la fonction définissant la norme que doit utiliser le projet
+ *        sous format XML.
+ * \param param Le paramètre à utiliser.
+ * \param nom Le nom des paramètres de calculs.
+ * \param root Le noeud dans lequel doit être inséré la méthode sous format
+ *             XML.
+ */
+bool CHK
+CProjet::setParametresXML (IParametres *param,
+                           std::string  nom,
+                           uint32_t     variante,
+                           xmlNodePtr   root)
+{
+  BUGPARAM (root, "%p", root, false, this)
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("setParamXML")),
+    xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           this,
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  if (dynamic_cast <CParamEC *> (param) != NULL)
+  {
+    BUGCRIT (xmlSetProp (
+               node.get (),
+               reinterpret_cast <const xmlChar *> ("Type"),
+               reinterpret_cast <const xmlChar *> ("EC")),
+             false,
+             this,
+             gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  }
+  else
+  {
+    BUGPROG (NULL, false, this, gettext ("Le type de la norme est inconnu.\n"))
+  }
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Nom"),
+             reinterpret_cast <const xmlChar *> (nom.c_str ())),
+           false,
+           this,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("Variante"),
+             reinterpret_cast <const xmlChar *> (std::to_string (variante).
+                                                                    c_str ())),
+           false,
+           this,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           this,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  node.release ();
+  
+  return true;
 }
 
 
@@ -207,28 +313,28 @@ CProjet::enregistre (std::string fichier)
   
   BUGCRIT (doc.get (),
            false,
-           dynamic_cast <CUndoManager *> (this),
+           this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (root_node = xmlNewNode (
                          NULL,
                          reinterpret_cast <const xmlChar *> ("Projet")),
            false,
-           dynamic_cast <CUndoManager *> (this),
+           this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
   xmlDocSetRootElement (doc.get (), root_node);
   
   BUGCONT (this->undoToXML (root_node),
            false,
-           dynamic_cast <CUndoManager *> (this))
+           this)
   xmlSetCompressMode (0);
   
   BUGUSER (xmlSaveFormatFile (fichier.c_str (),
                               doc.get (),
                               1) != -1,
            false,
-           dynamic_cast <CUndoManager *> (this),
+           this,
            gettext ("Échec lors de l'enregistrement.\n"))
   
   return true;
