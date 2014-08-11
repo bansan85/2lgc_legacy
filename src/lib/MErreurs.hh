@@ -57,13 +57,14 @@
   } \
 }
 /**
- * \def XXX(X, Y, ...)
+ * \def XXX(X, Y, MANAGER, MSG, ...)
  * \brief La macro est l'équivalent d'un "return Y; ..." si la condition X
  *        n'est pas vérifiée.
  * \param X : condition à vérifier,
  * \param Y : renvoie Y si la condition X n'est pas vérifiée,
- * \param ... : Actions à mener avant l'application de return (libération de la
- *              la mémoire, ...). Ne pas oublier le ; final.
+ * \param MANAGER : Le gestionnaire d'annulation. Peut être NULL,
+ * \param MSG : Le message afficher.
+ * \param ... : Message complémentaire sous une forme compatible avec fprintf.
  */
 
 
@@ -77,15 +78,13 @@
   } \
 }
 /**
- * \def BUGPARAM(PARAM, TYPE, X, Y, ...)
- * \brief Cette macro est identique à la commande #INFO mais ajoute un
- *        message d'erreur qui indique le mauvais paramètre et sa valeur.
+ * \def BUGPARAM(PARAM, TYPE, X, Y, MANAGER)
+ * \brief Macro spécialement conçu pour la vériifcation des paramètres.
  * \param PARAM : paramètre (variable) invalide,
  * \param TYPE : type du paramètre sous forme de texte ("%s", "%d", …),
  * \param X : condition à vérifier,
  * \param Y : renvoie Y si la condition X n'est pas vérifiée,
- * \param ... : Il est possible de lancer des actions à mener avant
- *              l'exécution de return (libération de la la mémoire, ...).
+ * \param MANAGER : Le gestionnaire d'annulation. Peut être NULL,
  */
 
 
@@ -98,10 +97,7 @@
  *        d'erreur "Erreur critique" avant l'arrêt de la fonction.
  * \param X : condition à vérifier,
  * \param Y : renvoie Y si la condition X n'est pas vérifiée,
- * \param ... : message à afficher sous la forme "(__format, arg); suite;" Il
- *              est possible de lancer des actions à mener avant l'exécution
- *              de return (libération de la la mémoire, ...) en remplaçant
- *              "suite" par les instructions.
+ * \param MANAGER : Le gestionnaire d'annulation. Peut être NULL,
  */
 
 

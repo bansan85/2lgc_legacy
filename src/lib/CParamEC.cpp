@@ -26,12 +26,17 @@
 
 /**
  * \brief Constructeur d'une classe CParamEC.
- * \param annexe (in) Le choix de l'annexe nationale.
+ * \param nom_ (in) Le nom décrivant la norme et ses différents options.
+ * \param annexe_ (in) Le choix de l'annexe nationale.
+ * \param variante_ (in) Le numéro de la variante de la norme.
+ * \param undo_ (in) Le gestionnaire des modifications.
  */
-CParamEC::CParamEC (ENormeEcAc annexe_,
-                    uint16_t   variante_,
+CParamEC::CParamEC (std::string    nom_,
+                    ENormeEcAc     annexe_,
+                    uint16_t       variante_,
                     CUndoManager & undo_) :
   IParametres (undo_),
+  nom (nom_),
   annexe (annexe_),
   variante (variante_)
 {
@@ -43,6 +48,29 @@ CParamEC::CParamEC (ENormeEcAc annexe_,
  */
 CParamEC::~CParamEC ()
 {
+}
+
+
+/**
+ * \brief Renvoie le nom des paramètres de calcul.
+ */
+std::string const
+CParamEC::getNom () const
+{
+  return nom;
+}
+
+
+/**
+ * \brief Définit le nom des paramètres de calcul.
+ * \param nom_ Le nouveau nom.
+ */
+bool CHK
+CParamEC::setNom (std::string nom_)
+{
+  nom = nom_;
+  
+  return true;
 }
 
 
@@ -64,6 +92,7 @@ bool CHK
 CParamEC::setVariante (uint32_t variante_)
 {
   variante = variante_;
+  
   return true;
 }
 
@@ -86,7 +115,7 @@ CParamEC::getpsiN () const
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, 0, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, 0, &this->getUndoManager ())
       break;
     }
   }
@@ -162,7 +191,7 @@ CParamEC::getpsiAction (uint8_t type) const
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, ACTION_INCONNUE, &this->getUndoManager ())
       break;
     }
   }
@@ -201,7 +230,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 16 : return gettext ("Sismique");
         default :
         {
-          BUGPARAM (type, "%u", NULL, NULL, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, std::string (), &this->getUndoManager ())
           break;
         }
       }
@@ -234,14 +263,14 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 21 : return gettext ("Eaux souterraines");
         default :
         {
-          BUGPARAM (type, "%u", NULL, NULL, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, std::string (), &this->getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, NULL, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, std::string (), &this->getUndoManager ())
       break;
     }
   }
@@ -320,7 +349,7 @@ CParamEC::getpsi0 (uint8_t type) const
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
       break;
     }
   }
@@ -399,7 +428,7 @@ CParamEC::getpsi1 (uint8_t type) const
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
       break;
     }
   }
@@ -478,7 +507,7 @@ CParamEC::getpsi2 (uint8_t type) const
     }
     default :
     {
-      BUGPARAM (annexe, "%u", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
       break;
     }
   }

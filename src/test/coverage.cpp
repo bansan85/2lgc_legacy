@@ -84,11 +84,11 @@ main (int32_t argc,
   BUGCONT (projet.ref (), -1, NULL)
   
   std::unique_ptr <CAction> action;
-  for (uint8_t i = 0; i <= 22; i++)
+  for (uint8_t i = 0; i < 22; i++)
   {
-    action.reset (new CAction (CAction::getDescription (i),
+    action.reset (new CAction (projet.getParametres ()->getpsiDescription (i),
                                0,
-                               dynamic_cast <CUndoManager &> (projet)));
+                               projet));
     
     BUGCONT (projet.addAction (action.get ()), -1, NULL)
     
@@ -98,36 +98,27 @@ main (int32_t argc,
   BUGCONT (projet.getEtat () == UNDO_MODIF, -1, NULL)
   BUGCONT (projet.unref (), -1, NULL)
   
-  
   BUGCONT (projet.ref (), -1, NULL)
   
-  action.reset (new CAction (CAction::getDescription (23),
-                             0,
-                             dynamic_cast <CUndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
-  action.release ();
-  
-  action.reset (new CAction (CAction::getDescription (2),
-                             0,
-                             dynamic_cast <CUndoManager &> (projet)));
+  action.reset (new CAction (projet.getParametres ()->getpsiDescription (22),
+                             22,
+                             projet));
   //Ici, il y a un traitement volontaire de l'erreur.
   if (!projet.addAction (action.get ()))
   {
     action.reset ();
-    dynamic_cast <CUndoManager &> (projet).rollback ();
+    projet.rollback ();
   }
   else
-    action.release ();
-  
-  BUGCONT (projet.ref (), -1, NULL)
+    BUGCONT (NULL, -1, NULL)
   
   
-  BUGCONT (CAction::getDescription (24).empty (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 23, -1, NULL)
+  BUGCONT (projet.getParametres ()->getpsiDescription (22).empty (), -1, NULL)
+  BUGCONT (projet.getActionCount () == 22, -1, NULL)
   BUGCONT (projet.undo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
   BUGCONT (projet.redo (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 23, -1, NULL)
+  BUGCONT (projet.getActionCount () == 22, -1, NULL)
   BUGCONT (projet.getEtat () == UNDO_NONE, -1, NULL)
   
   BUGCONT (projet.enregistre ("test.xml"), -1, NULL)

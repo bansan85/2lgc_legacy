@@ -27,6 +27,8 @@
 #include "CProjet.hpp"
 #include "MErreurs.hh"
 
+#include "CParamEC.hpp"
+
 /**
  * \brief Constructeur d'une classe CModeleActions.
  */
@@ -85,6 +87,12 @@ CModeleActions::addAction (CAction * action)
            &action->getUndoManager (),
            gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n"))
   
+  BUGPROG (action->getType () < static_cast <CProjet *> (this)
+                                                ->getParametres ()->getpsiN (),
+           false,
+           &action->getUndoManager (),
+           gettext ("Le type d'action %d est inconnu.\n"), action->getType ())
+  
   BUGCONT (action->getUndoManager ().ref (),
            false,
            &action->getUndoManager ())
@@ -105,19 +113,8 @@ CModeleActions::addAction (CAction * action)
            false,
            &action->getUndoManager ())
   
-  BUGCONT (action->setpsi0 (new CNbUser (dynamic_cast <CProjet *> (this)->
-                                 getParametres ().getpsi0 (action->getType ()),
-                                         U_)),
-           false,
-           &action->getUndoManager ())
-  BUGCONT (action->setpsi1 (new CNbUser (dynamic_cast <CProjet *> (this)->
-                                 getParametres ().getpsi1 (action->getType ()),
-                                         U_)),
-           false,
-           &action->getUndoManager ())
-  BUGCONT (action->setpsi2 (new CNbUser (dynamic_cast <CProjet *> (this)->
-                                 getParametres ().getpsi2 (action->getType ()),
-                                         U_)),
+  BUGCONT (action->setParam (dynamic_cast <CProjet *>
+                                                     (this)->getParametres ()),
            false,
            &action->getUndoManager ())
   
@@ -152,7 +149,7 @@ CModeleActions::getAction (std::string nom)
  * \brief Renvoie le nombre d'actions.
  */
 size_t
-CModeleActions::getActionCount ()
+CModeleActions::getActionCount () const
 {
   return actions.size ();
 }

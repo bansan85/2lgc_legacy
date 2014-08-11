@@ -40,7 +40,6 @@ INb::newINb (INb * nb)
   }
   else
   {
-    printf ("auie\n");
     return NULL;
   }
 }

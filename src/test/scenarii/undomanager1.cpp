@@ -20,13 +20,13 @@
 
 #include "config.h"
 
-#include "codegui.hpp"
-#include "MErreurs.hh"
-
 #include <stdint.h>
 #include <libintl.h>
-#include <string.h>
+#include <string>
+#include <iostream>
 
+#include "codegui.hpp"
+#include "MErreurs.hh"
 
 int
 main (int32_t argc,
@@ -41,6 +41,7 @@ main (int32_t argc,
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   textdomain (PACKAGE);
   
+  std::cout << projet.getActionCount () << "\n";
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
   // 0 Poids propre
   action.reset (new CAction ("Poids propre",
