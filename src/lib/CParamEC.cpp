@@ -31,7 +31,7 @@
  * \param variante_ (in) Le numéro de la variante de la norme.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-CParamEC::CParamEC (std::string    nom_,
+CParamEC::CParamEC (std::string  * nom_,
                     ENormeEcAc     annexe_,
                     uint16_t       variante_,
                     CUndoManager & undo_) :
@@ -57,7 +57,7 @@ CParamEC::~CParamEC ()
 std::string const
 CParamEC::getNom () const
 {
-  return nom;
+  return *nom;
 }
 
 
@@ -66,9 +66,69 @@ CParamEC::getNom () const
  * \param nom_ Le nouveau nom.
  */
 bool CHK
-CParamEC::setNom (std::string nom_)
+CParamEC::setNom (std::string * nom_)
 {
+  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  
+  BUGCONT (this->getUndoManager ().push (
+             std::bind (&CParamEC::setNom, this, nom),
+             std::bind (&CParamEC::setNom, this, nom_),
+             std::bind (std::default_delete <std::string> (), nom_),
+             std::bind (&CParamEC::setNomXML,
+                        this,
+                        nom,
+                        nom_,
+                        std::placeholders::_1)),
+             false,
+             &this->getUndoManager ())
+  
   nom = nom_;
+  
+  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  
+  return true;
+}
+
+
+/**
+ * \brief Converti la fonction setNom sous format XML.
+ * \param nom_ Le nom de l'action,
+ */
+bool CHK
+CParamEC::setNomXML (std::string * param,
+                     std::string * nom_,
+                     xmlNodePtr    root)
+{
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("ParamSetNom")),
+    xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("param"),
+             reinterpret_cast <const xmlChar *> (param->c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("nom"),
+             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node.release ();
   
   return true;
 }

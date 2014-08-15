@@ -43,7 +43,7 @@ CProjet::CProjet (ENorme norme) :
     case NORME_EC :
     {
       std::unique_ptr <CParamEC> param
-        (new CParamEC ("Eurocode, annexe nationale",
+        (new CParamEC (new std::string ("Eurocode, annexe nationale"),
          NORMEEUAC_FR,
          0,
          *this));
