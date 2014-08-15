@@ -8617,7 +8617,7 @@
         <dia:point val="185,-39"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="184.95,-39.05;207.88,33.05"/>
+        <dia:rectangle val="184.95,-39.05;207.88,34.45"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="185,-39"/>
@@ -8626,7 +8626,7 @@
         <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="72"/>
+        <dia:real val="73.400000000000006"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CAction#</dia:string>
@@ -9954,7 +9954,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Défini la norme que doit utiliser l'action.#</dia:string>
+            <dia:string>#Défini la norme que doit utiliser l'action. Ne nécessite pas de fonction XML puisqu'elle ne doit être appelée que depuis la fonction CProjet::setParametres.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -17468,17 +17468,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O54">
       <dia:attribute name="obj_pos">
-        <dia:point val="207.83,33"/>
+        <dia:point val="207.83,34.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="207.38,32.95;210.1,47.15"/>
+        <dia:rectangle val="207.38,34.35;210.1,47.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="207.83,33"/>
-        <dia:point val="210,33"/>
+        <dia:point val="207.83,34.4"/>
+        <dia:point val="210,34.4"/>
         <dia:point val="210,46.7"/>
         <dia:point val="207.83,46.7"/>
       </dia:attribute>

@@ -376,7 +376,9 @@ CAction::getDescription (uint8_t type_) const
 
 
 /**
- * \brief Défini la norme que doit utiliser l'action.
+ * \brief Défini la norme que doit utiliser l'action. Ne nécessite pas de
+ *        fonction XML puisqu'elle ne doit être appelée que depuis la fonction
+ *        CProjet::setParametres.
  * \param param Le type IParametres.
  */
 bool CHK
