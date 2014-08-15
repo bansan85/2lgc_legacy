@@ -27,6 +27,7 @@
 #include "MErreurs.hh"
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
+#include "CProjet.hpp"
 
 
 /**
@@ -48,7 +49,15 @@ CUndoManager::CUndoManager (CProjet & proj) :
  * \brief Duplication d'une classe CUndoManager.
  * \param other (in) La classe à dupliquer.
  */
-CUndoManager::CUndoManager (const CUndoManager & other) = delete;
+CUndoManager::CUndoManager (const CUndoManager & other) :
+  liste (),
+  pos (0),
+  count (0),
+  tmpListe (NULL),
+  projet (other.projet),
+  insertion (true)
+{
+}
 
 
 /**

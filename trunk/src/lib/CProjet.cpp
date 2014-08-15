@@ -142,7 +142,13 @@ CProjet::CProjet (ENorme norme) :
  * \brief Duplication d'une classe CProjet.
  * \param other (in) La classe à dupliquer.
  */
-CProjet::CProjet (const CProjet & other) = delete;
+CProjet::CProjet (const CProjet & other) :
+  CCalculs (),
+  CModele (),
+  CUndoManager (other),
+  parametres (NULL)
+{
+}
 
 
 /**

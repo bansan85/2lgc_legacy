@@ -61,14 +61,7 @@ CNbCalcul::CNbCalcul (CNbCalcul & nb) :
  * \param other La classe à dupliquer.
  */
 CNbCalcul &
-CNbCalcul::operator = (const CNbCalcul & other)
-{
-  this->val = other.val;
-  this->unite = other.unite;
-  this->decimales = other.decimales;
-  
-  return *this;
-}
+CNbCalcul::operator = (const CNbCalcul & other) = delete;
 
 
 /**

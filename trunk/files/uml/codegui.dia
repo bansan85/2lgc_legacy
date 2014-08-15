@@ -40648,7 +40648,7 @@ class CProjet;#</dia:string>
         <dia:point val="18,-136"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.95,-136.05;41.65,-102.25"/>
+        <dia:rectangle val="17.95,-136.05;41.65,-98.55"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="18,-136"/>
@@ -40657,7 +40657,7 @@ class CProjet;#</dia:string>
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="33.70000000000001"/>
+        <dia:real val="37.400000000000013"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CParamEC#</dia:string>
@@ -40919,6 +40919,54 @@ class CProjet;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
+            <dia:string>#CParamEC#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe CParamEC.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CParamEC &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
             <dia:string>#~CParamEC#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -40946,6 +40994,54 @@ class CProjet;#</dia:string>
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator =#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#CParamEC &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Assignment operator de CParamEC.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CParamEC &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
