@@ -32,8 +32,22 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
                                       [AC_MSG_ERROR(g++ ne supporte pas la norme c++11.)])
                   ])
 
+AC_MSG_CHECKING(de la récense de gcc...)
+AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <list>
+                                
+                                int main ()
+                                {
+                                  std::list <int> test;
+                                  
+                                   for (int action : test) {}
+                                  
+                                  return 0;
+                                }
+                               ]])],
+              [AC_MSG_RESULT(ok)],
+              [AC_MSG_ERROR(g++ en version 4.6 minimum est nécessaire.)])
 
-# libxml2
+# libxml2
 LIBXML_REQUIRED_VERSION=2.8.0
 AC_SUBST(XML_CPPFLAGS)
 AC_SUBST(XML_LIBS)
