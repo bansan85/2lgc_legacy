@@ -86,7 +86,8 @@ main (int32_t argc,
   std::unique_ptr <CAction> action;
   for (uint8_t i = 0; i < 22; i++)
   {
-    action.reset (new CAction (projet.getParametres ()->getpsiDescription (i),
+    action.reset (new CAction (new std::string (projet.getParametres ()->
+                                                        getpsiDescription (i)),
                                0,
                                projet));
     
@@ -100,7 +101,8 @@ main (int32_t argc,
   
   BUGCONT (projet.ref (), -1, NULL)
   
-  action.reset (new CAction (projet.getParametres ()->getpsiDescription (22),
+  action.reset (new CAction (new std::string (projet.getParametres ()->
+                                                       getpsiDescription (22)),
                              22,
                              projet));
   //Ici, il y a un traitement volontaire de l'erreur.

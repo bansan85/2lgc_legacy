@@ -26,7 +26,7 @@
  * \param nom_ (in) Le nom de l'action / groupe.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-IActionGroupe::IActionGroupe (std::string    nom_,
+IActionGroupe::IActionGroupe (std::string  * nom_,
                               CUndoManager & undo_) :
   IUndoable (undo_)
   , nom (nom_)
@@ -48,7 +48,7 @@ IActionGroupe::~IActionGroupe ()
 /**
  * \brief Renvoie le nom.
  */
-std::string const &
+std::string *
 IActionGroupe::getNom () const
 {
   return nom;

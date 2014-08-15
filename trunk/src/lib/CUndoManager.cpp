@@ -124,6 +124,34 @@ CUndoManager::push (std::function <bool ()>           annule,
 
 
 /**
+ * \brief Ajoute une fonction permettant de libérer de la mémoire.
+ * \param suppr (in) La fonction à lancer pour libérer la mémoire. Cette
+ *                   fonction est définie lorsqu'il y a ajout d'un élément en
+ *                   mémoire uniquement.
+ */
+bool
+CUndoManager::pushSuppr (std::function <void ()> suppr)
+{
+  if (!insertion)
+  {
+    return true;
+  }
+  
+  BUGPROG (count != 0,
+           false,
+           this,
+           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
+  
+  if (suppr != NULL)
+  {
+    tmpListe->suppr.push_back (suppr);
+  }
+  
+  return true;
+}
+
+
+/**
  * \brief Annule la dernière modification de la liste.
  */
 bool
