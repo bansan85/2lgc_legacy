@@ -109,7 +109,7 @@ CAction::~CAction ()
  * \brief Converti la fonction d'ajout d'une action sous format XML..
  * \param root Le noeud dans lequel doit être inséré l'action.
  */
-bool
+bool CHK
 CAction::addXML (std::string nom_,
                  uint8_t     type_,
                  xmlNodePtr  root)
