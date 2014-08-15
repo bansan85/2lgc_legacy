@@ -75,7 +75,7 @@ CParamEC::operator = (const CParamEC & other) = delete;
 /**
  * \brief Renvoie le nom des paramètres de calcul.
  */
-std::string const
+std::string const &
 CParamEC::getNom () const
 {
   return *nom;

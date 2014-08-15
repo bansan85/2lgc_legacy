@@ -44,28 +44,28 @@ main (int32_t argc,
   std::cout << projet.getActionCount () << "\n";
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
   // 0 Poids propre
-  action.reset (new CAction ("Poids propre",
+  action.reset (new CAction (new std::string ("Poids propre"),
                              0,
                              dynamic_cast <CUndoManager &> (projet)));
   BUGCONT (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUGCONT (projet.getActionCount () == 1, -1, NULL)
   // 2 Exploitation
-  action.reset (new CAction ("Chargement",
+  action.reset (new CAction (new std::string ("Chargement"),
                              2,
                              dynamic_cast <CUndoManager &> (projet)));
   BUGCONT (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUGCONT (projet.getActionCount () == 2, -1, NULL)
   // 18 Neige
-  action.reset (new CAction ("Neige",
+  action.reset (new CAction (new std::string ("Neige"),
                              18,
                              dynamic_cast <CUndoManager &> (projet)));
   BUGCONT (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUGCONT (projet.getActionCount () == 3, -1, NULL)
   // 19 Vent
-  action.reset (new CAction ("Vent",
+  action.reset (new CAction (new std::string ("Vent"),
                              19,
                              dynamic_cast <CUndoManager &> (projet)));
   BUGCONT (projet.addAction (action.get ()), -1, NULL)

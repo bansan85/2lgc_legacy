@@ -76,11 +76,11 @@ CModeleActions::addAction (CAction * action)
            &action->getUndoManager (),
            gettext ("Le programme est à ses limites.\n"))
   
-  BUGUSER (this->getAction (action->getNom ()) == NULL,
+  BUGUSER (this->getAction (*action->getNom ()) == NULL,
            false,
            &action->getUndoManager (),
            gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n"),
-             action->getNom ().c_str ())
+             action->getNom ()->c_str ())
   
   BUGPROG (action->emptyCharges (),
            false,
@@ -112,6 +112,10 @@ CModeleActions::addAction (CAction * action)
                         std::placeholders::_1)),
            false,
            &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().pushSuppr (std::bind
+                    (std::default_delete <std::string> (), action->getNom ())),
+           false,
+           &action->getUndoManager ())
   
   BUGCONT (action->setParam (dynamic_cast <CProjet *>
                                                      (this)->getParametres ()),
@@ -135,7 +139,7 @@ CModeleActions::getAction (std::string nom)
 {
   for (CAction * action : this->actions)
   {
-    if (nom.compare (action->getNom ()) == 0)
+    if (nom.compare (*action->getNom ()) == 0)
     {
       return action;
     }

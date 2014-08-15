@@ -37,7 +37,7 @@
  * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-CAction::CAction (std::string    nom_,
+CAction::CAction (std::string  * nom_,
                   uint8_t        type_,
                   CUndoManager & undo_) :
   IActionGroupe (nom_, undo_)
@@ -110,9 +110,9 @@ CAction::~CAction ()
  * \param root Le noeud dans lequel doit être inséré l'action.
  */
 bool CHK
-CAction::addXML (std::string nom_,
-                 uint8_t     type_,
-                 xmlNodePtr  root)
+CAction::addXML (std::string *nom_,
+                 uint8_t      type_,
+                 xmlNodePtr   root)
 {
   BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
   
@@ -128,7 +128,7 @@ CAction::addXML (std::string nom_,
   BUGCRIT (xmlSetProp (
              node.get (),
              reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (nom_.c_str ())),
+             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -166,14 +166,16 @@ CAction::getType () const
 /**
  * \brief Converti la fonction de modification du psi d'une action sous format
  *        XML.
+ * \param nom Le nom de l'action.
  * \param psi Le coefficient psi à changer (0, 1 ou 2).
  * \param psin Le coefficient psi à convertir.
  * \param root Le noeud dans lequel doit être inséré la branche.
  */
 bool CHK
-CAction::setpsiXML (uint8_t    psi,
-                    INb       *psin,
-                    xmlNodePtr root)
+CAction::setpsiXML (std::string * const nom_,
+                    uint8_t             psi,
+                    INb                *psin,
+                    xmlNodePtr          root)
 {
   BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
   BUGPARAM (psi, "%u", psi <= 2, false, &this->getUndoManager ())
@@ -199,7 +201,7 @@ CAction::setpsiXML (uint8_t    psi,
   BUGCRIT (xmlSetProp (
              node.get (),
              reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (this->getNom ().c_str ())),
+             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -259,6 +261,7 @@ CAction::setpsi0 (INb * val)
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
+                        this->getNom (),
                         0,
                         val,
                         std::placeholders::_1)),
@@ -298,6 +301,7 @@ CAction::setpsi1 (INb * val)
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
+                        this->getNom (),
                         1,
                         val,
                         std::placeholders::_1)),
@@ -337,6 +341,7 @@ CAction::setpsi2 (INb * val)
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
+                        this->getNom (),
                         2,
                         val,
                         std::placeholders::_1)),

@@ -229,6 +229,11 @@ CProjet::setParametres (IParametres * param)
            false,
            this)
   
+  BUGCONT (this->pushSuppr (std::bind (std::default_delete <std::string> (),
+                              const_cast <std::string *> (&param->getNom ()))),
+           false,
+           this)
+  
   parametres = param;
   
   BUGCONT (this->unref (), false, this)
