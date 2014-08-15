@@ -62,7 +62,7 @@ CModeleActions::~CModeleActions ()
 
 
 /**
- * \brief Ajout d'une action.
+ * \brief Ajout d'une action. La fonction XML est CAction::addXML.
  * \param action (in) L'action à ajouter.
  * \return false en cas de problème.
  */
@@ -172,7 +172,7 @@ CModeleActions::rmAction (CAction * action)
   BUGPROG (action->emptyCharges (),
            false,
            &action->getUndoManager (),
-           gettext ("L'action doit être supprimée sans charges. Elles doivent être supprimées avant.\n"))
+           gettext ("L'action doit être supprimée sans charge. Elles doivent être supprimées avant.\n"))
   
   BUGCONT (action->getUndoManager ().ref (),
            false,

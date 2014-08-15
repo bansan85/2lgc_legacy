@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <cmath>
+#include <cstdlib>
 
 #include "CParamEC.hpp"
 #include "MErreurs.hh"
@@ -113,7 +114,9 @@ CParamEC::setNom (std::string * nom_)
 
 /**
  * \brief Converti la fonction setNom sous format XML.
- * \param nom_ Le nom de l'action,
+ * \param param Le nom du paramètre.
+ * \param nom_ Le nouveau nom.
+ * \param root Le noeud dans lequel doit être inséré l'action.
  */
 bool CHK
 CParamEC::setNomXML (std::string * param,
@@ -172,7 +175,67 @@ CParamEC::getVariante () const
 bool CHK
 CParamEC::setVariante (uint32_t variante_)
 {
+  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  
+  BUGCONT (this->getUndoManager ().push (
+           std::bind (&CParamEC::setVariante, this, variante),
+           std::bind (&CParamEC::setVariante, this, variante_),
+           NULL,
+           std::bind (&CParamEC::setVarianteXML,
+                      this,
+                      nom,
+                      variante_,
+                      std::placeholders::_1)),
+           false,
+           &this->getUndoManager ())
+  
   variante = variante_;
+  
+  return true;
+}
+
+
+/**
+ * \brief Converti la fonction setVariante sous format XML.
+ * \param nom_ Le nom du paramètre de calcul à modifier.
+ * \param variante_ La nouvelle variante.
+ */
+bool CHK
+CParamEC::setVarianteXML (std::string * nom_,
+                          uint32_t      variante_,
+                          xmlNodePtr    root)
+{
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("ParamSetVariante")),
+    xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           &this->getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("param"),
+             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             reinterpret_cast <const xmlChar *> ("variante"),
+             reinterpret_cast <const xmlChar *>
+                                         (std::to_string(variante_).c_str ())),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           &this->getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node.release ();
   
   return true;
 }

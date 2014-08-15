@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true" active="true">
+  <dia:layer name="Classes principales" visible="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -9476,7 +9476,7 @@
                 <dia:string>#Le nom de l'action.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
-                <dia:enum val="0"/>
+                <dia:enum val="1"/>
               </dia:attribute>
             </dia:composite>
             <dia:composite type="umlparameter">
@@ -25623,7 +25623,7 @@ class CProjet;#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Ajout d'une action.#</dia:string>
+            <dia:string>#Ajout d'une action. La fonction XML est CAction::addXML.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -26615,7 +26615,7 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Classes dérivées" visible="true">
+  <dia:layer name="Classes dérivées" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O108">
       <dia:attribute name="obj_pos">
         <dia:point val="-62,-75"/>
@@ -40806,19 +40806,19 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O142">
       <dia:attribute name="obj_pos">
-        <dia:point val="18,-136"/>
+        <dia:point val="14,-136"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.95,-136.05;41.65,-98.55"/>
+        <dia:rectangle val="13.95,-136.05;37.65,-95.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="18,-136"/>
+        <dia:point val="14,-136"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="37.400000000000013"/>
+        <dia:real val="40.050000000000018"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CParamEC#</dia:string>
@@ -41356,7 +41356,7 @@ class CProjet;#</dia:string>
                 <dia:string>##</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
-                <dia:string>#Le noeud dans lequel doit être inséré l'action.#</dia:string>
+                <dia:string>#Le noeud dans lequel doit être inséré la description au format XML.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -41435,6 +41435,88 @@ class CProjet;#</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
                 <dia:string>#La nouvelle variante.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#setVarianteXML#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Converti la fonction setVariante sous format XML.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#nom_#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::string *#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#Le nom du paramètre de calcul à modifier.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#variante_#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#uint32_t#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La nouvelle variante.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#root#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#xmlNodePtr#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#Le noeud dans lequel doit être inséré la description au format XML.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -41723,7 +41805,7 @@ class CProjet;#</dia:string>
         <dia:point val="10.5225,-157.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.4725,-157.65;18.45,-130.7"/>
+        <dia:rectangle val="10.4725,-157.65;14.45,-130.7"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -41731,7 +41813,7 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="10.5225,-157.6"/>
         <dia:point val="10.5225,-131.55"/>
-        <dia:point val="18,-131.55"/>
+        <dia:point val="14,-131.55"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -42014,7 +42096,7 @@ class CProjet;#</dia:string>
         <dia:point val="41.8,-152.784"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="29.75,-152.834;42.65,-135.95"/>
+        <dia:rectangle val="25.75,-152.834;42.65,-135.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -42022,8 +42104,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="41.8,-152.784"/>
         <dia:point val="41.8,-143.992"/>
-        <dia:point val="29.8,-143.992"/>
-        <dia:point val="29.8,-136"/>
+        <dia:point val="25.8,-143.992"/>
+        <dia:point val="25.8,-136"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
