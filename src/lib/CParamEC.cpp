@@ -44,11 +44,32 @@ CParamEC::CParamEC (std::string  * nom_,
 
 
 /**
+ * \brief Duplication d'une classe CParamEC.
+ * \param other La classe à dupliquer.
+ */
+CParamEC::CParamEC (const CParamEC & other) :
+  IParametres (other.getUndoManager ()),
+  nom (new std::string (*other.nom)),
+  annexe (other.annexe),
+  variante (other.variante)
+{
+}
+
+
+/**
  * \brief Destructeur d'une classe CParamEC.
  */
 CParamEC::~CParamEC ()
 {
 }
+
+
+/**
+ * \brief Assignment operator de CParamEC.
+ * \param other La classe à dupliquer.
+ */
+CParamEC &
+CParamEC::operator = (const CParamEC & other) = delete;
 
 
 /**
