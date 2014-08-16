@@ -18,9 +18,6 @@
 
 #include "config.h"
 
-#include <algorithm>
-#include <iostream>
-#include <functional>
 
 #include "CModele.hpp"
 

@@ -31,6 +31,7 @@
  * \param norme (in) La norme du projet.
  */
 CProjet::CProjet (ENorme norme) :
+  CPreferences (),
   CCalculs (),
   CModele (),
   CUndoManager (*this),
@@ -143,6 +144,7 @@ CProjet::CProjet (ENorme norme) :
  * \param other (in) La classe à dupliquer.
  */
 CProjet::CProjet (const CProjet & other) :
+  CPreferences (),
   CCalculs (),
   CModele (),
   CUndoManager (other),

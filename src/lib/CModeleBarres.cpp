@@ -18,8 +18,6 @@
 
 #include "config.h"
 
-#include <cmath>
-#include <iostream>
 
 #include "CModeleBarres.hpp"
 
