@@ -101,7 +101,7 @@ CNbCalcul::toString () const
 {
   std::ostringstream oss;
   
-  oss.precision (*decimales);
+  oss.precision (decimales[unite]);
   oss << std::fixed << val;
   
   return oss.str ();

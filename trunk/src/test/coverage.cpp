@@ -100,15 +100,35 @@ main (int32_t argc,
   BUGCONT (projet.unref (), -1, NULL)
   
   BUGCONT (projet.ref (), -1, NULL)
+  CAction *action2;
+  BUGCONT (action2 = projet.getAction (projet.getParametres ()->
+                                                        getpsiDescription (5)),
+           -1,
+           NULL)
+  BUGCONT (action2->setpsi0 (new CNbCalcul (0.5, U_, projet.getDecimales ())),
+           -1,
+           NULL)
+  BUGCONT (action2->setpsi1 (new CNbCalcul (0.5, U_, projet.getDecimales ())),
+           -1,
+           NULL)
+  BUGCONT (action2->setpsi2 (new CNbCalcul (0.5, U_, projet.getDecimales ())),
+           -1,
+           NULL)
+  BUGCONT (projet.unref (), -1, NULL)
+  BUGCONT (projet.undo (), -1, NULL)
   
-  action.reset (new CAction (new std::string (projet.getParametres ()->
-                                                       getpsiDescription (22)),
+  BUGCONT (projet.ref (), -1, NULL)
+  
+  std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
+                                                      getpsiDescription (22)));
+  action.reset (new CAction (nom.get (),
                              22,
                              projet));
   //Ici, il y a un traitement volontaire de l'erreur.
   if (!projet.addAction (action.get ()))
   {
     action.reset ();
+    nom.reset ();
     projet.rollback ();
   }
   else

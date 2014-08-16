@@ -44,6 +44,7 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CNbUser.cpp \
 															CParamEC.cpp \
 															CPonderations.cpp \
+															CPreferences.cpp \
 															CProjet.cpp \
 															CUndoData.cpp \
 															CUndoManager.cpp \
