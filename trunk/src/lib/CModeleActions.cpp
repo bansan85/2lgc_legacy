@@ -117,8 +117,8 @@ CModeleActions::addAction (CAction * action)
            false,
            &action->getUndoManager ())
   
-  BUGCONT (action->setParam (dynamic_cast <CProjet *>
-                                                     (this)->getParametres ()),
+  BUGCONT (action->setParam (dynamic_cast <CProjet *> (this)->getParametres (),
+                             dynamic_cast <CProjet *> (this)->getDecimales ()),
            false,
            &action->getUndoManager ())
   
