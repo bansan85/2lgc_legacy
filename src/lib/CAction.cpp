@@ -243,6 +243,14 @@ CAction::getpsi0 () const
 bool CHK
 CAction::setpsi0 (INb * val)
 {
+  if (val != NULL)
+  {
+    if (val->getUnite () != U_)
+    {
+      return false;
+    }
+  }
+  
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
@@ -283,6 +291,14 @@ CAction::getpsi1 () const
 bool CHK
 CAction::setpsi1 (INb * val)
 {
+  if (val != NULL)
+  {
+    if (val->getUnite () != U_)
+    {
+      return false;
+    }
+  }
+  
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
@@ -323,6 +339,14 @@ CAction::getpsi2 () const
 bool CHK
 CAction::setpsi2 (INb * val)
 {
+  if (val != NULL)
+  {
+    if (val->getUnite () != U_)
+    {
+      return false;
+    }
+  }
+  
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
