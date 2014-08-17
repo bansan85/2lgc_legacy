@@ -150,3 +150,5 @@ checkcode :
 	
 	$(MAKE) -C src/lib cppcheck
 	../nsiqcppstyle/nsiqcppstyle . > coding_style.log
+
+CLEANFILES = *.xml

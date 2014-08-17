@@ -24,6 +24,7 @@
 
 #include "CParamEC.hpp"
 #include "CProjet.hpp"
+#include "MAbrev.hh"
 #include "MErreurs.hh"
 
 /**
@@ -49,10 +50,12 @@ CProjet::CProjet (ENorme norme) :
          0,
          *this));
       
+      this->setInsertion (false);
       if (!setParametres (param.get ()))
       {
         throw gettext ("Impossible de créer ce projet. Echec lors de la sélection de la norme.\n");
       }
+      this->setInsertion (true);
       param.release ();
       
       break;
@@ -261,8 +264,7 @@ CProjet::setParametresXML (IParametres *param,
   BUGPARAM (root, "%p", root, false, this)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("setParamXML")),
-    xmlFreeNode);
+                    xmlNewNode (NULL, BAD_CAST2 ("setParamXML")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -271,10 +273,7 @@ CProjet::setParametresXML (IParametres *param,
   
   if (dynamic_cast <CParamEC *> (param) != NULL)
   {
-    BUGCRIT (xmlSetProp (
-               node.get (),
-               reinterpret_cast <const xmlChar *> ("Type"),
-               reinterpret_cast <const xmlChar *> ("EC")),
+    BUGCRIT (xmlSetProp (node.get (), BAD_CAST2 ("Type"), BAD_CAST2 ("EC")),
              false,
              this,
              gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -284,19 +283,16 @@ CProjet::setParametresXML (IParametres *param,
     BUGPROG (NULL, false, this, gettext ("Le type de la norme est inconnu.\n"))
   }
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (nom.c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Nom"),
+                       BAD_CAST2 (nom.c_str ())),
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Variante"),
-             reinterpret_cast <const xmlChar *> (std::to_string (variante).
-                                                                    c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Variante"),
+                       BAD_CAST2 (std::to_string (variante).c_str ())),
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -320,8 +316,7 @@ bool
 CProjet::enregistre (std::string fichier)
 {
   std::unique_ptr <xmlDoc, void (*)(xmlDocPtr)> doc (
-    xmlNewDoc (reinterpret_cast <const xmlChar *> ("1.0")),
-    xmlFreeDoc);
+                                    xmlNewDoc (BAD_CAST2 ("1.0")), xmlFreeDoc);
   xmlNodePtr root_node;
   
   BUGCRIT (doc.get (),
@@ -329,18 +324,14 @@ CProjet::enregistre (std::string fichier)
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (root_node = xmlNewNode (
-                         NULL,
-                         reinterpret_cast <const xmlChar *> ("Projet")),
+  BUGCRIT (root_node = xmlNewNode (NULL, BAD_CAST2 ("Projet")),
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
   xmlDocSetRootElement (doc.get (), root_node);
   
-  BUGCONT (this->undoToXML (root_node),
-           false,
-           this)
+  BUGCONT (this->undoToXML (root_node), false, this)
   xmlSetCompressMode (0);
   
   BUGUSER (xmlSaveFormatFile (fichier.c_str (),

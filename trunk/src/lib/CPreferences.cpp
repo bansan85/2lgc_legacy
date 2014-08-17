@@ -26,11 +26,14 @@
  * \brief Constructeur d'une classe CPreferences.
  */
 CPreferences::CPreferences () :
-  decimales {3, // U_
-             3, 3, 3, 3, // U_MM
-             3, 3, 3, 3, // U_MM2
-             3, 3, 3, 3, // U_MM3
-             4, 4, 4, 4} // U_MM4
+  decimales
+  {
+    3, // U_
+    3, 3, 3, 3, // U_MM
+    3, 3, 3, 3, // U_MM2
+    3, 3, 3, 3, // U_MM3
+    4, 4, 4, 4
+  } // U_MM4
 {
 }
 
