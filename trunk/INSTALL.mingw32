@@ -406,7 +406,7 @@ Pour la version sans débug :
 
 Compilation du programme
 ========================
-BUG : si error: 'to_string' is not a member of 'std' : http://tehsausage.com/mingw-to-string
+BUG : si error: 'to_string' is not a member of 'std' : http://tehsausage.com/mingw-to-string
 
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
 

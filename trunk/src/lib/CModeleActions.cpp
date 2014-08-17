@@ -76,7 +76,7 @@ CModeleActions::addAction (CAction * action)
            &action->getUndoManager (),
            gettext ("Le programme est à ses limites.\n"))
   
-  BUGUSER (this->getAction (*action->getNom ()) == NULL,
+  BUGUSER (getAction (*action->getNom ()) == NULL,
            false,
            &action->getUndoManager (),
            gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n"),
@@ -137,7 +137,7 @@ CModeleActions::addAction (CAction * action)
 CAction *
 CModeleActions::getAction (std::string nom)
 {
-  for (CAction * action : this->actions)
+  for (CAction * action : actions)
   {
     if (nom.compare (*action->getNom ()) == 0)
     {

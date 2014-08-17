@@ -69,7 +69,7 @@ CNbUser::~CNbUser ()
 double
 CNbUser::getVal () const
 {
-  return this->val;
+  return val;
 }
 
 
@@ -79,7 +79,7 @@ CNbUser::getVal () const
 EUnite
 CNbUser::getUnite () const
 {
-  return this->unite;
+  return unite;
 }
 
 
@@ -135,14 +135,14 @@ CNbUser::toString () const
   uint8_t     width;
   double      test;
   
-  if (fabs (this->val) > 1e15)
+  if (fabs (val) > 1e15)
   {
     for (width = 0; width <= 15; width++)
     {
-      retour = format ("%.*le", width, this->val);
+      retour = format ("%.*le", width, val);
       sscanf (retour.c_str (), "%le", &test);
-      if ((fabs (this->val) * 0.999999999999999 <= fabs (test)) &&
-          (fabs (test) <= fabs (this->val) * 1.000000000000001))
+      if ((fabs (val) * 0.999999999999999 <= fabs (test)) &&
+          (fabs (test) <= fabs (val) * 1.000000000000001))
       {
         break;
       }
@@ -153,17 +153,17 @@ CNbUser::toString () const
   {
     for (width = 0; width <= 15; width++)
     {
-      retour = format ("%.*lf", width, this->val);
+      retour = format ("%.*lf", width, val);
       sscanf (retour.c_str (), "%lf", &test);
-      if ((fabs (this->val) * 0.999999999999999 <= fabs (test)) &&
-          (fabs (test) <= fabs (this->val) * 1.000000000000001))
+      if ((fabs (val) * 0.999999999999999 <= fabs (test)) &&
+          (fabs (test) <= fabs (val) * 1.000000000000001))
       {
         break;
       }
     }
   }
   
-  return format ("%.*lf", width, this->val);
+  return format ("%.*lf", width, val);
 }
 
 
@@ -180,7 +180,7 @@ CNbUser::newXML (xmlNodePtr root) const
   
   std::ostringstream oss;
   
-  oss << std::scientific << this->val;
+  oss << std::scientific << val;
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("valeur"),

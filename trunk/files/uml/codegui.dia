@@ -2885,7 +2885,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Défini l'appui du nœud. Peut-être NULL si le nœud est libre.#</dia:string>
+            <dia:string>#Défini l'appui du nœud. Peut-être NULL si le nœud est libre.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -5246,7 +5246,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Relâchement de la barre. NULL si aucun.#</dia:string>
+            <dia:string>#Relâchement de la barre. NULL si aucun.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -5431,7 +5431,7 @@
                 <dia:string>##</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
-                <dia:string>#Relâchement de la barre. NULL si aucun.#</dia:string>
+                <dia:string>#Relâchement de la barre. NULL si aucun.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -8207,7 +8207,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Un groupe possède soit une liste d'actions ou un liste de groupes. Action et Groupe d'actions possèdent le même point commun : un nom et un iter pour l'affichage graphique dans la fenêtre permettant de réaliser des combinaisons de Groupe et d'Action.
+        <dia:string>#Un groupe possède soit une liste d'actions ou un liste de groupes. Action et Groupe d'actions possèdent le même point commun : un nom et un iter pour l'affichage graphique dans la fenêtre permettant de réaliser des combinaisons de Groupe et d'Action.
 #include &lt;string&gt;#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
@@ -10172,7 +10172,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#psi vaut toujours -1 s'il ne s'agit pas d'une action variable sinon, psi vaut 0, 1 ou 2 pour que cette action soit pondérée avec soit psi0, psi1 ou psi2 en combinaison d'accompagnement.#</dia:string>
+            <dia:string>#psi vaut toujours -1 s'il ne s'agit pas d'une action variable sinon, psi vaut 0, 1 ou 2 pour que cette action soit pondérée avec soit psi0, psi1 ou psi2 en combinaison d'accompagnement.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -10195,7 +10195,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Ce flag vaut 1 si cette action est une action dominante. 0 s'il s'agit d'une action d'accompagnement.#</dia:string>
+            <dia:string>#Ce flag vaut 1 si cette action est une action dominante. 0 s'il s'agit d'une action d'accompagnement.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -11120,7 +11120,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Contient une liste d'actions ou de groupes avec la méthode pour les combiner (AND, OR ou XOR).#</dia:string>
+        <dia:string>#Contient une liste d'actions ou de groupes avec la méthode pour les combiner (AND, OR ou XOR).#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -12907,7 +12907,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Liste de tous les noeuds de la structure. Y compris les noeuds définis par l'utilisateur ou les noeuds créés par la discrétisation des éléments.
+        <dia:string>#Liste de tous les noeuds de la structure. Y compris les noeuds définis par l'utilisateur ou les noeuds créés par la discrétisation des éléments.
 #</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
@@ -13805,7 +13805,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#La position du noeud avec son degré de liberté dans la matrice partielle. Calcul : t_for_part-&gt;i[n_part[g_list_index (p-&gt;modele.noeuds, noeud)][0à5]]. Dans cette matrice de rigidité partielle, n_part renvoie UINT32_MAX si le degré de liberté est bloqué.#</dia:string>
+            <dia:string>#La position du noeud avec son degré de liberté dans la matrice partielle. Calcul : t_for_part-&gt;i[n_part[g_list_index (p-&gt;modele.noeuds, noeud)][0à5]]. Dans cette matrice de rigidité partielle, n_part renvoie UINT32_MAX si le degré de liberté est bloqué.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -13828,7 +13828,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#La position du noeud avec son degré de liberté dans la matrice complète. Calcul : t_for_part-&gt;i[n_part[g_list_index (p-&gt;modele.noeuds, noeud)][0à5]].#</dia:string>
+            <dia:string>#La position du noeud avec son degré de liberté dans la matrice complète. Calcul : t_for_part-&gt;i[n_part[g_list_index (p-&gt;modele.noeuds, noeud)][0à5]].#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -14441,7 +14441,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Numéro du département : 1 à 976, y compris 2A et 2B.#</dia:string>
+            <dia:string>#Numéro du département : 1 à 976, y compris 2A et 2B.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -18835,7 +18835,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Le système de gestion des annulations et de mémorisation de l'historique. Important : CUndoManager ne doit pas être tel quel. CProjet doit hérité de CUndoManager et CUndoManager doit être utilisé que par CProjet par polymorphisme.
+        <dia:string>#Le système de gestion des annulations et de mémorisation de l'historique. Important : CUndoManager ne doit pas être tel quel. CProjet doit hérité de CUndoManager et CUndoManager doit être utilisé que par CProjet par polymorphisme.
 #include &lt;cstdint&gt;
 class CProjet;#</dia:string>
       </dia:attribute>
@@ -18975,7 +18975,7 @@ class CProjet;#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Les modifications en cours sont intégrés lorsque count descend à 0. En cas de modification, chaque méthode ref augmente de 1 et unref diminue de 1. Cela permet de prendre en compte plusieurs modifications dans un même évènement. Les fonctions undo / redo ne peuvent s'exécuter si count est différent de 0.#</dia:string>
+            <dia:string>#Les modifications en cours sont intégrés lorsque count descend à 0. En cas de modification, chaque méthode ref augmente de 1 et unref diminue de 1. Cela permet de prendre en compte plusieurs modifications dans un même évènement. Les fonctions undo / redo ne peuvent s'exécuter si count est différent de 0.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -18998,7 +18998,7 @@ class CProjet;#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#La liste temporaire. Créer dynaniquement lorsque ref passe de 0 à 1 et ajouté automatiquement à la liste lorsque ref passe de 1 à 0.#</dia:string>
+            <dia:string>#La liste temporaire. Créer dynaniquement lorsque ref passe de 0 à 1 et ajouté automatiquement à la liste lorsque ref passe de 1 à 0.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -19044,7 +19044,7 @@ class CProjet;#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Lorsque true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la cage, afin d'éviter un double enregistrement.#</dia:string>
+            <dia:string>#Lorsque true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la cage, afin d'éviter un double enregistrement.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -29716,7 +29716,7 @@ class CProjet;#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Défini la position du nœud sur la barre (entre 0 et 1).#</dia:string>
+            <dia:string>#Défini la position du nœud sur la barre (entre 0 et 1).#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>

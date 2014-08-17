@@ -91,9 +91,9 @@ CParamEC::getNom () const
 bool CHK
 CParamEC::setNom (std::string * nom_)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().push (
+  BUGCONT (getUndoManager ().push (
              std::bind (&CParamEC::setNom, this, nom),
              std::bind (&CParamEC::setNom, this, nom_),
              std::bind (std::default_delete <std::string> (), nom_),
@@ -103,11 +103,11 @@ CParamEC::setNom (std::string * nom_)
                         nom_,
                         std::placeholders::_1)),
              false,
-             &this->getUndoManager ())
+             &getUndoManager ())
   
   nom = nom_;
   
-  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
   return true;
 }
@@ -129,26 +129,26 @@ CParamEC::setNomXML (std::string * param,
   
   BUGCRIT (node.get (),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
                        BAD_CAST2 (param->c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("nom"),
                        BAD_CAST2 (nom_->c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node.release ();
   
@@ -173,9 +173,9 @@ CParamEC::getVariante () const
 bool CHK
 CParamEC::setVariante (uint32_t variante_)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().push (
+  BUGCONT (getUndoManager ().push (
            std::bind (&CParamEC::setVariante, this, variante),
            std::bind (&CParamEC::setVariante, this, variante_),
            NULL,
@@ -185,7 +185,7 @@ CParamEC::setVariante (uint32_t variante_)
                       variante_,
                       std::placeholders::_1)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   
   variante = variante_;
   
@@ -208,26 +208,26 @@ CParamEC::setVarianteXML (std::string * nom_,
   
   BUGCRIT (node.get (),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
                        BAD_CAST2 (nom_->c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("variante"),
                        BAD_CAST2 (std::to_string(variante_).c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node.release ();
   
@@ -253,7 +253,7 @@ CParamEC::getpsiN () const
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, 0, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, 0, &getUndoManager ())
       break;
     }
   }
@@ -293,7 +293,7 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
+        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &getUndoManager ())
       }
     }
     case NORMEEUAC_FR :
@@ -324,12 +324,12 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &this->getUndoManager ())
+        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &getUndoManager ())
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, ACTION_INCONNUE, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, ACTION_INCONNUE, &getUndoManager ())
       break;
     }
   }
@@ -368,7 +368,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 16 : return gettext ("Sismique");
         default :
         {
-          BUGPARAM (type, "%u", NULL, std::string (), &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, std::string (), &getUndoManager ())
           break;
         }
       }
@@ -401,14 +401,14 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 21 : return gettext ("Eaux souterraines");
         default :
         {
-          BUGPARAM (type, "%u", NULL, std::string (), &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, std::string (), &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, std::string (), &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, std::string (), &getUndoManager ())
       break;
     }
   }
@@ -447,7 +447,7 @@ CParamEC::getpsi0 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
@@ -480,14 +480,14 @@ CParamEC::getpsi0 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
       break;
     }
   }
@@ -526,7 +526,7 @@ CParamEC::getpsi1 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
@@ -559,14 +559,14 @@ CParamEC::getpsi1 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
       break;
     }
   }
@@ -605,7 +605,7 @@ CParamEC::getpsi2 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
@@ -638,14 +638,14 @@ CParamEC::getpsi2 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &this->getUndoManager ())
+          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &this->getUndoManager ())
+      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
       break;
     }
   }

@@ -115,33 +115,33 @@ CAction::addXML (std::string *nom_,
                  uint8_t      type_,
                  xmlNodePtr   root)
 {
-  BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
+  BUGPARAM (root, "%p", root, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                      xmlNewNode (NULL, BAD_CAST2 ("addAction")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
                        BAD_CAST2 (CAction::getDescription (type_).c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();
@@ -174,29 +174,29 @@ CAction::setpsiXML (std::string * const nom_,
                     INb                *psin,
                     xmlNodePtr          root)
 {
-  BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
-  BUGPARAM (psi, "%u", psi <= 2, false, &this->getUndoManager ())
+  BUGPARAM (root, "%p", root, false, &getUndoManager ())
+  BUGPARAM (psi, "%u", psi <= 2, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                          xmlNewNode (NULL, BAD_CAST2 ("setpsi")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("psi"),
                        BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
@@ -204,20 +204,20 @@ CAction::setpsiXML (std::string * const nom_,
   
   BUGCRIT (node0.get (),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCONT (psin->newXML (node0.get ()), false, &this->getUndoManager ())
+  BUGCONT (psin->newXML (node0.get ()), false, &getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           &this->getUndoManager (),
+           &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node.release ();
   
@@ -243,7 +243,7 @@ CAction::getpsi0 () const
 bool CHK
 CAction::setpsi0 (INb * val)
 {
-  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi0, this, psi0),
@@ -256,10 +256,10 @@ CAction::setpsi0 (INb * val)
                         val,
                         std::placeholders::_1)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   psi0 = val;
   
-  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
   return true;
 }
@@ -283,7 +283,7 @@ CAction::getpsi1 () const
 bool CHK
 CAction::setpsi1 (INb * val)
 {
-  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi1, this, psi1),
@@ -296,10 +296,10 @@ CAction::setpsi1 (INb * val)
                         val,
                         std::placeholders::_1)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   psi1 = val;
   
-  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
   return true;
 }
@@ -323,7 +323,7 @@ CAction::getpsi2 () const
 bool CHK
 CAction::setpsi2 (INb * val)
 {
-  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi2, this, psi2),
@@ -336,10 +336,10 @@ CAction::setpsi2 (INb * val)
                         val,
                         std::placeholders::_1)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   psi2 = val;
   
-  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
   return true;
 }
@@ -376,7 +376,7 @@ bool CHK
 CAction::setParam (IParametres * param,
                    uint8_t     * decimales)
 {
-  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   funcDesc = std::bind (&IParametres::getpsiDescription,
                         param,
@@ -384,15 +384,15 @@ CAction::setParam (IParametres * param,
   
   BUGCONT (setpsi0 (new CNbCalcul (param->getpsi0 (type), U_, decimales)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   BUGCONT (setpsi1 (new CNbCalcul (param->getpsi1 (type), U_, decimales)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   BUGCONT (setpsi2 (new CNbCalcul (param->getpsi2 (type), U_, decimales)),
            false,
-           &this->getUndoManager ())
+           &getUndoManager ())
   
-  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
   return true;
 }

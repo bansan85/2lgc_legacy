@@ -54,7 +54,7 @@ CUndoData::operator = (const CUndoData & other) = delete;
  */
 CUndoData::~CUndoData ()
 {
-  for (std::function <void ()> f : this->suppr)
+  for (std::function <void ()> f : suppr)
   {
     f ();
   }

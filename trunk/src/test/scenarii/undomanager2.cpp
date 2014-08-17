@@ -89,7 +89,7 @@ main (int32_t argc,
            NULL)
   BUGCONT (n3 = n2->children, -1, NULL)
   BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
-  BUGCONT (std::string ("setParamXML").compare (BAD_TSAC2 (n3->name)) == 0,
+  BUGCONT (std::string ("setParam").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            NULL)
   BUGCONT (n2 = n2->next, -1, NULL)

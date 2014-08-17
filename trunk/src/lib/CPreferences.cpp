@@ -46,7 +46,7 @@ CPreferences::CPreferences (const CPreferences & other)
 {
   std::copy (std::begin (other.decimales),
              std::end (other.decimales),
-             std::begin (this->decimales));
+             std::begin (decimales));
 }
 
 
@@ -59,7 +59,7 @@ CPreferences::operator = (const CPreferences & other)
 {
   std::copy (std::begin (other.decimales),
              std::end (other.decimales),
-             std::begin (this->decimales));
+             std::begin (decimales));
   return *this;
 }
 

@@ -79,7 +79,7 @@ CNbCalcul::~CNbCalcul ()
 double
 CNbCalcul::getVal () const
 {
-  return this->val;
+  return val;
 }
 
 
@@ -89,7 +89,7 @@ CNbCalcul::getVal () const
 EUnite
 CNbCalcul::getUnite () const
 {
-  return this->unite;
+  return unite;
 }
 
 
@@ -122,7 +122,7 @@ CNbCalcul::newXML (xmlNodePtr root) const
   
   std::ostringstream oss;
   
-  oss << std::scientific << this->val;
+  oss << std::scientific << val;
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("valeur"),
