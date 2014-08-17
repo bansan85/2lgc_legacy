@@ -50,12 +50,10 @@ CProjet::CProjet (ENorme norme) :
          0,
          *this));
       
-      this->setInsertion (false);
       if (!setParametres (param.get ()))
       {
         throw gettext ("Impossible de créer ce projet. Echec lors de la sélection de la norme.\n");
       }
-      this->setInsertion (true);
       param.release ();
       
       break;

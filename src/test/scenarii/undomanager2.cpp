@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Test les fonctionnalités de base de gestionnaire d'annulation.
+// Lorsque des modifications sont appliquées juste après un/plusieurs undo,
+// on vérifie que les modifications fraichement annulées sont bien supprimées
+// du gestionnaire d'annulation avant l'insertion des nouvelles modifications.
 
 #include "config.h"
 
@@ -81,6 +83,16 @@ main (int32_t argc,
            -1,
            NULL)
   BUGCONT (n2 = n1->children, -1, NULL)
+  BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
+  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
+           -1,
+           NULL)
+  BUGCONT (n3 = n2->children, -1, NULL)
+  BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
+  BUGCONT (std::string ("setParamXML").compare (BAD_TSAC2 (n3->name)) == 0,
+           -1,
+           NULL)
+  BUGCONT (n2 = n2->next, -1, NULL)
   BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
   BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
            -1,

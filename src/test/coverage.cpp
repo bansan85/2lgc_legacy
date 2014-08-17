@@ -114,8 +114,12 @@ main (int32_t argc,
   BUGCONT (action2->setpsi2 (new CNbCalcul (0.5, U_, projet.getDecimales ())),
            -1,
            NULL)
+  action2->getpsi0 ().getVal ();
+  action2->getpsi1 ().getUnite ();
+  action2->getpsi2 ().toString ();
   BUGCONT (projet.unref (), -1, NULL)
   BUGCONT (projet.undo (), -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
   
   BUGCONT (projet.ref (), -1, NULL)
   
@@ -138,12 +142,14 @@ main (int32_t argc,
   BUGCONT (projet.getParametres ()->getpsiDescription (22).empty (), -1, NULL)
   BUGCONT (projet.getActionCount () == 22, -1, NULL)
   BUGCONT (projet.undo (), -1, NULL)
+  BUGCONT (projet.undo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 0, -1, NULL)
+  BUGCONT (projet.redo (), -1, NULL)
   BUGCONT (projet.redo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 22, -1, NULL)
   BUGCONT (projet.getEtat () == UNDO_NONE, -1, NULL)
   
-  BUGCONT (projet.enregistre ("test.xml"), -1, NULL)
+  BUGCONT (projet.enregistre ("coverage.xml"), -1, NULL)
   
   // Création des groupes d'actions
 /*  BUGCONT(_1990_groupe_ajout_niveau(projet), -1)
