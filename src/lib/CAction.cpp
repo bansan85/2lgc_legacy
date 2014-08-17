@@ -25,7 +25,7 @@
 #include <locale>
 
 #include "CAction.hpp"
-#include "CNbUser.hpp"
+#include "CNbCalcul.hpp"
 #include "MAbrev.hh"
 #include "MErreurs.hh"
 
@@ -207,9 +207,7 @@ CAction::setpsiXML (std::string * const nom_,
            &this->getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCONT (psin->newXML (node0.get ()),
-           false,
-           &this->getUndoManager ())
+  BUGCONT (psin->newXML (node0.get ()), false, &this->getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()),
            false,
@@ -233,7 +231,7 @@ CAction::setpsiXML (std::string * const nom_,
 INb const &
 CAction::getpsi0 () const
 {
-  return *this->psi0;
+  return *psi0;
 }
 
 
@@ -245,23 +243,23 @@ CAction::getpsi0 () const
 bool CHK
 CAction::setpsi0 (INb * val)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().push (
+  BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi0, this, psi0),
              std::bind (&CAction::setpsi0, this, val),
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
-                        this->getNom (),
+                        getNom (),
                         0,
                         val,
                         std::placeholders::_1)),
            false,
            &this->getUndoManager ())
-  this->psi0 = val;
+  psi0 = val;
   
-  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
   
   return true;
 }
@@ -273,7 +271,7 @@ CAction::setpsi0 (INb * val)
 INb const &
 CAction::getpsi1 () const
 {
-  return *this->psi1;
+  return *psi1;
 }
 
 
@@ -285,23 +283,23 @@ CAction::getpsi1 () const
 bool CHK
 CAction::setpsi1 (INb * val)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().push (
+  BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi1, this, psi1),
              std::bind (&CAction::setpsi1, this, val),
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
-                        this->getNom (),
+                        getNom (),
                         1,
                         val,
                         std::placeholders::_1)),
            false,
            &this->getUndoManager ())
-  this->psi1 = val;
+  psi1 = val;
   
-  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
   
   return true;
 }
@@ -313,7 +311,7 @@ CAction::setpsi1 (INb * val)
 INb const &
 CAction::getpsi2 () const
 {
-  return *this->psi2;
+  return *psi2;
 }
 
 
@@ -325,23 +323,23 @@ CAction::getpsi2 () const
 bool CHK
 CAction::setpsi2 (INb * val)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().push (
+  BUGCONT (getUndoManager ().push (
              std::bind (&CAction::setpsi2, this, psi2),
              std::bind (&CAction::setpsi2, this, val),
              std::bind (std::default_delete <INb> (), val),
              std::bind (&CAction::setpsiXML,
                         this,
-                        this->getNom (),
+                        getNom (),
                         2,
                         val,
                         std::placeholders::_1)),
            false,
            &this->getUndoManager ())
-  this->psi2 = val;
+  psi2 = val;
   
-  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
   
   return true;
 }
@@ -353,7 +351,7 @@ CAction::setpsi2 (INb * val)
 bool
 CAction::emptyCharges () const
 {
-  return this->charges.empty ();
+  return charges.empty ();
 }
 
 
@@ -372,27 +370,29 @@ CAction::getDescription (uint8_t type_) const
  *        fonction XML puisqu'elle ne doit être appelée que depuis la fonction
  *        CProjet::setParametres.
  * \param param Le type IParametres.
+ * \param decimales Les nombres de décimales à appliquer.
  */
 bool CHK
-CAction::setParam (IParametres * param)
+CAction::setParam (IParametres * param,
+                   uint8_t     * decimales)
 {
-  BUGCONT (this->getUndoManager ().ref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().ref (), false, &this->getUndoManager ())
   
   funcDesc = std::bind (&IParametres::getpsiDescription,
                         param,
                         std::placeholders::_1);
   
-  BUGCONT (setpsi0 (new CNbUser (param->getpsi0 (type), U_)),
+  BUGCONT (setpsi0 (new CNbCalcul (param->getpsi0 (type), U_, decimales)),
            false,
-           &getUndoManager ())
-  BUGCONT (setpsi1 (new CNbUser (param->getpsi1 (type), U_)),
+           &this->getUndoManager ())
+  BUGCONT (setpsi1 (new CNbCalcul (param->getpsi1 (type), U_, decimales)),
            false,
-           &getUndoManager ())
-  BUGCONT (setpsi2 (new CNbUser (param->getpsi2 (type), U_)),
+           &this->getUndoManager ())
+  BUGCONT (setpsi2 (new CNbCalcul (param->getpsi2 (type), U_, decimales)),
            false,
-           &getUndoManager ())
+           &this->getUndoManager ())
   
-  BUGCONT (this->getUndoManager ().unref (), false, &this->getUndoManager ())
+  BUGCONT (getUndoManager ().unref (), false, &this->getUndoManager ())
   
   return true;
 }
