@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include "CParamEC.hpp"
+#include "MAbrev.hh"
 #include "MErreurs.hh"
 
 
@@ -124,26 +125,23 @@ CParamEC::setNomXML (std::string * param,
                      xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("ParamSetNom")),
-    xmlFreeNode);
+                    xmlNewNode (NULL, BAD_CAST2 ("ParamSetNom")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
            &this->getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("param"),
-             reinterpret_cast <const xmlChar *> (param->c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("param"),
+                       BAD_CAST2 (param->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("nom"),
-             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("nom"),
+                       BAD_CAST2 (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -206,27 +204,23 @@ CParamEC::setVarianteXML (std::string * nom_,
                           xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("ParamSetVariante")),
-    xmlFreeNode);
+               xmlNewNode (NULL, BAD_CAST2 ("ParamSetVariante")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
            &this->getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("param"),
-             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("param"),
+                       BAD_CAST2 (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("variante"),
-             reinterpret_cast <const xmlChar *>
-                                         (std::to_string(variante_).c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("variante"),
+                       BAD_CAST2 (std::to_string(variante_).c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")

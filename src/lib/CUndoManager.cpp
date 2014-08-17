@@ -24,10 +24,11 @@
 #include <locale>
 #include <sys/types.h>
 
-#include "MErreurs.hh"
+#include "CProjet.hpp"
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
-#include "CProjet.hpp"
+#include "MAbrev.hh"
+#include "MErreurs.hh"
 
 
 /**
@@ -260,6 +261,24 @@ CUndoManager::ref ()
     return true;
   }
   
+  if ((count == 0) && (pos != 0))
+  {
+    std::list <CUndoData *>::iterator it = liste.end ();
+    
+    std::advance (it, -static_cast <ssize_t> (pos));
+    
+    for (; it != liste.end (); )
+    {
+      for (std::function <void ()> f : (*it)->suppr)
+      {
+        f ();
+      }
+      liste.erase (it++);
+    }
+    
+    pos = 0;
+  }
+  
   if (count == 0)
   {
     tmpListe = new CUndoData ();
@@ -307,8 +326,7 @@ bool
 CUndoManager::undoToXML (xmlNodePtr root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("UndoManager")),
-    xmlFreeNode);
+                    xmlNewNode (NULL, BAD_CAST2 ("UndoManager")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -318,10 +336,9 @@ CUndoManager::undoToXML (xmlNodePtr root)
   for (CUndoData * data : liste)
   {
     std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-      xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("Bloc")),
-      xmlFreeNode);
+                           xmlNewNode (NULL, BAD_CAST2 ("Bloc")), xmlFreeNode);
     
-    BUGCRIT (node.get (),
+    BUGCRIT (node0.get (),
              false,
              this,
              gettext ("Erreur d'allocation mémoire.\n"))
@@ -334,7 +351,7 @@ CUndoManager::undoToXML (xmlNodePtr root)
                gettext ("Erreur lors de la génération du fichier XML.\n"))
     }
     
-    BUGCRIT (xmlAddChild (root, node0.get ()),
+    BUGCRIT (xmlAddChild (node.get (), node0.get ()),
              false,
              this,
              gettext ("Erreur lors de la génération du fichier XML.\n"))
@@ -383,6 +400,17 @@ CUndoManager::rollback ()
   insertion = true;
   
   return true;
+}
+
+
+/**
+ * \brief Défini si l'insertion via push est autorisée.
+ * \param insert La nouvelle valeur.
+ */
+void
+CUndoManager::setInsertion (bool insert)
+{
+  insertion = insert;
 }
 
 

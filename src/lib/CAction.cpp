@@ -26,6 +26,7 @@
 
 #include "CAction.hpp"
 #include "CNbUser.hpp"
+#include "MAbrev.hh"
 #include "MErreurs.hh"
 
 
@@ -117,27 +118,23 @@ CAction::addXML (std::string *nom_,
   BUGPARAM (root, "%p", root, false, &this->getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("addAction")),
-    xmlFreeNode);
+                     xmlNewNode (NULL, BAD_CAST2 ("addAction")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
            &this->getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Nom"),
+                       BAD_CAST2 (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Type"),
-             reinterpret_cast <const xmlChar *> (
-                                    CAction::getDescription (type_).c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Type"),
+                       BAD_CAST2 (CAction::getDescription (type_).c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -181,34 +178,29 @@ CAction::setpsiXML (std::string * const nom_,
   BUGPARAM (psi, "%u", psi <= 2, false, &this->getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("setpsi")),
-    xmlFreeNode);
+                         xmlNewNode (NULL, BAD_CAST2 ("setpsi")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
            &this->getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("psi"),
-             reinterpret_cast <const xmlChar *> (psi == 0 ? "0" :
-                                                 psi == 1 ? "1" : "2")),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("psi"),
+                       BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("Nom"),
-             reinterpret_cast <const xmlChar *> (nom_->c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Nom"),
+                       BAD_CAST2 (nom_->c_str ())),
            false,
            &this->getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("val")),
-    xmlFreeNode);
+                            xmlNewNode (NULL, BAD_CAST2 ("val")), xmlFreeNode);
   
   BUGCRIT (node0.get (),
            false,
@@ -361,7 +353,7 @@ CAction::setpsi2 (INb * val)
 bool
 CAction::emptyCharges () const
 {
-  return this->charges.size () == 0;
+  return this->charges.empty ();
 }
 
 

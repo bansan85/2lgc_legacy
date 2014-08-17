@@ -12,3 +12,5 @@ coverage_SOURCES	=	coverage.cpp
 coverage_LDADD		=	../lib/libeurocodes.la
 
 EXTRA_PROGRAMS = $(TESTS)
+
+CLEANFILES = *.xml

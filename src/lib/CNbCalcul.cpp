@@ -26,6 +26,7 @@
 
 #include "CNbCalcul.hpp"
 #include "EUnite.hh"
+#include "MAbrev.hh"
 #include "MErreurs.hh"
 
 
@@ -112,8 +113,7 @@ bool CHK
 CNbCalcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-    xmlNewNode (NULL, reinterpret_cast <const xmlChar *> ("NbCalcul")),
-    xmlFreeNode);
+                       xmlNewNode (NULL, BAD_CAST2 ("NbCalcul")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -124,18 +124,16 @@ CNbCalcul::newXML (xmlNodePtr root) const
   
   oss << std::scientific << this->val;
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("valeur"),
-             reinterpret_cast <const xmlChar *> (oss.str ().c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("valeur"),
+                       BAD_CAST2 (oss.str ().c_str ())),
            false,
            NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             reinterpret_cast <const xmlChar *> ("unite"),
-             reinterpret_cast <const xmlChar *> (EUniteConst[unite].c_str ())),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("unite"),
+                       BAD_CAST2 (EUniteConst[unite].c_str ())),
            false,
            NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
