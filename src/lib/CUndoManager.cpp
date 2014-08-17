@@ -74,11 +74,9 @@ CUndoManager::operator = (const CUndoManager & other) = delete;
  */
 CUndoManager::~CUndoManager ()
 {
-  for_each (this->liste.begin (),
-            this->liste.end (),
-            std::default_delete <CUndoData> ());
+  for_each (liste.begin (), liste.end (), std::default_delete <CUndoData> ());
   
-  delete (this->tmpListe);
+  delete (tmpListe);
 }
 
 

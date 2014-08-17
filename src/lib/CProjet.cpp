@@ -216,9 +216,9 @@ CProjet::getParametres ()
 bool CHK
 CProjet::setParametres (IParametres * param)
 {
-  BUGCONT (this->ref (), false, this)
+  BUGCONT (ref (), false, this)
   
-  BUGCONT (this->push (
+  BUGCONT (push (
              std::bind (&CProjet::setParametres, this, parametres),
              std::bind (&CProjet::setParametres, this, param),
              std::bind (std::default_delete <IParametres> (), param),
@@ -232,14 +232,14 @@ CProjet::setParametres (IParametres * param)
            false,
            this)
   
-  BUGCONT (this->pushSuppr (std::bind (std::default_delete <std::string> (),
+  BUGCONT (pushSuppr (std::bind (std::default_delete <std::string> (),
                               const_cast <std::string *> (&param->getNom ()))),
            false,
            this)
   
   parametres = param;
   
-  BUGCONT (this->unref (), false, this)
+  BUGCONT (unref (), false, this)
   
   return true;
 }
@@ -262,7 +262,7 @@ CProjet::setParametresXML (IParametres *param,
   BUGPARAM (root, "%p", root, false, this)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                    xmlNewNode (NULL, BAD_CAST2 ("setParamXML")), xmlFreeNode);
+                       xmlNewNode (NULL, BAD_CAST2 ("setParam")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -329,7 +329,7 @@ CProjet::enregistre (std::string fichier)
   
   xmlDocSetRootElement (doc.get (), root_node);
   
-  BUGCONT (this->undoToXML (root_node), false, this)
+  BUGCONT (undoToXML (root_node), false, this)
   xmlSetCompressMode (0);
   
   BUGUSER (xmlSaveFormatFile (fichier.c_str (),

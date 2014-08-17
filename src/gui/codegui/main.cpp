@@ -127,7 +127,7 @@ main (int32_t argc,
   BUGCONT (projet.addAction (action.get ()), -1, NULL)
   action.release ();
   BUGCONT (projet.getActionCount () == 3, -1, NULL)
-  // 19 Vent
+  // 19 Vent
   action.reset (new CAction (new std::string ("Vent"),
                              19,
                              dynamic_cast <CUndoManager &> (projet)));
