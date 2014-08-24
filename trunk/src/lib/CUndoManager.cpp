@@ -228,17 +228,13 @@ CUndoManager::redo ()
 EUndoEtat
 CUndoManager::getEtat () const
 {
-  if (count == 0)
-  {
-    return UNDO_NONE;
-  }
-  else if (insertion)
+  if ((insertion) && (count != 0))
   {
     return UNDO_MODIF;
   }
   else
   {
-    return UNDO_REVERT;
+    return UNDO_NONE_OR_REVERT;
   }
 }
 
@@ -267,10 +263,7 @@ CUndoManager::ref ()
     
     for (; it != liste.end (); )
     {
-      for (std::function <void ()> f : (*it)->suppr)
-      {
-        f ();
-      }
+      delete *it;
       liste.erase (it++);
     }
     
@@ -398,6 +391,16 @@ CUndoManager::rollback ()
   insertion = true;
   
   return true;
+}
+
+
+/**
+ * \brief Renvoie si l'insertion via push est possible.
+ */
+bool CHK
+CUndoManager::getInsertion ()
+{
+  return insertion;
 }
 
 

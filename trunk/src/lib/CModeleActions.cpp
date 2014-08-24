@@ -23,7 +23,7 @@
 #include <memory>
 
 #include "CModeleActions.hpp"
-#include "CNbUser.hpp"
+#include "CNbCalcul.hpp"
 #include "CProjet.hpp"
 #include "MErreurs.hh"
 
@@ -117,10 +117,20 @@ CModeleActions::addAction (CAction * action)
            false,
            &action->getUndoManager ())
   
-  BUGCONT (action->setParam (dynamic_cast <CProjet *> (this)->getParametres (),
-                             dynamic_cast <CProjet *> (this)->getDecimales ()),
-           false,
-           &action->getUndoManager ())
+  IParametres *param = dynamic_cast <CProjet *> (this)->getParametres ();
+  uint8_t type = action->getType ();
+  uint8_t *decimales = dynamic_cast <CProjet *> (this)->getDecimales ();
+  
+  if (action->getUndoManager ().getEtat () != UNDO_NONE_OR_REVERT)
+  {
+    BUGCONT (action->setParam (
+               param,
+               new CNbCalcul (param->getpsi0 (type), U_, decimales),
+               new CNbCalcul (param->getpsi1 (type), U_, decimales),
+               new CNbCalcul (param->getpsi2 (type), U_, decimales)),
+             false,
+             &action->getUndoManager ())
+  }
   
   BUGCONT (action->getUndoManager ().unref (),
            false,

@@ -143,7 +143,7 @@ main (int32_t argc,
   BUGCONT (projet.redo (), -1, NULL)
   BUGCONT (projet.redo (), -1, NULL)
   BUGCONT (projet.getActionCount () == 22, -1, NULL)
-  BUGCONT (projet.getEtat () == UNDO_NONE, -1, NULL)
+  BUGCONT (projet.getEtat () == UNDO_NONE_OR_REVERT, -1, NULL)
   
   BUGCONT (projet.undo (), -1, NULL)
   BUGCONT (projet.ref (), -1, NULL)

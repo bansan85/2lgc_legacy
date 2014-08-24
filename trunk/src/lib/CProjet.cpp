@@ -233,7 +233,7 @@ CProjet::setParametres (IParametres * param)
            this)
   
   BUGCONT (pushSuppr (std::bind (std::default_delete <std::string> (),
-                              const_cast <std::string *> (&param->getNom ()))),
+                               const_cast <std::string *> (param->getNom ()))),
            false,
            this)
   
@@ -255,14 +255,14 @@ CProjet::setParametres (IParametres * param)
  */
 bool CHK
 CProjet::setParametresXML (IParametres *param,
-                           std::string  nom,
+                           std::string *nom,
                            uint32_t     variante,
                            xmlNodePtr   root)
 {
   BUGPARAM (root, "%p", root, false, this)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                       xmlNewNode (NULL, BAD_CAST2 ("setParam")), xmlFreeNode);
+                 xmlNewNode (NULL, BAD_CAST2 ("projetSetParam")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -283,7 +283,7 @@ CProjet::setParametresXML (IParametres *param,
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
-                       BAD_CAST2 (nom.c_str ())),
+                       BAD_CAST2 (nom->c_str ())),
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
