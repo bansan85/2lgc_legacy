@@ -48,7 +48,7 @@ CAction::CAction (std::string  * nom_,
   , psi0 (NULL)
   , psi1 (NULL)
   , psi2 (NULL)
-  , funcDesc (NULL)
+  , parametres (NULL)
   , deplacement (NULL)
   , forces (NULL)
   , efforts_noeuds (NULL)
@@ -75,7 +75,7 @@ CAction::CAction (const CAction & other) :
   , psi0 (NULL)
   , psi1 (NULL)
   , psi2 (NULL)
-  , funcDesc (NULL)
+  , parametres (NULL)
   , deplacement (NULL)
   , forces (NULL)
   , efforts_noeuds (NULL)
@@ -339,12 +339,9 @@ CAction::getpsi2 () const
 bool CHK
 CAction::setpsi2 (INb * val)
 {
-  if (val != NULL)
+  if ((val != NULL) && (val->getUnite () != U_))
   {
-    if (val->getUnite () != U_)
-    {
-      return false;
-    }
+    return false;
   }
   
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -361,6 +358,7 @@ CAction::setpsi2 (INb * val)
                         std::placeholders::_1)),
            false,
            &getUndoManager ())
+  
   psi2 = val;
   
   BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
@@ -385,7 +383,7 @@ CAction::emptyCharges () const
 std::string const
 CAction::getDescription (uint8_t type_) const
 {
-  return funcDesc (type_);
+  return parametres->getpsiDescription (type_);
 }
 
 
@@ -394,29 +392,156 @@ CAction::getDescription (uint8_t type_) const
  *        fonction XML puisqu'elle ne doit être appelée que depuis la fonction
  *        CProjet::setParametres.
  * \param param Le type IParametres.
- * \param decimales Les nombres de décimales à appliquer.
+ * \param psi0_ Le coefficient psi0.
+ * \param psi1_ Le coefficient psi1.
+ * \param psi2_ Le coefficient psi2.
  */
 bool CHK
 CAction::setParam (IParametres * param,
-                   uint8_t     * decimales)
+                   INb         * psi0_,
+                   INb         * psi1_,
+                   INb         * psi2_)
 {
+  bool ins = getUndoManager ().getInsertion ();
+  
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
-  funcDesc = std::bind (&IParametres::getpsiDescription,
-                        param,
-                        std::placeholders::_1);
+  parametres = param;
   
-  BUGCONT (setpsi0 (new CNbCalcul (param->getpsi0 (type), U_, decimales)),
+  getUndoManager ().setInsertion (false);
+  
+  BUGCONT (setpsi0 (psi0_), false, &getUndoManager ())
+  BUGCONT (setpsi1 (psi1_), false, &getUndoManager ())
+  BUGCONT (setpsi2 (psi2_), false, &getUndoManager ())
+  
+  getUndoManager ().setInsertion (ins);
+  
+  BUGCONT (getUndoManager ().push (
+             std::bind (&CAction::setParam,
+                        this,
+                        parametres,
+                        psi0,
+                        psi1,
+                        psi2),
+             std::bind (&CAction::setParam, this, param, psi0_, psi1_, psi2_),
+             std::bind (std::default_delete <INb> (), psi0_),
+             std::bind (&CAction::setParamXML,
+                        this,
+                        this->getNom (),
+                        param->getNom (),
+                        psi0_,
+                        psi1_,
+                        psi2_,
+                        std::placeholders::_1)),
            false,
            &getUndoManager ())
-  BUGCONT (setpsi1 (new CNbCalcul (param->getpsi1 (type), U_, decimales)),
+  
+  BUGCONT (getUndoManager ().pushSuppr (std::bind (std::default_delete <INb>
+                                                                            (),
+                                        psi1_)),
            false,
            &getUndoManager ())
-  BUGCONT (setpsi2 (new CNbCalcul (param->getpsi2 (type), U_, decimales)),
+  BUGCONT (getUndoManager ().pushSuppr (std::bind (std::default_delete <INb>
+                                                                            (),
+                                        psi2_)),
            false,
            &getUndoManager ())
   
   BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
+  
+  return true;
+}
+
+
+/**
+ * \brief Converti la fonction setParam en format XML.
+ * \param action Le nom de l'action.
+ * \param param Le nom des paramètres.
+ * \param root Le noeud dans lequel doit être inséré la branche.
+ */
+bool CHK
+CAction::setParamXML (std::string * action,
+                      std::string * param,
+                      INb         * psi0_,
+                      INb         * psi1_,
+                      INb         * psi2_,
+                      xmlNodePtr    root)
+{
+  BUGPARAM (root, "%p", root, false, &getUndoManager ())
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+                 xmlNewNode (NULL, BAD_CAST2 ("actionSetParam")), xmlFreeNode);
+  
+  BUGCRIT (node.get (),
+           false,
+           &getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Action"),
+                       BAD_CAST2 (action->c_str ())),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Param"),
+                       BAD_CAST2 (param->c_str ())),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+                           xmlNewNode (NULL, BAD_CAST2 ("psi0")), xmlFreeNode);
+  
+  BUGCRIT (node0.get (),
+           false,
+           &getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCONT (psi0_->newXML (node0.get ()), false, &getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node0.release ();
+  
+  node0.reset (xmlNewNode (NULL, BAD_CAST2 ("psi1")));
+  
+  BUGCRIT (node0.get (),
+           false,
+           &getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCONT (psi1_->newXML (node0.get ()), false, &getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node0.release ();
+  
+  node0.reset (xmlNewNode (NULL, BAD_CAST2 ("psi2")));
+  
+  BUGCRIT (node0.get (),
+           false,
+           &getUndoManager (),
+           gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUGCONT (psi2_->newXML (node0.get ()), false, &getUndoManager ())
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node0.release ();
+  
+  BUGCRIT (xmlAddChild (root, node.get ()),
+           false,
+           &getUndoManager (),
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+  node.release ();
   
   return true;
 }

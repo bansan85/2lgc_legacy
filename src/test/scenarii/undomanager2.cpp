@@ -73,7 +73,6 @@ main (int32_t argc,
   
   n0 = root_node;
   BUGCONT (n0->type == XML_ELEMENT_NODE, -1, NULL)
-  std::cout << BAD_TSAC2 (n0->name) << "\n";
   BUGCONT (std::string ("Projet").compare (BAD_TSAC2 (n0->name)) == 0,
            -1,
            NULL)
@@ -89,7 +88,7 @@ main (int32_t argc,
            NULL)
   BUGCONT (n3 = n2->children, -1, NULL)
   BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
-  BUGCONT (std::string ("setParam").compare (BAD_TSAC2 (n3->name)) == 0,
+  BUGCONT (std::string ("projetSetParam").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            NULL)
   BUGCONT (n2 = n2->next, -1, NULL)
@@ -102,10 +101,14 @@ main (int32_t argc,
   BUGCONT (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            NULL)
-  BUGCONT (std::string ("Poids propre").compare (BAD_TSAC2 (xmlGetProp (n3,
-                                                     BAD_CAST2 ("Nom")))) == 0,
+  
+  xmlChar *prop;
+  
+  prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
+  BUGCONT (std::string ("Poids propre").compare (BAD_TSAC2 (prop)) == 0,
            -1,
            NULL)
+  xmlFree (prop);
   BUGCONT (n2 = n2->next, -1, NULL)
   BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
   BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
@@ -118,10 +121,11 @@ main (int32_t argc,
            NULL)
   // On vérifie bien que Chargement n'est plus présent dans la liste des
   // modifications.
-  BUGCONT (std::string ("Neige").compare (BAD_TSAC2 (xmlGetProp (n3,
-                                                     BAD_CAST2 ("Nom")))) == 0,
+  prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
+  BUGCONT (std::string ("Neige").compare (BAD_TSAC2 (prop)) == 0,
            -1,
            NULL)
+  xmlFree (prop);
   
   xmlFreeNode (root_node);
   
