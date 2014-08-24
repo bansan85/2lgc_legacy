@@ -28,6 +28,7 @@
 #include "CNbCalcul.hpp"
 #include "MAbrev.hh"
 #include "MErreurs.hh"
+#include "EUnite.hh"
 
 
 /**
@@ -247,10 +248,10 @@ CAction::setpsi0 (INb * val)
   {
     BUGUSER (val->getUnite () == U_,
              false,
-             &action->getUndoManager (),
-             gettext ("L'unité est de type [%s] à la place de [].\n"),
-               EUniteConst[val->getUnite ()],
-               EUniteConst[0])
+             &this->getUndoManager (),
+             gettext ("L'unité est de type [%s] à la place de [%s].\n"),
+               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[0].c_str ())
   }
   
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -297,10 +298,10 @@ CAction::setpsi1 (INb * val)
   {
     BUGUSER (val->getUnite () == U_,
              false,
-             &action->getUndoManager (),
-             gettext ("L'unité est de type [%s] à la place de [].\n"),
-               EUniteConst[val->getUnite ()],
-               EUniteConst[0])
+             &this->getUndoManager (),
+             gettext ("L'unité est de type [%s] à la place de [%s].\n"),
+               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[0].c_str ())
   }
   
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -347,10 +348,10 @@ CAction::setpsi2 (INb * val)
   {
     BUGUSER (val->getUnite () == U_,
              false,
-             &action->getUndoManager (),
-             gettext ("L'unité est de type [%s] à la place de [].\n"),
-               EUniteConst[val->getUnite ()],
-               EUniteConst[0])
+             &this->getUndoManager (),
+             gettext ("L'unité est de type [%s] à la place de [%s].\n"),
+               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[0].c_str ())
   }
   
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
