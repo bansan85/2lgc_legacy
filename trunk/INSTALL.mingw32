@@ -33,29 +33,21 @@ Commenter perl et quitter
 mv /etc/fstab.sample /etc/fstab
 quitter la console et la relancer
 
-(test -d comp32debug || mkdir comp32debug) && \
-cd comp32debug && \
+(test -d comp32debug || mkdir comp32debug) && cd comp32debug && \
 (test -d ../archives && cp ../archives/* .) && \
-(test -f zlib-1.2.8.tar.xz || wget http://zlib.net/zlib-1.2.8.tar.xz) && \
-tar xvaf zlib-1.2.8.tar.xz && \
-cd zlib-1.2.8 && \
+(test -f zlib-1.2.8.tar.xz || wget http://zlib.net/zlib-1.2.8.tar.xz) && tar xvaf zlib-1.2.8.tar.xz && cd zlib-1.2.8 && \
 sed -i 's/$(STRIP) $\@//g' win32/Makefile.gcc &&
 make -j9 -f win32/Makefile.gcc CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -D_LARGEFILE64_SOURCE=1" PREFIX=i686-pc-mingw32- && \
 sudo make -f win32/Makefile.gcc install BINARY_PATH="/usr/i686-pc-mingw32/usr/bin" LIBRARY_PATH="/usr/i686-pc-mingw32/usr/lib" INCLUDE_PATH="/usr/i686-pc-mingw32/usr/include" && \
-sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/libz.dll && \
-sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/ && \
-sudo cp libz.dll.a /usr/i686-pc-mingw32/usr/lib/ && \
-cd .. && \
-(test -f libffi-3.1.tar.gz || wget ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz) && \
-tar xvzf libffi-3.1.tar.gz && \
-cd libffi-3.1 && \
+sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/libz.dll && sudo cp zlib1.dll /usr/i686-pc-mingw32/usr/bin/ && sudo cp libz.dll.a /usr/i686-pc-mingw32/usr/lib/ && cd .. && \
+(test -f libffi-3.1.tar.gz || wget ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz) && tar xvzf libffi-3.1.tar.gz && cd libffi-3.1 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f libiconv-1.14.tar.gz || wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz) && \
-tar xvzf libiconv-1.14.tar.gz && \
-cd libiconv-1.14 && \
+(test -f libiconv-1.14.tar.gz || wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz) && tar xvzf libiconv-1.14.tar.gz && cd libiconv-1.14 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
-make -j9 && sudo make install && cd .. && \
+make -j9 && sudo make install && cd ..
+
+GENTOO :
 (test -f gettext-runtime_0.18.1.1-2_win32.zip || wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip) && \
 sudo unzip gettext-runtime_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
 (test -f gettext-runtime-dev_0.18.1.1-2_win32.zip || wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-dev_0.18.1.1-2_win32.zip) && \
@@ -63,9 +55,7 @@ sudo unzip gettext-runtime-dev_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/
 
 GENTOO : (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
 
-(test -f glib-2.40.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz) && \
-tar xvaf glib-2.40.0.tar.xz && \
-cd glib-2.40.0 && \
+(test -f glib-2.40.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz) && tar xvaf glib-2.40.0.tar.xz && cd glib-2.40.0 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
 sed -i 's/tests$//g' Makefile.am Makefile.in glib/Makefile.in gobject/Makefile.in && \
 sed -i 's/tests fam$/fam/g' gio/Makefile.in && \
@@ -89,25 +79,17 @@ dans MinGW : export PATH=$PATH:/c/Python27
 sed -i 's#/usr/bin/env python2.5#python#g' gio/gdbus-2.0/codegen/Makefile && \
 
 make -j9 && sudo make install && cd .. && \
-(test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && \
-tar xvzf libxml2-2.9.1.tar.gz && \
-cd libxml2-2.9.1 && \
+(test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && tar xvzf libxml2-2.9.1.tar.gz && cd libxml2-2.9.1 && \
 sed -i 's/doc example//g' Makefile.am Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --without-icu --without-python --disable-ipv6 --with-threads --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f jpegsrc.v9a.tar.gz || wget http://www.ijg.org/files/jpegsrc.v9a.tar.gz) && \
-tar xvzf jpegsrc.v9a.tar.gz && \
-cd jpeg-9a && \
+(test -f jpegsrc.v9a.tar.gz || wget http://www.ijg.org/files/jpegsrc.v9a.tar.gz) && tar xvzf jpegsrc.v9a.tar.gz && cd jpeg-9a && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f tiff-4.0.3.tar.gz || wget http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz) && \
-tar xvzf tiff-4.0.3.tar.gz && \
-cd tiff-4.0.3 && \
+(test -f tiff-4.0.3.tar.gz || wget http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz) && tar xvzf tiff-4.0.3.tar.gz && cd tiff-4.0.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f libpng-1.6.12.tar.xz || wget http://downloads.sourceforge.net/project/libpng/libpng16/1.6.12/libpng-1.6.12.tar.xz) && \
-tar xvaf libpng-1.6.12.tar.xz && \
-cd libpng-1.6.12 && \
+(test -f libpng-1.6.12.tar.xz || wget http://downloads.sourceforge.net/project/libpng/libpng16/1.6.12/libpng-1.6.12.tar.xz) && tar xvaf libpng-1.6.12.tar.xz && cd libpng-1.6.12 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 
@@ -116,67 +98,50 @@ http://win32builder.gnome.org/packages/3.6/pkg-config_0.28-1_win32.zip
 http://win32builder.gnome.org/packages/3.6/pkg-config-dev_0.28-1_win32.zip
 et extraire dans C:/MinGW
 
-(test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && \
-tar xvaf gdk-pixbuf-2.30.8.tar.xz && \
-cd gdk-pixbuf-2.30.8 && \
+GENTOO :
+export PKG_CONFIG_PATH=/usr/i686-pc-mingw32/usr/lib/pkgconfig
+export PKG_CONFIG=/usr/bin/pkg-config
+export PKG_CONFIG_SYSROOT_DIR=/usr/i686-pc-mingw32/
+
+(test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && tar xvaf gdk-pixbuf-2.30.8.tar.xz && cd gdk-pixbuf-2.30.8 && \
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f pixman-0.32.6.tar.gz || wget http://cairographics.org/releases/pixman-0.32.6.tar.gz) && \
-tar xvzf pixman-0.32.6.tar.gz && \
-cd pixman-0.32.6 && \
+(test -f pixman-0.32.6.tar.gz || wget http://cairographics.org/releases/pixman-0.32.6.tar.gz) && tar xvzf pixman-0.32.6.tar.gz && cd pixman-0.32.6 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -mstackrealign" ./configure --disable-static --enable-shared --enable-sse2 --enable-ssse3 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 sed -i "s/demos test//g" Makefile.am Makefile.in && \
 make -j9 && sudo make install && cd .. && \
-(test -f freetype-2.5.3.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.5.3/freetype-2.5.3.tar.bz2) && \
-tar xvjf freetype-2.5.3.tar.bz2 && \
-cd freetype-2.5.3 && \
-LIBPNG_CFLAGS="-I/usr/i686-pc-mingw32/usr/include/libpng16" LIBPNG_LDFLAGS="-lpng16" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+(test -f freetype-2.5.3.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.5.3/freetype-2.5.3.tar.bz2) && tar xvjf freetype-2.5.3.tar.bz2 && cd freetype-2.5.3 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --without-harfbuzz --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f fontconfig-2.11.1.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz) && \
-tar xvzf fontconfig-2.11.1.tar.gz && \
-cd fontconfig-2.11.1 && \
+(test -f fontconfig-2.11.1.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz) && tar xvzf fontconfig-2.11.1.tar.gz && cd fontconfig-2.11.1 && \
 sed -i 's/test doc//g' Makefile.in && \
 sed -i 's/d test/d/g' Makefile.in Makefile.am && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --enable-libxml2 --disable-docs --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
-autoreconf --force -i
 
 MinGW :
+autoreconf --force -i
 vim src/fcatomic.h
 66gg
 -#define fc_atomic_ptr_get(P) …
 +#define fc_atomic_ptr_get(P) ((void *) *(P))
 
 make -j9 && sudo make install && cd .. && \
-(test -f pthreads-w32-2-9-1-release.tar.gz || wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz) && \
-tar xvzf pthreads-w32-2-9-1-release.tar.gz && \
-cd pthreads-w32-2-9-1-release && \
+(test -f pthreads-w32-2-9-1-release.tar.gz || wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz) && tar xvzf pthreads-w32-2-9-1-release.tar.gz && cd pthreads-w32-2-9-1-release && \
 make CROSS=i686-pc-mingw32- OPT="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" clean GC -j1 && \
-sudo cp pthreadGC2.dll /usr/i686-pc-mingw32/usr/bin/libpthreadGC2.dll && \
-sudo cp libpthreadGC2.a /usr/i686-pc-mingw32/usr/lib && \
-sudo cp pthread.h sched.h semaphore.h /usr/i686-pc-mingw32/usr/include/ && \
-(test -e /usr/i686-pc-mingw32/usr/bin/libpthread.dll || sudo ln -s libpthreadGC2.dll /usr/i686-pc-mingw32/usr/bin/libpthread.dll) && \
-(test -e /usr/i686-pc-mingw32/usr/lib/libpthread.a || sudo ln -s libpthreadGC2.a /usr/i686-pc-mingw32/usr/lib/libpthread.a) && \
-cd .. && \
-(test -f cairo-1.12.16.tar.xz || wget http://cairographics.org/releases/cairo-1.12.16.tar.xz) && \
-tar xvaf cairo-1.12.16.tar.xz && \
-cd cairo-1.12.16 && \
-sed -i "s/typedef SSIZE_T ssize_t;//g" util/cairo-missing/cairo-missing.h && \
-sed -i "s/test perf//g" Makefile.am Makefile.in && \
-sed -i "s/src doc/src/g" Makefile.am Makefile.in && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --disable-xlib --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+sudo cp pthreadGC2.dll /usr/i686-pc-mingw32/usr/bin/libpthreadGC2.dll && sudo cp libpthreadGC2.a /usr/i686-pc-mingw32/usr/lib && sudo cp pthread.h sched.h semaphore.h /usr/i686-pc-mingw32/usr/include/ && \
+(test -e /usr/i686-pc-mingw32/usr/bin/libpthread.dll || sudo ln -s libpthreadGC2.dll /usr/i686-pc-mingw32/usr/bin/libpthread.dll) && (test -e /usr/i686-pc-mingw32/usr/lib/libpthread.a || sudo ln -s libpthreadGC2.a /usr/i686-pc-mingw32/usr/lib/libpthread.a) && cd .. && \
+(test -f cairo-1.12.16.tar.xz || wget http://cairographics.org/releases/cairo-1.12.16.tar.xz) && tar xvaf cairo-1.12.16.tar.xz && cd cairo-1.12.16 && \
+sed -i "s/typedef SSIZE_T ssize_t;//g" util/cairo-missing/cairo-missing.h && sed -i "s/test perf//g" Makefile.am Makefile.in && sed -i "s/src doc/src/g" Makefile.am Makefile.in && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --disable-xlib --disable-xcb --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f ragel-6.8.tar.gz || wget http://www.complang.org/ragel/ragel-6.8.tar.gz) && \
-tar xvzf ragel-6.8.tar.gz && \
-cd ragel-6.8 && \
+(test -f ragel-6.8.tar.gz || wget http://www.complang.org/ragel/ragel-6.8.tar.gz) && tar xvzf ragel-6.8.tar.gz && cd ragel-6.8 && \
 sed -i 's#test "$cross_compiling" = yes &&##g' ./configure && \
 sed -i 's#as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5##g' ./configure && \
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" && sudo make install && cd .. && \
-(test -f pango-1.36.5.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.5.tar.xz) && \
-tar xvaf pango-1.36.5.tar.xz && \
-cd pango-1.36.5 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-included-modules=basic-win32 --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+(test -f pango-1.36.5.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.5.tar.xz) && tar xvaf pango-1.36.5.tar.xz && cd pango-1.36.5 && \
+have_harfbuzz=false CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-included-modules=basic-win32 --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libcroco-0.6.8.tar.xz || wget http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.8.tar.xz) && \
 tar xvaf libcroco-0.6.8.tar.xz && \
@@ -186,7 +151,7 @@ make -j9 && sudo make install && cd .. && \
 (test -f poppler-0.26.3.tar.xz || wget http://poppler.freedesktop.org/poppler-0.26.3.tar.xz) && \
 tar xvaf poppler-0.26.3.tar.xz && \
 cd poppler-0.26.3 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -D_WIN32_WINNT=0x0501" CXXFLAGS=$CFLAGS ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -D_WIN32_WINNT=0x0600" CXXFLAGS=$CFLAGS ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f atk-2.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.12/atk-2.12.0.tar.xz) && \
 tar xvaf atk-2.12.0.tar.xz && \
