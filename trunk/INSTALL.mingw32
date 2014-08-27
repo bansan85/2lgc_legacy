@@ -98,10 +98,7 @@ http://win32builder.gnome.org/packages/3.6/pkg-config_0.28-1_win32.zip
 http://win32builder.gnome.org/packages/3.6/pkg-config-dev_0.28-1_win32.zip
 et extraire dans C:/MinGW
 
-GENTOO :
-export PKG_CONFIG_PATH=/usr/i686-pc-mingw32/usr/lib/pkgconfig
-export PKG_CONFIG=/usr/bin/pkg-config
-export PKG_CONFIG_SYSROOT_DIR=
+GENTOO : corriger l'éventuel bug dans //usr/bin/i686-pc-mingw32-pkg-config avec ${libdir}
 
 (test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && tar xvaf gdk-pixbuf-2.30.8.tar.xz && cd gdk-pixbuf-2.30.8 && \
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
@@ -141,13 +138,6 @@ sed -i 's#as_fn_error $? "cannot check for file existence when cross compiling" 
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" && sudo make install && cd .. && \
 (test -f pango-1.36.5.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.5.tar.xz) && tar xvaf pango-1.36.5.tar.xz && cd pango-1.36.5 && \
-
-GENTOO :
-sed -i "s/PKG_CHECK_MODULES.*harfbuzz.*$//" configure.ac && \
-sed -i "s/AM_CONDITIONAL.*harfbuzz.*$//" configure.ac && \
-autoreconf --force -i
-
-
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-included-modules=basic-win32 --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libcroco-0.6.8.tar.xz || wget http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.8.tar.xz) && tar xvaf libcroco-0.6.8.tar.xz && cd libcroco-0.6.8 && \
@@ -205,24 +195,16 @@ commenter tout ce qui est en dessous de gtkbuiltincache.h: stamp-icons
 dans MinGW (si nécessaire) : export PATH=$PATH:/c/Python27
 
 make -j9 && sudo make install && cd .. && \
-(test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && \
-tar xvzf icon-naming-utils-0.8.90.tar.gz && \
-cd icon-naming-utils-0.8.90 && \
+(test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && tar xvzf icon-naming-utils-0.8.90.tar.gz && cd icon-naming-utils-0.8.90 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gnome-icon-theme-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme/3.12/gnome-icon-theme-3.12.0.tar.xz) && \
-tar xvaf gnome-icon-theme-3.12.0.tar.xz && \
-cd gnome-icon-theme-3.12.0 && \
+(test -f gnome-icon-theme-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme/3.12/gnome-icon-theme-3.12.0.tar.xz) && tar xvaf gnome-icon-theme-3.12.0.tar.xz && cd gnome-icon-theme-3.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gnome-icon-theme-symbolic-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.12/gnome-icon-theme-symbolic-3.12.0.tar.xz) && \
-tar xvaf gnome-icon-theme-symbolic-3.12.0.tar.xz && \
-cd gnome-icon-theme-symbolic-3.12.0 && \
+(test -f gnome-icon-theme-symbolic-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.12/gnome-icon-theme-symbolic-3.12.0.tar.xz) && tar xvaf gnome-icon-theme-symbolic-3.12.0.tar.xz && cd gnome-icon-theme-symbolic-3.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f librsvg-2.40.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.2.tar.xz) && \
-tar xvaf librsvg-2.40.2.tar.xz && \
-cd librsvg-2.40.2 && \
+(test -f librsvg-2.40.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.2.tar.xz) && tar xvaf librsvg-2.40.2.tar.xz && cd librsvg-2.40.2 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-introspection=no --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32
 
 TOUT : rsvg-base.c
