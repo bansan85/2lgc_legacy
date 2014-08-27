@@ -31,6 +31,11 @@
 #include "MErreurs.hh"
 
 
+std::string
+format (const std::string fmt,
+        ...);
+
+
 /**
  * \brief Constructeur d'une classe CNbUser.
  * \param valeur (in) La valeur initiale.
