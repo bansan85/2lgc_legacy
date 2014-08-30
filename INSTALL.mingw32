@@ -11,7 +11,7 @@ sed -i 's/comp32/comp64/g' INSTALL.mingw64
 sed -i 's/intl.dll/libintl-8.dll/g' INSTALL.mingw64
 
 Pour avoir ce script en version MinGW 32bit, il faut lancer les commandes suivantes :
-sed -i 's#/usr/i686-pc-mingw32/usr#/mingw/#g' INSTALL.mingw
+sed -i 's#/usr/i686-pc-mingw32/usr#/mingw#g' INSTALL.mingw
 sed -i 's/i686-pc-mingw32-//g' INSTALL.mingw
 sed -i 's/sudo //g' INSTALL.mingw
 sed -i 's/--build=x86_64-pc-linux-gnu --host=i686-pc-mingw32//g' INSTALL.mingw
@@ -151,7 +151,7 @@ CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields"
 make -j9 && sudo make install && cd .. && \
 (test -f gtk+-3.12.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.12/gtk+-3.12.2.tar.xz) && tar xvaf gtk+-3.12.2.tar.xz && cd gtk+-3.12.2 && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
-PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-cups --disable-cloudprint --disable-static --enable-shared --oldincludedir=/usr/i686-pc-mingw32/usr/include --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency --enable-debug=yes && \
+PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-cups --disable-cloudprint --disable-static --enable-shared --oldincludedir=/usr/i686-pc-mingw32/usr/include --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-debug=yes && \
 
 TOUT : gdk/Makefile :
 -am__append_6 = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
