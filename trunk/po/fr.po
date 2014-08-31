@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-08-25 01:08+0200\n"
-"PO-Revision-Date: 2014-08-25 01:08+0100\n"
+"POT-Creation-Date: 2014-08-31 19:13+0200\n"
+"PO-Revision-Date: 2014-08-31 23:03+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -19,6 +19,35 @@ msgstr "Erreur d'allocation mémoire.\n"
 #, c-format
 msgid "Problème depuis la librairie : %s\n"
 msgstr "Problème depuis la librairie : %s\n"
+
+msgid "Le programme est à ses limites.\n"
+msgstr "Le programme est à ses limites.\n"
+
+#, c-format
+msgid ""
+"L'action '%s' existe déjà.\n"
+"Impossible de l'ajouter.\n"
+msgstr ""
+"L'action '%s' existe déjà.\n"
+"Impossible de l'ajouter.\n"
+
+msgid ""
+"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
+"ensuite.\n"
+msgstr ""
+"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
+"ensuite.\n"
+
+#, c-format
+msgid "Le type d'action %d est inconnu.\n"
+msgstr "Le type d'action %d est inconnu.\n"
+
+msgid ""
+"L'action doit être supprimée sans charge. Elles doivent être supprimées "
+"avant.\n"
+msgstr ""
+"L'action doit être supprimée sans charge. Elles doivent être supprimées "
+"avant.\n"
 
 msgid ""
 "Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune "
@@ -39,9 +68,6 @@ msgstr ""
 
 msgid "Il n'y a plus rien à rétablir.\n"
 msgstr "Il n'y a plus rien à rétablir.\n"
-
-msgid "Le programme est à ses limites.\n"
-msgstr "Le programme est à ses limites.\n"
 
 msgid "Impossible d'appeler unref alors que le compteur vaut 0.\n"
 msgstr "Impossible d'appeler unref alors que le compteur vaut 0.\n"
@@ -1809,29 +1835,3 @@ msgstr "Modification d'une charge ponctuelle sur barre"
 #, c-format
 msgid "L'unité est de type [%s] à la place de [%s].\n"
 msgstr "L'unité est de type [%s] à la place de [%s].\n"
-
-#, c-format
-msgid ""
-"L'action '%s' existe déjà.\n"
-"Impossible de l'ajouter.\n"
-msgstr ""
-"L'action '%s' existe déjà.\n"
-"Impossible de l'ajouter.\n"
-
-msgid ""
-"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
-"ensuite.\n"
-msgstr ""
-"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
-"ensuite.\n"
-
-#, c-format
-msgid "Le type d'action %d est inconnu.\n"
-msgstr "Le type d'action %d est inconnu.\n"
-
-msgid ""
-"L'action doit être supprimée sans charge. Elles doivent être supprimées "
-"avant.\n"
-msgstr ""
-"L'action doit être supprimée sans charge. Elles doivent être supprimées "
-"avant.\n"

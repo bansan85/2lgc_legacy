@@ -33,13 +33,6 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CBarreInfoEF.cpp \
 															CCalculs.cpp \
 															CModele.cpp \
-															CModeleActions.cpp \
-															CModeleAppuis.cpp \
-															CModeleBarres.cpp \
-															CModeleMateriaux.cpp \
-															CModeleNoeuds.cpp \
-															CModeleRelachements.cpp \
-															CModeleSections.cpp \
 															CNbCalcul.cpp \
 															CNbUser.cpp \
 															CParamEC.cpp \
