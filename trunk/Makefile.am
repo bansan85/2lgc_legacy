@@ -54,7 +54,7 @@ AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
 export AM_CXXFLAGS AM_CPPFLAGS
 
-EXTRA_DIST = config.rpath  config.rpath
+EXTRA_DIST = config.rpath
 
 package_win :
 if PLATFORM_WIN32

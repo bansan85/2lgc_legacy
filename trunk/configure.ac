@@ -63,27 +63,8 @@ if test x$withdebug = xtrue; then
 AC_DEFINE(ENABLE_DEBUG, 1, [Défini si les options de débug doivent être activés])
 fi
 
-# GTK+-3
-AC_ARG_WITH(gtk,  [  --with-gtk           build with gtk support], [withgtk=true], [withgtk=false])
-AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-with-gtk $withgtk
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
-AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
-if test x$withgtk = xtrue; then
-  GLIB_REQUIRED_VERSION=2.38.0
-  AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
-  GTK_REQUIRED_VERSION=3.6.0
-  AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
-  AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
-  AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
-fi
-
-AM_GNU_GETTEXT([external])
-ALL_LINGUAS="fr"
-PKG_PROG_PKG_CONFIG
-
 # Détermination de la version de Windows que l'on est en train de compiler
-AC_MSG_CHECKING([for some Win platform])
+AC_MSG_CHECKING([for some platform])
 case "$host" in
   *-*64-mingw*|*-*64-cygwin*)
     platform_win=Win64
@@ -91,14 +72,53 @@ case "$host" in
   *-*-mingw*|*-*-cygwin*)
     platform_win=Win32
     ;;
+  *-*-linux-androideabi|*-*-linux-gnueabihf)
+    platform_win=Android
+    ;;
   *)
-    platform_win=no
+    platform_win=Linux
     ;;
 esac
 AC_MSG_RESULT([$platform_win])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win" = "Win32")
 AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
-AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "no")
+AM_CONDITIONAL(PLATFORM_ANDROID, test "$platform_win" = "Android")
+AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "Linux")
+
+# GTK+-3
+AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
+AC_ARG_WITH(gtk,  [  --with-gtk           build with gtk support], [withgtk=true], [withgtk=false])
+AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+with-gtk $withgtk
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
+if test ! "x$platform_win" = "xAndroid"; then
+  if test x$withgtk = xtrue; then
+    GLIB_REQUIRED_VERSION=2.38.0
+    PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED_VERSION)
+    GTK_REQUIRED_VERSION=3.6.0
+    PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED_VERSION)
+    AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
+    AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
+  fi
+  AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
+  AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])
+  AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
+  LIBS="-lgfortran $LIBS"
+  sinclude(acx_blas.m4)
+  ACX_BLAS
+  if test x"$BLAS_LIBS" = x; then
+      AC_MSG_ERROR([Cannot find blas libraries])
+  fi
+  AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
+  AC_CHECK_LIB([umfpack], [main], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
+
+else
+  AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
+fi
+
+AM_GNU_GETTEXT([external])
+ALL_LINGUAS="fr"
+PKG_PROG_PKG_CONFIG
 
 # Vérification de la possibilité de compiler la documentation via doxygen
 AC_ARG_WITH(doc,  [  --with-doc           build with doc support], [withdoc=true], [withdoc=false])
@@ -115,17 +135,6 @@ AM_CONDITIONAL(HAVE_DOXYGEN, test x$withdoc = xtrue && test -n "$DOXYGEN")
 
 # Checks for libraries.
 AC_CHECK_LIB(m, sqrt)
-AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
-AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])
-AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
-LIBS="-lgfortran $LIBS"
-sinclude(acx_blas.m4)
-ACX_BLAS
-if test x"$BLAS_LIBS" = x; then
-    AC_MSG_ERROR([Cannot find blas libraries])
-fi
-AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
-AC_CHECK_LIB([umfpack], [main], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
 
 # Checks for header files.
 AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
