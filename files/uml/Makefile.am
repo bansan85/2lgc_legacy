@@ -8,7 +8,7 @@ checkcode : ../../src/lib/codegui.hpp
 
 ../../src/lib/codegui.hpp : COPYING.head codegui.dia
 	rm -f *.hpp ../../src/lib/*.hpp
-	/usr/bin/dia2code -l COPYING.head -t cpp -ext hpp -d . codegui.dia
+	dia2code -l COPYING.head -t cpp -ext hpp -d . codegui.dia
 	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> codegui.hpp \;
 	mv *.hpp ../../src/lib
 
