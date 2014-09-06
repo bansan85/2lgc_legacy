@@ -27,7 +27,7 @@ else
 if PLATFORM_WIN64
 CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=x86-64 -mms-bitfields
 else
-CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=native
+CUSTOM_CXXFLAGS	+= @CXXFLAGS@
 endif
 endif
 
