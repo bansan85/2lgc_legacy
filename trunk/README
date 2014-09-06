@@ -19,6 +19,7 @@ La description des messages doit toujours commencer par :
 [CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
 [TEST] : Ajout / Modification de tests.
 [WIN] : Tout ce qui concerne la compatibilité avec Windows.
+[ANDROID] : Tout ce qui concerne la compatibilité avecAndroid.
 
 
 Performances :

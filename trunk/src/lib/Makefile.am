@@ -10,7 +10,11 @@ if PLATFORM_LINUX
 if ENABLE_DEBUG
 libeurocodes_la_LIBADD    +=	-lgcov
 endif
-else
+endif
+if PLATFORM_WIN32
+libeurocodes_la_LIBADD    +=  -lintl
+endif
+if PLATFORM_WIN64
 libeurocodes_la_LIBADD    +=  -lintl
 endif
 
