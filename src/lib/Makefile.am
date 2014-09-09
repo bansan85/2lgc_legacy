@@ -132,10 +132,19 @@ CLEANFILES += gtk/ressources.cpp gtk/ressources.hpp
 endif
 
 gtk/ressources.hpp: ../../files/ui/ressources.xml gtk/ressources.cpp
+if ENABLE_GTK
 	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-header --manual-register
+else
+	touch gtk/ressources.hpp
+endif
+
 gtk/ressources.cpp: ../../files/ui/ressources.xml $(wildcard ../../files/ui/*.ui)
+if ENABLE_GTK
 	$(MAKE) -C ../../files/ui
 	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-source --manual-register
+else
+	touch gtk/ressources.cpp
+endif
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log
