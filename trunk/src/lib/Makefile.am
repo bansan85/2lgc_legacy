@@ -57,6 +57,8 @@ $(libeurocodes_la_SOURCES) : 	uml
 uml :
 	$(MAKE) -C ../../files/uml
 
+CLEANFILES = *.gcno *.gcda *.hpp
+
 
 if ENABLE_GTK
 DEFAULT_INCLUDES							+=	-Igtk
@@ -122,20 +124,22 @@ libeurocodes_gtk_la_HEADERS =	gtk/1990_gtk_groupes.hpp \
 							gtk/EF_gtk_rapport.hpp \
 							gtk/EF_gtk_relachement.hpp \
 							gtk/EF_gtk_resultats.hpp
-endif
 
-if ENABLE_GTK
 common/common_projet.cpp: gtk/ressources.hpp gtk/ressources.cpp
+
+CLEANFILES += gtk/ressources.cpp gtk/ressources.hpp
+
+endif
 
 gtk/ressources.hpp: ../../files/ui/ressources.xml gtk/ressources.cpp
 	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-header --manual-register
 gtk/ressources.cpp: ../../files/ui/ressources.xml $(wildcard ../../files/ui/*.ui)
 	$(MAKE) -C ../../files/ui
 	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-source --manual-register
-endif
-
-CLEANFILES = *.gcno *.gcda gtk/ressources.cpp gtk/ressources.hpp *.hpp
 
 cppcheck :
-	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) $(libeurocodes_gtk_la_SOURCES) &> ../../cppcheck.log
+	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log
+if ENABLE_GTK
+	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_gtk_la_SOURCES) &>> ../../cppcheck.log
+endif
 	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck.log
