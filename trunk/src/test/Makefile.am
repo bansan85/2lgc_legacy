@@ -6,11 +6,9 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../.. \
 
 TESTS	=	coverage
 
-
-
 coverage_SOURCES	=	coverage.cpp
 coverage_LDADD		=	../lib/libeurocodes.la
 
 EXTRA_PROGRAMS = $(TESTS)
 
-CLEANFILES = *.xml
+CLEANFILES = *.xml coverage *.gcno *.gcda

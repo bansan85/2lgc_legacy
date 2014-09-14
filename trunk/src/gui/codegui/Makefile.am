@@ -18,3 +18,5 @@ if !PLATFORM_LINUX
 codegui_LDFLAGS		+=  -mwindows
 endif
 endif #ENABLE_DEBUG
+
+CLEANFILES	=	*.gcno *.gcda

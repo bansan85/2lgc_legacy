@@ -164,7 +164,7 @@ CAction::getType () const
 /**
  * \brief Converti la fonction de modification du psi d'une action sous format
  *        XML.
- * \param nom Le nom de l'action.
+ * \param nom_ Le nom de l'action.
  * \param psi Le coefficient psi à changer (0, 1 ou 2).
  * \param psin Le coefficient psi à convertir.
  * \param root Le noeud dans lequel doit être inséré la branche.
