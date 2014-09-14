@@ -9,4 +9,4 @@ projet_LDADD		=	../../lib/libeurocodes.la
 EXTRA_PROGRAMS	= $(TESTS)
 EXTRA_DIST			= projet.cpp
 
-CLEANFILES = *.xml
+CLEANFILES = *.xml projet *.gcno *.gcda

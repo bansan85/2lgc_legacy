@@ -16,4 +16,4 @@ undomanager2_LDADD		=	../../lib/libeurocodes.la
 
 EXTRA_PROGRAMS = $(TESTS)
 
-CLEANFILES = *.xml
+CLEANFILES = *.xml undomanager1 undomanager2 action1 *.gcno *.gcda

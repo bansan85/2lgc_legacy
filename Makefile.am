@@ -1,14 +1,16 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS =	po \
-			files \
-			src
+SUBDIRS	=	po \
+					files \
+					src
 
 if HAVE_DOXYGEN
 SUBDIRS += docs
 endif
 
 AM_CPPFLAGS			= @XML_CPPFLAGS@
+
+AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-debug --with-doc
 
 if PLATFORM_LINUX
 if ENABLE_DEBUG
@@ -54,7 +56,7 @@ AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
 export AM_CXXFLAGS AM_CPPFLAGS
 
-EXTRA_DIST	=	config.rpath \
+EXTRA_DIST	= config.rpath 	config.rpath \
 							config.h
 
 package_win :
