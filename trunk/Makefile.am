@@ -38,7 +38,7 @@ CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CXXFLAGS	+= -Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Wunsafe-loop-optimizations -funsafe-loop-optimizations -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -Weffc++ -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -fmax-errors=1
+CUSTOM_CXXFLAGS	+= -Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -Weffc++ -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -fmax-errors=1
 
 if PLATFORM_WIN32
 CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
@@ -54,7 +54,8 @@ AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
 
 export AM_CXXFLAGS AM_CPPFLAGS
 
-EXTRA_DIST = config.rpath
+EXTRA_DIST	=	config.rpath \
+							config.h
 
 package_win :
 if PLATFORM_WIN32
@@ -151,4 +152,4 @@ checkcode :
 	$(MAKE) -C src/lib cppcheck
 	../nsiqcppstyle/nsiqcppstyle . > coding_style.log
 
-CLEANFILES = test.xml
+CLEANFILES =	test.xml 2lgc_code-*.tar.gz

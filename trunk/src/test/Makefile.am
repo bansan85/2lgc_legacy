@@ -1,8 +1,8 @@
 SUBDIRS = scenarii \
 					static
 
-DEFAULT_INCLUDES	=	-I../.. \
-										-I../lib
+DEFAULT_INCLUDES	=	-I$(srcdir)/../.. \
+										-I$(srcdir)/../lib
 
 TESTS	=	coverage
 
