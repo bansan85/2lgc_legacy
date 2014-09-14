@@ -24,7 +24,7 @@ Avec gcc :
 ./configure --with-gtk --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
-make -j9 && sudo make install && make check -j9 && /usr/local/bin/codegui
+make -j9 && sudo make install && make check -j9 && /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && rm -Rf out_html && lcov --capture --directory . --output-file coverage.info && genhtml coverage.info --output-directory out_html && firefox out_html/index.html
 sudo make install-data && make check -j9
 make -C doc doc

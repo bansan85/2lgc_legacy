@@ -1,5 +1,5 @@
-DEFAULT_INCLUDES					=		-I../.. \
-															-I.
+DEFAULT_INCLUDES					=		-I$(srcdir) \
+															-I$(srcdir)/../..
 
 AUTOMAKE_OPTIONS					= 	subdir-objects
 
@@ -57,11 +57,10 @@ $(libeurocodes_la_SOURCES) : 	uml
 uml :
 	$(MAKE) -C ../../files/uml
 
-CLEANFILES = *.gcno *.gcda *.hpp
-
+CLEANFILES = *.gcno *.gcda *.hpp gtk/ressources.cpp gtk/ressources.hpp
 
 if ENABLE_GTK
-DEFAULT_INCLUDES							+=	-Igtk
+DEFAULT_INCLUDES							+=	-I$(srcdir)/gtk
 lib_LTLIBRARIES 							+=	libeurocodes-gtk.la
 libeurocodes_gtk_la_LIBADD		=		@GTK_LIBS@
 libeurocodes_gtk_la_CXXFLAGS	=		$(AM_CXXFLAGS) @GTK_CFLAGS@
@@ -126,8 +125,6 @@ libeurocodes_gtk_la_HEADERS =	gtk/1990_gtk_groupes.hpp \
 							gtk/EF_gtk_resultats.hpp
 
 common/common_projet.cpp: gtk/ressources.hpp gtk/ressources.cpp
-
-CLEANFILES += gtk/ressources.cpp gtk/ressources.hpp
 
 endif
 

@@ -1,3 +1,5 @@
+chmod +w 2lgc_code-0.0.0.2 -R
+rm -Rf 2lgc_code-0.0.0.2
 make clean
 rm -Rf install-sh ltmain.sh config.status config.h config.h.in config.log configure depcomp config.status Makefile Makefile.in config.guess config.sub missing stamp-h1 libtool autom4te.cache autoscan-?.??.log config.h config.guess config.h.in config.log config.status config.sub aclocal.m4 config.rpath m4 ABOUT-NLS configure.scan.orig  configure.scan.rej compile codegui coverage.info out_html test-driver docs/Doxyfile INSTALL.mingw64 core* cov* *.log
 rm -Rf po/boldquot.sed po/en@boldquot.header po/en@quot.header po/insert-header.sin po/Makefile.in.in po/Makevars po/POTFILES po/POTFILES.in po/quot.sed po/remove-potcdate.sed po/remove-potcdate.sin po/Rules-quot po/stamp-po po/Makevars.template po/check-macro-version po/install-data-yes po/install-data

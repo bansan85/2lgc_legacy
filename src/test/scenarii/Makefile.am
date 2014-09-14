@@ -1,5 +1,5 @@
-DEFAULT_INCLUDES	=	-I../../.. \
-										-I../../lib
+DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
+										-I$(srcdir)/../../lib
 
 TESTS	=	action1 \
 				undomanager1 \

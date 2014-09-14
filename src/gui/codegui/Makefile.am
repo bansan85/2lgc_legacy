@@ -1,5 +1,5 @@
-DEFAULT_INCLUDES	=	-I../../.. \
-										-I../../lib
+DEFAULT_INCLUDES	=	-I$(srcdir)/../../lib \
+										-I$(srcdir)/../../..
 
 bin_PROGRAMS			=	codegui
 codegui_SOURCES		=	main.cpp
