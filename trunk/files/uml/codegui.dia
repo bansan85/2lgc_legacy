@@ -8729,7 +8729,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#La description de type est donnée par #_1990_action_bat_txt_type.#</dia:string>
+            <dia:string>#La description de type est donnée par IParametres::getpsiDescription.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>

@@ -160,6 +160,7 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  src/lib/Makefile
                  docs/Doxyfile
                  src/test/Makefile
+                 src/test/bugs/Makefile
                  src/test/static/Makefile
                  src/test/scenarii/Makefile])
 AC_OUTPUT

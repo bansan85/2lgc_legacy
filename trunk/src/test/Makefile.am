@@ -1,5 +1,6 @@
 SUBDIRS = scenarii \
-					static
+					static \
+					bugs
 
 DEFAULT_INCLUDES	=	-I$(srcdir)/../.. \
 										-I$(srcdir)/../lib
