@@ -26,4 +26,8 @@
 #define EGTK(...)
 #endif
 
+#ifdef _MSC_VER
+#define CHK _Check_return_
+#else
 #define CHK __attribute__ ((__warn_unused_result__))
+#endif

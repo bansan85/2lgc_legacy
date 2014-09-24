@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true" active="true">
+  <dia:layer name="Classes principales" visible="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -21530,7 +21530,7 @@ class CProjet;#</dia:string>
         <dia:point val="130,-214.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="123.24,-228.3;130.75,-213.35"/>
+        <dia:rectangle val="123.24,-227.95;130.75,-213.35"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -21538,8 +21538,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="130,-214.2"/>
         <dia:point val="126.295,-214.2"/>
-        <dia:point val="126.295,-227.55"/>
-        <dia:point val="123.29,-227.55"/>
+        <dia:point val="126.295,-227.2"/>
+        <dia:point val="123.29,-227.2"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -23180,7 +23180,7 @@ class CProjet;#</dia:string>
         <dia:point val="102,-230"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="101.95,-230.05;123.34,-206.6"/>
+        <dia:rectangle val="101.95,-230.05;123.34,-205.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="102,-230"/>
@@ -23189,7 +23189,7 @@ class CProjet;#</dia:string>
         <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="23.350000000000001"/>
+        <dia:real val="24.050000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoData#</dia:string>
@@ -23201,7 +23201,8 @@ class CProjet;#</dia:string>
         <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables. Non copyable.
 #include &lt;list&gt;
 #include &lt;libxml/tree.h&gt;
-#include &lt;memory&gt;#</dia:string>
+#include &lt;memory&gt;
+#include &lt;functional&gt;#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -25074,13 +25075,13 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Classes dérivées" visible="true">
+  <dia:layer name="Classes dérivées" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O97">
       <dia:attribute name="obj_pos">
         <dia:point val="-62,-75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-62.05,-75.05;-41.43,-44.1"/>
+        <dia:rectangle val="-62.05,-75.05;-41.43,-43.4"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-62,-75"/>
@@ -25089,7 +25090,7 @@ class CProjet;#</dia:string>
         <dia:real val="20.52"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="30.850000000000005"/>
+        <dia:real val="31.550000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CNbCalcul#</dia:string>
@@ -25098,7 +25099,8 @@ class CProjet;#</dia:string>
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Nombre défini par l'ordinateur (et potentiellement à virgule infinie). L'intérêt de cette classe est de pouvoir stocker un nombre flottant obtenu par calcul et que l'affichage via toString respecte les décimales par défaut.#</dia:string>
+        <dia:string>#Nombre défini par l'ordinateur (et potentiellement à virgule infinie). L'intérêt de cette classe est de pouvoir stocker un nombre flottant obtenu par calcul et que l'affichage via toString respecte les décimales par défaut.
+#include &lt;cstdint&gt;#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -26238,7 +26240,7 @@ class CProjet;#</dia:string>
         <dia:point val="-42.4725,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-51.79,-44.2;-41.6225,-30.95"/>
+        <dia:rectangle val="-51.79,-43.75;-41.6225,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -26247,7 +26249,7 @@ class CProjet;#</dia:string>
         <dia:point val="-42.4725,-31"/>
         <dia:point val="-42.4725,-43"/>
         <dia:point val="-51.74,-43"/>
-        <dia:point val="-51.74,-44.15"/>
+        <dia:point val="-51.74,-43.45"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
