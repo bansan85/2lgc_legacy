@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true">
+  <dia:layer name="Classes principales" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -24671,7 +24671,7 @@ class CProjet;#</dia:string>
         <dia:point val="155,-184"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="154.95,-184.05;177.88,-170.35"/>
+        <dia:rectangle val="154.95,-184.05;177.88,-168.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="155,-184"/>
@@ -24680,7 +24680,7 @@ class CProjet;#</dia:string>
         <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="13.599999999999998"/>
+        <dia:real val="14.999999999999998"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CPreferences#</dia:string>
@@ -24689,7 +24689,9 @@ class CProjet;#</dia:string>
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Les préférences de l'utilisateur (hors paramètres de calculs).#</dia:string>
+        <dia:string>#Les préférences de l'utilisateur (hors paramètres de calculs).
+#include &lt;cstdint&gt;
+#include &lt;array&gt;#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -24772,10 +24774,10 @@ class CProjet;#</dia:string>
       <dia:attribute name="attributes">
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#decimales[U_LAST]#</dia:string>
+            <dia:string>#decimales#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#std::array &lt;uint8_t, U_LAST&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -24959,7 +24961,7 @@ class CProjet;#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t *#</dia:string>
+            <dia:string>#std::array &lt;uint8_t, U_LAST&gt; &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -24989,17 +24991,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Generalization" version="1" id="O95">
       <dia:attribute name="obj_pos">
-        <dia:point val="155,-182.95"/>
+        <dia:point val="155,-182.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="143.55,-183.8;155.05,-172.9"/>
+        <dia:rectangle val="143.55,-183.1;155.05,-172.9"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="155,-182.95"/>
-        <dia:point val="148.9,-182.95"/>
+        <dia:point val="155,-182.25"/>
+        <dia:point val="148.9,-182.25"/>
         <dia:point val="148.9,-172.95"/>
         <dia:point val="143.6,-172.95"/>
       </dia:attribute>
@@ -25075,13 +25077,13 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Classes dérivées" visible="true" active="true">
+  <dia:layer name="Classes dérivées" visible="true">
     <dia:object type="UML - Class" version="0" id="O97">
       <dia:attribute name="obj_pos">
         <dia:point val="-62,-75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-62.05,-75.05;-41.43,-43.4"/>
+        <dia:rectangle val="-62.05,-75.05;-41.43,-41.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-62,-75"/>
@@ -25090,7 +25092,7 @@ class CProjet;#</dia:string>
         <dia:real val="20.52"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="31.550000000000004"/>
+        <dia:real val="33.050000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CNbCalcul#</dia:string>
@@ -25100,7 +25102,8 @@ class CProjet;#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Nombre défini par l'ordinateur (et potentiellement à virgule infinie). L'intérêt de cette classe est de pouvoir stocker un nombre flottant obtenu par calcul et que l'affichage via toString respecte les décimales par défaut.
-#include &lt;cstdint&gt;#</dia:string>
+#include &lt;cstdint&gt;
+#include &lt;array&gt;#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -25232,7 +25235,7 @@ class CProjet;#</dia:string>
             <dia:string>#decimales#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t *#</dia:string>
+            <dia:string>#std::array &lt;uint8_t, U_LAST&gt; &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -25320,7 +25323,7 @@ class CProjet;#</dia:string>
                 <dia:string>#decimales_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t *#</dia:string>
+                <dia:string>#std::array &lt;uint8_t, U_LAST&gt; &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -26249,7 +26252,7 @@ class CProjet;#</dia:string>
         <dia:point val="-42.4725,-31"/>
         <dia:point val="-42.4725,-43"/>
         <dia:point val="-51.74,-43"/>
-        <dia:point val="-51.74,-43.45"/>
+        <dia:point val="-51.74,-41.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

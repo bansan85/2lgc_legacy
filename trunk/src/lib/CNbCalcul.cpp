@@ -35,9 +35,9 @@
  * \param valeur (in) La valeur initiale.
  * \param unit (in) L'unité du nombre.
  */
-CNbCalcul::CNbCalcul (double   valeur,
-                      EUnite   unit,
-                      uint8_t *decimales_) :
+CNbCalcul::CNbCalcul (double                         valeur,
+                      EUnite                         unit,
+                      std::array <uint8_t, U_LAST> & decimales_) :
   val (valeur),
   unite (unit),
   decimales (decimales_)
