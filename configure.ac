@@ -19,33 +19,34 @@ AC_PROG_F77
 AC_PROG_LIBTOOL
 
 AC_LANG(C++)
-old_CXXFLAGS="$CXXFLAGS"
-CXXFLAGS="$CXXFLAGS -std=c++11"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+old_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -std=c++11"
+AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[]],
                                    [[return 1;]])],
-                  [],
+                  [CXXFLAGS="$CXXFLAGS -std=c++11"],
                   [
-                    CXXFLAGS="$old_CXXFLAGS -std=c++0x"
+                    CPPFLAGS="$old_CPPFLAGS -std=c++0x"
                     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
                                                        [[return 1;]])],
-                                      [],
+                                      [CXXFLAGS="$CXXFLAGS -std=c++11"],
                                       [AC_MSG_ERROR(g++ ne supporte pas la norme c++11.)])
                   ])
+CPPFLAGS="$old_CPPFLAGS"
 
 AC_MSG_CHECKING(de la récense de gcc...)
-AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <list>
-                                
-                                int main ()
-                                {
-                                  std::list <int> test;
-                                  
-                                   for (int action : test) {}
-                                  
-                                  return 0;
-                                }
-                               ]])],
-              [AC_MSG_RESULT(ok)],
-              [AC_MSG_ERROR(g++ en version 4.6 minimum est nécessaire.)])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <list>
+                                    
+                                    int main ()
+                                    {
+                                      std::list <int> test;
+                                      
+                                       for (int action : test) {}
+                                      
+                                      return 0;
+                                    }
+                                   ]])],
+                  [AC_MSG_RESULT(ok)],
+                  [AC_MSG_ERROR(g++ en version 4.6 minimum est nécessaire.)])
 
 # libxml2
 LIBXML_REQUIRED_VERSION=2.8.0
