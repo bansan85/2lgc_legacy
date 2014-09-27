@@ -53,9 +53,9 @@ CAction::CAction (std::string  * nom_,
   , deplacement (NULL)
   , forces (NULL)
   , efforts_noeuds (NULL)
-  , efforts {{}, {}, {}, {}, {}, {}}
-  , deformation {{}, {}, {}}
-  , rotation {{}, {}, {}}
+  , efforts ({ { {}, {}, {}, {}, {}, {} } })
+  , deformation ({ { {}, {}, {}} })
+  , rotation ({ { {}, {}, {}} })
 #ifdef ENABLE_GTK
   , Iter_fenetre_ac (NULL)
   , Iter_liste (NULL)
@@ -80,9 +80,9 @@ CAction::CAction (const CAction & other) :
   , deplacement (NULL)
   , forces (NULL)
   , efforts_noeuds (NULL)
-  , efforts {{}, {}, {}, {}, {}, {}}
-  , deformation {{}, {}, {}}
-  , rotation {{}, {}, {}}
+  , efforts ({ { {}, {}, {}, {}, {}, {} } })
+  , deformation ({ { {}, {}, {}} })
+  , rotation ({ { {}, {}, {}} })
 #ifdef ENABLE_GTK
   , Iter_fenetre_ac (NULL)
   , Iter_liste (NULL)
