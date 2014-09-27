@@ -95,8 +95,8 @@ CAction::CAction (const CAction & other) :
  * \brief Assignment operator de CAction.
  * \param other (in) La classe à dupliquer.
  */
-CAction &
-CAction::operator = (const CAction & other) = delete;
+//CAction &
+//CAction::operator = (const CAction & other) = delete;
 
 
 /**

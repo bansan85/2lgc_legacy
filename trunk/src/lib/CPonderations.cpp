@@ -63,15 +63,15 @@ CPonderations::CPonderations (uint8_t eluequ,
  * \brief Duplication d'une classe CPonderations.
  * \param other (in) La classe à dupliquer.
  */
-CPonderations::CPonderations (const CPonderations & other) = delete;
+//CPonderations::CPonderations (const CPonderations & other) = delete;
 
 
 /**
  * \brief Assignment operator de CPonderations.
  * \param other (in) La classe à dupliquer.
  */
-CPonderations &
-CPonderations::operator = (const CPonderations & other) = delete;
+//CPonderations &
+//CPonderations::operator = (const CPonderations & other) = delete;
 
 
 /**

@@ -59,19 +59,19 @@ CParamEC::CParamEC (const CParamEC & other) :
 
 
 /**
+ * \brief Assignment operator de CParamEC.
+ * \param other La classe à dupliquer.
+ */
+//CParamEC &
+//CParamEC::operator = (const CParamEC & other) = delete;
+
+
+/**
  * \brief Destructeur d'une classe CParamEC.
  */
 CParamEC::~CParamEC ()
 {
 }
-
-
-/**
- * \brief Assignment operator de CParamEC.
- * \param other La classe à dupliquer.
- */
-CParamEC &
-CParamEC::operator = (const CParamEC & other) = delete;
 
 
 /**

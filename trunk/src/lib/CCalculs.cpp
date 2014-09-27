@@ -55,7 +55,7 @@ CCalculs::CCalculs () :
  *        à zéro et les paramètres des pondérations est conservés.
  * \param other (in) La classe à dupliquer.
  */
-CCalculs::CCalculs (const CCalculs & other) = delete;
+//CCalculs::CCalculs (const CCalculs & other) = delete;
 
 
 /**
@@ -64,8 +64,8 @@ CCalculs::CCalculs (const CCalculs & other) = delete;
  *        les paramètres des pondérations est conservés.
  * \param other (in) La classe à dupliquer.
  */
-CCalculs &
-CCalculs::operator = (const CCalculs & other) = delete;
+//CCalculs &
+//CCalculs::operator = (const CCalculs & other) = delete;
 
 
 /**
