@@ -123,7 +123,8 @@ CModele::addAction (CAction * action)
   
   IParametres *param = dynamic_cast <CProjet *> (this)->getParametres ();
   uint8_t type = action->getType ();
-  uint8_t *decimales = dynamic_cast <CProjet *> (this)->getDecimales ();
+  std::array <uint8_t, U_LAST> decimales = dynamic_cast <CProjet *>
+                                                       (this)->getDecimales ();
   
   if (action->getUndoManager ().getEtat () != UNDO_NONE_OR_REVERT)
   {

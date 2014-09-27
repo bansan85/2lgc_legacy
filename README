@@ -19,6 +19,7 @@ La description des messages doit toujours commencer par :
 [CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
 [TEST] : Ajout / Modification de tests.
 [WIN] : Tout ce qui concerne la compatibilité avec Windows.
+[VISUAL STUDIO] : Les modifications spécifiques à Visual Studio.
 [ANDROID] : Tout ce qui concerne la compatibilité avec Android.
 
 

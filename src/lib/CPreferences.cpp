@@ -27,13 +27,13 @@
  */
 CPreferences::CPreferences () :
   decimales
-  {
+  ({{
     3, // U_
     3, 3, 3, 3, // U_MM
     3, 3, 3, 3, // U_MM2
     3, 3, 3, 3, // U_MM3
     4, 4, 4, 4
-  } // U_MM4
+  }}) // U_MM4
 {
 }
 
@@ -75,10 +75,10 @@ CPreferences::~CPreferences ()
 /**
  * \brief Renvoie la liste des décimales applicables aux unités.
  */
-uint8_t *
+std::array <uint8_t, U_LAST> &
 CPreferences::getDecimales () const
 {
-  return const_cast <uint8_t *> (decimales);
+  return const_cast <std::array <uint8_t, U_LAST> &> (decimales);
 }
 
 
