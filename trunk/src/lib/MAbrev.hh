@@ -22,6 +22,11 @@
 #define BAD_CAST2 reinterpret_cast <const xmlChar *>
 #define BAD_TSAC2 reinterpret_cast <const char *>
 
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 #endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
