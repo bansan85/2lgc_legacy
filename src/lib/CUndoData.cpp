@@ -38,15 +38,15 @@ CUndoData::CUndoData () :
  * \brief Duplication d'une classe CUndoData. Non copiable.
  * \param other (in) La classe à dupliquer.
  */
-CUndoData::CUndoData (const CUndoData & other) = delete;
+//CUndoData::CUndoData (const CUndoData & other) = delete;
 
 
 /**
  * \brief Assignment operator de CUndoData. Non copiable.
  * \param other (in) La classe à dupliquer.
  */
-CUndoData &
-CUndoData::operator = (const CUndoData & other) = delete;
+//CUndoData &
+//CUndoData::operator = (const CUndoData & other) = delete;
 
 
 /**

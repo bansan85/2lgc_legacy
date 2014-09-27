@@ -61,8 +61,8 @@ CNbCalcul::CNbCalcul (CNbCalcul & nb) :
  * \brief Assignment operator de CProjet.
  * \param other La classe à dupliquer.
  */
-CNbCalcul &
-CNbCalcul::operator = (const CNbCalcul & other) = delete;
+//CNbCalcul &
+//CNbCalcul::operator = (const CNbCalcul & other) = delete;
 
 
 /**

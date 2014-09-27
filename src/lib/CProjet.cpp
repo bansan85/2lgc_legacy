@@ -158,8 +158,8 @@ CProjet::CProjet (const CProjet & other) :
  * \brief Assignment operator de CProjet.
  * \param other (in) La classe à dupliquer.
  */
-CProjet &
-CProjet::operator = (const CProjet & other) = delete;
+//CProjet &
+//CProjet::operator = (const CProjet & other) = delete;
 
 
 /**
