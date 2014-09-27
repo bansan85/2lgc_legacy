@@ -55,22 +55,12 @@ sudo unzip gettext-runtime-dev_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/
 
 GENTOO : (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
 
-(test -f glib-2.40.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz) && tar xvaf glib-2.40.0.tar.xz && cd glib-2.40.0 && \
+(test -f glib-2.42.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.42/glib-2.42.0.tar.xz) && tar xvaf glib-2.42.0.tar.xz && cd glib-2.42.0 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
 sed -i 's/tests$//g' Makefile.am Makefile.in glib/Makefile.in gobject/Makefile.in && \
 sed -i 's/tests fam$/fam/g' gio/Makefile.in && \
 sed -i 's/\. tests \\$/\\/g' gio/Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" LIBFFI_CFLAGS="-I/usr/i686-pc-mingw32/usr/lib/libffi-3.1/include" LIBFFI_LIBS="-lffi" ./configure --disable-static --enable-shared --with-threads=win32 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32
-
-TOUT : patch : glib/grand.c
-+#ifdef HAVE_RAND_S
-   for (i = 0; i < G_N_ELEMENTS (seed); i++)
-     rand_s (&seed[i]);
-+#else
-+  srand ((unsigned)time (NULL));
-+  for (i = 0; i < G_N_ELEMENTS (seed); i++)
-+    seed[i] = rand ();
-+#endif
 
 MINGW :
 sed -i 's#/home/keith/staged/mingw32#/mingw#g' /mingw/lib/*.la
@@ -89,7 +79,7 @@ make -j9 && sudo make install && cd .. && \
 (test -f tiff-4.0.3.tar.gz || wget http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz) && tar xvzf tiff-4.0.3.tar.gz && cd tiff-4.0.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f libpng-1.6.12.tar.xz || wget http://downloads.sourceforge.net/project/libpng/libpng16/1.6.12/libpng-1.6.12.tar.xz) && tar xvaf libpng-1.6.12.tar.xz && cd libpng-1.6.12 && \
+(test -f libpng-1.6.13.tar.xz || wget http://downloads.sourceforge.net/project/libpng/libpng16/1.6.13/libpng-1.6.13.tar.xz) && tar xvaf libpng-1.6.13.tar.xz && cd libpng-1.6.13 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 
@@ -97,8 +87,6 @@ MinGW :
 http://win32builder.gnome.org/packages/3.6/pkg-config_0.28-1_win32.zip
 http://win32builder.gnome.org/packages/3.6/pkg-config-dev_0.28-1_win32.zip
 et extraire dans C:/MinGW
-
-GENTOO : corriger l'éventuel bug dans //usr/bin/i686-pc-mingw32-pkg-config avec ${libdir}
 
 (test -f gdk-pixbuf-2.30.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.30/gdk-pixbuf-2.30.8.tar.xz) && tar xvaf gdk-pixbuf-2.30.8.tar.xz && cd gdk-pixbuf-2.30.8 && \
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
@@ -137,62 +125,42 @@ sed -i 's#test "$cross_compiling" = yes &&##g' ./configure && \
 sed -i 's#as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5##g' ./configure && \
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" && sudo make install && cd .. && \
-(test -f pango-1.36.5.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.5.tar.xz) && tar xvaf pango-1.36.5.tar.xz && cd pango-1.36.5 && \
+(test -f pango-1.36.8.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.36/pango-1.36.8.tar.xz) && tar xvaf pango-1.36.8.tar.xz && cd pango-1.36.8 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --with-included-modules=basic-win32 --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libcroco-0.6.8.tar.xz || wget http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.8.tar.xz) && tar xvaf libcroco-0.6.8.tar.xz && cd libcroco-0.6.8 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f poppler-0.26.3.tar.xz || wget http://poppler.freedesktop.org/poppler-0.26.3.tar.xz) && tar xvaf poppler-0.26.3.tar.xz && cd poppler-0.26.3 && \
+(test -f poppler-0.26.4.tar.xz || wget http://poppler.freedesktop.org/poppler-0.26.4.tar.xz) && tar xvaf poppler-0.26.4.tar.xz && cd poppler-0.26.4 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -D_WIN32_WINNT=0x0600" CXXFLAGS=$CFLAGS ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --disable-cms --disable-gtk-test --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f atk-2.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.12/atk-2.12.0.tar.xz) && tar xvaf atk-2.12.0.tar.xz && cd atk-2.12.0 && \
+(test -f atk-2.14.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.14/atk-2.14.0.tar.xz) && tar xvaf atk-2.14.0.tar.xz && cd atk-2.14.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --enable-introspection=no --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gtk+-3.12.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.12/gtk+-3.12.2.tar.xz) && tar xvaf gtk+-3.12.2.tar.xz && cd gtk+-3.12.2 && \
+(test -f gtk+-3.14.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.14/gtk+-3.14.0.tar.xz) && tar xvaf gtk+-3.14.0.tar.xz && cd gtk+-3.14.0 && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
-PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-cups --disable-cloudprint --disable-static --enable-shared --oldincludedir=/usr/i686-pc-mingw32/usr/include --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-debug=yes && \
-
-TOUT : gdk/Makefile :
--am__append_6 = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
-+am__append_6 = -Wl,win32/rc/gdk-win32-res.o
-
--libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-+libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
-
--install-def-file: gdk.def
--  mkdir -p $(DESTDIR)$(libdir)
--  $(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
--uninstall-def-file:
--  -rm $(DESTDIR)$(libdir)/gdk-win32-3.0.def
-
--install-data-local: install-ms-lib install-def-file
-+install-data-local: install-ms-lib
-
-TOUT : gtk/Makefile :
--am__append_18 = $(gtk_def) $(gtk_win32_res) $(deps)
-+am__append_18 = $(gtk_win32_res) $(deps)
-
--gtk_def = gtk.def
--gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
-
--install-def-file: gtk.def
--  $(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-3.0.def
--uninstall-def-file:
--  -rm $(DESTDIR)$(libdir)/gtk-win32-3.0.def
-
--libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
-+libgtk_target_ldflags = $(gtk_win32_res_ldflag)
-
--install-data-local: install-ms-lib install-def-file install-mac-key-theme
-+install-data-local: install-ms-lib install-mac-key-theme
-
--uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-+uninstall-local: uninstall-ms-lib uninstall-mac-key-theme
+sed -i 's/ docs / /g' Makefile.in Makefile.am && \
 
 MINGW : gtk/Makefile :
 commenter tout ce qui est en dessous de gtkbuiltincache.h: stamp-icons
 dans MinGW (si nécessaire) : export PATH=$PATH:/c/Python27
+
+GENTOO :
+cd util
+Makefile.am :
+CC = $(CC_FOR_BUILD)
+CFLAGS = $(CFLAGS_FOR_BUILD)
+LIBS =
+PKG_CONFIG = $(PKG_CONFIG_FOR_BUILD)
+cd ..
+
+CFLAGS="-D_WIN32_WINNT=0x0600 -D_WIN32_IE=0x0300 -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-cups --disable-cloudprint --disable-static --enable-shared --oldincludedir=/usr/i686-pc-mingw32/usr/include --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-debug=yes
+
+GENTOO :
+cd util
+make
+gcc -pthread -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include  -g -O2   -o extract-strings.exe extract_strings-extract-strings.o -lgobject-2.0 -lgmodule-2.0 -pthread -lglib-2.0
+cd ..
 
 make -j9 && sudo make install && cd .. && \
 (test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && tar xvzf icon-naming-utils-0.8.90.tar.gz && cd icon-naming-utils-0.8.90 && \
@@ -204,7 +172,8 @@ make -j9 && sudo make install && cd .. && \
 (test -f gnome-icon-theme-symbolic-3.12.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.12/gnome-icon-theme-symbolic-3.12.0.tar.xz) && tar xvaf gnome-icon-theme-symbolic-3.12.0.tar.xz && cd gnome-icon-theme-symbolic-3.12.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f librsvg-2.40.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.2.tar.xz) && tar xvaf librsvg-2.40.2.tar.xz && cd librsvg-2.40.2 && \
+(test -f librsvg-2.40.4.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.4.tar.xz) && tar xvaf librsvg-2.40.4.tar.xz && cd librsvg-2.40.4 && \
+sed -i 's/gio-unix/gio-windows/g' configure && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --enable-introspection=no --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32
 
 TOUT : rsvg-base.c
