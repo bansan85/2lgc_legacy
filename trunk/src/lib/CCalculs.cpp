@@ -28,8 +28,8 @@
  */
 CCalculs::CCalculs () :
   c (new cholmod_common),
-  n_part {{}, {}, {}, {}, {}, {}},
-  n_comp {{}, {}, {}, {}, {}, {}},
+  n_part ({{{}, {}, {}, {}, {}, {}}}),
+  n_comp ({{{}, {}, {}, {}, {}, {}}}),
   t_part (NULL),
   t_comp (NULL),
   t_part_en_cours (0),
