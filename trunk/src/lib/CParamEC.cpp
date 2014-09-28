@@ -178,7 +178,7 @@ CParamEC::setVariante (uint32_t variante_)
   BUGCONT (getUndoManager ().push (
            std::bind (&CParamEC::setVariante, this, variante),
            std::bind (&CParamEC::setVariante, this, variante_),
-           NULL,
+           nullptr,
            std::bind (&CParamEC::setVarianteXML,
                       this,
                       nom,

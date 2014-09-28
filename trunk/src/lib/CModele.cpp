@@ -200,8 +200,8 @@ CModele::rmAction (CAction * action)
                                                           (&CModele::rmAction),
                         this,
                         action),
-             NULL,
-             NULL),
+             nullptr,
+             nullptr),
            false,
            &action->getUndoManager ())
   

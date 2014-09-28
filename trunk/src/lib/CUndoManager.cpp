@@ -109,11 +109,11 @@ CUndoManager::push (std::function <bool ()>           annule,
   
   tmpListe->annule.push_front (annule);
   tmpListe->repete.push_back (repete);
-  if (suppr != NULL)
+  if (suppr != nullptr)
   {
     tmpListe->suppr.push_back (suppr);
   }
-  if (sauve != NULL)
+  if (sauve != nullptr)
   {
     tmpListe->sauve.push_back (sauve);
   }
