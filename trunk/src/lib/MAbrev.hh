@@ -22,9 +22,12 @@
 #define BAD_CAST2 reinterpret_cast <const xmlChar *>
 #define BAD_TSAC2 reinterpret_cast <const char *>
 
-#if defined(_MSC_VER)
+#if defined (_MSC_VER)
 #include <BaseTsd.h>
 typedef SSIZE_T ssize_t;
+#define DLLEXPORT __declspec (dllexport)
+#else
+#define DLLEXPORT
 #endif
 
 #endif
