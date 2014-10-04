@@ -138,27 +138,14 @@ make -j9 && sudo make install && cd .. && \
 sed -i 's/demos tests testsuite examples//g' Makefile.in Makefile.am && \
 sed -i 's/ docs / /g' Makefile.in Makefile.am && \
 
+GENTOO :
+patch : https://bug731013.bugzilla-attachments.gnome.org/attachment.cgi?id=287100
+
 MINGW : gtk/Makefile :
 commenter tout ce qui est en dessous de gtkbuiltincache.h: stamp-icons
 dans MinGW (si nécessaire) : export PATH=$PATH:/c/Python27
 
-GENTOO :
-cd util
-Makefile.am :
-CC = $(CC_FOR_BUILD)
-CFLAGS = $(CFLAGS_FOR_BUILD)
-LIBS =
-PKG_CONFIG = $(PKG_CONFIG_FOR_BUILD)
-cd ..
-
 CFLAGS="-D_WIN32_WINNT=0x0600 -D_WIN32_IE=0x0300 -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-cups --disable-papi --disable-introspection --disable-cups --disable-cloudprint --disable-static --enable-shared --oldincludedir=/usr/i686-pc-mingw32/usr/include --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-debug=yes
-
-GENTOO :
-cd util
-make
-gcc -pthread -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include  -g -O2   -o extract-strings.exe extract_strings-extract-strings.o -lgobject-2.0 -lgmodule-2.0 -pthread -lglib-2.0
-cd ..
-
 make -j9 && sudo make install && cd .. && \
 (test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && tar xvzf icon-naming-utils-0.8.90.tar.gz && cd icon-naming-utils-0.8.90 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
