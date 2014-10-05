@@ -55,7 +55,15 @@ AC_SUBST(XML_LIBS)
 AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
 
 # debug
-AC_ARG_WITH(debug,  [  --with-debug           build with debug support], [withdebug=true], [withdebug=false])
+
+AC_ARG_WITH(debug,
+            AS_HELP_STRING([--with-debug],
+                           [build with debug support.]))
+if test "$with_debug" != "yes"; then
+  withdebug=false
+else
+  withdebug=true
+fi
 AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-debug $withdebug
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
@@ -87,11 +95,18 @@ AM_CONDITIONAL(PLATFORM_ANDROID, test "$platform_win" = "Android")
 AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "Linux")
 
 # GTK+-3
-AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
-AC_ARG_WITH(gtk,  [  --with-gtk           build with gtk support], [withgtk=true], [withgtk=false])
+AC_ARG_WITH(gtk,
+            AS_HELP_STRING([--with-gtk],
+                           [build with gtk support]))
+if test "$with_gtk" != "yes"; then
+  withgtk=false
+else
+  withgtk=true
+fi
 AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-gtk $withgtk
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
+AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
 if test ! "x$platform_win" = "xAndroid"; then
   if test x$withgtk = xtrue; then
     GLIB_REQUIRED_VERSION=2.38.0
@@ -123,7 +138,14 @@ ALL_LINGUAS="fr"
 PKG_PROG_PKG_CONFIG
 
 # Vérification de la possibilité de compiler la documentation via doxygen
-AC_ARG_WITH(doc,  [  --with-doc           build with doc support], [withdoc=true], [withdoc=false])
+AC_ARG_WITH(doc,
+            AS_HELP_STRING([--with-doc],
+                           [build with doc support]))
+if test "$with_doc" != "yes"; then
+  withdoc=false
+else
+  withdoc=true
+fi
 AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-doc $withdoc
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
