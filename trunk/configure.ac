@@ -18,7 +18,15 @@ AM_PROG_CC_C_O
 AC_PROG_F77
 AC_PROG_LIBTOOL
 
+sinclude(acinclude.m4)
+
 AC_LANG(C++)
+
+old_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -Werror"
+CC_CHECK_CFLAGS_APPEND([-Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -fmax-errors=1])
+CPPFLAGS="$old_CPPFLAGS"
+
 old_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -std=c++11"
 AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[]],
@@ -94,6 +102,13 @@ AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
 AM_CONDITIONAL(PLATFORM_ANDROID, test "$platform_win" = "Android")
 AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "Linux")
 
+if test "$platform_win" == "Linux" && "$withdebug" == "true"; then
+  old_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS -Werror"
+  CC_CHECK_CFLAGS_APPEND([--coverage -fprofile-arcs -ftest-coverage])
+  CPPFLAGS="$old_CPPFLAGS"
+fi
+
 # GTK+-3
 AC_ARG_WITH(gtk,
             AS_HELP_STRING([--with-gtk],
@@ -124,7 +139,6 @@ AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cis
 AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])
 AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
 LIBS="-lgfortran $LIBS"
-sinclude(acx_blas.m4)
 ACX_BLAS
 if test x"$BLAS_LIBS" = x; then
     AC_MSG_ERROR([Cannot find blas libraries])
