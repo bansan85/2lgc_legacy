@@ -14,22 +14,17 @@ AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-debug --with-doc
 
 if PLATFORM_LINUX
 if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	= --coverage -fprofile-arcs -ftest-coverage
 AM_LDFLAGS			= -fprofile-arcs -ftest-coverage
-else
-CUSTOM_CXXFLAGS	=
 endif
-else
-CUSTOM_CXXFLAGS	=
 endif
 
 if PLATFORM_WIN32
-CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=i686 -mms-bitfields
+CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=i686 -mms-bitfields
 else
 if PLATFORM_WIN64
-CUSTOM_CXXFLAGS	+= @CXXFLAGS@ -march=x86-64 -mms-bitfields
+CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=x86-64 -mms-bitfields
 else
-CUSTOM_CXXFLAGS	+= @CXXFLAGS@
+CUSTOM_CXXFLAGS	= @CXXFLAGS@
 endif
 endif
 
@@ -40,7 +35,7 @@ CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
 endif
 
 
-CUSTOM_CXXFLAGS	+= -Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -fmax-errors=1
+CUSTOM_CXXFLAGS	+= -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
 #-Weffc++
 
 if PLATFORM_WIN32
@@ -140,7 +135,7 @@ checkcode :
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) clean
-	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
+	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
 	$(MAKE) -j9 &> l_clang.log
 	
 	$(MAKE) clean
