@@ -245,7 +245,7 @@ CParamEC::getpsiN () const
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, 0, &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, 0, &getUndoManager ())
       break;
     }
   }
@@ -285,7 +285,7 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &getUndoManager ())
+        BUGPARAM (type, "%u", nullptr, ACTION_INCONNUE, &getUndoManager ())
       }
     }
     case NORMEEUAC_FR :
@@ -316,12 +316,12 @@ CParamEC::getpsiAction (uint8_t type) const
       }
       else
       {
-        BUGPARAM (type, "%u", NULL, ACTION_INCONNUE, &getUndoManager ())
+        BUGPARAM (type, "%u", nullptr, ACTION_INCONNUE, &getUndoManager ())
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, ACTION_INCONNUE, &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, ACTION_INCONNUE, &getUndoManager ())
       break;
     }
   }
@@ -360,7 +360,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 16 : return gettext ("Sismique");
         default :
         {
-          BUGPARAM (type, "%u", NULL, std::string (), &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, std::string (), &getUndoManager ())
           break;
         }
       }
@@ -393,14 +393,14 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 21 : return gettext ("Eaux souterraines");
         default :
         {
-          BUGPARAM (type, "%u", NULL, std::string (), &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, std::string (), &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, std::string (), &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, std::string (), &getUndoManager ())
       break;
     }
   }
@@ -439,7 +439,7 @@ CParamEC::getpsi0 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
@@ -472,14 +472,14 @@ CParamEC::getpsi0 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
       break;
     }
   }
@@ -518,7 +518,7 @@ CParamEC::getpsi1 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
@@ -551,14 +551,14 @@ CParamEC::getpsi1 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
       break;
     }
   }
@@ -597,7 +597,7 @@ CParamEC::getpsi2 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
@@ -630,14 +630,14 @@ CParamEC::getpsi2 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", NULL, NAN, &getUndoManager ())
+          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", NULL, NAN, &getUndoManager ())
+      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
       break;
     }
   }

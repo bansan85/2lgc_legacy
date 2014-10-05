@@ -100,14 +100,14 @@ std::string
 format (const std::string fmt,
         ...)
 {
-  uint32_t    size = 1024;
+  size_t      size = 1024;
   bool        b = false;
   va_list     marker;
   std::string s;
   
   while (!b)
   {
-    uint32_t n;
+    int32_t n;
     
     s.resize (size);
     va_start (marker, fmt);
@@ -116,9 +116,9 @@ format (const std::string fmt,
                    fmt.c_str (),
                    marker);
     va_end (marker);
-    if ((n > 0) && ((b = (n < size)) == true))
+    if ((n > 0) && ((b = (static_cast <size_t> (n) < size)) == true))
     {
-      s.resize (n);
+      s.resize (static_cast <size_t> (n));
     }
     else
     {
