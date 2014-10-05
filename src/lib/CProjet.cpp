@@ -270,7 +270,7 @@ CProjet::setParametresXML (IParametres *param,
   }
   else
   {
-    BUGPROG (NULL, false, this, gettext ("Le type de la norme est inconnu.\n"))
+    BUGPROG (nullptr, false, this, gettext ("Le type de la norme est inconnu.\n"))
   }
   
   BUGCRIT (xmlSetProp (node.get (),
