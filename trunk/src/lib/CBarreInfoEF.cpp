@@ -47,21 +47,6 @@ CBarreInfoEF::CBarreInfoEF () :
 
 
 /**
- * \brief Duplication d'une classe CBarreInfoEF.
- * \param other (in) La classe à dupliquer.
- */
-//CBarreInfoEF::CBarreInfoEF (const CBarreInfoEF & other) = delete;
-
-
-/**
- * \brief Assignment operator de CBarreInfoEF.
- * \param other (in) La classe à dupliquer.
- */
-//CBarreInfoEF &
-//CBarreInfoEF::operator = (const CBarreInfoEF & other) = delete;
-
-
-/**
  * \brief Destructeur d'une classe CBarreInfoEF.
  */
 CBarreInfoEF::~CBarreInfoEF ()

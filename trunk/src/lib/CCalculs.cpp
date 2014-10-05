@@ -50,25 +50,6 @@ CCalculs::CCalculs () :
 
 
 /**
- * \brief Duplication d'une classe CCalculs. Les résultats n'étant pas
- *        dupliqués, la variable cholmod_common (c) est simplement initialisée
- *        à zéro et les paramètres des pondérations est conservés.
- * \param other (in) La classe à dupliquer.
- */
-//CCalculs::CCalculs (const CCalculs & other) = delete;
-
-
-/**
- * \brief Assignment operator de CCalculs. Les résultats n'étant pas dupliqués,
- *        la variable cholmod_common (c) est simplement initialisée à zéro et
- *        les paramètres des pondérations est conservés.
- * \param other (in) La classe à dupliquer.
- */
-//CCalculs &
-//CCalculs::operator = (const CCalculs & other) = delete;
-
-
-/**
  * \brief Libère les résultats.
  */
 CCalculs::~CCalculs ()
