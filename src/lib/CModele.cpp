@@ -106,7 +106,7 @@ CModele::addAction (CAction * action)
            false,
            &action->getUndoManager ())
   
-  IParametres *param = dynamic_cast <CProjet *> (this)->getParametres ();
+  IParametres *param = static_cast <CProjet *> (this)->getParametres ();
   uint8_t type = action->getType ();
   std::array <uint8_t, U_LAST> decimales = dynamic_cast <CProjet *>
                                                        (this)->getDecimales ();
