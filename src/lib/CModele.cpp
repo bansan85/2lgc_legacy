@@ -41,21 +41,6 @@ CModele::CModele () :
 
 
 /**
- * \brief Duplication d'une classe CModele.
- * \param other (in) La classe à dupliquer.
- */
-//CModele::CModele (const CModele & other) = delete;
-
-
-/**
- * \brief Assignment operator de CModele.
- * \param other (in) La classe à dupliquer.
- */
-//CModele &
-//CModele::operator = (const CModele & other) = delete;
-
-
-/**
  * \brief Libère le modèle de calcul.
  */
 CModele::~CModele ()

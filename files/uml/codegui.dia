@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true" active="true">
+  <dia:layer name="Classes principales" visible="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -3161,16 +3161,16 @@
         <dia:point val="190,-142"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="189.95,-142.05;213.65,-102.45"/>
+        <dia:rectangle val="189.95,-142.05;205.252,-108"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="190,-142"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="23.600000000000001"/>
+        <dia:real val="15.202500000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="39.500000000000014"/>
+        <dia:real val="33.95000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CBarreInfoEF#</dia:string>
@@ -3637,167 +3637,6 @@
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#CBarreInfoEF#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une classe CBarreInfoEF. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#source#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#CBarre &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La barre à analyser.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#discretisation#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#uint32_t#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le tronçon à analyser.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#CBarreInfoEF#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CBarreInfoEF. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CBarreInfoEF &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CBarreInfoEF &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CBarreInfoEF.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CBarreInfoEF &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
@@ -8189,16 +8028,16 @@
         <dia:point val="153,-7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="152.95,-7.05;177.42,13.85"/>
+        <dia:rectangle val="152.95,-7.05;177.035,12"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="153,-7"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="24.369999999999997"/>
+        <dia:real val="23.984999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="20.800000000000001"/>
+        <dia:real val="18.949999999999999"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IActionGroupe#</dia:string>
@@ -8452,54 +8291,6 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//IActionGroupe &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de IActionGroupe.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const IActionGroupe &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
             <dia:string>#~IActionGroupe#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -8617,7 +8408,7 @@
         <dia:point val="185,-41"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="184.95,-41.05;207.88,40.5"/>
+        <dia:rectangle val="184.95,-41.05;207.88,38.65"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="185,-41"/>
@@ -8626,7 +8417,7 @@
         <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="81.449999999999989"/>
+        <dia:real val="79.599999999999994"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CAction#</dia:string>
@@ -9165,54 +8956,6 @@ class DLLEXPORT CAction;#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Duplication d'une classe CAction.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CAction &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CAction &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CAction.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -12088,16 +11831,16 @@ class DLLEXPORT CAction;#</dia:string>
         <dia:point val="222,-160"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="221.95,-160.05;246.42,-106.1"/>
+        <dia:rectangle val="221.95,-160.05;243.34,-109.8"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="222,-160"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="24.369999999999997"/>
+        <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="53.850000000000023"/>
+        <dia:real val="50.15000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CPonderations#</dia:string>
@@ -12612,102 +12355,6 @@ class DLLEXPORT CAction;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CPonderations#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CPonderations. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CPonderations &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CPonderations &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CPonderations. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CPonderations &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
             <dia:string>#~CPonderations#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -13059,7 +12706,7 @@ class DLLEXPORT CAction;#</dia:string>
         <dia:point val="120,-142"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="119.95,-142.05;142.11,-61.5"/>
+        <dia:rectangle val="119.95,-142.05;142.11,-65.2"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="120,-142"/>
@@ -13068,7 +12715,7 @@ class DLLEXPORT CAction;#</dia:string>
         <dia:real val="22.059999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="80.449999999999932"/>
+        <dia:real val="76.749999999999943"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CModele#</dia:string>
@@ -13376,102 +13023,6 @@ class DLLEXPORT CModele;
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#CModele#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CModele. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CModele &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CModele &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CModele. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CModele &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
@@ -15379,7 +14930,7 @@ class DLLEXPORT CModele;
         <dia:point val="153,-144"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="152.95,-144.05;182.445,-89.3"/>
+        <dia:rectangle val="152.95,-144.05;182.445,-94.4"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="153,-144"/>
@@ -15388,7 +14939,7 @@ class DLLEXPORT CModele;
         <dia:real val="29.395"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="54.649999999999999"/>
+        <dia:real val="49.549999999999997"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CCalculs#</dia:string>
@@ -15901,102 +15452,6 @@ class DLLEXPORT CModele;
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#CCalculs#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CCalculs. Non copiable. Les résultats n'étant pas dupliqués, la variable cholmod_common (c) est simplement initialisée à zéro et les paramètres des pondérations est conservés.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CCalculs &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CCalculs &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CCalculs. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CCalculs &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
@@ -16824,7 +16279,7 @@ class DLLEXPORT CModele;
         <dia:point val="120,-174"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="119.95,-174.05;143.65,-146"/>
+        <dia:rectangle val="119.95,-174.05;143.65,-147.85"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="120,-174"/>
@@ -16833,7 +16288,7 @@ class DLLEXPORT CModele;
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="27.950000000000003"/>
+        <dia:real val="26.100000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CProjet#</dia:string>
@@ -17013,54 +16468,6 @@ class DLLEXPORT CProjet;#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Duplication d'une classe CProjet. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CProjet &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CProjet &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CProjet. Non copiable.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -18544,7 +17951,7 @@ class DLLEXPORT CProjet;#</dia:string>
         <dia:point val="166.185,-16.35"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="165.135,-17.1;166.935,-6.2"/>
+        <dia:rectangle val="164.942,-17.1;166.935,-6.2"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -18552,8 +17959,8 @@ class DLLEXPORT CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="166.185,-16.35"/>
         <dia:point val="166.185,-11.325"/>
-        <dia:point val="165.185,-11.325"/>
-        <dia:point val="165.185,-7"/>
+        <dia:point val="164.993,-11.325"/>
+        <dia:point val="164.993,-7"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -18789,18 +18196,18 @@ class DLLEXPORT CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O46">
       <dia:attribute name="obj_pos">
-        <dia:point val="165.185,13.8"/>
+        <dia:point val="164.993,11.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="164.335,13.75;168.235,19.05"/>
+        <dia:rectangle val="164.143,11.9;168.235,19.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="165.185,13.8"/>
-        <dia:point val="165.185,16.8"/>
-        <dia:point val="168.185,16.8"/>
+        <dia:point val="164.993,11.95"/>
+        <dia:point val="164.993,15.875"/>
+        <dia:point val="168.185,15.875"/>
         <dia:point val="168.185,19"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -18830,18 +18237,18 @@ class DLLEXPORT CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O47">
       <dia:attribute name="obj_pos">
-        <dia:point val="177.37,-4.2"/>
+        <dia:point val="176.985,-4.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="177.32,-38.25;185.05,-3.35"/>
+        <dia:rectangle val="176.935,-38.25;185.05,-3.35"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="177.37,-4.2"/>
-        <dia:point val="181.585,-4.2"/>
-        <dia:point val="181.585,-38.2"/>
+        <dia:point val="176.985,-4.2"/>
+        <dia:point val="181.392,-4.2"/>
+        <dia:point val="181.392,-38.2"/>
         <dia:point val="185,-38.2"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -19195,17 +18602,17 @@ class DLLEXPORT CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O54">
       <dia:attribute name="obj_pos">
-        <dia:point val="207.83,40.45"/>
+        <dia:point val="207.83,38.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="207.38,40.4;210.1,48.15"/>
+        <dia:rectangle val="207.38,38.55;210.1,48.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="207.83,40.45"/>
-        <dia:point val="210,40.45"/>
+        <dia:point val="207.83,38.6"/>
+        <dia:point val="210,38.6"/>
         <dia:point val="210,47.7"/>
         <dia:point val="207.83,47.7"/>
       </dia:attribute>
@@ -19591,18 +18998,18 @@ class DLLEXPORT CProjet;#</dia:string>
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="246.37,-147.9"/>
+        <dia:point val="243.29,-147.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="245.62,-148.65;250.05,-145.4"/>
+        <dia:rectangle val="242.54,-148.65;250.05,-145.4"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="246.37,-147.9"/>
-        <dia:point val="248.535,-147.9"/>
-        <dia:point val="248.535,-146.25"/>
+        <dia:point val="243.29,-147.9"/>
+        <dia:point val="246.995,-147.9"/>
+        <dia:point val="246.995,-146.25"/>
         <dia:point val="250,-146.25"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -20527,16 +19934,16 @@ class DLLEXPORT CProjet;#</dia:string>
         <dia:point val="130,-250"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="129.95,-250.05;153.65,-189.9"/>
+        <dia:rectangle val="129.95,-250.05;153.558,-191.75"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="130,-250"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="23.600000000000001"/>
+        <dia:real val="23.5075"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="60.050000000000004"/>
+        <dia:real val="58.20000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoManager#</dia:string>
@@ -20833,54 +20240,6 @@ class CProjet;#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Duplication d'une classe CUndoManager. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CUndoManager &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CUndoManager &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CUndoManager. Non copiable.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -21537,17 +20896,17 @@ class CProjet;#</dia:string>
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="130,-216.8"/>
+        <dia:point val="130,-218.65"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="123.24,-227.95;130.75,-215.95"/>
+        <dia:rectangle val="123.24,-227.95;130.75,-217.8"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="130,-216.8"/>
-        <dia:point val="126.295,-216.8"/>
+        <dia:point val="130,-218.65"/>
+        <dia:point val="126.295,-218.65"/>
         <dia:point val="126.295,-227.2"/>
         <dia:point val="123.29,-227.2"/>
       </dia:attribute>
@@ -21566,7 +20925,7 @@ class CProjet;#</dia:string>
         <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O63" connection="28"/>
+        <dia:connection handle="0" to="O63" connection="26"/>
         <dia:connection handle="1" to="O80" connection="4"/>
       </dia:connections>
     </dia:object>
@@ -21619,16 +20978,16 @@ class CProjet;#</dia:string>
         <dia:point val="64,-236"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="63.95,-236.05;85.34,-219.8"/>
+        <dia:rectangle val="63.95,-236.05;80.915,-221.65"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="64,-236"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="21.289999999999999"/>
+        <dia:real val="16.865000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="16.149999999999999"/>
+        <dia:real val="14.299999999999999"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IUndoable#</dia:string>
@@ -21841,54 +21200,6 @@ class CProjet;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//IUndoable &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de IUndoable. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const IUndoable &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
             <dia:string>#~IUndoable#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -21985,17 +21296,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O67">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="57.9425,-219.9;75.495,-103.15"/>
+        <dia:rectangle val="57.9425,-221.75;73.2825,-103.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-104"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-104"/>
         <dia:point val="57.9925,-104"/>
         <dia:point val="57.9925,-106.6"/>
       </dia:attribute>
@@ -22026,17 +21337,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O68">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.365,-219.9;75.495,-30.95"/>
+        <dia:rectangle val="10.365,-221.75;73.2825,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="10.415,-43"/>
         <dia:point val="10.415,-31"/>
       </dia:attribute>
@@ -22067,17 +21378,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O69">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="34.445,-219.9;75.495,-30.95"/>
+        <dia:rectangle val="34.445,-221.75;73.2825,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="34.495,-43"/>
         <dia:point val="34.495,-31"/>
       </dia:attribute>
@@ -22108,17 +21419,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O70">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="51.3225,-219.9;75.495,-30.95"/>
+        <dia:rectangle val="51.3225,-221.75;73.2825,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="51.3725,-43"/>
         <dia:point val="51.3725,-31"/>
       </dia:attribute>
@@ -22149,17 +21460,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O71">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="69.9,-219.9;75.495,-30.95"/>
+        <dia:rectangle val="69.9,-221.75;73.2825,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="69.95,-43"/>
         <dia:point val="69.95,-31"/>
       </dia:attribute>
@@ -22190,17 +21501,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O72">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;129.08,-30.95"/>
+        <dia:rectangle val="71.5825,-221.75;129.08,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="129.03,-43"/>
         <dia:point val="129.03,-31"/>
       </dia:attribute>
@@ -22231,17 +21542,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O73">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;92.465,-30.95"/>
+        <dia:rectangle val="71.5825,-221.75;92.465,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="92.415,-43"/>
         <dia:point val="92.415,-31"/>
       </dia:attribute>
@@ -22272,17 +21583,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O74">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;166.235,-30.95"/>
+        <dia:rectangle val="71.5825,-221.75;166.235,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="166.185,-43"/>
         <dia:point val="166.185,-31"/>
       </dia:attribute>
@@ -22313,20 +21624,20 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O75">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;179.05,-6.95"/>
+        <dia:rectangle val="71.5825,-221.75;179.05,-6.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="179,-43"/>
         <dia:point val="179,-7"/>
-        <dia:point val="177.37,-7"/>
+        <dia:point val="176.985,-7"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -22356,17 +21667,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O76">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;111.423,54.05"/>
+        <dia:rectangle val="71.5825,-221.75;111.423,54.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="107,-43"/>
         <dia:point val="107,30"/>
         <dia:point val="111.373,30"/>
@@ -22401,17 +21712,17 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O77">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="73.795,-219.9;219.423,-26.95"/>
+        <dia:rectangle val="71.5825,-221.75;219.423,-26.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-43"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-43"/>
         <dia:point val="219.373,-43"/>
         <dia:point val="219.373,-27"/>
       </dia:attribute>
@@ -23182,7 +22493,6 @@ class CProjet;#</dia:string>
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O8" connection="2"/>
-        <dia:connection handle="1" to="O6" connection="43"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O80">
@@ -23190,7 +22500,7 @@ class CProjet;#</dia:string>
         <dia:point val="102,-230"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="101.95,-230.05;123.34,-205.9"/>
+        <dia:rectangle val="101.95,-230.05;123.34,-209.6"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="102,-230"/>
@@ -23199,7 +22509,7 @@ class CProjet;#</dia:string>
         <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="24.050000000000001"/>
+        <dia:real val="20.350000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoData#</dia:string>
@@ -23442,102 +22752,6 @@ class CProjet;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CUndoData#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoData. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CUndoData &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CUndoData &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CUndoData. Non copiable.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CUndoData &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
             <dia:string>#~CUndoData#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -23577,16 +22791,16 @@ class CProjet;#</dia:string>
         <dia:point val="130,-246.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="84.84,-246.55;130.05,-234.15"/>
+        <dia:rectangle val="80.415,-246.55;130.05,-234.15"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="130,-246.5"/>
-        <dia:point val="107.845,-246.5"/>
-        <dia:point val="107.845,-234.6"/>
-        <dia:point val="85.29,-234.6"/>
+        <dia:point val="105.632,-246.5"/>
+        <dia:point val="105.632,-234.6"/>
+        <dia:point val="80.865,-234.6"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -23618,18 +22832,18 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Generalization" version="1" id="O82">
       <dia:attribute name="obj_pos">
-        <dia:point val="141.8,-189.95"/>
+        <dia:point val="141.754,-191.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="131.75,-190;142.65,-173.95"/>
+        <dia:rectangle val="131.75,-191.85;142.604,-173.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="141.8,-189.95"/>
-        <dia:point val="141.8,-181.575"/>
-        <dia:point val="131.8,-181.575"/>
+        <dia:point val="141.754,-191.8"/>
+        <dia:point val="141.754,-182.5"/>
+        <dia:point val="131.8,-182.5"/>
         <dia:point val="131.8,-174"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -23662,16 +22876,16 @@ class CProjet;#</dia:string>
         <dia:point val="131.03,-142"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="130.18,-146.1;131.88,-141.95"/>
+        <dia:rectangle val="130.18,-147.95;131.88,-141.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="131.03,-142"/>
-        <dia:point val="131.03,-144.425"/>
-        <dia:point val="131.8,-144.425"/>
-        <dia:point val="131.8,-146.05"/>
+        <dia:point val="131.03,-145.35"/>
+        <dia:point val="131.8,-145.35"/>
+        <dia:point val="131.8,-147.9"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -23703,7 +22917,7 @@ class CProjet;#</dia:string>
         <dia:point val="153,-139.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="143.55,-146.1;153.05,-138.25"/>
+        <dia:rectangle val="143.55,-147.95;153.05,-138.25"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -23711,8 +22925,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="153,-139.1"/>
         <dia:point val="151,-139.1"/>
-        <dia:point val="151,-146.05"/>
-        <dia:point val="143.6,-146.05"/>
+        <dia:point val="151,-147.9"/>
+        <dia:point val="143.6,-147.9"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -23901,7 +23115,7 @@ class CProjet;#</dia:string>
         <dia:point val="120.912,-201.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="120.862,-203.75;130.45,-201.5"/>
+        <dia:rectangle val="120.862,-205.6;130.45,-201.5"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -23909,8 +23123,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="120.912,-201.55"/>
         <dia:point val="125.256,-201.55"/>
-        <dia:point val="125.256,-203.3"/>
-        <dia:point val="130,-203.3"/>
+        <dia:point val="125.256,-205.15"/>
+        <dia:point val="130,-205.15"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -23937,7 +23151,7 @@ class CProjet;#</dia:string>
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O85" connection="4"/>
-        <dia:connection handle="1" to="O63" connection="40"/>
+        <dia:connection handle="1" to="O63" connection="38"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O87">
@@ -24591,18 +23805,18 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O92">
       <dia:attribute name="obj_pos">
-        <dia:point val="74.645,-219.85"/>
+        <dia:point val="72.4325,-221.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.75,-219.9;75.495,-181.684"/>
+        <dia:rectangle val="41.75,-221.75;73.2825,-181.684"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="74.645,-219.85"/>
-        <dia:point val="74.645,-200.392"/>
-        <dia:point val="41.8,-200.392"/>
+        <dia:point val="72.4325,-221.7"/>
+        <dia:point val="72.4325,-201.317"/>
+        <dia:point val="41.8,-201.317"/>
         <dia:point val="41.8,-181.734"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -25087,22 +24301,22 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Classes dérivées" visible="true">
+  <dia:layer name="Classes dérivées" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O97">
       <dia:attribute name="obj_pos">
-        <dia:point val="-62,-75"/>
+        <dia:point val="-63,-79"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-62.05,-75.05;-40.66,-41.9"/>
+        <dia:rectangle val="-63.05,-79.05;-45.125,-47.75"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-62,-75"/>
+        <dia:point val="-63,-79"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="21.289999999999999"/>
+        <dia:real val="17.824999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="33.050000000000004"/>
+        <dia:real val="31.200000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CNbCalcul#</dia:string>
@@ -25397,54 +24611,6 @@ class CProjet;#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CNbCalcul &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CProjet.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CNbCalcul &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
             <dia:string>#~CNbCalcul#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -25715,13 +24881,13 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O98">
       <dia:attribute name="obj_pos">
-        <dia:point val="-40,-75"/>
+        <dia:point val="-33,-75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-40.05,-75.05;-22.895,-48.6"/>
+        <dia:rectangle val="-33.05,-75.05;-15.895,-48.6"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-40,-75"/>
+        <dia:point val="-33,-75"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="17.055"/>
@@ -26253,7 +25419,7 @@ class CProjet;#</dia:string>
         <dia:point val="-42.4725,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-51.405,-43.75;-41.6225,-30.95"/>
+        <dia:rectangle val="-54.1375,-47.85;-41.6225,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -26261,8 +25427,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="-42.4725,-31"/>
         <dia:point val="-42.4725,-43"/>
-        <dia:point val="-51.355,-43"/>
-        <dia:point val="-51.355,-41.95"/>
+        <dia:point val="-54.0875,-43"/>
+        <dia:point val="-54.0875,-47.8"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -26294,7 +25460,7 @@ class CProjet;#</dia:string>
         <dia:point val="-42.4725,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-43.3225,-48.7;-31.4225,-30.95"/>
+        <dia:rectangle val="-43.3225,-48.7;-24.4225,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -26302,8 +25468,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="-42.4725,-31"/>
         <dia:point val="-42.4725,-43"/>
-        <dia:point val="-31.4725,-43"/>
-        <dia:point val="-31.4725,-48.65"/>
+        <dia:point val="-24.4725,-43"/>
+        <dia:point val="-24.4725,-48.65"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -39283,7 +38449,7 @@ class CProjet;#</dia:string>
         <dia:point val="14,-136"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.95,-136.05;37.65,-95.9"/>
+        <dia:rectangle val="13.95,-136.05;37.65,-97.75"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="14,-136"/>
@@ -39292,7 +38458,7 @@ class CProjet;#</dia:string>
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="40.050000000000018"/>
+        <dia:real val="38.200000000000017"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CParamEC#</dia:string>
@@ -39567,54 +38733,6 @@ class CProjet;#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Duplication d'une classe CParamEC.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CParamEC &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#operator =#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#//CParamEC &amp;#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CParamEC.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>

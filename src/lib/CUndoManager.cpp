@@ -62,14 +62,6 @@ CUndoManager::CUndoManager (const CUndoManager & other) :
 
 
 /**
- * \brief Assignment operator de CUndoManager.
- * \param other (in) La classe à dupliquer.
- */
-//CUndoManager &
-//CUndoManager::operator = (const CUndoManager & other) = delete;
-
-
-/**
  * \brief Libère l'historique du projet.
  */
 CUndoManager::~CUndoManager ()

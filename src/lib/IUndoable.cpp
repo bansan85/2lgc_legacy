@@ -43,14 +43,6 @@ IUndoable::IUndoable (const IUndoable & other) :
 
 
 /**
- * \brief Assignment operator de IUndoable.
- * \param other (in) La classe à dupliquer.
- */
-//IUndoable &
-//IUndoable::operator = (const IUndoable & other) = delete;
-
-
-/**
  * \brief Destructeur d'une classe IUndoable.
  */
 IUndoable::~IUndoable ()
