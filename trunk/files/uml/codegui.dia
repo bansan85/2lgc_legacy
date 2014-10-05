@@ -38449,7 +38449,7 @@ class CProjet;#</dia:string>
         <dia:point val="14,-136"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.95,-136.05;37.65,-97.75"/>
+        <dia:rectangle val="13.95,-136.05;37.65,-99.6"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="14,-136"/>
@@ -38458,7 +38458,7 @@ class CProjet;#</dia:string>
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="38.200000000000017"/>
+        <dia:real val="36.350000000000016"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CParamEC#</dia:string>
@@ -38711,54 +38711,6 @@ class CProjet;#</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
                 <dia:string>#Le gestionnaire des modifications.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#CParamEC#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CParamEC.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#other#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#const CParamEC &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#La classe à dupliquer.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
