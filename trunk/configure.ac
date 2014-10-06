@@ -120,6 +120,8 @@ if test "$with_gui" == "gtk3"; then
     PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED_VERSION)
     GTK_REQUIRED_VERSION=3.6.0
     PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED_VERSION)
+    PKG_CHECK_MODULES(GLIBMM, glibmm-2.4 >= $GLIB_REQUIRED_VERSION)
+    PKG_CHECK_MODULES(GTKMM, gtkmm-3.0 >= $GTK_REQUIRED_VERSION)
 #    AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
     AC_DEFINE(ENABLE_GTK, 1, [Défini si l’interface GTK doit être supportée.])
   else
