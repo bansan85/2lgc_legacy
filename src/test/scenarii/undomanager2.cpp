@@ -83,27 +83,24 @@ main (int32_t argc,
            NULL)
   BUGCONT (n2 = n1->children, -1, NULL)
   BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
-  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
-           -1,
-           NULL)
+  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0, -1, NULL)
   BUGCONT (n3 = n2->children, -1, NULL)
   BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
   BUGCONT (std::string ("projetSetParam").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            NULL)
+  
+  xmlChar *prop;
+  
   BUGCONT (n2 = n2->next, -1, NULL)
   BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
-  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
-           -1,
-           NULL)
+  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0, -1, NULL)
+  BUGCONT (prop = xmlGetProp (n2, BAD_CAST2 ("Heure")), -1,NULL)
   BUGCONT (n3 = n2->children, -1, NULL)
   BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
   BUGCONT (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            NULL)
-  
-  xmlChar *prop;
-  
   prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
   BUGCONT (std::string ("Poids propre").compare (BAD_TSAC2 (prop)) == 0,
            -1,
@@ -111,9 +108,7 @@ main (int32_t argc,
   xmlFree (prop);
   BUGCONT (n2 = n2->next, -1, NULL)
   BUGCONT (n2->type == XML_ELEMENT_NODE, -1, NULL)
-  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0,
-           -1,
-           NULL)
+  BUGCONT (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0, -1, NULL)
   BUGCONT (n3 = n2->children, -1, NULL)
   BUGCONT (n3->type == XML_ELEMENT_NODE, -1, NULL)
   BUGCONT (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0,
@@ -122,9 +117,7 @@ main (int32_t argc,
   // On vérifie bien que Chargement n'est plus présent dans la liste des
   // modifications.
   prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
-  BUGCONT (std::string ("Neige").compare (BAD_TSAC2 (prop)) == 0,
-           -1,
-           NULL)
+  BUGCONT (std::string ("Neige").compare (BAD_TSAC2 (prop)) == 0, -1, NULL)
   xmlFree (prop);
   
   xmlFreeNode (root_node);

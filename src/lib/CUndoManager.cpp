@@ -326,6 +326,13 @@ CUndoManager::undoToXML (xmlNodePtr root)
              this,
              gettext ("Erreur d'allocation mémoire.\n"))
     
+    BUGCRIT (xmlSetProp (node0.get (),
+                         BAD_CAST2 ("Heure"),
+                         BAD_CAST2 (std::to_string (data->heure).c_str ())),
+             false,
+             this,
+             gettext ("Problème depuis la librairie : %s\n"), "xml2")
+    
     for (std::function <bool (xmlNodePtr)> f : data->sauve)
     {
       BUGCRIT (f (node0.get ()),
