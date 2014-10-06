@@ -130,7 +130,7 @@ checkcode :
 	$(MAKE) -j9 &> l_gcc_sans_gtk.log
 	
 	$(MAKE) clean
-	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
@@ -142,7 +142,7 @@ checkcode :
 	scan-build make -j9 &> l_clang_scan.log
 	
 	$(MAKE) clean
-	./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	../cov-analysis-*/bin/cov-build --dir cov-int make -j9
 	tar czvf cov-2LGC.tgz cov-int

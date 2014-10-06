@@ -25,7 +25,7 @@ La description des messages doit toujours commencer par :
 
 Performances :
 Pour tester l'intégralité de l'application, il convient de la compiler avec l'option FLAGS="--coverage". Par exemple :
-  ./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
+  ./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
 Ensuite compiler et installer l'application normalement :
   make -j9 && sudo make install && /usr/local/bin/codegui
   

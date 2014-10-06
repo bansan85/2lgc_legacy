@@ -109,31 +109,51 @@ if test "$platform_win" == "Linux" && "$withdebug" == "true"; then
   CPPFLAGS="$old_CPPFLAGS"
 fi
 
-# GTK+-3
-AC_ARG_WITH(gtk,
-            AS_HELP_STRING([--with-gtk],
-                           [build with gtk support]))
-if test "$with_gtk" != "yes"; then
-  withgtk=false
-else
-  withgtk=true
-fi
-AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-with-gtk $withgtk
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
-AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
-if test ! "x$platform_win" = "xAndroid"; then
-  if test x$withgtk = xtrue; then
+# GUI
+AC_ARG_WITH(gui,
+            AS_HELP_STRING([--with-gui=@<:@none/gtk3/win/metro@:>@],
+                           [build with GUI support]))
+if test "$with_gui" == "gtk3"; then
+  if test "x$platform_win" == "xWin32" -o "x$platform_win" == "xWin64" -o "x$platform_win" == "xLinux"; then
+    withgui=gtk3
     GLIB_REQUIRED_VERSION=2.38.0
     PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED_VERSION)
     GTK_REQUIRED_VERSION=3.6.0
     PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED_VERSION)
-    AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
-    AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
+#    AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
+    AC_DEFINE(ENABLE_GTK, 1, [Défini si l’interface GTK doit être supportée.])
+  else
+    AC_MSG_ERROR([L’interface graphique sélectionnée via --with-gui n’est pas compatible.])
   fi
 else
-  AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
+  if test "x$with_gui" == "xwin"; then
+    if test "x$platform_win" == "xWin32" -o "x$platform_win" == "xWin64"; then
+      withgui=win
+      AC_DEFINE(ENABLE_WIN, 1, [Défini si l’interface Windows doit être supportée.])
+    else
+      AC_MSG_ERROR([L’interface graphique sélectionnée via --with-gui n’est pas compatible.])
+    fi
+  else
+    if test "x$with_gui" == "xmetro"; then :
+      if test "x$platform_win" == "xWin32" -o "x$platform_win" == "xWin64"; then :
+        withgui=metro
+        AC_DEFINE(ENABLE_METRO, 1, [Défini si l’interface METRO doit être supportée.])
+      else
+        AC_MSG_ERROR([L’interface graphique sélectionnée via --with-gui n’est pas compatible.])
+      fi
+    else
+      withgui=none
+    fi
+  fi
 fi
+AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+with-gui $withgui
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
+
+AM_CONDITIONAL(ENABLE_GTK, test x$withgui = xgtk3)
+AM_CONDITIONAL(ENABLE_WIN, test x$withgui = xwin)
+AM_CONDITIONAL(ENABLE_METRO, test x$withgui = xmetro)
+
 
 AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
 AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])
@@ -164,10 +184,8 @@ AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 with-doc $withdoc
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test x$withgtk = xtrue; then
-  if test -z "$DOXYGEN";
-    then AC_MSG_WARN([Doxygen introuvable - documentation non compilable])
-  fi
+if test -z "$DOXYGEN";
+  then AC_MSG_WARN([Doxygen introuvable - documentation non compilable])
 fi
 AM_CONDITIONAL(HAVE_DOXYGEN, test x$withdoc = xtrue && test -n "$DOXYGEN")
 
