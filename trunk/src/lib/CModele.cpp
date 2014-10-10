@@ -23,6 +23,7 @@
 #include "CNbCalcul.hpp"
 #include "CProjet.hpp"
 #include "MErreurs.hh"
+#include "SString.hh"
 
 /**
  * \brief Initialise le modèle de calcul.
@@ -98,7 +99,9 @@ CModele::addAction (CAction * action)
                         action,
                         action->getNom (),
                         action->getType (),
-                        std::placeholders::_1)),
+                        std::placeholders::_1),
+             format (gettext ("Ajout de l'action “%s”"),
+                     action->getNom ()->c_str ())),
            false,
            &action->getUndoManager ())
   BUGCONT (action->getUndoManager ().pushSuppr (std::bind
@@ -186,7 +189,9 @@ CModele::rmAction (CAction * action)
                         this,
                         action),
              nullptr,
-             nullptr),
+             nullptr,
+             format (gettext ("Suppression de l'action “%s”"),
+                     action->getNom ()->c_str ())),
            false,
            &action->getUndoManager ())
   

@@ -89,47 +89,6 @@ CNbUser::getUnite () const
 
 
 /**
- * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais
- *        en version std::string. Honteusement volé de
- *        http://stackoverflow.com/questions/2342162#3742999.
- * \param fmt : le texte à formater,
- * \param ... : les divers paramètres.
- * \return Le texte formaté en format std::string.
- */
-std::string
-format (const std::string fmt,
-        ...)
-{
-  size_t      size = 1024;
-  bool        b = false;
-  va_list     marker;
-  std::string s;
-  
-  while (!b)
-  {
-    int32_t n;
-    
-    s.resize (size);
-    va_start (marker, fmt);
-    n = vsnprintf (const_cast <char *> (s.c_str ()),
-                   size,
-                   fmt.c_str (),
-                   marker);
-    va_end (marker);
-    if ((n > 0) && ((b = (static_cast <size_t> (n) < size)) == true))
-    {
-      s.resize (static_cast <size_t> (n));
-    }
-    else
-    {
-      size = size * 2;
-    }
-  }
-  return s;
-}
-
-
-/**
  * \brief Renvoie le nombre sous forme de texte sans respecter le nombre de
  *        décimales..
  */

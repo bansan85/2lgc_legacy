@@ -24,6 +24,7 @@
 #include "CParamEC.hpp"
 #include "MAbrev.hh"
 #include "MErreurs.hh"
+#include "SString.hh"
 
 
 /**
@@ -80,9 +81,12 @@ CParamEC::setNom (std::string * nom_)
                         this,
                         nom,
                         nom_,
-                        std::placeholders::_1)),
-             false,
-             &getUndoManager ())
+                        std::placeholders::_1),
+             format (gettext ("Nom du paramètre “%s” (%s)"),
+                     nom->c_str (),
+                     nom_->c_str ())),
+           false,
+           &getUndoManager ())
   
   nom = nom_;
   
@@ -155,14 +159,17 @@ CParamEC::setVariante (uint32_t variante_)
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
-           std::bind (&CParamEC::setVariante, this, variante),
-           std::bind (&CParamEC::setVariante, this, variante_),
-           nullptr,
-           std::bind (&CParamEC::setVarianteXML,
-                      this,
-                      nom,
-                      variante_,
-                      std::placeholders::_1)),
+             std::bind (&CParamEC::setVariante, this, variante),
+             std::bind (&CParamEC::setVariante, this, variante_),
+             nullptr,
+             std::bind (&CParamEC::setVarianteXML,
+                        this,
+                        nom,
+                        variante_,
+                        std::placeholders::_1),
+             format (gettext ("Variante du paramètre “%s” (%d)"),
+                     nom->c_str (),
+                     variante_)),
            false,
            &getUndoManager ())
   

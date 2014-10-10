@@ -48,7 +48,8 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															IActionGroupe.cpp \
 															INb.cpp \
 															IParametres.cpp \
-															IUndoable.cpp
+															IUndoable.cpp \
+															SString.cpp
 
 libeurocodes_la_HEADERS 	=		$(wildcard *.hpp *.hh)
 

@@ -26,9 +26,10 @@
 
 #include "CAction.hpp"
 #include "CNbCalcul.hpp"
+#include "EUnite.hh"
 #include "MAbrev.hh"
 #include "MErreurs.hh"
-#include "EUnite.hh"
+#include "SString.hh"
 
 
 /**
@@ -257,7 +258,10 @@ CAction::setpsi0 (INb * val)
                         getNom (),
                         0,
                         val,
-                        std::placeholders::_1)),
+                        std::placeholders::_1),
+             format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
+                     getNom ()->c_str (),
+                     val->getVal ())),
            false,
            &getUndoManager ())
   psi0 = val;
@@ -307,7 +311,10 @@ CAction::setpsi1 (INb * val)
                         getNom (),
                         1,
                         val,
-                        std::placeholders::_1)),
+                        std::placeholders::_1),
+             format (gettext ("Cœfficient psi1 de l'action “%s” (%lf)"),
+                     getNom ()->c_str (),
+                     val->getVal ())),
            false,
            &getUndoManager ())
   psi1 = val;
@@ -357,7 +364,10 @@ CAction::setpsi2 (INb * val)
                         getNom (),
                         2,
                         val,
-                        std::placeholders::_1)),
+                        std::placeholders::_1),
+             format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
+                     getNom ()->c_str (),
+                     val->getVal ())),
            false,
            &getUndoManager ())
   
@@ -434,7 +444,10 @@ CAction::setParam (IParametres * param,
                         psi0_,
                         psi1_,
                         psi2_,
-                        std::placeholders::_1)),
+                        std::placeholders::_1),
+             format (gettext ("Paramètres de l'action “%s” (%s)"),
+                     getNom ()->c_str (),
+                     param->getNom ())),
            false,
            &getUndoManager ())
   

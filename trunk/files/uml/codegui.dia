@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Classes principales" visible="true">
+  <dia:layer name="Classes principales" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="-30,-31"/>
@@ -19934,7 +19934,7 @@ class DLLEXPORT CProjet;#</dia:string>
         <dia:point val="130,-250"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="129.95,-250.05;153.558,-191.75"/>
+        <dia:rectangle val="129.95,-250.05;153.558,-190.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="130,-250"/>
@@ -19943,7 +19943,7 @@ class DLLEXPORT CProjet;#</dia:string>
         <dia:real val="23.5075"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="58.20000000000001"/>
+        <dia:real val="59.000000000000007"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoManager#</dia:string>
@@ -20395,6 +20395,23 @@ class CProjet;#</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
                 <dia:string>#La fonction à lancer pour enregistrer dans un fichier l'historique.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#description#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::string#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La description de l'action.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -22500,7 +22517,7 @@ class CProjet;#</dia:string>
         <dia:point val="102,-230"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="101.95,-230.05;123.34,-209.6"/>
+        <dia:rectangle val="101.95,-230.05;123.34,-207.75"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="102,-230"/>
@@ -22509,7 +22526,7 @@ class CProjet;#</dia:string>
         <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="20.350000000000001"/>
+        <dia:real val="22.200000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoData#</dia:string>
@@ -22718,6 +22735,29 @@ class CProjet;#</dia:string>
             <dia:boolean val="false"/>
           </dia:attribute>
         </dia:composite>
+        <dia:composite type="umlattribute">
+          <dia:attribute name="name">
+            <dia:string>#description#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#std::string#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="value">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Description de l'opération.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+        </dia:composite>
       </dia:attribute>
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
@@ -22832,18 +22872,18 @@ class CProjet;#</dia:string>
     </dia:object>
     <dia:object type="UML - Generalization" version="1" id="O82">
       <dia:attribute name="obj_pos">
-        <dia:point val="141.754,-191.8"/>
+        <dia:point val="141.754,-191"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="131.75,-191.85;142.604,-173.95"/>
+        <dia:rectangle val="131.75,-191.05;142.604,-173.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="141.754,-191.8"/>
-        <dia:point val="141.754,-182.5"/>
-        <dia:point val="131.8,-182.5"/>
+        <dia:point val="141.754,-191"/>
+        <dia:point val="141.754,-182.1"/>
+        <dia:point val="131.8,-182.1"/>
         <dia:point val="131.8,-174"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -23115,7 +23155,7 @@ class CProjet;#</dia:string>
         <dia:point val="120.912,-201.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="120.862,-205.6;130.45,-201.5"/>
+        <dia:rectangle val="120.862,-204.8;130.45,-201.5"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -23123,8 +23163,8 @@ class CProjet;#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="120.912,-201.55"/>
         <dia:point val="125.256,-201.55"/>
-        <dia:point val="125.256,-205.15"/>
-        <dia:point val="130,-205.15"/>
+        <dia:point val="125.256,-204.35"/>
+        <dia:point val="130,-204.35"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -24301,7 +24341,7 @@ class CProjet;#</dia:string>
       </dia:connections>
     </dia:object>
   </dia:layer>
-  <dia:layer name="Classes dérivées" visible="true" active="true">
+  <dia:layer name="Classes dérivées" visible="true">
     <dia:object type="UML - Class" version="0" id="O97">
       <dia:attribute name="obj_pos">
         <dia:point val="-63,-79"/>

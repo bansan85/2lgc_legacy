@@ -81,12 +81,14 @@ CUndoManager::~CUndoManager ()
  *                   mémoire uniquement.
  * \param sauve (in) La fonction à lancer pour enregistrer dans un fichier
  *                   l'historique.
+ * \param description (in) La description de l'action.
  */
 bool
 CUndoManager::push (std::function <bool ()>           annule,
                     std::function <bool ()>           repete,
                     std::function <void ()>           suppr,
-                    std::function <bool (xmlNodePtr)> sauve)
+                    std::function <bool (xmlNodePtr)> sauve,
+                    std::string                       description)
 {
   if (!insertion)
   {
@@ -108,6 +110,15 @@ CUndoManager::push (std::function <bool ()>           annule,
   if (sauve != nullptr)
   {
     tmpListe->sauve.push_back (sauve);
+  }
+  
+  if (count == 1)
+  {
+    if (!tmpListe->description.empty ())
+    {
+      tmpListe->description.append ("\n");
+    }
+    tmpListe->description.assign (description);
   }
   
   return true;
@@ -329,6 +340,13 @@ CUndoManager::undoToXML (xmlNodePtr root)
     BUGCRIT (xmlSetProp (node0.get (),
                          BAD_CAST2 ("Heure"),
                          BAD_CAST2 (std::to_string (data->heure).c_str ())),
+             false,
+             this,
+             gettext ("Problème depuis la librairie : %s\n"), "xml2")
+    
+    BUGCRIT (xmlSetProp (node0.get (),
+                         BAD_CAST2 ("Description"),
+                         BAD_CAST2 (data->description.c_str ())),
              false,
              this,
              gettext ("Problème depuis la librairie : %s\n"), "xml2")

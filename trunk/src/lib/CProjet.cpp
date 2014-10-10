@@ -26,6 +26,7 @@
 #include "CProjet.hpp"
 #include "MAbrev.hh"
 #include "MErreurs.hh"
+#include "SString.hh"
 
 /**
  * \brief Constructeur d'une classe CProjet.
@@ -219,8 +220,9 @@ CProjet::setParametres (IParametres * param)
                         param,
                         param->getNom (),
                         param->getVariante (),
-                        std::placeholders::_1)
-                        ),
+                        std::placeholders::_1),
+             format (gettext ("Paramètres du projet (%s)"),
+                     param->getNom ()->c_str ())),
            false,
            this)
   
