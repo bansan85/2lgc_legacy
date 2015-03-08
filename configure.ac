@@ -2,12 +2,15 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
+AC_INIT(2lgc_code, 0.0.1, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 AM_INIT_AUTOMAKE([-Wno-portability])
 AC_CONFIG_SRCDIR([src/lib/CProjet.cpp])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.hpp])
 AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
+AH_BOTTOM([
+#include "common.h"
+])
 
 # Checks for programs.
 AC_PROG_AWK
@@ -24,7 +27,7 @@ AC_LANG(C++)
 
 old_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -Werror"
-CC_CHECK_CFLAGS_APPEND([-Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -fmax-errors=1])
+CC_CHECK_CFLAGS_APPEND([-Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -fmax-errors=10])
 CPPFLAGS="$old_CPPFLAGS"
 
 old_CPPFLAGS="$CPPFLAGS"
@@ -215,6 +218,7 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  src/gui/Makefile
                  src/gui/codegui/Makefile
                  src/lib/Makefile
+                 src/libundo/Makefile
                  docs/Doxyfile
                  src/test/Makefile
                  src/test/bugs/Makefile

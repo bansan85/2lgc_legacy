@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#include "config.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -24,10 +24,8 @@
 #include <locale>
 #include <sys/types.h>
 
-#include "CProjet.hpp"
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
-#include "MAbrev.hh"
 #include "MErreurs.hh"
 
 
@@ -35,27 +33,11 @@
  * \brief Initialise le système de gestion de l'historique et de la gestion des
  *        annuler / répéter.
  */
-CUndoManager::CUndoManager (CProjet & proj) :
+CUndoManager::CUndoManager () :
   liste (),
   pos (0),
   count (0),
   tmpListe (NULL),
-  projet (proj),
-  insertion (true)
-{
-}
-
-
-/**
- * \brief Duplication d'une classe CUndoManager.
- * \param other (in) La classe à dupliquer.
- */
-CUndoManager::CUndoManager (const CUndoManager & other) :
-  liste (),
-  pos (0),
-  count (0),
-  tmpListe (NULL),
-  projet (other.projet),
   insertion (true)
 {
 }
@@ -233,11 +215,11 @@ CUndoManager::getEtat () const
 {
   if ((insertion) && (count != 0))
   {
-    return UNDO_MODIF;
+    return EUndoEtat::UNDO_MODIF;
   }
   else
   {
-    return UNDO_NONE_OR_REVERT;
+    return EUndoEtat::UNDO_NONE_OR_REVERT;
   }
 }
 
@@ -248,7 +230,7 @@ CUndoManager::getEtat () const
 bool
 CUndoManager::ref ()
 {
-  BUGCRIT (count != 255,
+  BUGCRIT (count != UINT16_MAX,
            false,
            this,
            gettext ("Le programme est à ses limites.\n"))
@@ -415,7 +397,7 @@ CUndoManager::rollback ()
  * \brief Renvoie si l'insertion via push est possible.
  */
 bool CHK
-CUndoManager::getInsertion ()
+CUndoManager::getInsertion () const
 {
   return insertion;
 }

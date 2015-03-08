@@ -1,3 +1,4 @@
-SUBDIRS =	lib \
+SUBDIRS =	libundo \
+					lib \
 					test \
 					gui

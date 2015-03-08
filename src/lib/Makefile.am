@@ -19,12 +19,13 @@ libeurocodes_la_LIBADD    +=  -lintl
 endif
 
 if ENABLE_GTK
-libeurocodes_la_CXXFLAGS	=		$(AM_CXXFLAGS) @GTK_CFLAGS@
+libeurocodes_la_CXXFLAGS =   $(AM_CXXFLAGS) @GTKMM_CFLAGS@
+libeurocodes_la_LIBADD   +=  @GTKMM_LIBS@
 else
 libeurocodes_la_CXXFLAGS	=		$(AM_CXXFLAGS)
 endif
 
-libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -version-info 0:0:0 -Wl,-O0 -no-undefined
+libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -version-info $(VERSION) -Wl,-O0 -no-undefined
 
 libeurocodes_la_CPPFLAGS	=		@XML_CPPFLAGS@
 if ENABLE_GTK
@@ -43,12 +44,9 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CPonderations.cpp \
 															CPreferences.cpp \
 															CProjet.cpp \
-															CUndoData.cpp \
-															CUndoManager.cpp \
 															IActionGroupe.cpp \
 															INb.cpp \
 															IParametres.cpp \
-															IUndoable.cpp \
 															SString.cpp
 
 libeurocodes_la_HEADERS 	=		$(wildcard *.hpp *.hh)

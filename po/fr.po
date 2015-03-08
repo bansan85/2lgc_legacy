@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-09-14 13:47+0200\n"
+"POT-Creation-Date: 2015-03-08 22:50+0100\n"
 "PO-Revision-Date: 2014-09-14 13:59+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -42,6 +42,10 @@ msgstr ""
 msgid "Le type d'action %d est inconnu.\n"
 msgstr "Le type d'action %d est inconnu.\n"
 
+#, c-format
+msgid "Ajout de l'action “%s”"
+msgstr ""
+
 msgid ""
 "L'action doit être supprimée sans charge. Elles doivent être supprimées "
 "avant.\n"
@@ -49,38 +53,9 @@ msgstr ""
 "L'action doit être supprimée sans charge. Elles doivent être supprimées "
 "avant.\n"
 
-msgid ""
-"Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune "
-"action n'est en cours (nécessité d'appeler la fonction ref).\n"
+#, c-format
+msgid "Suppression de l'action “%s”"
 msgstr ""
-"Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune "
-"action n'est en cours (nécessité d'appeler la fonction ref).\n"
-
-msgid "Il n'y a plus rien à annuler.\n"
-msgstr "Il n'y a plus rien à annuler.\n"
-
-msgid ""
-"Echec lors de l'opération.\n"
-"Le projet est très probablement corrompu.\n"
-msgstr ""
-"Echec lors de l'opération.\n"
-"Le projet est très probablement corrompu.\n"
-
-msgid "Il n'y a plus rien à rétablir.\n"
-msgstr "Il n'y a plus rien à rétablir.\n"
-
-msgid "Impossible d'appeler unref alors que le compteur vaut 0.\n"
-msgstr "Impossible d'appeler unref alors que le compteur vaut 0.\n"
-
-msgid "Erreur lors de la génération du fichier XML.\n"
-msgstr "Erreur lors de la génération du fichier XML.\n"
-
-msgid ""
-"Impossible de faire marche arrière suite à l'erreur détectée.\n"
-"Le projet est très probablement corrompu.\n"
-msgstr ""
-"Impossible de faire marche arrière suite à l'erreur détectée.\n"
-"Le projet est très probablement corrompu.\n"
 
 msgid ""
 "Impossible de créer ce projet. Echec lors de la sélection de la norme.\n"
@@ -89,6 +64,10 @@ msgstr ""
 
 msgid "Impossible de créer ce projet. La norme est inconnue.\n"
 msgstr "Impossible de créer ce projet. La norme est inconnue.\n"
+
+#, c-format
+msgid "Paramètres du projet (%s)"
+msgstr ""
 
 msgid "Le type de la norme est inconnu.\n"
 msgstr "Le type de la norme est inconnu.\n"
@@ -317,6 +296,14 @@ msgstr "Calculer"
 msgid "Afficher"
 msgstr "Afficher"
 
+#, c-format
+msgid "Nom du paramètre “%s” (%s)"
+msgstr ""
+
+#, c-format
+msgid "Variante du paramètre “%s” (%d)"
+msgstr ""
+
 msgid "Permanente"
 msgstr "Permanente"
 
@@ -418,3 +405,15 @@ msgstr "Eaux souterraines"
 #, c-format
 msgid "L'unité est de type [%s] à la place de [%s].\n"
 msgstr "L'unité est de type [%s] à la place de [%s].\n"
+
+#, c-format
+msgid "Cœfficient psi0 de l'action “%s” (%lf)"
+msgstr ""
+
+#, c-format
+msgid "Cœfficient psi1 de l'action “%s” (%lf)"
+msgstr ""
+
+#, c-format
+msgid "Paramètres de l'action “%s” (%s)"
+msgstr ""

@@ -1,4 +1,5 @@
-all : ../../src/lib/codegui.hpp
+all : ../../src/lib/codegui.hpp \
+		  ../../src/libundo/undo.hpp
 
 checkcode : ../../src/lib/codegui.hpp
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
@@ -7,10 +8,16 @@ checkcode : ../../src/lib/codegui.hpp
 	$(MAKE) comp_hpp_cpp
 
 ../../src/lib/codegui.hpp : COPYING.head codegui.dia
-	rm -f *.hpp ../../src/lib/*.hpp
-	dia2code -l COPYING.head -t cpp -ext hpp -d . codegui.dia
+	rm -f *.hpp
+	../../../dia2code-git/src/dia2code -l COPYING.head -t cpp11 -ext hpp -d . codegui.dia
 	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> codegui.hpp \;
 	mv *.hpp ../../src/lib
+
+../../src/libundo/undo.hpp : COPYING.head undo.dia
+	rm -f *.hpp
+	../../../dia2code-git/src/dia2code -l COPYING.head -t cpp11 -ext hpp -d . undo.dia
+	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> undo.hpp \;
+	mv *.hpp ../../src/libundo
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)

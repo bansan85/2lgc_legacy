@@ -16,20 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MABREV_HH
-#define __MABREV_HH
+#include "config.hpp"
 
-#define BAD_CAST2 reinterpret_cast <const xmlChar *>
-#define BAD_TSAC2 reinterpret_cast <const char *>
+#include "CUndoData.hpp"
 
-#if defined (_MSC_VER)
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#define DLLEXPORT __declspec (dllexport)
-#else
-#define DLLEXPORT
-#endif
 
-#endif
+/**
+ * \brief Constructeur d'une classe CUndoData.
+ */
+CUndoData::CUndoData () :
+  annule (),
+  repete (),
+  suppr (),
+  sauve (),
+  heure (0)
+{
+}
+
+
+/*
+ * \brief Assignment operator de CUndoData. Non copiable.
+ * \param other (in) La classe à dupliquer.
+ */
+//CUndoData &
+//CUndoData::operator = (const CUndoData & other) = delete;
+
+
+/**
+ * \brief Destructeur d'une classe CUndoData.
+ */
+CUndoData::~CUndoData ()
+{
+  for (std::function <void ()> f : suppr)
+  {
+    f ();
+  }
+}
+
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -58,8 +58,8 @@ CAction::CAction (std::string  * nom_,
   , deformation ({ { {}, {}, {}} })
   , rotation ({ { {}, {}, {}} })
 #ifdef ENABLE_GTK
-  , Iter_fenetre_ac (NULL)
-  , Iter_liste (NULL)
+  //, Iter_fenetre_ac (NULL)
+  //, Iter_liste (NULL)
 #endif
 {
 }
@@ -85,8 +85,8 @@ CAction::CAction (const CAction & other) :
   , deformation ({ { {}, {}, {}} })
   , rotation ({ { {}, {}, {}} })
 #ifdef ENABLE_GTK
-  , Iter_fenetre_ac (NULL)
-  , Iter_liste (NULL)
+  //, Iter_fenetre_ac (NULL)
+  //, Iter_liste (NULL)
 #endif
 {
 }

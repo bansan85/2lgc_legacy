@@ -16,41 +16,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#include "config.hpp"
 
-#include "CUndoData.hpp"
+#include <iostream>
 
+#include "IUndoable.hpp"
 
 /**
- * \brief Constructeur d'une classe CUndoData.
+ * \brief Constructeur d'une classe IUndoable.
+ * \param undo_ (in) Le gestionnaire des modifications.
  */
-CUndoData::CUndoData () :
-  annule (),
-  repete (),
-  suppr (),
-  sauve (),
-  heure (0)
+IUndoable::IUndoable (CUndoManager & undo_) :
+  undoManager (undo_)
 {
 }
 
 
-/*
- * \brief Assignment operator de CUndoData. Non copiable.
+/**
+ * \brief Duplication d'une classe IUndoable.
  * \param other (in) La classe à dupliquer.
  */
-//CUndoData &
-//CUndoData::operator = (const CUndoData & other) = delete;
+IUndoable::IUndoable (const IUndoable & other) :
+  undoManager (other.undoManager)
+{
+}
 
 
 /**
- * \brief Destructeur d'une classe CUndoData.
+ * \brief Destructeur d'une classe IUndoable.
  */
-CUndoData::~CUndoData ()
+IUndoable::~IUndoable ()
 {
-  for (std::function <void ()> f : suppr)
-  {
-    f ();
-  }
+}
+
+
+/**
+ * \brief Renvoie le gestionnaire d'annulations.
+ */
+CUndoManager &
+IUndoable::getUndoManager () const
+{
+  return undoManager;
 }
 
 
