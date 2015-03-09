@@ -19,10 +19,8 @@ libeurocodes_la_LIBADD    +=  -lintl
 endif
 
 if ENABLE_GTK
-libeurocodes_la_CXXFLAGS =   $(AM_CXXFLAGS) @GTKMM_CFLAGS@
+libeurocodes_la_CXXFLAGS =   @GTKMM_CFLAGS@
 libeurocodes_la_LIBADD   +=  @GTKMM_LIBS@
-else
-libeurocodes_la_CXXFLAGS	=		$(AM_CXXFLAGS)
 endif
 
 libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -version-info $(VERSION) -Wl,-O0 -no-undefined

@@ -1,36 +1,34 @@
-DEFAULT_INCLUDES					=		-I$(srcdir) \
+DEFAULT_INCLUDES		=		-I$(srcdir) \
 															-I$(srcdir)/../.. \
 															-I$(srcdir)/../macro
 
-AUTOMAKE_OPTIONS					= 	subdir-objects
+AUTOMAKE_OPTIONS		= 	subdir-objects
 
-lib_LTLIBRARIES						= 	libundo.la
+lib_LTLIBRARIES			= 	libundo.la
 
 libundo_la_LIBADD		=		@XML_LIBS@
 if PLATFORM_LINUX
 if ENABLE_DEBUG
-libundo_la_LIBADD    +=	-lgcov
+libundo_la_LIBADD   +=	-lgcov
 endif
 endif
 if PLATFORM_WIN32
-libundo_la_LIBADD    +=  -lintl
+libundo_la_LIBADD   +=  -lintl
 endif
 if PLATFORM_WIN64
-libundo_la_LIBADD    +=  -lintl
+libundo_la_LIBADD   +=  -lintl
 endif
 
 if ENABLE_GTK
-libundo_la_CXXFLAGS	=		$(AM_CXXFLAGS) @GTKMM_CFLAGS@
+libundo_la_CXXFLAGS	=		@GTKMM_CFLAGS@
 libundo_la_LIBADD		+=	@GTKMM_LIBS@
-else
-libundo_la_CXXFLAGS	=		$(AM_CXXFLAGS)
 endif
 
-libundo_la_LDFLAGS		= 	$(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
+libundo_la_LDFLAGS	= 	$(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
 
 libundo_la_CPPFLAGS	=		@XML_CPPFLAGS@
 
-libundo_ladir 				= 	$(includedir)/2lgc
+libundo_ladir 			= 	$(includedir)/2lgc
 
 libundo_la_SOURCES 	=		IUndoable.cpp \
 															CUndoData.cpp \
