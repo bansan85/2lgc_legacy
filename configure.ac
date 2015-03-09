@@ -68,6 +68,13 @@ CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
                         -Wuseless-cast \
                         -Wwrite-strings \
                         -Wzero-as-null-pointer-constant \
+                        -fabi-version=6 \
+                        -Wabi \
+                        -Wctor-dtor-privacy \
+                        -Wc++11-compat \
+                        -Weffc++ \
+                        -Wstrict-null-sentinel \
+                        -Woverloaded-virtual \
                        ])
 CPPFLAGS="$old_CPPFLAGS"
 

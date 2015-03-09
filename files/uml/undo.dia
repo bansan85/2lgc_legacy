@@ -68,16 +68,16 @@
         <dia:point val="130.648,-251.751"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="130.598,-251.801;154.206,-197.351"/>
+        <dia:rectangle val="130.598,-251.801;157.378,-194.801"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="130.648,-251.751"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="23.5075"/>
+        <dia:real val="26.68"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="54.350000000000009"/>
+        <dia:real val="56.900000000000006"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoManager#</dia:string>
@@ -87,7 +87,7 @@
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Le système de gestion des annulations et de mémorisation de l'historique. Important : CUndoManager ne doit pas être tel quel. CProjet doit hérité de CUndoManager et CUndoManager doit être utilisé que par CProjet par polymorphisme.
-#</dia:string>
+Non copiable.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -329,7 +329,55 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoManager. Non copiable.#</dia:string>
+            <dia:string>#Duplication d'une classe CUndoManager.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CUndoManager &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator=#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>#delete#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#CUndoManager &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe CUndoManager.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1003,19 +1051,19 @@
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="130.648,-238.701"/>
+        <dia:point val="130.648,-238.001"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="123.24,-239.451;131.398,-225.85"/>
+        <dia:rectangle val="122.744,-238.751;131.398,-233.311"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="130.648,-238.701"/>
-        <dia:point val="126.619,-238.701"/>
-        <dia:point val="126.619,-226.7"/>
-        <dia:point val="123.29,-226.7"/>
+        <dia:point val="130.648,-238.001"/>
+        <dia:point val="126.371,-238.001"/>
+        <dia:point val="126.371,-234.161"/>
+        <dia:point val="122.794,-234.161"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1038,19 +1086,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O2">
       <dia:attribute name="obj_pos">
-        <dia:point val="64,-236"/>
+        <dia:point val="165.604,-239.851"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="63.95,-236.05;80.915,-220.85"/>
+        <dia:rectangle val="165.554,-239.901;190.024,-222.151"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="64,-236"/>
+        <dia:point val="165.604,-239.851"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="16.865000000000002"/>
+        <dia:real val="24.369999999999997"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="15.1"/>
+        <dia:real val="17.649999999999999"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IUndoable#</dia:string>
@@ -1059,7 +1107,8 @@
         <dia:string>#interface#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.#</dia:string>
+        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.
+Non copiable.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -1218,7 +1267,7 @@
             <dia:string>#IUndoable#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
+            <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>##</dia:string>
@@ -1227,7 +1276,55 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe IUndoable. Non copiable.#</dia:string>
+            <dia:string>#Duplication d'une classe IUndoable.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const IUndoable &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator=#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>#delete#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#IUndoable &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une interface IUndoable.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1359,19 +1456,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O3">
       <dia:attribute name="obj_pos">
-        <dia:point val="102,-230"/>
+        <dia:point val="98.4237,-238.161"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="101.95,-230.05;123.34,-210.55"/>
+        <dia:rectangle val="98.3737,-238.211;122.844,-214.311"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="102,-230"/>
+        <dia:point val="98.4237,-238.161"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="21.289999999999999"/>
+        <dia:real val="24.369999999999997"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="19.400000000000002"/>
+        <dia:real val="23.800000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CUndoData#</dia:string>
@@ -1380,7 +1477,8 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables. Non copyable.#</dia:string>
+        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.
+Non copiable.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -1633,6 +1731,102 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
+            <dia:string>#CUndoData#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>#delete#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe CUndoData.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CUndoData &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#operator=#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>#delete#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#CUndoData &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Duplication d'une classe CUndoData.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#other#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const CUndoData &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La classe à dupliquer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
             <dia:string>#~CUndoData#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
@@ -1669,19 +1863,19 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O4">
       <dia:attribute name="obj_pos">
-        <dia:point val="80.865,-234.2"/>
+        <dia:point val="189.974,-237.701"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="80.815,-250.101;131.098,-234.15"/>
+        <dia:rectangle val="156.878,-249.751;191.124,-237.651"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="80.865,-234.2"/>
-        <dia:point val="105.556,-234.2"/>
-        <dia:point val="105.556,-249.651"/>
-        <dia:point val="130.648,-249.651"/>
+        <dia:point val="189.974,-237.701"/>
+        <dia:point val="191.024,-237.701"/>
+        <dia:point val="191.024,-249.301"/>
+        <dia:point val="157.328,-249.301"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1708,18 +1902,18 @@
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O2" connection="4"/>
-        <dia:connection handle="1" to="O0" connection="3"/>
+        <dia:connection handle="1" to="O0" connection="4"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O5">
       <dia:attribute name="obj_pos">
-        <dia:point val="109,-203"/>
+        <dia:point val="107.349,-209.419"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="108.95,-203.05;120.962,-193.65"/>
+        <dia:rectangle val="107.299,-209.469;119.311,-200.069"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="109,-203"/>
+        <dia:point val="107.349,-209.419"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="11.9125"/>
@@ -1731,7 +1925,7 @@
         <dia:string>#EUndoEtat#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>#enum#</dia:string>
+        <dia:string>#enumeration#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#L'état du gestionnaire des annulations.#</dia:string>
@@ -1870,19 +2064,19 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="130.648,-210.751"/>
+        <dia:point val="130.648,-208.201"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="120.462,-210.801;130.698,-201.1"/>
+        <dia:rectangle val="118.811,-208.835;130.698,-207.235"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="130.648,-210.751"/>
-        <dia:point val="125.98,-210.751"/>
-        <dia:point val="125.98,-201.55"/>
-        <dia:point val="120.912,-201.55"/>
+        <dia:point val="130.648,-208.201"/>
+        <dia:point val="125.155,-208.201"/>
+        <dia:point val="125.155,-207.969"/>
+        <dia:point val="119.261,-207.969"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1908,7 +2102,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="36"/>
+        <dia:connection handle="0" to="O0" connection="38"/>
         <dia:connection handle="1" to="O5" connection="4"/>
       </dia:connections>
     </dia:object>
@@ -2024,18 +2218,18 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O8">
       <dia:attribute name="obj_pos">
-        <dia:point val="112.645,-230"/>
+        <dia:point val="110.609,-238.161"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="112.595,-255.45;113.625,-229.95"/>
+        <dia:rectangle val="110.559,-255.45;113.625,-238.111"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="112.645,-230"/>
-        <dia:point val="112.645,-242.3"/>
-        <dia:point val="113.175,-242.3"/>
+        <dia:point val="110.609,-238.161"/>
+        <dia:point val="110.609,-246.381"/>
+        <dia:point val="113.175,-246.381"/>
         <dia:point val="113.175,-255"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2178,18 +2372,18 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="112.645,-230"/>
+        <dia:point val="110.609,-238.161"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="112.595,-255.45;119.978,-229.95"/>
+        <dia:rectangle val="110.559,-255.45;119.978,-238.111"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="112.645,-230"/>
-        <dia:point val="112.645,-242.3"/>
-        <dia:point val="119.528,-242.3"/>
+        <dia:point val="110.609,-238.161"/>
+        <dia:point val="110.609,-246.381"/>
+        <dia:point val="119.528,-246.381"/>
         <dia:point val="119.528,-255"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2371,18 +2565,18 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O13">
       <dia:attribute name="obj_pos">
-        <dia:point val="112.645,-230"/>
+        <dia:point val="110.609,-238.161"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="100.725,-255.45;112.695,-229.95"/>
+        <dia:rectangle val="100.725,-255.45;110.659,-238.111"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="112.645,-230"/>
-        <dia:point val="112.645,-242.3"/>
-        <dia:point val="101.175,-242.3"/>
+        <dia:point val="110.609,-238.161"/>
+        <dia:point val="110.609,-246.381"/>
+        <dia:point val="101.175,-246.381"/>
         <dia:point val="101.175,-255"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

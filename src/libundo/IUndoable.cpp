@@ -33,16 +33,6 @@ IUndoable::IUndoable (CUndoManager & undo_) :
 
 
 /**
- * \brief Duplication d'une classe IUndoable.
- * \param other (in) La classe à dupliquer.
- */
-IUndoable::IUndoable (const IUndoable & other) :
-  undoManager (other.undoManager)
-{
-}
-
-
-/**
  * \brief Destructeur d'une classe IUndoable.
  */
 IUndoable::~IUndoable ()

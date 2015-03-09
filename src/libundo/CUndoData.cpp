@@ -29,7 +29,8 @@ CUndoData::CUndoData () :
   repete (),
   suppr (),
   sauve (),
-  heure (0)
+  heure (0),
+  description ()
 {
 }
 
