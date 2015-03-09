@@ -27,7 +27,48 @@ AC_LANG(C++)
 
 old_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -Werror"
-CC_CHECK_CFLAGS_APPEND([-Wall -Wextra -Winline -Wpacked -Wmissing-format-attribute -Wstrict-aliasing=2 -Wmissing-declarations -Wuninitialized -Wfloat-equal -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Wformat=2 -Wformat-nonliteral -Wformat-security -Wswitch-enum -Winit-self -fstrict-overflow -Wstrict-overflow=1 -Wno-unused-parameter -Wno-error=deprecated-declarations -Wconversion -Wold-style-cast -Wno-overloaded-virtual -Wwrite-strings -Wcast-qual -Wcast-align -Wredundant-decls -Wlogical-op -Wpointer-arith -fmax-errors=10])
+CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
+                        -fstack-protector-all \
+                        -fstrict-overflow \
+                        -Wall \
+                        -Wcast-align \
+                        -Wcast-qual \
+                        -Wconditionally-supported \
+                        -Wconversion \
+                        -Wextra \
+                        -Wfloat-equal \
+                        -Wformat=2 \
+                        -Wformat-nonliteral \
+                        -Wformat-security \
+                        -Winit-self \
+                        -Winline \
+                        -Wlogical-op \
+                        -Wmissing-declarations \
+                        -Wmissing-format-attribute \
+                        -Wno-comment \
+                        -Wno-error=deprecated-declarations \
+                        -Wno-overloaded-virtual \
+                        -Wno-unused-parameter \
+                        -Wold-style-cast \
+                        -Wpacked \
+                        -Wpedantic \
+                        -Wpointer-arith \
+                        -Wredundant-decls \
+                        -Wshadow \
+                        -Wsign-conversion \
+                        -Wstack-protector \
+                        -Wstrict-aliasing=1 \
+                        -Wstrict-overflow=5 \
+                        -Wswitch-default \
+                        -Wswitch-enum \
+                        -Wtrampolines \
+                        -Wundef \
+                        -Wuninitialized \
+                        -Wunused-parameter \
+                        -Wuseless-cast \
+                        -Wwrite-strings \
+                        -Wzero-as-null-pointer-constant \
+                       ])
 CPPFLAGS="$old_CPPFLAGS"
 
 old_CPPFLAGS="$CPPFLAGS"

@@ -35,7 +35,7 @@
           __FUNCTION__, \
           __LINE__); \
   if ((MANAGER) != NULL) \
-    (static_cast <CUndoManager *> (MANAGER))->rollback (); \
+    (MANAGER)->rollback (); \
   PRINTF (MSG); \
   PRINTF (__VA_ARGS__); \
   return Y; \

@@ -37,7 +37,7 @@ CUndoManager::CUndoManager () :
   liste (),
   pos (0),
   count (0),
-  tmpListe (NULL),
+  tmpListe (nullptr),
   insertion (true)
 {
 }
@@ -81,7 +81,7 @@ CUndoManager::push (std::function <bool ()>           annule,
            false,
            this,
            gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
-  BUGPARAM (tmpListe, "%p", tmpListe, false, this)
+  BUGPARAM (static_cast <void*> (tmpListe), "%p", tmpListe, false, this)
   
   tmpListe->annule.push_front (annule);
   tmpListe->repete.push_back (repete);
@@ -288,7 +288,7 @@ CUndoManager::unref ()
   {
     time (&tmpListe->heure);
     liste.push_back (tmpListe);
-    tmpListe = NULL;
+    tmpListe = nullptr;
   }
   
   return true;
@@ -302,7 +302,9 @@ bool
 CUndoManager::undoToXML (xmlNodePtr root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                    xmlNewNode (NULL, BAD_CAST2 ("UndoManager")), xmlFreeNode);
+                                        xmlNewNode (nullptr,
+                                                    BAD_CAST2 ("UndoManager")),
+                                        xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -312,7 +314,9 @@ CUndoManager::undoToXML (xmlNodePtr root)
   for (CUndoData * data : liste)
   {
     std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                           xmlNewNode (NULL, BAD_CAST2 ("Bloc")), xmlFreeNode);
+                                               xmlNewNode (nullptr,
+                                                           BAD_CAST2 ("Bloc")),
+                                               xmlFreeNode);
     
     BUGCRIT (node0.get (),
              false,
@@ -380,12 +384,12 @@ CUndoManager::rollback ()
   {
     BUGCRIT (f (),
              false,
-             NULL,
+             static_cast <CUndoManager *> (nullptr),
              gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n"))
   }
   
   delete tmpListe;
-  tmpListe = NULL;
+  tmpListe = nullptr;
   
   insertion = true;
   
