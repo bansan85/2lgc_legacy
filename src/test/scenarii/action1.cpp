@@ -21,18 +21,19 @@
 #include "config.h"
 
 #include "codegui.hpp"
-#include "MErreurs.hh"
+#include "MErreurs.hpp"
 
 #include <stdint.h>
 #include <libintl.h>
 #include <string.h>
+#include <memory>
 
 
 int
 main (int32_t argc,
       char   *argv[])
 {
-  CProjet projet (NORME_EC);
+  CProjet projet (ENorme::NORME_EC);
   std::unique_ptr <CAction> action;
   
   // On charge la localisation
@@ -41,28 +42,46 @@ main (int32_t argc,
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   textdomain (PACKAGE);
   
-  BUGCONT (projet.getActionCount () == 0, -1, NULL)
+  BUGCONT (projet.getActionCount () == 0,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 0 Poids propre
   action.reset (new CAction (new std::string ("Poids propre"), 0, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 1, -1, NULL)
+  BUGCONT (projet.getActionCount () == 1,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 2 Exploitation
   action.reset (new CAction (new std::string ("Chargement"), 2, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 2, -1, NULL)
+  BUGCONT (projet.getActionCount () == 2,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 18 Neige
   action.reset (new CAction (new std::string ("Neige"), 18, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 3, -1, NULL)
+  BUGCONT (projet.getActionCount () == 3,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 19 Vent
   action.reset (new CAction (new std::string ("Vent"), 19, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
   
-  BUGCONT (projet.enregistre ("test.xml"), -1, NULL)
+  BUGCONT (projet.enregistre ("test.xml"),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   
   return 0;
 }

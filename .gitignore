@@ -27,7 +27,7 @@ files/ui/*.ui.h
 files/ui/ressources.xml
 files/uml/*.hpp
 install-sh
-lib*_la-*.*o
+*.*o
 libtool
 ltmain.sh
 m4
@@ -50,3 +50,12 @@ src/gui/codegui/test.xml
 src/lib/gtkressources.cpp
 stamp-h1
 test-driver
+*.log
+*.gcda
+*.trs
+src/test/scenarii/action1
+src/test/scenarii/undomanager1
+src/test/scenarii/undomanager2
+src/test/static/projet
+*.xml
+src/test/coverage

@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include "codegui.hpp"
-#include "MErreurs.hh"
 
 #include <stdint.h>
 #include <libintl.h>
