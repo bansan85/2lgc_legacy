@@ -20,7 +20,6 @@
 
 #include "IParametres.hpp"
 
-
 /**
  * \brief Constructeur d'une classe IParametres.
  * \param undo_ Le gestionnaire des modifications.
@@ -30,13 +29,11 @@ IParametres::IParametres (CUndoManager & undo_) :
 {
 }
 
-
 /**
  * \brief Destructeur d'une classe IParametres.
  */
 IParametres::~IParametres ()
 {
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

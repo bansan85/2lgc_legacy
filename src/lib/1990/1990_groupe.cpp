@@ -51,7 +51,6 @@ _1990_groupe_init (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Ajoute un niveau au projet en lui attribuant le numéro suivant le
  *        dernier niveau existant.
@@ -93,7 +92,6 @@ _1990_groupe_ajout_niveau (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Ajoute un groupe au niveau choisi avec le type de combinaison
@@ -164,7 +162,6 @@ _1990_groupe_ajout_groupe (Projet                 *p,
   
   return groupe_nouveau;
 }
-
 
 /**
  * \brief Ajoute l'élément 'element_add' au groupe 'groupe' du niveau
@@ -283,7 +280,6 @@ _1990_groupe_ajout_element (Projet        *p,
   return true;
 }
 
-
 /**
  * \brief Modifie le type d'une combinaison (OR, XOR ou AND).
  * \param groupe : le groupe à modifier,
@@ -318,7 +314,6 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
   
   return true;
 }
-
 
 /**
  * \brief Modifie le nom d'un groupe. L'ancienne valeur est libérée.
@@ -376,7 +371,6 @@ _1990_groupe_modifie_nom (Niveau_Groupe     *groupe_niveau,
   
   return true;
 }
-
 
 /**
  * \brief Affiche tous les groupes y compris les combinaisons temporaires de
@@ -503,7 +497,6 @@ _1990_groupe_affiche_tout (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Libère l'élément désigné par les paramètres.
  * \param p : variable projet,
@@ -574,7 +567,6 @@ _1990_groupe_retire_element (Projet        *p,
   
   return true;
 }
-
 
 /**
  * \brief Libère le niveau ainsi que tous les niveaux supérieurs.
@@ -658,7 +650,6 @@ _1990_groupe_free_niveau (Projet        *p,
   return true;
 }
 
-
 /**
  * \brief Libère les combinaisons temporaires d'un groupe.
  * \param liste : liste contenant les combinaisons à libérer.
@@ -691,7 +682,6 @@ _1990_groupe_free_combinaisons (
 
   return true;
 }
-
 
 /**
  * \brief Libère le groupe demandé. La suppression d'un groupe entraine sa
@@ -811,7 +801,6 @@ _1990_groupe_free_groupe (Projet        *p,
   
   return true;
 }
-
 
 /**
  * \brief Libère l'ensemble des groupes et niveaux.

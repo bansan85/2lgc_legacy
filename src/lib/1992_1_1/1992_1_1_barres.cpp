@@ -83,7 +83,6 @@ _1992_1_1_barres_init (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Fonction permettant de libérer une barre contenue dans une liste.
  * \param barre : la barre à libérer,
@@ -133,7 +132,6 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
   
   return;
 }
-
 
 /**
  * \brief Ajoute une barre.
@@ -279,7 +277,6 @@ _1992_1_1_barres_ajout (Projet         *p,
   return true;
 }
 
-
 /**
  * \brief Renvoie la barre en fonction du numéro.
  * \param p : la variable projet,
@@ -323,7 +320,6 @@ _1992_1_1_barres_cherche_numero (Projet  *p,
     return NULL;
   }
 }
-
 
 /**
  * \brief Renvoie, sous forme d'une liste de noeuds, d'une liste de barres et
@@ -859,7 +855,6 @@ _1992_1_1_barres_cherche_dependances (
   }
 }
 
-
 /**
  * \brief Calcule les deux angles de rotation pour faire tourner une barre
  *        horizontale en une barre parallèle à une droite passant par les
@@ -921,7 +916,6 @@ _1992_1_1_barres_angle_rotation (EF_Noeud *debut,
   return true;
 }
 
-
 /**
  * \brief Change le type d'une barre.
  * \param barre : barre à modifier,
@@ -963,7 +957,6 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
   
   return true;
 }
-
 
 /**
  * \brief Change la section d'une barre.
@@ -1009,7 +1002,6 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
   return true;
 }
 
-
 /**
  * \brief Change le matériau d'une barre.
  * \param barre : barre à modifier,
@@ -1049,7 +1041,6 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
   
   return true;
 }
-
 
 /**
  * \brief Change l'angle d'une barre autour de son axe x.
@@ -1098,7 +1089,6 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   
   return true;
 }
-
 
 /**
  * \brief Change un des deux noeuds d'extrémité d'une barre.
@@ -1197,7 +1187,6 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   return true;
 }
 
-
 /**
  * \brief Change le relâchement d'une barre.
  * \param barre : barre à modifier,
@@ -1237,7 +1226,6 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
   
   return true;
 }
-
 
 /**
  * \brief Ajouter un élément à la matrice de rigidité partielle et complète.
@@ -2189,7 +2177,6 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   return true;
 }
 
-
 /**
  * \brief Ajoute à la matrice de rigidité toutes les barres.
  * \param p : la variable projet.
@@ -2218,7 +2205,6 @@ _1992_1_1_barres_rigidite_ajout_tout (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Supprime une liste de barres.
@@ -2393,7 +2379,6 @@ _1992_1_1_barres_supprime_liste (Projet                 *p,
   
   return true;
 }
-
 
 /**
  * \brief Libère l'ensemble des barres.

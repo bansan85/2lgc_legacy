@@ -18,12 +18,13 @@
 
 #include "config.h"
 
+#include <memory>
 
 #include "CModele.hpp"
 #include "CNbCalcul.hpp"
 #include "CProjet.hpp"
-#include "MErreurs.hh"
-#include "SString.hh"
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
 /**
  * \brief Initialise le modèle de calcul.
@@ -40,7 +41,6 @@ CModele::CModele () :
 {
 }
 
-
 /**
  * \brief Libère le modèle de calcul.
  */
@@ -50,7 +50,6 @@ CModele::~CModele ()
   // d'annulation.
 }
 
-
 /**
  * \brief Ajout d'une action. La fonction XML est CAction::addXML.
  * \param action (in) L'action à ajouter.
@@ -59,7 +58,11 @@ CModele::~CModele ()
 bool
 CModele::addAction (CAction * action)
 {
-  BUGPARAM (action, "%p", action, false, &action->getUndoManager ())
+  BUGPARAM (static_cast <void *> (action),
+            "%p",
+            action,
+            false,
+            &action->getUndoManager ())
   
   BUGCRIT (actions.max_size () != actions.size (),
            false,
@@ -111,16 +114,16 @@ CModele::addAction (CAction * action)
   
   IParametres *param = static_cast <CProjet *> (this)->getParametres ();
   uint8_t type = action->getType ();
-  std::array <uint8_t, U_LAST> decimales = dynamic_cast <CProjet *>
-                                                       (this)->getDecimales ();
+  std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> decimales =
+                              dynamic_cast <CProjet *> (this)->getDecimales ();
   
-  if (action->getUndoManager ().getEtat () != UNDO_NONE_OR_REVERT)
+  if (action->getUndoManager ().getEtat () != EUndoEtat::UNDO_NONE_OR_REVERT)
   {
     BUGCONT (action->setParam (
                param,
-               new CNbCalcul (param->getpsi0 (type), U_, decimales),
-               new CNbCalcul (param->getpsi1 (type), U_, decimales),
-               new CNbCalcul (param->getpsi2 (type), U_, decimales)),
+               new CNbCalcul (param->getpsi0 (type), EUnite::U_, decimales),
+               new CNbCalcul (param->getpsi1 (type), EUnite::U_, decimales),
+               new CNbCalcul (param->getpsi2 (type), EUnite::U_, decimales)),
              false,
              &action->getUndoManager ())
   }
@@ -131,7 +134,6 @@ CModele::addAction (CAction * action)
   
   return true;
 }
-
 
 /**
  * \brief Recherche une action.
@@ -151,7 +153,6 @@ CModele::getAction (std::string nom)
   return NULL;
 }
 
-
 /**
  * \brief Renvoie le nombre d'actions.
  */
@@ -161,7 +162,6 @@ CModele::getActionCount () const
   return actions.size ();
 }
 
-
 /**
  * \brief Supprime d'une action.
  * \param action (in) L'action à supprimer.
@@ -170,7 +170,11 @@ CModele::getActionCount () const
 bool
 CModele::rmAction (CAction * action)
 {
-  BUGPARAM (action, "%p", action, false, &action->getUndoManager ())
+  BUGPARAM (static_cast <void *> (action),
+            "%p",
+            action,
+            false,
+            &action->getUndoManager ())
   
   BUGPROG (action->emptyCharges (),
            false,
@@ -201,6 +205,5 @@ CModele::rmAction (CAction * action)
   
   return true;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

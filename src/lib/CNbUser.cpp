@@ -26,15 +26,9 @@
 #include <iostream>
 
 #include "CNbUser.hpp"
-#include "EUnite.hh"
-#include "MAbrev.hh"
-#include "MErreurs.hh"
-
-
-std::string
-format (const std::string fmt,
-        ...);
-
+#include "EUniteTxt.hpp"
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
 /**
  * \brief Constructeur d'une classe CNbUser.
@@ -48,25 +42,12 @@ CNbUser::CNbUser (double valeur,
 {
 }
 
-
-/**
- * \brief Constructeur d'une classe CNbUser.
- * \param nb Le nombre à copier.
- */
-CNbUser::CNbUser (CNbUser & nb) :
-  val (nb.val),
-  unite (nb.unite)
-{
-}
-
-
 /**
  * \brief Libère une classe CNbUser.
  */
 CNbUser::~CNbUser ()
 {
 }
-
 
 /**
  * \brief Renvoie la valeur du nombre.
@@ -77,7 +58,6 @@ CNbUser::getVal () const
   return val;
 }
 
-
 /**
  * \brief Renvoie l'unité du nombre.
  */
@@ -86,7 +66,6 @@ CNbUser::getUnite () const
 {
   return unite;
 }
-
 
 /**
  * \brief Renvoie le nombre sous forme de texte sans respecter le nombre de
@@ -130,16 +109,15 @@ CNbUser::toString () const
   return format ("%.*lf", width, val);
 }
 
-
 bool CHK
 CNbUser::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                         xmlNewNode (NULL, BAD_CAST2 ("NbUser")), xmlFreeNode);
+                      xmlNewNode (nullptr, BAD_CAST2 ("NbUser")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   std::ostringstream oss;
@@ -150,25 +128,25 @@ CNbUser::newXML (xmlNodePtr root) const
                        BAD_CAST2 ("valeur"),
                        BAD_CAST2 (oss.str ().c_str ())),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("unite"),
-                       BAD_CAST2 (EUniteConst[unite].c_str ())),
+                       BAD_CAST2 (EUniteConst[static_cast <size_t> (unite)]
+                                                                   .c_str ())),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();
   
   return true;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

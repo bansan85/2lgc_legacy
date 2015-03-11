@@ -30,16 +30,16 @@ CCalculs::CCalculs () :
   c (new cholmod_common),
   n_part ({{{}, {}, {}, {}, {}, {}}}),
   n_comp ({{{}, {}, {}, {}, {}, {}}}),
-  t_part (NULL),
-  t_comp (NULL),
+  t_part (nullptr),
+  t_comp (nullptr),
   t_part_en_cours (0),
   t_comp_en_cours (0),
-  m_part (NULL),
-  m_comp (NULL),
-  numeric (NULL),
-  ap (NULL),
-  ai (NULL),
-  ax (NULL),
+  m_part (nullptr),
+  m_comp (nullptr),
+  numeric (nullptr),
+  ap (nullptr),
+  ai (nullptr),
+  ax (nullptr),
   residu (NAN),
   rapport (),
   info_EF (),
@@ -47,7 +47,6 @@ CCalculs::CCalculs () :
 {
   cholmod_start (c);
 }
-
 
 /**
  * \brief Libère les résultats.
@@ -69,6 +68,5 @@ CCalculs::~CCalculs ()
   delete ai;
   delete ax;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

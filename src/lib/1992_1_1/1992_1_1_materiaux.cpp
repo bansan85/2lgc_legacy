@@ -36,7 +36,6 @@
 #include "common_gtk.hpp"
 #endif
 
-
 /**
  * \brief Renvoie la résistance caractéristique en compression du béton,
  *        mesurée sur cube à 28 jours en fonction de fck en unité SI (Pa).
@@ -119,7 +118,6 @@ _1992_1_1_materiaux_fckcube (double fck)
   }
 }
 
-
 /**
  * \brief Renvoie la valeur moyenne de la résistance en compression du béton,
  *        mesurée sur cylindre en unité SI (Pa).
@@ -140,7 +138,6 @@ _1992_1_1_materiaux_fcm (double fck)
   
   return (fck + 8.) * 1000000.;
 }
-
 
 /**
  * \brief Renvoie la valeur moyenne de la résistance en traction directe du
@@ -173,7 +170,6 @@ _1992_1_1_materiaux_fctm (double fck,
   }
 }
 
-
 /**
  * \brief Renvoie la valeur moyenne de la résistance en traction directe du
  *        béton, (fractile 5%) en unité SI (Pa).
@@ -187,7 +183,6 @@ _1992_1_1_materiaux_fctk_0_05 (double fctm)
 {
   return 0.7 * fctm * 1000000.;
 }
-
 
 /**
  * \brief Renvoie la valeur moyenne de la résistance en traction directe du
@@ -203,7 +198,6 @@ _1992_1_1_materiaux_fctk_0_95 (double fctm)
   return 1.3 * fctm * 1000000.;
 }
 
-
 /**
  * \brief Renvoie le module d'élasticité sécant du béton en unité SI (Pa).
  * \param fcm : valeur moyenne de la résistance en compression du béton, en
@@ -217,7 +211,6 @@ _1992_1_1_materiaux_ecm (double fcm)
   return 22. * pow (fcm / 10., 0.3) * 1000000000.;
 }
 
-
 /**
  * \brief Renvoie la déformation relative en compression du béton au point 1.
  * \param fcm : valeur moyenne de la résistance en compression du béton, en
@@ -230,7 +223,6 @@ _1992_1_1_materiaux_ec1 (double fcm)
 {
   return std::min (0.7 * pow (fcm, 0.31), 2.8) / 1000.;
 }
-
 
 /**
  * \brief Renvoie la déformation relative ultime en compression du béton au
@@ -263,7 +255,6 @@ _1992_1_1_materiaux_ecu1 (double fcm,
   }
 }
 
-
 /**
  * \brief Renvoie la déformation relative en compression du béton au point 2.
  * \param fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -290,7 +281,6 @@ _1992_1_1_materiaux_ec2 (double fck)
     return (2. + 0.085 * pow (fck - 50., 0.53)) / 1000.;
   }
 }
-
 
 /**
  * \brief Renvoie la déformation relative ultime en compression du béton au
@@ -320,7 +310,6 @@ _1992_1_1_materiaux_ecu2 (double fck)
   }
 }
 
-
 /**
  * \brief Renvoie la déformation relative en compression du béton au point 3.
  * \param fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -347,7 +336,6 @@ _1992_1_1_materiaux_ec3 (double fck)
     return (1.75 + 0.55 * (fck - 50.) / 40.) / 1000.;
   }
 }
-
 
 /**
  * \brief Renvoie la déformation relative ultime en compression du béton au
@@ -377,7 +365,6 @@ _1992_1_1_materiaux_ecu3 (double fck)
   }
 }
 
-
 /**
  * \brief Renvoie le coefficient n utilisé dans la courbe parabole rectangle.
  * \param fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -405,7 +392,6 @@ _1992_1_1_materiaux_n (double fck)
   }
 }
 
-
 /**
  * \brief Renvoie le module de cisallement en unité SI (Pa).
  * \param ecm : module d'élasticité sécant du béton en GPa,
@@ -425,7 +411,6 @@ _1992_1_1_materiaux_gnu (double ecm,
         (gettext ("Le coefficient de poisson doit être compris entre 0 et 0.5, borne exclues.\n")); )
   return ecm / (2. * (1. + nu)) * 1000000000.;
 }
-
 
 /**
  * \brief Ajoute un matériau en béton et calcule ses caractéristiques
@@ -521,7 +506,6 @@ _1992_1_1_materiaux_ajout (Projet      *p,
   
   return mat;
 }
-
 
 /**
  * \brief Modifie un matériau béton.
@@ -697,7 +681,6 @@ _1992_1_1_materiaux_modif (Projet      *p,
   
   return true;
 }
-
 
 /**
  * \brief Renvoie la description d'un matériau béton sous forme d'un texte.

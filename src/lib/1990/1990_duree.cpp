@@ -23,7 +23,6 @@
 #include "common_erreurs.hpp"
 #include "common_projet.hpp"
 
-
 /**
  * \brief Renvoie la durée (en année) indicative de la norme européenne. Dans
  *        le cas où la durée indiquée par la norme européenne est un intervalle
@@ -57,7 +56,6 @@ _1990_duree_norme_eu (uint8_t type)
   }
 }
 
-
 /**
  * \brief Renvoie la durée (en année) indicative de la norme française. La
  *        description de type est donnée par #_1990_duree_norme_txt_fr.
@@ -88,7 +86,6 @@ _1990_duree_norme_fr (uint8_t type)
     default : { FAILPARAM (type, "%u", 0) break; }
   }
 }
-
 
 /**
  * \brief Renvoie la description des catérogies des durées indicatives de la
@@ -123,7 +120,6 @@ _1990_duree_norme_txt_eu (uint8_t type)
   }
 }
 
-
 /**
  * \brief Renvoie la description des catérogies des durées indicative de la
  *        norme française.
@@ -157,7 +153,6 @@ _1990_duree_norme_txt_fr (uint8_t type)
   }
 }
 
-
 /**
  * \brief Renvoie la durée (en année) indicative de la norme spécifiée.
  * \param type : categorie de durée d'utilisation de projet,
@@ -179,7 +174,6 @@ _1990_duree_norme (uint8_t type,
     default : { FAILPARAM (norme, "%d", 0) break; }
   }
 }
-
 
 /**
  * \brief Renvoie la description des catérogies des durées indicatives de la

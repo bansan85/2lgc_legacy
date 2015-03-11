@@ -44,7 +44,6 @@
 
 }
 
-
 /**
  * \brief Initialise la liste des actions.
  * \param p : la variable projet.
@@ -127,7 +126,6 @@ _1990_action_init (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Ajoute une nouvelle action à la liste des actions.
@@ -229,7 +227,6 @@ _1990_action_ajout (Projet            *p,
   return act;
 }
 
-
 /**
  * \brief Renvoie le nom de l'action. Il convient de ne pas libérer ou modifier
  *        la valeur renvoyée.
@@ -246,7 +243,6 @@ _1990_action_nom_renvoie (Action *action)
   
   return action->nom;
 }
-
 
 /**
  * \brief Renomme une action. L'ancienne valeur est libérée.
@@ -292,7 +288,6 @@ _1990_action_nom_change (Projet            *p,
   return true;
 }
 
-
 /**
  * \brief Renvoie le type de l'action. La correspondance avec la description
  *        est obtenue avec la fonction #_1990_action_bat_txt_type.
@@ -309,7 +304,6 @@ _1990_action_type_renvoie (Action *action)
   
   return action->type;
 }
-
 
 /**
  * \brief Change le type d'une action, y compris &psi;<sub>0</sub>,
@@ -366,7 +360,6 @@ _1990_action_type_change (Projet *p,
   return true;
 }
 
-
 /**
  * \brief Renvoie true si la liste des charges est vide ou si action est égale
  *        à NULL.
@@ -384,7 +377,6 @@ _1990_action_charges_vide (Action *action)
   return action->charges.empty ();
 }
 
-
 /**
  * \brief Renvoie la liste des charges.
  * \param action : une action.
@@ -401,7 +393,6 @@ _1990_action_charges_renvoie (Action *action)
   return &action->charges;
 }
 
-
 /**
  * \brief Renvoie le flag "Action prédominante" de l'action.
  * \param action : une action.
@@ -417,7 +408,6 @@ _1990_action_flags_action_predominante_renvoie (Action *action)
   
   return action->action_predominante;
 }
-
 
 /**
  * \brief Change le flag "Action prédominante" de l'action.
@@ -441,7 +431,6 @@ _1990_action_flags_action_predominante_change (Action *action,
   return true;
 }
 
-
 /**
  * \brief Renvoie le coefficient &psi;<sub>0</sub> de l'action.
  * \param action : une action.
@@ -457,7 +446,6 @@ _1990_action_psi_renvoie_0 (Action *action)
   
   return action->psi0;
 }
-
 
 /**
  * \brief Renvoie le coefficient &psi;<sub>1</sub> de l'action.
@@ -475,7 +463,6 @@ _1990_action_psi_renvoie_1 (Action *action)
   return action->psi1;
 }
 
-
 /**
  * \brief Renvoie le coefficient &psi;<sub>2</sub> de l'action.
  * \param action : une action.
@@ -491,7 +478,6 @@ _1990_action_psi_renvoie_2 (Action *action)
   
   return action->psi2;
 }
-
 
 /**
  * \brief Change le coefficient &psi; d'une action.
@@ -572,7 +558,6 @@ _1990_action_psi_change (Projet  *p,
   return true;
 }
 
-
 /**
  * \brief Renvoie la matrice sparse deplacement de l'action.
  * \param action : une action.
@@ -588,7 +573,6 @@ _1990_action_deplacement_renvoie (Action *action)
   
   return action->deplacement;
 }
-
 
 /**
  * \brief Modifie la matrice sparse deplacement de l'action. La précédente
@@ -613,7 +597,6 @@ _1990_action_deplacement_change (Action         *action,
   return true;
 }
 
-
 /**
  * \brief Renvoie la matrice sparse forces de l'action.
  * \param action : une action.
@@ -629,7 +612,6 @@ _1990_action_forces_renvoie (Action *action)
   
   return action->forces;
 }
-
 
 /**
  * \brief Modifie la matrice sparse forces de l'action. La précédente n'est pas
@@ -654,7 +636,6 @@ _1990_action_forces_change (Action         *action,
   return true;
 }
 
-
 /**
  * \brief Renvoie la matrice sparse efforts_noeuds de l'action.
  * \param action : une action.
@@ -670,7 +651,6 @@ _1990_action_efforts_noeuds_renvoie (Action *action)
   
   return action->efforts_noeuds;
 }
-
 
 /**
  * \brief Modifie la matrice sparse efforts_noeuds de l'action. La précédente
@@ -695,7 +675,6 @@ _1990_action_efforts_noeuds_change (Action         *action,
   return true;
 }
 
-
 #ifdef ENABLE_GTK
 /**
  * \brief Renvoie la variable Iter_fenetre.
@@ -713,7 +692,6 @@ _1990_action_Iter_fenetre_renvoie (Action *action)
   return &action->Iter_fenetre;
 }
 #endif
-
 
 /**
  * \brief Renvoie la fonction Effort dans la barre.
@@ -738,7 +716,6 @@ _1990_action_efforts_renvoie (Action  *action,
   return action->efforts[effort].at (barre);
 }
 
-
 /**
  * \brief Renvoie la fonction Rotation dans la barre.
  * \param action : une action,
@@ -762,7 +739,6 @@ _1990_action_rotation_renvoie (Action  *action,
   return action->rotation[effort].at (barre);
 }
 
-
 /**
  * \brief Renvoie la fonction Déformation dans la barre.
  * \param action : une action,
@@ -785,7 +761,6 @@ _1990_action_deformation_renvoie (Action  *action,
   
   return action->deformation[effort].at (barre);
 }
-
 
 /**
  * \brief Libère les fonctions de toutes les barres de l'action souhaitée.
@@ -826,7 +801,6 @@ _1990_action_fonction_free (Action *action)
   
   return true;
 }
-
 
 /**
  * \brief Initialise les fonctions décrivant les sollicitations, les rotations
@@ -881,7 +855,6 @@ _1990_action_fonction_init (Projet *p,
   return true;
 }
 
-
 /**
  * \brief Affiche dans l'entrée standard les actions existantes.
  * \param p : la variable projet.
@@ -917,7 +890,6 @@ _1990_action_affiche_tout (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Affiche tous les résultats des calculs dans l'entrée standard.
@@ -1010,7 +982,6 @@ _1990_action_affiche_resultats (Projet *p,
   return true;
 }
 
-
 /**
  * \brief Libère les résultats de l'action souhaitée crée par
  *        #_1990_action_ponderation_resultat.
@@ -1032,7 +1003,6 @@ _1990_action_ponderation_resultat_free_calculs (Action *action)
   
   return true;
 }
-
 
 /**
  * \brief Crée une fausse action sur la base d'une combinaison. L'objectif est
@@ -1173,7 +1143,6 @@ _1990_action_ponderation_resultat (std::list <Ponderation *> *ponderation,
   return action;
 }
 
-
 /**
  * \brief Libère les résultats de l'action souhaitée.
  * \param p : la variable projet,
@@ -1216,7 +1185,6 @@ _1990_action_free_calculs (Projet *p,
   
   return true;
 }
-
 
 /**
  * \brief Libère l'action souhaitée.
@@ -1387,7 +1355,6 @@ _1990_action_free_1 (Projet *p,
   
   return true;
 }
-
 
 /**
  * \brief Libère l'ensemble des actions existantes.

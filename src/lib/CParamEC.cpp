@@ -20,12 +20,11 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <memory>
 
 #include "CParamEC.hpp"
-#include "MAbrev.hh"
-#include "MErreurs.hh"
-#include "SString.hh"
-
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
 /**
  * \brief Constructeur d'une classe CParamEC.
@@ -45,14 +44,12 @@ CParamEC::CParamEC (std::string  * nom_,
 {
 }
 
-
 /**
  * \brief Destructeur d'une classe CParamEC.
  */
 CParamEC::~CParamEC ()
 {
 }
-
 
 /**
  * \brief Renvoie le nom des paramètres de calcul.
@@ -62,7 +59,6 @@ CParamEC::getNom () const
 {
   return nom;
 }
-
 
 /**
  * \brief Définit le nom des paramètres de calcul.
@@ -95,7 +91,6 @@ CParamEC::setNom (std::string * nom_)
   return true;
 }
 
-
 /**
  * \brief Converti la fonction setNom sous format XML.
  * \param param Le nom du paramètre.
@@ -108,7 +103,7 @@ CParamEC::setNomXML (std::string * param,
                      xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                    xmlNewNode (NULL, BAD_CAST2 ("ParamSetNom")), xmlFreeNode);
+                 xmlNewNode (nullptr, BAD_CAST2 ("ParamSetNom")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -138,7 +133,6 @@ CParamEC::setNomXML (std::string * param,
   return true;
 }
 
-
 /**
  * \brief Renvoie la variante de la norme.
  */
@@ -147,7 +141,6 @@ CParamEC::getVariante () const
 {
   return variante;
 }
-
 
 /**
  * \brief Défini la variante de la norme.
@@ -178,7 +171,6 @@ CParamEC::setVariante (uint32_t variante_)
   return true;
 }
 
-
 /**
  * \brief Converti la fonction setVariante sous format XML.
  * \param nom_ Le nom du paramètre de calcul à modifier.
@@ -190,7 +182,7 @@ CParamEC::setVarianteXML (std::string * nom_,
                           xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-               xmlNewNode (NULL, BAD_CAST2 ("ParamSetVariante")), xmlFreeNode);
+            xmlNewNode (nullptr, BAD_CAST2 ("ParamSetVariante")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -220,7 +212,6 @@ CParamEC::setVarianteXML (std::string * nom_,
   return true;
 }
 
-
 /**
  * \brief Renvoie le nombre de type d'actions différents de psi.
  */
@@ -229,22 +220,25 @@ CParamEC::getpsiN () const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       return 17;
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       return 22;
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, 0, &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                0,
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /**
  * \brief Renvoie la catégorie du type d'action.
@@ -255,72 +249,83 @@ CParamEC::getpsiAction (uint8_t type) const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       if (type == 0)
       {
-        return ACTION_POIDS_PROPRE;
+        return EAction::ACTION_POIDS_PROPRE;
       }
       else if (type == 1)
       {
-        return ACTION_PRECONTRAINTE;
+        return EAction::ACTION_PRECONTRAINTE;
       }
       else if ((2 <= type) && (type <= 14))
       {
-        return ACTION_VARIABLE;
+        return EAction::ACTION_VARIABLE;
       }
       else if (type == 15)
       {
-        return ACTION_ACCIDENTELLE;
+        return EAction::ACTION_ACCIDENTELLE;
       }
       else if (type == 16)
       {
-        return ACTION_SISMIQUE;
+        return EAction::ACTION_SISMIQUE;
       }
       else
       {
-        BUGPARAM (type, "%u", nullptr, ACTION_INCONNUE, &getUndoManager ())
+        BUGPARAM (type,
+                  "%u",
+                  static_cast <CUndoManager *> (nullptr),
+                  EAction::ACTION_INCONNUE,
+                  &getUndoManager ())
       }
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       if (type == 0) 
       {
-        return ACTION_POIDS_PROPRE;
+        return EAction::ACTION_POIDS_PROPRE;
       }
       else if (type == 1) 
       {
-        return ACTION_PRECONTRAINTE;
+        return EAction::ACTION_PRECONTRAINTE;
       }
       else if ((2 <= type) && (type <= 18))
       {
-        return ACTION_VARIABLE;
+        return EAction::ACTION_VARIABLE;
       }
       else if (type == 19)
       {
-        return ACTION_ACCIDENTELLE;
+        return EAction::ACTION_ACCIDENTELLE;
       }
       else if (type == 20)
       {
-        return ACTION_SISMIQUE;
+        return EAction::ACTION_SISMIQUE;
       }
       else if (type == 21)
       {
-        return ACTION_EAUX_SOUTERRAINES;
+        return EAction::ACTION_EAUX_SOUTERRAINES;
       }
       else
       {
-        BUGPARAM (type, "%u", nullptr, ACTION_INCONNUE, &getUndoManager ())
+        BUGPARAM (type,
+                  "%u",
+                  static_cast <CUndoManager *> (nullptr),
+                  EAction::ACTION_INCONNUE,
+                  &getUndoManager ())
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, ACTION_INCONNUE, &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                EAction::ACTION_INCONNUE,
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /**
  * \brief Renvoie la description du type d'actions différents de psi.
@@ -331,7 +336,7 @@ CParamEC::getpsiDescription (uint8_t type) const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       switch (type)
       {
@@ -354,12 +359,16 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 16 : return gettext ("Sismique");
         default :
         {
-          BUGPARAM (type, "%u", nullptr, std::string (), &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    std::string (),
+                    &getUndoManager ())
           break;
         }
       }
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       switch (type)
       {
@@ -387,19 +396,26 @@ CParamEC::getpsiDescription (uint8_t type) const
         case 21 : return gettext ("Eaux souterraines");
         default :
         {
-          BUGPARAM (type, "%u", nullptr, std::string (), &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    std::string (),
+                    &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, std::string (), &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                std::string (),
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /**
  * \brief Renvoie la valeur par défaut du coefficient psi0.
@@ -410,7 +426,7 @@ CParamEC::getpsi0 (uint8_t type) const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       switch (type)
       {
@@ -433,12 +449,16 @@ CParamEC::getpsi0 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       switch (type)
       {
@@ -466,19 +486,26 @@ CParamEC::getpsi0 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                NAN,
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /**
  * \brief Renvoie la valeur par défaut du coefficient psi1.
@@ -489,7 +516,7 @@ CParamEC::getpsi1 (uint8_t type) const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       switch (type)
       {
@@ -512,12 +539,16 @@ CParamEC::getpsi1 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       switch (type)
       {
@@ -545,19 +576,26 @@ CParamEC::getpsi1 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                NAN,
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /**
  * \brief Renvoie la valeur par défaut du coefficient psi2.
@@ -568,7 +606,7 @@ CParamEC::getpsi2 (uint8_t type) const
 {
   switch (annexe)
   {
-    case NORMEEUAC_EU :
+    case ENormeEcAc::NORMEEUAC_EU :
     {
       switch (type)
       {
@@ -591,12 +629,16 @@ CParamEC::getpsi2 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
-    case NORMEEUAC_FR :
+    case ENormeEcAc::NORMEEUAC_FR :
     {
       switch (type)
       {
@@ -624,18 +666,25 @@ CParamEC::getpsi2 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", nullptr, NAN, &getUndoManager ())
+          BUGPARAM (type,
+                    "%u",
+                    static_cast <CUndoManager *> (nullptr),
+                    NAN,
+                    &getUndoManager ())
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (annexe, "%d", nullptr, NAN, &getUndoManager ())
+      BUGPARAM (static_cast <size_t> (annexe),
+                "%zu",
+                static_cast <CUndoManager *> (nullptr),
+                NAN,
+                &getUndoManager ())
       break;
     }
   }
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

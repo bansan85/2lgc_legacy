@@ -25,25 +25,24 @@
 #include <sstream>
 
 #include "CNbCalcul.hpp"
-#include "EUnite.hh"
-#include "MAbrev.hh"
-#include "MErreurs.hh"
-
+#include "SString.hpp"
+#include "MErreurs.hpp"
+#include "EUniteTxt.hpp"
 
 /**
  * \brief Constructeur d'une classe CNbCalcul.
  * \param valeur (in) La valeur initiale.
  * \param unit (in) L'unité du nombre.
  */
-CNbCalcul::CNbCalcul (double                         valeur,
-                      EUnite                         unit,
-                      std::array <uint8_t, U_LAST> & decimales_) :
+CNbCalcul::CNbCalcul (
+  double                                                        valeur,
+  EUnite                                                        unit,
+  std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> & decimales_) :
   val (valeur),
   unite (unit),
   decimales (decimales_)
 {
 }
-
 
 /**
  * \brief Constructeur d'une classe CNbCalcul.
@@ -56,14 +55,12 @@ CNbCalcul::CNbCalcul (CNbCalcul & nb) :
 {
 }
 
-
 /**
  * \brief Libère une classe CNbCalcul.
  */
 CNbCalcul::~CNbCalcul ()
 {
 }
-
 
 /**
  * \brief Renvoie la valeur du nombre.
@@ -74,7 +71,6 @@ CNbCalcul::getVal () const
   return val;
 }
 
-
 /**
  * \brief Renvoie l'unité du nombre.
  */
@@ -83,7 +79,6 @@ CNbCalcul::getUnite () const
 {
   return unite;
 }
-
 
 /**
  * \brief Renvoie le nombre sous forme de texte en respectant le nombre de
@@ -94,22 +89,21 @@ CNbCalcul::toString () const
 {
   std::ostringstream oss;
   
-  oss.precision (decimales[unite]);
+  oss.precision (decimales[static_cast <size_t> (unite)]);
   oss << std::fixed << val;
   
   return oss.str ();
 }
 
-
 bool CHK
 CNbCalcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                       xmlNewNode (NULL, BAD_CAST2 ("NbCalcul")), xmlFreeNode);
+                    xmlNewNode (nullptr, BAD_CAST2 ("NbCalcul")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   std::ostringstream oss;
@@ -120,25 +114,25 @@ CNbCalcul::newXML (xmlNodePtr root) const
                        BAD_CAST2 ("valeur"),
                        BAD_CAST2 (oss.str ().c_str ())),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("unite"),
-                       BAD_CAST2 (EUniteConst[unite].c_str ())),
+                       BAD_CAST2 (EUniteConst[static_cast <size_t> (unite)].
+                                                                    c_str ())),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           NULL,
+           static_cast <CUndoManager *> (nullptr),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();
   
   return true;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

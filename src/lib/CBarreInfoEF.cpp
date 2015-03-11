@@ -27,9 +27,9 @@
  * \brief Constructeur d'une classe CBarreInfoEF.
  */
 CBarreInfoEF::CBarreInfoEF () :
-  m_rig_loc (NULL),
-  m_rot (NULL),
-  m_rot_t (NULL),
+  m_rig_loc (nullptr),
+  m_rot (nullptr),
+  m_rot_t (nullptr),
   ay (NAN),
   by (NAN),
   cy (NAN),
@@ -45,14 +45,11 @@ CBarreInfoEF::CBarreInfoEF () :
 {
 }
 
-
 /**
  * \brief Destructeur d'une classe CBarreInfoEF.
  */
 CBarreInfoEF::~CBarreInfoEF ()
 {
-  // TODO
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

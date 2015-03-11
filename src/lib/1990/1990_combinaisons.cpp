@@ -101,7 +101,6 @@ _1990_combinaisons_verifie_double (
   return false;
 }
 
-
 /**
  * \brief Ajoute à une liste de combinaisons existante une liste de
  *        combinaisons.
@@ -182,7 +181,6 @@ _1990_combinaisons_duplique (
   
   return true;
 }
-
 
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
@@ -301,7 +299,6 @@ _1990_combinaisons_genere_xor (Projet        *p,
   return true;
 }
 
-
 /**
  * \brief Fusionne deux combinaisons. La liste des combinaisons source est
  *        copiée à la fin de la liste des combinaisons destination. Il est donc
@@ -339,7 +336,6 @@ _1990_combinaisons_fusion (std::list <Combinaison *> **destination,
   
   return true;
 }
-
 
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
@@ -558,7 +554,6 @@ _1990_combinaisons_genere_and (Projet        *p,
   
   return true;
 }
-
 
 /**
  * \brief Génère toutes les combinaisons d'un groupe possédant comme type de
@@ -796,7 +791,6 @@ _1990_combinaisons_genere_or (Projet        *p,
   return true;
 }
 
-
 /**
  * \brief Initialise la mémoire pour les combinaisons à l'ELU et l'ELS.
  * \param p : la variable projet.
@@ -880,7 +874,6 @@ _1990_combinaisons_init (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Fonction à utiliser avec for_each pour libérer une combinaison.
  * \param comb : une combinaison à libérer.
@@ -896,7 +889,6 @@ _1990_combinaisons_free_1 (std::list <Combinaison *> *comb)
   
   return;
 }
-
 
 /**
  * \brief Libère l'ensemble des combinaisons à l'ELU et l'ELS.
@@ -982,7 +974,6 @@ _1990_combinaisons_free (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
  *        l'équilibre seulement.
@@ -1001,7 +992,6 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Modifie les options de combinaison pour que l'ELU EQU calcule à
@@ -1022,7 +1012,6 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 1.
@@ -1041,7 +1030,6 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
@@ -1062,7 +1050,6 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon l'approche 3.
@@ -1081,7 +1068,6 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
@@ -1102,7 +1088,6 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
  *        selon la formule 6.10 de l'EN 1990.
@@ -1121,7 +1106,6 @@ _1990_combinaisons_elustrgeo_6_10 (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
@@ -1142,7 +1126,6 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Modifie les options de combinaison pour que l'ELU ACC calcule avec
  *        les valeurs quasi permanente des actions variables.
@@ -1161,7 +1144,6 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Génère l'ensemble des combinaisons et pondérations du projet.

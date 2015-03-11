@@ -22,7 +22,6 @@
 #include "CNbCalcul.hpp"
 #include "CNbUser.hpp"
 
-
 /**
  * \brief Constructeur d'une classe INb.
  * \param nb Le nombre à dupliquer.
@@ -44,13 +43,11 @@ INb::newINb (INb * nb)
   }
 }
 
-
 /**
  * \brief Destructeur d'une classe INb.
  */
 INb::~INb ()
 {
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

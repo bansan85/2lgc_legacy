@@ -50,7 +50,7 @@ CUndoManager::push (std::function <bool ()>           annule,
                     std::function <bool ()>           repete,
                     std::function <void ()>           suppr,
                     std::function <bool (xmlNodePtr)> sauve,
-                    std::string &                     description)
+                    std::string                       description)
 {
   if (!insertion)
   {

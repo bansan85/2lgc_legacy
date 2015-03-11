@@ -58,13 +58,11 @@ CPonderations::CPonderations (uint8_t eluequ,
 #endif
 }
 
-
 /**
  * \brief Destructeur d'une classe CPonderations.
  */
 CPonderations::~CPonderations ()
 {
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

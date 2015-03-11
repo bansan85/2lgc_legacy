@@ -24,9 +24,8 @@
 
 #include "CParamEC.hpp"
 #include "CProjet.hpp"
-#include "MAbrev.hh"
-#include "MErreurs.hh"
-#include "SString.hh"
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
 /**
  * \brief Constructeur d'une classe CProjet.
@@ -36,18 +35,18 @@ CProjet::CProjet (ENorme norme) :
   CPreferences (),
   CCalculs (),
   CModele (),
-  CUndoManager (*this),
-  parametres (NULL)
+  CUndoManager (),
+  parametres (nullptr)
 {
   LIBXML_TEST_VERSION
   
   switch (norme)
   {
-    case NORME_EC :
+    case ENorme::NORME_EC :
     {
       std::unique_ptr <CParamEC> param
         (new CParamEC (new std::string ("Eurocode, annexe nationale"),
-         NORMEEUAC_FR,
+         ENormeEcAc::NORMEEUAC_FR,
          0,
          *this));
       
@@ -140,21 +139,6 @@ CProjet::CProjet (ENorme norme) :
 #endif
 }
 
-
-/**
- * \brief Duplication d'une classe CProjet.
- * \param other (in) La classe à dupliquer.
- */
-CProjet::CProjet (const CProjet & other) :
-  CPreferences (),
-  CCalculs (),
-  CModele (),
-  CUndoManager (other),
-  parametres (NULL)
-{
-}
-
-
 /**
  * \brief Libère une classe CProjet avec tout le contenu.
  */
@@ -191,7 +175,6 @@ CProjet::~CProjet ()
 #endif
 }
 
-
 /**
  * \brief Renvoie les paramètres du projet.
  */
@@ -200,7 +183,6 @@ CProjet::getParametres ()
 {
   return parametres;
 }
-
 
 /**
  * \brief Défini les paramètres de calculs du projet.
@@ -227,7 +209,7 @@ CProjet::setParametres (IParametres * param)
            this)
   
   BUGCONT (pushSuppr (std::bind (std::default_delete <std::string> (),
-                               const_cast <std::string *> (param->getNom ()))),
+                               param->getNom ())),
            false,
            this)
   
@@ -237,7 +219,6 @@ CProjet::setParametres (IParametres * param)
   
   return true;
 }
-
 
 /**
  * \brief Converti la fonction définissant la norme que doit utiliser le projet
@@ -253,10 +234,10 @@ CProjet::setParametresXML (IParametres *param,
                            uint32_t     variante,
                            xmlNodePtr   root)
 {
-  BUGPARAM (root, "%p", root, false, this)
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, this)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                 xmlNewNode (NULL, BAD_CAST2 ("projetSetParam")), xmlFreeNode);
+              xmlNewNode (nullptr, BAD_CAST2 ("projetSetParam")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -299,7 +280,6 @@ CProjet::setParametresXML (IParametres *param,
   return true;
 }
 
-
 /**
  * \brief Enregistre le projet.
  * \param fichier (in) Le nom du fichier.
@@ -316,7 +296,7 @@ CProjet::enregistre (std::string fichier)
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (root_node = xmlNewNode (NULL, BAD_CAST2 ("Projet")),
+  BUGCRIT (root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet")),
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
@@ -335,7 +315,6 @@ CProjet::enregistre (std::string fichier)
   
   return true;
 }
-
 
 /**
  * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la
@@ -396,7 +375,6 @@ CProjet::showHelp ()
   return;
 }
 
-
 #if 0
 #ifdef ENABLE_GTK
 /**
@@ -420,7 +398,6 @@ gui_window_destroy_event (GtkWidget *pWidget,
   return;
 }
 
-
 /**
  * \brief Bouton de fermeture de la fenêtre.
  * \param fenetre : composant à détruire,
@@ -434,7 +411,6 @@ gui_window_option_destroy_button (GtkWidget *fenetre)
   
   return;
 }
-
 
 /**
  * \brief Crée une fenêtre graphique avec toute l'interface (menu, vue 3D,

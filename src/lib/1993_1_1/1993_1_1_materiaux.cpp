@@ -36,7 +36,6 @@
 #include "common_gtk.hpp"
 #endif
 
-
 /**
  * \brief Ajoute un matériau en acier.
  * \param p : la variable projet,
@@ -81,7 +80,6 @@ _1993_1_1_materiaux_ajout (Projet      *p,
   
   return mat;
 }
-
 
 /**
  * \brief Modifie un matériau acier.
@@ -185,7 +183,6 @@ _1993_1_1_materiaux_modif (Projet      *p,
   
   return true;
 }
-
 
 /**
  * \brief Renvoie la description d'un matériau acier sous forme d'un texte.

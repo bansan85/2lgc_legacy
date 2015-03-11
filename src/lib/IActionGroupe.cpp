@@ -20,7 +20,6 @@
 
 #include "IActionGroupe.hpp"
 
-
 /**
  * \brief Constructeur d'une interface IActionGroupe.
  * \param nom_ (in) Le nom de l'action / groupe.
@@ -36,14 +35,12 @@ IActionGroupe::IActionGroupe (std::string  * nom_,
 {
 }
 
-
 /**
  * \brief Destructeur d'une classe IActionGroupe.
  */
 IActionGroupe::~IActionGroupe ()
 {
 }
-
 
 /**
  * \brief Renvoie le nom.
@@ -53,6 +50,5 @@ IActionGroupe::getNom () const
 {
   return nom;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

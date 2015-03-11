@@ -26,11 +26,9 @@
 
 #include "CAction.hpp"
 #include "CNbCalcul.hpp"
-#include "EUnite.hh"
-#include "MAbrev.hh"
-#include "MErreurs.hh"
-#include "SString.hh"
-
+#include "EUniteTxt.hpp"
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
 /**
  * \brief Constructeur d'une classe CAction. Par défaut, les coefficients psi
@@ -47,13 +45,13 @@ CAction::CAction (std::string  * nom_,
   , type (type_)
   , action_predominante (false)
   , charges ()
-  , psi0 (NULL)
-  , psi1 (NULL)
-  , psi2 (NULL)
-  , parametres (NULL)
-  , deplacement (NULL)
-  , forces (NULL)
-  , efforts_noeuds (NULL)
+  , psi0 (nullptr)
+  , psi1 (nullptr)
+  , psi2 (nullptr)
+  , parametres (nullptr)
+  , deplacement (nullptr)
+  , forces (nullptr)
+  , efforts_noeuds (nullptr)
   , efforts ({ { {}, {}, {}, {}, {}, {} } })
   , deformation ({ { {}, {}, {}} })
   , rotation ({ { {}, {}, {}} })
@@ -63,34 +61,6 @@ CAction::CAction (std::string  * nom_,
 #endif
 {
 }
-
-
-/**
- * \brief Duplication d'une classe CAction.
- * \param other (in) La classe à dupliquer.
- */
-CAction::CAction (const CAction & other) :
-  IActionGroupe (other.getNom (), other.getUndoManager ())
-  , type (other.type)
-  , action_predominante (false)
-  , charges ()
-  , psi0 (NULL)
-  , psi1 (NULL)
-  , psi2 (NULL)
-  , parametres (NULL)
-  , deplacement (NULL)
-  , forces (NULL)
-  , efforts_noeuds (NULL)
-  , efforts ({ { {}, {}, {}, {}, {}, {} } })
-  , deformation ({ { {}, {}, {}} })
-  , rotation ({ { {}, {}, {}} })
-#ifdef ENABLE_GTK
-  //, Iter_fenetre_ac (NULL)
-  //, Iter_liste (NULL)
-#endif
-{
-}
-
 
 /**
  * \brief Libère une classe CAction.
@@ -98,7 +68,6 @@ CAction::CAction (const CAction & other) :
 CAction::~CAction ()
 {
 }
-
 
 /**
  * \brief Converti la fonction d'ajout d'une action sous format XML..
@@ -109,10 +78,10 @@ CAction::addXML (std::string *nom_,
                  uint8_t      type_,
                  xmlNodePtr   root)
 {
-  BUGPARAM (root, "%p", root, false, &getUndoManager ())
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                     xmlNewNode (NULL, BAD_CAST2 ("addAction")), xmlFreeNode);
+                   xmlNewNode (nullptr, BAD_CAST2 ("addAction")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -143,7 +112,6 @@ CAction::addXML (std::string *nom_,
   return true;
 }
 
-
 /**
  * \brief Renvoie le type de l'action.
  */
@@ -152,7 +120,6 @@ CAction::getType () const
 {
   return type;
 }
-
 
 /**
  * \brief Converti la fonction de modification du psi d'une action sous format
@@ -168,11 +135,11 @@ CAction::setpsiXML (std::string * const nom_,
                     INb                *psin,
                     xmlNodePtr          root)
 {
-  BUGPARAM (root, "%p", root, false, &getUndoManager ())
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   BUGPARAM (psi, "%u", psi <= 2, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                         xmlNewNode (NULL, BAD_CAST2 ("setpsi")), xmlFreeNode);
+                      xmlNewNode (nullptr, BAD_CAST2 ("setpsi")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -194,7 +161,7 @@ CAction::setpsiXML (std::string * const nom_,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                            xmlNewNode (NULL, BAD_CAST2 ("val")), xmlFreeNode);
+                         xmlNewNode (nullptr, BAD_CAST2 ("val")), xmlFreeNode);
   
   BUGCRIT (node0.get (),
            false,
@@ -218,7 +185,6 @@ CAction::setpsiXML (std::string * const nom_,
   return true;
 }
 
-
 /**
  * \brief Renvoie le cœfficient psi0.
  */
@@ -227,7 +193,6 @@ CAction::getpsi0 () const
 {
   return *psi0;
 }
-
 
 /**
  * \brief Défini le cœfficient psi0.
@@ -239,11 +204,11 @@ CAction::setpsi0 (INb * val)
 {
   if (val != NULL)
   {
-    BUGUSER (val->getUnite () == U_,
+    BUGUSER (val->getUnite () == EUnite::U_,
              false,
              &this->getUndoManager (),
              gettext ("L'unité est de type [%s] à la place de [%s].\n"),
-               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[static_cast <size_t> (val->getUnite ())].c_str (),
                EUniteConst[0].c_str ())
   }
   
@@ -271,7 +236,6 @@ CAction::setpsi0 (INb * val)
   return true;
 }
 
-
 /**
  * \brief Renvoie le cœfficient psi1.
  */
@@ -280,7 +244,6 @@ CAction::getpsi1 () const
 {
   return *psi1;
 }
-
 
 /**
  * \brief Défini le cœfficient psi1.
@@ -292,11 +255,11 @@ CAction::setpsi1 (INb * val)
 {
   if (val != NULL)
   {
-    BUGUSER (val->getUnite () == U_,
+    BUGUSER (val->getUnite () == EUnite::U_,
              false,
              &this->getUndoManager (),
              gettext ("L'unité est de type [%s] à la place de [%s].\n"),
-               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[static_cast <size_t> (val->getUnite ())].c_str (),
                EUniteConst[0].c_str ())
   }
   
@@ -324,7 +287,6 @@ CAction::setpsi1 (INb * val)
   return true;
 }
 
-
 /**
  * \brief Renvoie le cœfficient psi2.
  */
@@ -333,7 +295,6 @@ CAction::getpsi2 () const
 {
   return *psi2;
 }
-
 
 /**
  * \brief Défini le cœfficient psi2.
@@ -345,11 +306,11 @@ CAction::setpsi2 (INb * val)
 {
   if (val != NULL)
   {
-    BUGUSER (val->getUnite () == U_,
+    BUGUSER (val->getUnite () == EUnite::U_,
              false,
              &this->getUndoManager (),
              gettext ("L'unité est de type [%s] à la place de [%s].\n"),
-               EUniteConst[val->getUnite ()].c_str (),
+               EUniteConst[static_cast <size_t> (val->getUnite ())].c_str (),
                EUniteConst[0].c_str ())
   }
   
@@ -378,7 +339,6 @@ CAction::setpsi2 (INb * val)
   return true;
 }
 
-
 /**
  * \brief Renvoie true si aucune charge n'est présente.
  */
@@ -388,7 +348,6 @@ CAction::emptyCharges () const
   return charges.empty ();
 }
 
-
 /**
  * \brief Renvoie le type de l'action sous forme de texte.
  */
@@ -397,7 +356,6 @@ CAction::getDescription (uint8_t type_) const
 {
   return parametres->getpsiDescription (type_);
 }
-
 
 /**
  * \brief Défini la norme que doit utiliser l'action. Ne nécessite pas de
@@ -467,7 +425,6 @@ CAction::setParam (IParametres * param,
   return true;
 }
 
-
 /**
  * \brief Converti la fonction setParam en format XML.
  * \param action Le nom de l'action.
@@ -482,10 +439,10 @@ CAction::setParamXML (std::string * action,
                       INb         * psi2_,
                       xmlNodePtr    root)
 {
-  BUGPARAM (root, "%p", root, false, &getUndoManager ())
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                 xmlNewNode (NULL, BAD_CAST2 ("actionSetParam")), xmlFreeNode);
+              xmlNewNode (nullptr, BAD_CAST2 ("actionSetParam")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
@@ -507,7 +464,7 @@ CAction::setParamXML (std::string * action,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                           xmlNewNode (NULL, BAD_CAST2 ("psi0")), xmlFreeNode);
+                        xmlNewNode (nullptr, BAD_CAST2 ("psi0")), xmlFreeNode);
   
   BUGCRIT (node0.get (),
            false,
@@ -522,7 +479,7 @@ CAction::setParamXML (std::string * action,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
-  node0.reset (xmlNewNode (NULL, BAD_CAST2 ("psi1")));
+  node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi1")));
   
   BUGCRIT (node0.get (),
            false,
@@ -537,7 +494,7 @@ CAction::setParamXML (std::string * action,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
-  node0.reset (xmlNewNode (NULL, BAD_CAST2 ("psi2")));
+  node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi2")));
   
   BUGCRIT (node0.get (),
            false,
@@ -560,6 +517,5 @@ CAction::setParamXML (std::string * action,
   
   return true;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -37,33 +37,6 @@ CPreferences::CPreferences () :
 {
 }
 
-
-/**
- * \brief Duplication d'une classe CPreferences.
- * \param other (in) La classe à dupliquer.
- */
-CPreferences::CPreferences (const CPreferences & other)
-{
-  std::copy (std::begin (other.decimales),
-             std::end (other.decimales),
-             std::begin (decimales));
-}
-
-
-/**
- * \brief Assignment operator de CPreferences.
- * \param other (in) La classe à dupliquer.
- */
-CPreferences &
-CPreferences::operator = (const CPreferences & other)
-{
-  std::copy (std::begin (other.decimales),
-             std::end (other.decimales),
-             std::begin (decimales));
-  return *this;
-}
-
-
 /**
  * \brief Destructeur d'une classe CPreferences.
  */
@@ -71,15 +44,14 @@ CPreferences::~CPreferences ()
 {
 }
 
-
 /**
  * \brief Renvoie la liste des décimales applicables aux unités.
  */
-std::array <uint8_t, U_LAST> &
+std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> &
 CPreferences::getDecimales () const
 {
-  return const_cast <std::array <uint8_t, U_LAST> &> (decimales);
+  return const_cast <std::array <uint8_t,
+                         static_cast <size_t> (EUnite::U_LAST)> &> (decimales);
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

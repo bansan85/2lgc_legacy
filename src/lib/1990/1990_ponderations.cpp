@@ -102,7 +102,6 @@ _1990_ponderations_verifie_double (
   return false;
 }
 
-
 /**
  * \brief Ajoute à une liste de pondérations existante une liste de
  *        pondérations. Une vérification est effectuée pour s'assurer que la
@@ -169,7 +168,6 @@ _1990_ponderations_duplique_sans_double (
   
   return true;
 }
-
 
 /**
  * \brief Génère l'ensemble des pondérations en fonction des paramètres
@@ -371,7 +369,6 @@ _1990_ponderations_genere_un (
   
   return true;
 }
-
 
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme européenne.
@@ -1008,7 +1005,6 @@ _1990_ponderations_genere_eu (Projet *p)
   
   return true;
 }
-
 
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme française.
@@ -1735,7 +1731,6 @@ _1990_ponderations_genere_fr (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Génération de l'ensemble des pondérations selon la norme spécifiée.
  *        Cf. _1990_ponderations_genere_PAYS.
@@ -1765,7 +1760,6 @@ _1990_ponderations_genere (Projet *p)
               }
   }
 }
-
 
 /**
  * \brief Renvoie sous forme de texte une pondération.
@@ -1832,7 +1826,6 @@ _1990_ponderations_description (std::list <Ponderation*> *ponderation)
   return retour.str ();
 }
 
-
 /**
  * \brief Affiche les pondérations de la liste fournie en argument.
  * \param ponderations : la liste des pondérations.
@@ -1882,7 +1875,6 @@ _1990_ponderations_affiche (
   return;
 }
 
-
 /**
  * \brief Affiche toutes les pondérations du projet.
  * \param p : la variable projet.
@@ -1918,7 +1910,6 @@ _1990_ponderations_affiche_tout (Projet *p)
   return true;
 }
 
-
 /**
  * \brief Fonction à utiliser avec for_each pour libérer une pondération.
  * \param pond : une pondération à libérer.
@@ -1934,6 +1925,5 @@ _1990_ponderations_free_1 (std::list <Ponderation *> *pond)
   
   return;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

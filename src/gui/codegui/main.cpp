@@ -18,12 +18,13 @@
 
 #include "config.h"
 
-#include "codegui.hpp"
-#include "MErreurs.hh"
-
 #include <stdint.h>
 #include <libintl.h>
 #include <string.h>
+#include <memory>
+
+#include "codegui.hpp"
+#include "MErreurs.hpp"
 
 /*
 #include <stdio.h>
@@ -63,7 +64,7 @@ main (int32_t argc,
       char   *argv[])
 {
   /* Variables */
-  CProjet projet (NORME_EC);
+  CProjet projet (ENorme::NORME_EC);
   std::unique_ptr <CAction> action;
 //  GList   *tmp1, *tmp2;
   
@@ -105,45 +106,81 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUGCONT (projet.getActionCount () == 0, -1, NULL)
+  BUGCONT (projet.getActionCount () == 0,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 0 Poids propre
   action.reset (new CAction (new std::string ("Poids propre"),
                              0,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 1, -1, NULL)
+  BUGCONT (projet.getActionCount () == 1,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 2 Exploitation
   action.reset (new CAction (new std::string ("Chargement"),
                              2,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 2, -1, NULL)
+  BUGCONT (projet.getActionCount () == 2,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 18 Neige
   action.reset (new CAction (new std::string ("Neige"),
                              18,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 3, -1, NULL)
+  BUGCONT (projet.getActionCount () == 3,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   // 19 Vent
   action.reset (new CAction (new std::string ("Vent"),
                              19,
                              dynamic_cast <CUndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()), -1, NULL)
+  BUGCONT (projet.addAction (action.get ()),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   action.release ();
-  BUGCONT (projet.getActionCount () == 4, -1, NULL)
-  BUGCONT (projet.undo (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 3, -1, NULL)
-  BUGCONT (projet.undo (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 2, -1, NULL)
-  BUGCONT (projet.undo (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 1, -1, NULL)
-  BUGCONT (projet.undo (), -1, NULL)
-  BUGCONT (projet.getActionCount () == 0, -1, NULL)
+  BUGCONT (projet.getActionCount () == 4,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.undo (),
+           -1, 
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 3,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.undo (),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 2,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.undo (),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 1,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.undo (),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 0,
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   
-  BUGCONT (projet.enregistre ("test.xml"), -1, NULL)
+  BUGCONT (projet.enregistre ("test.xml"),
+           -1,
+           static_cast <CUndoManager *> (nullptr))
   
   // Création des groupes d'actions
 /*  BUGCONT(_1990_groupe_ajout_niveau(projet), -1)
