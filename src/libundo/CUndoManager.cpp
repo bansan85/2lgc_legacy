@@ -26,13 +26,9 @@
 
 #include "CUndoManager.hpp"
 #include "IUndoable.hpp"
-#include "MErreurs.hh"
+#include "MErreurs.hpp"
+#include "SString.hpp"
 
-
-/**
- * \brief Initialise le système de gestion de l'historique et de la gestion des
- *        annuler / répéter.
- */
 CUndoManager::CUndoManager () :
   liste (),
   pos (0),
@@ -42,10 +38,6 @@ CUndoManager::CUndoManager () :
 {
 }
 
-
-/**
- * \brief Libère l'historique du projet.
- */
 CUndoManager::~CUndoManager ()
 {
   for_each (liste.begin (), liste.end (), std::default_delete <CUndoData> ());
@@ -53,24 +45,12 @@ CUndoManager::~CUndoManager ()
   delete (tmpListe);
 }
 
-
-/**
- * \brief Ajoute une modification à la liste.
- * \param annule (in) La fonction à lancer pour annuler la modification.
- * \param repete (in) La fonction à lancer pour répéter la modification.
- * \param suppr (in) La fonction à lancer pour libérer la mémoire. Cette
- *                   fonction est définie lorsqu'il y a ajout d'un élément en
- *                   mémoire uniquement.
- * \param sauve (in) La fonction à lancer pour enregistrer dans un fichier
- *                   l'historique.
- * \param description (in) La description de l'action.
- */
 bool
 CUndoManager::push (std::function <bool ()>           annule,
                     std::function <bool ()>           repete,
                     std::function <void ()>           suppr,
                     std::function <bool (xmlNodePtr)> sauve,
-                    std::string                       description)
+                    std::string &                     description)
 {
   if (!insertion)
   {
@@ -80,7 +60,7 @@ CUndoManager::push (std::function <bool ()>           annule,
   BUGPROG (count != 0,
            false,
            this,
-           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
+           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune modification n'est en cours (nécessité d'appeler la fonction ref).\n"))
   BUGPARAM (static_cast <void*> (tmpListe), "%p", tmpListe, false, this)
   
   tmpListe->annule.push_front (annule);
@@ -94,6 +74,8 @@ CUndoManager::push (std::function <bool ()>           annule,
     tmpListe->sauve.push_back (sauve);
   }
   
+  // Seules les modifications de premier ordre sont mémorisées dans la
+  // description.
   if (count == 1)
   {
     if (!tmpListe->description.empty ())
@@ -106,13 +88,6 @@ CUndoManager::push (std::function <bool ()>           annule,
   return true;
 }
 
-
-/**
- * \brief Ajoute une fonction permettant de libérer de la mémoire.
- * \param suppr (in) La fonction à lancer pour libérer la mémoire. Cette
- *                   fonction est définie lorsqu'il y a ajout d'un élément en
- *                   mémoire uniquement.
- */
 bool
 CUndoManager::pushSuppr (std::function <void ()> suppr)
 {
@@ -124,7 +99,7 @@ CUndoManager::pushSuppr (std::function <void ()> suppr)
   BUGPROG (count != 0,
            false,
            this,
-           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune action n'est en cours (nécessité d'appeler la fonction ref).\n"))
+           gettext ("Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune modification n'est en cours (nécessité d'appeler la fonction ref).\n"))
   
   if (suppr != NULL)
   {
@@ -134,10 +109,6 @@ CUndoManager::pushSuppr (std::function <void ()> suppr)
   return true;
 }
 
-
-/**
- * \brief Annule la dernière modification de la liste.
- */
 bool
 CUndoManager::undo ()
 {
@@ -160,7 +131,7 @@ CUndoManager::undo ()
     BUGCRIT (f (),
              false,
              this,
-             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
+             gettext ("Échec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
   }
   
   ++pos;
@@ -170,10 +141,19 @@ CUndoManager::undo ()
   return true;
 }
 
+bool
+CUndoManager::undoN (uint32_t nb)
+{
+  for (uint32_t i = 1; i <= nb; i++)
+  {
+    BUGCRIT (undo (),
+             false,
+             this,
+             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
+  }
+  return true;
+}
 
-/**
- * \brief Rétablit la dernière modification de la liste.
- */
 bool
 CUndoManager::redo ()
 {
@@ -206,10 +186,19 @@ CUndoManager::redo ()
   return true;
 }
 
+bool
+CUndoManager::redoN (uint32_t nb)
+{
+  for (uint32_t i = 1; i <= nb; i++)
+  {
+    BUGCRIT (redo (),
+             false,
+             this,
+             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
+  }
+  return true;
+}
 
-/**
- * \brief Renvoie l'état du gestionnaire des annulations.
- */
 EUndoEtat
 CUndoManager::getEtat () const
 {
@@ -223,10 +212,6 @@ CUndoManager::getEtat () const
   }
 }
 
-
-/**
- * \brief Augmente le count de 1.
- */
 bool
 CUndoManager::ref ()
 {
@@ -265,10 +250,6 @@ CUndoManager::ref ()
   return true;
 }
 
-
-/**
- * \brief Diminue le count de 1.
- */
 bool
 CUndoManager::unref ()
 {
@@ -294,10 +275,6 @@ CUndoManager::unref ()
   return true;
 }
 
-
-/**
- * \brief Renvoie les informations du gestionnaire d'annulation sous forme XML.
- */
 bool
 CUndoManager::undoToXML (xmlNodePtr root)
 {
@@ -363,19 +340,14 @@ CUndoManager::undoToXML (xmlNodePtr root)
   return true;
 }
 
-
-/**
- * \brief Annule les modifications en cours sur la base de ceux dans la liste
- *        tmpListe.
- */
-bool
+void
 CUndoManager::rollback ()
 {
   count = 0;
   
   if (tmpListe == NULL)
   {
-    return true;
+    return;
   }
   
   insertion = false;
@@ -383,7 +355,7 @@ CUndoManager::rollback ()
   for (std::function <bool ()> f : tmpListe->annule)
   {
     BUGCRIT (f (),
-             false,
+             ,
              static_cast <CUndoManager *> (nullptr),
              gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n"))
   }
@@ -393,29 +365,19 @@ CUndoManager::rollback ()
   
   insertion = true;
   
-  return true;
+  return;
 }
 
-
-/**
- * \brief Renvoie si l'insertion via push est possible.
- */
 bool CHK
 CUndoManager::getInsertion () const
 {
   return insertion;
 }
 
-
-/**
- * \brief Défini si l'insertion via push est autorisée.
- * \param insert La nouvelle valeur.
- */
 void
 CUndoManager::setInsertion (bool insert)
 {
   insertion = insert;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

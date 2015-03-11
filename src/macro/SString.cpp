@@ -21,7 +21,7 @@
 #include <string>
 #include <cstdarg>
 
-#include "SString.hh"
+#include "SString.hpp"
 
 
 /**
@@ -52,7 +52,7 @@ format (const std::string fmt,
                    fmt.c_str (),
                    marker);
     va_end (marker);
-    if ((n > 0) && ((b = (static_cast <size_t> (n) < size)) == true))
+    if ((n > 0) && (b = (static_cast <size_t> (n) < size)))
     {
       s.resize (static_cast <size_t> (n));
     }

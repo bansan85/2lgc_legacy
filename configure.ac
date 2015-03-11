@@ -5,11 +5,11 @@ AC_PREREQ([2.68])
 AC_INIT(2lgc_code, 0.0.1, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 AM_INIT_AUTOMAKE([-Wno-portability])
 AC_CONFIG_SRCDIR([src/lib/CProjet.cpp])
-AC_CONFIG_HEADERS([config.hpp])
+AC_CONFIG_HEADERS([config.h])
 AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
 AH_BOTTOM([
-#include "common.h"
+#include "src/macro/common.h"
 ])
 
 # Checks for programs.

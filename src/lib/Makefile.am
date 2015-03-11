@@ -1,5 +1,7 @@
 DEFAULT_INCLUDES					=		-I$(srcdir) \
-															-I$(srcdir)/../..
+															-I$(srcdir)/../.. \
+															-I$(srcdir)/../macro \
+															-I$(srcdir)/../libundo
 
 AUTOMAKE_OPTIONS					= 	subdir-objects
 

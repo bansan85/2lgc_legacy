@@ -6,7 +6,6 @@ aclocal.m4
 autom4te.cache
 compile
 config.guess
-common.h
 config.rpath
 config.sub
 depcomp
@@ -45,3 +44,5 @@ cppcheck-undo.log
 cppcheck.log
 lib*_la-*.*o
 *.la
+config.h.in
+*.gcno

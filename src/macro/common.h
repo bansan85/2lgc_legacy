@@ -1,6 +1,3 @@
-#ifndef SSTRING__H
-#define SSTRING__H
-
 /*
  * 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
  * Copyright (C) 2011
@@ -19,10 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#define EGTK(...) __VA_ARGS__
+#else
+#define EGTK(...)
+#endif
 
-std::string
-format (const std::string fmt,
-        ...);
-
+#ifdef _MSC_VER
+#define CHK _Check_return_
+#else
+#define CHK __attribute__ ((__warn_unused_result__))
 #endif

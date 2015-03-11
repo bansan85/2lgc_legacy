@@ -20,10 +20,6 @@
 
 #include "CUndoData.hpp"
 
-
-/**
- * \brief Constructeur d'une classe CUndoData.
- */
 CUndoData::CUndoData () :
   annule (),
   repete (),
@@ -34,18 +30,6 @@ CUndoData::CUndoData () :
 {
 }
 
-
-/*
- * \brief Assignment operator de CUndoData. Non copiable.
- * \param other (in) La classe à dupliquer.
- */
-//CUndoData &
-//CUndoData::operator = (const CUndoData & other) = delete;
-
-
-/**
- * \brief Destructeur d'une classe CUndoData.
- */
 CUndoData::~CUndoData ()
 {
   for (std::function <void ()> f : suppr)
@@ -53,6 +37,5 @@ CUndoData::~CUndoData ()
     f ();
   }
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

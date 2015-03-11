@@ -22,32 +22,19 @@
 
 #include "IUndoable.hpp"
 
-/**
- * \brief Constructeur d'une classe IUndoable.
- * \param undo_ (in) Le gestionnaire des modifications.
- */
 IUndoable::IUndoable (CUndoManager & undo_) :
   undoManager (undo_)
 {
 }
 
-
-/**
- * \brief Destructeur d'une classe IUndoable.
- */
 IUndoable::~IUndoable ()
 {
 }
 
-
-/**
- * \brief Renvoie le gestionnaire d'annulations.
- */
 CUndoManager &
 IUndoable::getUndoManager () const
 {
   return undoManager;
 }
-
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
