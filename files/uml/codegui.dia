@@ -7333,7 +7333,7 @@
         <dia:point val="150,-6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="149.95,-6.05;177.885,14.85"/>
+        <dia:rectangle val="149.95,-6.05;177.885,14.15"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="150,-6"/>
@@ -7342,7 +7342,7 @@
         <dia:real val="27.835000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="20.800000000000001"/>
+        <dia:real val="20.100000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IActionGroupe#</dia:string>
@@ -7351,8 +7351,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Un groupe possède soit une liste d'actions ou un liste de groupes. Action et Groupe d'actions possèdent le même point commun : un nom et un iter pour l'affichage graphique dans la fenêtre permettant de réaliser des combinaisons de Groupe et d'Action.
-#include &lt;string&gt;#</dia:string>
+        <dia:string>#Un groupe possède soit une liste d'actions ou un liste de groupes. Action et Groupe d'actions possèdent le même point commun : un nom et un iter pour l'affichage graphique dans la fenêtre permettant de réaliser des combinaisons de Groupe et d'Action.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="true"/>
@@ -13942,7 +13941,7 @@
         <dia:point val="153,-144"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="152.95,-144.05;182.445,-90.7"/>
+        <dia:rectangle val="152.95,-144.05;182.445,-91.4"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="153,-144"/>
@@ -13951,7 +13950,7 @@
         <dia:real val="29.395"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="53.25"/>
+        <dia:real val="52.550000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CCalculs#</dia:string>
@@ -13960,8 +13959,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Contient toutes les données nécessaires pour la réalisation des calculs aux éléments finis et notamment les variables utilisées par les librairies cholmod et umfpack. Établi une corrélation entre le degré de liberté (x, y, z, rx, ry, rz) d'un noeud et sa position dans la matrice de rigidité globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même matrice qui permet de déterminer le déplacement des noeuds. La matrice de rigidité complète permet, sur la base du calcul des déplacements, de déterminer les efforts aux noeuds et d'en déduire les sollicitations le long des barres. La position de la ligne / colonne dans la matrice se déterminera par la lecture de n_part[10][1] pour, par exemple, la position du noeud dont le numéro est le 10 et comme degré de liberté y. Si la valeur renvoyée est -1, cela signifie que le déplacement ou la rotation est bloquée et que le degré de liberté ne figure pas dans la matrice de rigidité partielle.
-#include &lt;array&gt;#</dia:string>
+        <dia:string>#Contient toutes les données nécessaires pour la réalisation des calculs aux éléments finis et notamment les variables utilisées par les librairies cholmod et umfpack. Établi une corrélation entre le degré de liberté (x, y, z, rx, ry, rz) d'un noeud et sa position dans la matrice de rigidité globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même matrice qui permet de déterminer le déplacement des noeuds. La matrice de rigidité complète permet, sur la base du calcul des déplacements, de déterminer les efforts aux noeuds et d'en déduire les sollicitations le long des barres. La position de la ligne / colonne dans la matrice se déterminera par la lecture de n_part[10][1] pour, par exemple, la position du noeud dont le numéro est le 10 et comme degré de liberté y. Si la valeur renvoyée est -1, cela signifie que le déplacement ou la rotation est bloquée et que le degré de liberté ne figure pas dans la matrice de rigidité partielle.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -15978,17 +15976,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O24">
       <dia:attribute name="obj_pos">
-        <dia:point val="182.395,-99.9"/>
+        <dia:point val="182.395,-100.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="182.345,-130.7;222.45,-99.85"/>
+        <dia:rectangle val="182.345,-130.7;222.45,-100.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="182.395,-99.9"/>
-        <dia:point val="220,-99.9"/>
+        <dia:point val="182.395,-100.6"/>
+        <dia:point val="220,-100.6"/>
         <dia:point val="220,-130.25"/>
         <dia:point val="222,-130.25"/>
       </dia:attribute>
@@ -16904,17 +16902,17 @@
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="182.395,-101.75"/>
+        <dia:point val="182.395,-102.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="181.645,-141.65;189.05,-100.9"/>
+        <dia:rectangle val="181.645,-141.65;189.05,-101.6"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="182.395,-101.75"/>
-        <dia:point val="186.048,-101.75"/>
+        <dia:point val="182.395,-102.45"/>
+        <dia:point val="186.048,-102.45"/>
         <dia:point val="186.048,-140.9"/>
         <dia:point val="189,-140.9"/>
       </dia:attribute>
@@ -17223,18 +17221,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O44">
       <dia:attribute name="obj_pos">
-        <dia:point val="163.917,14.8"/>
+        <dia:point val="163.917,14.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="163.067,14.75;168.235,19.05"/>
+        <dia:rectangle val="163.067,14.05;168.235,19.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="163.917,14.8"/>
-        <dia:point val="163.917,17.3"/>
-        <dia:point val="168.185,17.3"/>
+        <dia:point val="163.917,14.1"/>
+        <dia:point val="163.917,16.95"/>
+        <dia:point val="168.185,16.95"/>
         <dia:point val="168.185,19"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -17264,17 +17262,17 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O45">
       <dia:attribute name="obj_pos">
-        <dia:point val="177.835,-3.2"/>
+        <dia:point val="177.835,-3.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="177.785,-40;185.05,-2.35"/>
+        <dia:rectangle val="177.785,-40;185.05,-2.7"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="177.835,-3.2"/>
-        <dia:point val="180,-3.2"/>
+        <dia:point val="177.835,-3.55"/>
+        <dia:point val="180,-3.55"/>
         <dia:point val="180,-39.95"/>
         <dia:point val="185,-39.95"/>
       </dia:attribute>
@@ -17341,17 +17339,17 @@
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="182.395,-103.6"/>
+        <dia:point val="182.395,-104.3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="181.645,-160.85;186.05,-102.75"/>
+        <dia:rectangle val="181.645,-160.85;186.05,-103.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="182.395,-103.6"/>
-        <dia:point val="184.548,-103.6"/>
+        <dia:point val="182.395,-104.3"/>
+        <dia:point val="184.548,-104.3"/>
         <dia:point val="184.548,-160.1"/>
         <dia:point val="186,-160.1"/>
       </dia:attribute>
@@ -17770,7 +17768,7 @@
         <dia:point val="120,-171.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="53.15,-180.434;120.05,-171.35"/>
+        <dia:rectangle val="53.15,-181.134;120.05,-171.35"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17778,8 +17776,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="120,-171.4"/>
         <dia:point val="118,-171.4"/>
-        <dia:point val="118,-179.984"/>
-        <dia:point val="53.6,-179.984"/>
+        <dia:point val="118,-180.684"/>
+        <dia:point val="53.6,-180.684"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -19032,7 +19030,7 @@
         <dia:point val="30,-181.734"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="29.95,-181.784;53.65,-152.734"/>
+        <dia:rectangle val="29.95,-181.784;53.65,-154.134"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="30,-181.734"/>
@@ -19041,7 +19039,7 @@
         <dia:real val="23.600000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="28.95000000000001"/>
+        <dia:real val="27.550000000000011"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IParametres#</dia:string>
@@ -19050,9 +19048,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Contient les options de calculs du projet.
-#include &lt;cstdint&gt;
-#include &lt;string&gt;#</dia:string>
+        <dia:string>#Contient les options de calculs du projet.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="true"/>
@@ -19810,17 +19806,17 @@
     </dia:object>
     <dia:object type="UML - Generalization" version="1" id="O68">
       <dia:attribute name="obj_pos">
-        <dia:point val="153,-139.1"/>
+        <dia:point val="153,-139.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="143.55,-147.5;153.05,-138.25"/>
+        <dia:rectangle val="143.55,-147.5;153.05,-138.6"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="153,-139.1"/>
-        <dia:point val="151,-139.1"/>
+        <dia:point val="153,-139.45"/>
+        <dia:point val="151,-139.45"/>
         <dia:point val="151,-147.45"/>
         <dia:point val="143.6,-147.45"/>
       </dia:attribute>
@@ -20456,17 +20452,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O73">
       <dia:attribute name="obj_pos">
-        <dia:point val="30,-161.734"/>
+        <dia:point val="30,-163.134"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="16.675,-180;30.05,-161.684"/>
+        <dia:rectangle val="16.675,-180;30.05,-163.084"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="30,-161.734"/>
-        <dia:point val="23.7625,-161.734"/>
+        <dia:point val="30,-163.134"/>
+        <dia:point val="23.7625,-163.134"/>
         <dia:point val="23.7625,-179.55"/>
         <dia:point val="17.125,-179.55"/>
       </dia:attribute>
@@ -20952,7 +20948,7 @@
         <dia:point val="185,-27.3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="53.15,-180.434;185.05,-27.25"/>
+        <dia:rectangle val="53.15,-181.134;185.05,-27.25"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -20962,8 +20958,8 @@
         <dia:point val="181,-27.3"/>
         <dia:point val="181,-86"/>
         <dia:point val="150,-86"/>
-        <dia:point val="150,-179.984"/>
-        <dia:point val="53.6,-179.984"/>
+        <dia:point val="150,-180.684"/>
+        <dia:point val="53.6,-180.684"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -22591,18 +22587,18 @@
   <dia:layer name="Connection classes principales-dérivées" visible="true">
     <dia:object type="UML - Realizes" version="1" id="O89">
       <dia:attribute name="obj_pos">
-        <dia:point val="41.8,-152.784"/>
+        <dia:point val="41.8,-154.184"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="25.9425,-152.834;42.65,-135.95"/>
+        <dia:rectangle val="25.9425,-154.234;42.65,-135.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="41.8,-152.784"/>
-        <dia:point val="41.8,-143.992"/>
-        <dia:point val="25.9925,-143.992"/>
+        <dia:point val="41.8,-154.184"/>
+        <dia:point val="41.8,-144.692"/>
+        <dia:point val="25.9925,-144.692"/>
         <dia:point val="25.9925,-136"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
