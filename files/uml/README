@@ -7,7 +7,7 @@ Fichier dia: Nom de l'interface
 
 Classe implémentant une interface:
 Couleur: Orange #FFA500
-Préfix: abbréviation du nom de l'interface
+Préfix: abbréviation du nom de l'interface sans son "I"
 Fichier dia: Ces classes sont définies dans le fichier dia de l'interface.
 
 Dépendances:

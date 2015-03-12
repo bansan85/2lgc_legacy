@@ -7,11 +7,12 @@ checkcode : ../../src/lib/codegui.hpp
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
 
-../../src/lib/codegui.hpp : COPYING.head codegui.dia INb.dia INoeud.dia
+../../src/lib/codegui.hpp : COPYING.head codegui.dia INb.dia INoeud.dia ISection.dia
 	rm -f ../../src/lib/*.hpp
 	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib codegui.dia
 	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INb.dia
 	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INoeud.dia
+	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ISection.dia
 	find ../../src/lib -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/lib/codegui.hpp \;
 	sed -i "s#../../src/lib/##g" ../../src/lib/codegui.hpp
 	sed -i "s/#include <codegui.hpp>//g" ../../src/lib/codegui.hpp
