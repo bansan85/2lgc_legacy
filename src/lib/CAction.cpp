@@ -25,7 +25,6 @@
 #include <locale>
 
 #include "CAction.hpp"
-#include "CNbCalcul.hpp"
 #include "EUniteTxt.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"

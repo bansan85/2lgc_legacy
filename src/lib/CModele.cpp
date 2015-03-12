@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "CModele.hpp"
-#include "CNbCalcul.hpp"
+#include "NbCalcul.hpp"
 #include "CProjet.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
@@ -121,9 +121,9 @@ CModele::addAction (CAction * action)
   {
     BUGCONT (action->setParam (
                param,
-               new CNbCalcul (param->getpsi0 (type), EUnite::U_, decimales),
-               new CNbCalcul (param->getpsi1 (type), EUnite::U_, decimales),
-               new CNbCalcul (param->getpsi2 (type), EUnite::U_, decimales)),
+               new NbCalcul (param->getpsi0 (type), EUnite::U_, decimales),
+               new NbCalcul (param->getpsi1 (type), EUnite::U_, decimales),
+               new NbCalcul (param->getpsi2 (type), EUnite::U_, decimales)),
              false,
              &action->getUndoManager ())
   }

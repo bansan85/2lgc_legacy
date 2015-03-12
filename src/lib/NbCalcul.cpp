@@ -24,17 +24,17 @@
 #include <locale>
 #include <sstream>
 
-#include "CNbCalcul.hpp"
+#include "NbCalcul.hpp"
 #include "SString.hpp"
 #include "MErreurs.hpp"
 #include "EUniteTxt.hpp"
 
 /**
- * \brief Constructeur d'une classe CNbCalcul.
+ * \brief Constructeur d'une classe NbCalcul.
  * \param valeur (in) La valeur initiale.
  * \param unit (in) L'unité du nombre.
  */
-CNbCalcul::CNbCalcul (
+NbCalcul::NbCalcul (
   double                                                        valeur,
   EUnite                                                        unit,
   std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> & decimales_) :
@@ -45,10 +45,10 @@ CNbCalcul::CNbCalcul (
 }
 
 /**
- * \brief Constructeur d'une classe CNbCalcul.
+ * \brief Constructeur d'une classe NbCalcul.
  * \param nb Le nombre à copier.
  */
-CNbCalcul::CNbCalcul (CNbCalcul & nb) :
+NbCalcul::NbCalcul (const NbCalcul & nb) :
   val (nb.val),
   unite (nb.unite),
   decimales (nb.decimales)
@@ -56,9 +56,9 @@ CNbCalcul::CNbCalcul (CNbCalcul & nb) :
 }
 
 /**
- * \brief Libère une classe CNbCalcul.
+ * \brief Libère une classe NbCalcul.
  */
-CNbCalcul::~CNbCalcul ()
+NbCalcul::~NbCalcul ()
 {
 }
 
@@ -66,7 +66,7 @@ CNbCalcul::~CNbCalcul ()
  * \brief Renvoie la valeur du nombre.
  */
 double
-CNbCalcul::getVal () const
+NbCalcul::getVal () const
 {
   return val;
 }
@@ -75,7 +75,7 @@ CNbCalcul::getVal () const
  * \brief Renvoie l'unité du nombre.
  */
 EUnite
-CNbCalcul::getUnite () const
+NbCalcul::getUnite () const
 {
   return unite;
 }
@@ -85,7 +85,7 @@ CNbCalcul::getUnite () const
  *        décimales..
  */
 std::string
-CNbCalcul::toString () const
+NbCalcul::toString () const
 {
   std::ostringstream oss;
   
@@ -95,8 +95,8 @@ CNbCalcul::toString () const
   return oss.str ();
 }
 
-bool CHK
-CNbCalcul::newXML (xmlNodePtr root) const
+bool
+NbCalcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                     xmlNewNode (nullptr, BAD_CAST2 ("NbCalcul")), xmlFreeNode);

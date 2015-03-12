@@ -25,27 +25,27 @@
 #include <sstream>
 #include <iostream>
 
-#include "CNbUser.hpp"
+#include "NbUser.hpp"
 #include "EUniteTxt.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
 /**
- * \brief Constructeur d'une classe CNbUser.
+ * \brief Constructeur d'une classe NbUser.
  * \param valeur (in) La valeur initiale.
  * \param unit (in) L'unité du nombre.
  */
-CNbUser::CNbUser (double valeur,
-                  EUnite unit) :
+NbUser::NbUser (double valeur,
+                EUnite unit) :
   val (valeur),
   unite (unit)
 {
 }
 
 /**
- * \brief Libère une classe CNbUser.
+ * \brief Libère une classe NbUser.
  */
-CNbUser::~CNbUser ()
+NbUser::~NbUser ()
 {
 }
 
@@ -53,7 +53,7 @@ CNbUser::~CNbUser ()
  * \brief Renvoie la valeur du nombre.
  */
 double
-CNbUser::getVal () const
+NbUser::getVal () const
 {
   return val;
 }
@@ -62,7 +62,7 @@ CNbUser::getVal () const
  * \brief Renvoie l'unité du nombre.
  */
 EUnite
-CNbUser::getUnite () const
+NbUser::getUnite () const
 {
   return unite;
 }
@@ -72,7 +72,7 @@ CNbUser::getUnite () const
  *        décimales..
  */
 std::string
-CNbUser::toString () const
+NbUser::toString () const
 {
   std::string retour;
   uint8_t     width;
@@ -110,7 +110,7 @@ CNbUser::toString () const
 }
 
 bool CHK
-CNbUser::newXML (xmlNodePtr root) const
+NbUser::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                       xmlNewNode (nullptr, BAD_CAST2 ("NbUser")), xmlFreeNode);

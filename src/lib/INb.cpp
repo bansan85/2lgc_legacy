@@ -19,8 +19,8 @@
 #include "config.h"
 
 #include "INb.hpp"
-#include "CNbCalcul.hpp"
-#include "CNbUser.hpp"
+#include "NbCalcul.hpp"
+#include "NbUser.hpp"
 
 /**
  * \brief Constructeur d'une classe INb.
@@ -29,13 +29,13 @@
 INb *
 INb::newINb (INb * nb)
 {
-  if (dynamic_cast <CNbCalcul *> (nb) != NULL)
+  if (dynamic_cast <NbCalcul *> (nb) != NULL)
   {
-    return new CNbCalcul (*dynamic_cast <CNbCalcul *> (nb));
+    return new NbCalcul (*dynamic_cast <NbCalcul *> (nb));
   }
-  else if (dynamic_cast <CNbUser *> (nb) != NULL)
+  else if (dynamic_cast <NbUser *> (nb) != NULL)
   {
-    return new CNbUser (*dynamic_cast <CNbUser *> (nb));
+    return new NbUser (*dynamic_cast <NbUser *> (nb));
   }
   else
   {

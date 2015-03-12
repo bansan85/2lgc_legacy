@@ -109,9 +109,9 @@ main (int32_t argc,
   action2->getpsi0 ().getVal ();
   action2->getpsi1 ().getUnite ();
   action2->getpsi2 ().toString ();
-  BUGCONT (action2->setpsi0 (new CNbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
-  BUGCONT (action2->setpsi1 (new CNbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
-  BUGCONT (action2->setpsi2 (new CNbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
+  BUGCONT (action2->setpsi0 (new NbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
+  BUGCONT (action2->setpsi1 (new NbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
+  BUGCONT (action2->setpsi2 (new NbUser (0.5, EUnite::U_)), -1, static_cast <CUndoManager *> (nullptr))
   action2->getpsi0 ().getVal ();
   action2->getpsi1 ().getUnite ();
   action2->getpsi2 ().toString ();

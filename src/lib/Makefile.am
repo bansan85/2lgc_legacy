@@ -38,8 +38,8 @@ libeurocodes_la_SOURCES 	=		CAction.cpp \
 															CBarreInfoEF.cpp \
 															CCalculs.cpp \
 															CModele.cpp \
-															CNbCalcul.cpp \
-															CNbUser.cpp \
+															NbCalcul.cpp \
+															NbUser.cpp \
 															CParamEC.cpp \
 															CPonderations.cpp \
 															CPreferences.cpp \

@@ -7,17 +7,22 @@ checkcode : ../../src/lib/codegui.hpp
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
 
-../../src/lib/codegui.hpp : COPYING.head codegui.dia
-	rm -f *.hpp
-	../../../dia2code-git/src/dia2code -l COPYING.head -t cpp11 -ext hpp -d . codegui.dia
-	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> codegui.hpp \;
-	mv *.hpp ../../src/lib
+../../src/lib/codegui.hpp : COPYING.head codegui.dia INb.dia
+	rm -f ../../src/lib/*.hpp
+	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib codegui.dia
+	../../../dia2code-git/src/dia2code -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INb.dia
+	find ../../src/lib -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/lib/codegui.hpp \;
+	sed -i "s#../../src/lib/##g" ../../src/lib/codegui.hpp
+	sed -i "s/#include <codegui.hpp>//g" ../../src/lib/codegui.hpp
+	sort ../../src/lib/codegui.hpp -o ../../src/lib/codegui.hpp
 
 ../../src/libundo/undo.hpp : COPYING.head undo.dia
-	rm -f *.hpp
-	../../../dia2code-git/src/dia2code -l COPYING.head -t cpp11 -ext hpp -d . undo.dia
-	find * -maxdepth 0 -name "*.hpp" -exec echo "#include \"{}\"" >> undo.hpp \;
-	mv *.hpp ../../src/libundo
+	rm -f ../../src/libundo/*.hpp
+	../../../dia2code-git/src/dia2code -l COPYING.head -t cpp11 -ext hpp -d ../../src/libundo undo.dia
+	find ../../src/libundo -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/libundo/undo.hpp \;
+	sed -i "s#../../src/libundo/##g" ../../src/libundo/undo.hpp
+	sed -i "s/#include <undo.hpp>//g" ../../src/libundo/undo.hpp
+	sort ../../src/libundo/undo.hpp -o ../../src/libundo/undo.hpp
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)

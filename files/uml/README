@@ -1,0 +1,13 @@
+Convention pour la conception des diagrammes DIA.
+
+Interface:
+Couleur: Vert foncé #008000
+Préfix: "I"
+Fichier dia: Nom de l'interface
+
+Classe implémentant une interface:
+Couleur: Orange #FFA500
+Préfix: abbréviation du nom de l'interface
+Fichier dia: Ces classes sont définies dans le fichier dia de l'interface.
+
+
