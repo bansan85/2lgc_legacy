@@ -10,4 +10,5 @@ Couleur: Orange #FFA500
 Préfix: abbréviation du nom de l'interface
 Fichier dia: Ces classes sont définies dans le fichier dia de l'interface.
 
-
+Dépendances:
+Couleur: celui de la classe à l'origine de la dépendance.
