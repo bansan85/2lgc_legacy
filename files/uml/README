@@ -1,14 +1,22 @@
 Convention pour la conception des diagrammes DIA.
 
-Interface:
-Couleur: Vert foncé #008000
-Préfix: "I"
-Fichier dia: Nom de l'interface
+Interface :
+Couleur : vert foncé #008000
+Préfix : "I"
+Fichier dia : nom de l'interface
 
-Classe implémentant une interface:
-Couleur: Orange #FFA500
-Préfix: abbréviation du nom de l'interface sans son "I"
-Fichier dia: Ces classes sont définies dans le fichier dia de l'interface.
+Classe implémentant une interface :
+Couleur : orange #FFA500
+Préfix : abbréviation du nom de l'interface sans son "I"
+Fichier dia : ces classes sont définies dans le fichier dia de l'interface.
 
-Dépendances:
-Couleur: celui de la classe à l'origine de la dépendance.
+Dépendances :
+Couleur : celui de la classe à l'origine de la dépendance.
+
+Classe externe désignant une dépendance vers une entête système :
+Couleur : bleu
+Ne contient rien d'autre que le nom de la classe et son stéréotype.
+
+Classe externe désignant une dépendance vers une entête non système :
+Couleur : noir
+Ne contient rien d'autre que le nom de la classe et son stéréotype.

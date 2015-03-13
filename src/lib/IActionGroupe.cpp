@@ -25,8 +25,8 @@
  * \param nom_ (in) Le nom de l'action / groupe.
  * \param undo_ (in) Le gestionnaire des modifications.
  */
-IActionGroupe::IActionGroupe (std::string  * nom_,
-                              CUndoManager & undo_) :
+IActionGroupe::IActionGroupe (std::string * nom_,
+                              UndoManager & undo_) :
   IUndoable (undo_)
   , nom (nom_)
 #ifdef ENABLE_GTK

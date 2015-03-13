@@ -44,44 +44,44 @@ main (int32_t argc,
   
   BUGCONT (projet.getActionCount () == 0,
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   // 0 Poids propre
   action.reset (new CAction (new std::string ("Poids propre"), 0, projet));
   BUGCONT (projet.addAction (action.get ()),
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   action.release ();
   BUGCONT (projet.getActionCount () == 1,
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   // 2 Exploitation
   action.reset (new CAction (new std::string ("Chargement"), 2, projet));
   BUGCONT (projet.addAction (action.get ()),
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   action.release ();
   BUGCONT (projet.getActionCount () == 2,
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   // 18 Neige
   action.reset (new CAction (new std::string ("Neige"), 18, projet));
   BUGCONT (projet.addAction (action.get ()),
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   action.release ();
   BUGCONT (projet.getActionCount () == 3,
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   // 19 Vent
   action.reset (new CAction (new std::string ("Vent"), 19, projet));
   BUGCONT (projet.addAction (action.get ()),
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   action.release ();
   
   BUGCONT (projet.enregistre ("test.xml"),
            -1,
-           static_cast <CUndoManager *> (nullptr))
+           static_cast <UndoManager *> (nullptr))
   
   return 0;
 }

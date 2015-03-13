@@ -1564,7 +1564,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3445,7 +3445,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -4603,7 +4603,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -7531,7 +7531,7 @@
                 <dia:string>#undo_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -8274,7 +8274,7 @@
                 <dia:string>#undo_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -10671,7 +10671,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -11075,7 +11075,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -18530,7 +18530,7 @@
         <dia:real val="3"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#CUndoManager.hpp#</dia:string>
+        <dia:string>#UndoManager.hpp#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>#extern#</dia:string>
@@ -19164,7 +19164,7 @@
                 <dia:string>#undo_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -21805,7 +21805,7 @@
                 <dia:string>#undo_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>

@@ -39,7 +39,7 @@
  */
 CAction::CAction (std::string  * nom_,
                   uint8_t        type_,
-                  CUndoManager & undo_) :
+                  UndoManager &  undo_) :
   IActionGroupe (nom_, undo_)
   , type (type_)
   , action_predominante (false)

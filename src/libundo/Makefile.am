@@ -31,8 +31,8 @@ libundo_la_CPPFLAGS	=		@XML_CPPFLAGS@
 libundo_ladir 			= 	$(includedir)/2lgc
 
 libundo_la_SOURCES 	=		IUndoable.cpp \
-															CUndoData.cpp \
-															CUndoManager.cpp
+												UndoData.cpp \
+												UndoManager.cpp
 
 libundo_la_HEADERS 	=		$(wildcard *.hpp *.hh)
 

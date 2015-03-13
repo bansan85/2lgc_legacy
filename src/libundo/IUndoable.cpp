@@ -22,7 +22,7 @@
 
 #include "IUndoable.hpp"
 
-IUndoable::IUndoable (CUndoManager & undo_) :
+IUndoable::IUndoable (UndoManager & undo_) :
   undoManager (undo_)
 {
 }
@@ -31,7 +31,7 @@ IUndoable::~IUndoable ()
 {
 }
 
-CUndoManager &
+UndoManager &
 IUndoable::getUndoManager () const
 {
   return undoManager;

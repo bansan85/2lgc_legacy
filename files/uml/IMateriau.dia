@@ -1038,7 +1038,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1796,7 +1796,7 @@
                 <dia:string>#undo#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>

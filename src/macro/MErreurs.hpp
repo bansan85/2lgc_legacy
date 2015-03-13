@@ -24,7 +24,7 @@
 #include <cstdio>
 #include <libintl.h>
 
-#include "CUndoManager.hpp"
+#include "UndoManager.hpp"
 
 #define PRINTF(...) printf (__VA_ARGS__)
 

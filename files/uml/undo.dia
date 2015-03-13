@@ -65,29 +65,29 @@
   <dia:layer name="Classes principales" visible="true" active="true">
     <dia:object type="UML - Class" version="0" id="O0">
       <dia:attribute name="obj_pos">
-        <dia:point val="130.648,-251.751"/>
+        <dia:point val="-8.5108,-24.9108"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="130.598,-251.801;157.763,-192.701"/>
+        <dia:rectangle val="-8.5608,-24.9608;17.8342,33.4392"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="130.648,-251.751"/>
+        <dia:point val="-8.5108,-24.9108"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="27.064999999999998"/>
+        <dia:real val="26.294999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="59.000000000000007"/>
+        <dia:real val="58.300000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#CUndoManager#</dia:string>
+        <dia:string>#UndoManager#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Le système de gestion des annulations et de mémorisation de l'historique. Important : CUndoManager ne doit pas être tel quel. CProjet doit hérité de CUndoManager et CUndoManager doit être utilisé que par CProjet par polymorphisme.
-Non copiable.#</dia:string>
+        <dia:string>#Le système de gestion des annulations et de mémorisation de l'historique.
+Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de UndoManager et UndoManager doit être utilisé que par le projet par polymorphisme.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -173,7 +173,7 @@ Non copiable.#</dia:string>
             <dia:string>#liste#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::list &lt;CUndoData *&gt;#</dia:string>
+            <dia:string>#std::list &lt;UndoData *&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -242,7 +242,7 @@ Non copiable.#</dia:string>
             <dia:string>#tmpListe#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CUndoData *#</dia:string>
+            <dia:string>#UndoData *#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -287,7 +287,7 @@ Non copiable.#</dia:string>
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CUndoManager#</dia:string>
+            <dia:string>#UndoManager#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -299,7 +299,7 @@ Non copiable.#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une classe CUndoManager.
+            <dia:string>#Constructeur d'une classe UndoManager.
 Initialise le système de gestion de l'historique et de la gestion des annuler / répéter.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
@@ -318,7 +318,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CUndoManager#</dia:string>
+            <dia:string>#UndoManager#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>#delete#</dia:string>
@@ -330,7 +330,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoManager.#</dia:string>
+            <dia:string>#Duplication d'une classe UndoManager.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -350,7 +350,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CUndoManager &amp;#</dia:string>
+                <dia:string>#const UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -372,13 +372,13 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
             <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CUndoManager &amp;#</dia:string>
+            <dia:string>#UndoManager &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoManager.#</dia:string>
+            <dia:string>#Duplication d'une classe UndoManager.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -398,7 +398,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CUndoManager &amp;#</dia:string>
+                <dia:string>#const UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -414,7 +414,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#~CUndoManager#</dia:string>
+            <dia:string>#~UndoManager#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -426,7 +426,7 @@ Initialise le système de gestion de l'historique et de la gestion des annuler /
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Destructeur d'une classe Manager.
+            <dia:string>#Destructeur d'une classe UndoManager.
 Libère l'historique du projet.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
@@ -545,7 +545,7 @@ Libère l'historique du projet.#</dia:string>
                 <dia:string>#description#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::string#</dia:string>
+                <dia:string>#const std::string#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1053,19 +1053,19 @@ Libère l'historique du projet.#</dia:string>
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="obj_pos">
-        <dia:point val="130.648,-238.001"/>
+        <dia:point val="-8.5108,-11.8608"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="123.129,-238.751;131.398,-233.311"/>
+        <dia:rectangle val="-16.8001,-12.6108;-7.7608,-7.1708"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="130.648,-238.001"/>
-        <dia:point val="126.563,-238.001"/>
-        <dia:point val="126.563,-234.161"/>
-        <dia:point val="123.179,-234.161"/>
+        <dia:point val="-8.5108,-11.8608"/>
+        <dia:point val="-12.9805,-11.8608"/>
+        <dia:point val="-12.9805,-8.0208"/>
+        <dia:point val="-16.7501,-8.0208"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1088,19 +1088,19 @@ Libère l'historique du projet.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O2">
       <dia:attribute name="obj_pos">
-        <dia:point val="167.089,-242.962"/>
+        <dia:point val="27.9302,-16.1218"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="167.039,-243.012;191.894,-227.112"/>
+        <dia:rectangle val="27.8802,-16.1718;52.7352,-0.9718"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="167.089,-242.962"/>
+        <dia:point val="27.9302,-16.1218"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="24.755000000000003"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="15.799999999999999"/>
+        <dia:real val="15.1"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IUndoable#</dia:string>
@@ -1109,8 +1109,7 @@ Libère l'historique du projet.#</dia:string>
         <dia:string>#interface#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.
-Non copiable.#</dia:string>
+        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -1146,13 +1145,13 @@ Non copiable.#</dia:string>
         <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#008000"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
         <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="text_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#008000"/>
       </dia:attribute>
       <dia:attribute name="normal_font">
         <dia:font family="monospace" style="0" name="Courier"/>
@@ -1196,7 +1195,7 @@ Non copiable.#</dia:string>
             <dia:string>#undoManager#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CUndoManager &amp;#</dia:string>
+            <dia:string>#UndoManager &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -1250,7 +1249,7 @@ Non copiable.#</dia:string>
                 <dia:string>#undo_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#CUndoManager &amp;#</dia:string>
+                <dia:string>#UndoManager &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1398,7 +1397,7 @@ Non copiable.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CUndoManager &amp;#</dia:string>
+            <dia:string>#UndoManager &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1428,29 +1427,28 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O3">
       <dia:attribute name="obj_pos">
-        <dia:point val="98.4237,-238.161"/>
+        <dia:point val="-40.7351,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="98.3737,-238.211;123.229,-214.311"/>
+        <dia:rectangle val="-40.7851,-11.3708;-16.7001,11.8292"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="98.4237,-238.161"/>
+        <dia:point val="-40.7351,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="24.755000000000003"/>
+        <dia:real val="23.984999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="23.800000000000001"/>
+        <dia:real val="23.100000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#CUndoData#</dia:string>
+        <dia:string>#UndoData#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.
-Non copiable.#</dia:string>
+        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -1673,7 +1671,7 @@ Non copiable.#</dia:string>
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CUndoData#</dia:string>
+            <dia:string>#UndoData#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -1685,7 +1683,7 @@ Non copiable.#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une classe CUndoData.#</dia:string>
+            <dia:string>#Constructeur d'une classe UndoData.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1703,7 +1701,7 @@ Non copiable.#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CUndoData#</dia:string>
+            <dia:string>#UndoData#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>#delete#</dia:string>
@@ -1715,7 +1713,7 @@ Non copiable.#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoData.#</dia:string>
+            <dia:string>#Duplication d'une classe UndoData.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1735,7 +1733,7 @@ Non copiable.#</dia:string>
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CUndoData &amp;#</dia:string>
+                <dia:string>#const UndoData &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1757,13 +1755,13 @@ Non copiable.#</dia:string>
             <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CUndoData &amp;#</dia:string>
+            <dia:string>#UndoData &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CUndoData.#</dia:string>
+            <dia:string>#Duplication d'une classe UndoData.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1783,7 +1781,7 @@ Non copiable.#</dia:string>
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CUndoData &amp;#</dia:string>
+                <dia:string>#const UndoData &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1799,7 +1797,7 @@ Non copiable.#</dia:string>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#~CUndoData#</dia:string>
+            <dia:string>#~UndoData#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -1811,7 +1809,7 @@ Non copiable.#</dia:string>
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Destructeur d'une classe CUndoData.#</dia:string>
+            <dia:string>#Destructeur d'une classe UndoData.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1835,19 +1833,19 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O4">
       <dia:attribute name="obj_pos">
-        <dia:point val="167.089,-240.812"/>
+        <dia:point val="27.9302,-14.3218"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="157.263,-249.751;167.139,-240.762"/>
+        <dia:rectangle val="17.3342,-23.2608;27.9802,-14.2718"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="167.089,-240.812"/>
-        <dia:point val="162.601,-240.812"/>
-        <dia:point val="162.601,-249.301"/>
-        <dia:point val="157.713,-249.301"/>
+        <dia:point val="27.9302,-14.3218"/>
+        <dia:point val="23.0572,-14.3218"/>
+        <dia:point val="23.0572,-22.8108"/>
+        <dia:point val="17.7842,-22.8108"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1858,10 +1856,10 @@ Non copiable.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
-        <dia:color val="#000000"/>
+        <dia:color val="#008000"/>
       </dia:attribute>
       <dia:attribute name="line_colour">
-        <dia:color val="#000000"/>
+        <dia:color val="#008000"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
@@ -1879,13 +1877,13 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O5">
       <dia:attribute name="obj_pos">
-        <dia:point val="107.349,-209.419"/>
+        <dia:point val="-31.8098,17.4212"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="107.299,-209.469;119.311,-200.069"/>
+        <dia:rectangle val="-31.8598,17.3712;-19.8473,26.7712"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="107.349,-209.419"/>
+        <dia:point val="-31.8098,17.4212"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="11.9125"/>
@@ -2036,19 +2034,19 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="130.648,-206.101"/>
+        <dia:point val="-8.5108,20.0392"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="118.811,-208.419;130.698,-206.051"/>
+        <dia:rectangle val="-20.3473,18.4212;-8.4608,20.3052"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="130.648,-206.101"/>
-        <dia:point val="125.155,-206.101"/>
-        <dia:point val="125.155,-207.969"/>
-        <dia:point val="119.261,-207.969"/>
+        <dia:point val="-8.5108,20.0392"/>
+        <dia:point val="-14.0041,20.0392"/>
+        <dia:point val="-14.0041,18.8712"/>
+        <dia:point val="-19.8973,18.8712"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -2080,13 +2078,13 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O7">
       <dia:attribute name="obj_pos">
-        <dia:point val="111,-258"/>
+        <dia:point val="-28.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="110.95,-258.05;115.4,-254.95"/>
+        <dia:rectangle val="-28.2088,-31.2098;-23.7588,-28.1098"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="111,-258"/>
+        <dia:point val="-28.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="4.3499999999999996"/>
@@ -2190,19 +2188,19 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O8">
       <dia:attribute name="obj_pos">
-        <dia:point val="110.801,-238.161"/>
+        <dia:point val="-28.7426,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="110.751,-255.45;113.625,-238.111"/>
+        <dia:rectangle val="-28.7926,-28.6098;-25.5338,-11.2708"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="110.801,-238.161"/>
-        <dia:point val="110.801,-246.381"/>
-        <dia:point val="113.175,-246.381"/>
-        <dia:point val="113.175,-255"/>
+        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-28.7426,-19.5403"/>
+        <dia:point val="-25.9838,-19.5403"/>
+        <dia:point val="-25.9838,-28.1598"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -2213,10 +2211,10 @@ Non copiable.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="line_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
@@ -2234,13 +2232,13 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O9">
       <dia:attribute name="obj_pos">
-        <dia:point val="117,-258"/>
+        <dia:point val="-22.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="116.95,-258.05;122.105,-254.95"/>
+        <dia:rectangle val="-22.2088,-31.2098;-17.0538,-28.1098"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="117,-258"/>
+        <dia:point val="-22.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="5.0549999999999997"/>
@@ -2344,19 +2342,19 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="110.801,-238.161"/>
+        <dia:point val="-28.7426,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="110.751,-255.45;119.978,-238.111"/>
+        <dia:rectangle val="-28.7926,-28.6098;-19.1813,-11.2708"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="110.801,-238.161"/>
-        <dia:point val="110.801,-246.381"/>
-        <dia:point val="119.528,-246.381"/>
-        <dia:point val="119.528,-255"/>
+        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-28.7426,-19.5403"/>
+        <dia:point val="-19.6313,-19.5403"/>
+        <dia:point val="-19.6313,-28.1598"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -2367,10 +2365,10 @@ Non copiable.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="line_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>
@@ -2388,16 +2386,16 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - LargePackage" version="0" id="O11">
       <dia:attribute name="obj_pos">
-        <dia:point val="96,-260"/>
+        <dia:point val="-43.1588,-33.1598"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="95.95,-261.85;105.05,-252.95"/>
+        <dia:rectangle val="-43.2088,-35.0098;-34.1088,-26.1098"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="96,-260"/>
+        <dia:point val="-43.1588,-33.1598"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="9"/>
@@ -2426,13 +2424,13 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O12">
       <dia:attribute name="obj_pos">
-        <dia:point val="99,-258"/>
+        <dia:point val="-40.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="98.95,-258.05;103.4,-254.95"/>
+        <dia:rectangle val="-40.2088,-31.2098;-35.7588,-28.1098"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="99,-258"/>
+        <dia:point val="-40.1588,-31.1598"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="4.3499999999999996"/>
@@ -2537,19 +2535,19 @@ Non copiable.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O13">
       <dia:attribute name="obj_pos">
-        <dia:point val="110.801,-238.161"/>
+        <dia:point val="-28.7426,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="100.725,-255.45;110.851,-238.111"/>
+        <dia:rectangle val="-38.4338,-28.6098;-28.6926,-11.2708"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="110.801,-238.161"/>
-        <dia:point val="110.801,-246.381"/>
-        <dia:point val="101.175,-246.381"/>
-        <dia:point val="101.175,-255"/>
+        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-28.7426,-19.5403"/>
+        <dia:point val="-37.9838,-19.5403"/>
+        <dia:point val="-37.9838,-28.1598"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -2560,10 +2558,10 @@ Non copiable.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="line_colour">
-        <dia:color val="#0000ff"/>
+        <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>##</dia:string>

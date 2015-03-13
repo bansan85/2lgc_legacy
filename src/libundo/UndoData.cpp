@@ -18,9 +18,9 @@
 
 #include "config.hpp"
 
-#include "CUndoData.hpp"
+#include "UndoData.hpp"
 
-CUndoData::CUndoData () :
+UndoData::UndoData () :
   annule (),
   repete (),
   suppr (),
@@ -30,7 +30,7 @@ CUndoData::CUndoData () :
 {
 }
 
-CUndoData::~CUndoData ()
+UndoData::~UndoData ()
 {
   for (std::function <void ()> f : suppr)
   {

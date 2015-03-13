@@ -35,7 +35,7 @@ CProjet::CProjet (ENorme norme) :
   CPreferences (),
   CCalculs (),
   CModele (),
-  CUndoManager (),
+  UndoManager (),
   parametres (nullptr)
 {
   LIBXML_TEST_VERSION

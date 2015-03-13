@@ -36,7 +36,7 @@
 CParamEC::CParamEC (std::string  * nom_,
                     ENormeEcAc     annexe_,
                     uint16_t       variante_,
-                    CUndoManager & undo_) :
+                    UndoManager &  undo_) :
   IParametres (undo_),
   nom (nom_),
   annexe (annexe_),
@@ -232,7 +232,7 @@ CParamEC::getpsiN () const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 0,
                 &getUndoManager ())
       break;
@@ -275,7 +275,7 @@ CParamEC::getpsiAction (uint8_t type) const
       {
         BUGPARAM (type,
                   "%u",
-                  static_cast <CUndoManager *> (nullptr),
+                  static_cast <UndoManager *> (nullptr),
                   EAction::ACTION_INCONNUE,
                   &getUndoManager ())
       }
@@ -310,7 +310,7 @@ CParamEC::getpsiAction (uint8_t type) const
       {
         BUGPARAM (type,
                   "%u",
-                  static_cast <CUndoManager *> (nullptr),
+                  static_cast <UndoManager *> (nullptr),
                   EAction::ACTION_INCONNUE,
                   &getUndoManager ())
       }
@@ -319,7 +319,7 @@ CParamEC::getpsiAction (uint8_t type) const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 EAction::ACTION_INCONNUE,
                 &getUndoManager ())
       break;
@@ -361,7 +361,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     std::string (),
                     &getUndoManager ())
           break;
@@ -398,7 +398,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     std::string (),
                     &getUndoManager ())
           break;
@@ -409,7 +409,7 @@ CParamEC::getpsiDescription (uint8_t type) const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 std::string (),
                 &getUndoManager ())
       break;
@@ -451,7 +451,7 @@ CParamEC::getpsi0 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -488,7 +488,7 @@ CParamEC::getpsi0 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -499,7 +499,7 @@ CParamEC::getpsi0 (uint8_t type) const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 NAN,
                 &getUndoManager ())
       break;
@@ -541,7 +541,7 @@ CParamEC::getpsi1 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -578,7 +578,7 @@ CParamEC::getpsi1 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -589,7 +589,7 @@ CParamEC::getpsi1 (uint8_t type) const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 NAN,
                 &getUndoManager ())
       break;
@@ -631,7 +631,7 @@ CParamEC::getpsi2 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -668,7 +668,7 @@ CParamEC::getpsi2 (uint8_t type) const
         {
           BUGPARAM (type,
                     "%u",
-                    static_cast <CUndoManager *> (nullptr),
+                    static_cast <UndoManager *> (nullptr),
                     NAN,
                     &getUndoManager ())
           break;
@@ -679,7 +679,7 @@ CParamEC::getpsi2 (uint8_t type) const
     {
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
-                static_cast <CUndoManager *> (nullptr),
+                static_cast <UndoManager *> (nullptr),
                 NAN,
                 &getUndoManager ())
       break;

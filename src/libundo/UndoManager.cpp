@@ -24,12 +24,12 @@
 #include <locale>
 #include <sys/types.h>
 
-#include "CUndoManager.hpp"
+#include "UndoManager.hpp"
 #include "IUndoable.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-CUndoManager::CUndoManager () :
+UndoManager::UndoManager () :
   liste (),
   pos (0),
   count (0),
@@ -38,19 +38,19 @@ CUndoManager::CUndoManager () :
 {
 }
 
-CUndoManager::~CUndoManager ()
+UndoManager::~UndoManager ()
 {
-  for_each (liste.begin (), liste.end (), std::default_delete <CUndoData> ());
+  for_each (liste.begin (), liste.end (), std::default_delete <UndoData> ());
   
   delete (tmpListe);
 }
 
 bool
-CUndoManager::push (std::function <bool ()>           annule,
-                    std::function <bool ()>           repete,
-                    std::function <void ()>           suppr,
-                    std::function <bool (xmlNodePtr)> sauve,
-                    std::string                       description)
+UndoManager::push (std::function <bool ()>           annule,
+                   std::function <bool ()>           repete,
+                   std::function <void ()>           suppr,
+                   std::function <bool (xmlNodePtr)> sauve,
+                   const std::string                 description)
 {
   if (!insertion)
   {
@@ -89,7 +89,7 @@ CUndoManager::push (std::function <bool ()>           annule,
 }
 
 bool
-CUndoManager::pushSuppr (std::function <void ()> suppr)
+UndoManager::pushSuppr (std::function <void ()> suppr)
 {
   if (!insertion)
   {
@@ -110,10 +110,10 @@ CUndoManager::pushSuppr (std::function <void ()> suppr)
 }
 
 bool
-CUndoManager::undo ()
+UndoManager::undo ()
 {
-  CUndoData * undoData;
-  std::list <CUndoData *>::iterator it;
+  UndoData * undoData;
+  std::list <UndoData *>::iterator it;
   
   BUGPROG (liste.size () != pos,
            false,
@@ -142,7 +142,7 @@ CUndoManager::undo ()
 }
 
 bool
-CUndoManager::undoN (uint32_t nb)
+UndoManager::undoN (uint32_t nb)
 {
   for (uint32_t i = 1; i <= nb; i++)
   {
@@ -155,10 +155,10 @@ CUndoManager::undoN (uint32_t nb)
 }
 
 bool
-CUndoManager::redo ()
+UndoManager::redo ()
 {
-  CUndoData * undoData;
-  std::list <CUndoData *>::iterator it;
+  UndoData * undoData;
+  std::list <UndoData *>::iterator it;
   
   BUGPROG (pos != 0,
            false,
@@ -187,7 +187,7 @@ CUndoManager::redo ()
 }
 
 bool
-CUndoManager::redoN (uint32_t nb)
+UndoManager::redoN (uint32_t nb)
 {
   for (uint32_t i = 1; i <= nb; i++)
   {
@@ -200,7 +200,7 @@ CUndoManager::redoN (uint32_t nb)
 }
 
 EUndoEtat
-CUndoManager::getEtat () const
+UndoManager::getEtat () const
 {
   if ((insertion) && (count != 0))
   {
@@ -213,7 +213,7 @@ CUndoManager::getEtat () const
 }
 
 bool
-CUndoManager::ref ()
+UndoManager::ref ()
 {
   BUGCRIT (count != UINT16_MAX,
            false,
@@ -227,7 +227,7 @@ CUndoManager::ref ()
   
   if ((count == 0) && (pos != 0))
   {
-    std::list <CUndoData *>::iterator it = liste.end ();
+    std::list <UndoData *>::iterator it = liste.end ();
     
     std::advance (it, -static_cast <ssize_t> (pos));
     
@@ -242,7 +242,7 @@ CUndoManager::ref ()
   
   if (count == 0)
   {
-    tmpListe = new CUndoData ();
+    tmpListe = new UndoData ();
   }
   
   ++count;
@@ -251,7 +251,7 @@ CUndoManager::ref ()
 }
 
 bool
-CUndoManager::unref ()
+UndoManager::unref ()
 {
   if (!insertion)
   {
@@ -276,19 +276,17 @@ CUndoManager::unref ()
 }
 
 bool
-CUndoManager::undoToXML (xmlNodePtr root)
+UndoManager::undoToXML (xmlNodePtr root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                                        xmlNewNode (nullptr,
-                                                    BAD_CAST2 ("UndoManager")),
-                                        xmlFreeNode);
+                 xmlNewNode (nullptr, BAD_CAST2 ("UndoManager")), xmlFreeNode);
   
   BUGCRIT (node.get (),
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  for (CUndoData * data : liste)
+  for (UndoData * data : liste)
   {
     std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
                                                xmlNewNode (nullptr,
@@ -341,7 +339,7 @@ CUndoManager::undoToXML (xmlNodePtr root)
 }
 
 void
-CUndoManager::rollback ()
+UndoManager::rollback ()
 {
   count = 0;
   
@@ -356,7 +354,7 @@ CUndoManager::rollback ()
   {
     BUGCRIT (f (),
              ,
-             static_cast <CUndoManager *> (nullptr),
+             static_cast <UndoManager *> (nullptr),
              gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n"))
   }
   
@@ -369,13 +367,13 @@ CUndoManager::rollback ()
 }
 
 bool CHK
-CUndoManager::getInsertion () const
+UndoManager::getInsertion () const
 {
   return insertion;
 }
 
 void
-CUndoManager::setInsertion (bool insert)
+UndoManager::setInsertion (bool insert)
 {
   insertion = insert;
 }
