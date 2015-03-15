@@ -146,10 +146,7 @@ UndoManager::undoN (uint32_t nb)
 {
   for (uint32_t i = 1; i <= nb; i++)
   {
-    BUGCRIT (undo (),
-             false,
-             this,
-             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
+    BUGCONT (undo (), false, this)
   }
   return true;
 }
@@ -191,10 +188,7 @@ UndoManager::redoN (uint32_t nb)
 {
   for (uint32_t i = 1; i <= nb; i++)
   {
-    BUGCRIT (redo (),
-             false,
-             this,
-             gettext ("Echec lors de l'opération.\nLe projet est très probablement corrompu.\n"))
+    BUGCONT (redo (), false, this)
   }
   return true;
 }
