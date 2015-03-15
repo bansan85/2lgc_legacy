@@ -20,8 +20,9 @@ automake --add-missing --copy
 autoconf
 
 Avec gcc :
-./configure --with-gui=gtk3 --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=none --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=gtk3 --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 make check -j9 && LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && rm -Rf out_html && lcov --capture --directory . --output-file coverage.info && genhtml coverage.info --output-directory out_html && firefox out_html/index.html
