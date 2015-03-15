@@ -26,13 +26,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-/**
- * \brief Constructeur d'une classe CParamEC.
- * \param nom_ (in) Le nom décrivant la norme et ses différents options.
- * \param annexe_ (in) Le choix de l'annexe nationale.
- * \param variante_ (in) Le numéro de la variante de la norme.
- * \param undo_ (in) Le gestionnaire des modifications.
- */
 CParamEC::CParamEC (std::string  * nom_,
                     ENormeEcAc     annexe_,
                     uint16_t       variante_,
@@ -44,27 +37,17 @@ CParamEC::CParamEC (std::string  * nom_,
 {
 }
 
-/**
- * \brief Destructeur d'une classe CParamEC.
- */
 CParamEC::~CParamEC ()
 {
 }
 
-/**
- * \brief Renvoie le nom des paramètres de calcul.
- */
 std::string *
 CParamEC::getNom () const
 {
   return nom;
 }
 
-/**
- * \brief Définit le nom des paramètres de calcul.
- * \param nom_ Le nouveau nom.
- */
-bool CHK
+bool
 CParamEC::setNom (std::string * nom_)
 {
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -91,13 +74,7 @@ CParamEC::setNom (std::string * nom_)
   return true;
 }
 
-/**
- * \brief Converti la fonction setNom sous format XML.
- * \param param Le nom du paramètre.
- * \param nom_ Le nouveau nom.
- * \param root Le noeud dans lequel doit être inséré l'action.
- */
-bool CHK
+bool
 CParamEC::setNomXML (std::string * param,
                      std::string * nom_,
                      xmlNodePtr    root)
@@ -133,20 +110,13 @@ CParamEC::setNomXML (std::string * param,
   return true;
 }
 
-/**
- * \brief Renvoie la variante de la norme.
- */
 uint32_t
 CParamEC::getVariante () const
 {
   return variante;
 }
 
-/**
- * \brief Défini la variante de la norme.
- * \param variante_  (in) La nouvelle variante.
- */
-bool CHK
+bool
 CParamEC::setVariante (uint32_t variante_)
 {
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -171,12 +141,7 @@ CParamEC::setVariante (uint32_t variante_)
   return true;
 }
 
-/**
- * \brief Converti la fonction setVariante sous format XML.
- * \param nom_ Le nom du paramètre de calcul à modifier.
- * \param variante_ La nouvelle variante.
- */
-bool CHK
+bool
 CParamEC::setVarianteXML (std::string * nom_,
                           uint32_t      variante_,
                           xmlNodePtr    root)
@@ -212,9 +177,6 @@ CParamEC::setVarianteXML (std::string * nom_,
   return true;
 }
 
-/**
- * \brief Renvoie le nombre de type d'actions différents de psi.
- */
 uint8_t
 CParamEC::getpsiN () const
 {
@@ -240,10 +202,6 @@ CParamEC::getpsiN () const
   }
 }
 
-/**
- * \brief Renvoie la catégorie du type d'action.
- * \param type (in) Le type d'action.
- */
 EAction
 CParamEC::getpsiAction (uint8_t type) const
 {
@@ -327,10 +285,6 @@ CParamEC::getpsiAction (uint8_t type) const
   }
 }
 
-/**
- * \brief Renvoie la description du type d'actions différents de psi.
- * \param type (in) Le type d'action à décrire.
- */
 std::string const
 CParamEC::getpsiDescription (uint8_t type) const
 {
@@ -417,10 +371,6 @@ CParamEC::getpsiDescription (uint8_t type) const
   }
 }
 
-/**
- * \brief Renvoie la valeur par défaut du coefficient psi0.
- * \param type (in) Le type de l'action.
- */
 double
 CParamEC::getpsi0 (uint8_t type) const
 {
@@ -507,10 +457,6 @@ CParamEC::getpsi0 (uint8_t type) const
   }
 }
 
-/**
- * \brief Renvoie la valeur par défaut du coefficient psi1.
- * \param type (in) Le type de l'action.
- */
 double
 CParamEC::getpsi1 (uint8_t type) const
 {
@@ -597,10 +543,6 @@ CParamEC::getpsi1 (uint8_t type) const
   }
 }
 
-/**
- * \brief Renvoie la valeur par défaut du coefficient psi2.
- * \param type (in) Le type de l'action.
- */
 double
 CParamEC::getpsi2 (uint8_t type) const
 {

@@ -22,10 +22,6 @@
 #include "NbCalcul.hpp"
 #include "NbUser.hpp"
 
-/**
- * \brief Constructeur d'une classe INb.
- * \param nb Le nombre à dupliquer.
- */
 INb *
 INb::newINb (INb * nb)
 {

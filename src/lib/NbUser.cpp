@@ -30,11 +30,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-/**
- * \brief Constructeur d'une classe NbUser.
- * \param valeur (in) La valeur initiale.
- * \param unit (in) L'unité du nombre.
- */
 NbUser::NbUser (double valeur,
                 EUnite unit) :
   val (valeur),
@@ -42,35 +37,37 @@ NbUser::NbUser (double valeur,
 {
 }
 
-/**
- * \brief Libère une classe NbUser.
- */
+NbUser::NbUser (const NbUser & other) :
+  val (other.val),
+  unite (other.unite)
+{
+}
+
+NbUser &
+NbUser::operator = (const NbUser & other)
+{
+  this->val = other.val;
+  this->unite = other.unite;
+
+  return *this;
+}
+
 NbUser::~NbUser ()
 {
 }
 
-/**
- * \brief Renvoie la valeur du nombre.
- */
 double
 NbUser::getVal () const
 {
   return val;
 }
 
-/**
- * \brief Renvoie l'unité du nombre.
- */
 EUnite
 NbUser::getUnite () const
 {
   return unite;
 }
 
-/**
- * \brief Renvoie le nombre sous forme de texte sans respecter le nombre de
- *        décimales..
- */
 std::string
 NbUser::toString () const
 {
@@ -109,7 +106,7 @@ NbUser::toString () const
   return format ("%.*lf", width, val);
 }
 
-bool CHK
+bool
 NbUser::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (

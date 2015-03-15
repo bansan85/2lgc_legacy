@@ -29,14 +29,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-/**
- * \brief Constructeur d'une classe CAction. Par défaut, les coefficients psi
- *        sont défini à NAN. Les valeurs sont automatiquement déterminés lors
- *        de l'insertion dans le projet en fonction de la norme du projet.
- * \param nom_ (in) Le nom de l'action.
- * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
- * \param undo_ (in) Le gestionnaire des modifications.
- */
 CAction::CAction (std::string  * nom_,
                   uint8_t        type_,
                   UndoManager &  undo_) :
@@ -57,18 +49,11 @@ CAction::CAction (std::string  * nom_,
 {
 }
 
-/**
- * \brief Libère une classe CAction.
- */
 CAction::~CAction ()
 {
 }
 
-/**
- * \brief Converti la fonction d'ajout d'une action sous format XML..
- * \param root Le noeud dans lequel doit être inséré l'action.
- */
-bool CHK
+bool
 CAction::addXML (std::string *nom_,
                  uint8_t      type_,
                  xmlNodePtr   root)
@@ -107,24 +92,13 @@ CAction::addXML (std::string *nom_,
   return true;
 }
 
-/**
- * \brief Renvoie le type de l'action.
- */
 uint8_t
 CAction::getType () const
 {
   return type;
 }
 
-/**
- * \brief Converti la fonction de modification du psi d'une action sous format
- *        XML.
- * \param nom_ Le nom de l'action.
- * \param psi Le coefficient psi à changer (0, 1 ou 2).
- * \param psin Le coefficient psi à convertir.
- * \param root Le noeud dans lequel doit être inséré la branche.
- */
-bool CHK
+bool
 CAction::setpsiXML (std::string * const nom_,
                     uint8_t             psi,
                     INb                *psin,
@@ -180,21 +154,13 @@ CAction::setpsiXML (std::string * const nom_,
   return true;
 }
 
-/**
- * \brief Renvoie le cœfficient psi0.
- */
 INb const &
 CAction::getpsi0 () const
 {
   return *psi0;
 }
 
-/**
- * \brief Défini le cœfficient psi0.
- * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
- *        l'action.
- */
-bool CHK
+bool
 CAction::setpsi0 (INb * val)
 {
   if (val != NULL)
@@ -231,21 +197,13 @@ CAction::setpsi0 (INb * val)
   return true;
 }
 
-/**
- * \brief Renvoie le cœfficient psi1.
- */
 INb const &
 CAction::getpsi1 () const
 {
   return *psi1;
 }
 
-/**
- * \brief Défini le cœfficient psi1.
- * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
- *        l'action.
- */
-bool CHK
+bool
 CAction::setpsi1 (INb * val)
 {
   if (val != NULL)
@@ -282,21 +240,13 @@ CAction::setpsi1 (INb * val)
   return true;
 }
 
-/**
- * \brief Renvoie le cœfficient psi2.
- */
 INb const &
 CAction::getpsi2 () const
 {
   return *psi2;
 }
 
-/**
- * \brief Défini le cœfficient psi2.
- * \param val Le nouveau cœfficient. val vaut NULL lors de la création de
- *        l'action.
- */
-bool CHK
+bool
 CAction::setpsi2 (INb * val)
 {
   if (val != NULL)
@@ -334,34 +284,19 @@ CAction::setpsi2 (INb * val)
   return true;
 }
 
-/**
- * \brief Renvoie true si aucune charge n'est présente.
- */
 bool
 CAction::emptyCharges () const
 {
   return charges.empty ();
 }
 
-/**
- * \brief Renvoie le type de l'action sous forme de texte.
- */
 std::string const
 CAction::getDescription (uint8_t type_) const
 {
   return parametres->getpsiDescription (type_);
 }
 
-/**
- * \brief Défini la norme que doit utiliser l'action. Ne nécessite pas de
- *        fonction XML puisqu'elle ne doit être appelée que depuis la fonction
- *        CProjet::setParametres.
- * \param param Le type IParametres.
- * \param psi0_ Le coefficient psi0.
- * \param psi1_ Le coefficient psi1.
- * \param psi2_ Le coefficient psi2.
- */
-bool CHK
+bool
 CAction::setParam (IParametres * param,
                    INb         * psi0_,
                    INb         * psi1_,
@@ -420,13 +355,7 @@ CAction::setParam (IParametres * param,
   return true;
 }
 
-/**
- * \brief Converti la fonction setParam en format XML.
- * \param action Le nom de l'action.
- * \param param Le nom des paramètres.
- * \param root Le noeud dans lequel doit être inséré la branche.
- */
-bool CHK
+bool
 CAction::setParamXML (std::string * action,
                       std::string * param,
                       INb         * psi0_,

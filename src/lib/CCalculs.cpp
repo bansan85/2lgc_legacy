@@ -23,9 +23,6 @@
 
 #include "CCalculs.hpp"
 
-/**
- * \brief Initialise les variables de calcul globales et les résultats.
- */
 CCalculs::CCalculs () :
   c (new cholmod_common),
   n_part ({{{}, {}, {}, {}, {}, {}}}),
@@ -48,9 +45,6 @@ CCalculs::CCalculs () :
   cholmod_start (c);
 }
 
-/**
- * \brief Libère les résultats.
- */
 CCalculs::~CCalculs ()
 {
   cholmod_free_triplet (&t_part, c);

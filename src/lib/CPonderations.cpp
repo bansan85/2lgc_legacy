@@ -22,15 +22,6 @@
 
 #include "CPonderations.hpp"
 
-/**
- * \brief Constructeur d'une classe CPonderations.
- * \param eluequ (in) ELU_EQU : méthode 1 si 0, méthode 2 si 1.
- * \param elugeostr (in) ELU_GEO/STR : si 0 approche 1, 1 : approche 2 et
- *                       2 : approche 3.
- * \param eluacc (in) ELU_ACC : 0 si psi1,1 et 1 si psi2,1.
- * \param form6_10 (in) Si 0, utilisation des formules 6.10a et b.
- *                       Si 1 alors formule 6.10.
- */
 CPonderations::CPonderations (uint8_t eluequ,
                               uint8_t elugeostr,
                               uint8_t eluacc,
@@ -51,9 +42,6 @@ CPonderations::CPonderations (uint8_t eluequ,
 {
 }
 
-/**
- * \brief Destructeur d'une classe CPonderations.
- */
 CPonderations::~CPonderations ()
 {
 }

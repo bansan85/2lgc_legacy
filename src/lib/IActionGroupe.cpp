@@ -20,11 +20,6 @@
 
 #include "IActionGroupe.hpp"
 
-/**
- * \brief Constructeur d'une interface IActionGroupe.
- * \param nom_ (in) Le nom de l'action / groupe.
- * \param undo_ (in) Le gestionnaire des modifications.
- */
 IActionGroupe::IActionGroupe (std::string * nom_,
                               UndoManager & undo_) :
   IUndoable (undo_)
@@ -32,16 +27,10 @@ IActionGroupe::IActionGroupe (std::string * nom_,
 {
 }
 
-/**
- * \brief Destructeur d'une classe IActionGroupe.
- */
 IActionGroupe::~IActionGroupe ()
 {
 }
 
-/**
- * \brief Renvoie le nom.
- */
 std::string *
 IActionGroupe::getNom () const
 {

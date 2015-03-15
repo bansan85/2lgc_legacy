@@ -26,9 +26,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-/**
- * \brief Initialise le modèle de calcul.
- */
 CModele::CModele () :
   appuis (),
   noeuds (),
@@ -41,20 +38,12 @@ CModele::CModele () :
 {
 }
 
-/**
- * \brief Libère le modèle de calcul.
- */
 CModele::~CModele ()
 {
   // Ce n'est pas modèle qui libère la mémoire, c'est le gestionnaire
   // d'annulation.
 }
 
-/**
- * \brief Ajout d'une action. La fonction XML est CAction::addXML.
- * \param action (in) L'action à ajouter.
- * \return false en cas de problème.
- */
 bool
 CModele::addAction (CAction * action)
 {
@@ -135,10 +124,6 @@ CModele::addAction (CAction * action)
   return true;
 }
 
-/**
- * \brief Recherche une action.
- * \param nom (in) Le nom de l'action.
- */
 CAction *
 CModele::getAction (std::string nom)
 {
@@ -153,20 +138,12 @@ CModele::getAction (std::string nom)
   return NULL;
 }
 
-/**
- * \brief Renvoie le nombre d'actions.
- */
 size_t
 CModele::getActionCount () const
 {
   return actions.size ();
 }
 
-/**
- * \brief Supprime d'une action.
- * \param action (in) L'action à supprimer.
- * \return false en cas de problème.
- */
 bool
 CModele::rmAction (CAction * action)
 {

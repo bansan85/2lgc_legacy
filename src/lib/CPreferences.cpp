@@ -22,9 +22,6 @@
 
 #include "CPreferences.hpp"
 
-/**
- * \brief Constructeur d'une classe CPreferences.
- */
 CPreferences::CPreferences () :
   decimales
   ({{
@@ -37,16 +34,10 @@ CPreferences::CPreferences () :
 {
 }
 
-/**
- * \brief Destructeur d'une classe CPreferences.
- */
 CPreferences::~CPreferences ()
 {
 }
 
-/**
- * \brief Renvoie la liste des décimales applicables aux unités.
- */
 std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> &
 CPreferences::getDecimales () const
 {

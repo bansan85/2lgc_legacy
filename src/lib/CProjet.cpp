@@ -27,10 +27,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-/**
- * \brief Constructeur d'une classe CProjet.
- * \param norme (in) La norme du projet.
- */
 CProjet::CProjet (ENorme norme) :
   CPreferences (),
   CCalculs (),
@@ -139,9 +135,6 @@ CProjet::CProjet (ENorme norme) :
 #endif
 }
 
-/**
- * \brief Libère une classe CProjet avec tout le contenu.
- */
 CProjet::~CProjet ()
 {
   xmlCleanupParser();
@@ -175,20 +168,13 @@ CProjet::~CProjet ()
 #endif
 }
 
-/**
- * \brief Renvoie les paramètres du projet.
- */
 IParametres *
 CProjet::getParametres ()
 {
   return parametres;
 }
 
-/**
- * \brief Défini les paramètres de calculs du projet.
- * \param param Les nouveaux paramètres.
- */
-bool CHK
+bool
 CProjet::setParametres (IParametres * param)
 {
   BUGCONT (ref (), false, this)
@@ -220,15 +206,7 @@ CProjet::setParametres (IParametres * param)
   return true;
 }
 
-/**
- * \brief Converti la fonction définissant la norme que doit utiliser le projet
- *        sous format XML.
- * \param param Le paramètre à utiliser.
- * \param nom Le nom des paramètres de calculs.
- * \param root Le noeud dans lequel doit être inséré la méthode sous format
- *             XML.
- */
-bool CHK
+bool
 CProjet::setParametresXML (IParametres *param,
                            std::string *nom,
                            uint32_t     variante,
@@ -280,10 +258,6 @@ CProjet::setParametresXML (IParametres *param,
   return true;
 }
 
-/**
- * \brief Enregistre le projet.
- * \param fichier (in) Le nom du fichier.
- */
 bool
 CProjet::enregistre (std::string fichier)
 {
@@ -316,11 +290,6 @@ CProjet::enregistre (std::string fichier)
   return true;
 }
 
-/**
- * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la
- *        licence GPL).
- * \return Rien.
- */
 void
 CProjet::showWarranty ()
 {
@@ -359,11 +328,6 @@ CProjet::showWarranty ()
   return;
 }
 
-/**
- * \brief Affiche l'aide lorsque l'utilisateur lance le programme avec l'option
- *        -h.
- * \return Rien.
- */
 void
 CProjet::showHelp ()
 {

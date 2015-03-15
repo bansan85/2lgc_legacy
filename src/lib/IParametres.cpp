@@ -20,18 +20,11 @@
 
 #include "IParametres.hpp"
 
-/**
- * \brief Constructeur d'une classe IParametres.
- * \param undo_ Le gestionnaire des modifications.
- */
 IParametres::IParametres (UndoManager & undo_) :
   IUndoable (undo_)
 {
 }
 
-/**
- * \brief Destructeur d'une classe IParametres.
- */
 IParametres::~IParametres ()
 {
 }

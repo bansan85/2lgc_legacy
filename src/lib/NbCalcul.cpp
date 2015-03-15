@@ -29,14 +29,9 @@
 #include "MErreurs.hpp"
 #include "EUniteTxt.hpp"
 
-/**
- * \brief Constructeur d'une classe NbCalcul.
- * \param valeur (in) La valeur initiale.
- * \param unit (in) L'unité du nombre.
- */
 NbCalcul::NbCalcul (
-  double                                                        valeur,
-  EUnite                                                        unit,
+  double                                                      valeur,
+  EUnite                                                      unit,
   std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales_) :
   val (valeur),
   unite (unit),
@@ -44,10 +39,6 @@ NbCalcul::NbCalcul (
 {
 }
 
-/**
- * \brief Constructeur d'une classe NbCalcul.
- * \param nb Le nombre à copier.
- */
 NbCalcul::NbCalcul (const NbCalcul & nb) :
   val (nb.val),
   unite (nb.unite),
@@ -55,35 +46,32 @@ NbCalcul::NbCalcul (const NbCalcul & nb) :
 {
 }
 
-/**
- * \brief Libère une classe NbCalcul.
- */
+NbCalcul &
+NbCalcul::operator = (const NbCalcul & other)
+{
+  this->val = other.val;
+  this->unite = other.unite;
+  this->decimales = other.decimales;
+
+  return *this;
+}
+
 NbCalcul::~NbCalcul ()
 {
 }
 
-/**
- * \brief Renvoie la valeur du nombre.
- */
 double
 NbCalcul::getVal () const
 {
   return val;
 }
 
-/**
- * \brief Renvoie l'unité du nombre.
- */
 EUnite
 NbCalcul::getUnite () const
 {
   return unite;
 }
 
-/**
- * \brief Renvoie le nombre sous forme de texte en respectant le nombre de
- *        décimales..
- */
 std::string
 NbCalcul::toString () const
 {

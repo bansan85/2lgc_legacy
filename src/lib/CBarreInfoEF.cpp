@@ -23,9 +23,6 @@
 
 #include "CBarreInfoEF.hpp"
 
-/**
- * \brief Constructeur d'une classe CBarreInfoEF.
- */
 CBarreInfoEF::CBarreInfoEF () :
   m_rig_loc (nullptr),
   m_rot (nullptr),
@@ -45,9 +42,6 @@ CBarreInfoEF::CBarreInfoEF () :
 {
 }
 
-/**
- * \brief Destructeur d'une classe CBarreInfoEF.
- */
 CBarreInfoEF::~CBarreInfoEF ()
 {
 }
