@@ -37,7 +37,7 @@
 NbCalcul::NbCalcul (
   double                                                        valeur,
   EUnite                                                        unit,
-  std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> & decimales_) :
+  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales_) :
   val (valeur),
   unite (unit),
   decimales (decimales_)

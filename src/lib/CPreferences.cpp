@@ -47,11 +47,11 @@ CPreferences::~CPreferences ()
 /**
  * \brief Renvoie la liste des décimales applicables aux unités.
  */
-std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> &
+std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> &
 CPreferences::getDecimales () const
 {
   return const_cast <std::array <uint8_t,
-                         static_cast <size_t> (EUnite::U_LAST)> &> (decimales);
+                           static_cast <size_t> (EUnite::LAST)> &> (decimales);
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

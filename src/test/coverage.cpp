@@ -66,7 +66,7 @@ main (int32_t argc,
       char   *argv[])
 {
   /* Variables */
-  CProjet projet (ENorme::NORME_EC);
+  CProjet projet (ENorme::EUROCODE);
 //  GList   *tmp1, *tmp2;
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -97,7 +97,7 @@ main (int32_t argc,
     action.release ();
   }
   
-  BUGCONT (projet.getEtat () == EUndoEtat::UNDO_MODIF, -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getEtat () == EUndoEtat::MODIF, -1, static_cast <UndoManager *> (nullptr))
   BUGCONT (projet.unref (), -1, static_cast <UndoManager *> (nullptr))
   
   BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))
@@ -144,7 +144,7 @@ main (int32_t argc,
   BUGCONT (projet.redo (), -1, static_cast <UndoManager *> (nullptr))
   BUGCONT (projet.redo (), -1, static_cast <UndoManager *> (nullptr))
   BUGCONT (projet.getActionCount () == 22, -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getEtat () == EUndoEtat::UNDO_NONE_OR_REVERT, -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getEtat () == EUndoEtat::NONE_OR_REVERT, -1, static_cast <UndoManager *> (nullptr))
   
   BUGCONT (projet.undo (), -1, static_cast <UndoManager *> (nullptr))
   BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))

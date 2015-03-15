@@ -1981,7 +1981,7 @@ Libère l'historique du projet.#</dia:string>
       <dia:attribute name="attributes">
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#UNDO_NONE_OR_REVERT#</dia:string>
+            <dia:string>#NONE_OR_REVERT#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>##</dia:string>
@@ -2004,7 +2004,7 @@ Libère l'historique du projet.#</dia:string>
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#UNDO_MODIF#</dia:string>
+            <dia:string>#MODIF#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>##</dia:string>

@@ -204,11 +204,11 @@ UndoManager::getEtat () const
 {
   if ((insertion) && (count != 0))
   {
-    return EUndoEtat::UNDO_MODIF;
+    return EUndoEtat::MODIF;
   }
   else
   {
-    return EUndoEtat::UNDO_NONE_OR_REVERT;
+    return EUndoEtat::NONE_OR_REVERT;
   }
 }
 

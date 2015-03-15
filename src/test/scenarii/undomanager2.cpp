@@ -36,7 +36,7 @@ int
 main (int32_t argc,
       char   *argv[])
 {
-  CProjet projet (ENorme::NORME_EC);
+  CProjet projet (ENorme::EUROCODE);
   std::unique_ptr <CAction> action;
   
   // On charge la localisation

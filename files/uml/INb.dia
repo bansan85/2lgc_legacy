@@ -1003,17 +1003,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O9">
       <dia:attribute name="obj_pos">
-        <dia:point val="-52.6975,-76"/>
+        <dia:point val="-53.0825,-76"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-52.7475,-87.7112;-45.119,-75.95"/>
+        <dia:rectangle val="-53.1325,-87.7112;-45.119,-75.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-52.6975,-76"/>
-        <dia:point val="-52.6975,-81.4306"/>
+        <dia:point val="-53.0825,-76"/>
+        <dia:point val="-53.0825,-81.4306"/>
         <dia:point val="-45.569,-81.4306"/>
         <dia:point val="-45.569,-87.2612"/>
       </dia:attribute>
@@ -1050,13 +1050,13 @@
         <dia:point val="-67,-76"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-67.05,-76.05;-38.345,-46.15"/>
+        <dia:rectangle val="-67.05,-76.05;-39.115,-46.15"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-67,-76"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="28.605"/>
+        <dia:real val="27.835000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="29.800000000000004"/>
@@ -1200,7 +1200,7 @@
             <dia:string>#decimales#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::array &lt;uint8_t, static_cast &lt;size_t&gt; (EUnite::U_LAST)&gt; &amp;#</dia:string>
+            <dia:string>#std::array &lt;uint8_t, static_cast &lt;size_t&gt; (EUnite::LAST)&gt; &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -1288,7 +1288,7 @@
                 <dia:string>#decimales_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::array &lt;uint8_t, static_cast &lt;size_t&gt; (EUnite::U_LAST)&gt; &amp;#</dia:string>
+                <dia:string>#std::array &lt;uint8_t, static_cast &lt;size_t&gt; (EUnite::LAST)&gt; &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2112,7 +2112,7 @@
         <dia:point val="-42.4725,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-52.7475,-46.25;-41.6225,-30.95"/>
+        <dia:rectangle val="-53.1325,-46.25;-41.6225,-30.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -2120,8 +2120,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="-42.4725,-31"/>
         <dia:point val="-42.4725,-43"/>
-        <dia:point val="-52.6975,-43"/>
-        <dia:point val="-52.6975,-46.2"/>
+        <dia:point val="-53.0825,-43"/>
+        <dia:point val="-53.0825,-46.2"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

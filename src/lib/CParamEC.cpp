@@ -220,11 +220,11 @@ CParamEC::getpsiN () const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       return 17;
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       return 22;
     }
@@ -249,69 +249,69 @@ CParamEC::getpsiAction (uint8_t type) const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       if (type == 0)
       {
-        return EAction::ACTION_POIDS_PROPRE;
+        return EAction::POIDS_PROPRE;
       }
       else if (type == 1)
       {
-        return EAction::ACTION_PRECONTRAINTE;
+        return EAction::PRECONTRAINTE;
       }
       else if ((2 <= type) && (type <= 14))
       {
-        return EAction::ACTION_VARIABLE;
+        return EAction::VARIABLE;
       }
       else if (type == 15)
       {
-        return EAction::ACTION_ACCIDENTELLE;
+        return EAction::ACCIDENTELLE;
       }
       else if (type == 16)
       {
-        return EAction::ACTION_SISMIQUE;
+        return EAction::SISMIQUE;
       }
       else
       {
         BUGPARAM (type,
                   "%u",
                   static_cast <UndoManager *> (nullptr),
-                  EAction::ACTION_INCONNUE,
+                  EAction::INCONNUE,
                   &getUndoManager ())
       }
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       if (type == 0) 
       {
-        return EAction::ACTION_POIDS_PROPRE;
+        return EAction::POIDS_PROPRE;
       }
       else if (type == 1) 
       {
-        return EAction::ACTION_PRECONTRAINTE;
+        return EAction::PRECONTRAINTE;
       }
       else if ((2 <= type) && (type <= 18))
       {
-        return EAction::ACTION_VARIABLE;
+        return EAction::VARIABLE;
       }
       else if (type == 19)
       {
-        return EAction::ACTION_ACCIDENTELLE;
+        return EAction::ACCIDENTELLE;
       }
       else if (type == 20)
       {
-        return EAction::ACTION_SISMIQUE;
+        return EAction::SISMIQUE;
       }
       else if (type == 21)
       {
-        return EAction::ACTION_EAUX_SOUTERRAINES;
+        return EAction::EAU_SOUTERRAINE;
       }
       else
       {
         BUGPARAM (type,
                   "%u",
                   static_cast <UndoManager *> (nullptr),
-                  EAction::ACTION_INCONNUE,
+                  EAction::INCONNUE,
                   &getUndoManager ())
       }
     }
@@ -320,7 +320,7 @@ CParamEC::getpsiAction (uint8_t type) const
       BUGPARAM (static_cast <size_t> (annexe),
                 "%zu",
                 static_cast <UndoManager *> (nullptr),
-                EAction::ACTION_INCONNUE,
+                EAction::INCONNUE,
                 &getUndoManager ())
       break;
     }
@@ -336,7 +336,7 @@ CParamEC::getpsiDescription (uint8_t type) const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       switch (type)
       {
@@ -368,7 +368,7 @@ CParamEC::getpsiDescription (uint8_t type) const
         }
       }
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       switch (type)
       {
@@ -426,7 +426,7 @@ CParamEC::getpsi0 (uint8_t type) const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       switch (type)
       {
@@ -458,7 +458,7 @@ CParamEC::getpsi0 (uint8_t type) const
         }
       }
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       switch (type)
       {
@@ -516,7 +516,7 @@ CParamEC::getpsi1 (uint8_t type) const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       switch (type)
       {
@@ -548,7 +548,7 @@ CParamEC::getpsi1 (uint8_t type) const
         }
       }
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       switch (type)
       {
@@ -606,7 +606,7 @@ CParamEC::getpsi2 (uint8_t type) const
 {
   switch (annexe)
   {
-    case ENormeEcAc::NORMEEUAC_EU :
+    case ENormeEcAc::EU :
     {
       switch (type)
       {
@@ -638,7 +638,7 @@ CParamEC::getpsi2 (uint8_t type) const
         }
       }
     }
-    case ENormeEcAc::NORMEEUAC_FR :
+    case ENormeEcAc::FR :
     {
       switch (type)
       {

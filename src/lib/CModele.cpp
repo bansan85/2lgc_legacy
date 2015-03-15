@@ -114,10 +114,10 @@ CModele::addAction (CAction * action)
   
   IParametres *param = static_cast <CProjet *> (this)->getParametres ();
   uint8_t type = action->getType ();
-  std::array <uint8_t, static_cast <size_t> (EUnite::U_LAST)> decimales =
+  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> decimales =
                               dynamic_cast <CProjet *> (this)->getDecimales ();
   
-  if (action->getUndoManager ().getEtat () != EUndoEtat::UNDO_NONE_OR_REVERT)
+  if (action->getUndoManager ().getEtat () != EUndoEtat::NONE_OR_REVERT)
   {
     BUGCONT (action->setParam (
                param,

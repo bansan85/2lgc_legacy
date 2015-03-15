@@ -42,11 +42,11 @@ CProjet::CProjet (ENorme norme) :
   
   switch (norme)
   {
-    case ENorme::NORME_EC :
+    case ENorme::EUROCODE :
     {
       std::unique_ptr <CParamEC> param
         (new CParamEC (new std::string ("Eurocode, annexe nationale"),
-         ENormeEcAc::NORMEEUAC_FR,
+         ENormeEcAc::FR,
          0,
          *this));
       

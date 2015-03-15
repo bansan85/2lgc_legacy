@@ -64,7 +64,7 @@ main (int32_t argc,
       char   *argv[])
 {
   /* Variables */
-  CProjet projet (ENorme::NORME_EC);
+  CProjet projet (ENorme::EUROCODE);
   std::unique_ptr <CAction> action;
 //  GList   *tmp1, *tmp2;
   
