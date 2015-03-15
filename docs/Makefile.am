@@ -7,7 +7,8 @@ doxyfile.stamp:
 CLEANFILES = doxyfile.stamp
 
 all-local: doxyfile.stamp
+
 clean-local:
-	rm -Rf html latex
+	rm -Rf html latex man
 
 endif 
