@@ -1,6 +1,6 @@
 DEFAULT_INCLUDES		=		-I$(srcdir) \
-															-I$(srcdir)/../.. \
-															-I$(srcdir)/../macro
+												-I$(srcdir)/../.. \
+												-I$(srcdir)/../macro
 
 AUTOMAKE_OPTIONS		= 	subdir-objects
 
@@ -17,11 +17,6 @@ libundo_la_LIBADD   +=  -lintl
 endif
 if PLATFORM_WIN64
 libundo_la_LIBADD   +=  -lintl
-endif
-
-if ENABLE_GTK
-libundo_la_CXXFLAGS	=		@GTKMM_CFLAGS@
-libundo_la_LIBADD		+=	@GTKMM_LIBS@
 endif
 
 libundo_la_LDFLAGS	= 	$(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
@@ -45,7 +40,4 @@ CLEANFILES = *.gcno *.gcda *.hpp
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libundo_la_SOURCES) &> ../../cppcheck-undo.log
-if ENABLE_GTK
-	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libundo_gtk_la_SOURCES) &>> ../../cppcheck-undo-gtk.log
-endif
 	@sed 's/^.*scanf without field.*$$//g' -i ../../cppcheck-undo.log

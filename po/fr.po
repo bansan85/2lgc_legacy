@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-03-08 22:50+0100\n"
+"POT-Creation-Date: 2015-03-15 13:38+0100\n"
 "PO-Revision-Date: 2014-09-14 13:59+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -12,13 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
-
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
-
-#, c-format
-msgid "Problème depuis la librairie : %s\n"
-msgstr "Problème depuis la librairie : %s\n"
 
 msgid "Le programme est à ses limites.\n"
 msgstr "Le programme est à ses limites.\n"
@@ -68,6 +61,13 @@ msgstr "Impossible de créer ce projet. La norme est inconnue.\n"
 #, c-format
 msgid "Paramètres du projet (%s)"
 msgstr ""
+
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
+
+#, c-format
+msgid "Problème depuis la librairie : %s\n"
+msgstr "Problème depuis la librairie : %s\n"
 
 msgid "Le type de la norme est inconnu.\n"
 msgstr "Le type de la norme est inconnu.\n"

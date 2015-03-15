@@ -68,7 +68,7 @@
         <dia:point val="28,-4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.95,-4.05;42.795,9.65"/>
+        <dia:rectangle val="27.95,-4.05;42.795,5.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="28,-4"/>
@@ -77,7 +77,7 @@
         <dia:real val="14.744999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="13.599999999999998"/>
+        <dia:real val="9.8999999999999986"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#ISection#</dia:string>
@@ -179,52 +179,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Nom du matériau.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#La ligne du treeview dans la fenêtre Action.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_liste)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#La liste des sections pour la fenêtre Barre.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -4183,18 +4137,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="35.3725,9.6"/>
+        <dia:point val="35.3725,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-13.5975,9.55;36.2225,22.05"/>
+        <dia:rectangle val="-13.5975,5.85;36.2225,22.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="35.3725,9.6"/>
-        <dia:point val="35.3725,16.2"/>
-        <dia:point val="-13.5475,16.2"/>
+        <dia:point val="35.3725,5.9"/>
+        <dia:point val="35.3725,14.35"/>
+        <dia:point val="-13.5475,14.35"/>
         <dia:point val="-13.5475,22"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -4224,18 +4178,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O11">
       <dia:attribute name="obj_pos">
-        <dia:point val="35.3725,9.6"/>
+        <dia:point val="35.3725,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.3275,9.55;36.2225,22.05"/>
+        <dia:rectangle val="10.3275,5.85;36.2225,22.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="35.3725,9.6"/>
-        <dia:point val="35.3725,16.2"/>
-        <dia:point val="10.3775,16.2"/>
+        <dia:point val="35.3725,5.9"/>
+        <dia:point val="35.3725,14.35"/>
+        <dia:point val="10.3775,14.35"/>
         <dia:point val="10.3775,22"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -4265,18 +4219,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O12">
       <dia:attribute name="obj_pos">
-        <dia:point val="35.3725,9.6"/>
+        <dia:point val="35.3725,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="34.5225,9.55;87.005,22.05"/>
+        <dia:rectangle val="34.5225,5.85;87.005,22.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="35.3725,9.6"/>
-        <dia:point val="35.3725,16.2"/>
-        <dia:point val="86.955,16.2"/>
+        <dia:point val="35.3725,5.9"/>
+        <dia:point val="35.3725,14.35"/>
+        <dia:point val="86.955,14.35"/>
         <dia:point val="86.955,22"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -4306,18 +4260,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O13">
       <dia:attribute name="obj_pos">
-        <dia:point val="35.3725,9.6"/>
+        <dia:point val="35.3725,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="34.5225,9.55;60.6575,22.05"/>
+        <dia:rectangle val="34.5225,5.85;60.6575,22.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="35.3725,9.6"/>
-        <dia:point val="35.3725,16.2"/>
-        <dia:point val="60.6075,16.2"/>
+        <dia:point val="35.3725,5.9"/>
+        <dia:point val="35.3725,14.35"/>
+        <dia:point val="60.6075,14.35"/>
         <dia:point val="60.6075,22"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -4347,18 +4301,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O14">
       <dia:attribute name="obj_pos">
-        <dia:point val="35.3725,9.6"/>
+        <dia:point val="35.3725,5.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="34.5225,9.55;36.2225,22.05"/>
+        <dia:rectangle val="34.5225,5.85;36.2225,22.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="35.3725,9.6"/>
-        <dia:point val="35.3725,16.2"/>
-        <dia:point val="35.6075,16.2"/>
+        <dia:point val="35.3725,5.9"/>
+        <dia:point val="35.3725,14.35"/>
+        <dia:point val="35.6075,14.35"/>
         <dia:point val="35.6075,22"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

@@ -1103,7 +1103,7 @@
         <dia:point val="-1,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-1.05,-31.05;21.88,23.9"/>
+        <dia:rectangle val="-1.05,-31.05;21.88,20.2"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-1,-31"/>
@@ -1112,7 +1112,7 @@
         <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="54.850000000000009"/>
+        <dia:real val="51.150000000000006"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CAppui#</dia:string>
@@ -1352,52 +1352,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Degré de liberté en rotation autour de l'axe z.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Affichage graphique dans le treeview de la fenêtre Appui.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_liste)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Pour la liste du menu déroulant du treeview de la fenêtre Barre.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -2984,7 +2938,7 @@
         <dia:point val="81,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="80.95,-31.05;103.88,27.1"/>
+        <dia:rectangle val="80.95,-31.05;103.88,23.4"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="81,-31"/>
@@ -2993,7 +2947,7 @@
         <dia:real val="22.830000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="58.049999999999997"/>
+        <dia:real val="54.349999999999994"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CRelachement#</dia:string>
@@ -3233,52 +3187,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Degré de liberté en rotation autour de l'axe z en fin de la barre.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Affichage graphique dans le treeview de la fenêtre Relâchement.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_liste)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Pour la liste du menu déroulant du treeview de la fenêtre Barre.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -4142,7 +4050,7 @@
         <dia:point val="118,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="117.95,-31.05;140.11,30.6"/>
+        <dia:rectangle val="117.95,-31.05;140.11,28.75"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="118,-31"/>
@@ -4151,7 +4059,7 @@
         <dia:real val="22.059999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="61.549999999999997"/>
+        <dia:real val="59.699999999999996"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CBarre#</dia:string>
@@ -4414,29 +4322,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Nœuds intermédiaires le long de la barre. Lorsque des nœuds intermédiaires sont ajoutés, ils le sont dans p-&gt;modele.noeuds. La liste de nœuds nds_inter contient uniquement un pointeur vers chaque nœud de la liste principale.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#L'affichage graphique dans la fenêtre Barre.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -5318,7 +5203,7 @@
         <dia:point val="186,-171"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="185.95,-171.05;206.032,-143.95"/>
+        <dia:rectangle val="185.95,-171.05;206.032,-145.8"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="186,-171"/>
@@ -5327,7 +5212,7 @@
         <dia:real val="19.982499999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="27.000000000000004"/>
+        <dia:real val="25.150000000000006"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CAnalyseComm#</dia:string>
@@ -5475,29 +5360,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Commentaire de l'analyse en cas d'erreur ou d'avertissement.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#La ligne du treeview dans la fenêtre Résultat.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -7333,7 +7195,7 @@
         <dia:point val="150,-6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="149.95,-6.05;177.885,14.15"/>
+        <dia:rectangle val="149.95,-6.05;177.885,12.3"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="150,-6"/>
@@ -7342,7 +7204,7 @@
         <dia:real val="27.835000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="20.100000000000001"/>
+        <dia:real val="18.25"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IActionGroupe#</dia:string>
@@ -7444,29 +7306,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Nom du groupe ou de l'action.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre_gr)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#L'affichage graphique dans la fenêtre Groupes.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -7760,7 +7599,7 @@
         <dia:point val="185,-41"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="184.95,-41.05;208.265,37"/>
+        <dia:rectangle val="184.95,-41.05;208.265,33.3"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="185,-41"/>
@@ -7769,7 +7608,7 @@
         <dia:real val="23.215"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="77.949999999999989"/>
+        <dia:real val="74.249999999999986"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CAction#</dia:string>
@@ -8147,52 +7986,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Les 3 rotations rx, ry, rz pour chaque barre dans le repère local.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_fenetre_ac)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Iter utilisé par le treeview dans la fenêtre Action.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#Iter_liste)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkTreeIter#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Iter utilisé par les menus des fenêtres Charges.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -11226,7 +11019,7 @@
         <dia:point val="222,-160"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="221.95,-160.05;243.34,-109.8"/>
+        <dia:rectangle val="221.95,-160.05;243.34,-110.6"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="222,-160"/>
@@ -11235,7 +11028,7 @@
         <dia:real val="21.289999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="50.15000000000002"/>
+        <dia:real val="49.350000000000023"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CPonderations#</dia:string>
@@ -11613,29 +11406,6 @@
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Liste des pondérations selon l'ELS PERM.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#list_el_desc)#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#EGTK (GtkListStore *#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -15979,7 +15749,7 @@
         <dia:point val="182.395,-100.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="182.345,-130.7;222.45,-100.55"/>
+        <dia:rectangle val="182.345,-131.5;222.45,-100.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -15987,8 +15757,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="182.395,-100.6"/>
         <dia:point val="220,-100.6"/>
-        <dia:point val="220,-130.25"/>
-        <dia:point val="222,-130.25"/>
+        <dia:point val="220,-131.05"/>
+        <dia:point val="222,-131.05"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -16015,7 +15785,7 @@
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O21" connection="41"/>
-        <dia:connection handle="1" to="O18" connection="36"/>
+        <dia:connection handle="1" to="O18" connection="34"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O25">
@@ -16642,16 +16412,16 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O34">
       <dia:attribute name="obj_pos">
-        <dia:point val="10.415,23.85"/>
+        <dia:point val="10.415,20.15"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.365,23.8;53.9599,31.4138"/>
+        <dia:rectangle val="10.365,20.1;53.9599,31.4138"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="10.415,23.85"/>
+        <dia:point val="10.415,20.15"/>
         <dia:point val="10.415,30.5638"/>
         <dia:point val="53.5099,30.5638"/>
       </dia:attribute>
@@ -16684,16 +16454,16 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O35">
       <dia:attribute name="obj_pos">
-        <dia:point val="92.415,27.05"/>
+        <dia:point val="92.415,23.35"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="63.8674,27;92.465,31.4138"/>
+        <dia:rectangle val="63.8674,23.3;92.465,31.4138"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="92.415,27.05"/>
+        <dia:point val="92.415,23.35"/>
         <dia:point val="92.415,30.5638"/>
         <dia:point val="64.3174,30.5638"/>
       </dia:attribute>
@@ -17221,18 +16991,18 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O44">
       <dia:attribute name="obj_pos">
-        <dia:point val="163.917,14.1"/>
+        <dia:point val="163.917,12.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="163.067,14.05;168.235,19.05"/>
+        <dia:rectangle val="163.067,12.2;168.235,19.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="163.917,14.1"/>
-        <dia:point val="163.917,16.95"/>
-        <dia:point val="168.185,16.95"/>
+        <dia:point val="163.917,12.25"/>
+        <dia:point val="163.917,16.025"/>
+        <dia:point val="168.185,16.025"/>
         <dia:point val="168.185,19"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -17342,7 +17112,7 @@
         <dia:point val="182.395,-104.3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="181.645,-160.85;186.05,-103.45"/>
+        <dia:rectangle val="181.645,-162.7;186.05,-103.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17350,8 +17120,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="182.395,-104.3"/>
         <dia:point val="184.548,-104.3"/>
-        <dia:point val="184.548,-160.1"/>
-        <dia:point val="186,-160.1"/>
+        <dia:point val="184.548,-161.95"/>
+        <dia:point val="186,-161.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -17369,7 +17139,7 @@
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O21" connection="37"/>
-        <dia:connection handle="1" to="O9" connection="16"/>
+        <dia:connection handle="1" to="O9" connection="14"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O47">
@@ -17500,7 +17270,7 @@
         <dia:point val="207.83,47.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="207.765,36.5;210.1,47.75"/>
+        <dia:rectangle val="207.765,32.8;210.1,47.75"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -17508,8 +17278,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="207.83,47.7"/>
         <dia:point val="210,47.7"/>
-        <dia:point val="210,36.95"/>
-        <dia:point val="208.215,36.95"/>
+        <dia:point val="210,33.25"/>
+        <dia:point val="208.215,33.25"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>

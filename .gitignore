@@ -43,7 +43,7 @@ po/POTFILES
 po/POTFILES.in
 po/Rules-quot
 po/stamp-po
-src/*/*.hpp
+src/lib*/*.hpp
 src/gui/codegui/codegui
 src/gui/codegui/codegui-main.o
 src/gui/codegui/test.xml

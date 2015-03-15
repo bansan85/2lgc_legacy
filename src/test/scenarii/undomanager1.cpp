@@ -30,8 +30,8 @@
 #include "MErreurs.hpp"
 
 int
-main (int32_t argc,
-      char   *argv[])
+main (int32_t,
+      char   *[])
 {
   CProjet projet (ENorme::EUROCODE);
   std::unique_ptr <CAction> action;

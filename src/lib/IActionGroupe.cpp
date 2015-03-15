@@ -29,9 +29,6 @@ IActionGroupe::IActionGroupe (std::string * nom_,
                               UndoManager & undo_) :
   IUndoable (undo_)
   , nom (nom_)
-#ifdef ENABLE_GTK
-  , Iter_fenetre_gr (NULL)
-#endif
 {
 }
 

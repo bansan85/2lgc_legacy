@@ -48,14 +48,7 @@ CPonderations::CPonderations (uint8_t eluequ,
   , els_car ()
   , els_freq ()
   , els_perm ()
-#ifdef ENABLE_GTK
-  , list_el_desc (NULL)
-  // TODO
-#endif
 {
-#ifdef ENABLE_GTK
-  std::cout << __func__ ;
-#endif
 }
 
 /**

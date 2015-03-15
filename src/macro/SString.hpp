@@ -16,23 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#ifndef __SSTRING_HPP
+#define __SSTRING_HPP
 
-#include "codegui.hpp"
+#include "config.hpp"
 
-#include <stdint.h>
-#include <libintl.h>
-#include <string.h>
+std::string
+format (const std::string fmt,
+        ...);
 
+#define BAD_CAST2 reinterpret_cast <const xmlChar *>
+#define BAD_TSAC2 reinterpret_cast <const char *>
 
-int
-main (int32_t,
-      char   *[])
-{
-  CProjet::showWarranty ();
-  CProjet::showHelp ();
-  
-  return 0;
-}
+#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
