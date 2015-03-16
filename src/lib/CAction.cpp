@@ -185,9 +185,11 @@ CAction::setpsi0 (INb * val)
                         0,
                         val,
                         std::placeholders::_1),
-             format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
-                     getNom ()->c_str (),
-                     val->getVal ())),
+             val != NULL ?
+               format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
+                       getNom ()->c_str (),
+                       val->getVal ()) :
+               ""),
            false,
            &getUndoManager ())
   psi0 = val;
@@ -228,9 +230,11 @@ CAction::setpsi1 (INb * val)
                         1,
                         val,
                         std::placeholders::_1),
-             format (gettext ("Cœfficient psi1 de l'action “%s” (%lf)"),
-                     getNom ()->c_str (),
-                     val->getVal ())),
+             val != NULL ?
+               format (gettext ("Cœfficient psi1 de l'action “%s” (%lf)"),
+                       getNom ()->c_str (),
+                       val->getVal ()) :
+               ""),
            false,
            &getUndoManager ())
   psi1 = val;
@@ -271,9 +275,11 @@ CAction::setpsi2 (INb * val)
                         2,
                         val,
                         std::placeholders::_1),
-             format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
-                     getNom ()->c_str (),
-                     val->getVal ())),
+             val != NULL ?
+               format (gettext ("Cœfficient psi0 de l'action “%s” (%lf)"),
+                       getNom ()->c_str (),
+                       val->getVal ()) :
+               ""),
            false,
            &getUndoManager ())
   
