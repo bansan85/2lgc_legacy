@@ -32,14 +32,14 @@
  * \param ... : les divers paramètres.
  * \return Le texte formaté en format std::string.
  */
-std::string
+std::string &
 format (const std::string fmt,
         ...)
 {
   size_t      size = 1024;
   bool        b = false;
   va_list     marker;
-  std::string s;
+  static std::string s;
   
   while (!b)
   {

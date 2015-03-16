@@ -1,6 +1,6 @@
 if HAVE_DOXYGEN
 
-doxyfile.stamp:
+doxyfile.stamp: $(wildcard ../src/lib/*.hpp ../src/macro/*.hpp ../src/libundo/*.hpp)
 	$(DOXYGEN) Doxyfile
 	echo Timestamp > doxyfile.stamp
 

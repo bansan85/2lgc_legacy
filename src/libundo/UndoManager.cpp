@@ -50,7 +50,7 @@ UndoManager::push (std::function <bool ()>           annule,
                    std::function <bool ()>           repete,
                    std::function <void ()>           suppr,
                    std::function <bool (xmlNodePtr)> sauve,
-                   const std::string                 description)
+                   const std::string               & description)
 {
   if (!insertion)
   {

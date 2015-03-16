@@ -21,7 +21,7 @@
 
 #include "config.hpp"
 
-std::string
+std::string &
 format (const std::string fmt,
         ...);
 

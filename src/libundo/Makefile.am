@@ -29,7 +29,7 @@ libundo_la_SOURCES 	=		IUndoable.cpp \
 												UndoData.cpp \
 												UndoManager.cpp
 
-libundo_la_HEADERS 	=		$(wildcard *.hpp *.hh)
+libundo_la_HEADERS 	=		$(wildcard *.hpp)
 
 $(libundo_la_SOURCES) : 	uml
 

@@ -545,7 +545,7 @@ Libère l'historique du projet.#</dia:string>
                 <dia:string>#description#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const std::string#</dia:string>
+                <dia:string>#const std::string &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1448,7 +1448,7 @@ Libère l'historique du projet.#</dia:string>
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>#Défini un modèle pour toutes les classes devant gérer des modifications annulables.#</dia:string>
+        <dia:string>#Ensemble de données nécessaire pour annuler, répéter et enregistrer une action.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
