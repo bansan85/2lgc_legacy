@@ -13,12 +13,12 @@ AM_CPPFLAGS			= @XML_CPPFLAGS@
 AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-debug --with-doc
 
 if PLATFORM_WIN32
-CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=i686 -mms-bitfields
+CUSTOM_CXXFLAGS	= -march=i686 -mms-bitfields
 else
 if PLATFORM_WIN64
-CUSTOM_CXXFLAGS	= @CXXFLAGS@ -march=x86-64 -mms-bitfields
+CUSTOM_CXXFLAGS	= -march=x86-64 -mms-bitfields
 else
-CUSTOM_CXXFLAGS	= @CXXFLAGS@
+CUSTOM_CXXFLAGS	=
 endif
 endif
 
@@ -128,7 +128,7 @@ checkcode :
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) clean
-	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
+	./configure --with-debug --prefix=/usr/local CXXFLAGS="" CC=clang CXX=clang++
 	$(MAKE) -j9 &> l_clang.log
 	
 	$(MAKE) clean

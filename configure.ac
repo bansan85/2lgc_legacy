@@ -78,6 +78,22 @@ CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
                        ])
 CPPFLAGS="$old_CPPFLAGS"
 
+#Pour clang
+old_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -Werror -Wno-unused-macros"
+CC_CHECK_CFLAGS_APPEND([-Weverything \
+                        -Wno-c++98-compat \
+                        -Wno-c++98-compat-pedantic \
+                        -Wno-reserved-id-macro \
+                        -Wno-documentation-unknown-command \
+                        -Wno-documentation \
+                        -Wno-padded \
+                        -Wno-unreachable-code-break \
+                        -Wno-covered-switch-default \
+                        -Wno-exit-time-destructors \
+                        -Wno-global-constructors])
+CPPFLAGS="$old_CPPFLAGS"
+
 old_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -std=c++11"
 AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[]],
