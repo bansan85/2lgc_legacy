@@ -156,7 +156,7 @@ AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "Linux")
 if test "$platform_win" == "Linux" && "$withdebug" == "true"; then
   old_CPPFLAGS="$CPPFLAGS"
   CPPFLAGS="$CPPFLAGS -Werror"
-  CC_CHECK_CFLAGS_APPEND([--coverage -fprofile-arcs -ftest-coverage])
+  CC_CHECK_CFLAGS_APPEND([-fprofile-arcs -ftest-coverage])
   CPPFLAGS="$old_CPPFLAGS"
 fi
 

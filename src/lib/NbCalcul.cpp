@@ -40,21 +40,13 @@ NbCalcul::NbCalcul (
 }
 
 NbCalcul::NbCalcul (const NbCalcul & nb) :
+  INb (),
   val (nb.val),
   unite (nb.unite),
   decimales (nb.decimales)
 {
 }
 
-NbCalcul &
-NbCalcul::operator = (const NbCalcul & other)
-{
-  this->val = other.val;
-  this->unite = other.unite;
-  this->decimales = other.decimales;
-
-  return *this;
-}
 
 NbCalcul::~NbCalcul ()
 {

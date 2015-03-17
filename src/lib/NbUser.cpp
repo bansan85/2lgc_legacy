@@ -38,18 +38,10 @@ NbUser::NbUser (double valeur,
 }
 
 NbUser::NbUser (const NbUser & other) :
+  INb (),
   val (other.val),
   unite (other.unite)
 {
-}
-
-NbUser &
-NbUser::operator = (const NbUser & other)
-{
-  this->val = other.val;
-  this->unite = other.unite;
-
-  return *this;
 }
 
 NbUser::~NbUser ()

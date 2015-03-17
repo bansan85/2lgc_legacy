@@ -22,6 +22,10 @@
 #include "NbCalcul.hpp"
 #include "NbUser.hpp"
 
+INb::INb ()
+{
+}
+
 INb *
 INb::newINb (INb * nb)
 {
