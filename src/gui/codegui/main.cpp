@@ -106,81 +106,45 @@ main (int32_t argc,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUGCONT (projet.getActionCount () == 0,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   // 0 Poids propre
   action.reset (new CAction (new std::string ("Poids propre"),
                              0,
                              dynamic_cast <UndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 1,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
   // 2 Exploitation
   action.reset (new CAction (new std::string ("Chargement"),
                              2,
                              dynamic_cast <UndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 2,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
   // 18 Neige
   action.reset (new CAction (new std::string ("Neige"),
                              18,
                              dynamic_cast <UndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 3,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 3, -1, UNDO_MANAGER_NULL)
   // 19 Vent
   action.reset (new CAction (new std::string ("Vent"),
                              19,
                              dynamic_cast <UndoManager &> (projet)));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 4,
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (),
-           -1, 
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 3,
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (),
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 2,
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (),
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 1,
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (),
-           -1,
-           static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 0,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 4, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 3, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.enregistre ("test.xml"),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.enregistre ("test.xml"), -1, UNDO_MANAGER_NULL)
   
   // Création des groupes d'actions
 /*  BUGCONT(_1990_groupe_ajout_niveau(projet), -1)

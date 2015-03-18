@@ -42,46 +42,28 @@ main (int32_t,
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   textdomain (PACKAGE);
   
-  BUGCONT (projet.getActionCount () == 0,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   // 0 Poids propre
   action.reset (new CAction (new std::string ("Poids propre"), 0, projet));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 1,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
   // 2 Exploitation
   action.reset (new CAction (new std::string ("Chargement"), 2, projet));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 2,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
   // 18 Neige
   action.reset (new CAction (new std::string ("Neige"), 18, projet));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
-  BUGCONT (projet.getActionCount () == 3,
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getActionCount () == 3, -1, UNDO_MANAGER_NULL)
   // 19 Vent
   action.reset (new CAction (new std::string ("Vent"), 19, projet));
-  BUGCONT (projet.addAction (action.get ()),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
   
-  BUGCONT (projet.enregistre ("test.xml"),
-           -1,
-           static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.enregistre ("test.xml"), -1, UNDO_MANAGER_NULL)
   
   return 0;
 }

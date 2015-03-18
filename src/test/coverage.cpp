@@ -82,7 +82,7 @@ main (int32_t,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
   
   std::unique_ptr <CAction> action;
   for (uint8_t i = 0; i < 22; i++)
@@ -92,34 +92,40 @@ main (int32_t,
                                0,
                                projet));
     
-    BUGCONT (projet.addAction (action.get ()), -1, static_cast <UndoManager *> (nullptr))
+    BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
     
     action.release ();
   }
   
-  BUGCONT (projet.getEtat () == EUndoEtat::MODIF, -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.unref (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getEtat () == EUndoEtat::MODIF, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
   CAction *action2;
   BUGCONT (action2 = projet.getAction (projet.getParametres ()->
                                                         getpsiDescription (5)),
            -1,
-           static_cast <UndoManager *> (nullptr))
+           UNDO_MANAGER_NULL)
   action2->getpsi0 ().getVal ();
   action2->getpsi1 ().getUnite ();
   action2->getpsi2 ().toString ();
-  BUGCONT (action2->setpsi0 (new NbUser (0.5, EUnite::U_)), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (action2->setpsi1 (new NbUser (0.5, EUnite::U_)), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (action2->setpsi2 (new NbUser (0.5, EUnite::U_)), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (action2->setpsi0 (new NbUser (0.5, EUnite::U_)),
+           -1,
+           UNDO_MANAGER_NULL)
+  BUGCONT (action2->setpsi1 (new NbUser (0.5, EUnite::U_)),
+           -1,
+           UNDO_MANAGER_NULL)
+  BUGCONT (action2->setpsi2 (new NbUser (0.5, EUnite::U_)),
+           -1,
+           UNDO_MANAGER_NULL)
   action2->getpsi0 ().getVal ();
   action2->getpsi1 ().getUnite ();
   action2->getpsi2 ().toString ();
-  BUGCONT (projet.unref (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.redo (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
   
   std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
                                                       getpsiDescription (22)));
@@ -134,25 +140,31 @@ main (int32_t,
     projet.rollback ();
   }
   else
-    BUGCONT (static_cast <UndoManager *> (nullptr), -1, static_cast <UndoManager *> (nullptr))
+    BUGCONT (UNDO_MANAGER_NULL, -1, UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.getParametres ()->getpsiDescription (22).empty (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 22, -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.undo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 0, -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.redo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.redo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getActionCount () == 22, -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getEtat () == EUndoEtat::NONE_OR_REVERT, -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.getParametres ()->getpsiDescription (22).empty (),
+           -1,
+           UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 22, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getActionCount () == 22, -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getEtat () == EUndoEtat::NONE_OR_REVERT,
+           -1,
+           UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.undo (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.ref (), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getParametres ()->setNom (new std::string ("nom")), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.getParametres ()->setVariante (0), -1, static_cast <UndoManager *> (nullptr))
-  BUGCONT (projet.unref (), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.getParametres ()->setNom (new std::string ("nom")),
+           -1,
+           UNDO_MANAGER_NULL)
+  BUGCONT (projet.getParametres ()->setVariante (0), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.enregistre ("coverage.xml"), -1, static_cast <UndoManager *> (nullptr))
+  BUGCONT (projet.enregistre ("coverage.xml"), -1, UNDO_MANAGER_NULL)
   
   return 0;
 }

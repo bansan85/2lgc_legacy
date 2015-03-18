@@ -348,7 +348,7 @@ UndoManager::rollback ()
   {
     BUGCRIT (f (),
              ,
-             static_cast <UndoManager *> (nullptr),
+             UNDO_MANAGER_NULL,
              gettext ("Impossible de faire marche arrière suite à l'erreur détectée.\nLe projet est très probablement corrompu.\n"))
   }
   

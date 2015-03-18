@@ -83,7 +83,7 @@ NbCalcul::newXML (xmlNodePtr root) const
   
   BUGCRIT (node.get (),
            false,
-           static_cast <UndoManager *> (nullptr),
+           UNDO_MANAGER_NULL,
            gettext ("Erreur d'allocation mémoire.\n"))
   
   std::ostringstream oss;
@@ -94,7 +94,7 @@ NbCalcul::newXML (xmlNodePtr root) const
                        BAD_CAST2 ("valeur"),
                        BAD_CAST2 (oss.str ().c_str ())),
            false,
-           static_cast <UndoManager *> (nullptr),
+           UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
@@ -102,12 +102,12 @@ NbCalcul::newXML (xmlNodePtr root) const
                        BAD_CAST2 (EUniteConst[static_cast <size_t> (unite)].
                                                                     c_str ())),
            false,
-           static_cast <UndoManager *> (nullptr),
+           UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()),
            false,
-           static_cast <UndoManager *> (nullptr),
+           UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   node.release ();

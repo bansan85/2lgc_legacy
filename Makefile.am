@@ -128,7 +128,7 @@ checkcode :
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) clean
-	./configure --with-debug --prefix=/usr/local CXXFLAGS="" CC=clang CXX=clang++
+	./configure --prefix=/usr/local CXXFLAGS="" CC=clang CXX=clang++
 	$(MAKE) -j9 &> l_clang.log
 	
 	$(MAKE) clean
