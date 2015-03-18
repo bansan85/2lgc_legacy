@@ -106,21 +106,21 @@ main (int32_t,
                                                         getpsiDescription (5)),
            -1,
            UNDO_MANAGER_NULL)
-  action2->getpsi0 ().getVal ();
-  action2->getpsi1 ().getUnite ();
-  action2->getpsi2 ().toString ();
-  BUGCONT (action2->setpsi0 (new NbUser (0.5, EUnite::U_)),
+  action2->getPsi (0)->getVal ();
+  action2->getPsi (1)->getUnite ();
+  action2->getPsi (2)->toString ();
+  BUGCONT (action2->setPsi (0, new NbUser (0.5, EUnite::U_)),
            -1,
            UNDO_MANAGER_NULL)
-  BUGCONT (action2->setpsi1 (new NbUser (0.5, EUnite::U_)),
+  BUGCONT (action2->setPsi (1, new NbUser (0.5, EUnite::U_)),
            -1,
            UNDO_MANAGER_NULL)
-  BUGCONT (action2->setpsi2 (new NbUser (0.5, EUnite::U_)),
+  BUGCONT (action2->setPsi (2, new NbUser (0.5, EUnite::U_)),
            -1,
            UNDO_MANAGER_NULL)
-  action2->getpsi0 ().getVal ();
-  action2->getpsi1 ().getUnite ();
-  action2->getpsi2 ().toString ();
+  action2->getPsi (0)->getVal ();
+  action2->getPsi (1)->getUnite ();
+  action2->getPsi (2)->toString ();
   BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)

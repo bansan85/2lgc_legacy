@@ -115,7 +115,7 @@ UndoManager::undo ()
   UndoData * undoData;
   std::list <UndoData *>::iterator it;
   
-  BUGPROG (liste.size () != pos,
+  BUGPROG (liste.size () > pos,
            false,
            this,
            gettext ("Il n'y a plus rien à annuler.\n"))
@@ -149,6 +149,33 @@ UndoManager::undoN (uint32_t nb)
     BUGCONT (undo (), false, this)
   }
   return true;
+}
+
+size_t
+UndoManager::undoNb () const
+{
+  return liste.size () - pos;
+}
+
+const std::string *
+UndoManager::undoDesc (size_t n) const
+{
+  UndoData * undoData;
+  std::list <UndoData *>::const_iterator it;
+
+  BUGPROG (n + pos <= liste.size (),
+           NULL,
+           UNDO_MANAGER_NULL,
+           gettext ("Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n"),
+                    n,
+                    pos,
+                    liste.size ())
+
+  it = liste.end ();
+  std::advance (it, -static_cast <ssize_t> (n + pos) - 1);
+  undoData = *it;
+
+  return &undoData->description;
 }
 
 bool
@@ -191,6 +218,33 @@ UndoManager::redoN (uint32_t nb)
     BUGCONT (redo (), false, this)
   }
   return true;
+}
+
+size_t
+UndoManager::redoNb () const
+{
+  return pos;
+}
+
+const std::string *
+UndoManager::redoDesc (size_t n) const
+{
+  UndoData * undoData;
+  std::list <UndoData *>::const_iterator it;
+
+  BUGPROG (n <= pos,
+           NULL,
+           UNDO_MANAGER_NULL,
+           gettext ("Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n"),
+                    n,
+                    pos,
+                    liste.size ())
+
+  it = liste.end ();
+  std::advance (it, -static_cast <ssize_t> (pos - n));
+  undoData = *it;
+
+  return &undoData->description;
 }
 
 EUndoEtat

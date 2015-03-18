@@ -63,7 +63,7 @@ main (int32_t,
   BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
   action.release ();
   
-  BUGCONT (projet.enregistre ("test.xml"), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.enregistre ("action1.xml"), -1, UNDO_MANAGER_NULL)
   
   return 0;
 }
