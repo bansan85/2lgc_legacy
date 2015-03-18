@@ -693,13 +693,13 @@
         <dia:real val="0.10000000149011612"/>
       </dia:attribute>
       <dia:attribute name="line_colour">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="fill_colour">
         <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>#extern#</dia:string>
@@ -767,13 +767,13 @@
         <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
         <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="text_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="normal_font">
         <dia:font family="monospace" style="0" name="Courier"/>
@@ -922,13 +922,13 @@
         <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
         <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="text_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="normal_font">
         <dia:font family="monospace" style="0" name="Courier"/>
@@ -1032,13 +1032,13 @@
         <dia:real val="0.10000000000000001"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
         <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="text_color">
-        <dia:color val="#000000"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="normal_font">
         <dia:font family="monospace" style="0" name="Courier"/>
