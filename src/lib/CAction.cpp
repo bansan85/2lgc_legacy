@@ -305,7 +305,7 @@ CAction::setParamXML (std::string * action,
                       INb         * psi0_,
                       INb         * psi1_,
                       INb         * psi2_,
-                      xmlNodePtr    root)
+                      xmlNodePtr    root) const
 {
   BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   

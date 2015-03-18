@@ -77,7 +77,7 @@ CParamEC::setNom (std::string * nom_)
 bool
 CParamEC::setNomXML (std::string * param,
                      std::string * nom_,
-                     xmlNodePtr    root)
+                     xmlNodePtr    root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                  xmlNewNode (nullptr, BAD_CAST2 ("ParamSetNom")), xmlFreeNode);
@@ -144,7 +144,7 @@ CParamEC::setVariante (uint32_t variante_)
 bool
 CParamEC::setVarianteXML (std::string * nom_,
                           uint32_t      variante_,
-                          xmlNodePtr    root)
+                          xmlNodePtr    root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
             xmlNewNode (nullptr, BAD_CAST2 ("ParamSetVariante")), xmlFreeNode);
