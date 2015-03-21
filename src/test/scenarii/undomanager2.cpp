@@ -37,7 +37,7 @@ main (int32_t,
       char   *[])
 {
   CProjet projet (ENorme::EUROCODE);
-  std::unique_ptr <CAction> action;
+  std::shared_ptr <CAction> action;
   
   // On charge la localisation
   setlocale (LC_ALL, "" );
@@ -47,21 +47,18 @@ main (int32_t,
   
   BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   // 0 Poids propre
-  action.reset (new CAction (new std::string ("Poids propre"), 0, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Poids propre")), 0, projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
   // 2 Exploitation
-  action.reset (new CAction (new std::string ("Chargement"), 2, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Chargement")), 2, projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
   // 18 Neige
-  action.reset (new CAction (new std::string ("Neige"), 18, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Neige")), 18, projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
   
   BUGCONT (projet.enregistre ("undomanager2.xml"), -1, UNDO_MANAGER_NULL)
@@ -108,6 +105,7 @@ main (int32_t,
   BUGCONT (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0,
            -1,
            UNDO_MANAGER_NULL)
+  xmlFree (prop);
   prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
   BUGCONT (std::string ("Poids propre").compare (BAD_TSAC2 (prop)) == 0,
            -1,

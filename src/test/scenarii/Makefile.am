@@ -6,7 +6,8 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
 TESTS	=	action1 \
 				action2 \
 				undomanager1 \
-				undomanager2
+				undomanager2 \
+				undomanager3
 
 action1_SOURCES	=	action1.cpp
 action1_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
@@ -19,6 +20,9 @@ undomanager1_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 undomanager2_SOURCES	=	undomanager2.cpp
 undomanager2_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
+
+undomanager3_SOURCES	=	undomanager3.cpp
+undomanager3_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 EXTRA_PROGRAMS = $(TESTS)
 

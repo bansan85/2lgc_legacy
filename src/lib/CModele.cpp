@@ -40,23 +40,16 @@ CModele::CModele () :
 
 CModele::~CModele ()
 {
-  // Ce n'est pas modèle qui libère la mémoire, c'est le gestionnaire
-  // d'annulation.
 }
 
 bool
-CModele::addAction (CAction * action)
+CModele::addAction (std::shared_ptr <CAction> action)
 {
-  BUGPARAM (static_cast <void *> (action),
+  BUGPARAM (static_cast <void *> (action.get ()),
             "%p",
             action,
             false,
             &action->getUndoManager ())
-  
-  BUGCRIT (actions.max_size () != actions.size (),
-           false,
-           &action->getUndoManager (),
-           gettext ("Le programme est à ses limites.\n"))
   
   BUGUSER (getAction (*action->getNom ()) == NULL,
            false,
@@ -80,28 +73,36 @@ CModele::addAction (CAction * action)
            &action->getUndoManager ())
   
   actions.push_back (action);
+
+  std::shared_ptr <IParametres> param = static_cast <CProjet *> (this)->
+                                                              getParametres ();
+
+  std::shared_ptr <std::string> type_ (new std::string (
+                 param.get ()->getpsiDescription (action.get ()->getType ())));
+
   BUGCONT (action->getUndoManager ().push (
-             std::bind (static_cast <bool (CModele::*) (CAction *)>
-                                                          (&CModele::rmAction),
+             std::bind (static_cast <bool (CModele::*)
+                             (std::shared_ptr <CAction>)> (&CModele::rmAction),
                         this,
                         action),
              std::bind (&CModele::addAction, this, action),
-             std::bind (std::default_delete <CAction> (), action),
+             action,
              std::bind (&CAction::addXML,
                         action,
-                        action->getNom (),
-                        action->getType (),
+                        action->getNom ().get (),
+                        type_.get (),
                         std::placeholders::_1),
              format (gettext ("Ajout de l'action “%s”"),
-                     action->getNom ()->c_str ())),
+                     action->getNom ().get ()->c_str ())),
            false,
            &action->getUndoManager ())
-  BUGCONT (action->getUndoManager ().pushSuppr (std::bind
-                    (std::default_delete <std::string> (), action->getNom ())),
+  BUGCONT (action->getUndoManager ().pushSuppr (action->getNom ()),
+           false,
+           &action->getUndoManager ())
+  BUGCONT (action->getUndoManager ().pushSuppr (type_),
            false,
            &action->getUndoManager ())
   
-  IParametres *param = static_cast <CProjet *> (this)->getParametres ();
   uint8_t type = action->getType ();
   std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> decimales =
                               dynamic_cast <CProjet *> (this)->getDecimales ();
@@ -110,9 +111,18 @@ CModele::addAction (CAction * action)
   {
     BUGCONT (action->setParam (
                param,
-               new NbCalcul (param->getpsi0 (type), EUnite::U_, decimales),
-               new NbCalcul (param->getpsi1 (type), EUnite::U_, decimales),
-               new NbCalcul (param->getpsi2 (type), EUnite::U_, decimales)),
+               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi0
+                                                                        (type),
+                                                    EUnite::U_,
+                             decimales)),
+               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi1
+                                                                        (type),
+                                                    EUnite::U_,
+                                                    decimales)),
+               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi2
+                                                                        (type),
+                                                    EUnite::U_,
+                                                    decimales))),
              false,
              &action->getUndoManager ())
   }
@@ -125,13 +135,13 @@ CModele::addAction (CAction * action)
 }
 
 CAction *
-CModele::getAction (std::string nom)
+CModele::getAction (std::string nom) const
 {
-  for (CAction * action : actions)
+  for (std::shared_ptr <CAction> action : actions)
   {
-    if (nom.compare (*action->getNom ()) == 0)
+    if (nom.compare (*action.get ()->getNom ()) == 0)
     {
-      return action;
+      return action.get ();
     }
   }
   
@@ -145,40 +155,51 @@ CModele::getActionCount () const
 }
 
 bool
-CModele::rmAction (CAction * action)
+CModele::rmAction (std::shared_ptr <CAction> action)
 {
-  BUGPARAM (static_cast <void *> (action),
+  BUGPARAM (static_cast <void *> (action.get ()),
             "%p",
             action,
             false,
             &action->getUndoManager ())
   
-  BUGPROG (action->emptyCharges (),
+  BUGPROG (action.get ()->emptyCharges (),
            false,
-           &action->getUndoManager (),
+           &action.get ()->getUndoManager (),
            gettext ("L'action doit être supprimée sans charge. Elles doivent être supprimées avant.\n"))
   
-  BUGCONT (action->getUndoManager ().ref (),
+  BUGCONT (action.get ()->getUndoManager ().ref (),
            false,
-           &action->getUndoManager ())
-  
-  actions.remove (action);
-  BUGCONT (action->getUndoManager ().push (
-             std::bind (&CModele::addAction, this, action),
-             std::bind (static_cast <bool (CModele::*) (CAction *)>
-                                                          (&CModele::rmAction),
+           &action.get ()->getUndoManager ())
+
+  std::list <std::shared_ptr <CAction> >::iterator it;
+
+  for (it = actions.begin (); it != actions.end (); ++it)
+  {
+    if ((*it).get () == action.get ())
+    {
+      actions.erase (it);
+      break;
+    }
+  }
+  BUGCONT (action.get ()->getUndoManager ().push (
+             std::bind (&CModele::addAction,
+                        this,
+                        action),
+             std::bind (static_cast <bool (CModele::*)
+                             (std::shared_ptr <CAction>)> (&CModele::rmAction),
                         this,
                         action),
              nullptr,
              nullptr,
              format (gettext ("Suppression de l'action “%s”"),
-                     action->getNom ()->c_str ())),
+                     action.get ()->getNom ()->c_str ())),
            false,
-           &action->getUndoManager ())
+           &action.get ()->getUndoManager ())
   
-  BUGCONT (action->getUndoManager ().unref (),
+  BUGCONT (action.get ()->getUndoManager ().unref (),
            false,
-           &action->getUndoManager ());
+           &action.get ()->getUndoManager ());
   
   return true;
 }

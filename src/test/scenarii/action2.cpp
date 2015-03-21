@@ -36,9 +36,9 @@ main (int32_t,
       char  *[])
 {
   CProjet projet (ENorme::EUROCODE);
-  std::unique_ptr <CAction> action;
+  std::shared_ptr <CAction> action;
   CAction *action_;
-  std::unique_ptr <INb> nb0, nb1, nb2;
+  std::shared_ptr <INb> nb0, nb1, nb2;
   
   // On charge la localisation
   setlocale (LC_ALL, "");
@@ -48,9 +48,11 @@ main (int32_t,
   
   BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   // 2 Exploitation
-  action.reset (new CAction (new std::string ("Chargement"), 2, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (
+                                               new std::string ("Chargement")),
+                2,
+                projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   action_ = projet.getAction ("Chargement");
   BUGCONT (action_ != NULL, -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
@@ -59,12 +61,9 @@ main (int32_t,
   nb1.reset (new NbUser (0.1, EUnite::U_));
   nb2.reset (new NbUser (0.2, EUnite::U_));
 
-  BUGCONT (action_->setPsi (0, nb0.get ()), -1, UNDO_MANAGER_NULL)
-  nb0.release ();
-  BUGCONT (action_->setPsi (1, nb1.get ()), -1, UNDO_MANAGER_NULL)
-  nb1.release ();
-  BUGCONT (action_->setPsi (2, nb2.get ()), -1, UNDO_MANAGER_NULL)
-  nb2.release ();
+  BUGCONT (action_->setPsi (0, nb0), -1, UNDO_MANAGER_NULL)
+  BUGCONT (action_->setPsi (1, nb1), -1, UNDO_MANAGER_NULL)
+  BUGCONT (action_->setPsi (2, nb2), -1, UNDO_MANAGER_NULL)
 
   BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
 
@@ -168,7 +167,7 @@ main (int32_t,
            -1,
            UNDO_MANAGER_NULL)
   
-  BUGCONT (projet.enregistre ("test.xml"), -1, UNDO_MANAGER_NULL)
+  BUGCONT (projet.enregistre ("action2.xml"), -1, UNDO_MANAGER_NULL)
   
   return 0;
 }

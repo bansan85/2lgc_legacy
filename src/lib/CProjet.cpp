@@ -40,17 +40,16 @@ CProjet::CProjet (ENorme norme) :
   {
     case ENorme::EUROCODE :
     {
-      std::unique_ptr <CParamEC> param
-        (new CParamEC (new std::string ("Eurocode, annexe nationale"),
+      std::shared_ptr <CParamEC> param
+        (new CParamEC (std::shared_ptr <std::string> (new std::string (gettext ("Eurocode, annexe nationale"))),
          ENormeEcAc::FR,
          0,
          *this));
       
-      if (!setParametres (param.get ()))
+      if (!setParametres (param))
       {
         throw gettext ("Impossible de créer ce projet. Echec lors de la sélection de la norme.\n");
       }
-      param.release ();
       
       break;
     }
@@ -168,34 +167,33 @@ CProjet::~CProjet ()
 #endif
 }
 
-IParametres *
+std::shared_ptr <IParametres> &
 CProjet::getParametres ()
 {
   return parametres;
 }
 
 bool
-CProjet::setParametres (IParametres * param)
+CProjet::setParametres (std::shared_ptr <IParametres> param)
 {
   BUGCONT (ref (), false, this)
   
   BUGCONT (push (
              std::bind (&CProjet::setParametres, this, parametres),
              std::bind (&CProjet::setParametres, this, param),
-             std::bind (std::default_delete <IParametres> (), param),
+             param,
              std::bind (&CProjet::setParametresXML,
                         this,
-                        param,
-                        param->getNom (),
+                        param.get (),
+                        param->getNom ().get (),
                         param->getVariante (),
                         std::placeholders::_1),
              format (gettext ("Paramètres du projet (%s)"),
-                     param->getNom ()->c_str ())),
+                     param.get ()->getNom ()->c_str ())),
            false,
            this)
   
-  BUGCONT (pushSuppr (std::bind (std::default_delete <std::string> (),
-                               param->getNom ())),
+  BUGCONT (pushSuppr (param->getNom ()),
            false,
            this)
   

@@ -20,8 +20,10 @@ if PLATFORM_WIN64
 libeurocodes_la_LIBADD    +=  -lintl
 endif
 
+libeurocodes_la_CXXFLAGS =   $(AM_CXXFLAGS)
+
 if ENABLE_GTK
-libeurocodes_la_CXXFLAGS =   @GTKMM_CFLAGS@
+libeurocodes_la_CXXFLAGS +=   @GTKMM_CFLAGS@
 libeurocodes_la_LIBADD   +=  @GTKMM_LIBS@
 endif
 
@@ -57,22 +59,7 @@ $(libeurocodes_la_SOURCES) : 	uml
 uml :
 	$(MAKE) -C ../../files/uml
 
-CLEANFILES = *.gcno *.gcda *.hpp gtk/ressources.cpp gtk/ressources.hpp
-
-gtk/ressources.hpp: ../../files/ui/ressources.xml gtk/ressources.cpp
-if ENABLE_GTK
-	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-header --manual-register
-else
-	touch gtk/ressources.hpp
-endif
-
-gtk/ressources.cpp: ../../files/ui/ressources.xml $(wildcard ../../files/ui/*.ui)
-if ENABLE_GTK
-	$(MAKE) -C ../../files/ui
-	glib-compile-resources --target=$@ --sourcedir=../../files/ui ../../files/ui/ressources.xml --c-name _2lgc --generate-source --manual-register
-else
-	touch gtk/ressources.cpp
-endif
+CLEANFILES = *.gcno *.gcda *.hpp
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES) &> ../../cppcheck.log

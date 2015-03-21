@@ -29,17 +29,17 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-CAction::CAction (std::string  * nom_,
-                  uint8_t        type_,
-                  UndoManager &  undo_) :
+CAction::CAction (std::shared_ptr <std::string> nom_,
+                  uint8_t                       type_,
+                  UndoManager                 & undo_) :
   IActionGroupe (nom_, undo_)
   , type (type_)
   , action_predominante (false)
   , charges ()
-  , psi0 (nullptr)
-  , psi1 (nullptr)
-  , psi2 (nullptr)
-  , parametres (nullptr)
+  , psi0 (std::shared_ptr <INb> (nullptr))
+  , psi1 (std::shared_ptr <INb> (nullptr))
+  , psi2 (std::shared_ptr <INb> (nullptr))
+  , parametres (std::shared_ptr <IParametres> (nullptr))
   , deplacement (nullptr)
   , forces (nullptr)
   , efforts_noeuds (nullptr)
@@ -55,7 +55,7 @@ CAction::~CAction ()
 
 bool
 CAction::addXML (std::string *nom_,
-                 uint8_t      type_,
+                 std::string *type_,
                  xmlNodePtr   root) const
 {
   BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
@@ -77,7 +77,7 @@ CAction::addXML (std::string *nom_,
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
-                       BAD_CAST2 (CAction::getDescription (type_).c_str ())),
+                       BAD_CAST2 (type_->c_str ())),
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -161,30 +161,31 @@ CAction::getPsi (uint8_t psi) const
 
   if (psi == 0)
   {
-    return psi0;
+    return psi0.get ();
   }
   else if (psi == 1)
   {
-    return psi1;
+    return psi1.get ();
   }
   else
   {
-    return psi2;
+    return psi2.get ();
   }
 }
 
 bool
-CAction::setPsi (uint8_t psi, INb * val)
+CAction::setPsi (uint8_t psi, std::shared_ptr <INb> val)
 {
   BUGPARAM (psi, "%u", psi <= 2, false, &getUndoManager ())
 
   if (val != NULL)
   {
-    BUGUSER (val->getUnite () == EUnite::U_,
+    BUGUSER (val.get ()->getUnite () == EUnite::U_,
              false,
              &getUndoManager (),
              gettext ("L'unité est de type [%s] à la place de [%s].\n"),
-               EUniteConst[static_cast <size_t> (val->getUnite ())].c_str (),
+               EUniteConst[static_cast <size_t> (val.get ()->getUnite ())].
+                                                                      c_str (),
                EUniteConst[static_cast <size_t> (EUnite::U_)].c_str ())
   }
   
@@ -195,18 +196,18 @@ CAction::setPsi (uint8_t psi, INb * val)
                psi == 1 ? std::bind (&CAction::setPsi, this, 1, psi1) :
                  std::bind (&CAction::setPsi, this, 2, psi2),
              std::bind (&CAction::setPsi, this, psi, val),
-             std::bind (std::default_delete <INb> (), val),
+             val,
              std::bind (&CAction::setpsiXML,
                         this,
-                        getNom (),
+                        getNom ().get (),
                         psi,
-                        val,
+                        val.get (),
                         std::placeholders::_1),
              val != NULL ?
                format (gettext ("Cœfficient ψ%C de l'action “%s” (%lf)"),
                        0x2080 + psi,
-                       getNom ()->c_str (),
-                       val->getVal ()) :
+                       getNom ().get ()->c_str (),
+                       val.get ()->getVal ()) :
                ""),
            false,
            &getUndoManager ())
@@ -241,16 +242,14 @@ CAction::getDescription (uint8_t type_) const
 }
 
 bool
-CAction::setParam (IParametres * param,
-                   INb         * psi0_,
-                   INb         * psi1_,
-                   INb         * psi2_)
+CAction::setParam (std::shared_ptr <IParametres> param,
+                   std::shared_ptr <INb>         psi0_,
+                   std::shared_ptr <INb>         psi1_,
+                   std::shared_ptr <INb>         psi2_)
 {
   bool ins = getUndoManager ().getInsertion ();
   
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
-  
-  parametres = param;
   
   getUndoManager ().setInsertion (false);
   
@@ -267,32 +266,36 @@ CAction::setParam (IParametres * param,
                         psi0,
                         psi1,
                         psi2),
-             std::bind (&CAction::setParam, this, param, psi0_, psi1_, psi2_),
-             std::bind (std::default_delete <INb> (), psi0_),
-             std::bind (&CAction::setParamXML,
+             std::bind (&CAction::setParam,
                         this,
-                        getNom (),
-                        param->getNom (),
+                        param,
                         psi0_,
                         psi1_,
-                        psi2_,
+                        psi2_),
+             param,
+             std::bind (&CAction::setParamXML,
+                        this,
+                        getNom ().get (),
+                        param != NULL ?
+                          param.get ()->getNom ().get () :
+                          nullptr,
+                        psi0_.get (),
+                        psi1_.get (),
+                        psi2_.get (),
                         std::placeholders::_1),
              format (gettext ("Paramètres de l'action “%s” (%s)"),
-                     getNom ()->c_str (),
-                     param->getNom ())),
+                     getNom ().get ()->c_str (),
+                     param != NULL ?
+                       param.get ()->getNom ().get ()->c_str () :
+                       nullptr)),
            false,
            &getUndoManager ())
   
-  BUGCONT (getUndoManager ().pushSuppr (std::bind (std::default_delete <INb>
-                                                                            (),
-                                        psi1_)),
-           false,
-           &getUndoManager ())
-  BUGCONT (getUndoManager ().pushSuppr (std::bind (std::default_delete <INb>
-                                                                            (),
-                                        psi2_)),
-           false,
-           &getUndoManager ())
+  BUGCONT (getUndoManager ().pushSuppr (psi0_), false, &getUndoManager ())
+  BUGCONT (getUndoManager ().pushSuppr (psi1_), false, &getUndoManager ())
+  BUGCONT (getUndoManager ().pushSuppr (psi2_), false, &getUndoManager ())
+  
+  parametres = param;
   
   BUGCONT (getUndoManager ().unref (), false, &getUndoManager ())
   
@@ -326,7 +329,9 @@ CAction::setParamXML (std::string * action,
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Param"),
-                       BAD_CAST2 (param->c_str ())),
+                       param != nullptr ?
+                         BAD_CAST2 (param->c_str ()) :
+                         BAD_CAST2 ("")),
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")

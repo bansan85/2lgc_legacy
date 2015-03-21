@@ -28,39 +28,6 @@
 #include "codegui.hpp"
 #include "MErreurs.hpp"
 
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <locale.h>
-#include <time.h>
-
-#ifdef ENABLE_GTK
-#include <gtk/gtk.h>
-#endif
-
-#include "common_m3d.hpp"
-
-#include "common_text.hpp"
-#include "common_erreurs.hpp"
-#include "common_math.hpp"
-#include "common_selection.hpp"
-#include "common_projet.hpp"
-#include "1990_groupe.hpp"
-#include "1990_action.hpp"
-#include "1992_1_1_barres.hpp"
-#include "1992_1_1_materiaux.hpp"
-#include "1993_1_1_materiaux.hpp"
-#include "EF_appuis.hpp"
-#include "EF_relachement.hpp"
-#include "EF_materiaux.hpp"
-#include "EF_noeuds.hpp"
-#include "EF_calculs.hpp"
-#include "EF_charge_noeud.hpp"
-#include "EF_charge_barre_ponctuelle.hpp"
-#include "EF_charge_barre_repartie_uniforme.hpp"
-#include "EF_sections.hpp"
-*/
-
 int
 main (int32_t,
       char   *[])
@@ -84,17 +51,15 @@ main (int32_t,
   
   BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
   
-  std::unique_ptr <CAction> action;
+  std::shared_ptr <CAction> action;
   for (uint8_t i = 0; i < 22; i++)
   {
-    action.reset (new CAction (new std::string (projet.getParametres ()->
-                                                        getpsiDescription (i)),
+    action.reset (new CAction (std::shared_ptr <std::string> (
+                        new std::string (projet.getParametres ()->getpsiDescription (i))),
                                0,
                                projet));
     
-    BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-    
-    action.release ();
+    BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   }
   
   BUGCONT (projet.getEtat () == EUndoEtat::MODIF, -1, UNDO_MANAGER_NULL)
@@ -109,13 +74,16 @@ main (int32_t,
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();
-  BUGCONT (action2->setPsi (0, new NbUser (0.5, EUnite::U_)),
+  BUGCONT (action2->setPsi (0, std::shared_ptr <INb> (
+                                                new NbUser (0.5, EUnite::U_))),
            -1,
            UNDO_MANAGER_NULL)
-  BUGCONT (action2->setPsi (1, new NbUser (0.5, EUnite::U_)),
+  BUGCONT (action2->setPsi (1, std::shared_ptr <INb> (
+                                                new NbUser (0.5, EUnite::U_))),
            -1,
            UNDO_MANAGER_NULL)
-  BUGCONT (action2->setPsi (2, new NbUser (0.5, EUnite::U_)),
+  BUGCONT (action2->setPsi (2, std::shared_ptr <INb> (
+                                                new NbUser (0.5, EUnite::U_))),
            -1,
            UNDO_MANAGER_NULL)
   action2->getPsi (0)->getVal ();
@@ -129,11 +97,12 @@ main (int32_t,
   
   std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
                                                       getpsiDescription (22)));
-  action.reset (new CAction (nom.get (),
+  action.reset (new CAction (std::shared_ptr <std::string> (
+            new std::string (projet.getParametres ()->getpsiDescription (22))),
                              22,
                              projet));
   // Ici, il y a un traitement volontaire de l'erreur.
-  if (!projet.addAction (action.get ()))
+  if (!projet.addAction (action))
   {
     action.reset ();
     nom.reset ();
@@ -158,7 +127,8 @@ main (int32_t,
   
   BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getParametres ()->setNom (new std::string ("nom")),
+  BUGCONT (projet.getParametres ()->setNom (
+                      std::shared_ptr <std::string> (new std::string ("nom"))),
            -1,
            UNDO_MANAGER_NULL)
   BUGCONT (projet.getParametres ()->setVariante (0), -1, UNDO_MANAGER_NULL)

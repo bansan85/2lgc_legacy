@@ -32,10 +32,7 @@ UndoData::UndoData () :
 
 UndoData::~UndoData ()
 {
-  for (std::function <void ()> f : suppr)
-  {
-    f ();
-  }
+  // Les pointeurs contenus dans suppr sont automatiquement supprimés.
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

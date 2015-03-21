@@ -34,6 +34,7 @@ UndoManager::UndoManager () :
   pos (0),
   count (0),
   tmpListe (nullptr),
+  memory (SIZE_MAX),
   insertion (true)
 {
 }
@@ -48,7 +49,7 @@ UndoManager::~UndoManager ()
 bool
 UndoManager::push (std::function <bool ()>           annule,
                    std::function <bool ()>           repete,
-                   std::function <void ()>           suppr,
+                   std::shared_ptr <void>            suppr,
                    std::function <bool (xmlNodePtr)> sauve,
                    const std::string               & description)
 {
@@ -89,7 +90,7 @@ UndoManager::push (std::function <bool ()>           annule,
 }
 
 bool
-UndoManager::pushSuppr (std::function <void ()> suppr)
+UndoManager::pushSuppr (std::shared_ptr <void> suppr)
 {
   if (!insertion)
   {
@@ -206,6 +207,17 @@ UndoManager::redo ()
   --pos;
   
   insertion = true;
+
+  // Utile si le paramètre memory est changé alors que pos n'est pas nul.
+  if (liste.size () - pos > memory)
+  {
+    size_t iend = liste.size () - pos - memory;
+    for (size_t i = 1; i < iend; ++i)
+    {
+      delete *liste.begin ();
+      liste.pop_front ();
+    }
+  }
   
   return true;
 }
@@ -306,6 +318,10 @@ UndoManager::unref ()
     return true;
   }
   
+  BUGPROG (pos == 0,
+           false,
+           this,
+           gettext ("La position en cours de la pile devrait être au sommet.\n"))
   BUGPROG (count != 0,
            false,
            this,
@@ -318,6 +334,16 @@ UndoManager::unref ()
     time (&tmpListe->heure);
     liste.push_back (tmpListe);
     tmpListe = nullptr;
+
+    if (liste.size () > memory)
+    {
+      size_t iend = liste.size () - memory;
+      for (size_t i = 1; i < iend; ++i)
+      {
+        delete *liste.begin ();
+        liste.pop_front ();
+      }
+    }
   }
   
   return true;
@@ -424,6 +450,22 @@ void
 UndoManager::setInsertion (bool insert)
 {
   insertion = insert;
+}
+
+void
+UndoManager::setMemory (size_t taille)
+{
+  memory = taille;
+
+  if (liste.size () - pos > taille)
+  {
+    size_t iend = liste.size () - pos - taille;
+    for (size_t i = 1; i < iend; ++i)
+    {
+      delete *liste.begin ();
+      liste.pop_front ();
+    }
+  }
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

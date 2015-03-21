@@ -1,37 +1,37 @@
-DEFAULT_INCLUDES		=		-I$(srcdir) \
-												-I$(srcdir)/../.. \
-												-I$(srcdir)/../macro
+DEFAULT_INCLUDES		 = -I$(srcdir) \
+											 -I$(srcdir)/../.. \
+											 -I$(srcdir)/../macro
 
-AUTOMAKE_OPTIONS		= 	subdir-objects
+AUTOMAKE_OPTIONS		 = subdir-objects
 
-lib_LTLIBRARIES			= 	libundo.la
+lib_LTLIBRARIES			 = libundo.la
 
-libundo_la_LIBADD		=		@XML_LIBS@
+libundo_la_LIBADD		 = @XML_LIBS@
 if PLATFORM_LINUX
 if ENABLE_DEBUG
-libundo_la_LIBADD   +=	-lgcov
+libundo_la_LIBADD   += -lgcov
 endif
 endif
 if PLATFORM_WIN32
-libundo_la_LIBADD   +=  -lintl
+libundo_la_LIBADD   += -lintl
 endif
 if PLATFORM_WIN64
-libundo_la_LIBADD   +=  -lintl
+libundo_la_LIBADD   += -lintl
 endif
 
-libundo_la_LDFLAGS	= 	$(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
+libundo_la_LDFLAGS	 = $(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
 
-libundo_la_CPPFLAGS	=		@XML_CPPFLAGS@
+libundo_la_CPPFLAGS	 = @XML_CPPFLAGS@
 
-libundo_ladir 			= 	$(includedir)/2lgc
+libundo_ladir 			 = $(includedir)/2lgc
 
-libundo_la_SOURCES 	=		IUndoable.cpp \
-												UndoData.cpp \
-												UndoManager.cpp
+libundo_la_SOURCES 	 = IUndoable.cpp \
+											 UndoData.cpp \
+											 UndoManager.cpp
 
-libundo_la_HEADERS 	=		$(wildcard *.hpp)
+libundo_la_HEADERS   = $(wildcard *.hpp)
 
-$(libundo_la_SOURCES) : 	uml
+$(libundo_la_SOURCES) : uml
 
 uml : ../../files/uml/undo.dia
 	$(MAKE) -C ../../files/uml

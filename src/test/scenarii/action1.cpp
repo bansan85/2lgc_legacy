@@ -34,7 +34,7 @@ main (int32_t,
       char  *[])
 {
   CProjet projet (ENorme::EUROCODE);
-  std::unique_ptr <CAction> action;
+  std::shared_ptr <CAction> action;
   
   // On charge la localisation
   setlocale (LC_ALL, "" );
@@ -44,24 +44,32 @@ main (int32_t,
   
   BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
   // 0 Poids propre
-  action.reset (new CAction (new std::string ("Poids propre"), 0, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (
+                                             new std::string ("Poids propre")),
+                0,
+                projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
   // 2 Exploitation
-  action.reset (new CAction (new std::string ("Chargement"), 2, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (
+                                               new std::string ("Chargement")),
+                2,
+                projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 2, -1, UNDO_MANAGER_NULL)
   // 18 Neige
-  action.reset (new CAction (new std::string ("Neige"), 18, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (
+                                                    new std::string ("Neige")),
+                18,
+                projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   BUGCONT (projet.getActionCount () == 3, -1, UNDO_MANAGER_NULL)
   // 19 Vent
-  action.reset (new CAction (new std::string ("Vent"), 19, projet));
-  BUGCONT (projet.addAction (action.get ()), -1, UNDO_MANAGER_NULL)
-  action.release ();
+  action.reset (new CAction (std::shared_ptr <std::string> (
+                                                     new std::string ("Vent")),
+                19,
+                projet));
+  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
   
   BUGCONT (projet.enregistre ("action1.xml"), -1, UNDO_MANAGER_NULL)
   

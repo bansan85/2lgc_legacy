@@ -9,13 +9,13 @@ checkcode : ../../src/lib/codegui.hpp
 
 ../../src/lib/codegui.hpp : COPYING.head codegui.dia INb.dia INoeud.dia ISection.dia IMateriau.dia IDeplacementType.dia ICharge.dia
 	rm -f ../../src/lib/*.hpp
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib codegui.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INb.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INoeud.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ISection.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IMateriau.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IDeplacementType.dia
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ICharge.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib codegui.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INb.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INoeud.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ISection.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IMateriau.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IDeplacementType.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ICharge.dia
 	find ../../src/lib -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/lib/codegui.hpp \;
 	sed -i "s#../../src/lib/##g" ../../src/lib/codegui.hpp
 	sed -i "s/#include <codegui.hpp>//g" ../../src/lib/codegui.hpp
@@ -23,7 +23,7 @@ checkcode : ../../src/lib/codegui.hpp
 
 ../../src/libundo/undo.hpp : COPYING.head undo.dia
 	rm -f ../../src/libundo/*.hpp
-	../../../dia2code-git/src/dia2code -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/libundo undo.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/libundo undo.dia
 	find ../../src/libundo -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/libundo/undo.hpp \;
 	sed -i "s#../../src/libundo/##g" ../../src/libundo/undo.hpp
 	sed -i "s/#include <undo.hpp>//g" ../../src/libundo/undo.hpp

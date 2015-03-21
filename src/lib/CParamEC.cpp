@@ -26,10 +26,10 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-CParamEC::CParamEC (std::string  * nom_,
-                    ENormeEcAc     annexe_,
-                    uint16_t       variante_,
-                    UndoManager &  undo_) :
+CParamEC::CParamEC (std::shared_ptr <std::string> nom_,
+                    ENormeEcAc                    annexe_,
+                    uint16_t                      variante_,
+                    UndoManager                 & undo_) :
   IParametres (undo_),
   nom (nom_),
   annexe (annexe_),
@@ -41,29 +41,29 @@ CParamEC::~CParamEC ()
 {
 }
 
-std::string *
+std::shared_ptr <std::string>
 CParamEC::getNom () const
 {
   return nom;
 }
 
 bool
-CParamEC::setNom (std::string * nom_)
+CParamEC::setNom (std::shared_ptr <std::string> nom_)
 {
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
   
   BUGCONT (getUndoManager ().push (
              std::bind (&CParamEC::setNom, this, nom),
              std::bind (&CParamEC::setNom, this, nom_),
-             std::bind (std::default_delete <std::string> (), nom_),
+             nom_,
              std::bind (&CParamEC::setNomXML,
                         this,
-                        nom,
-                        nom_,
+                        nom.get (),
+                        nom_.get (),
                         std::placeholders::_1),
              format (gettext ("Nom du paramètre “%s” (%s)"),
-                     nom->c_str (),
-                     nom_->c_str ())),
+                     nom.get ()->c_str (),
+                     nom_.get ()->c_str ())),
            false,
            &getUndoManager ())
   
@@ -127,11 +127,11 @@ CParamEC::setVariante (uint32_t variante_)
              nullptr,
              std::bind (&CParamEC::setVarianteXML,
                         this,
-                        nom,
+                        nom.get (),
                         variante_,
                         std::placeholders::_1),
              format (gettext ("Variante du paramètre “%s” (%d)"),
-                     nom->c_str (),
+                     nom.get ()->c_str (),
                      variante_)),
            false,
            &getUndoManager ())
