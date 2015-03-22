@@ -42,41 +42,37 @@ main (int32_t,
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
   
+  assert (projet.undoNb () == 1);
+  // Un pour le projet,
+  // Un pour l'historique.
+  assert (projet.getParametres ().use_count () == 2);
+  assert (projet.getParametres ()->getNom ().use_count () == 2);
+  projet.setMemory (0);
+  assert (projet.getParametres ().use_count () == 1);
+  assert (projet.getParametres ()->getNom ().use_count () == 1);
+  projet.setMemory (1000);
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
   action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Poids propre")), 0, projet));
+  assert (action.use_count () == 1);
+  assert (action->getNom ().use_count () == 1);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
   action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Chargement")), 2, projet));
   assert (projet.addAction (action));
+  // Un pour la variable action.
+  // Un pour l'insertion dans le projet,
+  // Deux pour les std::bind permettant l'annulation et la répétition.
+  assert (action.use_count () == 4);
+  assert (action->getNom ().use_count () == 2);
   assert (projet.getActionCount () == 2);
-  // 18 Neige
-  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Neige")), 18, projet));
-  assert (projet.addAction (action));
-  assert (projet.getActionCount () == 3);
-  // 19 Vent
-  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Vent")), 19, projet));
-  assert (projet.addAction (action));
-  assert (projet.getActionCount () == 4);
-  assert (projet.undo ());
-  assert (projet.getActionCount () == 3);
-  assert (projet.undo ());
-  assert (projet.getActionCount () == 2);
-  assert (projet.undo ());
-  assert (projet.getActionCount () == 1);
-  assert (projet.undo ());
-  assert (projet.getActionCount () == 0);
-  assert (projet.redo ());
-  assert (projet.getActionCount () == 1);
-  assert (projet.redo ());
-  assert (projet.getActionCount () == 2);
-  assert (projet.redo ());
-  assert (projet.getActionCount () == 3);
-  assert (projet.redo ());
-  assert (projet.getActionCount () == 4);
+  projet.setMemory (0);
+  assert (action.use_count () == 2);
+  assert (action->getNom ().use_count () == 1);
+  projet.setMemory (1000);
   
-  assert (projet.enregistre ("undomanager1.xml"));
+  assert (projet.enregistre ("undomanager4.xml"));
   
   return 0;
 }

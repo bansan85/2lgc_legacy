@@ -41,7 +41,7 @@ CParamEC::~CParamEC ()
 {
 }
 
-std::shared_ptr <std::string>
+const std::shared_ptr <std::string> &
 CParamEC::getNom () const
 {
   return nom;

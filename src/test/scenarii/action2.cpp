@@ -20,16 +20,15 @@
 
 #include "config.h"
 
-#include "codegui.hpp"
-#include "MErreurs.hpp"
-#include "Math.hpp"
-
 #include <stdint.h>
 #include <libintl.h>
 #include <string.h>
 #include <memory>
 #include <iostream>
+#include <cassert>
 
+#include "codegui.hpp"
+#include "Math.hpp"
 
 int
 main (int32_t,
@@ -42,132 +41,78 @@ main (int32_t,
   
   // On charge la localisation
   setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE, "UTF-8");
-  textdomain (PACKAGE);
+  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
+  textdomain (PACKAGE_NAME);
   
-  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
+  assert (projet.getActionCount () == 0);
   // 2 Exploitation
   action.reset (new CAction (std::shared_ptr <std::string> (
                                                new std::string ("Chargement")),
                 2,
                 projet));
-  BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
+  assert (projet.addAction (action));
   action_ = projet.getAction ("Chargement");
-  BUGCONT (action_ != NULL, -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
+  assert (action_ != NULL);
+  assert (projet.getActionCount () == 1);
 
   nb0.reset (new NbUser (0.0, EUnite::U_));
   nb1.reset (new NbUser (0.1, EUnite::U_));
   nb2.reset (new NbUser (0.2, EUnite::U_));
 
-  BUGCONT (action_->setPsi (0, nb0), -1, UNDO_MANAGER_NULL)
-  BUGCONT (action_->setPsi (1, nb1), -1, UNDO_MANAGER_NULL)
-  BUGCONT (action_->setPsi (2, nb2), -1, UNDO_MANAGER_NULL)
+  assert (action_->setPsi (0, nb0));
+  assert (action_->setPsi (1, nb1));
+  assert (action_->setPsi (2, nb2));
 
-  BUGCONT (projet.getActionCount () == 1, -1, UNDO_MANAGER_NULL)
+  assert (projet.getActionCount () == 1);
 
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
 
-  BUGCONT (projet.undoDesc (0)->compare (
-                     "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.undoDesc (0)->compare (
+                    "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0);
+  assert (projet.undo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
 
-  BUGCONT (projet.undoDesc (0)->compare (
-                     "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.undoDesc (0)->compare (
+                    "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0);
+  assert (projet.undo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
-  BUGCONT (projet.undoDesc (0)->compare (
-                     "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.7, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.undoDesc (0)->compare (
+                    "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0);
+  assert (projet.undo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.7, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
-  BUGCONT (projet.redoDesc (0)->compare (
-                     "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.redoDesc (0)->compare (
+                    "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0);
+  assert (projet.redo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
-  BUGCONT (projet.redoDesc (0)->compare (
-                     "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.redoDesc (0)->compare (
+                    "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0);
+  assert (projet.redo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
-  BUGCONT (projet.redoDesc (0)->compare (
-                     "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0,
-           -1,
-           UNDO_MANAGER_NULL);
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.redoDesc (0)->compare (
+                    "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0);
+  assert (projet.redo ());
+  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
   
-  BUGCONT (projet.enregistre ("action2.xml"), -1, UNDO_MANAGER_NULL)
+  assert (projet.enregistre ("action2.xml"));
   
   return 0;
 }

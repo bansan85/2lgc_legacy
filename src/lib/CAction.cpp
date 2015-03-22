@@ -284,9 +284,9 @@ CAction::setParam (std::shared_ptr <IParametres> param,
                         psi2_.get (),
                         std::placeholders::_1),
              format (gettext ("Paramètres de l'action “%s” (%s)"),
-                     getNom ().get ()->c_str (),
+                     getNom ()->c_str (),
                      param != NULL ?
-                       param.get ()->getNom ().get ()->c_str () :
+                       param.get ()->getNom ()->c_str () :
                        nullptr)),
            false,
            &getUndoManager ())

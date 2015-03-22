@@ -181,7 +181,7 @@ CProjet::setParametres (std::shared_ptr <IParametres> param)
   BUGCONT (push (
              std::bind (&CProjet::setParametres, this, parametres),
              std::bind (&CProjet::setParametres, this, param),
-             param,
+             nullptr,
              std::bind (&CProjet::setParametresXML,
                         this,
                         param.get (),

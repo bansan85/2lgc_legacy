@@ -18,6 +18,8 @@
 
 #include "config.hpp"
 
+#include <iostream>
+
 #include "UndoData.hpp"
 
 UndoData::UndoData () :

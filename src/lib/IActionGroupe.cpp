@@ -31,7 +31,7 @@ IActionGroupe::~IActionGroupe ()
 {
 }
 
-std::shared_ptr <std::string>
+const std::shared_ptr <std::string> &
 IActionGroupe::getNom () const
 {
   return nom;

@@ -38,9 +38,9 @@ main (int32_t argc,
   
   // On charge la localisation
   setlocale (LC_ALL, "" );
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE, "UTF-8");
-  textdomain (PACKAGE);
+  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
+  textdomain (PACKAGE_NAME);
   
   // On traite les arguments du programme
   switch (argc)

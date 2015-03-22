@@ -212,7 +212,7 @@ UndoManager::redo ()
   if (liste.size () - pos > memory)
   {
     size_t iend = liste.size () - pos - memory;
-    for (size_t i = 1; i < iend; ++i)
+    for (size_t i = 1; i <= iend; ++i)
     {
       delete *liste.begin ();
       liste.pop_front ();
@@ -460,7 +460,7 @@ UndoManager::setMemory (size_t taille)
   if (liste.size () - pos > taille)
   {
     size_t iend = liste.size () - pos - taille;
-    for (size_t i = 1; i < iend; ++i)
+    for (size_t i = 0; i < iend; ++i)
     {
       delete *liste.begin ();
       liste.pop_front ();

@@ -24,9 +24,9 @@
 #include <libintl.h>
 #include <string.h>
 #include <memory>
+#include <cassert>
 
 #include "codegui.hpp"
-#include "MErreurs.hpp"
 
 int
 main (int32_t,
@@ -40,60 +40,52 @@ main (int32_t,
   
   // On charge la localisation
   setlocale (LC_ALL, "" );
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE, "UTF-8");
-  textdomain (PACKAGE);
+  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
+  textdomain (PACKAGE_NAME);
   
   // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
 /*  INFO (gtk_init_check (&argc, &argv),
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
+  assert (projet.ref ());
   
   std::shared_ptr <CAction> action;
   for (uint8_t i = 0; i < 22; i++)
   {
     action.reset (new CAction (std::shared_ptr <std::string> (
-                        new std::string (projet.getParametres ()->getpsiDescription (i))),
-                               0,
-                               projet));
+             new std::string (projet.getParametres ()->getpsiDescription (i))),
+                              0,
+                              projet));
     
-    BUGCONT (projet.addAction (action), -1, UNDO_MANAGER_NULL)
+    assert (projet.addAction (action));
   }
   
-  BUGCONT (projet.getEtat () == EUndoEtat::MODIF, -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
+  assert (projet.getEtat () == EUndoEtat::MODIF);
+  assert (projet.unref ());
   
-  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
+  assert (projet.ref ());
   CAction *action2;
-  BUGCONT (action2 = projet.getAction (projet.getParametres ()->
-                                                        getpsiDescription (5)),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (action2 = projet.getAction (projet.getParametres ()->
+                                                       getpsiDescription (5)));
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();
-  BUGCONT (action2->setPsi (0, std::shared_ptr <INb> (
-                                                new NbUser (0.5, EUnite::U_))),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (action2->setPsi (1, std::shared_ptr <INb> (
-                                                new NbUser (0.5, EUnite::U_))),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (action2->setPsi (2, std::shared_ptr <INb> (
-                                                new NbUser (0.5, EUnite::U_))),
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (action2->setPsi (0, std::shared_ptr <INb> (
+                                               new NbUser (0.5, EUnite::U_))));
+  assert (action2->setPsi (1, std::shared_ptr <INb> (
+                                               new NbUser (0.5, EUnite::U_))));
+  assert (action2->setPsi (2, std::shared_ptr <INb> (
+                                               new NbUser (0.5, EUnite::U_))));
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();
-  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
+  assert (projet.unref ());
+  assert (projet.undo ());
+  assert (projet.redo ());
   
-  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
+  assert (projet.ref ());
   
   std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
                                                       getpsiDescription (22)));
@@ -109,32 +101,26 @@ main (int32_t,
     projet.rollback ();
   }
   else
-    BUGCONT (UNDO_MANAGER_NULL, -1, UNDO_MANAGER_NULL)
+    assert (nullptr);
   
-  BUGCONT (projet.getParametres ()->getpsiDescription (22).empty (),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (projet.getActionCount () == 22, -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getActionCount () == 0, -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.redo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getActionCount () == 22, -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getEtat () == EUndoEtat::NONE_OR_REVERT,
-           -1,
-           UNDO_MANAGER_NULL)
+  assert (projet.getParametres ()->getpsiDescription (22).empty ());
+  assert (projet.getActionCount () == 22);
+  assert (projet.undo ());
+  assert (projet.undo ());
+  assert (projet.getActionCount () == 0);
+  assert (projet.redo ());
+  assert (projet.redo ());
+  assert (projet.getActionCount () == 22);
+  assert (projet.getEtat () == EUndoEtat::NONE_OR_REVERT);
   
-  BUGCONT (projet.undo (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.ref (), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.getParametres ()->setNom (
-                      std::shared_ptr <std::string> (new std::string ("nom"))),
-           -1,
-           UNDO_MANAGER_NULL)
-  BUGCONT (projet.getParametres ()->setVariante (0), -1, UNDO_MANAGER_NULL)
-  BUGCONT (projet.unref (), -1, UNDO_MANAGER_NULL)
+  assert (projet.undo ());
+  assert (projet.ref ());
+  assert (projet.getParametres ()->setNom (
+                     std::shared_ptr <std::string> (new std::string ("nom"))));
+  assert (projet.getParametres ()->setVariante (0));
+  assert (projet.unref ());
   
-  BUGCONT (projet.enregistre ("coverage.xml"), -1, UNDO_MANAGER_NULL)
+  assert (projet.enregistre ("coverage.xml"));
   
   return 0;
 }

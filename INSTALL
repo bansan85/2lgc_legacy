@@ -20,6 +20,7 @@ automake --add-missing --copy
 autoconf
 
 Avec gcc :
+./configure --with-gui=none --with-debug --enable-valgrind-testing --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=gtk3 --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""

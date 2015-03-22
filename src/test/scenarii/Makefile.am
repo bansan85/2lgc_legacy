@@ -7,7 +7,8 @@ TESTS	=	action1 \
 				action2 \
 				undomanager1 \
 				undomanager2 \
-				undomanager3
+				undomanager3 \
+				undomanager4
 
 action1_SOURCES	=	action1.cpp
 action1_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
@@ -24,6 +25,9 @@ undomanager2_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 undomanager3_SOURCES	=	undomanager3.cpp
 undomanager3_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
+undomanager4_SOURCES	=	undomanager4.cpp
+undomanager4_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
+
 EXTRA_PROGRAMS = $(TESTS)
 
-CLEANFILES = *.xml undomanager1 undomanager2 action1 action2 *.gcno *.gcda
+CLEANFILES = *.xml undomanager1 undomanager2 undomanager3 undomanager4 action1 action2 *.gcno *.gcda

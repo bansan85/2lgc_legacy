@@ -94,6 +94,7 @@ CC_CHECK_CFLAGS_APPEND([-Weverything \
                         -Wno-global-constructors])
 CPPFLAGS="$old_CPPFLAGS"
 
+#Vérification que l'utilisation de c++11 est possible
 old_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -std=c++11"
 AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[]],
@@ -130,7 +131,6 @@ AC_SUBST(XML_LIBS)
 AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
 
 # debug
-
 AC_ARG_WITH(debug,
             AS_HELP_STRING([--with-debug],
                            [build with debug support.]))
@@ -257,6 +257,24 @@ if test -z "$DOXYGEN";
   then AC_MSG_WARN([Doxygen introuvable - documentation non compilable])
 fi
 AM_CONDITIONAL(HAVE_DOXYGEN, test x$withdoc = xtrue && test -n "$DOXYGEN")
+
+dnl Check for valgrind
+TESTS_ENVIRONMENT=""
+ac_enable_valgrind=no
+AC_ARG_ENABLE(valgrind-testing,
+     [  --enable-valgrind-testing     enable running of tests inside Valgrind],     [ ac_enable_valgrind=yes ], [ ac_enable_valgrind=no] )
+
+if test "x${ac_enable_valgrind}" = xyes ; then
+  if test "x${enable_shared}" = xyes ; then
+    TESTS_ENVIRONMENT="libtool --mode=execute "
+  fi
+
+  AC_CHECK_PROG(HAVE_VALGRIND, valgrind, yes, no)
+  if test "x$HAVE_VALGRIND" = xyes ; then
+    TESTS_ENVIRONMENT="$TESTS_ENVIRONMENT valgrind --show-reachable=yes --leak-check=full --show-leak-kinds=all --trace-children=yes"
+    AC_SUBST(TESTS_ENVIRONMENT)
+  fi
+fi
 
 # Checks for libraries.
 AC_CHECK_LIB(m, sqrt)
