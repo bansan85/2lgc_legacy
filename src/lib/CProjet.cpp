@@ -41,10 +41,10 @@ CProjet::CProjet (ENorme norme) :
     case ENorme::EUROCODE :
     {
       std::shared_ptr <CParamEC> param
-        (new CParamEC (std::shared_ptr <std::string> (new std::string (gettext ("Eurocode, annexe nationale"))),
-         ENormeEcAc::FR,
-         0,
-         *this));
+        (std::make_shared <CParamEC> (std::make_shared <std::string> (gettext ("Eurocode, annexe nationale")),
+                                      ENormeEcAc::FR,
+                                      0,
+                                      *this));
       
       if (!setParametres (param))
       {

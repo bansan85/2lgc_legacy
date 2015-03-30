@@ -54,10 +54,11 @@ main (int32_t,
   std::shared_ptr <CAction> action;
   for (uint8_t i = 0; i < 22; i++)
   {
-    action.reset (new CAction (std::shared_ptr <std::string> (
-             new std::string (projet.getParametres ()->getpsiDescription (i))),
-                              0,
-                              projet));
+    action = std::make_shared <CAction> (
+               std::make_shared <std::string> (
+                               projet.getParametres ()->getpsiDescription (i)),
+               0,
+               projet);
     
     assert (projet.addAction (action));
   }
@@ -72,12 +73,9 @@ main (int32_t,
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();
-  assert (action2->setPsi (0, std::shared_ptr <INb> (
-                                               new NbUser (0.5, EUnite::U_))));
-  assert (action2->setPsi (1, std::shared_ptr <INb> (
-                                               new NbUser (0.5, EUnite::U_))));
-  assert (action2->setPsi (2, std::shared_ptr <INb> (
-                                               new NbUser (0.5, EUnite::U_))));
+  assert (action2->setPsi (0, std::make_shared <NbUser> (0.5, EUnite::U_)));
+  assert (action2->setPsi (1, std::make_shared <NbUser> (0.5, EUnite::U_)));
+  assert (action2->setPsi (2, std::make_shared <NbUser> (0.5, EUnite::U_)));
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();
@@ -89,15 +87,16 @@ main (int32_t,
   
   std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
                                                       getpsiDescription (22)));
-  action.reset (new CAction (std::shared_ptr <std::string> (
-            new std::string (projet.getParametres ()->getpsiDescription (22))),
-                             22,
-                             projet));
+  action = std::make_shared <CAction> (
+             std::make_shared <std::string> (
+                              projet.getParametres ()->getpsiDescription (22)),
+             22,
+             projet);
   // Ici, il y a un traitement volontaire de l'erreur.
   if (!projet.addAction (action))
   {
-    action.reset ();
-    nom.reset ();
+    action = nullptr;
+    nom = nullptr;
     projet.rollback ();
   }
   else
@@ -115,8 +114,8 @@ main (int32_t,
   
   assert (projet.undo ());
   assert (projet.ref ());
-  assert (projet.getParametres ()->setNom (
-                     std::shared_ptr <std::string> (new std::string ("nom"))));
+  assert (projet.getParametres ()->setNom (std::make_shared <std::string>
+                                                                     ("nom")));
   assert (projet.getParametres ()->setVariante (0));
   assert (projet.unref ());
   

@@ -56,7 +56,6 @@ CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
                         -Wredundant-decls \
                         -Wshadow \
                         -Wsign-conversion \
-                        -Wstack-protector \
                         -Wstrict-aliasing=1 \
                         -Wstrict-overflow=5 \
                         -Wswitch-default \

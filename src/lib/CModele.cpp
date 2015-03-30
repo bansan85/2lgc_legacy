@@ -77,7 +77,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
   std::shared_ptr <IParametres> param = static_cast <CProjet *> (this)->
                                                               getParametres ();
 
-  std::shared_ptr <std::string> type_ (new std::string (
+  std::shared_ptr <std::string> type_ (std::make_shared <std::string> (
                  param.get ()->getpsiDescription (action.get ()->getType ())));
 
   BUGCONT (action->getUndoManager ().push (
@@ -111,18 +111,18 @@ CModele::addAction (std::shared_ptr <CAction> action)
   {
     BUGCONT (action->setParam (
                param,
-               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi0
-                                                                        (type),
-                                                    EUnite::U_,
-                             decimales)),
-               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi1
-                                                                        (type),
-                                                    EUnite::U_,
-                                                    decimales)),
-               std::shared_ptr <INb> (new NbCalcul (param.get ()->getpsi2
-                                                                        (type),
-                                                    EUnite::U_,
-                                                    decimales))),
+               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
+                                                  param.get ()->getpsi0 (type),
+                                                  EUnite::U_,
+                                                  decimales)),
+               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
+                                                  param.get ()->getpsi1 (type),
+                                                  EUnite::U_,
+                                                  decimales)),
+               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
+                                                  param.get ()->getpsi2 (type),
+                                                  EUnite::U_,
+                                                  decimales))),
              false,
              &action->getUndoManager ())
   }
@@ -137,7 +137,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
 CAction *
 CModele::getAction (std::string nom) const
 {
-  for (std::shared_ptr <CAction> action : actions)
+  for (const std::shared_ptr <CAction> & action : actions)
   {
     if (nom.compare (*action.get ()->getNom ()) == 0)
     {

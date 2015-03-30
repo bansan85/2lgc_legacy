@@ -47,18 +47,18 @@ main (int32_t,
   
   assert (projet.getActionCount () == 0);
   // 2 Exploitation
-  action.reset (new CAction (std::shared_ptr <std::string> (
-                                               new std::string ("Chargement")),
-                2,
-                projet));
+  action = std::make_shared <CAction> (std::make_shared <std::string> (
+                                                                 "Chargement"),
+                                       2,
+                                       projet);
   assert (projet.addAction (action));
   action_ = projet.getAction ("Chargement");
   assert (action_ != NULL);
   assert (projet.getActionCount () == 1);
 
-  nb0.reset (new NbUser (0.0, EUnite::U_));
-  nb1.reset (new NbUser (0.1, EUnite::U_));
-  nb2.reset (new NbUser (0.2, EUnite::U_));
+  nb0 = std::make_shared <NbUser> (0.0, EUnite::U_);
+  nb1 = std::make_shared <NbUser> (0.1, EUnite::U_);
+  nb2 = std::make_shared <NbUser> (0.2, EUnite::U_);
 
   assert (action_->setPsi (0, nb0));
   assert (action_->setPsi (1, nb1));

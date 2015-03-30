@@ -37,7 +37,7 @@ main (int32_t,
   std::shared_ptr <CAction> action;
   
   // On charge la localisation
-  setlocale (LC_ALL, "" );
+  setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE_NAME, LOCALEDIR);
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
@@ -53,13 +53,19 @@ main (int32_t,
   projet.setMemory (1000);
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Poids propre")), 0, projet));
+  action = std::make_shared <CAction> (std::make_shared <std::string>
+                                                              ("Poids propre"),
+                                       0,
+                                       projet);
   assert (action.use_count () == 1);
   assert (action->getNom ().use_count () == 1);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action.reset (new CAction (std::shared_ptr <std::string> (new std::string ("Chargement")), 2, projet));
+  action = std::make_shared <CAction> (std::make_shared <std::string>
+                                                                ("Chargement"),
+                                       2,
+                                       projet);
   assert (projet.addAction (action));
   // Un pour la variable action.
   // Un pour l'insertion dans le projet,

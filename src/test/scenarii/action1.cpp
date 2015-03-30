@@ -37,38 +37,37 @@ main (int32_t,
   std::shared_ptr <CAction> action;
   
   // On charge la localisation
-  setlocale (LC_ALL, "" );
+  setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE_NAME, LOCALEDIR);
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
   
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action.reset (new CAction (std::shared_ptr <std::string> (
-                                             new std::string ("Poids propre")),
+  action = std::make_shared <CAction> (std::make_shared <std::string> (
+                                                               "Poids propre"),
                 0,
-                projet));
+                projet);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action.reset (new CAction (std::shared_ptr <std::string> (
-                                               new std::string ("Chargement")),
+  action = std::make_shared <CAction> (std::make_shared <std::string> (
+                                                                 "Chargement"),
                 2,
-                projet));
+                projet);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 2);
   // 18 Neige
-  action.reset (new CAction (std::shared_ptr <std::string> (
-                                                    new std::string ("Neige")),
+  action = std::make_shared <CAction> (std::make_shared <std::string> (
+                                                                      "Neige"),
                 18,
-                projet));
+                projet);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 3);
   // 19 Vent
-  action.reset (new CAction (std::shared_ptr <std::string> (
-                                                     new std::string ("Vent")),
+  action = std::make_shared <CAction> (std::make_shared <std::string> ("Vent"),
                 19,
-                projet));
+                projet);
   assert (projet.addAction (action));
   
   assert (projet.enregistre ("action1.xml"));
