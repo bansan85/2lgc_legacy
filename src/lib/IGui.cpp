@@ -16,8 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef _MSC_VER
-#define CHK _Check_return_
-#else
-#define CHK __attribute__ ((__warn_unused_result__))
-#endif
+#include "config.h"
+
+#include "IGui.hpp"
+
+IGui::IGui ()
+{
+}
+
+IGui::~IGui ()
+{
+}
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -5,7 +5,7 @@
 #define ENABLE_DEBUG 1
 
 /* Défini si l’interface GTK doit être supportée. */
-#define ENABLE_GTK 1
+/* #undef ENABLE_GTK */
 
 /* Défini si l’interface METRO doit être supportée. */
 /* #undef ENABLE_METRO */

@@ -1,5 +1,4 @@
 SUBDIRS =	desktop \
-					ui \
 					uml
 
 applicationdir		=	$(datadir)/2lgc

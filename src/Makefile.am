@@ -1,4 +1,7 @@
-SUBDIRS =	libundo \
-					lib \
-					test \
-					gui
+SUBDIRS  = libundo \
+					 lib \
+					 test
+
+if ENABLE_GTK
+SUBDIRS += gtk
+endif

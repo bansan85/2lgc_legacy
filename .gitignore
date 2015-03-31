@@ -67,3 +67,4 @@ docs/html
 docs/latex
 docs/man
 out_html
+src/lib/gtk-ressources.cpp

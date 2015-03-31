@@ -296,8 +296,7 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  files/ui/Makefile
                  files/uml/Makefile
                  src/Makefile
-                 src/gui/Makefile
-                 src/gui/codegui/Makefile
+                 src/gtk/Makefile
                  src/lib/Makefile
                  src/libundo/Makefile
                  docs/Doxyfile

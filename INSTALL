@@ -8,8 +8,6 @@ patch < ../diff-po-Makevars.template.patch
 cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
-find files/ui -name "*.ui" -exec intltool-extract --quiet --type=gettext/glade {} \;
-sed -i 's/N_(/gettext (/g' files/ui/*.ui.h
 find src/test -name "*.cpp" > po/POTFILES.in
 find src/lib -maxdepth 1 -name "*.cpp" >> po/POTFILES.in
 
@@ -20,11 +18,12 @@ automake --add-missing --copy
 autoconf
 
 Avec gcc :
-./configure --with-gui=none --with-debug --enable-valgrind-testing --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=none --with-debug --with-doc --enable-valgrind-testing --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-./configure --with-gui=gtk3 --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
+find . -name "Makefile" -exec sed -i "s#-I/usr#-isystem/usr#g" {} \;
 make check -j9
 LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
