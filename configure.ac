@@ -43,7 +43,6 @@ CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
                         -Winit-self \
                         -Winline \
                         -Wlogical-op \
-                        -Wmissing-declarations \
                         -Wmissing-format-attribute \
                         -Wno-comment \
                         -Wno-error=deprecated-declarations \

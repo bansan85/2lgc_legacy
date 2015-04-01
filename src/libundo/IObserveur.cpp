@@ -18,20 +18,14 @@
 
 #include "config.h"
 
-#include <stdint.h>
-#include <libintl.h>
-#include <string.h>
+#include "IObserveur.hpp"
 
-#include "CProjet.hpp"
-
-int
-main (int32_t,
-      char   *[])
+IObserveur::IObserveur ()
 {
-  CProjet::showWarranty ();
-  CProjet::showHelp ();
-  
-  return 0;
+}
+
+IObserveur::~IObserveur()
+{
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

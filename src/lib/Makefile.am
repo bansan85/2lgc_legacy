@@ -30,9 +30,6 @@ endif
 libeurocodes_la_LDFLAGS		= $(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
 
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
-if ENABLE_GTK
-libeurocodes_la_CPPFLAGS +=	@GTK_CFLAGS@
-endif
 
 libeurocodes_ladir 				=	$(includedir)/2lgc
 
@@ -49,12 +46,11 @@ libeurocodes_la_SOURCES 	=	CAction.cpp \
 														IActionGroupe.cpp \
 														IGui.cpp \
 														INb.cpp \
-														IParametres.cpp \
-														../macro/SString.cpp \
-														../macro/Math.cpp
+														IParametres.cpp
 
 if ENABLE_GTK
-libeurocodes_la_SOURCES  +=	gtk-ressources.cpp
+libeurocodes_la_SOURCES  +=	gtk-ressources.cpp \
+														GWindowMain.cpp
 endif
 
 libeurocodes_la_HEADERS 	=	$(wildcard *.hpp)

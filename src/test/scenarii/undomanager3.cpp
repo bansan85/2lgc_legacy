@@ -25,8 +25,7 @@
 #include <iostream>
 #include <cassert>
 
-#include "codegui.hpp"
-
+#include "CProjet.hpp"
 
 int
 main (int32_t argc,

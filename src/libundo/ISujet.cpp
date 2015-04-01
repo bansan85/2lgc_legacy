@@ -16,26 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Math.hpp"
+#include "config.h"
 
-#include <cmath>
+#include "ISujet.hpp"
 
-bool doublesAreEqual (double a, double b, double moyAbs, double maxRel)
+ISujet::ISujet () :
+  observeurs ()
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wfloat-equal"
-  if (a == b)
-#pragma GCC diagnostic pop
+}
+
+ISujet::~ISujet ()
+{
+}
+
+void
+ISujet::notify (EEvent event, size_t param)
+{
+  for (IObserveur * obs : observeurs)
   {
-    return true;
+    obs->signal (event, param);
+  }
+}
+
+bool
+ISujet::addObserver (IObserveur * obs)
+{
+  if (obs == nullptr)
+  {
+    return false;
   }
 
-  double absError = fabs (a - b);
-  a = std::fabs (a);
-  b = std::fabs (b);
-  
-  return (absError <= moyAbs * std::sqrt (maxRel)) ||
-         ((absError / (a > b ? a : b)) <= maxRel);
+  observeurs.push_back (obs);
+
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

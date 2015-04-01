@@ -21,9 +21,28 @@
 
 #include "config.hpp"
 
+#include <cmath>
+
 #define ERR_REL 1.E-14
 
-bool doublesAreEqual (double a, double b, double moyAbs, double maxRel);
+inline bool
+doublesAreEqual (double a, double b, double moyAbs, double maxRel)
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
+  if (a == b)
+#pragma GCC diagnostic pop
+  {
+    return true;
+  }
+
+  double absError = fabs (a - b);
+  a = std::fabs (a);
+  b = std::fabs (b);
+  
+  return (absError <= moyAbs * std::sqrt (maxRel)) ||
+         ((absError / (a > b ? a : b)) <= maxRel);
+}
 
 #endif
 

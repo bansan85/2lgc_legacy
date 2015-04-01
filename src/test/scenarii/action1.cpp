@@ -20,14 +20,13 @@
 
 #include "config.h"
 
-#include "codegui.hpp"
-
 #include <stdint.h>
 #include <libintl.h>
 #include <string.h>
 #include <memory>
 #include <cassert>
 
+#include "CProjet.hpp"
 
 int
 main (int32_t,
@@ -46,8 +45,8 @@ main (int32_t,
   // 0 Poids propre
   action = std::make_shared <CAction> (std::make_shared <std::string> (
                                                                "Poids propre"),
-                0,
-                projet);
+                                       0,
+                                       projet);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 1);
   // 2 Exploitation

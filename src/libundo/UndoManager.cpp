@@ -30,6 +30,7 @@
 #include "SString.hpp"
 
 UndoManager::UndoManager () :
+  ISujet (),
   liste (),
   pos (0),
   count (0),
@@ -138,6 +139,11 @@ UndoManager::undo ()
   ++pos;
   
   insertion = true;
+
+  if (count == 0)
+  {
+    notify (EEvent::UNDO_NB, undoNb ());
+  }
   
   return true;
 }
@@ -145,10 +151,15 @@ UndoManager::undo ()
 bool
 UndoManager::undoN (uint32_t nb)
 {
+  // Pour éviter l'émission des signaux à chaque émission de undo ().
+  ++count;
   for (uint32_t i = 1; i <= nb; i++)
   {
     BUGCONT (undo (), false, this)
   }
+  --count;
+
+  notify (EEvent::UNDO_NB, undoNb ());
   return true;
 }
 

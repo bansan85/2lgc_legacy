@@ -5,8 +5,8 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../lib \
 
 bin_PROGRAMS			=	codegui
 codegui_SOURCES		=	main.cpp
-codegui_CPPFLAGS	=	@XML_CPPFLAGS@
-codegui_LDADD			=	-lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ -lgfortran @XML_LIBS@ ../lib/libeurocodes.la ../libundo/libundo.la
+codegui_CPPFLAGS	=	@XML_CPPFLAGS@ @GTKMM_CFLAGS@
+codegui_LDADD			=	-lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ -lgfortran @XML_LIBS@ ../lib/libeurocodes.la ../libundo/libundo.la @GTKMM_LIBS@
 
 if PLATFORM_LINUX
 if ENABLE_DEBUG
@@ -22,4 +22,4 @@ codegui_LDFLAGS	 +=  -mwindows
 endif
 endif #ENABLE_DEBUG
 
-CLEANFILES	      =	*.gcno *.gcda
+CLEANFILES	      =	*.gcno *.gcda *.hpp

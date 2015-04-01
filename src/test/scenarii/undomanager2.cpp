@@ -29,7 +29,7 @@
 #include <memory>
 #include <cassert>
 
-#include "codegui.hpp"
+#include "CProjet.hpp"
 #include "SString.hpp"
 
 int

@@ -28,10 +28,12 @@
 #include "SString.hpp"
 
 #ifdef ENABLE_GTK
-#include "gtk-ressources.h"
 #include <gtkmm/application.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/applicationwindow.h>
+
+#include "gtk-ressources.h"
+#include "GWindowMain.hpp"
 #endif
 
 CProjet::CProjet (ENorme norme) :
@@ -89,26 +91,40 @@ CProjet::getParametres ()
 bool
 CProjet::setParametres (std::shared_ptr <IParametres> param)
 {
+  {
+    parametres = param;
+    return true;
+  }
+
   BUGCONT (ref (), false, this)
   
-  BUGCONT (push (
-             std::bind (&CProjet::setParametres, this, parametres),
-             std::bind (&CProjet::setParametres, this, param),
-             nullptr,
-             std::bind (&CProjet::setParametresXML,
-                        this,
-                        param.get (),
-                        param->getNom ().get (),
-                        param->getVariante (),
-                        std::placeholders::_1),
-             format (gettext ("Paramètres du projet (%s)"),
-                     param.get ()->getNom ()->c_str ())),
+  BUGPROG (param == nullptr && getEtat () == EUndoEtat::MODIF,
            false,
-           this)
-  
-  BUGCONT (pushSuppr (param->getNom ()),
-           false,
-           this)
+           this,
+           gettext ("Param ne peut être null lors de la modification des paramètres de calculs du projet.\n"))
+  // Pas besoin (ni possible) de faire le push car !insertion vaut toujours
+  // vrai pour un param à nullptr.
+  if (param != nullptr)
+  {
+    BUGCONT (push (
+               std::bind (&CProjet::setParametres, this, parametres),
+               std::bind (&CProjet::setParametres, this, param),
+               nullptr,
+               std::bind (&CProjet::setParametresXML,
+                          this,
+                          param.get (),
+                          param->getNom ().get (),
+                          param->getVariante (),
+                          std::placeholders::_1),
+               format (gettext ("Paramètres du projet (%s)"),
+                       param.get ()->getNom ()->c_str ())),
+             false,
+             this)
+    
+    BUGCONT (pushSuppr (param->getNom ()),
+             false,
+             this)
+  }
   
   parametres = param;
   
@@ -257,6 +273,7 @@ CProjet::gShowMain (int32_t argc,
 #ifdef ENABLE_GTK
   Glib::RefPtr <Gtk::Application> app = Gtk::Application::create (
                                                argc, argv, "org.llgc.codegui");
+
   Glib::RefPtr <Gtk::Builder> builder;
   Gtk::ApplicationWindow* pDialog = nullptr;
 
@@ -270,13 +287,14 @@ CProjet::gShowMain (int32_t argc,
     BUGCRIT (NULL,
              false,
              this,
-             gettext ("Echec lors de la création de la fenêtre %s\n"),
+             gettext ("Échec lors de la création de la fenêtre %s\n"),
                "main")
   }
+  GWindowMain winMain (builder, *this);
+  addObserver (&winMain);
 
   builder->get_widget ("window1", pDialog);
   app->run (*pDialog);
-  delete pDialog;
 
 #endif
   return true;

@@ -1,5 +1,6 @@
 all : ../../src/lib/codegui.hpp \
-		  ../../src/libundo/undo.hpp
+		  ../../src/libundo/undo.hpp \
+			../../src/lib/gtk.dia
 
 checkcode : ../../src/lib/codegui.hpp
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
@@ -28,6 +29,9 @@ checkcode : ../../src/lib/codegui.hpp
 	sed -i "s#../../src/libundo/##g" ../../src/libundo/undo.hpp
 	sed -i "s/#include <undo.hpp>//g" ../../src/libundo/undo.hpp
 	sort ../../src/libundo/undo.hpp -o ../../src/libundo/undo.hpp
+
+../../src/lib/gtk.dia :
+	../../../dia2code-git/src/dia2code --tab 2 -nl -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib gtk.dia
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)

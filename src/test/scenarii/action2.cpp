@@ -27,7 +27,8 @@
 #include <iostream>
 #include <cassert>
 
-#include "codegui.hpp"
+#include "CProjet.hpp"
+#include "NbUser.hpp"
 #include "Math.hpp"
 
 int

@@ -23,8 +23,9 @@
 #include <string.h>
 #include <memory>
 #include <iostream>
+#include <cassert>
 
-#include "codegui.hpp"
+#include "CProjet.hpp"
 #include "MErreurs.hpp"
 
 
@@ -34,7 +35,6 @@ main (int32_t argc,
 {
   /* Variables */
   CProjet projet (ENorme::EUROCODE);
-  std::shared_ptr <CAction> action;
   
   // On charge la localisation
   setlocale (LC_ALL, "" );
@@ -67,6 +67,13 @@ main (int32_t argc,
     }
   }
 
+  projet.enregistre ("eeee.xml");
+  std::shared_ptr <CAction> action;
+  action = std::make_shared <CAction> (std::make_shared <std::string> (
+                                                               "Poids propre"),
+                                       0,
+                                       projet);
+  assert (projet.addAction (action));
   projet.gShowMain (argc, argv);
 
   // Affichage de l'interface graphique
