@@ -62,7 +62,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
            &action->getUndoManager (),
            gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n"))
   
-  BUGPROG (action->getType () < static_cast <CProjet *> (this)
+  BUGPROG (action->getType () <static_cast <CProjet *> (this)
                                                 ->getParametres ()->getpsiN (),
            false,
            &action->getUndoManager (),
@@ -82,7 +82,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
 
   BUGCONT (action->getUndoManager ().push (
              std::bind (static_cast <bool (CModele::*)
-                             (std::shared_ptr <CAction>)> (&CModele::rmAction),
+                           (std::shared_ptr <CAction> &)> (&CModele::rmAction),
                         this,
                         action),
              std::bind (&CModele::addAction, this, action),
@@ -135,7 +135,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
 }
 
 CAction *
-CModele::getAction (std::string nom) const
+CModele::getAction (const std::string & nom) const
 {
   for (const std::shared_ptr <CAction> & action : actions)
   {
@@ -155,7 +155,7 @@ CModele::getActionCount () const
 }
 
 bool
-CModele::rmAction (std::shared_ptr <CAction> action)
+CModele::rmAction (std::shared_ptr <CAction> & action)
 {
   BUGPARAM (static_cast <void *> (action.get ()),
             "%p",
@@ -187,7 +187,7 @@ CModele::rmAction (std::shared_ptr <CAction> action)
                         this,
                         action),
              std::bind (static_cast <bool (CModele::*)
-                             (std::shared_ptr <CAction>)> (&CModele::rmAction),
+                           (std::shared_ptr <CAction> &)> (&CModele::rmAction),
                         this,
                         action),
              nullptr,

@@ -142,7 +142,8 @@ UndoManager::undo ()
 
   if (count == 0)
   {
-    notify (EEvent::UNDO_NB, undoNb ());
+    notify (EEvent::UNDO_NB, nullptr);
+    notify (EEvent::REDO_NB, nullptr);
   }
   
   return true;
@@ -159,7 +160,8 @@ UndoManager::undoN (uint32_t nb)
   }
   --count;
 
-  notify (EEvent::UNDO_NB, undoNb ());
+  notify (EEvent::UNDO_NB, nullptr);
+  notify (EEvent::REDO_NB, nullptr);
   return true;
 }
 
@@ -230,16 +232,28 @@ UndoManager::redo ()
     }
   }
   
+  if (count == 0)
+  {
+    notify (EEvent::UNDO_NB, nullptr);
+    notify (EEvent::REDO_NB, nullptr);
+  }
+  
   return true;
 }
 
 bool
 UndoManager::redoN (uint32_t nb)
 {
+  // Pour éviter l'émission des signaux à chaque émission de redo ().
+  ++count;
   for (uint32_t i = 1; i <= nb; i++)
   {
     BUGCONT (redo (), false, this)
   }
+  --count;
+
+  notify (EEvent::UNDO_NB, nullptr);
+  notify (EEvent::REDO_NB, nullptr);
   return true;
 }
 

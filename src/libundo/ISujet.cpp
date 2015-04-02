@@ -30,7 +30,7 @@ ISujet::~ISujet ()
 }
 
 void
-ISujet::notify (EEvent event, size_t param)
+ISujet::notify (EEvent event, void * param)
 {
   for (IObserveur * obs : observeurs)
   {

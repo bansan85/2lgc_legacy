@@ -13852,7 +13852,7 @@
                 <dia:string>#nom#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::string#</dia:string>
+                <dia:string>#const std::string &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -13930,7 +13930,7 @@
                 <dia:string>#action#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr &lt;CAction&gt;#</dia:string>
+                <dia:string>#std::shared_ptr &lt;CAction&gt; &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -13978,7 +13978,7 @@
                 <dia:string>#nom#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::string#</dia:string>
+                <dia:string>#const std::string &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -20118,8 +20118,8 @@
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="125.351,-191"/>
-        <dia:point val="125.351,-183.916"/>
-        <dia:point val="133.925,-183.916"/>
+        <dia:point val="125.351,-183.917"/>
+        <dia:point val="133.925,-183.917"/>
         <dia:point val="133.925,-177.633"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

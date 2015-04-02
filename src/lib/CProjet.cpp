@@ -91,19 +91,10 @@ CProjet::getParametres ()
 bool
 CProjet::setParametres (std::shared_ptr <IParametres> param)
 {
-  {
-    parametres = param;
-    return true;
-  }
-
   BUGCONT (ref (), false, this)
   
-  BUGPROG (param == nullptr && getEtat () == EUndoEtat::MODIF,
-           false,
-           this,
-           gettext ("Param ne peut être null lors de la modification des paramètres de calculs du projet.\n"))
-  // Pas besoin (ni possible) de faire le push car !insertion vaut toujours
-  // vrai pour un param à nullptr.
+  // Pas besoin (ni possible) de faire le push car param == nullptr est vrai
+  // uniquement lors de la création du projet.
   if (param != nullptr)
   {
     BUGCONT (push (

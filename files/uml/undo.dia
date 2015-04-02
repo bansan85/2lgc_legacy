@@ -3497,7 +3497,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
                 <dia:string>#param#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#size_t#</dia:string>
+                <dia:string>#void *#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3918,7 +3918,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
                 <dia:string>#param#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#size_t#</dia:string>
+                <dia:string>#void *#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -3987,16 +3987,16 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="56.072,-9.34441"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="56.022,-9.39441;70.362,-3.94441"/>
+        <dia:rectangle val="56.022,-9.39441;69.272,-2.09441"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="56.072,-9.34441"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="14.24"/>
+        <dia:real val="13.15"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="5.3500000000000005"/>
+        <dia:real val="7.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#EEvent#</dia:string>
@@ -4097,7 +4097,30 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Nombre d'actions pouvant encore être annulées.#</dia:string>
+            <dia:string>#Nombre d'actions pouvant être annulées.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umlattribute">
+          <dia:attribute name="name">
+            <dia:string>#REDO_NB#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="value">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Nombre d'actions pouvant être répétées.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -4121,16 +4144,16 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="39.105,6.94953"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="39.055,-4.44441;63.642,6.99953"/>
+        <dia:rectangle val="39.055,-2.59441;63.097,6.99953"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="39.105,6.94953"/>
-        <dia:point val="39.105,1.67756"/>
-        <dia:point val="63.192,1.67756"/>
-        <dia:point val="63.192,-3.99441"/>
+        <dia:point val="39.105,2.60256"/>
+        <dia:point val="62.647,2.60256"/>
+        <dia:point val="62.647,-2.14441"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

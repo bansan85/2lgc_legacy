@@ -38,22 +38,22 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkButton" id="button1">
-                <property name="visible">True</property>
-                <property name="image">image1</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="buttonUndo">
                 <property name="visible">True</property>
                 <property name="image">image2</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonRedo">
+                <property name="visible">True</property>
+                <property name="image">image1</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>

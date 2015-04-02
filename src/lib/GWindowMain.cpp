@@ -31,19 +31,33 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
   build (builder),
   projet (proj)
 {
-  Gtk::Button * undoB = nullptr;
+  Gtk::Button * button = nullptr;
 
-  build->get_widget ("buttonUndo", undoB);
+  build->get_widget ("buttonUndo", button);
 
-  BUGPROG (undoB,
+  BUGPROG (button,
            ,
            UNDO_MANAGER_NULL,
            gettext ("Fenêtre %s, composant %s introuvable.\n"),
              "Main",
              "buttonUndo");
 
-  undoB->signal_clicked ().connect (sigc::mem_fun (
+  button->signal_clicked ().connect (sigc::mem_fun (
                                           *this, &GWindowMain::onClickedUndo));
+  signal (EEvent::UNDO_NB, nullptr);
+
+  build->get_widget ("buttonRedo", button);
+
+  BUGPROG (button,
+           ,
+           UNDO_MANAGER_NULL,
+           gettext ("Fenêtre %s, composant %s introuvable.\n"),
+             "Main",
+             "buttonRedo");
+
+  button->signal_clicked ().connect (sigc::mem_fun (
+                                          *this, &GWindowMain::onClickedRedo));
+  signal (EEvent::REDO_NB, nullptr);
 }
 
 GWindowMain::~GWindowMain()
@@ -55,7 +69,7 @@ GWindowMain::~GWindowMain()
 }
 
 void
-GWindowMain::signal (EEvent event, size_t param)
+GWindowMain::signal (EEvent event, void * param)
 {
   switch (event)
   {
@@ -72,7 +86,39 @@ GWindowMain::signal (EEvent event, size_t param)
                  "Main",
                  "buttonUndo");
 
-      undoB->set_sensitive (param != 0);
+      undoB->set_sensitive (projet.undoNb () != 0);
+      if (projet.undoNb () != 0)
+      {
+        undoB->set_tooltip_text (*projet.undoDesc (0));
+      }
+      else
+      {
+        undoB->set_tooltip_text ("");
+      }
+      break;
+    }
+    case EEvent::REDO_NB :
+    {
+      Gtk::Button * redoB = nullptr;
+
+      build->get_widget ("buttonRedo", redoB);
+
+      BUGPROG (redoB,
+               ,
+               UNDO_MANAGER_NULL,
+               gettext ("Fenêtre %s, composant %s introuvable.\n"),
+                 "Main",
+                 "buttonRedo");
+
+      redoB->set_sensitive (projet.redoNb () != 0);
+      if (projet.redoNb () != 0)
+      {
+        redoB->set_tooltip_text (*projet.redoDesc (0));
+      }
+      else
+      {
+        redoB->set_tooltip_text ("");
+      }
       break;
     }
     default :
@@ -86,6 +132,12 @@ void
 GWindowMain::onClickedUndo ()
 {
   projet.undo ();
+}
+
+void
+GWindowMain::onClickedRedo ()
+{
+  projet.redo ();
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
