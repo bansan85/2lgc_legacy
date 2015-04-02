@@ -28,8 +28,6 @@ make check -j9
 LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && rm -Rf out_html && lcov --capture --directory . --output-file coverage.info && genhtml coverage.info --output-directory out_html && firefox out_html/index.html
-sudo make install-data && make check -j9
-make -C doc doc
 NOTA :
     -pg
 

@@ -23,7 +23,7 @@ cppcheck-undo.log
 cppcheck.log
 depcomp
 docs/Doxyfile
-files/ui/*.ui.h
+*.ui.h
 files/ui/ressources.xml
 files/uml/*.hpp
 install-sh
@@ -44,9 +44,7 @@ po/POTFILES.in
 po/Rules-quot
 po/stamp-po
 src/lib*/*.hpp
-src/gui/codegui/codegui
-src/gui/codegui/codegui-main.o
-src/gui/codegui/test.xml
+src/gtk/codegui
 src/lib/gtkressources.cpp
 stamp-h1
 test-driver
@@ -59,6 +57,7 @@ src/test/scenarii/undomanager1
 src/test/scenarii/undomanager2
 src/test/scenarii/undomanager3
 src/test/scenarii/undomanager4
+src/test/scenarii/undomanager5
 src/test/static/projet
 *.xml
 src/test/coverage

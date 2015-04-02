@@ -1,17 +1,18 @@
-SUBDIRS = scenarii \
-					static \
-					bugs
+SUBDIRS 					= scenarii \
+										static \
+										bugs
 
 DEFAULT_INCLUDES	=	-I$(srcdir)/../.. \
 										-I$(srcdir)/../lib \
 										-I$(srcdir)/../libundo \
 										-I$(srcdir)/../macro
 
-TESTS	=	coverage
+TESTS							=	coverage
+
+AM_LDFLAGS				= ../lib/libeurocodes.la ../libundo/libundo.la
 
 coverage_SOURCES	=	coverage.cpp
-coverage_LDADD		=	../lib/libeurocodes.la ../libundo/libundo.la
 
-EXTRA_PROGRAMS = $(TESTS)
+EXTRA_PROGRAMS 		= $(TESTS)
 
-CLEANFILES = *.xml coverage *.gcno *.gcda
+CLEANFILES 				= *.xml coverage *.gcno *.gcda

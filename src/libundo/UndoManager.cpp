@@ -36,6 +36,7 @@ UndoManager::UndoManager () :
   count (0),
   tmpListe (nullptr),
   memory (SIZE_MAX),
+  sauveDesc (1),
   insertion (true)
 {
 }
@@ -78,13 +79,13 @@ UndoManager::push (std::function <bool ()>           annule,
   
   // Seules les modifications de premier ordre sont mémorisées dans la
   // description.
-  if (count == 1)
+  if (count <= sauveDesc)
   {
     if (!tmpListe->description.empty ())
     {
       tmpListe->description.append ("\n");
     }
-    tmpListe->description.assign (description);
+    tmpListe->description.append (description);
   }
   
   return true;
@@ -491,6 +492,12 @@ UndoManager::setMemory (size_t taille)
       liste.pop_front ();
     }
   }
+}
+
+void
+UndoManager::setSauveDesc (uint16_t val)
+{
+  sauveDesc = val;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -68,7 +68,7 @@
         <dia:point val="-8.5108,-24.9108"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-8.5608,-24.9608;17.8342,47.7892"/>
+        <dia:rectangle val="-8.5608,-24.9608;17.8342,52.8892"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-8.5108,-24.9108"/>
@@ -77,7 +77,7 @@
         <dia:real val="26.294999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="72.649999999999977"/>
+        <dia:real val="77.749999999999972"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#UndoManager#</dia:string>
@@ -272,6 +272,29 @@ Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de U
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Taille de l'historique#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="1"/>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umlattribute">
+          <dia:attribute name="name">
+            <dia:string>#sauveDesc#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#uint16_t#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="value">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Définit pour quelle valeur inférieur ou égale à count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -1229,6 +1252,54 @@ Libère l'historique du projet.#</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
                 <dia:string>#La nouvelle taille.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#setSauveDesc#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#void#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Défini l'attribut sauveDesc.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#val#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#uint16_t#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La nouvelle valeur.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -2310,17 +2381,17 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="-8.5108,29.2892"/>
+        <dia:point val="-8.5108,32.5392"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-20.3473,18.4212;-8.4608,29.3392"/>
+        <dia:rectangle val="-20.3473,18.4212;-8.4608,32.5892"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-8.5108,29.2892"/>
-        <dia:point val="-14.0041,29.2892"/>
+        <dia:point val="-8.5108,32.5392"/>
+        <dia:point val="-14.0041,32.5392"/>
         <dia:point val="-14.0041,18.8712"/>
         <dia:point val="-19.8973,18.8712"/>
       </dia:attribute>
@@ -2348,7 +2419,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="48"/>
+        <dia:connection handle="0" to="O0" connection="50"/>
         <dia:connection handle="1" to="O5" connection="4"/>
       </dia:connections>
     </dia:object>
@@ -3570,7 +3641,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="30,8.05"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.7342,3.1392;30.05,8.9"/>
+        <dia:rectangle val="17.7342,6.3892;30.05,8.9"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -3578,8 +3649,8 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="30,8.05"/>
         <dia:point val="23.4921,8.05"/>
-        <dia:point val="23.4921,3.1892"/>
-        <dia:point val="17.7842,3.1892"/>
+        <dia:point val="23.4921,6.4392"/>
+        <dia:point val="17.7842,6.4392"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -3603,7 +3674,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O18" connection="3"/>
-        <dia:connection handle="1" to="O0" connection="25"/>
+        <dia:connection handle="1" to="O0" connection="27"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O20">

@@ -8,25 +8,24 @@ TESTS	=	action1 \
 				undomanager1 \
 				undomanager2 \
 				undomanager3 \
-				undomanager4
+				undomanager4 \
+				undomanager5
+
+AM_LDFLAGS			= ../../lib/libeurocodes.la ../../libundo/libundo.la
 
 action1_SOURCES	=	action1.cpp
-action1_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 action2_SOURCES	=	action2.cpp
-action2_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 undomanager1_SOURCES	=	undomanager1.cpp
-undomanager1_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 undomanager2_SOURCES	=	undomanager2.cpp
-undomanager2_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 undomanager3_SOURCES	=	undomanager3.cpp
-undomanager3_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
 
 undomanager4_SOURCES	=	undomanager4.cpp
-undomanager4_LDADD		=	../../lib/libeurocodes.la ../../libundo/libundo.la
+
+undomanager5_SOURCES	=	undomanager5.cpp
 
 EXTRA_PROGRAMS = $(TESTS)
 
