@@ -140,17 +140,14 @@ CProjet::setParametresXML (IParametres *param,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  if (dynamic_cast <CParamEC *> (param) != NULL)
-  {
-    BUGCRIT (xmlSetProp (node.get (), BAD_CAST2 ("Type"), BAD_CAST2 ("EC")),
-             false,
-             this,
-             gettext ("Problème depuis la librairie : %s\n"), "xml2")
-  }
-  else
-  {
-    BUGPROG (nullptr, false, this, gettext ("Le type de la norme est inconnu.\n"))
-  }
+  BUGPROG (dynamic_cast <CParamEC *> (param) != NULL,
+           false,
+           this,
+           gettext ("Le type de la norme est inconnu.\n"))
+  BUGCRIT (xmlSetProp (node.get (), BAD_CAST2 ("Type"), BAD_CAST2 ("EC")),
+           false,
+           this,
+           gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),

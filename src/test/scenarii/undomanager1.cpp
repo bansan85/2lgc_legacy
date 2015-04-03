@@ -86,6 +86,11 @@ main (int32_t,
   assert (projet.getActionCount () == 3);
   assert (projet.redo ());
   assert (projet.getActionCount () == 4);
+
+  assert (projet.undoN (4));
+  assert (projet.getActionCount () == 0);
+  assert (projet.redoN (4));
+  assert (projet.getActionCount () == 4);
   
   assert (projet.enregistre ("undomanager1.xml"));
   
