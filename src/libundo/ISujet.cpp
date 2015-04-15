@@ -38,17 +38,17 @@ ISujet::notify (EEvent event, void * param)
   }
 }
 
-bool
+void
 ISujet::addObserver (IObserveur * obs)
 {
   if (obs == nullptr)
   {
-    return false;
+    return;
   }
 
   observeurs.push_back (obs);
 
-  return true;
+  return;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

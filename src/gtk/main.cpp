@@ -67,14 +67,13 @@ main (int32_t argc,
     }
   }
 
-  projet.enregistre ("eeee.xml");
   std::shared_ptr <CAction> action;
   action = std::make_shared <CAction> (std::make_shared <std::string> (
                                                                "Poids propre"),
                                        0,
                                        projet);
   assert (projet.addAction (action));
-  projet.gShowMain (argc, argv);
+  BUGCONT (projet.gShowMain (argc, argv), -1, &projet);
 
   // Affichage de l'interface graphique
 //  gtk_widget_show_all (projet->ui.comp.window);

@@ -69,7 +69,7 @@ GWindowMain::~GWindowMain()
 }
 
 void
-GWindowMain::signal (EEvent event, void * param)
+GWindowMain::signal (EEvent event, void *)
 {
   switch (event)
   {
@@ -131,13 +131,13 @@ GWindowMain::signal (EEvent event, void * param)
 void
 GWindowMain::onClickedUndo ()
 {
-  projet.undo ();
+  BUGCONT (projet.undo (), , &projet);
 }
 
 void
 GWindowMain::onClickedRedo ()
 {
-  projet.redo ();
+  BUGCONT (projet.redo (), , &projet);
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
