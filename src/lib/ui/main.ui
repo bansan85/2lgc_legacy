@@ -3,11 +3,13 @@
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="icon_name">edit-redo</property>
+    <property name="icon_name">edit-undo</property>
+    <property name="pixel_size">16</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="icon_name">edit-undo</property>
+    <property name="icon_name">edit-redo</property>
+    <property name="pixel_size">16</property>
   </object>
   <object class="GtkPopoverMenu" id="menu1">
     <property name="position">bottom</property>
@@ -38,9 +40,9 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkButton" id="buttonUndo">
+              <object class="GtkMenuToolButton" id="buttonUndo">
                 <property name="visible">True</property>
-                <property name="image">image2</property>
+                <property name="icon_widget">image1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -48,22 +50,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="buttonRedo">
+              <object class="GtkMenuToolButton" id="buttonRedo">
                 <property name="visible">True</property>
-                <property name="image">image1</property>
+                <property name="icon_widget">image2</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkMenuButton" id="menubutton2">
-                <property name="visible">True</property>
-                <property name="margin_start">12</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>

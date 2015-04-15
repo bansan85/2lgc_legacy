@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <libintl.h>
-#include <gtkmm/button.h>
+#include <gtkmm/menutoolbutton.h>
 #include <gtkmm/applicationwindow.h>
 
 #include "GWindowMain.hpp"
@@ -31,7 +31,7 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
   build (builder),
   projet (proj)
 {
-  Gtk::Button * button = nullptr;
+  Gtk::MenuToolButton * button = nullptr;
 
   build->get_widget ("buttonUndo", button);
 
@@ -75,7 +75,7 @@ GWindowMain::signal (EEvent event, void * param)
   {
     case EEvent::UNDO_NB :
     {
-      Gtk::Button * undoB = nullptr;
+      Gtk::MenuToolButton * undoB = nullptr;
 
       build->get_widget ("buttonUndo", undoB);
 
@@ -99,7 +99,7 @@ GWindowMain::signal (EEvent event, void * param)
     }
     case EEvent::REDO_NB :
     {
-      Gtk::Button * redoB = nullptr;
+      Gtk::MenuToolButton * redoB = nullptr;
 
       build->get_widget ("buttonRedo", redoB);
 
