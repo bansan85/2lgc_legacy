@@ -12,38 +12,7 @@ AM_CPPFLAGS			= @XML_CPPFLAGS@
 
 AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-debug --with-doc
 
-if PLATFORM_WIN32
-CUSTOM_CXXFLAGS	= -march=i686 -mms-bitfields
-else
-if PLATFORM_WIN64
-CUSTOM_CXXFLAGS	= -march=x86-64 -mms-bitfields
-else
-CUSTOM_CXXFLAGS	=
-endif
-endif
-
-if ENABLE_DEBUG
-CUSTOM_CXXFLAGS	+= -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe
-else
-CUSTOM_CXXFLAGS	+= -O2 -fomit-frame-pointer -pipe
-endif
-
-
-CUSTOM_CXXFLAGS	+= -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
-
-if PLATFORM_WIN32
-CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
-else
-if PLATFORM_WIN64
-CUSTOM_CXXFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
-else
-CUSTOM_CXXFLAGS += -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" #-fsanitize=address
-endif
-endif
-
-AM_CXXFLAGS 		= $(CUSTOM_CXXFLAGS) -Wno-error -D__STRICT_ANSI__
-
-export AM_CXXFLAGS AM_CPPFLAGS
+export AM_CPPFLAGS
 
 EXTRA_DIST	= config.rpath \
 							config.h

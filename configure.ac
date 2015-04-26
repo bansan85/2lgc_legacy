@@ -25,87 +25,118 @@ sinclude(acinclude.m4)
 
 AC_LANG(C++)
 
-old_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -Werror"
-CC_CHECK_CFLAGS_APPEND([-fmax-errors=10 \
-                        -fstack-protector-all \
-                        -fstrict-overflow \
-                        -Wall \
-                        -Wcast-align \
-                        -Wcast-qual \
-                        -Wconditionally-supported \
-                        -Wconversion \
-                        -Wextra \
-                        -Wfloat-equal \
-                        -Wformat=2 \
-                        -Wformat-nonliteral \
-                        -Wformat-security \
-                        -Winit-self \
-                        -Winline \
-                        -Wlogical-op \
-                        -Wmissing-format-attribute \
-                        -Wno-comment \
-                        -Wno-error=deprecated-declarations \
-                        -Wno-overloaded-virtual \
-                        -Wno-unused-parameter \
-                        -Wold-style-cast \
-                        -Wpacked \
-                        -Wpedantic \
-                        -Wpointer-arith \
-                        -Wredundant-decls \
-                        -Wshadow \
-                        -Wsign-conversion \
-                        -Wstrict-aliasing=1 \
-                        -Wstrict-overflow=5 \
-                        -Wswitch-default \
-                        -Wswitch-enum \
-                        -Wtrampolines \
-                        -Wundef \
-                        -Wuninitialized \
-                        -Wunused-parameter \
-                        -Wuseless-cast \
-                        -Wwrite-strings \
-                        -Wzero-as-null-pointer-constant \
-                        -fabi-version=6 \
-                        -Wabi \
-                        -Wctor-dtor-privacy \
-                        -Wc++11-compat \
-                        -Weffc++ \
-                        -Wstrict-null-sentinel \
-                        -Woverloaded-virtual \
-                       ])
-CPPFLAGS="$old_CPPFLAGS"
+for NEW_FLAG in \
+    -fmax-errors=10 \
+    -fstack-protector-all \
+    -fstrict-overflow \
+    -Wall \
+    -Wcast-align \
+    -Wcast-qual \
+    -Wconditionally-supported \
+    -Wconversion \
+    -Wextra \
+    -Wfloat-equal \
+    -Wformat=2 \
+    -Wformat-nonliteral \
+    -Wformat-security \
+    -Winit-self \
+    -Winline \
+    -Wlogical-op \
+    -Wmissing-format-attribute \
+    -Wno-comment \
+    -Wno-error=deprecated-declarations \
+    -Wno-overloaded-virtual \
+    -Wno-unused-parameter \
+    -Wold-style-cast \
+    -Wpacked \
+    -Wpedantic \
+    -Wpointer-arith \
+    -Wredundant-decls \
+    -Wshadow \
+    -Wsign-conversion \
+    -Wstrict-aliasing=1 \
+    -Wstrict-overflow=5 \
+    -Wswitch-default \
+    -Wswitch-enum \
+    -Wtrampolines \
+    -Wundef \
+    -Wuninitialized \
+    -Wunused-parameter \
+    -Wuseless-cast \
+    -Wwrite-strings \
+    -Wzero-as-null-pointer-constant \
+    -fabi-version=6 \
+    -Wabi \
+    -Wctor-dtor-privacy \
+    -Wc++11-compat \
+    -Weffc++ \
+    -Wstrict-null-sentinel \
+    -Woverloaded-virtual
+do
+  AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
+  OLD_CFLAGS="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror"
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+    [void foo(void); void foo(void) { }])], [
+    AM_CXXFLAGS="$AM_CXXFLAGS $NEW_FLAG"
+    AC_MSG_RESULT([yes])
+  ], [
+    AC_MSG_RESULT([no])
+  ])
+  CXXFLAGS="$OLD_CFLAGS"
+done
 
 #Pour clang
-old_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -Werror -Wno-unused-macros"
-CC_CHECK_CFLAGS_APPEND([-Weverything \
-                        -Wno-c++98-compat \
-                        -Wno-c++98-compat-pedantic \
-                        -Wno-reserved-id-macro \
-                        -Wno-documentation-unknown-command \
-                        -Wno-documentation \
-                        -Wno-padded \
-                        -Wno-unreachable-code-break \
-                        -Wno-covered-switch-default \
-                        -Wno-exit-time-destructors \
-                        -Wno-global-constructors])
-CPPFLAGS="$old_CPPFLAGS"
+old_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS -Werror -Wno-unused-macros"
+for NEW_FLAG in \
+    -Weverything \
+    -Wno-c++98-compat \
+    -Wno-c++98-compat-pedantic \
+    -Wno-reserved-id-macro \
+    -Wno-documentation-unknown-command \
+    -Wno-documentation \
+    -Wno-padded \
+    -Wno-unreachable-code-break \
+    -Wno-covered-switch-default \
+    -Wno-exit-time-destructors \
+    -Wno-global-constructors
+do
+  AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
+  OLD_CFLAGS="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror"
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+    [void foo(void); void foo(void) { }])], [
+    AM_CXXFLAGS="$AM_CXXFLAGS $NEW_FLAG"
+    AC_MSG_RESULT([yes])
+  ], [
+    AC_MSG_RESULT([no])
+  ])
+  CXXFLAGS="$OLD_CFLAGS"
+done
+CXXFLAGS="$old_CXXFLAGS"
 
 #Vérification que l'utilisation de c++11 est possible
-old_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -std=c++11"
-AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[]],
-                                   [[return 1;]])],
-                  [CXXFLAGS="$CXXFLAGS -std=c++11"],
-                  [
-                    CPPFLAGS="$old_CPPFLAGS -std=c++0x"
-                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
-                                                       [[return 1;]])],
-                                      [CXXFLAGS="$CXXFLAGS -std=c++11"],
-                                      [AC_MSG_ERROR(g++ ne supporte pas la norme c++11.)])
-                  ])
-CPPFLAGS="$old_CPPFLAGS"
+AC_MSG_CHECKING([if $CXX accepts -std=c++11])
+OLD_CFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS -std=c++11 -Werror"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+  [void foo(void); void foo(void) { }])], [
+  AM_CXXFLAGS="$AM_CXXFLAGS -std=c++11"
+  AC_MSG_RESULT([yes])
+], [
+  AC_MSG_RESULT([no])
+  AC_MSG_CHECKING([if $CXX accepts -std=c++0x])
+  CXXFLAGS="$OLD_CFLAGS -std=c++0x -Werror"
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+    [void foo(void); void foo(void) { }])], [
+    AM_CXXFLAGS="$AM_CXXFLAGS -std=c++0x"
+    AC_MSG_RESULT([yes])
+  ], [
+    AC_MSG_RESULT([no])
+  ])
+])
+CXXFLAGS="$OLD_CFLAGS"
 
 AC_MSG_CHECKING(de la récense de gcc...)
 AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <list>
@@ -174,6 +205,29 @@ if test "$platform_win" == "Linux" && "$withdebug" == "true"; then
   CPPFLAGS="$old_CPPFLAGS"
 fi
 
+if test "$platform_win" == "Win32"; then
+  AM_CXXFLAGS="$AM_CXXFLAGS -march=i686 -mms-bitfields"
+fi
+if test "$platform_win" == "Win64"; then
+  AM_CXXFLAGS="$AM_CXXFLAGS -march=i686 -mms-bitfields"
+fi
+if test "$withdebug" == "true"; then
+  AM_CXXFLAGS="$AM_CXXFLAGS -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe"
+else
+  AM_CXXFLAGS="$AM_CXXFLAGS -O2 -fomit-frame-pointer -pipe"
+fi
+AM_CXXFLAGS="$AM_CXXFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED"
+if test "$platform_win" == "Win32"; then
+  AM_CXXFLAGS="$AM_CXXFLAGS -DLOCALEDIR=\\\"./locale\\\" -DDATADIR=\\\"./files\\\""
+else
+  if test "$platform_win" == "Win64"; then
+    AM_CXXFLAGS="$AM_CXXFLAGS -DLOCALEDIR=\\\"./locale\\\" -DDATADIR=\\\"./files\\\""
+  else
+    AM_CXXFLAGS="$AM_CXXFLAGS -DLOCALEDIR=\\\""${localedir}"\\\" -DDATADIR=\\\""${datadir}"/2lgc\\\""
+  fi
+fi
+AM_CXXFLAGS="$AM_CXXFLAGS -Wno-error -D__STRICT_ANSI__"
+
 # GUI
 AC_ARG_WITH(gui,
             AS_HELP_STRING([--with-gui=@<:@none/gtk3/win/metro@:>@],
@@ -221,6 +275,7 @@ AM_CONDITIONAL(ENABLE_GTK, test x$withgui = xgtk3)
 AM_CONDITIONAL(ENABLE_WIN, test x$withgui = xwin)
 AM_CONDITIONAL(ENABLE_METRO, test x$withgui = xmetro)
 
+AC_SUBST([AM_CXXFLAGS])
 
 AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
 AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])

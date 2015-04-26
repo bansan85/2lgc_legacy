@@ -252,7 +252,7 @@ AC_DEFUN([CC_CHECK_CFLAG_APPEND], [
   )
 
   AS_IF([eval test x$]AS_TR_SH([cc_cv_cflags_$1])[ = xyes],
-    [CXXFLAGS="$CXXFLAGS $1"; DEBUG_CXXFLAGS="$DEBUG_CXXFLAGS $1"; $2], [$3])
+    [CXXFLAGS="$CXXFLAGS $1"; $2], [$3])
 ])
 
 dnl CC_CHECK_CFLAGS_APPEND([FLAG1 FLAG2], [action-if-found], [action-if-not])
