@@ -85,6 +85,8 @@ uifiles : $(UI_H_PRINT_FILES)
 %.ui.h.p : %.ui
 	@echo "<file compressed=\"true\">$^</file>" >> gtk-ressources.xml
 
+else
+gtk-ressources.xml :
 endif
 
 cppcheck :
