@@ -179,7 +179,7 @@ UndoManager::undoDesc (size_t n) const
   std::list <UndoData *>::const_iterator it;
 
   BUGPROG (n + pos <= liste.size (),
-           NULL,
+           nullptr,
            UNDO_MANAGER_NULL,
            gettext ("Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n"),
                     n,
@@ -271,7 +271,7 @@ UndoManager::redoDesc (size_t n) const
   std::list <UndoData *>::const_iterator it;
 
   BUGPROG (n <= pos,
-           NULL,
+           nullptr,
            UNDO_MANAGER_NULL,
            gettext ("Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n"),
                     n,
@@ -443,7 +443,7 @@ UndoManager::rollback ()
 {
   count = 0;
   
-  if (tmpListe == NULL)
+  if (tmpListe == nullptr)
   {
     return;
   }

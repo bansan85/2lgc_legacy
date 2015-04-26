@@ -34,7 +34,7 @@
           __FILE__, \
           __FUNCTION__, \
           __LINE__); \
-  if ((MANAGER) != NULL) \
+  if ((MANAGER) != nullptr) \
     (MANAGER)->rollback (); \
   PRINTF (MSG); \
   PRINTF (__VA_ARGS__); \

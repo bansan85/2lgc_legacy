@@ -29,17 +29,17 @@ INb::INb ()
 INb *
 INb::newINb (INb * nb)
 {
-  if (dynamic_cast <NbCalcul *> (nb) != NULL)
+  if (dynamic_cast <NbCalcul *> (nb) != nullptr)
   {
     return new NbCalcul (*dynamic_cast <NbCalcul *> (nb));
   }
-  else if (dynamic_cast <NbUser *> (nb) != NULL)
+  else if (dynamic_cast <NbUser *> (nb) != nullptr)
   {
     return new NbUser (*dynamic_cast <NbUser *> (nb));
   }
   else
   {
-    return NULL;
+    return nullptr;
   }
 }
 

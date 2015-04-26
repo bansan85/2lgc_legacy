@@ -54,7 +54,7 @@ main (int32_t,
                                        projet);
   assert (projet.addAction (action));
   action_ = projet.getAction ("Chargement");
-  assert (action_ != NULL);
+  assert (action_ != nullptr);
   assert (projet.getActionCount () == 1);
 
   nb0 = std::make_shared <NbUser> (0.0, EUnite::U_);

@@ -140,7 +140,7 @@ CProjet::setParametresXML (IParametres *param,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGPROG (dynamic_cast <CParamEC *> (param) != NULL,
+  BUGPROG (dynamic_cast <CParamEC *> (param) != nullptr,
            false,
            this,
            gettext ("Le type de la norme est inconnu.\n"))

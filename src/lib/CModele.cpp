@@ -51,7 +51,7 @@ CModele::addAction (std::shared_ptr <CAction> action)
             false,
             &action->getUndoManager ())
   
-  BUGUSER (getAction (*action->getNom ()) == NULL,
+  BUGUSER (getAction (*action->getNom ()) == nullptr,
            false,
            &action->getUndoManager (),
            gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n"),
@@ -145,7 +145,7 @@ CModele::getAction (const std::string & nom) const
     }
   }
   
-  return NULL;
+  return nullptr;
 }
 
 size_t
