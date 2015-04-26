@@ -69,3 +69,4 @@ out_html
 src/lib/gtk-ressources.cpp
 cov-2LGC.tgz
 cov-int
+massif.out.*
