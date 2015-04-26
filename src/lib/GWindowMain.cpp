@@ -123,7 +123,7 @@ GWindowMain::signal (EEvent event, void *)
     }
     default :
     {
-      BUGPROG (nullptr, , UNDO_MANAGER_NULL, gettext ("Signal inconnu.\n"));
+      BUGPROG (false, , UNDO_MANAGER_NULL, gettext ("Signal inconnu.\n"));
     }
   }
 }
