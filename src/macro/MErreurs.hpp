@@ -19,7 +19,7 @@
 #ifndef __MERREURS_HH
 #define __MERREURS_HH
 
-#include "config.hpp"
+#include "config.h"
 
 #include <cstdio>
 #include <libintl.h>

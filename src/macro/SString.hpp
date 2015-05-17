@@ -19,7 +19,7 @@
 #ifndef __SSTRING_HPP
 #define __SSTRING_HPP
 
-#include "config.hpp"
+#include "config.h"
 
 /**
  * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais

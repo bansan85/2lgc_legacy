@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.hpp"
+#include "config.h"
 
 #include <algorithm>
 #include <memory>
@@ -381,7 +381,7 @@ UndoManager::undoToXML (xmlNodePtr root)
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                  xmlNewNode (nullptr, BAD_CAST2 ("UndoManager")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
@@ -393,21 +393,22 @@ UndoManager::undoToXML (xmlNodePtr root)
                                                            BAD_CAST2 ("Bloc")),
                                                xmlFreeNode);
     
-    BUGCRIT (node0.get (),
+    BUGCRIT (node0.get () != nullptr,
              false,
              this,
              gettext ("Erreur d'allocation mémoire.\n"))
     
-    BUGCRIT (xmlSetProp (node0.get (),
-                         BAD_CAST2 ("Heure"),
-                         BAD_CAST2 (std::to_string (data->heure).c_str ())),
+    BUGCRIT (xmlSetProp (
+               node0.get (),
+               BAD_CAST2 ("Heure"),
+               BAD_CAST2 (std::to_string (data->heure).c_str ())) != nullptr,
              false,
              this,
              gettext ("Problème depuis la librairie : %s\n"), "xml2")
     
     BUGCRIT (xmlSetProp (node0.get (),
                          BAD_CAST2 ("Description"),
-                         BAD_CAST2 (data->description.c_str ())),
+                         BAD_CAST2 (data->description.c_str ())) != nullptr,
              false,
              this,
              gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -420,7 +421,7 @@ UndoManager::undoToXML (xmlNodePtr root)
                gettext ("Erreur lors de la génération du fichier XML.\n"))
     }
     
-    BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+    BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
              false,
              this,
              gettext ("Erreur lors de la génération du fichier XML.\n"))
@@ -428,7 +429,7 @@ UndoManager::undoToXML (xmlNodePtr root)
     node0.release ();
   }
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            this,
            gettext ("Erreur lors de la génération du fichier XML.\n"))

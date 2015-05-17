@@ -19,7 +19,7 @@
 #ifndef __MATH_HPP
 #define __MATH_HPP
 
-#include "config.hpp"
+#include "config.h"
 
 #include <cmath>
 

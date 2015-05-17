@@ -81,7 +81,7 @@ NbCalcul::newXML (xmlNodePtr root) const
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                     xmlNewNode (nullptr, BAD_CAST2 ("NbCalcul")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            UNDO_MANAGER_NULL,
            gettext ("Erreur d'allocation mémoire.\n"))
@@ -92,7 +92,7 @@ NbCalcul::newXML (xmlNodePtr root) const
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("valeur"),
-                       BAD_CAST2 (oss.str ().c_str ())),
+                       BAD_CAST2 (oss.str ().c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -100,12 +100,12 @@ NbCalcul::newXML (xmlNodePtr root) const
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("unite"),
                        BAD_CAST2 (EUniteConst[static_cast <size_t> (unite)].
-                                                                    c_str ())),
+                                                         c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            UNDO_MANAGER_NULL,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")

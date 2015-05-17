@@ -82,26 +82,26 @@ CParamEC::setNomXML (std::string * param,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                  xmlNewNode (nullptr, BAD_CAST2 ("ParamSetNom")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
-                       BAD_CAST2 (param->c_str ())),
+                       BAD_CAST2 (param->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("nom"),
-                       BAD_CAST2 (nom_->c_str ())),
+                       BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -149,26 +149,27 @@ CParamEC::setVarianteXML (std::string * nom_,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
             xmlNewNode (nullptr, BAD_CAST2 ("ParamSetVariante")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
-                       BAD_CAST2 (nom_->c_str ())),
+                       BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("variante"),
-                       BAD_CAST2 (std::to_string(variante_).c_str ())),
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             BAD_CAST2 ("variante"),
+             BAD_CAST2 (std::to_string(variante_).c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")

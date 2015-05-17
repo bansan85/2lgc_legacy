@@ -18,6 +18,18 @@
 
 #ifdef _MSC_VER
 #define CHK _Check_return_
-#else
+
+#ifndef ssize_t
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif // !ssize_t
+
+#else // !_MSC_VER
 #define CHK __attribute__ ((__warn_unused_result__))
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+#define SSCANF sscanf_s
+#else
+#define SSCANF sscanf
 #endif

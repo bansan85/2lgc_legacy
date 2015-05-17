@@ -57,7 +57,7 @@ CProjet::CProjet (ENorme norme) :
       
       if (!setParametres (param))
       {
-        throw gettext ("Impossible de créer ce projet. Echec lors de la sélection de la norme.\n");
+        throw gettext ("Impossible de créer ce projet. Échec lors de la sélection de la norme.\n");
       }
       
       break;

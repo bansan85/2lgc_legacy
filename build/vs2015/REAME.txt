@@ -1,0 +1,6 @@
+Télécharger via le site http://rpm.pbone.net/ :
+  - mingw32-libxml2 (ftp://bo.mirror.garr.it/pub/1/fedora/linux/development/22/i386/os/Packages/m/mingw32-libxml2-2.9.2-1.fc22.noarch.rpm)
+  - mingw32-iconv (ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/11/Everything/i386/os/Packages/mingw32-iconv-1.12-9.fc11.noarch.rpm)
+et les décompresser dans le dossier build\vs2015\lib.
+
+Installer libintl (http://gnuwin32.sourceforge.net/downlinks/libintl.php) dans build\vs2015\lib\GnuWin32
