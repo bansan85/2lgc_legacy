@@ -63,26 +63,26 @@ CAction::addXML (std::string *nom_,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                    xmlNewNode (nullptr, BAD_CAST2 ("addAction")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
-                       BAD_CAST2 (nom_->c_str ())),
+                       BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
-                       BAD_CAST2 (type_->c_str ())),
+                       BAD_CAST2 (type_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -110,21 +110,22 @@ CAction::setpsiXML (std::string * const nom_,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                       xmlNewNode (nullptr, BAD_CAST2 ("setpsi")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("psi"),
-                       BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")),
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             BAD_CAST2 ("psi"),
+             BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
-                       BAD_CAST2 (nom_->c_str ())),
+                       BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -132,20 +133,20 @@ CAction::setpsiXML (std::string * const nom_,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
                          xmlNewNode (nullptr, BAD_CAST2 ("val")), xmlFreeNode);
   
-  BUGCRIT (node0.get (),
+  BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCONT (psin->newXML (node0.get ()), false, &getUndoManager ())
   
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -315,14 +316,14 @@ CAction::setParamXML (std::string * action,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
               xmlNewNode (nullptr, BAD_CAST2 ("actionSetParam")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Action"),
-                       BAD_CAST2 (action->c_str ())),
+                       BAD_CAST2 (action->c_str ())) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -331,7 +332,7 @@ CAction::setParamXML (std::string * action,
                        BAD_CAST2 ("Param"),
                        param != nullptr ?
                          BAD_CAST2 (param->c_str ()) :
-                         BAD_CAST2 ("")),
+                         BAD_CAST2 ("")) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -339,14 +340,14 @@ CAction::setParamXML (std::string * action,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
                         xmlNewNode (nullptr, BAD_CAST2 ("psi0")), xmlFreeNode);
   
-  BUGCRIT (node0.get (),
+  BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCONT (psi0_->newXML (node0.get ()), false, &getUndoManager ())
   
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -354,14 +355,14 @@ CAction::setParamXML (std::string * action,
   
   node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi1")));
   
-  BUGCRIT (node0.get (),
+  BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCONT (psi1_->newXML (node0.get ()), false, &getUndoManager ())
   
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -369,20 +370,20 @@ CAction::setParamXML (std::string * action,
   
   node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi2")));
   
-  BUGCRIT (node0.get (),
+  BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
            gettext ("Erreur d'allocation mémoire.\n"))
   
   BUGCONT (psi2_->newXML (node0.get ()), false, &getUndoManager ())
   
-  BUGCRIT (xmlAddChild (node.get (), node0.get ()),
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   node0.release ();
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
            gettext ("Problème depuis la librairie : %s\n"), "xml2")

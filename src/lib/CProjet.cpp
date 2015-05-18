@@ -118,7 +118,7 @@ CProjet::setParametresXML (IParametres *param,
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
               xmlNewNode (nullptr, BAD_CAST2 ("projetSetParam")), xmlFreeNode);
   
-  BUGCRIT (node.get (),
+  BUGCRIT (node.get () != nullptr,
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
@@ -127,26 +127,29 @@ CProjet::setParametresXML (IParametres *param,
            false,
            this,
            gettext ("Le type de la norme est inconnu.\n"))
-  BUGCRIT (xmlSetProp (node.get (), BAD_CAST2 ("Type"), BAD_CAST2 ("EC")),
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Type"),
+                       BAD_CAST2 ("EC")) != nullptr,
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
-                       BAD_CAST2 (nom->c_str ())),
+                       BAD_CAST2 (nom->c_str ())) != nullptr,
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Variante"),
-                       BAD_CAST2 (std::to_string (variante).c_str ())),
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             BAD_CAST2 ("Variante"),
+             BAD_CAST2 (std::to_string (variante).c_str ())) != nullptr,
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
   
-  BUGCRIT (xmlAddChild (root, node.get ()),
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            this,
            gettext ("Problème depuis la librairie : %s\n"), "xml2")
@@ -163,12 +166,13 @@ CProjet::enregistre (std::string fichier)
                                     xmlNewDoc (BAD_CAST2 ("1.0")), xmlFreeDoc);
   xmlNodePtr root_node;
   
-  BUGCRIT (doc.get (),
+  BUGCRIT (doc.get () != nullptr,
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))
   
-  BUGCRIT (root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet")),
+  root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
+  BUGCRIT (root_node != nullptr,
            false,
            this,
            gettext ("Erreur d'allocation mémoire.\n"))

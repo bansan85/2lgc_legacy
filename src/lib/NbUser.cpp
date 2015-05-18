@@ -72,7 +72,7 @@ NbUser::toString () const
     for (width = 0; width <= 15; width++)
     {
       retour = format ("%.*le", width, val);
-      sscanf (retour.c_str (), "%le", &test);
+      SSCANF (retour.c_str (), "%le", &test);
       if ((fabs (val) * 0.999999999999999 <= fabs (test)) &&
           (fabs (test) <= fabs (val) * 1.000000000000001))
       {
@@ -86,7 +86,7 @@ NbUser::toString () const
     for (width = 0; width <= 15; width++)
     {
       retour = format ("%.*lf", width, val);
-      sscanf (retour.c_str (), "%lf", &test);
+      SSCANF (retour.c_str (), "%lf", &test);
       if ((fabs (val) * 0.999999999999999 <= fabs (test)) &&
           (fabs (test) <= fabs (val) * 1.000000000000001))
       {
