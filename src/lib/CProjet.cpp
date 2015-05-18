@@ -27,15 +27,6 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-#ifdef ENABLE_GTK
-#include <gtkmm/application.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/applicationwindow.h>
-
-#include "gtk-ressources.h"
-#include "GWindowMain.hpp"
-#endif
-
 CProjet::CProjet (ENorme norme) :
   CPreferences (),
   CCalculs (),
@@ -67,19 +58,11 @@ CProjet::CProjet (ENorme norme) :
       throw gettext ("Impossible de créer ce projet. La norme est inconnue.\n");
     }
   }
-
-#ifdef ENABLE_GTK
-  _2lgc_register_resource ();
-#endif
 }
 
 CProjet::~CProjet ()
 {
   xmlCleanupParser();
-  
-#ifdef ENABLE_GTK
-  _2lgc_unregister_resource ();
-#endif
 }
 
 std::shared_ptr <IParametres> &
@@ -252,46 +235,6 @@ CProjet::showHelp ()
     << gettext ("\t-w, --warranty : affiche les limites de garantie du logiciel\n");
   
   return;
-}
-
-bool
-CProjet::gShowMain (int32_t argc,
-                    char   *argv[])
-{
-#ifdef ENABLE_GTK
-  Glib::RefPtr <Gtk::Application> app = Gtk::Application::create (
-                                               argc, argv, "org.llgc.codegui");
-
-  Glib::RefPtr <Gtk::Builder> builder;
-  Gtk::ApplicationWindow* pDialog = nullptr;
-
-  try
-  {
-    builder = Gtk::Builder::create_from_resource (
-                                               "/org/2lgc/codegui/ui/main.ui");
-  }
-  catch (...)
-  {
-    BUGCRIT (NULL,
-             false,
-             this,
-             gettext ("Échec lors de la création de la fenêtre %s\n"),
-               "main")
-  }
-  GWindowMain winMain (builder, *this);
-  addObserver (&winMain);
-
-  builder->get_widget ("window1", pDialog);
-  app->run (*pDialog);
-
-#endif
-  return true;
-}
-
-bool
-CProjet::gAddAction ()
-{
-  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

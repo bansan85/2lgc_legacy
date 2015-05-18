@@ -44,6 +44,7 @@ po/POTFILES.in
 po/Rules-quot
 po/stamp-po
 src/lib*/*.hpp
+src/gtk/*.hpp
 src/gtk/codegui
 src/lib/gtkressources.cpp
 stamp-h1
@@ -66,7 +67,7 @@ docs/html
 docs/latex
 docs/man
 out_html
-src/lib/gtk-ressources.cpp
+src/gtk/gtk-ressources.cpp
 cov-2LGC.tgz
 cov-int
 massif.out.*

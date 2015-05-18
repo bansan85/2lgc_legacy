@@ -31,7 +31,7 @@ checkcode : ../../src/lib/codegui.hpp
 	sort ../../src/libundo/undo.hpp -o ../../src/libundo/undo.hpp
 
 ../../src/lib/gtk.dia :
-	../../../dia2code-git/src/dia2code --tab 2 -nl -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib gtk.dia
+	../../../dia2code-git/src/dia2code --tab 2 -nl -l COPYING.head -t cpp11 -ext hpp -d ../../src/gtk gtk.dia
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)

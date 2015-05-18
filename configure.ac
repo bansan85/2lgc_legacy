@@ -351,6 +351,7 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  files/uml/Makefile
                  src/Makefile
                  src/gtk/Makefile
+                 src/gtk/ui/Makefile
                  src/lib/Makefile
                  src/libundo/Makefile
                  docs/Doxyfile

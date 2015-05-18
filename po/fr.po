@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-05-17 22:49+0200\n"
+"POT-Creation-Date: 2015-05-18 10:21+0200\n"
 "PO-Revision-Date: 2015-05-18 00:03+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -219,10 +219,6 @@ msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
 #, c-format
-msgid "Échec lors de la création de la fenêtre %s\n"
-msgstr "Échec lors de la création de la fenêtre %s\n"
-
-#, c-format
 msgid "Nom du paramètre “%s” (%s)"
 msgstr "Nom du paramètre “%s” (%s)"
 
@@ -340,9 +336,8 @@ msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
 msgid "Paramètres de l'action “%s” (%s)"
 msgstr "Paramètres de l'action “%s” (%s)"
 
-#, c-format
-msgid "Fenêtre %s, composant %s introuvable.\n"
-msgstr "Fenêtre %s, composant %s introuvable.\n"
+#~ msgid "Fenêtre %s, composant %s introuvable.\n"
+#~ msgstr "Fenêtre %s, composant %s introuvable.\n"
 
-msgid "Signal inconnu.\n"
-msgstr "Signal inconnu.\n"
+#~ msgid "Signal inconnu.\n"
+#~ msgstr "Signal inconnu.\n"
