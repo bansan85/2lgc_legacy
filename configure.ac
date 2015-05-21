@@ -339,8 +339,6 @@ AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
 AC_CHECK_HEADER_STDBOOL
 
 # Checks for library functions.
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
 AC_CHECK_FUNCS([localeconv memset modf pow setlocale sqrt strchr strstr])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in
