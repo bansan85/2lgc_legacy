@@ -88,13 +88,19 @@ checkcode :
 	
 	$(MAKE) clean
 	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	$(MAKE) -j9 &> l_gcc_sans_gtk.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
+	
+	$(MAKE) clean
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=undefined" CXXFLAGS="-fsanitize=undefined"
+	$(MAKE) -j9 &> l_gcc_undefined.log
+	
+	$(MAKE) clean
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=address" CXXFLAGS="-fsanitize=address"
+	$(MAKE) -j9 &> l_gcc_address.log
 	
 	$(MAKE) clean
 	./configure --prefix=/usr/local CXXFLAGS="" CC=clang CXX=clang++
@@ -108,6 +114,10 @@ checkcode :
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	../cov-analysis-*/bin/cov-build --dir cov-int make -j9
 	tar czvf cov-2LGC.tgz cov-int
+	
+	$(MAKE) clean
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	MALLOC_CHECK_=3 MALLOC_PERTURB_=252 $(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) -C src/lib cppcheck
 	../nsiqcppstyle/nsiqcppstyle . > coding_style.log
