@@ -75,6 +75,7 @@ GWindowMain::signal (EEvent event, void *)
   {
     case EEvent::UNDO_NB :
     {
+      printf ("UNDO_NB\n");
       Gtk::MenuToolButton * undoB = nullptr;
 
       build->get_widget ("buttonUndo", undoB);
@@ -99,6 +100,7 @@ GWindowMain::signal (EEvent event, void *)
     }
     case EEvent::REDO_NB :
     {
+      printf ("REDO_NB\n");
       Gtk::MenuToolButton * redoB = nullptr;
 
       build->get_widget ("buttonRedo", redoB);

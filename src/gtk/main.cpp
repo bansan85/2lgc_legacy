@@ -59,8 +59,10 @@ gShowMain (int32_t argc,
              gettext ("Échec lors de la création de la fenêtre %s\n"),
                "main")
   }
-  GWindowMain winMain (builder, projet);
-  projet.addObserver (&winMain);
+
+  std::shared_ptr <GWindowMain> winMain;
+  winMain = std::make_shared <GWindowMain> (builder, projet);
+  projet.addObserver (winMain);
 
   builder->get_widget ("window1", pDialog);
   app->run (*pDialog);

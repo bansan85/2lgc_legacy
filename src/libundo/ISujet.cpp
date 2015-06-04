@@ -32,14 +32,14 @@ ISujet::~ISujet ()
 void
 ISujet::notify (EEvent event, void * param)
 {
-  for (IObserveur * obs : observeurs)
+  for (std::shared_ptr <IObserveur> obs : observeurs)
   {
     obs->signal (event, param);
   }
 }
 
 void
-ISujet::addObserver (IObserveur * obs)
+ISujet::addObserver (std::shared_ptr <IObserveur> obs)
 {
   if (obs == nullptr)
   {
