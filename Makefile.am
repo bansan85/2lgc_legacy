@@ -103,7 +103,7 @@ checkcode :
 	$(MAKE) -j9 &> l_gcc_address.log
 	
 	$(MAKE) clean
-	./configure --prefix=/usr/local CXXFLAGS="" CC=clang CXX=clang++
+	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
 	$(MAKE) -j9 &> l_clang.log
 	
 	$(MAKE) clean

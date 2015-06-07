@@ -28,8 +28,8 @@
 
 #define PRINTF(...) printf (__VA_ARGS__)
 
-
-#define FAILINFO(Y, MANAGER, MSG, ...) { \
+// FAILINFO ne doit pas être utilisé à l'extérieur de MErreurs.hpp
+#define FAILINFO(Y, MANAGER, MSG, ...) \
   PRINTF (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
           __FILE__, \
           __FUNCTION__, \
@@ -38,11 +38,10 @@
     (MANAGER)->rollback (); \
   PRINTF (MSG); \
   PRINTF (__VA_ARGS__); \
-  return Y; \
-}
+  return Y;
 
-
-#define XXX(X, Y, MANAGER, MSG, ...) { \
+// XXX ne doit pas être utilisé à l'extérieur de MErreurs.hpp
+#define XXX(X, Y, MANAGER, MSG, ...) \
   try \
   { \
     bool tmp_x = (X); \
@@ -54,8 +53,7 @@
   catch (...) \
   { \
     FAILINFO (Y, MANAGER, MSG, __VA_ARGS__) \
-  } \
-}
+  }
 /**
  * \def XXX(X, Y, MANAGER, MSG, ...)
  * \brief La macro est l'équivalent d'un "return Y; ..." si la condition X
@@ -66,7 +64,6 @@
  * \param MSG : Le message afficher.
  * \param ... : Message complémentaire sous une forme compatible avec fprintf.
  */
-
 
 #define BUGPARAM(PARAM, TYPE, X, Y, MANAGER) { \
   if (!(X)) \
@@ -87,7 +84,6 @@
  * \param MANAGER : Le gestionnaire d'annulation. Peut être NULL,
  */
 
-
 #define BUGCRIT(X, Y, MANAGER, ...) { \
   XXX (X, Y, MANAGER, gettext ("Erreur de type critique.\n"), __VA_ARGS__) \
 }
@@ -100,21 +96,17 @@
  * \param MANAGER : Le gestionnaire d'annulation. Peut être NULL,
  */
 
-
 #define BUGUSER(X, Y, MANAGER, ...) { \
   XXX (X, Y, MANAGER, gettext ("Erreur de type utilisateur.\n"), __VA_ARGS__) \
 }
-
 
 #define BUGPROG(X, Y, MANAGER, ...) { \
   XXX (X, Y, MANAGER, gettext ("Erreur de programmation.\n"), __VA_ARGS__) \
 }
 
-
 #define BUGCONT(X, Y, MANAGER) { \
   XXX (X, Y, MANAGER, gettext ("Propagation de l'erreur.\n"), "BLA") \
 }
-
 
 #endif
 

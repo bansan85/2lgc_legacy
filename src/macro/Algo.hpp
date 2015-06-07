@@ -16,37 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __ALGO_HPP
+#define __ALGO_HPP
+
 #include "config.h"
 
-#include "ISujet.hpp"
-
-ISujet::ISujet () :
-  observeurs ()
-{
-}
-
-ISujet::~ISujet ()
-{
-}
-
-void
-ISujet::notify (EEvent event, void * param)
-{
-  for (std::shared_ptr <IObserveur> obs : observeurs)
-  {
-    obs->signal (event, param);
-  }
-}
-
-void
-ISujet::addObserver (std::shared_ptr <IObserveur> obs)
-{
-  if (obs != nullptr)
-  {
-    observeurs.push_back (obs);
+#define NCALL(i, function) \
+  for (size_t i_ = 1; i_ <= i; i_++) \
+  { \
+    function \
   }
 
-  return;
-}
+#endif
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
