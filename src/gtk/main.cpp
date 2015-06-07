@@ -39,12 +39,13 @@ gShowMain (int32_t argc,
            char   *argv[],
            CProjet &projet)
 {
-#ifdef ENABLE_GTK
-  Glib::RefPtr <Gtk::Application> app = Gtk::Application::create (
-                                               argc, argv, "org.llgc.codegui");
+  Glib::RefPtr <Gtk::Application> app =
+                                 Gtk::Application::create (argc,
+                                                           argv,
+                                                           "org.llgc.codegui");
 
   Glib::RefPtr <Gtk::Builder> builder;
-  Gtk::ApplicationWindow* pDialog = nullptr;
+  Gtk::ApplicationWindow    * pDialog = nullptr;
 
   try
   {
@@ -56,7 +57,7 @@ gShowMain (int32_t argc,
     BUGCRIT (NULL,
              false,
              &projet,
-             gettext ("Échec lors de la création de la fenêtre %s\n"),
+             "Échec lors de la création de la fenêtre %s\n",
                "main")
   }
 
@@ -67,7 +68,6 @@ gShowMain (int32_t argc,
   builder->get_widget ("window1", pDialog);
   app->run (*pDialog);
 
-#endif
   return true;
 }
 
@@ -112,19 +112,15 @@ main (int32_t argc,
   _2lgc_register_resource ();
 
   std::shared_ptr <CAction> action;
-  action = std::make_shared <CAction> (std::make_shared <std::string> (
-                                                               "Poids propre"),
-                                       0,
-                                       projet);
+  action = std::make_shared <CAction> (
+                               std::make_shared <std::string> ("Poids propre"),
+                               0,
+                               projet);
   assert (projet.addAction (action));
   BUGCONT (gShowMain (argc, argv, projet), -1, &projet);
 
   _2lgc_unregister_resource ();
 
-  // Affichage de l'interface graphique
-//  gtk_widget_show_all (projet->ui.comp.window);
-//  gtk_main ();
-  
   return 0;
 }
 

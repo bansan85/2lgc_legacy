@@ -38,12 +38,13 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
   BUGPROG (button,
            ,
            UNDO_MANAGER_NULL,
-           gettext ("Fenêtre %s, composant %s introuvable.\n"),
+           "Fenêtre %s, composant %s introuvable.\n",
              "Main",
              "buttonUndo");
 
-  button->signal_clicked ().connect (sigc::mem_fun (
-                                          *this, &GWindowMain::onClickedUndo));
+  button->signal_clicked ().connect (
+                                  sigc::mem_fun (*this,
+                                                 &GWindowMain::onClickedUndo));
   signal (EEvent::UNDO_NB, nullptr);
 
   build->get_widget ("buttonRedo", button);
@@ -51,18 +52,19 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
   BUGPROG (button,
            ,
            UNDO_MANAGER_NULL,
-           gettext ("Fenêtre %s, composant %s introuvable.\n"),
+           "Fenêtre %s, composant %s introuvable.\n",
              "Main",
              "buttonRedo");
 
-  button->signal_clicked ().connect (sigc::mem_fun (
-                                          *this, &GWindowMain::onClickedRedo));
+  button->signal_clicked ().connect (
+                                  sigc::mem_fun (*this,
+                                                 &GWindowMain::onClickedRedo));
   signal (EEvent::REDO_NB, nullptr);
 }
 
 GWindowMain::~GWindowMain()
 {
-  Gtk::ApplicationWindow* pDialog = nullptr;
+  Gtk::ApplicationWindow * pDialog = nullptr;
 
   build->get_widget ("window1", pDialog);
   delete pDialog;
@@ -82,7 +84,7 @@ GWindowMain::signal (EEvent event, void *)
       BUGPROG (undoB,
                ,
                UNDO_MANAGER_NULL,
-               gettext ("Fenêtre %s, composant %s introuvable.\n"),
+               "Fenêtre %s, composant %s introuvable.\n",
                  "Main",
                  "buttonUndo");
 
@@ -106,7 +108,7 @@ GWindowMain::signal (EEvent event, void *)
       BUGPROG (redoB,
                ,
                UNDO_MANAGER_NULL,
-               gettext ("Fenêtre %s, composant %s introuvable.\n"),
+               "Fenêtre %s, composant %s introuvable.\n",
                  "Main",
                  "buttonRedo");
 
@@ -123,7 +125,11 @@ GWindowMain::signal (EEvent event, void *)
     }
     default :
     {
-      BUGPROG (false, , UNDO_MANAGER_NULL, gettext ("Signal inconnu.\n"));
+      BUGPROG (false,
+               ,
+               UNDO_MANAGER_NULL,
+               "Signal %zu inconnu.\n",
+                 static_cast <size_t> (event));
     }
   }
 }
