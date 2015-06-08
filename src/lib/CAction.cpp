@@ -61,31 +61,32 @@ CAction::addXML (std::string *nom_,
   BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                   xmlNewNode (nullptr, BAD_CAST2 ("addAction")), xmlFreeNode);
+                                 xmlNewNode (nullptr, BAD_CAST2 ("addAction")),
+                                 xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
                        BAD_CAST2 (type_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   node.release ();
   
@@ -108,12 +109,13 @@ CAction::setpsiXML (std::string * const nom_,
   BUGPARAM (psi, "%u", psi <= 2, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                      xmlNewNode (nullptr, BAD_CAST2 ("setpsi")), xmlFreeNode);
+                                    xmlNewNode (nullptr, BAD_CAST2 ("setpsi")),
+                                    xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (
              node.get (),
@@ -121,35 +123,36 @@ CAction::setpsiXML (std::string * const nom_,
              BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                         xmlNewNode (nullptr, BAD_CAST2 ("val")), xmlFreeNode);
+                                       xmlNewNode (nullptr, BAD_CAST2 ("val")),
+                                       xmlFreeNode);
   
   BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCONT (psin->newXML (node0.get ()), false, &getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node0.release ();
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node.release ();
   
   return true;
@@ -181,10 +184,10 @@ CAction::setPsi (uint8_t psi, std::shared_ptr <INb> val)
 
   if (val != NULL)
   {
-    BUGUSER (val.get ()->getUnite () == EUnite::U_,
+    BUGPROG (val.get ()->getUnite () == EUnite::U_,
              false,
              &getUndoManager (),
-             gettext ("L'unité est de type [%s] à la place de [%s].\n"),
+             "L'unité est de type [%s] à la place de [%s].\n",
                EUniteConst[static_cast <size_t> (val.get ()->getUnite ())].
                                                                       c_str (),
                EUniteConst[static_cast <size_t> (EUnite::U_)].c_str ())
@@ -314,19 +317,20 @@ CAction::setParamXML (std::string * action,
   BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-              xmlNewNode (nullptr, BAD_CAST2 ("actionSetParam")), xmlFreeNode);
+                            xmlNewNode (nullptr, BAD_CAST2 ("actionSetParam")),
+                            xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Action"),
                        BAD_CAST2 (action->c_str ())) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Param"),
@@ -335,22 +339,23 @@ CAction::setParamXML (std::string * action,
                          BAD_CAST2 ("")) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                        xmlNewNode (nullptr, BAD_CAST2 ("psi0")), xmlFreeNode);
+                                      xmlNewNode (nullptr, BAD_CAST2 ("psi0")),
+                                      xmlFreeNode);
   
   BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCONT (psi0_->newXML (node0.get ()), false, &getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node0.release ();
   
   node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi1")));
@@ -358,14 +363,14 @@ CAction::setParamXML (std::string * action,
   BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCONT (psi1_->newXML (node0.get ()), false, &getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node0.release ();
   
   node0.reset (xmlNewNode (nullptr, BAD_CAST2 ("psi2")));
@@ -373,20 +378,20 @@ CAction::setParamXML (std::string * action,
   BUGCRIT (node0.get () != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGCONT (psi2_->newXML (node0.get ()), false, &getUndoManager ())
   
   BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node0.release ();
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            &getUndoManager (),
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   node.release ();
   
   return true;

@@ -18,6 +18,7 @@
 
 #include "config.h"
 
+#include <algorithm>
 #include <memory>
 
 #include "CModele.hpp"
@@ -60,13 +61,13 @@ CModele::addAction (std::shared_ptr <CAction> action)
   BUGPROG (action->emptyCharges (),
            false,
            &action->getUndoManager (),
-           gettext ("L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n"))
+           "L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n")
   
   BUGPROG (action->getType () <static_cast <CProjet *> (this)
                                                 ->getParametres ()->getpsiN (),
            false,
            &action->getUndoManager (),
-           gettext ("Le type d'action %d est inconnu.\n"), action->getType ())
+           "Le type d'action %d est inconnu.\n", action->getType ())
   
   BUGCONT (action->getUndoManager ().ref (),
            false,
@@ -137,15 +138,23 @@ CModele::addAction (std::shared_ptr <CAction> action)
 CAction *
 CModele::getAction (const std::string & nom) const
 {
-  for (const std::shared_ptr <CAction> & action : actions)
-  {
-    if (nom.compare (*action.get ()->getNom ()) == 0)
-    {
-      return action.get ();
-    }
-  }
+  std::list <std::shared_ptr <CAction> >::const_iterator it;
+
+  it = std::find_if (actions.begin (),
+                     actions.end (),
+                     [&nom](const std::shared_ptr <CAction> & action)
+                     {
+                       return nom.compare (*action.get ()->getNom ()) == 0;
+                     });
   
-  return nullptr;
+  if (it != actions.end ())
+  {
+    return (*it).get ();
+  }
+  else
+  {
+    return nullptr;
+  }
 }
 
 size_t
@@ -166,22 +175,26 @@ CModele::rmAction (std::shared_ptr <CAction> & action)
   BUGPROG (action.get ()->emptyCharges (),
            false,
            &action.get ()->getUndoManager (),
-           gettext ("L'action doit être supprimée sans charge. Elles doivent être supprimées avant.\n"))
+           "L'action doit être supprimée sans charge. Elles doivent être supprimées avant.\n")
   
   BUGCONT (action.get ()->getUndoManager ().ref (),
            false,
            &action.get ()->getUndoManager ())
 
-  std::list <std::shared_ptr <CAction> >::iterator it;
+  std::list <std::shared_ptr <CAction> >::const_iterator it;
 
-  for (it = actions.begin (); it != actions.end (); ++it)
+  it = std::find_if (actions.begin (),
+                     actions.end (),
+                     [&action](const std::shared_ptr <CAction> & it2)
+                     {
+                       return it2.get () == action.get ();
+                     });
+
+  if (it != actions.end ())
   {
-    if ((*it).get () == action.get ())
-    {
-      actions.erase (it);
-      break;
-    }
+    actions.erase (it);
   }
+
   BUGCONT (action.get ()->getUndoManager ().push (
              std::bind (&CModele::addAction,
                         this,

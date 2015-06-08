@@ -40,22 +40,22 @@ CProjet::CProjet (ENorme norme) :
   {
     case ENorme::EUROCODE :
     {
-      std::shared_ptr <CParamEC> param
-        (std::make_shared <CParamEC> (std::make_shared <std::string> (gettext ("Eurocode, annexe nationale")),
-                                      ENormeEcAc::FR,
-                                      0,
-                                      *this));
+      std::shared_ptr <CParamEC> param (std::make_shared <CParamEC>
+        (std::make_shared <std::string> (gettext ("Eurocode, annexe nationale")),
+         ENormeEcAc::FR,
+         0,
+         *this));
       
       if (!setParametres (param))
       {
-        throw gettext ("Impossible de créer ce projet. Échec lors de la sélection de la norme.\n");
+        throw "Impossible de créer ce projet. Échec lors de la sélection de la norme.\n";
       }
       
       break;
     }
     default :
     {
-      throw gettext ("Impossible de créer ce projet. La norme est inconnue.\n");
+      throw "Impossible de créer ce projet. La norme est inconnue.\n";
     }
   }
 }
@@ -116,30 +116,31 @@ CProjet::setParametresXML (IParametres *param,
   BUGPARAM (static_cast <void *> (root), "%p", root, false, this)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-              xmlNewNode (nullptr, BAD_CAST2 ("projetSetParam")), xmlFreeNode);
+                            xmlNewNode (nullptr, BAD_CAST2 ("projetSetParam")),
+                            xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
            this,
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   BUGPROG (dynamic_cast <CParamEC *> (param) != nullptr,
            false,
            this,
-           gettext ("Le type de la norme est inconnu.\n"))
+           "Le type de la norme est inconnu.\n")
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
                        BAD_CAST2 ("EC")) != nullptr,
            false,
            this,
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom->c_str ())) != nullptr,
            false,
            this,
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (
              node.get (),
@@ -147,12 +148,12 @@ CProjet::setParametresXML (IParametres *param,
              BAD_CAST2 (std::to_string (variante).c_str ())) != nullptr,
            false,
            this,
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
            this,
-           gettext ("Problème depuis la librairie : %s\n"), "xml2")
+           "Problème depuis la librairie : %s\n", "xml2")
   
   node.release ();
   
@@ -169,13 +170,13 @@ CProjet::enregistre (std::string fichier)
   BUGCRIT (doc.get () != nullptr,
            false,
            this,
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
   BUGCRIT (root_node != nullptr,
            false,
            this,
-           gettext ("Erreur d'allocation mémoire.\n"))
+           "Erreur d'allocation mémoire.\n")
   
   xmlDocSetRootElement (doc.get (), root_node);
   
