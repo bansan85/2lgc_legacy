@@ -112,7 +112,7 @@ checkcode :
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
-	../cov-analysis-*/bin/cov-build --dir cov-int make -j9
+	../cov-analysis-*/bin/cov-build --dir cov-int make -j9 check
 	tar czvf cov-2LGC.tgz cov-int
 	
 	$(MAKE) clean

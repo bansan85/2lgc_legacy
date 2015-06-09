@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-05-18 10:21+0200\n"
+"POT-Creation-Date: 2015-06-08 23:01+0200\n"
 "PO-Revision-Date: 2015-05-18 00:03+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -21,27 +21,9 @@ msgstr ""
 "L'action '%s' existe déjà.\n"
 "Impossible de l'ajouter.\n"
 
-msgid ""
-"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
-"ensuite.\n"
-msgstr ""
-"L'action doit être ajoutée sans charge. Elles doivent être ajoutées "
-"ensuite.\n"
-
-#, c-format
-msgid "Le type d'action %d est inconnu.\n"
-msgstr "Le type d'action %d est inconnu.\n"
-
 #, c-format
 msgid "Ajout de l'action “%s”"
 msgstr "Ajout de l'action “%s”"
-
-msgid ""
-"L'action doit être supprimée sans charge. Elles doivent être supprimées "
-"avant.\n"
-msgstr ""
-"L'action doit être supprimée sans charge. Elles doivent être supprimées "
-"avant.\n"
 
 #, c-format
 msgid "Suppression de l'action “%s”"
@@ -50,27 +32,9 @@ msgstr "Suppression de l'action “%s”"
 msgid "Eurocode, annexe nationale"
 msgstr "Eurocode, annexe nationale"
 
-msgid ""
-"Impossible de créer ce projet. Échec lors de la sélection de la norme.\n"
-msgstr ""
-"Impossible de créer ce projet. Échec lors de la sélection de la norme.\n"
-
-msgid "Impossible de créer ce projet. La norme est inconnue.\n"
-msgstr "Impossible de créer ce projet. La norme est inconnue.\n"
-
 #, c-format
 msgid "Paramètres du projet (%s)"
 msgstr "Paramètres du projet (%s)"
-
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
-
-msgid "Le type de la norme est inconnu.\n"
-msgstr "Le type de la norme est inconnu.\n"
-
-#, c-format
-msgid "Problème depuis la librairie : %s\n"
-msgstr "Problème depuis la librairie : %s\n"
 
 msgid "Échec lors de l'enregistrement.\n"
 msgstr "Échec lors de l'enregistrement.\n"
@@ -325,19 +289,9 @@ msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
 #, c-format
-msgid "L'unité est de type [%s] à la place de [%s].\n"
-msgstr "L'unité est de type [%s] à la place de [%s].\n"
-
-#, c-format
 msgid "Cœfficient ψ%C de l'action “%s” (%lf)"
 msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
 
 #, c-format
 msgid "Paramètres de l'action “%s” (%s)"
 msgstr "Paramètres de l'action “%s” (%s)"
-
-#~ msgid "Fenêtre %s, composant %s introuvable.\n"
-#~ msgstr "Fenêtre %s, composant %s introuvable.\n"
-
-#~ msgid "Signal inconnu.\n"
-#~ msgstr "Signal inconnu.\n"
