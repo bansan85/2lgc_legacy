@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\src\macro;..\..\;.;lib\usr\i686-w64-mingw32\sys-root\mingw\include\libxml2;lib\usr\i686-pc-mingw32\sys-root\mingw\include;lib\GnuWin32\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src\macro;..\..\;.;C:\msys32\mingw32\include;C:\msys32\mingw32\include\libxml2;$(IncludePath)</IncludePath>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -60,7 +60,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>lib\usr\i686-w64-mingw32\sys-root\mingw\lib\libxml2.dll.a;lib\GnuWin32\lib\libintl.dll.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\msys32\mingw32\lib\libxml2.dll.a;C:\msys32\mingw32\lib\libintl.dll.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
