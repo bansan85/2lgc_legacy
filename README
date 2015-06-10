@@ -16,10 +16,11 @@ La description des messages doit toujours commencer par :
 [CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, coding style, …).
 [GTK] : tout ce qui concerne une modification de l'interface graphique linux.
 [UML] : Modification du diagramme UML.
-[CONFIG] : Toute modification portant sur les autotools et qui prépare la compilation.
 [TEST] : Ajout / Modification de tests.
 [WIN] : Tout ce qui concerne la compatibilité avec Windows.
-[VISUAL STUDIO] : Les modifications spécifiques à Visual Studio.
+[AUTOTOOLS] : Toutes modifications portant sur les autotools.
+[VISUAL STUDIO] : Toutes modifications portant sur Visual Studio.
+[TRAVIS] : Toutes modifications portant sur Travis.
 [ANDROID] : Tout ce qui concerne la compatibilité avec Android.
 
 
