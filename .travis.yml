@@ -5,8 +5,7 @@ compiler :
 
 before_install:
   - sudo apt-get update -qq
-  - apt-cache search cholmod
-  - sudo apt-get install -y libcholmod2.1.2
+  - sudo apt-get install -y libcholmod1.7.1
   - sudo apt-get install -y libgtk-3-0
   - sudo apt-get install -y librsvg2-2
   - sudo sed -i '/read dummy/d' `type -p gettextize`
