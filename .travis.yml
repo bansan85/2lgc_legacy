@@ -4,15 +4,8 @@ compiler :
   - gcc
 
 before_install:
-  - sudo sh -c 'echo "deb http://ppa.launchpad.net/gnome3-team/gnome3-staging/ubuntu vivid main" >> /etc/apt/sources.list'
-  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid main universe restricted multiverse" >> /etc/apt/sources.list'
-  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid-security main universe restricted multiverse" >> /etc/apt/sources.list'
-  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid-updates main universe restricted multiverse" >> /etc/apt/sources.list'
   - sudo apt-get update -qq
-  - sudo apt-cache gencaches
-  - sudo apt-get install -y libcholmod1.7.1
-  - sudo apt-get install -y --force-yes libgtk-3-0
-  - sudo apt-get install -y librsvg2-2
+  - sudo apt-get install -y libsuitesparse-dev
   - sudo sed -i '/read dummy/d' `type -p gettextize`
   - sudo sed -i '/Press Return/d' `type -p gettextize`
 
@@ -32,7 +25,7 @@ script:
   - libtoolize
   - automake --add-missing --copy
   - autoconf
-  - ./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+  - ./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
   - sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
   - find . -name "Makefile" -exec sed -i "s#-I/usr#-isystem/usr#g" {} \;
   - make check -j9
