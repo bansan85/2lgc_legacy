@@ -5,6 +5,9 @@ compiler :
 
 before_install:
   - sudo sh -c 'echo "deb http://ppa.launchpad.net/gnome3-team/gnome3-staging/ubuntu vivid main" >> /etc/apt/sources.list'
+  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid main universe restricted multiverse" >> /etc/apt/sources.list'
+  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid-security main universe restricted multiverse" >> /etc/apt/sources.list'
+  - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid-updates main universe restricted multiverse" >> /etc/apt/sources.list'
   - sudo apt-get update -qq
   - sudo apt-cache gencaches
   - apt-cache search cholmod
