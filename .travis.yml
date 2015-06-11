@@ -11,7 +11,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-cache gencaches
   - sudo apt-get install -y libcholmod1.7.1
-  - sudo apt-get install -y libgtk-3-0
+  - sudo apt-get install -y --force-yes libgtk-3-0
   - sudo apt-get install -y librsvg2-2
   - sudo sed -i '/read dummy/d' `type -p gettextize`
   - sudo sed -i '/Press Return/d' `type -p gettextize`
