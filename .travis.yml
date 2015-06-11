@@ -5,7 +5,7 @@ compiler :
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y libsuitesparse-dev
+  - sudo apt-get install -y libsuitesparse-dev gfortran
   - sudo sed -i '/read dummy/d' `type -p gettextize`
   - sudo sed -i '/Press Return/d' `type -p gettextize`
 
