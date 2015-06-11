@@ -4,7 +4,7 @@ compiler :
   - gcc
 
 before_install:
-  - sudo add-apt-repository ppa:gnome3-team/gnome3-staging -y
+  - sudo sh -c 'echo "deb http://ppa.launchpad.net/gnome3-team/gnome3-staging/ubuntu vivid main" >> /etc/apt/sources.list'
   - sudo apt-get update -qq
   - sudo apt-cache gencaches
   - apt-cache search cholmod
