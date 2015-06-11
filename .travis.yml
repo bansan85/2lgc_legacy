@@ -10,10 +10,7 @@ before_install:
   - sudo sh -c 'echo "deb http://fr.archive.ubuntu.com/ubuntu/ vivid-updates main universe restricted multiverse" >> /etc/apt/sources.list'
   - sudo apt-get update -qq
   - sudo apt-cache gencaches
-  - apt-cache search cholmod
-  - apt-cache showpkg libcholmod2.1.2
-  - apt-cache showpkg libgtk-3-0
-  - sudo apt-get install -y libcholmod2.1.2
+  - sudo apt-get install -y libcholmod1.7.1
   - sudo apt-get install -y libgtk-3-0
   - sudo apt-get install -y librsvg2-2
   - sudo sed -i '/read dummy/d' `type -p gettextize`
