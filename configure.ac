@@ -154,7 +154,7 @@ AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <list>
                   [AC_MSG_ERROR(g++ en version 4.6 minimum est nécessaire.)])
 
 # libxml2
-LIBXML_REQUIRED_VERSION=2.8.0
+LIBXML_REQUIRED_VERSION=2.7.0
 AC_SUBST(XML_CPPFLAGS)
 AC_SUBST(XML_LIBS)
 AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
@@ -336,7 +336,6 @@ AC_CHECK_LIB(m, sqrt)
 AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_HEADER_STDBOOL
 
 # Checks for library functions.
 AC_CHECK_FUNCS([localeconv memset modf pow setlocale sqrt strchr strstr])
