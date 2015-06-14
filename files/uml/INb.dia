@@ -68,13 +68,13 @@
         <dia:point val="-21.7434,1.13319"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-21.7934,1.08319;-16.2059,4.18319"/>
+        <dia:rectangle val="-21.7934,1.08319;-16.9759,4.18319"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-21.7434,1.13319"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="5.4874999999999998"/>
+        <dia:real val="4.7174999999999994"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="3"/>
@@ -631,16 +631,16 @@
         <dia:point val="-2,6.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-16.7059,1.78319;-1.95,6.85"/>
+        <dia:rectangle val="-17.4759,1.78319;-1.95,6.85"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-2,6.8"/>
-        <dia:point val="-8.92795,6.8"/>
-        <dia:point val="-8.92795,2.23319"/>
-        <dia:point val="-16.2559,2.23319"/>
+        <dia:point val="-9.31295,6.8"/>
+        <dia:point val="-9.31295,2.23319"/>
+        <dia:point val="-17.0259,2.23319"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1693,7 +1693,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#val#</dia:string>
+                <dia:string>#unite_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#EUnite#</dia:string>
@@ -2276,7 +2276,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#unite#</dia:string>
+                <dia:string>#unite_#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#EUnite#</dia:string>
