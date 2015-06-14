@@ -30,8 +30,8 @@ typedef SSIZE_T ssize_t;
 
 #if defined(_MSC_VER)
 #define SSCANF sscanf_s
-#define DLLEXPORT __declspec(dllexport)
+#define DllExport __declspec(dllexport)
 #else
 #define SSCANF sscanf
-#define DLLEXPORT
+#define DllExport
 #endif
