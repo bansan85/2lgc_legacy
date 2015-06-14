@@ -28,8 +28,10 @@ typedef SSIZE_T ssize_t;
 #define CHK __attribute__ ((__warn_unused_result__))
 #endif
 
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_MSC_VER)
 #define SSCANF sscanf_s
+#define DLLEXPORT __declspec(dllexport)
 #else
 #define SSCANF sscanf
+#define DLLEXPORT
 #endif

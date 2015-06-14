@@ -100,7 +100,8 @@ for NEW_FLAG in \
     -Wno-unreachable-code-break \
     -Wno-covered-switch-default \
     -Wno-exit-time-destructors \
-    -Wno-global-constructors
+    -Wno-global-constructors \
+    -Winconsistent-missing-override
 do
   AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
   OLD_CFLAGS="$CXXFLAGS"
