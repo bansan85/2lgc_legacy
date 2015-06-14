@@ -49,7 +49,7 @@ format (const std::string fmt,
                    fmt.c_str (),
                    marker);
     va_end (marker);
-    if ((n > 0) && (b = (static_cast <size_t> (n) < size)))
+    if ((n > 0) && ((b = (static_cast <size_t> (n) < size)) == true))
     {
       s.resize (static_cast <size_t> (n));
     }
