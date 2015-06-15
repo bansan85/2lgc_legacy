@@ -43,7 +43,7 @@ CModele::~CModele ()
 {
 }
 
-bool
+bool CHK
 CModele::addAction (std::shared_ptr <CAction> action)
 {
   BUGPARAM (static_cast <void *> (action.get ()),
@@ -163,7 +163,7 @@ CModele::getActionCount () const
   return actions.size ();
 }
 
-bool
+bool CHK
 CModele::rmAction (std::shared_ptr <CAction> & action)
 {
   BUGPARAM (static_cast <void *> (action.get ()),

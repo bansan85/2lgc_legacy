@@ -75,7 +75,7 @@ NbCalcul::toString () const
   return oss.str ();
 }
 
-bool
+bool CHK
 NbCalcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (

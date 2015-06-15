@@ -98,7 +98,7 @@ NbUser::toString () const
   return format ("%.*lf", width, val);
 }
 
-bool
+bool CHK
 NbUser::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (

@@ -71,7 +71,7 @@ CProjet::getParametres ()
   return parametres;
 }
 
-bool
+bool CHK
 CProjet::setParametres (std::shared_ptr <IParametres> param)
 {
   BUGCONT (ref (), false, this)
@@ -107,7 +107,7 @@ CProjet::setParametres (std::shared_ptr <IParametres> param)
   return true;
 }
 
-bool
+bool CHK
 CProjet::setParametresXML (IParametres *param,
                            std::string *nom,
                            uint32_t     variante,
@@ -160,7 +160,7 @@ CProjet::setParametresXML (IParametres *param,
   return true;
 }
 
-bool
+bool CHK
 CProjet::enregistre (std::string fichier)
 {
   std::unique_ptr <xmlDoc, void (*)(xmlDocPtr)> doc (

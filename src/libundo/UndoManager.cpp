@@ -49,7 +49,7 @@ UndoManager::~UndoManager ()
   delete (tmpListe);
 }
 
-bool
+bool CHK
 UndoManager::push (std::function <bool ()>           annule,
                    std::function <bool ()>           repete,
                    std::shared_ptr <void>            suppr,
@@ -92,7 +92,7 @@ UndoManager::push (std::function <bool ()>           annule,
   return true;
 }
 
-bool
+bool CHK
 UndoManager::pushSuppr (std::shared_ptr <void> suppr)
 {
   if (!insertion)
@@ -152,7 +152,7 @@ UndoManager::undo ()
   return true;
 }
 
-bool
+bool CHK
 UndoManager::undoN (uint32_t nb)
 {
   // Pour éviter l'émission des signaux à chaque émission de undo ().
@@ -193,7 +193,7 @@ UndoManager::undoDesc (size_t n) const
   return &undoData->description;
 }
 
-bool
+bool CHK
 UndoManager::redo ()
 {
   UndoData * undoData;
@@ -242,7 +242,7 @@ UndoManager::redo ()
   return true;
 }
 
-bool
+bool CHK
 UndoManager::redoN (uint32_t nb)
 {
   // Pour éviter l'émission des signaux à chaque émission de redo ().
@@ -296,7 +296,7 @@ UndoManager::getEtat () const
   }
 }
 
-bool
+bool CHK
 UndoManager::ref ()
 {
   BUGCRIT (count != UINT16_MAX,
@@ -334,7 +334,7 @@ UndoManager::ref ()
   return true;
 }
 
-bool
+bool CHK
 UndoManager::unref ()
 {
   if (!insertion)
@@ -372,7 +372,7 @@ UndoManager::unref ()
   return true;
 }
 
-bool
+bool CHK
 UndoManager::undoToXML (xmlNodePtr root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (

@@ -47,7 +47,7 @@ CParamEC::getNom () const
   return nom;
 }
 
-bool
+bool CHK
 CParamEC::setNom (std::shared_ptr <std::string> nom_)
 {
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -74,7 +74,7 @@ CParamEC::setNom (std::shared_ptr <std::string> nom_)
   return true;
 }
 
-bool
+bool CHK
 CParamEC::setNomXML (std::string * param,
                      std::string * nom_,
                      xmlNodePtr    root) const
@@ -117,7 +117,7 @@ CParamEC::getVariante () const
   return variante;
 }
 
-bool
+bool CHK
 CParamEC::setVariante (uint32_t variante_)
 {
   BUGCONT (getUndoManager ().ref (), false, &getUndoManager ())
@@ -142,7 +142,7 @@ CParamEC::setVariante (uint32_t variante_)
   return true;
 }
 
-bool
+bool CHK
 CParamEC::setVarianteXML (std::string * nom_,
                           uint32_t      variante_,
                           xmlNodePtr    root) const

@@ -53,7 +53,7 @@ CAction::~CAction ()
 {
 }
 
-bool
+bool CHK
 CAction::addXML (std::string *nom_,
                  std::string *type_,
                  xmlNodePtr   root) const
@@ -99,7 +99,7 @@ CAction::getType () const
   return type;
 }
 
-bool
+bool CHK
 CAction::setpsiXML (std::string * const nom_,
                     uint8_t             psi,
                     INb                *psin,
@@ -177,7 +177,7 @@ CAction::getPsi (uint8_t psi) const
   }
 }
 
-bool
+bool CHK
 CAction::setPsi (uint8_t psi, std::shared_ptr <INb> val)
 {
   BUGPARAM (psi, "%u", psi <= 2, false, &getUndoManager ())
@@ -233,7 +233,7 @@ CAction::setPsi (uint8_t psi, std::shared_ptr <INb> val)
   return true;
 }
 
-bool
+bool CHK
 CAction::emptyCharges () const
 {
   return charges.empty ();
@@ -245,7 +245,7 @@ CAction::getDescription (uint8_t type_) const
   return parametres->getpsiDescription (type_);
 }
 
-bool
+bool CHK
 CAction::setParam (std::shared_ptr <IParametres> param,
                    std::shared_ptr <INb>         psi0_,
                    std::shared_ptr <INb>         psi1_,
@@ -306,7 +306,7 @@ CAction::setParam (std::shared_ptr <IParametres> param,
   return true;
 }
 
-bool
+bool CHK
 CAction::setParamXML (std::string * action,
                       std::string * param,
                       INb         * psi0_,
