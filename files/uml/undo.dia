@@ -3682,7 +3682,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="56,12"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="55.95,11.95;81.575,24"/>
+        <dia:rectangle val="55.95,11.95;81.575,24.8"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="56,12"/>
@@ -3691,13 +3691,13 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:real val="25.524999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="11.949999999999999"/>
+        <dia:real val="12.75"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IObserveur#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>##</dia:string>
+        <dia:string>#DllExport#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Observateur qui recevera les évènements du sujet.#</dia:string>
@@ -4014,7 +4014,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="51.675,10.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="51.625,10.35;56.45,13.5"/>
+        <dia:rectangle val="51.625,10.35;56.45,13.9"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -4022,8 +4022,8 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="51.675,10.4"/>
         <dia:point val="53.6375,10.4"/>
-        <dia:point val="53.6375,13.05"/>
-        <dia:point val="56,13.05"/>
+        <dia:point val="53.6375,13.45"/>
+        <dia:point val="56,13.45"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
