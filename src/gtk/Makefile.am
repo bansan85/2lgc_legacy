@@ -66,6 +66,6 @@ codegui_LDFLAGS	 +=  -mwindows
 endif
 endif #ENABLE_DEBUG
 
-CLEANFILES	      =	*.gcno *.gcda *.hpp gtk-ressources.cpp gtk-ressources.xml ui/*.ui.h
+CLEANFILES	      =	*.gcno *.gcda *.hpp gtk-ressources.cpp gtk-ressources.xml ui/*.ui.h *.stamp
 
 EXTRA_DIST				= gtk-ressources.h

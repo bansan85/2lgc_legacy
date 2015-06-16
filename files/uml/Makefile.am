@@ -1,11 +1,21 @@
-all : $(top_builddir)/src/gtk/GWindowMain.hpp \
+all : $(top_srcdir)/files/uml/gtk.stamp $(top_srcdir)/files/uml/undo.stamp $(top_srcdir)/files/uml/codegui.stamp
+
+#%.dia :
+#	echo "touch $@"
+#	touch $@
+
+$(top_srcdir)/files/uml/gtk.stamp : $(top_builddir)/src/gtk/GWindowMain.hpp
+
+$(top_srcdir)/files/uml/undo.stamp : \
 			$(top_builddir)/src/libundo/EEvent.hpp \
 			$(top_builddir)/src/libundo/EUndoEtat.hpp \
 			$(top_builddir)/src/libundo/IObserveur.hpp \
 			$(top_builddir)/src/libundo/ISujet.hpp \
 			$(top_builddir)/src/libundo/IUndoable.hpp \
 			$(top_builddir)/src/libundo/UndoData.hpp \
-			$(top_builddir)/src/libundo/UndoManager.hpp \
+			$(top_builddir)/src/libundo/UndoManager.hpp
+
+$(top_srcdir)/files/uml/codegui.stamp : \
       $(top_builddir)/src/lib/CAction.hpp \
       $(top_builddir)/src/lib/CAdresse.hpp \
       $(top_builddir)/src/lib/CAnalyseComm.hpp \
@@ -64,13 +74,55 @@ checkcode : ../../src/lib/codegui.hpp
 	$(MAKE) comp_hpp_cpp
 
 $(top_builddir)/src/gtk/%.hpp : $(top_srcdir)/files/uml/gtk.dia
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/gtk -cl $* $<
+	@if test -e "$@"; then \
+		echo mv "$@" "$@.old"; \
+		mv "$@" "$@.old"; \
+	fi
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/gtk -cl "$*" "$(top_srcdir)/files/uml/gtk.dia"
+	@if test -e "$@.old"; then \
+		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
+			echo rm "$@.old"; \
+			rm "$@.old"; \
+		else \
+			echo mv "$@.old" "$@"; \
+			mv "$@.old" "$@"; \
+		fi \
+	fi
+	touch $@
 
 $(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/undo.dia
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo -cl $* $<
+	@if test -e "$@"; then \
+		echo mv "$@" "$@.old"; \
+		mv "$@" "$@.old"; \
+	fi
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo -cl "$*" "$(top_srcdir)/files/uml/undo.dia"
+	@if test -e "$@.old"; then \
+		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
+			echo rm "$@.old"; \
+			rm "$@.old"; \
+		else \
+			echo mv "$@.old" "$@"; \
+			mv "$@.old" "$@"; \
+		fi \
+	fi
+	touch $@
 
 $(top_builddir)/src/lib/%.hpp : $(top_srcdir)/files/uml/codegui.dia
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/lib -cl $* $<
+	@if test -e "$@"; then \
+		echo mv "$@" "$@.old"; \
+		mv "$@" "$@.old"; \
+	fi
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/lib -cl "$*" "$(top_srcdir)/files/uml/codegui.dia"
+	@if test -e "$@.old"; then \
+		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
+			echo rm "$@.old"; \
+			rm "$@.old"; \
+		else \
+			echo mv "$@.old" "$@"; \
+			mv "$@.old" "$@"; \
+		fi \
+	fi
+	touch $@
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)
@@ -82,7 +134,7 @@ comp_hpp_cpp : $(OBJ_CPP)
 	echo -e "#include \"$^\" \nint main () { };" > $@
 	g++ $@ -std=c++11 -c -o $@.o &> $@.log
 
-CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o codegui.dia~
+CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o codegui.dia~ *.stamp
 
 EXTRA_DIST	=	COPYING.head \
 							codegui.dia \

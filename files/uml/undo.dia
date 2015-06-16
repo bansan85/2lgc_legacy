@@ -3080,13 +3080,13 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O16">
       <dia:attribute name="obj_pos">
-        <dia:point val="-52,-29"/>
+        <dia:point val="-52,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-52.05,-29.05;-47.6,-25.95"/>
+        <dia:rectangle val="-52.05,-31.05;-47.6,-27.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-52,-29"/>
+        <dia:point val="-52,-31"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="4.3499999999999996"/>
@@ -3193,16 +3193,16 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="-28.7426,-11.3208"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-50.275,-26.45;-28.6926,-11.2708"/>
+        <dia:rectangle val="-50.275,-28.45;-28.6926,-11.2708"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-18.4604"/>
-        <dia:point val="-49.825,-18.4604"/>
-        <dia:point val="-49.825,-26"/>
+        <dia:point val="-28.7426,-19.4604"/>
+        <dia:point val="-49.825,-19.4604"/>
+        <dia:point val="-49.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

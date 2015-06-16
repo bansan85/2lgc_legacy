@@ -33,11 +33,6 @@ libundo_la_SOURCES 	 = IObserveur.cpp \
 
 libundo_la_HEADERS   = $(wildcard *.hpp)
 
-$(libundo_la_SOURCES) : uml
-
-uml : ../../files/uml/undo.dia
-	$(MAKE) -C ../../files/uml
-
 CLEANFILES = *.gcno *.gcda *.hpp
 
 cppcheck :
