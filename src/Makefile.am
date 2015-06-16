@@ -1,5 +1,6 @@
 SUBDIRS  = libundo \
 					 lib \
+					 macro \
 					 test
 
 if ENABLE_GTK

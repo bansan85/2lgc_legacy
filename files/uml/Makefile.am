@@ -1,6 +1,61 @@
-all : ../../src/lib/codegui.hpp \
-		  ../../src/libundo/undo.hpp \
-			../../src/lib/gtk.dia
+all : $(top_builddir)/src/gtk/GWindowMain.hpp \
+			$(top_builddir)/src/libundo/EEvent.hpp \
+			$(top_builddir)/src/libundo/EUndoEtat.hpp \
+			$(top_builddir)/src/libundo/IObserveur.hpp \
+			$(top_builddir)/src/libundo/ISujet.hpp \
+			$(top_builddir)/src/libundo/IUndoable.hpp \
+			$(top_builddir)/src/libundo/UndoData.hpp \
+			$(top_builddir)/src/libundo/UndoManager.hpp \
+      $(top_builddir)/src/lib/CAction.hpp \
+      $(top_builddir)/src/lib/CAdresse.hpp \
+      $(top_builddir)/src/lib/CAnalyseComm.hpp \
+      $(top_builddir)/src/lib/CAppui.hpp \
+      $(top_builddir)/src/lib/CBarre.hpp \
+      $(top_builddir)/src/lib/CBarreInfoEF.hpp \
+      $(top_builddir)/src/lib/CCalculs.hpp \
+      $(top_builddir)/src/lib/CCombinaison.hpp \
+      $(top_builddir)/src/lib/CFonction.hpp \
+      $(top_builddir)/src/lib/CGroupe.hpp \
+      $(top_builddir)/src/lib/ChargeBarrePonctuelle.hpp \
+      $(top_builddir)/src/lib/ChargeBarreRepUni.hpp \
+      $(top_builddir)/src/lib/ChargeNoeud.hpp \
+      $(top_builddir)/src/lib/CMatAcierEc.hpp \
+      $(top_builddir)/src/lib/CMatBetonEc.hpp \
+      $(top_builddir)/src/lib/CModele.hpp \
+      $(top_builddir)/src/lib/CNiveauGroupe.hpp \
+      $(top_builddir)/src/lib/CParamEC.hpp \
+      $(top_builddir)/src/lib/CPoint.hpp \
+      $(top_builddir)/src/lib/CPonderation.hpp \
+      $(top_builddir)/src/lib/CPonderations.hpp \
+      $(top_builddir)/src/lib/CPreferences.hpp \
+      $(top_builddir)/src/lib/CProjet.hpp \
+      $(top_builddir)/src/lib/CRelachement.hpp \
+      $(top_builddir)/src/lib/CTroncon.hpp \
+      $(top_builddir)/src/lib/DepBloque.hpp \
+      $(top_builddir)/src/lib/DepLibre.hpp \
+      $(top_builddir)/src/lib/DepLineaire.hpp \
+      $(top_builddir)/src/lib/EAction.hpp \
+      $(top_builddir)/src/lib/ECombinaison.hpp \
+      $(top_builddir)/src/lib/ENormeEcAc.hpp \
+      $(top_builddir)/src/lib/ENorme.hpp \
+      $(top_builddir)/src/lib/EUnite.hpp \
+      $(top_builddir)/src/lib/IActionGroupe.hpp \
+      $(top_builddir)/src/lib/ICharge.hpp \
+      $(top_builddir)/src/lib/IDeplacementType.hpp \
+      $(top_builddir)/src/lib/IMateriau.hpp \
+      $(top_builddir)/src/lib/INb.hpp \
+      $(top_builddir)/src/lib/INoeud.hpp \
+      $(top_builddir)/src/lib/IParametres.hpp \
+      $(top_builddir)/src/lib/ISection.hpp \
+      $(top_builddir)/src/lib/NbCalcul.hpp \
+      $(top_builddir)/src/lib/NbUser.hpp \
+      $(top_builddir)/src/lib/NdBarre.hpp \
+      $(top_builddir)/src/lib/NdLibre.hpp \
+      $(top_builddir)/src/lib/SecCarree.hpp \
+      $(top_builddir)/src/lib/SecCirc.hpp \
+      $(top_builddir)/src/lib/SecPerso.hpp \
+      $(top_builddir)/src/lib/SecRect.hpp \
+      $(top_builddir)/src/lib/SecT.hpp
 
 checkcode : ../../src/lib/codegui.hpp
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
@@ -8,30 +63,14 @@ checkcode : ../../src/lib/codegui.hpp
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
 
-../../src/lib/codegui.hpp : COPYING.head codegui.dia INb.dia INoeud.dia ISection.dia IMateriau.dia IDeplacementType.dia ICharge.dia
-	rm -f ../../src/lib/*.hpp
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib codegui.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INb.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib INoeud.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ISection.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IMateriau.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib IDeplacementType.dia
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/lib ICharge.dia
-	find ../../src/lib -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/lib/codegui.hpp \;
-	sed -i "s#../../src/lib/##g" ../../src/lib/codegui.hpp
-	sed -i "s/#include <codegui.hpp>//g" ../../src/lib/codegui.hpp
-	sort ../../src/lib/codegui.hpp -o ../../src/lib/codegui.hpp
+$(top_builddir)/src/gtk/%.hpp : $(top_srcdir)/files/uml/gtk.dia
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/gtk -cl $* $<
 
-../../src/libundo/undo.hpp : COPYING.head undo.dia
-	rm -f ../../src/libundo/*.hpp
-	../../../dia2code-git/src/dia2code --tab 2 -nl -nc -l COPYING.head -t cpp11 -ext hpp -d ../../src/libundo undo.dia
-	find ../../src/libundo -maxdepth 1 -name "*.hpp" -exec echo "#include <{}>" >> ../../src/libundo/undo.hpp \;
-	sed -i "s#../../src/libundo/##g" ../../src/libundo/undo.hpp
-	sed -i "s/#include <undo.hpp>//g" ../../src/libundo/undo.hpp
-	sort ../../src/libundo/undo.hpp -o ../../src/libundo/undo.hpp
+$(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/undo.dia
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo -cl $* $<
 
-../../src/lib/gtk.dia :
-	../../../dia2code-git/src/dia2code --tab 2 -nl -l COPYING.head -t cpp11 -ext hpp -d ../../src/gtk gtk.dia
+$(top_builddir)/src/lib/%.hpp : $(top_srcdir)/files/uml/codegui.dia
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/lib -cl $* $<
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)
@@ -46,4 +85,6 @@ comp_hpp_cpp : $(OBJ_CPP)
 CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o codegui.dia~
 
 EXTRA_DIST	=	COPYING.head \
-							codegui.dia
+							codegui.dia \
+							gtk.dia \
+							undo.dia

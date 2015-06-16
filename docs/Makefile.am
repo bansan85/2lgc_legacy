@@ -1,12 +1,12 @@
 if HAVE_DOXYGEN
 
-doxyfile.stamp: $(wildcard ../src/lib/*.hpp ../src/macro/*.hpp ../src/libundo/*.hpp)
+$(builddir)/doxyfile.stamp: $(wildcard ../src/lib/*.hpp ../src/macro/*.hpp ../src/libundo/*.hpp)
 	$(DOXYGEN) Doxyfile
-	echo Timestamp > doxyfile.stamp
+	echo Timestamp > $(builddir)/doxyfile.stamp
 
 CLEANFILES = doxyfile.stamp
 
-all-local: doxyfile.stamp
+all-local: $(builddir)/doxyfile.stamp
 
 clean-local:
 	rm -Rf html latex man

@@ -10,7 +10,7 @@ endif
 
 AM_CPPFLAGS			= @XML_CPPFLAGS@
 
-AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-debug --with-doc
+AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-gui=gtk3 --with-debug --with-doc
 
 export AM_CPPFLAGS
 

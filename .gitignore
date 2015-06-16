@@ -71,3 +71,4 @@ src/gtk/gtk-ressources.cpp
 cov-2LGC.tgz
 cov-int
 massif.out.*
+2lgc_code-?.?.?*

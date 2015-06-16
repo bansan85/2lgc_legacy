@@ -29,4 +29,4 @@ undomanager5_SOURCES	=	undomanager5.cpp
 
 EXTRA_PROGRAMS = $(TESTS)
 
-CLEANFILES = *.xml undomanager1 undomanager2 undomanager3 undomanager4 action1 action2 *.gcno *.gcda
+CLEANFILES = *.xml undomanager1 undomanager2 undomanager3 undomanager4 undomanager5 action1 action2 *.gcno *.gcda

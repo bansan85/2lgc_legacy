@@ -1,4 +1,5 @@
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
+git clean -Xdf
 gettextize -f --no-changelog
 
 sed -i 's#po/Makefile.in po/Makefile.in#po/Makefile.in#g' configure.ac
@@ -25,6 +26,7 @@ Avec gcc :
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 find . -name "Makefile" -exec sed -i "s#-I/usr#-isystem/usr#g" {} \;
 make check -j9
+make distcheck
 LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/codegui && make distcheck -j9
 make check -j9 && rm -Rf out_html && lcov --capture --directory . --output-file coverage.info && genhtml coverage.info --output-directory out_html && firefox out_html/index.html

@@ -9,7 +9,25 @@ AC_CONFIG_HEADERS([config.h])
 AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
 AH_BOTTOM([
-#include "src/macro/common.h"
+#ifdef _MSC_VER
+#define CHK _Check_return_
+
+#ifndef ssize_t
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif // !ssize_t
+
+#else // !_MSC_VER
+#define CHK __attribute__ ((__warn_unused_result__))
+#endif
+
+#if defined(_MSC_VER)
+#define SSCANF sscanf_s
+#define DllExport __declspec(dllexport)
+#else
+#define SSCANF sscanf
+#define DllExport
+#endif
 ])
 
 # Checks for programs.
@@ -345,13 +363,12 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  docs/Makefile
                  files/Makefile
                  files/desktop/Makefile
-                 files/ui/Makefile
                  files/uml/Makefile
                  src/Makefile
                  src/gtk/Makefile
-                 src/gtk/ui/Makefile
                  src/lib/Makefile
                  src/libundo/Makefile
+                 src/macro/Makefile
                  docs/Doxyfile
                  src/test/Makefile
                  src/test/bugs/Makefile

@@ -151,5 +151,23 @@
 #define VERSION "0.0.1"
 
 
-#include "src/macro/common.h"
+#ifdef _MSC_VER
+#define CHK _Check_return_
+
+#ifndef ssize_t
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif // !ssize_t
+
+#else // !_MSC_VER
+#define CHK __attribute__ ((__warn_unused_result__))
+#endif
+
+#if defined(_MSC_VER)
+#define SSCANF sscanf_s
+#define DllExport __declspec(dllexport)
+#else
+#define SSCANF sscanf
+#define DllExport
+#endif
 

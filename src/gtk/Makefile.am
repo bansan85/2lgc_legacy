@@ -1,4 +1,5 @@
-DEFAULT_INCLUDES	 =	-I$(srcdir)/../lib \
+DEFAULT_INCLUDES	 =	-I$(builddir) \
+											-I$(srcdir)/../lib \
 											-I$(srcdir)/../.. \
 											-I$(srcdir)/../libundo \
 											-I$(srcdir)/../macro
@@ -66,3 +67,5 @@ endif
 endif #ENABLE_DEBUG
 
 CLEANFILES	      =	*.gcno *.gcda *.hpp gtk-ressources.cpp gtk-ressources.xml ui/*.ui.h
+
+EXTRA_DIST				= gtk-ressources.h
