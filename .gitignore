@@ -26,7 +26,6 @@ depcomp
 docs/Doxyfile
 *.ui.h
 files/ui/ressources.xml
-files/uml/*.hpp
 install-sh
 *.*o
 libtool
@@ -44,8 +43,6 @@ po/POTFILES
 po/POTFILES.in
 po/Rules-quot
 po/stamp-po
-src/lib*/*.hpp
-src/gtk/*.hpp
 src/gtk/codegui
 src/lib/gtkressources.cpp
 stamp-h1
