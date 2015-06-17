@@ -304,7 +304,28 @@ ACX_BLAS
 if test x"$BLAS_LIBS" = x; then
     AC_MSG_ERROR([Cannot find blas libraries])
 fi
-AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
+
+#cholmdo
+AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire.])])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <cholmod.h>
+
+                                    int main ()
+                                    {
+                                      return 0;
+                                    }
+                                   ]])],
+                  [],
+                  [CXXFLAGS="$CXXFLAGS -I/usr/include/suitesparse"])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <cholmod.h>
+
+                                    int main ()
+                                    {
+                                      return 0;
+                                    }
+                                   ]])],
+                  [],
+                  [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire.])])
+
 AC_CHECK_LIB([umfpack], [main], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
 
 
