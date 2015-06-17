@@ -11330,30 +11330,7 @@
       <dia:attribute name="attributes">
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#elu_equ_methode : 1#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="value">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#ELU_EQU : méthode 1 si 0, méthode 2 si 1.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="1"/>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umlattribute">
-          <dia:attribute name="name">
-            <dia:string>#elu_geo_str_methode : 2#</dia:string>
+            <dia:string>#elu_geo_str_methode#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#uint8_t#</dia:string>
@@ -11376,10 +11353,33 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
+            <dia:string>#elu_equ_methode : 1#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="value">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#ELU_EQU : méthode 1 si 0, méthode 2 si 1.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="1"/>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umlattribute">
+          <dia:attribute name="name">
             <dia:string>#elu_acc_psi : 1#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#bool#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -11402,7 +11402,7 @@
             <dia:string>#form_6_10 : 1#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#bool#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -11663,7 +11663,7 @@
                 <dia:string>#eluequ#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -11697,7 +11697,7 @@
                 <dia:string>#eluacc#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -11714,7 +11714,7 @@
                 <dia:string>#form6_10#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -11862,7 +11862,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#bool#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -11918,7 +11918,7 @@
                 <dia:string>#val#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -12018,7 +12018,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#bool#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -12074,7 +12074,7 @@
                 <dia:string>#val#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -12096,7 +12096,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#uint8_t#</dia:string>
+            <dia:string>#bool#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -12152,7 +12152,7 @@
                 <dia:string>#val#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint8_t#</dia:string>
+                <dia:string>#bool#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>

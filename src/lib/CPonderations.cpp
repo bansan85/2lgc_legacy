@@ -22,12 +22,12 @@
 
 #include "CPonderations.hpp"
 
-CPonderations::CPonderations (uint8_t eluequ,
+CPonderations::CPonderations (bool    eluequ,
                               uint8_t elugeostr,
-                              uint8_t eluacc,
-                              uint8_t form6_10) :
-  elu_equ_methode (eluequ & 1)
-  , elu_geo_str_methode (elugeostr & 3)
+                              bool    eluacc,
+                              bool    form6_10) :
+  elu_geo_str_methode (elugeostr)
+  , elu_equ_methode (eluequ & 1)
   , elu_acc_psi (eluacc & 1)
   , form_6_10 (form6_10 & 1)
   , elu_equ ()

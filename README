@@ -22,6 +22,7 @@ La description des messages doit toujours commencer par :
 [VISUAL STUDIO] : Toutes modifications portant sur Visual Studio.
 [TRAVIS] : Toutes modifications portant sur Travis.
 [ANDROID] : Tout ce qui concerne la compatibilité avec Android.
+[ICC] : Tout ce qui concerne la compilation avec ICC.
 
 
 Performances :
