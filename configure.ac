@@ -386,7 +386,6 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  files/desktop/Makefile
                  files/uml/Makefile
                  src/Makefile
-                 src/gtk/Makefile
                  src/lib/Makefile
                  src/libundo/Makefile
                  src/macro/Makefile
@@ -395,4 +394,8 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  src/test/bugs/Makefile
                  src/test/static/Makefile
                  src/test/scenarii/Makefile])
+if test "$with_gui" == "gtk3"; then
+  AC_CONFIG_FILES([src/gtk/Makefile])
+fi
+
 AC_OUTPUT
