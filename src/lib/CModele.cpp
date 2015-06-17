@@ -181,7 +181,7 @@ CModele::rmAction (std::shared_ptr <CAction> & action)
            false,
            &action.get ()->getUndoManager ())
 
-  std::list <std::shared_ptr <CAction> >::const_iterator it;
+  std::list <std::shared_ptr <CAction> >::iterator it;
 
   it = std::find_if (actions.begin (),
                      actions.end (),
