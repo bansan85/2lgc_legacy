@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
-#include <locale>
 
 #include "CAction.hpp"
 #include "EUniteTxt.hpp"

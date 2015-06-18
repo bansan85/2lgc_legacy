@@ -35,12 +35,6 @@ main (int32_t argc,
   CProjet projet (ENorme::EUROCODE);
   std::shared_ptr <CAction> action;
   
-  // On charge la localisation
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
-  textdomain (PACKAGE_NAME);
-  
   // On traite les arguments du programme
   switch (argc)
   {

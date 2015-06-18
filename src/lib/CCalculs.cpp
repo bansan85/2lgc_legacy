@@ -18,8 +18,8 @@
 
 #include "config.h"
 
-#include <cmath>
 #include <umfpack.h>
+#include <cmath>
 
 #include "CCalculs.hpp"
 

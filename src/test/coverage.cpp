@@ -39,12 +39,6 @@ main (int32_t,
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
   
-  // On charge la localisation
-  setlocale (LC_ALL, "" );
-  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
-  textdomain (PACKAGE_NAME);
-  
   // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
 /*  INFO (gtk_init_check (&argc, &argv),
         -1,

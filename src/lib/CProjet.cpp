@@ -58,6 +58,15 @@ CProjet::CProjet (ENorme norme) :
       throw "Impossible de créer ce projet. La norme est inconnue.\n";
     }
   }
+
+  // On charge la localisation
+  std::setlocale (LC_ALL, "");
+  std::cout.imbue(std::locale(""));
+  std::cin.imbue(std::locale(""));
+  std::cerr.imbue(std::locale(""));
+  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
+  textdomain (PACKAGE_NAME);
 }
 
 CProjet::~CProjet ()

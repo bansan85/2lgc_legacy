@@ -18,10 +18,7 @@
 
 #include "config.h"
 
-#include <cmath>
-#include <cstdarg>
 #include <memory>
-#include <locale>
 #include <sstream>
 
 #include "NbCalcul.hpp"

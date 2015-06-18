@@ -40,12 +40,6 @@ main (int32_t,
   CAction *action_;
   std::shared_ptr <INb> nb0, nb1, nb2;
   
-  // On charge la localisation
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
-  textdomain (PACKAGE_NAME);
-  
   assert (projet.getActionCount () == 0);
   // 2 Exploitation
   action = std::make_shared <CAction> (std::make_shared <std::string> (
@@ -71,45 +65,49 @@ main (int32_t,
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
 
-  std::cout << *projet.undoDesc (0) << "\n";
-  std::cout << "Cœfficient ψ₂ de l'action “Chargement” (0,200000)" << "\n";
   assert (projet.undoDesc (0)->compare (
-                    "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0);
+            "Cœfficient ψ₂ de l'action “Chargement” (" +
+            std::to_string (0.2) + ")") == 0);
   assert (projet.undo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
 
   assert (projet.undoDesc (0)->compare (
-                    "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0);
+            "Cœfficient ψ₁ de l'action “Chargement” (" +
+            std::to_string (0.1) + ")") == 0);
   assert (projet.undo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
   assert (projet.undoDesc (0)->compare (
-                    "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0);
+            "Cœfficient ψ₀ de l'action “Chargement” (" +
+            std::to_string (0.0) + ")") == 0);
   assert (projet.undo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.7, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
   assert (projet.redoDesc (0)->compare (
-                    "Cœfficient ψ₀ de l'action “Chargement” (0,000000)") == 0);
+            "Cœfficient ψ₀ de l'action “Chargement” (" +
+            std::to_string (0.0) + ")") == 0);
   assert (projet.redo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
   assert (projet.redoDesc (0)->compare (
-                    "Cœfficient ψ₁ de l'action “Chargement” (0,100000)") == 0);
+            "Cœfficient ψ₁ de l'action “Chargement” (" +
+            std::to_string (0.1) + ")") == 0);
   assert (projet.redo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
   assert (projet.redoDesc (0)->compare (
-                    "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0);
+            "Cœfficient ψ₂ de l'action “Chargement” (" +
+            std::to_string (0.2) + ")") == 0);
   assert (projet.redo ());
   assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));

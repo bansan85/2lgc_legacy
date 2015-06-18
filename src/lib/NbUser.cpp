@@ -18,10 +18,8 @@
 
 #include "config.h"
 
-#include <cmath>
-#include <cstdarg>
+#include <complex>
 #include <memory>
-#include <locale>
 #include <sstream>
 #include <iostream>
 
@@ -67,7 +65,7 @@ NbUser::toString () const
   uint8_t     width;
   double      test;
   
-  if (fabs (val) > 1e15)
+  if (std::abs (val) > 1e15)
   {
     for (width = 0; width <= 15; width++)
     {

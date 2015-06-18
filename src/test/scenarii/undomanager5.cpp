@@ -36,12 +36,6 @@ main (int32_t,
   CProjet projet (ENorme::EUROCODE);
   std::shared_ptr <CAction> action;
   
-  // On charge la localisation
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
-  textdomain (PACKAGE_NAME);
-  
   projet.setSauveDesc (2);
   assert (projet.ref ());
   assert (projet.getActionCount () == 0);

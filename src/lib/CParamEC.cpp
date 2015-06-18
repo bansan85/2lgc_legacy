@@ -18,9 +18,8 @@
 
 #include "config.h"
 
-#include <cmath>
-#include <cstdlib>
 #include <memory>
+#include <cmath>
 
 #include "CParamEC.hpp"
 #include "MErreurs.hpp"
