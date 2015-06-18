@@ -29,7 +29,7 @@ script:
   - sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool || die
   - find . -name "Makefile" -exec sed -i "s#-I/usr#-isystem/usr#g" {} \; || die
   - make -j4 || die
-  - make check -j4 || die
+  - make check -j4 || cat src/test/scenarii/action2.log
   - make distcheck -j4 || die
 
 branches:

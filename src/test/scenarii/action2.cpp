@@ -71,6 +71,8 @@ main (int32_t,
   assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
   assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
 
+  std::cout << *projet.undoDesc (0) << "\n";
+  std::cout << "Cœfficient ψ₂ de l'action “Chargement” (0,200000)" << "\n";
   assert (projet.undoDesc (0)->compare (
                     "Cœfficient ψ₂ de l'action “Chargement” (0,200000)") == 0);
   assert (projet.undo ());
