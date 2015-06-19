@@ -89,7 +89,6 @@ CModele::addAction (std::shared_ptr <CAction> action)
              std::bind (&CModele::addAction, this, action),
              nullptr,
              std::bind (&CAction::addXML,
-                        action.get (),
                         action->getNom ().get (),
                         type_.get (),
                         std::placeholders::_1),

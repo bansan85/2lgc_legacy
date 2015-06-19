@@ -63,14 +63,6 @@ class IParametres : public IUndoable
      */
     virtual bool CHK setNom (std::shared_ptr <std::string> nom_) = 0;
     /**
-     * \brief Converti la fonction setNom sous format XML.
-     * \param param (in) Le nom des paramètres de calcul.
-     * \param nom_ (in) Le nouveau nom.
-     * \param root (in) Le noeud dans lequel doit être inséré l'action.
-     * \return bool CHK
-     */
-    virtual bool CHK setNomXML (std::string * param, std::string * nom_, xmlNodePtr root) const = 0;
-    /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t
      */

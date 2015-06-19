@@ -94,7 +94,7 @@ class DllExport CAction : public IActionGroupe
      * \param root (in) Le noeud dans lequel doit être inséré l'action.
      * \return bool CHK
      */
-    bool CHK addXML (std::string * nom_, std::string * type_, xmlNodePtr root) const;
+    static bool CHK addXML (std::string * nom_, std::string * type_, xmlNodePtr root);
     /**
      * \brief Renvoie le type de l'action.
      * \return uint8_t

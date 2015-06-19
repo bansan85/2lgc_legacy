@@ -56,7 +56,6 @@ CParamEC::setNom (std::shared_ptr <std::string> nom_)
              std::bind (&CParamEC::setNom, this, nom_),
              nom_,
              std::bind (&CParamEC::setNomXML,
-                        this,
                         nom.get (),
                         nom_.get (),
                         std::placeholders::_1),
@@ -76,7 +75,7 @@ CParamEC::setNom (std::shared_ptr <std::string> nom_)
 bool CHK
 CParamEC::setNomXML (std::string * param,
                      std::string * nom_,
-                     xmlNodePtr    root) const
+                     xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                                xmlNewNode (nullptr, BAD_CAST2 ("ParamSetNom")),
@@ -84,26 +83,26 @@ CParamEC::setNomXML (std::string * param,
   
   BUGCRIT (node.get () != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
                        BAD_CAST2 (param->c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   node.release ();
   
@@ -126,7 +125,6 @@ CParamEC::setVariante (uint32_t variante_)
              std::bind (&CParamEC::setVariante, this, variante_),
              nullptr,
              std::bind (&CParamEC::setVarianteXML,
-                        this,
                         nom.get (),
                         variante_,
                         std::placeholders::_1),
@@ -144,7 +142,7 @@ CParamEC::setVariante (uint32_t variante_)
 bool CHK
 CParamEC::setVarianteXML (std::string * nom_,
                           uint32_t      variante_,
-                          xmlNodePtr    root) const
+                          xmlNodePtr    root)
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                           xmlNewNode (nullptr, BAD_CAST2 ("ParamSetVariante")),
@@ -152,14 +150,14 @@ CParamEC::setVarianteXML (std::string * nom_,
   
   BUGCRIT (node.get () != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("param"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (
@@ -167,12 +165,12 @@ CParamEC::setVarianteXML (std::string * nom_,
              BAD_CAST2 ("variante"),
              BAD_CAST2 (std::to_string(variante_).c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   node.release ();
   

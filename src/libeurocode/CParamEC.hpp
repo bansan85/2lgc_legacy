@@ -80,7 +80,7 @@ class CParamEC : public IParametres
      * \param root (in) Le noeud dans lequel doit être inséré la description au format XML.
      * \return bool CHK
      */
-    bool CHK setNomXML (std::string * param, std::string * nom_, xmlNodePtr root) const;
+    static bool CHK setNomXML (std::string * param, std::string * nom_, xmlNodePtr root);
     /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t
@@ -99,7 +99,7 @@ class CParamEC : public IParametres
      * \param root (in) Le noeud dans lequel doit être inséré la description au format XML.
      * \return bool CHK
      */
-    bool CHK setVarianteXML (std::string * nom_, uint32_t variante_, xmlNodePtr root) const;
+    static bool CHK setVarianteXML (std::string * nom_, uint32_t variante_, xmlNodePtr root);
     /**
      * \brief Renvoie le nombre de différents types d'actions.
      * \return uint8_t

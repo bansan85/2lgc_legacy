@@ -55,9 +55,9 @@ CAction::~CAction ()
 bool CHK
 CAction::addXML (std::string *nom_,
                  std::string *type_,
-                 xmlNodePtr   root) const
+                 xmlNodePtr   root)
 {
-  BUGPARAM (static_cast <void *> (root), "%p", root, false, &getUndoManager ())
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, UNDO_MANAGER_NULL)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                                  xmlNewNode (nullptr, BAD_CAST2 ("addAction")),
@@ -65,26 +65,26 @@ CAction::addXML (std::string *nom_,
   
   BUGCRIT (node.get () != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
                        BAD_CAST2 (type_->c_str ())) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           &getUndoManager (),
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   node.release ();

@@ -8369,10 +8369,10 @@
             <dia:enum val="2"/>
           </dia:attribute>
           <dia:attribute name="query">
-            <dia:boolean val="true"/>
+            <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
+            <dia:boolean val="true"/>
           </dia:attribute>
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
@@ -19219,7 +19219,7 @@
         <dia:point val="30,-181.734"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="29.95,-181.784;56.345,-150.434"/>
+        <dia:rectangle val="29.95,-181.784;56.345,-153.084"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="30,-181.734"/>
@@ -19228,7 +19228,7 @@
         <dia:real val="26.294999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="31.250000000000014"/>
+        <dia:real val="28.600000000000012"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#IParametres#</dia:string>
@@ -19264,7 +19264,7 @@
         <dia:int val="40"/>
       </dia:attribute>
       <dia:attribute name="comment_line_length">
-        <dia:int val="60"/>
+        <dia:int val="100"/>
       </dia:attribute>
       <dia:attribute name="comment_tagging">
         <dia:boolean val="false"/>
@@ -19564,88 +19564,6 @@
               </dia:attribute>
               <dia:attribute name="comment">
                 <dia:string>#Le nouveau nom.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#setNomXML#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#bool CHK#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Converti la fonction setNom sous format XML.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="true"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="true"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#param#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#std::string *#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le nom des paramètres de calcul.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#nom_#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#std::string *#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le nouveau nom.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#root#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#xmlNodePtr#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le noeud dans lequel doit être inséré l'action.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
@@ -20584,17 +20502,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O72">
       <dia:attribute name="obj_pos">
-        <dia:point val="30,-159.434"/>
+        <dia:point val="30,-162.084"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.8175,-180;30.05,-159.384"/>
+        <dia:rectangle val="13.8175,-180;30.05,-162.034"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="30,-159.434"/>
-        <dia:point val="22.3337,-159.434"/>
+        <dia:point val="30,-162.084"/>
+        <dia:point val="22.3337,-162.084"/>
         <dia:point val="22.3337,-179.55"/>
         <dia:point val="14.2675,-179.55"/>
       </dia:attribute>
@@ -20622,7 +20540,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O65" connection="28"/>
+        <dia:connection handle="0" to="O65" connection="26"/>
         <dia:connection handle="1" to="O71" connection="4"/>
       </dia:connections>
     </dia:object>
