@@ -6,3 +6,5 @@ SUBDIRS  = libundo \
 if ENABLE_GTK
 SUBDIRS += gtk
 endif
+
+DIST_SUBDIRS = $(SUBDIRS)

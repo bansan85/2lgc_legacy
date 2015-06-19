@@ -1,12 +1,13 @@
-all : $(top_srcdir)/files/uml/gtk.stamp $(top_srcdir)/files/uml/undo.stamp $(top_srcdir)/files/uml/codegui.stamp
 
-#%.dia :
-#	echo "touch $@"
-#	touch $@
+all : $(top_builddir)/files/uml/gtk.stamp $(top_builddir)/files/uml/undo.stamp $(top_builddir)/files/uml/codegui.stamp
 
-$(top_srcdir)/files/uml/gtk.stamp : $(top_builddir)/src/gtk/GWindowMain.hpp
+if ENABLE_GTK
+$(top_builddir)/files/uml/gtk.stamp : $(top_builddir)/src/gtk/GWindowMain.hpp
+else
+$(top_builddir)/files/uml/gtk.stamp :
+endif
 
-$(top_srcdir)/files/uml/undo.stamp : \
+$(top_builddir)/files/uml/undo.stamp : \
 			$(top_builddir)/src/libundo/EEvent.hpp \
 			$(top_builddir)/src/libundo/EUndoEtat.hpp \
 			$(top_builddir)/src/libundo/IObserveur.hpp \
@@ -15,7 +16,7 @@ $(top_srcdir)/files/uml/undo.stamp : \
 			$(top_builddir)/src/libundo/UndoData.hpp \
 			$(top_builddir)/src/libundo/UndoManager.hpp
 
-$(top_srcdir)/files/uml/codegui.stamp : \
+$(top_builddir)/files/uml/codegui.stamp : \
       $(top_builddir)/src/lib/CAction.hpp \
       $(top_builddir)/src/lib/CAdresse.hpp \
       $(top_builddir)/src/lib/CAnalyseComm.hpp \

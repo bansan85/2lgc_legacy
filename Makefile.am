@@ -10,7 +10,11 @@ endif
 
 AM_CPPFLAGS			= @XML_CPPFLAGS@
 
+if ENABLE_GTK
 AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-gui=gtk3 --with-debug --with-doc
+else
+AM_DISTCHECK_CONFIGURE_FLAGS	=	--with-gui=none --with-debug --with-doc
+endif
 
 export AM_CPPFLAGS
 

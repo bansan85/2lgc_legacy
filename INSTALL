@@ -18,6 +18,13 @@ libtoolize
 automake --add-missing --copy
 autoconf
 
+Pour compiler avec une version des autotools différentes de celle par défaut :
+autoheader-2.68
+WANT_AUTOCONF="2.68" aclocal -I m4
+libtoolize
+WANT_AUTOCONF="2.68" automake --add-missing --copy
+autoconf-2.68
+
 Avec gcc :
 ./configure --with-gui=none --with-debug --enable-valgrind-testing --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
