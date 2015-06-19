@@ -89,7 +89,9 @@ for NEW_FLAG in \
     -Wc++11-compat \
     -Weffc++ \
     -Wstrict-null-sentinel \
-    -Woverloaded-virtual
+    -Woverloaded-virtual \
+    -Weverything \
+    -Winconsistent-missing-override
 do
   AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
   OLD_CXXFLAGS="$CXXFLAGS"
@@ -105,27 +107,27 @@ do
   CXXFLAGS="$OLD_CXXFLAGS"
 done
 
-#Pour clang
+#gcc/config/warnings.m4 :
+# Do the check with the no- prefix removed since gcc silently
+# accepts any -Wno-* option on purpose
 for NEW_FLAG in \
-    -Weverything \
-    -Wno-c++98-compat \
-    -Wno-c++98-compat-pedantic \
-    -Wno-reserved-id-macro \
-    -Wno-documentation-unknown-command \
-    -Wno-documentation \
-    -Wno-padded \
-    -Wno-unreachable-code-break \
-    -Wno-covered-switch-default \
-    -Wno-exit-time-destructors \
-    -Wno-global-constructors \
-    -Winconsistent-missing-override
+    c++98-compat \
+    c++98-compat-pedantic \
+    reserved-id-macro \
+    documentation-unknown-command \
+    documentation \
+    padded \
+    unreachable-code-break \
+    covered-switch-default \
+    exit-time-destructors \
+    global-constructors
 do
-  AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
+  AC_MSG_CHECKING([if $CXX accepts -Wno-$NEW_FLAG])
   OLD_CXXFLAGS="$CXXFLAGS"
-  CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror -Wno-unused-macros"
+  CXXFLAGS="$CXXFLAGS -W$NEW_FLAG -Werror -Wno-unused-macros"
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
     [void foo(void); void foo(void) { }])], [
-    AM_CXXFLAGS="$AM_CXXFLAGS $NEW_FLAG"
+    AM_CXXFLAGS="$AM_CXXFLAGS -Wno-$NEW_FLAG"
     AC_MSG_RESULT([yes])
   ], [
     AC_MSG_RESULT([no])
