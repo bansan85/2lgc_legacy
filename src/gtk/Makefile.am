@@ -1,6 +1,7 @@
 DEFAULT_INCLUDES	 =	-I$(builddir) \
-											-I$(srcdir)/../lib \
 											-I$(srcdir)/../.. \
+											-I$(srcdir)/../libeurocode \
+											-I$(srcdir)/../libprojet \
 											-I$(srcdir)/../libundo \
 											-I$(srcdir)/../macro
 
@@ -15,7 +16,8 @@ codegui_LDADD			 =	-lcholmod \
 											@GTKMM_LIBS@ \
 											@BLAS_LIBS@ \
 											@XML_LIBS@ \
-											../lib/libeurocodes.la \
+											../libeurocode/libeurocode.la \
+											../libprojet/libprojet.la \
 											../libundo/libundo.la
 
 if ENABLE_GTK

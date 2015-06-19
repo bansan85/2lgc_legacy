@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include "IMateriau.hpp"
+#include <IMateriau.hpp>
 
 /**
  * \brief Défini un matériau béton selon l'Eurocode 2.

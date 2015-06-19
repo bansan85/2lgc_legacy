@@ -5,7 +5,7 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
 
 TESTS	=	
 
-AM_LDFLAGS				= ../../lib/libeurocodes.la ../../libundo/libundo.la
+AM_LDFLAGS				= ../../libeurocode/libeurocode.la ../../libundo/libundo.la
 
 EXTRA_PROGRAMS = $(TESTS)
 

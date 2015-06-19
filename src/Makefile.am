@@ -1,5 +1,6 @@
 SUBDIRS  = libundo \
-					 lib \
+					 libeurocode \
+					 libprojet \
 					 macro \
 					 test
 

@@ -1,5 +1,7 @@
-
-all : $(top_builddir)/files/uml/gtk.stamp $(top_builddir)/files/uml/undo.stamp $(top_builddir)/files/uml/codegui.stamp
+all : $(top_builddir)/files/uml/gtk.stamp \
+      $(top_builddir)/files/uml/libundo.stamp \
+			$(top_builddir)/files/uml/libprojet.stamp \
+			$(top_builddir)/files/uml/libeurocode.stamp
 
 if ENABLE_GTK
 $(top_builddir)/files/uml/gtk.stamp : $(top_builddir)/src/gtk/GWindowMain.hpp
@@ -7,7 +9,7 @@ else
 $(top_builddir)/files/uml/gtk.stamp :
 endif
 
-$(top_builddir)/files/uml/undo.stamp : \
+$(top_builddir)/files/uml/libundo.stamp : \
 			$(top_builddir)/src/libundo/EEvent.hpp \
 			$(top_builddir)/src/libundo/EUndoEtat.hpp \
 			$(top_builddir)/src/libundo/IObserveur.hpp \
@@ -16,59 +18,61 @@ $(top_builddir)/files/uml/undo.stamp : \
 			$(top_builddir)/src/libundo/UndoData.hpp \
 			$(top_builddir)/src/libundo/UndoManager.hpp
 
-$(top_builddir)/files/uml/codegui.stamp : \
-      $(top_builddir)/src/lib/CAction.hpp \
-      $(top_builddir)/src/lib/CAdresse.hpp \
-      $(top_builddir)/src/lib/CAnalyseComm.hpp \
-      $(top_builddir)/src/lib/CAppui.hpp \
-      $(top_builddir)/src/lib/CBarre.hpp \
-      $(top_builddir)/src/lib/CBarreInfoEF.hpp \
-      $(top_builddir)/src/lib/CCalculs.hpp \
-      $(top_builddir)/src/lib/CCombinaison.hpp \
-      $(top_builddir)/src/lib/CFonction.hpp \
-      $(top_builddir)/src/lib/CGroupe.hpp \
-      $(top_builddir)/src/lib/ChargeBarrePonctuelle.hpp \
-      $(top_builddir)/src/lib/ChargeBarreRepUni.hpp \
-      $(top_builddir)/src/lib/ChargeNoeud.hpp \
-      $(top_builddir)/src/lib/CMatAcierEc.hpp \
-      $(top_builddir)/src/lib/CMatBetonEc.hpp \
-      $(top_builddir)/src/lib/CModele.hpp \
-      $(top_builddir)/src/lib/CNiveauGroupe.hpp \
-      $(top_builddir)/src/lib/CParamEC.hpp \
-      $(top_builddir)/src/lib/CPoint.hpp \
-      $(top_builddir)/src/lib/CPonderation.hpp \
-      $(top_builddir)/src/lib/CPonderations.hpp \
-      $(top_builddir)/src/lib/CPreferences.hpp \
-      $(top_builddir)/src/lib/CProjet.hpp \
-      $(top_builddir)/src/lib/CRelachement.hpp \
-      $(top_builddir)/src/lib/CTroncon.hpp \
-      $(top_builddir)/src/lib/DepBloque.hpp \
-      $(top_builddir)/src/lib/DepLibre.hpp \
-      $(top_builddir)/src/lib/DepLineaire.hpp \
-      $(top_builddir)/src/lib/EAction.hpp \
-      $(top_builddir)/src/lib/ECombinaison.hpp \
-      $(top_builddir)/src/lib/ENormeEcAc.hpp \
-      $(top_builddir)/src/lib/ENorme.hpp \
-      $(top_builddir)/src/lib/EUnite.hpp \
-      $(top_builddir)/src/lib/IActionGroupe.hpp \
-      $(top_builddir)/src/lib/ICharge.hpp \
-      $(top_builddir)/src/lib/IDeplacementType.hpp \
-      $(top_builddir)/src/lib/IMateriau.hpp \
-      $(top_builddir)/src/lib/INb.hpp \
-      $(top_builddir)/src/lib/INoeud.hpp \
-      $(top_builddir)/src/lib/IParametres.hpp \
-      $(top_builddir)/src/lib/ISection.hpp \
-      $(top_builddir)/src/lib/NbCalcul.hpp \
-      $(top_builddir)/src/lib/NbUser.hpp \
-      $(top_builddir)/src/lib/NdBarre.hpp \
-      $(top_builddir)/src/lib/NdLibre.hpp \
-      $(top_builddir)/src/lib/SecCarree.hpp \
-      $(top_builddir)/src/lib/SecCirc.hpp \
-      $(top_builddir)/src/lib/SecPerso.hpp \
-      $(top_builddir)/src/lib/SecRect.hpp \
-      $(top_builddir)/src/lib/SecT.hpp
+$(top_builddir)/files/uml/libprojet.stamp : \
+      $(top_builddir)/src/libprojet/CAction.hpp \
+      $(top_builddir)/src/libprojet/CAdresse.hpp \
+      $(top_builddir)/src/libprojet/CAnalyseComm.hpp \
+      $(top_builddir)/src/libprojet/CAppui.hpp \
+      $(top_builddir)/src/libprojet/CBarre.hpp \
+      $(top_builddir)/src/libprojet/CBarreInfoEF.hpp \
+      $(top_builddir)/src/libprojet/CCalculs.hpp \
+      $(top_builddir)/src/libprojet/CCombinaison.hpp \
+      $(top_builddir)/src/libprojet/CFonction.hpp \
+      $(top_builddir)/src/libprojet/CGroupe.hpp \
+      $(top_builddir)/src/libprojet/ChargeBarrePonctuelle.hpp \
+      $(top_builddir)/src/libprojet/ChargeBarreRepUni.hpp \
+      $(top_builddir)/src/libprojet/ChargeNoeud.hpp \
+      $(top_builddir)/src/libprojet/CModele.hpp \
+      $(top_builddir)/src/libprojet/CNiveauGroupe.hpp \
+      $(top_builddir)/src/libprojet/CPoint.hpp \
+      $(top_builddir)/src/libprojet/CPonderation.hpp \
+      $(top_builddir)/src/libprojet/CPonderations.hpp \
+      $(top_builddir)/src/libprojet/CPreferences.hpp \
+      $(top_builddir)/src/libprojet/CProjet.hpp \
+      $(top_builddir)/src/libprojet/CRelachement.hpp \
+      $(top_builddir)/src/libprojet/CTroncon.hpp \
+      $(top_builddir)/src/libprojet/DepBloque.hpp \
+      $(top_builddir)/src/libprojet/DepLibre.hpp \
+      $(top_builddir)/src/libprojet/DepLineaire.hpp \
+      $(top_builddir)/src/libprojet/EAction.hpp \
+      $(top_builddir)/src/libprojet/ECombinaison.hpp \
+      $(top_builddir)/src/libprojet/ENorme.hpp \
+      $(top_builddir)/src/libprojet/EUnite.hpp \
+      $(top_builddir)/src/libprojet/IActionGroupe.hpp \
+      $(top_builddir)/src/libprojet/ICharge.hpp \
+      $(top_builddir)/src/libprojet/IDeplacementType.hpp \
+      $(top_builddir)/src/libprojet/IMateriau.hpp \
+      $(top_builddir)/src/libprojet/INb.hpp \
+      $(top_builddir)/src/libprojet/INoeud.hpp \
+      $(top_builddir)/src/libprojet/IParametres.hpp \
+      $(top_builddir)/src/libprojet/ISection.hpp \
+      $(top_builddir)/src/libprojet/NbCalcul.hpp \
+      $(top_builddir)/src/libprojet/NbUser.hpp \
+      $(top_builddir)/src/libprojet/NdBarre.hpp \
+      $(top_builddir)/src/libprojet/NdLibre.hpp \
+      $(top_builddir)/src/libprojet/SecCarree.hpp \
+      $(top_builddir)/src/libprojet/SecCirc.hpp \
+      $(top_builddir)/src/libprojet/SecPerso.hpp \
+      $(top_builddir)/src/libprojet/SecRect.hpp \
+      $(top_builddir)/src/libprojet/SecT.hpp
 
-checkcode : ../../src/lib/codegui.hpp
+$(top_builddir)/files/uml/libeurocode.stamp : \
+      $(top_builddir)/src/libeurocode/CMatAcierEc.hpp \
+      $(top_builddir)/src/libeurocode/CMatBetonEc.hpp \
+      $(top_builddir)/src/libeurocode/CParamEC.hpp \
+      $(top_builddir)/src/libeurocode/ENormeEcAc.hpp
+
+checkcode : ../../src/libeurocode/codegui.hpp
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
@@ -91,12 +95,12 @@ $(top_builddir)/src/gtk/%.hpp : $(top_srcdir)/files/uml/gtk.dia
 	fi
 	touch $@
 
-$(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/undo.dia
+$(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/libundo.dia
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
 	fi
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo -cl "$*" "$(top_srcdir)/files/uml/undo.dia"
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo -cl "$*" "$(top_srcdir)/files/uml/libundo.dia"
 	@if test -e "$@.old"; then \
 		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
 			echo rm "$@.old"; \
@@ -108,12 +112,29 @@ $(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/undo.dia
 	fi
 	touch $@
 
-$(top_builddir)/src/lib/%.hpp : $(top_srcdir)/files/uml/codegui.dia
+$(top_builddir)/src/libprojet/%.hpp : $(top_srcdir)/files/uml/libprojet.dia
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
 	fi
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/lib -cl "$*" "$(top_srcdir)/files/uml/codegui.dia"
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libprojet -cl "$*" "$(top_srcdir)/files/uml/libprojet.dia"
+	@if test -e "$@.old"; then \
+		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
+			echo rm "$@.old"; \
+			rm "$@.old"; \
+		else \
+			echo mv "$@.old" "$@"; \
+			mv "$@.old" "$@"; \
+		fi \
+	fi
+	touch $@
+
+$(top_builddir)/src/libeurocode/%.hpp : $(top_srcdir)/files/uml/libeurocode.dia
+	@if test -e "$@"; then \
+		echo mv "$@" "$@.old"; \
+		mv "$@" "$@.old"; \
+	fi
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libeurocode -cl "$*" "$(top_srcdir)/files/uml/libeurocode.dia"
 	@if test -e "$@.old"; then \
 		if test ! "`(md5sum $@.old |sed 's/^\([0-9a-f]*\).*/\1/')`" = "`(md5sum $@ |sed 's/^\([0-9a-f]*\).*/\1/')`"; then \
 			echo rm "$@.old"; \
@@ -135,9 +156,10 @@ comp_hpp_cpp : $(OBJ_CPP)
 	echo -e "#include \"$^\" \nint main () { };" > $@
 	g++ $@ -std=c++11 -c -o $@.o &> $@.log
 
-CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o codegui.dia~ *.stamp
+CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o *.stamp
 
 EXTRA_DIST	=	COPYING.head \
-							codegui.dia \
 							gtk.dia \
-							undo.dia
+							libundo.dia \
+							libprojet.dia \
+							libeurocode.dia

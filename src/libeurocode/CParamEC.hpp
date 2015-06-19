@@ -21,9 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+#include <IParametres.hpp>
 #include "ENormeEcAc.hpp"
-#include "EAction.hpp"
-#include "IParametres.hpp"
 
 /**
  * \brief Contient les options de calculs selon les Eurocodes.

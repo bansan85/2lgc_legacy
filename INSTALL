@@ -9,8 +9,10 @@ patch < ../diff-po-Makevars.template.patch
 cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
-find src/test -name "*.cpp" > po/POTFILES.in
-find src/lib -maxdepth 1 -name "*.cpp" >> po/POTFILES.in
+find src/libeurocode -maxdepth 1 -name "*.cpp" > po/POTFILES.in
+find src/libprojet -maxdepth 1 -name "*.cpp" >> po/POTFILES.in
+find src/libundo -maxdepth 1 -name "*.cpp" >> po/POTFILES.in
+#find src/gtk -maxdepth 1 -name "*.cpp" >> po/POTFILES.in
 
 autoheader
 aclocal -I m4

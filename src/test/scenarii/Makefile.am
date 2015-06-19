@@ -1,5 +1,6 @@
 DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
-										-I$(srcdir)/../../lib \
+										-I$(srcdir)/../../libeurocode \
+										-I$(srcdir)/../../libprojet \
 										-I$(srcdir)/../../libundo \
 										-I$(srcdir)/../../macro
 
@@ -11,7 +12,7 @@ TESTS	=	action1 \
 				undomanager4 \
 				undomanager5
 
-AM_LDFLAGS			= ../../lib/libeurocodes.la ../../libundo/libundo.la
+AM_LDFLAGS			= ../../libeurocode/libeurocode.la ../../libundo/libundo.la ../../libprojet/libprojet.la
 
 action1_SOURCES	=	action1.cpp
 
