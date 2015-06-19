@@ -92,8 +92,9 @@ for NEW_FLAG in \
     -Woverloaded-virtual
 do
   AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
-  OLD_CFLAGS="$CXXFLAGS"
+  OLD_CXXFLAGS="$CXXFLAGS"
   CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror"
+#AC_COMPILE_IFELSE utilise CXXFLAGS pas AM_CXXFLAGS
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
     [void foo(void); void foo(void) { }])], [
     AM_CXXFLAGS="$AM_CXXFLAGS $NEW_FLAG"
@@ -101,12 +102,10 @@ do
   ], [
     AC_MSG_RESULT([no])
   ])
-  CXXFLAGS="$OLD_CFLAGS"
+  CXXFLAGS="$OLD_CXXFLAGS"
 done
 
 #Pour clang
-old_CXXFLAGS="$CXXFLAGS"
-CXXFLAGS="$CXXFLAGS -Werror -Wno-unused-macros"
 for NEW_FLAG in \
     -Weverything \
     -Wno-c++98-compat \
@@ -122,8 +121,8 @@ for NEW_FLAG in \
     -Winconsistent-missing-override
 do
   AC_MSG_CHECKING([if $CXX accepts $NEW_FLAG])
-  OLD_CFLAGS="$CXXFLAGS"
-  CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror"
+  OLD_CXXFLAGS="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS $NEW_FLAG -Werror -Wno-unused-macros"
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
     [void foo(void); void foo(void) { }])], [
     AM_CXXFLAGS="$AM_CXXFLAGS $NEW_FLAG"
@@ -131,9 +130,8 @@ do
   ], [
     AC_MSG_RESULT([no])
   ])
-  CXXFLAGS="$OLD_CFLAGS"
+  CXXFLAGS="$OLD_CXXFLAGS"
 done
-CXXFLAGS="$old_CXXFLAGS"
 
 #Vérification que l'utilisation de c++11 est possible
 AC_MSG_CHECKING([if $CXX accepts -std=c++11])
