@@ -178,6 +178,18 @@ AC_SUBST(XML_CPPFLAGS)
 AC_SUBST(XML_LIBS)
 AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
 
+#clang préfère avoir -fno-use-cxa-atexit pour éviter des erreurs de type "hidden symbol `atexit'.
+AC_TRY_LINK([
+              #include <stdio.h>
+            ],
+            [
+              #ifndef __clang__
+                This is not clang!
+              #endif
+            ],
+            [AM_CXXFLAGS="$AM_CXXFLAGS -fno-use-cxa-atexit"],
+            [])
+
 # debug
 AC_ARG_WITH(debug,
             AS_HELP_STRING([--with-debug],
