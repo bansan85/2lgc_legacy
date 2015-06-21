@@ -63,8 +63,8 @@ main (int32_t,
   
   assert (projet.ref ());
   CAction *action2;
-  assert (action2 = projet.getAction (projet.getParametres ()->
-                                                       getpsiDescription (5)));
+  assert ((action2 = projet.getAction (projet.getParametres ()->
+                                           getpsiDescription (5))) != nullptr);
   action2->getPsi (0)->getVal ();
   action2->getPsi (1)->getUnite ();
   action2->getPsi (2)->toString ();

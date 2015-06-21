@@ -54,7 +54,7 @@ gShowMain (int32_t argc,
   }
   catch (...)
   {
-    BUGCRIT (NULL,
+    BUGCRIT (false,
              false,
              &projet,
              "Échec lors de la création de la fenêtre %s\n",
