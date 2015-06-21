@@ -91,10 +91,6 @@ checkcode :
 	@(cd files/uml && $(MAKE) clean && $(MAKE) $@)
 	
 	$(MAKE) clean
-	./configure --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-	$(MAKE) -j9 &> l_gcc_sans_gtk.log
-	
-	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	$(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
@@ -109,9 +105,6 @@ checkcode :
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
 	$(MAKE) -j9 &> l_clang.log
-	
-	$(MAKE) clean
-	scan-build make -j9 &> l_clang_scan.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
