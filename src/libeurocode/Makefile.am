@@ -8,7 +8,8 @@ AUTOMAKE_OPTIONS			  =	subdir-objects
 
 lib_LTLIBRARIES				  =	libeurocode.la
 
-libeurocode_la_LIBADD		=	@XML_LIBS@
+libeurocode_la_LIBADD		=	@XML_LIBS@ \
+                          ../libundo/libundo.la
 if PLATFORM_LINUX
 if ENABLE_DEBUG
 libeurocode_la_LIBADD	 +=	-lgcov
