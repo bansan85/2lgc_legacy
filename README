@@ -23,6 +23,7 @@ La description des messages doit toujours commencer par :
 [TRAVIS] : Toutes modifications portant sur Travis.
 [ANDROID] : Tout ce qui concerne la compatibilité avec Android.
 [ICC] : Tout ce qui concerne la compilation avec ICC.
+[CLANG] : Tout ce qui concerne la compilation avec CLANG.
 
 
 Performances :
