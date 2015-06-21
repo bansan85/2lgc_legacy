@@ -10,7 +10,7 @@ before_install:
   - sudo sed -i '/read dummy/d' `type -p gettextize`
   - sudo sed -i '/Press Return/d' `type -p gettextize`
 
-script: .travis.sh
+script: ./.travis.sh
 
 branches:
   only:
