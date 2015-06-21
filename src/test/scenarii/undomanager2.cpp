@@ -68,40 +68,49 @@ main (int32_t,
   
   xmlNodePtr root_node, n0, n1, n2, n3;
   
-  assert ((root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"))) != nullptr);
+  root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
+  assert (root_node);
   
   assert (projet.undoToXML (root_node));
   
   n0 = root_node;
   assert (n0->type == XML_ELEMENT_NODE);
   assert (std::string ("Projet").compare (BAD_TSAC2 (n0->name)) == 0);
-  assert ((n1 = n0->children) != nullptr);
+  n1 = n0->children;
+  assert (n1);
   assert (n1->type == XML_ELEMENT_NODE);
   assert (std::string ("UndoManager").compare (BAD_TSAC2 (n1->name)) == 0);
-  assert ((n2 = n1->children) != nullptr);
+  n2 = n1->children;
+  assert (n2);
   assert (n2->type == XML_ELEMENT_NODE);
   assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
-  assert ((n3 = n2->children) != nullptr);
+  n3 = n2->children;
+  assert (n3);
   assert (n3->type == XML_ELEMENT_NODE);
   assert (std::string ("projetSetParam").compare (BAD_TSAC2 (n3->name)) == 0);
   
   xmlChar *prop;
   
-  assert ((n2 = n2->next) != nullptr);
+  n2 = n2->next;
+  assert (n2);
   assert (n2->type == XML_ELEMENT_NODE);
   assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
-  assert ((prop = xmlGetProp (n2, BAD_CAST2 ("Heure"))) != nullptr);
-  assert ((n3 = n2->children) != nullptr);
+  prop = xmlGetProp (n2, BAD_CAST2 ("Heure"));
+  assert (prop);
+  n3 = n2->children;
+  assert (n3);
   assert (n3->type == XML_ELEMENT_NODE);
   assert (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0);
   xmlFree (prop);
   prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
   assert (std::string ("Poids propre").compare (BAD_TSAC2 (prop)) == 0);
   xmlFree (prop);
-  assert ((n2 = n2->next) != nullptr);
+  n2 = n2->next;
+  assert (n2);
   assert (n2->type == XML_ELEMENT_NODE);
   assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
-  assert ((n3 = n2->children) != nullptr);
+  n3 = n2->children;
+  assert (n3);
   assert (n3->type == XML_ELEMENT_NODE);
   assert (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0);
   // On vérifie bien que Chargement n'est plus présent dans la liste des
