@@ -45,7 +45,8 @@ NOTA :
 
 Avec clang :
 ./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
-make -j9 && sudo make install && /usr/local/bin/codegui
+Avec ICC :
+./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=icc CXX=icc
 
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :
