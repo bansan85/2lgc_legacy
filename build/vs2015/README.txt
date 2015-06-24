@@ -17,8 +17,8 @@ Enfin, le projet est maintenant utilisable en lançant le fichier 2lgc.sln.
 
 libeurocode et libprojet présentant une dépendance circulaire, il est
 nécessaire de réaliser les opérations de compilation suivante dans l'ordre :
-1 libundo (génère .dll et .lib)
-2 libprojet (génère .lib)
-3 libeurocode (génère .dll et .lib)
-4 libprojet (génère .dll et .lib)
-5 codegui (génère codegui)
+01 libundo (génère .dll et .lib)
+02 libeurocode (génère .lib)
+03 libprojet (génère .dll et .lib)
+04 libeurocode (génère .dll et .lib)
+10 codegui (génère codegui)

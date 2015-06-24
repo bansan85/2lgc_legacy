@@ -6,15 +6,25 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\libeurocode\CMatAcierEc.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\CMatBetonEc.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\CParamEC.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\ENormeEcAc.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\libeurocode\CParamEC.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FD3010AE-127A-4D2B-A17D-5141884FF9DE}</ProjectGuid>
+    <ProjectGuid>{B9157F6C-77C7-4BEE-ABCC-2831D2F27DF7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Win32Project1</RootNamespace>
-    <ProjectName>10-codegui</ProjectName>
+    <RootNamespace>02-libeurocode</RootNamespace>
+    <ProjectName>04-libeurocode</ProjectName>
+    <TargetPlatformVersion>10.0.10069.0</TargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -30,7 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\src\libprojet;..\..;..\..\src\libeurocode;..\..\src\libundo;..\..\src\macro;..\..\src\gtk;C:\msys32\mingw32\include\libxml2;C:\msys32\mingw32\include;C:\msys32\mingw32\include\gtkmm-3.0;C:\msys32\mingw32\lib\gtkmm-3.0\include;C:\msys32\mingw32\lib\gdkmm-3.0\include;C:\msys32\mingw32\lib\pangomm-1.4\include;C:\msys32\mingw32\lib\glibmm-2.4\include;C:\msys32\mingw32\include\glibmm-2.4;C:\msys32\mingw32\include\glib-2.0;C:\msys32\mingw32\lib\glib-2.0\include;C:\msys32\mingw32\include\sigc++-2.0;C:\msys32\mingw32\lib\sigc++-2.0\include;C:\msys32\mingw32\include\pangomm-1.4;C:\msys32\mingw32\include\pango-1.0;C:\msys32\mingw32\include\cairomm-1.0;C:\msys32\mingw32\include\cairo;C:\msys32\mingw32\include\freetype2;C:\msys32\mingw32\include\atkmm-1.6;C:\msys32\mingw32\include\gdkmm-3.0;C:\msys32\mingw32\include\gtk-3.0;C:\msys32\mingw32\include\gdk-pixbuf-2.0;C:\msys32\mingw32\include\giomm-2.4;C:\msys32\mingw32\include\atk-1.0;C:\msys32\mingw32\lib\giomm-2.4\include;$(IncludePath)</IncludePath>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys32\mingw32\include;C:\msys32\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -38,20 +49,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libgtk-3.dll.a;C:\msys32\mingw32\lib\libglib-2.0.dll.a;Debug\01-libundo.lib;Debug\02-libeurocode.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\msys32\mingw32\lib\libxml2.dll.a;C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libsuitesparseconfig.a;C:\msys32\mingw32\lib\libumfpack.a;C:\msys32\mingw32\lib\libcholmod.a;Debug\01-libundo.lib;Debug\03-libprojet.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\gtk\GWindowMain.cpp" />
-    <ClCompile Include="..\..\src\gtk\main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
