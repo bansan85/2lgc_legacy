@@ -5,29 +5,18 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FD3010AE-127A-4D2B-A17D-5141884FF9DE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Win32Project1</RootNamespace>
-    <ProjectName>03-codegui</ProjectName>
+    <ProjectName>04-codegui</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -38,16 +27,10 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..;..\..\src\lib;..\..\src\libundo;..\..\src\macro;..\..\src\gtk;C:\msys32\mingw32\include\libxml2;C:\msys32\mingw32\include;C:\msys32\mingw32\include\gtkmm-3.0;C:\msys32\mingw32\lib\gtkmm-3.0\include;C:\msys32\mingw32\lib\gdkmm-3.0\include;C:\msys32\mingw32\lib\pangomm-1.4\include;C:\msys32\mingw32\lib\glibmm-2.4\include;C:\msys32\mingw32\include\glibmm-2.4;C:\msys32\mingw32\include\glib-2.0;C:\msys32\mingw32\lib\glib-2.0\include;C:\msys32\mingw32\include\sigc++-2.0;C:\msys32\mingw32\lib\sigc++-2.0\include;C:\msys32\mingw32\include\pangomm-1.4;C:\msys32\mingw32\include\pango-1.0;C:\msys32\mingw32\include\cairomm-1.0;C:\msys32\mingw32\include\cairo;C:\msys32\mingw32\include\freetype2;C:\msys32\mingw32\include\atkmm-1.6;C:\msys32\mingw32\include\gdkmm-3.0;C:\msys32\mingw32\include\gtk-3.0;C:\msys32\mingw32\include\gdk-pixbuf-2.0;C:\msys32\mingw32\include\giomm-2.4;C:\msys32\mingw32\include\atk-1.0;C:\msys32\mingw32\lib\giomm-2.4\include;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\src\libprojet;..\..;..\..\src\libeurocode;..\..\src\libundo;..\..\src\macro;..\..\src\gtk;C:\msys32\mingw32\include\libxml2;C:\msys32\mingw32\include;C:\msys32\mingw32\include\gtkmm-3.0;C:\msys32\mingw32\lib\gtkmm-3.0\include;C:\msys32\mingw32\lib\gdkmm-3.0\include;C:\msys32\mingw32\lib\pangomm-1.4\include;C:\msys32\mingw32\lib\glibmm-2.4\include;C:\msys32\mingw32\include\glibmm-2.4;C:\msys32\mingw32\include\glib-2.0;C:\msys32\mingw32\lib\glib-2.0\include;C:\msys32\mingw32\include\sigc++-2.0;C:\msys32\mingw32\lib\sigc++-2.0\include;C:\msys32\mingw32\include\pangomm-1.4;C:\msys32\mingw32\include\pango-1.0;C:\msys32\mingw32\include\cairomm-1.0;C:\msys32\mingw32\include\cairo;C:\msys32\mingw32\include\freetype2;C:\msys32\mingw32\include\atkmm-1.6;C:\msys32\mingw32\include\gdkmm-3.0;C:\msys32\mingw32\include\gtk-3.0;C:\msys32\mingw32\include\gdk-pixbuf-2.0;C:\msys32\mingw32\include\giomm-2.4;C:\msys32\mingw32\include\atk-1.0;C:\msys32\mingw32\lib\giomm-2.4\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -63,24 +46,6 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libgtk-3.dll.a;C:\msys32\mingw32\lib\libglib-2.0.dll.a;Debug\01-libundo.lib;Debug\02-libeurocode.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

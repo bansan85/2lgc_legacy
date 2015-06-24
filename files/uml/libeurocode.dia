@@ -335,7 +335,7 @@
         <dia:point val="95.0587,38.2212"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="95.0087,38.1712;119.094,79.1212"/>
+        <dia:rectangle val="95.0087,38.1712;119.094,79.9212"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="95.0587,38.2212"/>
@@ -344,13 +344,13 @@
         <dia:real val="23.984999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="40.850000000000016"/>
+        <dia:real val="41.650000000000013"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CParamEC#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
-        <dia:string>##</dia:string>
+        <dia:string>#DllExport#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
         <dia:string>#Contient les options de calculs selon les Eurocodes.#</dia:string>
@@ -1328,17 +1328,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O3">
       <dia:attribute name="obj_pos">
-        <dia:point val="95.0587,42.6712"/>
+        <dia:point val="95.0587,43.4712"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="90.3924,16.1712;95.1087,43.5212"/>
+        <dia:rectangle val="90.3924,16.1712;95.1087,44.3212"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="95.0587,42.6712"/>
-        <dia:point val="90.8424,42.6712"/>
+        <dia:point val="95.0587,43.4712"/>
+        <dia:point val="90.8424,43.4712"/>
         <dia:point val="90.8424,16.6212"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

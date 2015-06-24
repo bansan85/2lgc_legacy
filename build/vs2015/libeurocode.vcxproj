@@ -5,10 +5,15 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\libeurocode\CMatAcierEc.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\CMatBetonEc.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\CParamEC.hpp" />
+    <ClInclude Include="..\..\src\libeurocode\ENormeEcAc.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\libeurocode\CParamEC.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6BD1A5A3-5359-4FCC-8124-5DB9DC3D5527}</ProjectGuid>
@@ -24,13 +29,6 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -39,17 +37,11 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>..\..\src\lib;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys32\mingw32\include;C:\msys32\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys32\mingw32\include;C:\msys32\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -63,95 +55,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\msys32\mingw32\lib\libxml2.dll.a;C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libsuitesparseconfig.a;C:\msys32\mingw32\lib\libumfpack.a;C:\msys32\mingw32\lib\libcholmod.a;Debug\01-libundo.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\msys32\mingw32\lib\libxml2.dll.a;C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libsuitesparseconfig.a;C:\msys32\mingw32\lib\libumfpack.a;C:\msys32\mingw32\lib\libcholmod.a;Debug\01-libundo.lib;Debug\03-libprojet.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\lib\CAction.cpp" />
-    <ClCompile Include="..\..\src\lib\CBarreInfoEF.cpp" />
-    <ClCompile Include="..\..\src\lib\CCalculs.cpp" />
-    <ClCompile Include="..\..\src\lib\CModele.cpp" />
-    <ClCompile Include="..\..\src\lib\CParamEC.cpp" />
-    <ClCompile Include="..\..\src\lib\CPonderations.cpp" />
-    <ClCompile Include="..\..\src\lib\CPreferences.cpp" />
-    <ClCompile Include="..\..\src\lib\CProjet.cpp" />
-    <ClCompile Include="..\..\src\lib\IActionGroupe.cpp" />
-    <ClCompile Include="..\..\src\lib\INb.cpp" />
-    <ClCompile Include="..\..\src\lib\IParametres.cpp" />
-    <ClCompile Include="..\..\src\lib\NbCalcul.cpp" />
-    <ClCompile Include="..\..\src\lib\NbUser.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\lib\CAction.hpp" />
-    <ClInclude Include="..\..\src\lib\CAdresse.hpp" />
-    <ClInclude Include="..\..\src\lib\CAnalyseComm.hpp" />
-    <ClInclude Include="..\..\src\lib\CAppui.hpp" />
-    <ClInclude Include="..\..\src\lib\CBarre.hpp" />
-    <ClInclude Include="..\..\src\lib\CBarreInfoEF.hpp" />
-    <ClInclude Include="..\..\src\lib\CCalculs.hpp" />
-    <ClInclude Include="..\..\src\lib\CCombinaison.hpp" />
-    <ClInclude Include="..\..\src\lib\CFonction.hpp" />
-    <ClInclude Include="..\..\src\lib\CGroupe.hpp" />
-    <ClInclude Include="..\..\src\lib\ChargeBarrePonctuelle.hpp" />
-    <ClInclude Include="..\..\src\lib\ChargeBarreRepUni.hpp" />
-    <ClInclude Include="..\..\src\lib\ChargeNoeud.hpp" />
-    <ClInclude Include="..\..\src\lib\CMatAcierEc.hpp" />
-    <ClInclude Include="..\..\src\lib\CMatBetonEc.hpp" />
-    <ClInclude Include="..\..\src\lib\CModele.hpp" />
-    <ClInclude Include="..\..\src\lib\CNiveauGroupe.hpp" />
-    <ClInclude Include="..\..\src\lib\codegui.hpp" />
-    <ClInclude Include="..\..\src\lib\CParamEC.hpp" />
-    <ClInclude Include="..\..\src\lib\CPoint.hpp" />
-    <ClInclude Include="..\..\src\lib\CPonderation.hpp" />
-    <ClInclude Include="..\..\src\lib\CPonderations.hpp" />
-    <ClInclude Include="..\..\src\lib\CPreferences.hpp" />
-    <ClInclude Include="..\..\src\lib\CProjet.hpp" />
-    <ClInclude Include="..\..\src\lib\CRelachement.hpp" />
-    <ClInclude Include="..\..\src\lib\CTroncon.hpp" />
-    <ClInclude Include="..\..\src\lib\DepBloque.hpp" />
-    <ClInclude Include="..\..\src\lib\DepLibre.hpp" />
-    <ClInclude Include="..\..\src\lib\DepLineaire.hpp" />
-    <ClInclude Include="..\..\src\lib\EAction.hpp" />
-    <ClInclude Include="..\..\src\lib\ECombinaison.hpp" />
-    <ClInclude Include="..\..\src\lib\ENorme.hpp" />
-    <ClInclude Include="..\..\src\lib\ENormeEcAc.hpp" />
-    <ClInclude Include="..\..\src\lib\EUnite.hpp" />
-    <ClInclude Include="..\..\src\lib\IActionGroupe.hpp" />
-    <ClInclude Include="..\..\src\lib\ICharge.hpp" />
-    <ClInclude Include="..\..\src\lib\IDeplacementType.hpp" />
-    <ClInclude Include="..\..\src\lib\IMateriau.hpp" />
-    <ClInclude Include="..\..\src\lib\INb.hpp" />
-    <ClInclude Include="..\..\src\lib\INoeud.hpp" />
-    <ClInclude Include="..\..\src\lib\IParametres.hpp" />
-    <ClInclude Include="..\..\src\lib\ISection.hpp" />
-    <ClInclude Include="..\..\src\lib\NbCalcul.hpp" />
-    <ClInclude Include="..\..\src\lib\NbUser.hpp" />
-    <ClInclude Include="..\..\src\lib\NdBarre.hpp" />
-    <ClInclude Include="..\..\src\lib\NdLibre.hpp" />
-    <ClInclude Include="..\..\src\lib\SecCarree.hpp" />
-    <ClInclude Include="..\..\src\lib\SecCirc.hpp" />
-    <ClInclude Include="..\..\src\lib\SecPerso.hpp" />
-    <ClInclude Include="..\..\src\lib\SecRect.hpp" />
-    <ClInclude Include="..\..\src\lib\SecT.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -5,7 +5,7 @@
 #define ENABLE_DEBUG 1
 
 /* Défini si l’interface GTK doit être supportée. */
-/* #undef ENABLE_GTK */
+#define ENABLE_GTK 1
 
 /* Défini si l’interface METRO doit être supportée. */
 /* #undef ENABLE_METRO */
@@ -75,10 +75,6 @@
 /* Define to 1 if you have the <locale.h> header file. */
 #define HAVE_LOCALE_H 1
 
-/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
-   to 0 otherwise. */
-#define HAVE_MALLOC 1
-
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
@@ -90,10 +86,6 @@
 
 /* Define to 1 if you have the `pow' function. */
 #define HAVE_POW 1
-
-/* Define to 1 if your system has a GNU libc compatible `realloc' function,
-   and to 0 otherwise. */
-#define HAVE_REALLOC 1
 
 /* Define to 1 if you have the `setlocale' function. */
 #define HAVE_SETLOCALE 1
@@ -128,9 +120,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
-/* Define to 1 if the system has the type `_Bool'. */
-/* #undef HAVE__BOOL */
-
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
 
@@ -161,12 +150,24 @@
 /* Version number of package */
 #define VERSION "0.0.1"
 
-/* Define to rpl_malloc if the replacement function should be used. */
-/* #undef malloc */
 
-/* Define to rpl_realloc if the replacement function should be used. */
-/* #undef realloc */
+#ifdef _MSC_VER
+#define CHK _Check_return_
 
+#ifndef ssize_t
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif // !ssize_t
 
-#include "src/macro/common.h"
+#else // !_MSC_VER
+#define CHK __attribute__ ((__warn_unused_result__))
+#endif
+
+#if defined(_MSC_VER)
+#define SSCANF sscanf_s
+#define DllExport __declspec(dllexport)
+#else
+#define SSCANF sscanf
+#define DllExport
+#endif
 

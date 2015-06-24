@@ -60,7 +60,7 @@ CProjet::CProjet (ENorme norme) :
   }
 
   // On charge la localisation
-  std::setlocale (LC_ALL, "");
+  setlocale (LC_ALL, "");
   std::cout.imbue (std::locale (""));
   std::cin.imbue (std::locale (""));
   std::cerr.imbue (std::locale (""));
