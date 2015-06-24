@@ -27,7 +27,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 /**
  * \brief Contient les options de calculs selon les Eurocodes.
  */
-class CParamEC : public IParametres
+class DllExport CParamEC : public IParametres
 {
   // Attributes
   private :

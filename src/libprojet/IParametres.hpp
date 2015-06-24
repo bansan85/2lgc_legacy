@@ -27,7 +27,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 /**
  * \brief Contient les options de calculs du projet.
  */
-class IParametres : public IUndoable
+class DllExport IParametres : public IUndoable
 {
   // Operations
   public :
