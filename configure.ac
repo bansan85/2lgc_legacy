@@ -381,6 +381,10 @@ if test "x${ac_enable_valgrind}" = xyes ; then
   fi
 fi
 
+# Vérification de la présence de dia2code v0.9
+AC_CHECK_PROG(HAVE_DIA2CODE, dia2code, yes, no, "/home/legarrec/info/programmation/dia2code-git/src")
+AM_CONDITIONAL(HAVE_DIA2CODE, test "x$HAVE_DIA2CODE" = xyes)
+
 # Checks for libraries.
 AC_CHECK_LIB(m, sqrt)
 

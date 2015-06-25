@@ -79,6 +79,7 @@ checkcode : ../../src/libeurocode/codegui.hpp
 	$(MAKE) comp_hpp_cpp
 
 $(top_builddir)/src/gtk/%.hpp : $(top_srcdir)/files/uml/gtk.dia
+if HAVE_DIA2CODE
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
@@ -94,8 +95,10 @@ $(top_builddir)/src/gtk/%.hpp : $(top_srcdir)/files/uml/gtk.dia
 		fi \
 	fi
 	touch $@
+endif
 
 $(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/libundo.dia
+if HAVE_DIA2CODE
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
@@ -111,8 +114,10 @@ $(top_builddir)/src/libundo/%.hpp : $(top_srcdir)/files/uml/libundo.dia
 		fi \
 	fi
 	touch $@
+endif
 
 $(top_builddir)/src/libprojet/%.hpp : $(top_srcdir)/files/uml/libprojet.dia
+if HAVE_DIA2CODE
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
@@ -128,8 +133,10 @@ $(top_builddir)/src/libprojet/%.hpp : $(top_srcdir)/files/uml/libprojet.dia
 		fi \
 	fi
 	touch $@
+endif
 
 $(top_builddir)/src/libeurocode/%.hpp : $(top_srcdir)/files/uml/libeurocode.dia
+if HAVE_DIA2CODE
 	@if test -e "$@"; then \
 		echo mv "$@" "$@.old"; \
 		mv "$@" "$@.old"; \
@@ -145,6 +152,7 @@ $(top_builddir)/src/libeurocode/%.hpp : $(top_srcdir)/files/uml/libeurocode.dia
 		fi \
 	fi
 	touch $@
+endif
 
 SRC_HPP = $(wildcard *.hpp)
 OBJ_CPP = $(SRC_HPP:.hpp=.cpp)
