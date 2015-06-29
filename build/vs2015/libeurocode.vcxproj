@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys32\mingw32\include;C:\msys32\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,7 +55,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\msys32\mingw32\lib\libxml2.dll.a;C:\msys32\mingw32\lib\libintl.dll.a;C:\msys32\mingw32\lib\libsuitesparseconfig.a;C:\msys32\mingw32\lib\libumfpack.a;C:\msys32\mingw32\lib\libcholmod.a;Debug\01-libundo.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;Debug\01-libundo.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
