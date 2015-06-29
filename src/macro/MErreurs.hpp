@@ -40,22 +40,15 @@
   PRINTF (__VA_ARGS__); \
   return Y;
 
-// XXX ne doit pas être utilisé à l'extérieur de MErreurs.hpp
-#define XXX(X, Y, MANAGER, MSG, ...) \
-  try \
-  { \
-    bool tmp_x = (X); \
-    if (!tmp_x) \
-    { \
-      FAILINFO (Y, MANAGER, MSG, __VA_ARGS__) \
-    } \
-  } \
-  catch (...) \
+// BUG ne doit pas être utilisé à l'extérieur de MErreurs.hpp
+#define BUG(X, Y, MANAGER, MSG, ...) \
+  bool tmp_x = (X); \
+  if (!tmp_x) \
   { \
     FAILINFO (Y, MANAGER, MSG, __VA_ARGS__) \
-  }
+  } \
 /**
- * \def XXX(X, Y, MANAGER, MSG, ...)
+ * \def BUG(X, Y, MANAGER, MSG, ...)
  * \brief La macro est l'équivalent d'un "return Y; ..." si la condition X
  *        n'est pas vérifiée.
  * \param X : condition à vérifier,
@@ -85,11 +78,11 @@
  */
 
 #define BUGCRIT(X, Y, MANAGER, ...) { \
-  XXX (X, Y, MANAGER, gettext ("Erreur de type critique.\n"), __VA_ARGS__) \
+  BUG (X, Y, MANAGER, gettext ("Erreur de type critique.\n"), __VA_ARGS__) \
 }
 /**
  * \def BUGCRIT(X, Y, ...)
- * \brief Cette macro est identique à la commande #XXX mais ajoute un message
+ * \brief Cette macro est identique à la commande #BUG mais ajoute un message
  *        d'erreur "Erreur critique" avant l'arrêt de la fonction.
  * \param X : condition à vérifier,
  * \param Y : renvoie Y si la condition X n'est pas vérifiée,
@@ -97,15 +90,15 @@
  */
 
 #define BUGUSER(X, Y, MANAGER, ...) { \
-  XXX (X, Y, MANAGER, gettext ("Erreur de type utilisateur.\n"), __VA_ARGS__) \
+  BUG (X, Y, MANAGER, gettext ("Erreur de type utilisateur.\n"), __VA_ARGS__) \
 }
 
 #define BUGPROG(X, Y, MANAGER, ...) { \
-  XXX (X, Y, MANAGER, gettext ("Erreur de programmation.\n"), __VA_ARGS__) \
+  BUG (X, Y, MANAGER, gettext ("Erreur de programmation.\n"), __VA_ARGS__) \
 }
 
 #define BUGCONT(X, Y, MANAGER) { \
-  XXX (X, Y, MANAGER, gettext ("Propagation de l'erreur.\n"), "BLA") \
+  BUG (X, Y, MANAGER, gettext ("Propagation de l'erreur.\n"), "BLA") \
 }
 
 #endif
