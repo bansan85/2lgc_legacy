@@ -1,4 +1,5 @@
 *.gcno
+*.pyc
 *.la
 *.swp
 *~
