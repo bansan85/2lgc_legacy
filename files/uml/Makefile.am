@@ -15,6 +15,7 @@ $(top_builddir)/files/uml/libundo.stamp : \
 			$(top_builddir)/src/libundo/IObserveur.hpp \
 			$(top_builddir)/src/libundo/ISujet.hpp \
 			$(top_builddir)/src/libundo/IUndoable.hpp \
+			$(top_builddir)/src/libundo/IUndoableFonction.hpp \
 			$(top_builddir)/src/libundo/UndoData.hpp \
 			$(top_builddir)/src/libundo/UndoManager.hpp
 
