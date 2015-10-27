@@ -47,7 +47,7 @@ class DllExport UndoManager : public ISujet
     UndoData * tmpListe;
     /// Taille de l'historique
     size_t memory;
-    /// Définit pour quelle valeur inférieur ou égale à count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.
+    /// Définit pour quelle valeur inférieure ou égale à count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.
     uint16_t sauveDesc;
     /// Lorsque true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la pile, afin d'éviter un double enregistrement.
     bool insertion : 1;
@@ -154,7 +154,7 @@ class DllExport UndoManager : public ISujet
      * \param root (in) Le noeud dans lequel doit être inséré l'historique.
      * \return bool CHK
      */
-    bool CHK undoToXML (xmlNodePtr root);
+    bool CHK undoToXML (xmlNodePtr root) const;
     /**
      * \brief Annule les modifications en cours sur la base de ceux dans la liste tmpListe. Force count à 0.
      * \return void

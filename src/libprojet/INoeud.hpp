@@ -22,12 +22,11 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <CAppui.hpp>
-#include <IUndoable.hpp>
 
 /**
  * \brief Défini un nœud par ces coordonnées et son appui.
  */
-class INoeud : public IUndoable
+class INoeud
 {
   // Attributes
   private :

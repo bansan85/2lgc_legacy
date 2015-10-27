@@ -21,12 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoable.hpp>
-
 /**
  * \brief Adresse conforme au fichier france_villes.csv.
  */
-class CAdresse : public IUndoable
+class CAdresse
 {
   // Attributes
   private :

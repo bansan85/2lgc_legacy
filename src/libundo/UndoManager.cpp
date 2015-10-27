@@ -26,7 +26,6 @@
 
 #include "Algo.hpp"
 #include "UndoManager.hpp"
-#include "IUndoable.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
@@ -373,14 +372,14 @@ UndoManager::unref ()
 }
 
 bool CHK
-UndoManager::undoToXML (xmlNodePtr root)
+UndoManager::undoToXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                  xmlNewNode (nullptr, BAD_CAST2 ("UndoManager")), xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
-           this,
+           UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
   for (UndoData * data : liste)
@@ -391,7 +390,7 @@ UndoManager::undoToXML (xmlNodePtr root)
     
     BUGCRIT (node0.get () != nullptr,
              false,
-             this,
+             UNDO_MANAGER_NULL,
              "Erreur d'allocation mémoire.\n")
     
     BUGCRIT (xmlSetProp (
@@ -399,27 +398,27 @@ UndoManager::undoToXML (xmlNodePtr root)
                BAD_CAST2 ("Heure"),
                BAD_CAST2 (std::to_string (data->heure).c_str ())) != nullptr,
              false,
-             this,
+             UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
     
     BUGCRIT (xmlSetProp (node0.get (),
                          BAD_CAST2 ("Description"),
                          BAD_CAST2 (data->description.c_str ())) != nullptr,
              false,
-             this,
+             UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
     
     for (std::function <bool (xmlNodePtr)> f : data->sauve)
     {
       BUGCRIT (f (node0.get ()),
                false,
-               this,
+               UNDO_MANAGER_NULL,
                "Erreur lors de la génération du fichier XML.\n")
     }
     
     BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
              false,
-             this,
+             UNDO_MANAGER_NULL,
              "Erreur lors de la génération du fichier XML.\n")
     
     node0.release ();
@@ -427,7 +426,7 @@ UndoManager::undoToXML (xmlNodePtr root)
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           this,
+           UNDO_MANAGER_NULL,
            "Erreur lors de la génération du fichier XML.\n")
 
   node.release ();

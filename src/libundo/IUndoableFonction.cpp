@@ -18,14 +18,21 @@
 
 #include "config.h"
 
-#include "IParametres.hpp"
+#include "IUndoableFonction.hpp"
 
-IParametres::IParametres ()
+IUndoableFonction::IUndoableFonction (bool importance) :
+  important (importance)
 {
 }
 
-IParametres::~IParametres ()
+IUndoableFonction::~IUndoableFonction()
 {
+}
+
+bool CHK
+IUndoableFonction::getImportant () const
+{
+  return important;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

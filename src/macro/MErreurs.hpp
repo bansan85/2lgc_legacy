@@ -29,24 +29,28 @@
 #define PRINTF(...) printf (__VA_ARGS__)
 
 // FAILINFO ne doit pas être utilisé à l'extérieur de MErreurs.hpp
-#define FAILINFO(Y, MANAGER, MSG, ...) \
+#define FAILINFO(Y, MSG, ...) {\
   PRINTF (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
           __FILE__, \
           __FUNCTION__, \
           __LINE__); \
-  if ((MANAGER) != nullptr) \
-    (MANAGER)->rollback (); \
   PRINTF (MSG); \
   PRINTF (__VA_ARGS__); \
-  return Y;
+  return Y; \
+}
+
+// FAILUNDOINFO ne doit pas être utilisé à l'extérieur de MErreurs.hpp
+#define FAILUNDOINFO(Y, MANAGER, MSG, ...) {\
+  if ((MANAGER) != nullptr) \
+    (MANAGER)->rollback (); \
+  FAILINFO (Y, MSG, __VA_ARGS__) \
+}
 
 // BUG ne doit pas être utilisé à l'extérieur de MErreurs.hpp
 #define BUG(X, Y, MANAGER, MSG, ...) \
   bool tmp_x = (X); \
   if (!tmp_x) \
-  { \
-    FAILINFO (Y, MANAGER, MSG, __VA_ARGS__) \
-  } \
+    FAILUNDOINFO (Y, MANAGER, MSG, __VA_ARGS__) \
 /**
  * \def BUG(X, Y, MANAGER, MSG, ...)
  * \brief La macro est l'équivalent d'un "return Y; ..." si la condition X
@@ -60,12 +64,10 @@
 
 #define BUGPARAM(PARAM, TYPE, X, Y, MANAGER) { \
   if (!(X)) \
-  { \
-    FAILINFO (Y, \
+    FAILUNDOINFO (Y, \
               MANAGER, \
               gettext ("Erreur de programmation."), \
               "%s" #PARAM " = " TYPE ".\n", gettext ("Paramètre incorrect : "), PARAM) \
-  } \
 }
 /**
  * \def BUGPARAM(PARAM, TYPE, X, Y, MANAGER)

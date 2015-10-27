@@ -22,12 +22,11 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <IDeplacementType.hpp>
-#include <IUndoable.hpp>
 
 /**
  * \brief Données définissant un relâchement.
  */
-class CRelachement : public IUndoable
+class CRelachement
 {
   // Attributes
   private :
@@ -56,9 +55,8 @@ class CRelachement : public IUndoable
      * \param rxf (in) Le type de relâchement autour de l'axe x en fin de barre.
      * \param ryf (in) Le type de relâchement autour de l'axe y en fin de barre.
      * \param rzf (in) Le type de relâchement autour de l'axe z en fin de barre.
-     * \param undo (in) Le gestionnaire des modifications.
      */
-    CRelachement (std::string nom, IDeplacementType * rxd, IDeplacementType * ryd, IDeplacementType * rzd, IDeplacementType * rxf, IDeplacementType * ryf, IDeplacementType * rzf, UndoManager & undo);
+    CRelachement (std::string nom, IDeplacementType * rxd, IDeplacementType * ryd, IDeplacementType * rzd, IDeplacementType * rxf, IDeplacementType * ryf, IDeplacementType * rzf);
     /**
      * \brief Duplication d'une classe CRelachement.
      * \param other (in) La classe à dupliquer.

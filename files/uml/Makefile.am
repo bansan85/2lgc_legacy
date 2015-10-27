@@ -14,13 +14,13 @@ $(top_builddir)/files/uml/libundo.stamp : \
 			$(top_builddir)/src/libundo/EUndoEtat.hpp \
 			$(top_builddir)/src/libundo/IObserveur.hpp \
 			$(top_builddir)/src/libundo/ISujet.hpp \
-			$(top_builddir)/src/libundo/IUndoable.hpp \
 			$(top_builddir)/src/libundo/IUndoableFonction.hpp \
 			$(top_builddir)/src/libundo/UndoData.hpp \
 			$(top_builddir)/src/libundo/UndoManager.hpp
 
 $(top_builddir)/files/uml/libprojet.stamp : \
       $(top_builddir)/src/libprojet/CAction.hpp \
+      $(top_builddir)/src/libprojet/CActionSetPsi.hpp \
       $(top_builddir)/src/libprojet/CAdresse.hpp \
       $(top_builddir)/src/libprojet/CAnalyseComm.hpp \
       $(top_builddir)/src/libprojet/CAppui.hpp \
@@ -34,12 +34,14 @@ $(top_builddir)/files/uml/libprojet.stamp : \
       $(top_builddir)/src/libprojet/ChargeBarreRepUni.hpp \
       $(top_builddir)/src/libprojet/ChargeNoeud.hpp \
       $(top_builddir)/src/libprojet/CModele.hpp \
+      $(top_builddir)/src/libprojet/CModeleAddAction.hpp \
+      $(top_builddir)/src/libprojet/CModeleRmAction.hpp \
+      $(top_builddir)/src/libprojet/CModeleSetParametres.hpp \
       $(top_builddir)/src/libprojet/CNiveauGroupe.hpp \
       $(top_builddir)/src/libprojet/CPoint.hpp \
       $(top_builddir)/src/libprojet/CPonderation.hpp \
       $(top_builddir)/src/libprojet/CPonderations.hpp \
       $(top_builddir)/src/libprojet/CPreferences.hpp \
-      $(top_builddir)/src/libprojet/CProjet.hpp \
       $(top_builddir)/src/libprojet/CRelachement.hpp \
       $(top_builddir)/src/libprojet/CTroncon.hpp \
       $(top_builddir)/src/libprojet/DepBloque.hpp \
@@ -57,6 +59,7 @@ $(top_builddir)/files/uml/libprojet.stamp : \
       $(top_builddir)/src/libprojet/INoeud.hpp \
       $(top_builddir)/src/libprojet/IParametres.hpp \
       $(top_builddir)/src/libprojet/ISection.hpp \
+      $(top_builddir)/src/libprojet/IUndoFunc.hpp \
       $(top_builddir)/src/libprojet/NbCalcul.hpp \
       $(top_builddir)/src/libprojet/NbUser.hpp \
       $(top_builddir)/src/libprojet/NdBarre.hpp \

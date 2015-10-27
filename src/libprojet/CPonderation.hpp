@@ -21,6 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderations;
+class CCalculs;
+class CModele;
+class IUndoFunc;
+class CActionSetPsi;
+class CAction;
+
 #include "CAction.hpp"
 
 /**

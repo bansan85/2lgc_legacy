@@ -18,23 +18,20 @@
 
 #include "config.h"
 
-#include <iostream>
+#include "IUndoFunc.hpp"
 
-#include "IUndoable.hpp"
-
-IUndoable::IUndoable (UndoManager & undo_) :
-  undoManager (undo_)
+IUndoFunc::IUndoFunc (bool importance) :
+  IUndoableFonction (importance)
 {
 }
 
-IUndoable::~IUndoable ()
+IUndoFunc::~IUndoFunc ()
 {
 }
 
-UndoManager &
-IUndoable::getUndoManager () const
-{
-  return undoManager;
+CModele *
+IUndoFunc::t () {
+  return reinterpret_cast <CModele *> (this);
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

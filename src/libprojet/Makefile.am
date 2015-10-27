@@ -35,14 +35,17 @@ libprojet_la_SOURCES 	=	CAction.cpp \
 												CBarreInfoEF.cpp \
 												CCalculs.cpp \
 												CModele.cpp \
-												NbCalcul.cpp \
-												NbUser.cpp \
+												CModeleAddAction.cpp \
+												CModeleRmAction.cpp \
+												CModeleSetParametres.cpp \
 												CPonderations.cpp \
 												CPreferences.cpp \
-												CProjet.cpp \
 												IActionGroupe.cpp \
 												INb.cpp \
-												IParametres.cpp
+												IParametres.cpp \
+												IUndoFunc.cpp \
+												NbCalcul.cpp \
+												NbUser.cpp
 
 libprojet_la_HEADERS 	=	$(wildcard *.hpp)
 

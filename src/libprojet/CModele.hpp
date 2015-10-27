@@ -21,9 +21,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CActionSetPsi;
+class CAction;
+class CModeleAddAction;
+class CModeleRmAction;
+class CModeleSetParametres;
+class IUndoFunc;
+
 #include <IMateriau.hpp>
 #include <ISection.hpp>
 #include <INoeud.hpp>
+#include <UndoManager.hpp>
+#include <ISujet.hpp>
+#include "CModeleSetParametres.hpp"
+#include "CModeleRmAction.hpp"
+#include "CModeleAddAction.hpp"
+#include "CCalculs.hpp"
+#include "CPreferences.hpp"
+#include "ENorme.hpp"
+#include "IParametres.hpp"
 #include "CAppui.hpp"
 #include "CRelachement.hpp"
 #include "CBarre.hpp"
@@ -33,7 +52,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 /**
  * \brief Contient toutes les données définissant la structure à analyser.
  */
-class DllExport CModele
+class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, public CModeleAddAction, public ISujet, public CCalculs
 {
   // Associations
   // Attributes
@@ -54,6 +73,8 @@ class DllExport CModele
     std::list <std::shared_ptr <CAction> > actions;
     /// Compatibilités entres actions.
     std::list <std::shared_ptr <CNiveauGroupe> > niveaux_groupes;
+    /// Le gestionnaire d'annulation
+    UndoManager undoManager;
   // Operations
   public :
     /**
@@ -220,8 +241,8 @@ class DllExport CModele
      */
     bool CHK rmBarre (uint32_t num);
     /**
-     * \brief Ajout d'une action. La fonction XML est CAction::addXML.
-     * \param action (in) La nouvelle action.
+     * \brief Ajoute une action au modèle.
+     * \param action (in) L'action à ajouter.
      * \return bool CHK
      */
     bool CHK addAction (std::shared_ptr <CAction> action);
@@ -241,13 +262,33 @@ class DllExport CModele
      * \param action (in) L'action à supprimer.
      * \return bool CHK
      */
-    bool CHK rmAction (std::shared_ptr <CAction> & action);
+    bool CHK rmAction (std::shared_ptr <CAction> action);
     /**
-     * \brief Supprime une action.
-     * \param nom (in) Le nom de l'action à supprimer.
+     * \brief Renvoie les paramètres de calculs.
+     * \return std::shared_ptr <IParametres> &
+     */
+    std::shared_ptr <IParametres> & getParametres () const;
+    /**
+     * \brief Renvoie le gestionnaire d'annulation.
+     * \return UndoManager &
+     */
+    UndoManager & getUndoManager ();
+    /**
+     * \brief Enregistre le projet.
+     * \param fichier (in) Le nom du fichier.
      * \return bool CHK
      */
-    bool CHK rmAction (const std::string & nom);
+    bool CHK enregistre (const std::string fichier) const;
+    /**
+     * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL).
+     * \return void
+     */
+    static void showWarranty ();
+    /**
+     * \brief Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h.
+     * \return void
+     */
+    static void showHelp ();
 };
 
 #endif

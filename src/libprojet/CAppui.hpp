@@ -22,12 +22,11 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <IDeplacementType.hpp>
-#include <IUndoable.hpp>
 
 /**
  * \brief Données définissant un appui.
  */
-class CAppui : public IUndoable
+class CAppui
 {
   // Attributes
   private :
@@ -56,9 +55,8 @@ class CAppui : public IUndoable
      * \param rx (in) Le type d'appui autour de l'axe x.
      * \param ry (in) Le type d'appui autour de l'axe y.
      * \param rz (in) Le type d'appui autour de l'axe z.
-     * \param undo (in) Le gestionnaire des modifications.
      */
-    CAppui (std::string nom, IDeplacementType * ux, IDeplacementType * uy, IDeplacementType * uz, IDeplacementType * rx, IDeplacementType * ry, IDeplacementType * rz, UndoManager & undo);
+    CAppui (std::string nom, IDeplacementType * ux, IDeplacementType * uy, IDeplacementType * uz, IDeplacementType * rx, IDeplacementType * ry, IDeplacementType * rz);
     /**
      * \brief Duplication d'une classe CAppui.
      * \param other (in) La classe à dupliquer.

@@ -21,12 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoable.hpp>
-
 /**
  * \brief Défini les différents types de déplacement pour les appuis et les relâchements.
  */
-class IDeplacementType : public IUndoable
+class IDeplacementType
 {
   // Attributes
   private :

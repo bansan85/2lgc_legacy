@@ -27,9 +27,9 @@
 #include "MErreurs.hpp"
 
 GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
-                          CProjet & proj) :
+                          CModele                     & modele_) :
   build (builder),
-  projet (proj)
+  modele (modele_)
 {
   Gtk::MenuToolButton * button = nullptr;
 
@@ -78,6 +78,7 @@ GWindowMain::signal (EEvent event, void *)
     case EEvent::UNDO_NB :
     {
       Gtk::MenuToolButton * undoB = nullptr;
+      bool param2 = modele.getUndoManager ().undoNb () != 0;
 
       build->get_widget ("buttonUndo", undoB);
 
@@ -88,10 +89,10 @@ GWindowMain::signal (EEvent event, void *)
                  "Main",
                  "buttonUndo");
 
-      undoB->set_sensitive (projet.undoNb () != 0);
-      if (projet.undoNb () != 0)
+      undoB->set_sensitive (param2);
+      if (param2)
       {
-        undoB->set_tooltip_text (*projet.undoDesc (0));
+        undoB->set_tooltip_text (*modele.getUndoManager ().undoDesc (0));
       }
       else
       {
@@ -102,6 +103,7 @@ GWindowMain::signal (EEvent event, void *)
     case EEvent::REDO_NB :
     {
       Gtk::MenuToolButton * redoB = nullptr;
+      bool param2 = modele.getUndoManager ().redoNb () != 0;
 
       build->get_widget ("buttonRedo", redoB);
 
@@ -112,10 +114,10 @@ GWindowMain::signal (EEvent event, void *)
                  "Main",
                  "buttonRedo");
 
-      redoB->set_sensitive (projet.redoNb () != 0);
-      if (projet.redoNb () != 0)
+      redoB->set_sensitive (param2);
+      if (param2)
       {
-        redoB->set_tooltip_text (*projet.redoDesc (0));
+        redoB->set_tooltip_text (*modele.getUndoManager ().redoDesc (0));
       }
       else
       {
@@ -137,13 +139,13 @@ GWindowMain::signal (EEvent event, void *)
 void
 GWindowMain::onClickedUndo ()
 {
-  BUGCONT (projet.undo (), , &projet);
+  BUGCONT (modele.getUndoManager ().undo (), , UNDO_MANAGER_NULL);
 }
 
 void
 GWindowMain::onClickedRedo ()
 {
-  BUGCONT (projet.redo (), , &projet);
+  BUGCONT (modele.getUndoManager ().redo (), , UNDO_MANAGER_NULL);
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -24,13 +24,13 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 #include <ISection.hpp>
 #include <IMateriau.hpp>
 #include <INoeud.hpp>
-#include <IUndoable.hpp>
+#include <list>
 #include "CRelachement.hpp"
 
 /**
  * \brief Données d'une barre.
  */
-class CBarre : public IUndoable
+class CBarre
 {
   // Attributes
   private :
@@ -61,9 +61,8 @@ class CBarre : public IUndoable
      * \param angle (in) Angle de rotation de la barre autour de l'axe x local.
      * \param relachement (in) Relâchement de la barre. NULL si aucun.
      * \param discretisation (in) Nombre de découpage de la barre.
-     * \param undo (in) Le gestionnaire des modifications.
      */
-    CBarre (ISection * section, IMateriau * materiau, INoeud * noeudd, INoeud * noeudf, INb * angle, CRelachement * relachement, uint16_t discretisation, UndoManager & undo);
+    CBarre (ISection * section, IMateriau * materiau, INoeud * noeudd, INoeud * noeudf, INb * angle, CRelachement * relachement, uint16_t discretisation);
     /**
      * \brief Duplication d'une classe CBarre.
      * \param other (in) La classe à dupliquer.

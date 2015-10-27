@@ -22,7 +22,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <gtkmm/builder.h>
-#include <CProjet.hpp>
+#include <CModele.hpp>
 #include <IObserveur.hpp>
 
 /**
@@ -34,16 +34,16 @@ class GWindowMain : public IObserveur
   private :
     /// Le composant GtkBuirder contenant la fenêtre.
     Glib::RefPtr <Gtk::Builder> build;
-    /// Le projet relié à la fenêtre.
-    CProjet & projet;
+    /// Le projet relié à l'interface graphique.
+    CModele & modele;
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe GWindowMain.
      * \param builder (in) Le composant GtkBuirder contenant la fenêtre.
-     * \param proj (in) Le projet relié à la fenêtre.
+     * \param modele_ (in) Le projet lié à l'interface graphique.
      */
-    GWindowMain (Glib::RefPtr <Gtk::Builder> & builder, CProjet & proj);
+    GWindowMain (Glib::RefPtr <Gtk::Builder> & builder, CModele & modele_);
     /**
      * \brief Duplication d'une classe GWindowMain.
      * \param other (in) La classe à dupliquer.

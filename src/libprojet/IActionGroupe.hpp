@@ -21,12 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoable.hpp>
+#include <memory>
 
 /**
  * \brief Un groupe possède soit une liste d'actions ou un liste de groupes. Action et Groupe d'actions possèdent le même point commun : un nom et un iter pour l'affichage graphique dans la fenêtre permettant de réaliser des combinaisons de Groupe et d'Action.
  */
-class IActionGroupe : public IUndoable
+class IActionGroupe
 {
   // Attributes
   private :
@@ -37,9 +37,8 @@ class IActionGroupe : public IUndoable
     /**
      * \brief Constructeur d'une interface IActionGroupe.
      * \param nom_ (in) Le nom de l'action / groupe.
-     * \param undo_ (in) Le gestionnaire des modifications.
      */
-    IActionGroupe (std::shared_ptr <std::string> nom_, UndoManager & undo_);
+    IActionGroupe (std::shared_ptr <std::string> nom_);
     /**
      * \brief Duplication d'une classe IActionGroupe.
      * \param other (in) La classe à dupliquer.

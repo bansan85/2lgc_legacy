@@ -27,7 +27,7 @@ libundo_ladir 			 = $(includedir)/2lgc
 
 libundo_la_SOURCES 	 = IObserveur.cpp \
 											 ISujet.cpp \
-											 IUndoable.cpp \
+											 IUndoableFonction.cpp \
 											 UndoData.cpp \
 											 UndoManager.cpp
 

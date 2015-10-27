@@ -20,10 +20,8 @@
 
 #include "IActionGroupe.hpp"
 
-IActionGroupe::IActionGroupe (std::shared_ptr <std::string> nom_,
-                              UndoManager & undo_) :
-  IUndoable (undo_)
-  , nom (nom_)
+IActionGroupe::IActionGroupe (std::shared_ptr <std::string> nom_) :
+  nom (nom_)
 {
 }
 

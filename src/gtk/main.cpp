@@ -31,13 +31,14 @@
 
 #include "gtk-ressources.h"
 #include "GWindowMain.hpp"
-#include "CProjet.hpp"
+#include "CModele.hpp"
 #include "MErreurs.hpp"
+#include "MUndo.hpp"
 
 bool
-gShowMain (int32_t argc,
-           char   *argv[],
-           CProjet &projet)
+gShowMain (int32_t   argc,
+           char    * argv[],
+           CModele & modele)
 {
   Glib::RefPtr <Gtk::Application> app =
                                  Gtk::Application::create (argc,
@@ -56,14 +57,14 @@ gShowMain (int32_t argc,
   {
     BUGCRIT (false,
              false,
-             &projet,
+             UNDO_MANAGER_NULL,
              "Échec lors de la création de la fenêtre %s\n",
                "main")
   }
 
   std::shared_ptr <GWindowMain> winMain;
-  winMain = std::make_shared <GWindowMain> (builder, projet);
-  projet.addObserver (winMain);
+  winMain = std::make_shared <GWindowMain> (builder, modele);
+  modele.addObserver (winMain);
 
   builder->get_widget ("window1", pDialog);
   app->run (*pDialog);
@@ -76,7 +77,7 @@ main (int32_t argc,
       char   *argv[])
 {
   /* Variables */
-  CProjet projet (ENorme::EUROCODE);
+  CModele projet;
   
   // On traite les arguments du programme
   switch (argc)
@@ -86,13 +87,13 @@ main (int32_t argc,
       if ((strcmp (argv[1], "-w") == 0) ||
           (strcmp (argv[1], "--warranty") == 0))
       {
-        CProjet::showWarranty ();
+        CModele::showWarranty ();
         return 0;
       }
       else if ((strcmp (argv[1], "-h") == 0) ||
                (strcmp (argv[1], "--help") == 0))
       {
-        CProjet::showHelp ();
+        CModele::showHelp ();
         return 0;
       }
       break;
@@ -108,10 +109,9 @@ main (int32_t argc,
   std::shared_ptr <CAction> action;
   action = std::make_shared <CAction> (
                                std::make_shared <std::string> ("Poids propre"),
-                               0,
-                               projet);
+                               0);
   assert (projet.addAction (action));
-  BUGCONT (gShowMain (argc, argv, projet), -1, &projet);
+  BUGCONT (gShowMain (argc, argv, projet), -1, UNDO_MANAGER_NULL);
 
   _2lgc_unregister_resource ();
 

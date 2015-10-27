@@ -1,5 +1,5 @@
-#ifndef IUNDOABLEFONCTION__HPP
-#define IUNDOABLEFONCTION__HPP
+#ifndef CACTIONSETPSI__HPP
+#define CACTIONSETPSI__HPP
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
@@ -21,75 +21,78 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <libxml/tree.h>
-#include <string>
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CModele;
+class IUndoFunc;
+class CAction;
 
-class IUndoableFonction
+#include "IUndoFunc.hpp"
+
+/**
+ * \brief Classe annulable permettant de définir le coefficient psi de l'action.
+ */
+class CActionSetPsi : public IUndoFunc
 {
-  // Attributes
-  private :
-    /// Flag permettant de savoir si la modification est importante ou non.
-    bool important : 1;
   // Operations
   public :
     /**
-     * \brief Constructeur d'une interface IUndoableFonction.
-     * \param importance (in) Indique si la modification est importante ou non.
+     * \brief Constructeur d'une classe CActionSetPsi.
      */
-    IUndoableFonction (bool importance);
+    CActionSetPsi ();
     /**
-     * \brief Duplication d'une interface IUndoableFonction.
+     * \brief Duplication d'une classe CActionSetPsi.
      * \param other (in) La classe à dupliquer.
      */
-    IUndoableFonction (const IUndoableFonction & other) = delete;
+    CActionSetPsi (const CActionSetPsi & other) = delete;
     /**
-     * \brief Duplication d'une interface IUndoableFonction.
+     * \brief Duplication d'une classe CActionSetPsi.
      * \param other (in) La classe à dupliquer.
-     * \return IUndoableFonction &
+     * \return CActionSetPsi &
      */
-    IUndoableFonction & operator = (const IUndoableFonction & other) = delete;
+    CActionSetPsi & operator = (const CActionSetPsi & other) = delete;
     /**
-     * \brief Destructeur d'une interface IUndoableFonction.
+     * \brief Destructeur d'une classe CActionSetPsi.
      */
-    virtual ~IUndoableFonction ();
+    virtual ~CActionSetPsi ();
     /**
      * \brief Exécute la fonction.
      * \return bool CHK
      */
-    virtual bool CHK execute () = 0;
-  private :
+    bool CHK execute ();
     /**
      * \brief Format XML pour appliquer les modifications.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    virtual bool CHK doXML (xmlNodePtr node) = 0;
+    bool CHK doXML (xmlNodePtr node);
     /**
      * \brief La description de la modification.
      * \return const std::string &
      */
-    virtual const std::string & doDescription () = 0;
+    const std::string & doDescription ();
     /**
      * \brief Annule la fonction.
      * \return bool CHK
      */
-    virtual bool CHK undo () = 0;
+    bool CHK undo ();
     /**
      * \brief Format XML  pour annuler les modifications.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    virtual bool CHK undoXML (xmlNodePtr node) = 0;
+    bool CHK undoXML (xmlNodePtr node);
     /**
      * \brief La description de l'annulation.
      * \return const std::string &
      */
-    virtual const std::string & undoDescription () = 0;
+    const std::string & undoDescription ();
     /**
      * \brief La fonction renvoie true si la classe modifie le modèle et false si elle ne modifie rien de significatif.
      * \return bool CHK
      */
-    bool CHK getImportant () const;
+    virtual bool CHK getModification () const;
 };
 
 #endif

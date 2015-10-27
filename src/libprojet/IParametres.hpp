@@ -21,21 +21,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoable.hpp>
+#include <memory>
+#include <cstdint>
 #include "EAction.hpp"
 
 /**
  * \brief Contient les options de calculs du projet.
  */
-class DllExport IParametres : public IUndoable
+class DllExport IParametres
 {
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe IParametres.
-     * \param undo_ (in) Le gestionnaire des modifications.
      */
-    IParametres (UndoManager & undo_);
+    IParametres ();
     /**
      * \brief Constructeur d'une classe IParametres.
      * \param other (in) La classe à dupliquer.
@@ -57,22 +57,10 @@ class DllExport IParametres : public IUndoable
      */
     virtual const std::shared_ptr <std::string> & getNom () const = 0;
     /**
-     * \brief Définit le nom des paramètres de calcul.
-     * \param nom_ (in) Le nouveau nom.
-     * \return bool CHK
-     */
-    virtual bool CHK setNom (std::shared_ptr <std::string> nom_) = 0;
-    /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t
      */
     virtual uint32_t getVariante () const = 0;
-    /**
-     * \brief Défini la variante de la norme.
-     * \param variante_ (in) La nouvelle variante.
-     * \return bool CHK
-     */
-    virtual bool CHK setVariante (uint32_t variante_) = 0;
     /**
      * \brief Renvoie le nombre de différents types d'actions.
      * \return uint8_t

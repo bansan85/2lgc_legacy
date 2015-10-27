@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-06-19 17:50+0200\n"
+"POT-Creation-Date: 2015-07-07 23:43+0200\n"
 "PO-Revision-Date: 2015-05-18 00:03+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -12,14 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
-
-#, c-format
-msgid "Nom du paramètre “%s” (%s)"
-msgstr "Nom du paramètre “%s” (%s)"
-
-#, c-format
-msgid "Variante du paramètre “%s” (%d)"
-msgstr "Variante du paramètre “%s” (%d)"
 
 msgid "Permanente"
 msgstr "Permanente"
@@ -118,29 +110,6 @@ msgstr "Neige : Altitude <= 1000 m"
 
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
-
-#, c-format
-msgid ""
-"L'action '%s' existe déjà.\n"
-"Impossible de l'ajouter.\n"
-msgstr ""
-"L'action '%s' existe déjà.\n"
-"Impossible de l'ajouter.\n"
-
-#, c-format
-msgid "Ajout de l'action “%s”"
-msgstr "Ajout de l'action “%s”"
-
-#, c-format
-msgid "Suppression de l'action “%s”"
-msgstr "Suppression de l'action “%s”"
-
-msgid "Eurocode, annexe nationale"
-msgstr "Eurocode, annexe nationale"
-
-#, c-format
-msgid "Paramètres du projet (%s)"
-msgstr "Paramètres du projet (%s)"
 
 msgid "Échec lors de l'enregistrement.\n"
 msgstr "Échec lors de l'enregistrement.\n"
@@ -288,10 +257,33 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
-#, c-format
-msgid "Cœfficient ψ%C de l'action “%s” (%lf)"
-msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
+#~ msgid "Nom du paramètre “%s” (%s)"
+#~ msgstr "Nom du paramètre “%s” (%s)"
 
-#, c-format
-msgid "Paramètres de l'action “%s” (%s)"
-msgstr "Paramètres de l'action “%s” (%s)"
+#~ msgid "Variante du paramètre “%s” (%d)"
+#~ msgstr "Variante du paramètre “%s” (%d)"
+
+#~ msgid ""
+#~ "L'action '%s' existe déjà.\n"
+#~ "Impossible de l'ajouter.\n"
+#~ msgstr ""
+#~ "L'action '%s' existe déjà.\n"
+#~ "Impossible de l'ajouter.\n"
+
+#~ msgid "Ajout de l'action “%s”"
+#~ msgstr "Ajout de l'action “%s”"
+
+#~ msgid "Suppression de l'action “%s”"
+#~ msgstr "Suppression de l'action “%s”"
+
+#~ msgid "Eurocode, annexe nationale"
+#~ msgstr "Eurocode, annexe nationale"
+
+#~ msgid "Paramètres du projet (%s)"
+#~ msgstr "Paramètres du projet (%s)"
+
+#~ msgid "Cœfficient ψ%C de l'action “%s” (%lf)"
+#~ msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
+
+#~ msgid "Paramètres de l'action “%s” (%s)"
+#~ msgstr "Paramètres de l'action “%s” (%s)"

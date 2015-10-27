@@ -44,9 +44,8 @@ class DllExport CParamEC : public IParametres
      * \param nom_ (in) Le nom décrivant la norme et ses différents options.
      * \param annexe_ (in) Le choix de l'annexe nationale.
      * \param variante_ (in) Le numéro de la variante de la norme.
-     * \param undo_ (in) Le gestionnaire des modifications.
      */
-    CParamEC (std::shared_ptr <std::string> nom_, ENormeEcAc annexe_, uint16_t variante_, UndoManager & undo_);
+    CParamEC (std::shared_ptr <std::string> nom_, ENormeEcAc annexe_, uint16_t variante_);
     /**
      * \brief Constructeur d'une classe CParamEC.
      * \param other (in) La classe à dupliquer.
@@ -66,40 +65,12 @@ class DllExport CParamEC : public IParametres
      * \brief Renvoie le nom des paramètres de calcul.
      * \return const std::shared_ptr <std::string> &
      */
-    virtual const std::shared_ptr <std::string> & getNom () const;
-    /**
-     * \brief Définit le nom des paramètres de calcul.
-     * \param nom_ (in) Le nouveau nom.
-     * \return bool CHK
-     */
-    bool CHK setNom (std::shared_ptr <std::string> nom_);
-    /**
-     * \brief Converti la fonction setNom sous format XML.
-     * \param param (in) Le nom des paramètres de calcul.
-     * \param nom_ (in) Le nouveau nom.
-     * \param root (in) Le noeud dans lequel doit être inséré la description au format XML.
-     * \return bool CHK
-     */
-    static bool CHK setNomXML (std::string * param, std::string * nom_, xmlNodePtr root);
+    const std::shared_ptr <std::string> & getNom () const;
     /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t
      */
     uint32_t getVariante () const;
-    /**
-     * \brief Défini la variante de la norme.
-     * \param variante_ (in) La nouvelle variante.
-     * \return bool CHK
-     */
-    bool CHK setVariante (uint32_t variante_);
-    /**
-     * \brief Converti la fonction setVariante sous format XML.
-     * \param nom_ (in) Le nom du paramètre de calcul à modifier.
-     * \param variante_ (in) La nouvelle variante.
-     * \param root (in) Le noeud dans lequel doit être inséré la description au format XML.
-     * \return bool CHK
-     */
-    static bool CHK setVarianteXML (std::string * nom_, uint32_t variante_, xmlNodePtr root);
     /**
      * \brief Renvoie le nombre de différents types d'actions.
      * \return uint8_t

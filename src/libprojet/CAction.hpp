@@ -21,10 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CModele;
+class IUndoFunc;
+class CActionSetPsi;
+
 #include <ICharge.hpp>
 #include <cholmod.h>
 #include <vector>
 #include <array>
+#include "CActionSetPsi.hpp"
 #include "IActionGroupe.hpp"
 #include "IParametres.hpp"
 #include "CFonction.hpp"
@@ -32,7 +40,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 /**
  * \brief Objet définissant une action avec sa liste de charges.
  */
-class DllExport CAction : public IActionGroupe
+class DllExport CAction : public CActionSetPsi, public IActionGroupe
 {
   // Associations
   // Attributes
@@ -69,9 +77,8 @@ class DllExport CAction : public IActionGroupe
      * \brief Constructeur d'une classe CAction. Par défaut, les coefficients psi sont défini à NAN. Les valeurs sont automatiquement déterminés lors de l'insertion dans le projet en fonction de la norme du projet.
      * \param nom_ (in) Le nom de l'action.
      * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
-     * \param undo_ (in) Le système de gestion des annulations.
      */
-    CAction (std::shared_ptr <std::string> nom_, uint8_t type_, UndoManager & undo_);
+    CAction (std::shared_ptr <std::string> nom_, uint8_t type_);
     /**
      * \brief Duplication d'une classe CAction.
      * \param other (in) La classe à dupliquer.
@@ -88,14 +95,6 @@ class DllExport CAction : public IActionGroupe
      */
     virtual ~CAction ();
     /**
-     * \brief Converti la fonction d'ajout d'une action sous format XML.
-     * \param nom_ (in) Le nom de l'action.
-     * \param type_ (in) Le type d'action, cf. _1990_action_bat_txt_type.
-     * \param root (in) Le noeud dans lequel doit être inséré l'action.
-     * \return bool CHK
-     */
-    static bool CHK addXML (std::string * nom_, std::string * type_, xmlNodePtr root);
-    /**
      * \brief Renvoie le type de l'action.
      * \return uint8_t
      */
@@ -107,27 +106,11 @@ class DllExport CAction : public IActionGroupe
      */
     bool CHK setType (uint8_t type_);
     /**
-     * \brief Converti la fonction de modification du psi d'une action sous format XML.
-     * \param nom_ (in) Le nom de l'action.
-     * \param psi (in) Le coefficient psi à changer (0, 1 ou 2).
-     * \param psin (in) Le coefficient psi à convertir.
-     * \param root (in) Le noeud dans lequel doit être inséré la branche.
-     * \return bool CHK
-     */
-    bool CHK setpsiXML (std::string * const nom_, uint8_t psi, INb * psin, xmlNodePtr root) const;
-    /**
      * \brief Renvoie le cœfficient psi.
      * \param psi (in) Le numéro du coefficient à renvoyer (0, 1 ou 2).
      * \return INb const *
      */
     INb const * getPsi (uint8_t psi) const;
-    /**
-     * \brief Défini le cœfficient psi0.
-     * \param psi (in) Le numéro du coefficient à renvoyer (0, 1 ou 2).
-     * \param val (in) Le nouveau cœfficient. Vaut NULL lors de la création de l'action.
-     * \return bool CHK
-     */
-    bool CHK setPsi (uint8_t psi, std::shared_ptr <INb> val);
     /**
      * \brief Renvoie true si aucune charge n'est présente.
      * \return bool CHK
@@ -151,26 +134,6 @@ class DllExport CAction : public IActionGroupe
      * \return std::string const
      */
     std::string const getDescription (uint8_t type_) const;
-    /**
-     * \brief Défini la norme que doit utiliser l'action. Ne nécessite pas de fonction XML puisqu'elle ne doit être appelée que depuis la fonction CProjet::setParametres.
-     * \param param (in) Le type IParametres.
-     * \param psi0_ (in) Le coefficient psi0.
-     * \param psi1_ (in) Le coefficient psi1.
-     * \param psi2_ (in) Le coefficient psi2.
-     * \return CHK bool
-     */
-    CHK bool setParam (std::shared_ptr <IParametres> param, std::shared_ptr <INb> psi0_, std::shared_ptr <INb> psi1_, std::shared_ptr <INb> psi2_);
-    /**
-     * \brief Converti la fonction setParam en format XML.
-     * \param action (in) Le nom de l'action.
-     * \param param (in) Le nom des paramètres.
-     * \param psi0_ (in) Le coefficient psi0.
-     * \param psi1_ (in) Le coefficient psi1.
-     * \param psi2_ (in) Le coefficient psi2.
-     * \param root (in) Le noeud dans lequel doit être inséré la branche.
-     * \return bool CHK
-     */
-    bool CHK setParamXML (std::string * action, std::string * param, INb * psi0_, INb * psi1_, INb * psi2_, xmlNodePtr root) const;
 };
 
 #endif

@@ -21,13 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoable.hpp>
+#include <list>
 #include "IActionGroupe.hpp"
 
 /**
  * \brief Contient une liste de groupe. Si le niveau vaut 0, le niveau contiendra une liste d'actions. Si le niveau est supérieur à 0, le niveau contiendra une liste de groupes du niveau inférieur.
  */
-class CNiveauGroupe : public IUndoable
+class CNiveauGroupe
 {
   // Associations
   // Attributes
@@ -39,9 +39,8 @@ class CNiveauGroupe : public IUndoable
     /**
      * \brief Constructeur d'une classe CNiveauGroupe.
      * \param liste (in) La liste des groupes ou des actions.
-     * \param undo (in) Le gestionnaire des modifications.
      */
-    CNiveauGroupe (std::list <IActionGroupe *> * liste, UndoManager & undo);
+    CNiveauGroupe (std::list <IActionGroupe *> * liste);
     /**
      * \brief Duplication d'une classe CNiveauGroupe.
      * \param other (in) La classe à dupliquer.

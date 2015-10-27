@@ -22,12 +22,11 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <INb.hpp>
-#include <IUndoable.hpp>
 
 /**
  * \brief Défini un matériau type.
  */
-class IMateriau : public IUndoable
+class IMateriau
 {
   // Attributes
   private :

@@ -20,10 +20,10 @@
 
 #include <algorithm>
 #include <memory>
+#include <iostream>
 
 #include "CModele.hpp"
 #include "NbCalcul.hpp"
-#include "CProjet.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
@@ -35,103 +35,31 @@ CModele::CModele () :
   relachements (),
   barres (),
   actions (),
-  niveaux_groupes ()
+  niveaux_groupes (),
+  undoManager ()
 {
+  LIBXML_TEST_VERSION
+
+  // On charge la localisation
+  setlocale (LC_ALL, "");
+  std::cout.imbue (std::locale (""));
+  std::cin.imbue (std::locale (""));
+  std::cerr.imbue (std::locale (""));
+  bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+  bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
+  textdomain (PACKAGE_NAME);
 }
 
 CModele::~CModele ()
 {
+  xmlCleanupParser ();
 }
 
 bool CHK
-CModele::addAction (std::shared_ptr <CAction> action)
+CModele::addAction (std::shared_ptr <CAction>)
 {
-  BUGPARAM (static_cast <void *> (action.get ()),
-            "%p",
-            action,
-            false,
-            &action->getUndoManager ())
-  
-  BUGUSER (getAction (*action->getNom ()) == nullptr,
-           false,
-           &action->getUndoManager (),
-           gettext ("L'action '%s' existe déjà.\nImpossible de l'ajouter.\n"),
-             action->getNom ()->c_str ())
-  
-  BUGPROG (action->emptyCharges (),
-           false,
-           &action->getUndoManager (),
-           "L'action doit être ajoutée sans charge. Elles doivent être ajoutées ensuite.\n")
-  
-  BUGPROG (action->getType () <static_cast <CProjet *> (this)
-                                                ->getParametres ()->getpsiN (),
-           false,
-           &action->getUndoManager (),
-           "Le type d'action %d est inconnu.\n", action->getType ())
-  
-  BUGCONT (action->getUndoManager ().ref (),
-           false,
-           &action->getUndoManager ())
-  
-  actions.push_back (action);
-
-  std::shared_ptr <IParametres> param = static_cast <CProjet *> (this)->
-                                                              getParametres ();
-
-  std::shared_ptr <std::string> type_ (std::make_shared <std::string> (
-                 param.get ()->getpsiDescription (action.get ()->getType ())));
-
-  BUGCONT (action->getUndoManager ().push (
-             std::bind (static_cast <bool (CModele::*)
-                           (std::shared_ptr <CAction> &)> (&CModele::rmAction),
-                        this,
-                        action),
-             std::bind (&CModele::addAction, this, action),
-             nullptr,
-             std::bind (&CAction::addXML,
-                        action->getNom ().get (),
-                        type_.get (),
-                        std::placeholders::_1),
-             format (gettext ("Ajout de l'action “%s”"),
-                     action->getNom ().get ()->c_str ())),
-           false,
-           &action->getUndoManager ())
-  BUGCONT (action->getUndoManager ().pushSuppr (action->getNom ()),
-           false,
-           &action->getUndoManager ())
-  BUGCONT (action->getUndoManager ().pushSuppr (type_),
-           false,
-           &action->getUndoManager ())
-  
-  uint8_t type = action->getType ();
-  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> decimales =
-                              dynamic_cast <CProjet *> (this)->getDecimales ();
-  
-  if (action->getUndoManager ().getEtat () != EUndoEtat::NONE_OR_REVERT)
-  {
-    BUGCONT (action->setParam (
-               param,
-               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
-                                                  param.get ()->getpsi0 (type),
-                                                  EUnite::U_,
-                                                  decimales)),
-               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
-                                                  param.get ()->getpsi1 (type),
-                                                  EUnite::U_,
-                                                  decimales)),
-               std::shared_ptr <INb> (std::make_shared <NbCalcul> (
-                                                  param.get ()->getpsi2 (type),
-                                                  EUnite::U_,
-                                                  decimales))),
-             false,
-             &action->getUndoManager ())
-  }
-  
-  BUGCONT (action->getUndoManager ().unref (),
-           false,
-           &action->getUndoManager ())
-  
-  return true;
+//TODO
+  return false;
 }
 
 CAction *
@@ -162,58 +90,92 @@ CModele::getActionCount () const
   return actions.size ();
 }
 
-bool CHK
-CModele::rmAction (std::shared_ptr <CAction> & action)
+UndoManager &
+CModele::getUndoManager ()
 {
-  BUGPARAM (static_cast <void *> (action.get ()),
-            "%p",
-            action,
-            false,
-            &action->getUndoManager ())
+  return undoManager;
+}
+
+bool CHK
+CModele::enregistre (const std::string fichier) const
+{
+  std::unique_ptr <xmlDoc, void (*)(xmlDocPtr)> doc (
+                                    xmlNewDoc (BAD_CAST2 ("1.0")), xmlFreeDoc);
+  xmlNodePtr root_node;
   
-  BUGPROG (action.get ()->emptyCharges (),
+  BUGCRIT (doc.get () != nullptr,
            false,
-           &action.get ()->getUndoManager (),
-           "L'action doit être supprimée sans charge. Elles doivent être supprimées avant.\n")
+           UNDO_MANAGER_NULL,
+           "Erreur d'allocation mémoire.\n")
   
-  BUGCONT (action.get ()->getUndoManager ().ref (),
+  root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
+  BUGCRIT (root_node != nullptr,
            false,
-           &action.get ()->getUndoManager ())
-
-  std::list <std::shared_ptr <CAction> >::iterator it;
-
-  it = std::find_if (actions.begin (),
-                     actions.end (),
-                     [&action](const std::shared_ptr <CAction> & it2)
-                     {
-                       return it2.get () == action.get ();
-                     });
-
-  if (it != actions.end ())
-  {
-    actions.erase (it);
-  }
-
-  BUGCONT (action.get ()->getUndoManager ().push (
-             std::bind (&CModele::addAction,
-                        this,
-                        action),
-             std::bind (static_cast <bool (CModele::*)
-                           (std::shared_ptr <CAction> &)> (&CModele::rmAction),
-                        this,
-                        action),
-             nullptr,
-             nullptr,
-             format (gettext ("Suppression de l'action “%s”"),
-                     action.get ()->getNom ()->c_str ())),
-           false,
-           &action.get ()->getUndoManager ())
+           UNDO_MANAGER_NULL,
+           "Erreur d'allocation mémoire.\n")
   
-  BUGCONT (action.get ()->getUndoManager ().unref (),
+  xmlDocSetRootElement (doc.get (), root_node);
+  
+  BUGCONT (undoManager.undoToXML (root_node), false, UNDO_MANAGER_NULL)
+  xmlSetCompressMode (0);
+  
+  BUGUSER (xmlSaveFormatFile (fichier.c_str (),
+                              doc.get (),
+                              1) != -1,
            false,
-           &action.get ()->getUndoManager ());
+           UNDO_MANAGER_NULL,
+           gettext ("Échec lors de l'enregistrement.\n"))
   
   return true;
+}
+
+void
+CModele::showWarranty ()
+{
+  std::cout << gettext ("15. Disclaimer of Warranty.\n")
+    << gettext ("\n")
+    << gettext ("THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n")
+    << gettext ("APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n")
+    << gettext ("HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n")
+    << gettext ("OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n")
+    << gettext ("THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n")
+    << gettext ("PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n")
+    << gettext ("IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n")
+    << gettext ("ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n")
+    << gettext ("\n")
+    << gettext ("16. Limitation of Liability.\n")
+    << gettext ("\n")
+    << gettext ("IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n")
+    << gettext ("WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n")
+    << gettext ("THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n")
+    << gettext ("GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n")
+    << gettext ("USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n")
+    << gettext ("DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n")
+    << gettext ("PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n")
+    << gettext ("EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n")
+    << gettext ("SUCH DAMAGES.\n")
+    << gettext ("\n")
+    << gettext ("17. Interpretation of Sections 15 and 16.\n")
+    << gettext ("\n")
+    << gettext ("If the disclaimer of warranty and limitation of liability provided\n")
+    << gettext ("above cannot be given local legal effect according to their terms,\n")
+    << gettext ("reviewing courts shall apply local law that most closely approximates\n")
+    << gettext ("an absolute waiver of all civil liability in connection with the\n")
+    << gettext ("Program, unless a warranty or assumption of liability accompanies a\n")
+    << gettext ("copy of the Program in return for a fee.\n");
+  
+  return;
+}
+
+void
+CModele::showHelp ()
+{
+  std::cout << gettext ("Utilisation : codegui [OPTION]... [FILE]...\n")
+    << gettext ("Options :\n")
+    << gettext ("\t-h, --help : affiche le présent menu\n")
+    << gettext ("\t-w, --warranty : affiche les limites de garantie du logiciel\n");
+  
+  return;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

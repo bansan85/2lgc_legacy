@@ -18,13 +18,14 @@
 
 #include "config.h"
 
-#include "IParametres.hpp"
+#include "CModeleAddAction.hpp"
 
-IParametres::IParametres ()
+CModeleAddAction::CModeleAddAction () :
+  IUndoFunc (true)
 {
 }
 
-IParametres::~IParametres ()
+CModeleAddAction::~CModeleAddAction ()
 {
 }
 
