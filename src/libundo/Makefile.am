@@ -28,10 +28,10 @@ libundo_ladir 			 = $(includedir)/2lgc
 libundo_la_SOURCES 	 = IObserveur.cpp \
 											 ISujet.cpp \
 											 IUndoableFonction.cpp \
-											 UndoData.cpp \
-											 UndoManager.cpp
+											 UndoManager.cpp \
+											 POCO/UndoData.cpp
 
-libundo_la_HEADERS   = $(wildcard *.hpp)
+libundo_la_HEADERS   = $(libundo_la_SOURCES:.cpp=.hpp)
 
 CLEANFILES = *.gcno *.gcda *.hpp
 

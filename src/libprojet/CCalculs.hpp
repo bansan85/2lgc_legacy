@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@ class IUndoFunc;
 class CActionSetPsi;
 class CAction;
 
-#include "CPonderations.hpp"
-#include "CAnalyseComm.hpp"
-#include "CBarreInfoEF.hpp"
+#include "POCO/calcul/CPonderations.hpp"
+#include "POCO/calcul/CAnalyseComm.hpp"
+#include "POCO/calcul/CBarreInfoEF.hpp"
 
 /**
  * \brief Contient toutes les données nécessaires pour la réalisation des calculs aux éléments finis et notamment les variables utilisées par les librairies cholmod et umfpack. Établi une corrélation entre le degré de liberté (x, y, z, rx, ry, rz) d'un noeud et sa position dans la matrice de rigidité globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même matrice qui permet de déterminer le déplacement des noeuds. La matrice de rigidité complète permet, sur la base du calcul des déplacements, de déterminer les efforts aux noeuds et d'en déduire les sollicitations le long des barres. La position de la ligne / colonne dans la matrice se déterminera par la lecture de n_part[10][1] pour, par exemple, la position du noeud dont le numéro est le 10 et comme degré de liberté y. Si la valeur renvoyée est -1, cela signifie que le déplacement ou la rotation est bloquée et que le degré de liberté ne figure pas dans la matrice de rigidité partielle.
@@ -69,11 +69,11 @@ class CCalculs
     /// Erreur non relative des réactions d'appuis.
     double residu;
     /// Le rapport d'analyse.
-    std::list <CAnalyseComm *> rapport;
+    std::list <POCO::calcul::CAnalyseComm *> rapport;
     /// Une info de calcul pour chaque barre et par élément discrétisé + 1.
-    std::vector < std::vector <CBarreInfoEF *> > info_EF;
+    std::vector < std::vector <POCO::calcul::CBarreInfoEF *> > info_EF;
     /// Pondérations conformes aux Eurocodes.
-    CPonderations ponderations;
+    POCO::calcul::CPonderations ponderations;
   // Operations
   public :
     /**

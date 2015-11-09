@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ class IUndoFunc : public IUndoableFonction
      */
     virtual ~IUndoFunc ();
     /**
-     * \brief Transtype la classe héritant de cette fonction en CContexte.
+     * \brief Transtype la classe héritant de cette fonction en CModele.
      * \return CModele *
      */
     CModele * t ();

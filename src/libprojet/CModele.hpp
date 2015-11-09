@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,23 +31,23 @@ class CModeleRmAction;
 class CModeleSetParametres;
 class IUndoFunc;
 
-#include <IMateriau.hpp>
-#include <ISection.hpp>
-#include <INoeud.hpp>
 #include <UndoManager.hpp>
 #include <ISujet.hpp>
+#include "ENorme.hpp"
 #include "CModeleSetParametres.hpp"
 #include "CModeleRmAction.hpp"
 #include "CModeleAddAction.hpp"
 #include "CCalculs.hpp"
-#include "CPreferences.hpp"
-#include "ENorme.hpp"
-#include "IParametres.hpp"
-#include "CAppui.hpp"
-#include "CRelachement.hpp"
-#include "CBarre.hpp"
-#include "CNiveauGroupe.hpp"
-#include "CAction.hpp"
+#include "POCO/CPreferences.hpp"
+#include "POCO/calcul/INorme.hpp"
+#include "POCO/structure/CAppui.hpp"
+#include "POCO/structure/INoeud.hpp"
+#include "POCO/structure/ISection.hpp"
+#include "POCO/structure/IMateriau.hpp"
+#include "POCO/structure/CRelachement.hpp"
+#include "POCO/structure/CBarre.hpp"
+#include "POCO/sollicitation/CNiveauGroupe.hpp"
+#include "POCO/sollicitation/CAction.hpp"
 
 /**
  * \brief Contient toutes les données définissant la structure à analyser.
@@ -58,29 +58,30 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
   // Attributes
   private :
     /// Liste des types d'appuis.
-    std::list <std::shared_ptr <CAppui> > appuis;
+    std::list <std::shared_ptr <POCO::structure::CAppui> > appuis;
     /// Liste des noeuds.
-    std::list <std::shared_ptr <INoeud> > noeuds;
+    std::list <std::shared_ptr <POCO::structure::INoeud> > noeuds;
     /// Liste des sections.
-    std::list <std::shared_ptr <ISection> > sections;
+    std::list <std::shared_ptr <POCO::structure::ISection> > sections;
     /// Liste des matériaux.
-    std::list <std::shared_ptr <IMateriau> > materiaux;
+    std::list <std::shared_ptr <POCO::structure::IMateriau> > materiaux;
     /// Liste des relâchements.
-    std::list <std::shared_ptr <CRelachement> > relachements;
+    std::list <std::shared_ptr <POCO::structure::CRelachement> > relachements;
     /// Liste des barres.
-    std::list <std::shared_ptr <CBarre> > barres;
+    std::list <std::shared_ptr <POCO::structure::CBarre> > barres;
     /// Liste des actions.
-    std::list <std::shared_ptr <CAction> > actions;
+    std::list <std::shared_ptr <POCO::sollicitation::CAction> > actions;
     /// Compatibilités entres actions.
-    std::list <std::shared_ptr <CNiveauGroupe> > niveaux_groupes;
+    std::list <std::shared_ptr <POCO::sollicitation::CNiveauGroupe> > niveaux_groupes;
     /// Le gestionnaire d'annulation
     UndoManager undoManager;
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe CModele.
+     * \param norme (in) Norme de calcul.
      */
-    CModele ();
+    CModele (ENorme norme);
     /**
      * \brief Duplication d'une classe CModele.
      * \param other (in) La classe à dupliquer.
@@ -101,19 +102,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param appui (in) Le nouveau appui.
      * \return bool CHK
      */
-    bool CHK addAppui (std::shared_ptr <CAppui> appui);
+    bool CHK addAppui (std::shared_ptr <POCO::structure::CAppui> appui);
     /**
      * \brief Recherche un appui.
      * \param nom (in) Le nom de l'appui.
-     * \return CAppui *
+     * \return POCO::structure::CAppui *
      */
-    CAppui * getAppui (std::string nom) const;
+    POCO::structure::CAppui * getAppui (std::string nom) const;
     /**
      * \brief Supprime un appui.
      * \param appui (in) L'appui à supprimer.
      * \return bool CHK
      */
-    bool CHK rmAppui (CAppui * appui);
+    bool CHK rmAppui (POCO::structure::CAppui * appui);
     /**
      * \brief Supprime un appui.
      * \param appui (in) Le nom de l'appui à supprimer.
@@ -125,19 +126,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param noeud (in) Le nouveau nœud.
      * \return bool CHK
      */
-    bool CHK addNoeud (std::shared_ptr <INoeud> noeud);
+    bool CHK addNoeud (std::shared_ptr <POCO::structure::INoeud> noeud);
     /**
      * \brief Recherche un nœud.
      * \param num (in) Le numéro du nœud.
-     * \return INoeud *
+     * \return POCO::structure::INoeud *
      */
-    INoeud * getNoeud (uint32_t num) const;
+    POCO::structure::INoeud * getNoeud (uint32_t num) const;
     /**
      * \brief Supprime un nœud.
      * \param noeud (in) Le nœud à supprimer.
      * \return bool CHK
      */
-    bool CHK rmNoeud (INoeud * noeud);
+    bool CHK rmNoeud (POCO::structure::INoeud * noeud);
     /**
      * \brief Supprime un nœud.
      * \param num (in) Le nœud à supprimer.
@@ -149,19 +150,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param section (in) Le nouveau section.
      * \return bool CHK
      */
-    bool CHK addSection (std::shared_ptr <ISection> section);
+    bool CHK addSection (std::shared_ptr <POCO::structure::ISection> section);
     /**
      * \brief Recherche une section.
      * \param nom (in) Le nom de la section.
-     * \return ISection *
+     * \return POCO::structure::ISection *
      */
-    ISection * getSection (std::string nom) const;
+    POCO::structure::ISection * getSection (std::string nom) const;
     /**
      * \brief Supprime une section.
      * \param section (in) La section à supprimer.
      * \return bool CHK
      */
-    bool CHK rmSection (ISection * section);
+    bool CHK rmSection (POCO::structure::ISection * section);
     /**
      * \brief Supprime une section.
      * \param nom (in) La section à supprimer.
@@ -173,19 +174,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param materiau (in) Le nouveau matériau.
      * \return bool CHK
      */
-    bool CHK addMateriau (std::shared_ptr <IMateriau> materiau);
+    bool CHK addMateriau (std::shared_ptr <POCO::structure::IMateriau> materiau);
     /**
      * \brief Recherche un matériau.
      * \param nom (in) Le nom du matériau.
-     * \return IMateriau *
+     * \return POCO::structure::IMateriau *
      */
-    IMateriau * getMateriau (std::string nom) const;
+    POCO::structure::IMateriau * getMateriau (std::string nom) const;
     /**
      * \brief Supprime un matériau.
      * \param materiau (in) Le matériau à supprimer.
      * \return bool CHK
      */
-    bool CHK rmMateriau (IMateriau * materiau);
+    bool CHK rmMateriau (POCO::structure::IMateriau * materiau);
     /**
      * \brief Supprime un matériau.
      * \param nom (in) Le matériau à supprimer.
@@ -197,19 +198,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param relachement (in) Le nouveau relâchement.
      * \return bool CHK
      */
-    bool CHK addRelachement (std::shared_ptr <CRelachement> relachement);
+    bool CHK addRelachement (std::shared_ptr <POCO::structure::CRelachement> relachement);
     /**
      * \brief Recherche un relâchement.
      * \param nom (in) Le nom du relâchement.
-     * \return CRelachement *
+     * \return POCO::structure::CRelachement *
      */
-    CRelachement * getRelachement (std::string nom) const;
+    POCO::structure::CRelachement * getRelachement (std::string nom) const;
     /**
      * \brief Supprime un relâchement.
      * \param relachement (in) Le relâchement à supprimer.
      * \return bool CHK
      */
-    bool CHK rmRelachement (CRelachement * relachement);
+    bool CHK rmRelachement (POCO::structure::CRelachement * relachement);
     /**
      * \brief Supprime un relâchement.
      * \param nom (in) Le relâchement à supprimer.
@@ -221,19 +222,19 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param barre (in) La nouvelle barre.
      * \return bool CHK
      */
-    bool CHK addBarre (std::shared_ptr <CBarre> barre);
+    bool CHK addBarre (std::shared_ptr <POCO::structure::CBarre> barre);
     /**
      * \brief Recherche une barre.
      * \param num (in) Le numéro de la barre.
-     * \return CBarre *
+     * \return POCO::structure::CBarre *
      */
-    CBarre * getBarre (uint32_t num) const;
+    POCO::structure::CBarre * getBarre (uint32_t num) const;
     /**
      * \brief Supprime une barre.
      * \param barre (in) La barre à supprimer.
      * \return bool CHK
      */
-    bool CHK rmBarre (CBarre * barre);
+    bool CHK rmBarre (POCO::structure::CBarre * barre);
     /**
      * \brief Supprime une barre.
      * \param num (in) Le numéro de la barre à supprimer.
@@ -245,13 +246,13 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param action (in) L'action à ajouter.
      * \return bool CHK
      */
-    bool CHK addAction (std::shared_ptr <CAction> action);
+    bool CHK addAction (std::shared_ptr <POCO::sollicitation::CAction> action);
     /**
      * \brief Recherche une action.
      * \param nom (in) Le nom de l'action.
-     * \return CAction *
+     * \return POCO::sollicitation::CAction *
      */
-    CAction * getAction (const std::string & nom) const;
+    POCO::sollicitation::CAction * getAction (const std::string & nom) const;
     /**
      * \brief Renvoie le nombre d'actions.
      * \return size_t
@@ -262,12 +263,12 @@ class DllExport CModele : public CModeleSetParametres, public CModeleRmAction, p
      * \param action (in) L'action à supprimer.
      * \return bool CHK
      */
-    bool CHK rmAction (std::shared_ptr <CAction> action);
+    bool CHK rmAction (std::shared_ptr <POCO::sollicitation::CAction> action);
     /**
      * \brief Renvoie les paramètres de calculs.
-     * \return std::shared_ptr <IParametres> &
+     * \return std::shared_ptr <POCO::calcul::INorme> &
      */
-    std::shared_ptr <IParametres> & getParametres () const;
+    std::shared_ptr <POCO::calcul::INorme> & getParametres () const;
     /**
      * \brief Renvoie le gestionnaire d'annulation.
      * \return UndoManager &

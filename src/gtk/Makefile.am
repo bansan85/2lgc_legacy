@@ -16,7 +16,6 @@ codegui_LDADD			 =	-lcholmod \
 											@GTKMM_LIBS@ \
 											@BLAS_LIBS@ \
 											@XML_LIBS@ \
-											../libeurocode/libeurocode.la \
 											../libprojet/libprojet.la \
 											../libundo/libundo.la
 

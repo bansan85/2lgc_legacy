@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 #include <config.h>
 #include "EUndoEtat.hpp"
 #include "ISujet.hpp"
-#include "UndoData.hpp"
+#include "POCO/UndoData.hpp"
 
 /**
  * \brief Le système de gestion des annulations et de mémorisation de l'historique.
@@ -38,18 +38,18 @@ class DllExport UndoManager : public ISujet
   // Attributes
   private :
     /// Historique des modifications. Fonctionne comme une pile mais il est nécessaire de pouvoir la parcourir sans dépiler.
-    std::list <UndoData *> liste;
+    std::list <POCO::UndoData *> liste;
     /// Défini la position des modifications par rapport au haut de la pile.
     size_t pos;
     /// Les modifications en cours sont intégrés lorsque count descend à 0. En cas de modification, chaque méthode ref augmente de 1 et unref diminue de 1. Cela permet de prendre en compte plusieurs modifications dans un même évènement. Les fonctions undo / redo ne peuvent s'exécuter si count est différent de 0.
     uint16_t count;
     /// La liste temporaire. Créer dynaniquement lorsque ref passe de 0 à 1 et ajouté automatiquement à la liste lorsque ref passe de 1 à 0.
-    UndoData * tmpListe;
+    POCO::UndoData * tmpListe;
     /// Taille de l'historique
     size_t memory;
-    /// Définit pour quelle valeur inférieure ou égale à count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.
+    /// Définit pour quelle valeur maximale de count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.
     uint16_t sauveDesc;
-    /// Lorsque true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la pile, afin d'éviter un double enregistrement.
+    /// Si true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la pile, afin d'éviter un double enregistrement.
     bool insertion : 1;
   // Operations
   public :
@@ -109,9 +109,9 @@ class DllExport UndoManager : public ISujet
     /**
      * \brief Renvoie la description de la nième opération à annuler.
      * \param n (in) L'opération à décrire.
-     * \return const std::string *
+     * \return const std::string
      */
-    const std::string * undoDesc (size_t n) const;
+    const std::string undoDesc (size_t n) const;
     /**
      * \brief Rétablit la dernière modification de la liste.
      * \return bool CHK
@@ -131,9 +131,9 @@ class DllExport UndoManager : public ISujet
     /**
      * \brief Renvoie la description de la nième opération à répéter.
      * \param n (in) L'opération à décrire.
-     * \return const std::string *
+     * \return const std::string
      */
-    const std::string * redoDesc (size_t n) const;
+    const std::string redoDesc (size_t n) const;
     /**
      * \brief Renvoie l'état du gestionnaire des annulations.
      * \return EUndoEtat

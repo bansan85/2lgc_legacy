@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 
 #include <libxml/tree.h>
 #include <string>
+#include "UndoManager.hpp"
 
 class IUndoableFonction
 {

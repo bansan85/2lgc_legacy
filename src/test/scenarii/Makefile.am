@@ -12,7 +12,7 @@ TESTS	=	action1 \
 				undomanager4 \
 				undomanager5
 
-AM_LDFLAGS			= ../../libeurocode/libeurocode.la ../../libundo/libundo.la ../../libprojet/libprojet.la
+AM_LDFLAGS			= ../../libundo/libundo.la ../../libprojet/libprojet.la
 
 action1_SOURCES	=	action1.cpp
 

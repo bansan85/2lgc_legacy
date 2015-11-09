@@ -3,7 +3,7 @@
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
-Copyright (C) 2011
+Copyright (C) 2011-2015
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 enum class EEvent
 {
   /// Nombre d'actions pouvant être annulées.
-  UNDO_NB,
+  UNDO_NB = 0,
   /// Nombre d'actions pouvant être répétées.
   REDO_NB
 };

@@ -32,7 +32,7 @@ libeurocode_ladir 			=	$(includedir)/2lgc
 
 libeurocode_la_SOURCES	=	CParamEC.cpp
 
-libeurocode_la_HEADERS	=	$(wildcard *.hpp)
+libeurocode_la_HEADERS	=	$(libeurocode_la_SOURCES:.cpp=.hpp)
 
 $(libeurocode_la_SOURCES) : uml
 

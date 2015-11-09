@@ -25,11 +25,11 @@ IUndoableFonction::IUndoableFonction (bool importance) :
 {
 }
 
-IUndoableFonction::~IUndoableFonction()
+IUndoableFonction::~IUndoableFonction ()
 {
 }
 
-bool CHK
+bool
 IUndoableFonction::getImportant () const
 {
   return important;

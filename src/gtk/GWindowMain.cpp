@@ -92,7 +92,7 @@ GWindowMain::signal (EEvent event, void *)
       undoB->set_sensitive (param2);
       if (param2)
       {
-        undoB->set_tooltip_text (*modele.getUndoManager ().undoDesc (0));
+        undoB->set_tooltip_text (modele.getUndoManager ().undoDesc (0));
       }
       else
       {
@@ -117,7 +117,7 @@ GWindowMain::signal (EEvent event, void *)
       redoB->set_sensitive (param2);
       if (param2)
       {
-        redoB->set_tooltip_text (*modele.getUndoManager ().redoDesc (0));
+        redoB->set_tooltip_text (modele.getUndoManager ().redoDesc (0));
       }
       else
       {

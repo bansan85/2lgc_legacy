@@ -1,4 +1,5 @@
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
+make clean
 git clean -Xdf
 gettextize -f --no-changelog
 

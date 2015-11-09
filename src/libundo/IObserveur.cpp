@@ -24,7 +24,7 @@ IObserveur::IObserveur ()
 {
 }
 
-IObserveur::~IObserveur()
+IObserveur::~IObserveur ()
 {
 }
 

@@ -18,7 +18,7 @@ endif
 
 export AM_CPPFLAGS
 
-EXTRA_DIST	= config.rpath \
+EXTRA_DIST	= config.rpath  config.rpath \
 							config.h
 
 package_win :

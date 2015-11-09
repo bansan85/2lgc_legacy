@@ -43,12 +43,14 @@ UndoManager::UndoManager () :
 
 UndoManager::~UndoManager ()
 {
-  for_each (liste.begin (), liste.end (), std::default_delete <UndoData> ());
+  for_each (liste.begin (),
+            liste.end (),
+            std::default_delete <POCO::UndoData> ());
   
   delete (tmpListe);
 }
 
-bool CHK
+bool
 UndoManager::push (std::function <bool ()>           annule,
                    std::function <bool ()>           repete,
                    std::shared_ptr <void>            suppr,
@@ -66,32 +68,28 @@ UndoManager::push (std::function <bool ()>           annule,
            "Impossible d'ajouter un évènement au gestionnaire d'annulation si aucune modification n'est en cours (nécessité d'appeler la fonction ref).\n")
   BUGPARAM (static_cast <void *> (tmpListe), "%p", tmpListe, false, this)
   
-  tmpListe->annule.push_front (annule);
-  tmpListe->repete.push_back (repete);
+  BUGCONT (tmpListe->addAnnuler (annule), false, this)
+  BUGCONT (tmpListe->addRepeter (repete), false, this)
   if (suppr != nullptr)
   {
-    tmpListe->suppr.push_back (suppr);
+    BUGCONT (tmpListe->addSupprimer (suppr), false, this)
   }
   if (sauve != nullptr)
   {
-    tmpListe->sauve.push_back (sauve);
+    BUGCONT (tmpListe->addToXML (sauve), false, this)
   }
   
   // Seules les modifications du sauveDesc-ième ordre sont mémorisées dans la
   // description.
   if (count <= sauveDesc)
   {
-    if (!tmpListe->description.empty ())
-    {
-      tmpListe->description.append ("\n");
-    }
-    tmpListe->description.append (description);
+    BUGCONT (tmpListe->appendDescription(description), false, this)
   }
   
   return true;
 }
 
-bool CHK
+bool
 UndoManager::pushSuppr (std::shared_ptr <void> suppr)
 {
   if (!insertion)
@@ -106,7 +104,7 @@ UndoManager::pushSuppr (std::shared_ptr <void> suppr)
   
   if (suppr != NULL)
   {
-    tmpListe->suppr.push_back (suppr);
+    BUGCONT (tmpListe->addSupprimer (suppr), false, this)
   }
   
   return true;
@@ -115,8 +113,8 @@ UndoManager::pushSuppr (std::shared_ptr <void> suppr)
 bool
 UndoManager::undo ()
 {
-  UndoData                       * undoData;
-  std::list <UndoData *>::iterator it;
+  POCO::UndoData                       * undoData;
+  std::list <POCO::UndoData *>::iterator it;
   
   BUGPROG (liste.size () > pos,
            false,
@@ -129,14 +127,10 @@ UndoManager::undo ()
   NCALL (pos + 1, --it;);
   undoData = *it;
   
-  for (std::function <bool ()> f : undoData->annule)
-  {
-    BUGCRIT (f (),
-             false,
-             this,
-             "Échec lors de l'opération.\n"
-               "Le projet est très probablement corrompu.\n")
-  }
+  BUGCRIT (undoData->execAnnuler(),
+           false,
+           this,
+           "Impossible d'annuler l'opération");
   
   ++pos;
   
@@ -151,12 +145,17 @@ UndoManager::undo ()
   return true;
 }
 
-bool CHK
+bool
 UndoManager::undoN (uint32_t nb)
 {
+  if (nb == 0)
+  {
+    return true;
+  }
+
   // Pour éviter l'émission des signaux à chaque émission de undo ().
   ++count;
-  NCALL (nb, BUGCONT (undo (), false, this))
+  NCALL (nb, BUGCONT (undo (), false, UNDO_MANAGER_NULL))
   --count;
 
   notify (EEvent::UNDO_NB, nullptr);
@@ -171,11 +170,11 @@ UndoManager::undoNb () const
   return liste.size () - pos;
 }
 
-const std::string *
+const std::string
 UndoManager::undoDesc (size_t n) const
 {
-  UndoData * undoData;
-  std::list <UndoData *>::const_iterator it;
+  POCO::UndoData                             * undoData;
+  std::list <POCO::UndoData *>::const_iterator it;
 
   BUGPROG (n + pos <= liste.size (),
            nullptr,
@@ -189,14 +188,14 @@ UndoManager::undoDesc (size_t n) const
   NCALL (n + pos + 1, --it;);
   undoData = *it;
 
-  return &undoData->description;
+  return *undoData->getDescription ();
 }
 
-bool CHK
+bool
 UndoManager::redo ()
 {
-  UndoData * undoData;
-  std::list <UndoData *>::iterator it;
+  POCO::UndoData                       * undoData;
+  std::list <POCO::UndoData *>::iterator it;
   
   BUGPROG (pos != 0,
            false,
@@ -209,14 +208,11 @@ UndoManager::redo ()
   NCALL (pos, --it;);
   undoData = *it;
   
-  for (std::function <bool ()> f : undoData->repete)
-  {
-    BUGCRIT (f (),
-             false,
-             this,
-             "Echec lors de l'opération.\n"
-               "Le projet est très probablement corrompu.\n")
-  }
+  BUGCRIT (undoData->execRepeter (),
+           false,
+           this,
+           "Impossible d'annuler l'opération");
+  
   
   --pos;
   
@@ -241,12 +237,17 @@ UndoManager::redo ()
   return true;
 }
 
-bool CHK
+bool
 UndoManager::redoN (uint32_t nb)
 {
+  if (nb == 0)
+  {
+    return true;
+  }
+
   // Pour éviter l'émission des signaux à chaque émission de redo ().
   ++count;
-  NCALL (nb, BUGCONT (redo (), false, this))
+  NCALL (nb, BUGCONT (redo (), false, UNDO_MANAGER_NULL))
   --count;
 
   notify (EEvent::UNDO_NB, nullptr);
@@ -261,11 +262,11 @@ UndoManager::redoNb () const
   return pos;
 }
 
-const std::string *
+const std::string
 UndoManager::redoDesc (size_t n) const
 {
-  UndoData                             * undoData;
-  std::list <UndoData *>::const_iterator it;
+  POCO::UndoData                             * undoData;
+  std::list <POCO::UndoData *>::const_iterator it;
 
   BUGPROG (n <= pos,
            nullptr,
@@ -279,7 +280,7 @@ UndoManager::redoDesc (size_t n) const
   NCALL (pos - n, --it;);
   undoData = *it;
 
-  return &undoData->description;
+  return *undoData->getDescription ();
 }
 
 EUndoEtat
@@ -295,7 +296,7 @@ UndoManager::getEtat () const
   }
 }
 
-bool CHK
+bool
 UndoManager::ref ()
 {
   BUGCRIT (count != UINT16_MAX,
@@ -310,7 +311,7 @@ UndoManager::ref ()
   
   if ((count == 0) && (pos != 0))
   {
-    std::list <UndoData *>::iterator it = liste.end ();
+    std::list <POCO::UndoData *>::iterator it = liste.end ();
     
     NCALL (pos, --it;);
     
@@ -325,7 +326,7 @@ UndoManager::ref ()
   
   if (count == 0)
   {
-    tmpListe = new UndoData ();
+    tmpListe = new POCO::UndoData ();
   }
   
   ++count;
@@ -333,7 +334,7 @@ UndoManager::ref ()
   return true;
 }
 
-bool CHK
+bool
 UndoManager::unref ()
 {
   if (!insertion)
@@ -354,7 +355,7 @@ UndoManager::unref ()
   
   if (count == 0)
   {
-    time (&tmpListe->heure);
+    BUGCONT (tmpListe->setHeure (), false, this)
     liste.push_back (tmpListe);
     tmpListe = nullptr;
 
@@ -371,7 +372,7 @@ UndoManager::unref ()
   return true;
 }
 
-bool CHK
+bool
 UndoManager::undoToXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
@@ -382,7 +383,7 @@ UndoManager::undoToXML (xmlNodePtr root) const
            UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
-  for (UndoData * data : liste)
+  for (POCO::UndoData * data : liste)
   {
     std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
                                       xmlNewNode (nullptr, BAD_CAST2 ("Bloc")),
@@ -396,25 +397,21 @@ UndoManager::undoToXML (xmlNodePtr root) const
     BUGCRIT (xmlSetProp (
                node0.get (),
                BAD_CAST2 ("Heure"),
-               BAD_CAST2 (std::to_string (data->heure).c_str ())) != nullptr,
+               BAD_CAST2 (
+                 std::to_string (data->getHeure ()).c_str ())) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
     
     BUGCRIT (xmlSetProp (node0.get (),
                          BAD_CAST2 ("Description"),
-                         BAD_CAST2 (data->description.c_str ())) != nullptr,
+                         BAD_CAST2 (
+                           data->getDescription ()->c_str ())) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
     
-    for (std::function <bool (xmlNodePtr)> f : data->sauve)
-    {
-      BUGCRIT (f (node0.get ()),
-               false,
-               UNDO_MANAGER_NULL,
-               "Erreur lors de la génération du fichier XML.\n")
-    }
+    BUGCONT (data->execToXML(node0.get ()), false, UNDO_MANAGER_NULL)
     
     BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
              false,
@@ -446,14 +443,11 @@ UndoManager::rollback ()
   
   insertion = false;
   
-  for (std::function <bool ()> f : tmpListe->annule)
-  {
-    BUGCRIT (f (),
-             ,
-             UNDO_MANAGER_NULL,
-             "Impossible de faire marche arrière suite à l'erreur détectée.\n"
-               "Le projet est très probablement corrompu.\n")
-  }
+  BUGCRIT (tmpListe->execAnnuler(),
+           ,
+           UNDO_MANAGER_NULL,
+           "Impossible de faire marche arrière suite à l'erreur détectée.\n"
+             "Le projet est très probablement corrompu.\n");
   
   delete tmpListe;
   tmpListe = nullptr;
@@ -463,7 +457,7 @@ UndoManager::rollback ()
   return;
 }
 
-bool CHK
+bool
 UndoManager::getInsertion () const
 {
   return insertion;

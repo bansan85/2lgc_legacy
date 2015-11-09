@@ -1,2 +1,2 @@
-Le ChangeLog est accessible via Subversion :
-svn log svn://2lgc.org/2lgc
+Le ChangeLog est accessible via Git :
+git log

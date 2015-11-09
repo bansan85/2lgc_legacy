@@ -1,11 +1,12 @@
-SUBDIRS  = libundo \
-					 libeurocode \
-					 libprojet \
-					 macro \
-					 test
+SUBDIRS  = 	libundo \
+						libprojet \
+						macro \
+						test
+
+#					 #libeurocode
 
 if ENABLE_GTK
-SUBDIRS += gtk
+#SUBDIRS += gtk
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)

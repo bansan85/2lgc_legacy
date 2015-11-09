@@ -26,41 +26,38 @@
 #include <memory>
 #include <cassert>
 
-#include "CProjet.hpp"
+#include "CModele.hpp"
 
 int
 main (int32_t,
       char  *[])
 {
-  CProjet projet (ENorme::EUROCODE);
-  std::shared_ptr <CAction> action;
+  CModele projet (ENorme::EUROCODE);
+  std::shared_ptr <POCO::sollicitation::CAction> action;
   
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action = std::make_shared <CAction> (std::make_shared <std::string> (
-                                                               "Poids propre"),
-                                       0,
-                                       projet);
+  action = std::make_shared <POCO::sollicitation::CAction> (
+                               std::make_shared <std::string> ("Poids propre"),
+                               0);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action = std::make_shared <CAction> (std::make_shared <std::string> (
-                                                                 "Chargement"),
-                2,
-                projet);
+  action = std::make_shared <POCO::sollicitation::CAction> (
+                                 std::make_shared <std::string> ("Chargement"),
+                                 2);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 2);
   // 18 Neige
-  action = std::make_shared <CAction> (std::make_shared <std::string> (
-                                                                      "Neige"),
-                18,
-                projet);
+  action = std::make_shared <POCO::sollicitation::CAction> (
+                                      std::make_shared <std::string> ("Neige"),
+                                      18);
   assert (projet.addAction (action));
   assert (projet.getActionCount () == 3);
   // 19 Vent
-  action = std::make_shared <CAction> (std::make_shared <std::string> ("Vent"),
-                19,
-                projet);
+  action = std::make_shared <POCO::sollicitation::CAction> (
+                                       std::make_shared <std::string> ("Vent"),
+                                       19);
   assert (projet.addAction (action));
   
   assert (projet.enregistre ("action1.xml"));

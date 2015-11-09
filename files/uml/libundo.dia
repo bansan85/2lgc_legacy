@@ -63,7 +63,45 @@
     </dia:attribute>
   </dia:diagramdata>
   <dia:layer name="Classes principales" visible="true" active="true">
-    <dia:object type="UML - Class" version="0" id="O0">
+    <dia:object type="UML - LargePackage" version="0" id="O0">
+      <dia:attribute name="obj_pos">
+        <dia:point val="-50,-23"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="-50.05,-24.05;-12.6149,26.05"/>
+      </dia:attribute>
+      <dia:attribute name="meta">
+        <dia:composite type="dict"/>
+      </dia:attribute>
+      <dia:attribute name="elem_corner">
+        <dia:point val="-50,-23"/>
+      </dia:attribute>
+      <dia:attribute name="elem_width">
+        <dia:real val="37.335067637534735"/>
+      </dia:attribute>
+      <dia:attribute name="elem_height">
+        <dia:real val="49"/>
+      </dia:attribute>
+      <dia:attribute name="line_width">
+        <dia:real val="0.10000000149011612"/>
+      </dia:attribute>
+      <dia:attribute name="line_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="fill_colour">
+        <dia:color val="#ffffff"/>
+      </dia:attribute>
+      <dia:attribute name="text_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="stereotype">
+        <dia:string>##</dia:string>
+      </dia:attribute>
+      <dia:attribute name="name">
+        <dia:string>#POCO#</dia:string>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="UML - Class" version="0" id="O1">
       <dia:attribute name="obj_pos">
         <dia:point val="-8.5108,-24.9108"/>
       </dia:attribute>
@@ -173,7 +211,7 @@ Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de U
             <dia:string>#liste#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::list &lt;UndoData *&gt;#</dia:string>
+            <dia:string>#std::list &lt;POCO::UndoData *&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -242,7 +280,7 @@ Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de U
             <dia:string>#tmpListe#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#UndoData *#</dia:string>
+            <dia:string>#POCO::UndoData *#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -294,7 +332,7 @@ Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de U
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Définit pour quelle valeur inférieure ou égale à count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.#</dia:string>
+            <dia:string>#Définit pour quelle valeur maximale de count la description des opérations doit être enregistrée dans la description de l'opération d'annulation / de répétition. Défaut 1.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -317,7 +355,7 @@ Important : UndoManager ne doit pas être tel quel. Le projet doit hériter de U
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Lorsque true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la pile, afin d'éviter un double enregistrement.#</dia:string>
+            <dia:string>#Si true, le gestionnaire d'annulation accepte les demandes de push, ref et unref. Peut être utile dans 2 cas : 1) lorsqu'une opération undo/redo est appelée puisque ces opérations vont devoir appeler des fonctions qui devraient normalement modifiées la pile. 2) Lorsqu'une fonction qui s'enregistre dans la pile appelle d'autres fonctions qui s'enregistre également dans la pile, afin d'éviter un double enregistrement.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="1"/>
@@ -769,7 +807,7 @@ Libère l'historique du projet.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#const std::string *#</dia:string>
+            <dia:string>#const std::string#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -925,7 +963,7 @@ Libère l'historique du projet.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#const std::string *#</dia:string>
+            <dia:string>#const std::string#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -1362,7 +1400,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Association" version="2" id="O1">
+    <dia:object type="UML - Association" version="2" id="O2">
       <dia:attribute name="name">
         <dia:string>##</dia:string>
       </dia:attribute>
@@ -1403,16 +1441,16 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="-8.5108,-11.0608"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-16.8001,-11.8108;-7.7608,-7.1708"/>
+        <dia:rectangle val="-20.14,-21.35;-7.7608,-10.2108"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-8.5108,-11.0608"/>
-        <dia:point val="-12.9805,-11.0608"/>
-        <dia:point val="-12.9805,-8.0208"/>
-        <dia:point val="-16.7501,-8.0208"/>
+        <dia:point val="-11.908,-11.0608"/>
+        <dia:point val="-11.908,-20.6"/>
+        <dia:point val="-20.09,-20.6"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1420,7 +1458,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="orth_autoroute">
-        <dia:boolean val="true"/>
+        <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="text_colour">
         <dia:color val="#000000"/>
@@ -1429,25 +1467,25 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:color val="#000000"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="14"/>
-        <dia:connection handle="1" to="O2" connection="9"/>
+        <dia:connection handle="0" to="O1" connection="14"/>
+        <dia:connection handle="1" to="O3" connection="4"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O2">
+    <dia:object type="UML - Class" version="0" id="O3">
       <dia:attribute name="obj_pos">
-        <dia:point val="-40.7351,-11.3208"/>
+        <dia:point val="-46,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-40.7851,-11.3708;-16.7001,11.8292"/>
+        <dia:rectangle val="-46.05,-22.05;-20.04,22.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-40.7351,-11.3208"/>
+        <dia:point val="-46,-22"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="23.984999999999999"/>
+        <dia:real val="25.91"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="23.100000000000001"/>
+        <dia:real val="44.850000000000016"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#UndoData#</dia:string>
@@ -1551,7 +1589,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>#Fonctions à exécuter dans l'ordre pour annuler les modifications.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1574,7 +1612,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>#Fonctions à exécuter dans l'ordre pour rétablir les modifications.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1594,10 +1632,10 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Liste des variables à libérer la mémoire lors de la libération du CProjet ou si l'historique est plein.#</dia:string>
+            <dia:string>#Liste des variables à libérer de la mémoire lors de la libération du CProjet ou si l'historique est plein.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1620,7 +1658,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>#Fonctions à exécuter pour pouvoir enregistrer cette classe dans un fichier.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1643,7 +1681,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>#Date de la modification.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1666,7 +1704,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>#Description de l'opération.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1823,6 +1861,84 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="inheritance_type">
+            <dia:enum val="1"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#addAnnuler#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Ajoute une méthode à appeler en cas d'annulation.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#fonction#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::function &lt;bool ()&gt;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La fonction sans paramètre convertie grâce à std::bind.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#execAnnuler#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Exécute l'ensemble des fonctions d'annulation dans l'ordre LIFO.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
             <dia:enum val="2"/>
           </dia:attribute>
           <dia:attribute name="query">
@@ -1833,21 +1949,382 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
           </dia:attribute>
           <dia:attribute name="parameters"/>
         </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#addRepeter#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Ajoute une méthode à appeler en cas de répétition.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#fonction#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::function &lt;bool ()&gt;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La fonction sans paramètre convertie grâce à std::bind.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#execRepeter#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Exécute l'ensemble des fonctions de répétition dans l'ordre FIFO.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#addSupprimer#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Ajoute une donnée à stocker en mémoire dans le cas d'une annulation ou d'une répétition.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#objet#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::shared_ptr &lt;void&gt;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La donnée à conserver.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#addToXML#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Ajoute une fonction permettant de sauvegarder la struture au format XML.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#fonction#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::function &lt;bool (xmlNodePtr)&gt;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La fonction créant les informations au format XML.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#execToXML#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Exécute l'ensemble des fonctions permettant de sauvegarder la struture au format XML dans l'ordre FIFO.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="true"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#noeud#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#xmlNodePtr#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#Noeud XML d'enregistrement des modifications.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#getHeure#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#time_t#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Renvoie l'heure de la modification des données.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#setHeure#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Définit l'heure de la modification par l'heure en cours.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#getDescription#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#const std::string *#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Renvoie la description des données.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="true"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#appendDescription#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Complète la description des données.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#description_#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#const std::string &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#La description complémentaire.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
       </dia:attribute>
       <dia:attribute name="template">
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="templates"/>
+      <dia:childnode parent="O0"/>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O3">
+    <dia:object type="UML - Class" version="0" id="O4">
       <dia:attribute name="obj_pos">
-        <dia:point val="-31.8098,17.4212"/>
+        <dia:point val="-34,28"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-31.8598,17.3712;-21.2423,26.7712"/>
+        <dia:rectangle val="-34.05,27.95;-23.4325,37.35"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-31.8098,17.4212"/>
+        <dia:point val="-34,28"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="10.5175"/>
@@ -1996,21 +2473,21 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O4">
+    <dia:object type="UML - Dependency" version="1" id="O5">
       <dia:attribute name="obj_pos">
         <dia:point val="-8.5108,33.3392"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-21.7423,18.4212;-8.4608,33.3892"/>
+        <dia:rectangle val="-23.9325,29;-8.4608,33.3892"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-8.5108,33.3392"/>
-        <dia:point val="-14.7015,33.3392"/>
-        <dia:point val="-14.7015,18.8712"/>
-        <dia:point val="-21.2923,18.8712"/>
+        <dia:point val="-15.7967,33.3392"/>
+        <dia:point val="-15.7967,29.45"/>
+        <dia:point val="-23.4825,29.45"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -2036,11 +2513,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="50"/>
-        <dia:connection handle="1" to="O3" connection="4"/>
+        <dia:connection handle="0" to="O1" connection="50"/>
+        <dia:connection handle="1" to="O4" connection="4"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O5">
+    <dia:object type="UML - Class" version="0" id="O6">
       <dia:attribute name="obj_pos">
         <dia:point val="-32,-31"/>
       </dia:attribute>
@@ -2150,20 +2627,20 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O6">
+    <dia:object type="UML - Dependency" version="1" id="O7">
       <dia:attribute name="obj_pos">
-        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-30.275,-28.45;-28.6926,-11.2708"/>
+        <dia:rectangle val="-33.095,-28.45;-29.375,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-19.4604"/>
-        <dia:point val="-29.825,-19.4604"/>
+        <dia:point val="-33.045,-22"/>
+        <dia:point val="-33.045,-24.8"/>
+        <dia:point val="-29.825,-24.8"/>
         <dia:point val="-29.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2190,11 +2667,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O2" connection="1"/>
-        <dia:connection handle="1" to="O5" connection="6"/>
+        <dia:connection handle="0" to="O3" connection="1"/>
+        <dia:connection handle="1" to="O6" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O7">
+    <dia:object type="UML - Class" version="0" id="O8">
       <dia:attribute name="obj_pos">
         <dia:point val="-26,-31"/>
       </dia:attribute>
@@ -2304,20 +2781,20 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O8">
+    <dia:object type="UML - Dependency" version="1" id="O9">
       <dia:attribute name="obj_pos">
-        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-28.7926,-28.45;-23.375,-11.2708"/>
+        <dia:rectangle val="-33.095,-28.45;-23.375,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-19.4604"/>
-        <dia:point val="-23.825,-19.4604"/>
+        <dia:point val="-33.045,-22"/>
+        <dia:point val="-33.045,-24.8"/>
+        <dia:point val="-23.825,-24.8"/>
         <dia:point val="-23.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2344,11 +2821,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O2" connection="1"/>
-        <dia:connection handle="1" to="O7" connection="6"/>
+        <dia:connection handle="0" to="O3" connection="1"/>
+        <dia:connection handle="1" to="O8" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - LargePackage" version="0" id="O9">
+    <dia:object type="UML - LargePackage" version="0" id="O10">
       <dia:attribute name="obj_pos">
         <dia:point val="-43.1588,-33.1598"/>
       </dia:attribute>
@@ -2386,7 +2863,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:string>#libxml#</dia:string>
       </dia:attribute>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O10">
+    <dia:object type="UML - Class" version="0" id="O11">
       <dia:attribute name="obj_pos">
         <dia:point val="-41,-31"/>
       </dia:attribute>
@@ -2495,22 +2972,22 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="templates"/>
-      <dia:childnode parent="O9"/>
+      <dia:childnode parent="O10"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O11">
+    <dia:object type="UML - Dependency" version="1" id="O12">
       <dia:attribute name="obj_pos">
-        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-39.275,-28.45;-28.6926,-11.2708"/>
+        <dia:rectangle val="-39.275,-28.45;-32.995,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-19.4604"/>
-        <dia:point val="-38.825,-19.4604"/>
+        <dia:point val="-33.045,-22"/>
+        <dia:point val="-33.045,-24.8"/>
+        <dia:point val="-38.825,-24.8"/>
         <dia:point val="-38.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2537,11 +3014,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O2" connection="1"/>
-        <dia:connection handle="1" to="O10" connection="6"/>
+        <dia:connection handle="0" to="O3" connection="1"/>
+        <dia:connection handle="1" to="O11" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O12">
+    <dia:object type="UML - Class" version="0" id="O13">
       <dia:attribute name="obj_pos">
         <dia:point val="1,-33"/>
       </dia:attribute>
@@ -2651,7 +3128,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O13">
+    <dia:object type="UML - Dependency" version="1" id="O14">
       <dia:attribute name="obj_pos">
         <dia:point val="4.6367,-24.9108"/>
       </dia:attribute>
@@ -2691,11 +3168,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="1"/>
-        <dia:connection handle="1" to="O12" connection="6"/>
+        <dia:connection handle="0" to="O1" connection="1"/>
+        <dia:connection handle="1" to="O13" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O14">
+    <dia:object type="UML - Class" version="0" id="O15">
       <dia:attribute name="obj_pos">
         <dia:point val="-52,-31"/>
       </dia:attribute>
@@ -2805,20 +3282,20 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O15">
+    <dia:object type="UML - Dependency" version="1" id="O16">
       <dia:attribute name="obj_pos">
-        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-50.275,-28.45;-28.6926,-11.2708"/>
+        <dia:rectangle val="-50.275,-28.45;-32.995,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-19.4604"/>
-        <dia:point val="-49.825,-19.4604"/>
+        <dia:point val="-33.045,-22"/>
+        <dia:point val="-33.045,-24.8"/>
+        <dia:point val="-49.825,-24.8"/>
         <dia:point val="-49.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -2845,11 +3322,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O2" connection="1"/>
-        <dia:connection handle="1" to="O14" connection="6"/>
+        <dia:connection handle="0" to="O3" connection="1"/>
+        <dia:connection handle="1" to="O15" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O16">
+    <dia:object type="UML - Class" version="0" id="O17">
       <dia:attribute name="obj_pos">
         <dia:point val="30,7"/>
       </dia:attribute>
@@ -3253,7 +3730,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Realizes" version="1" id="O17">
+    <dia:object type="UML - Realizes" version="1" id="O18">
       <dia:attribute name="obj_pos">
         <dia:point val="30,8.45"/>
       </dia:attribute>
@@ -3290,11 +3767,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O16" connection="3"/>
-        <dia:connection handle="1" to="O0" connection="27"/>
+        <dia:connection handle="0" to="O17" connection="3"/>
+        <dia:connection handle="1" to="O1" connection="27"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O18">
+    <dia:object type="UML - Class" version="0" id="O19">
       <dia:attribute name="obj_pos">
         <dia:point val="56,12"/>
       </dia:attribute>
@@ -3626,7 +4103,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O19">
+    <dia:object type="UML - Dependency" version="1" id="O20">
       <dia:attribute name="obj_pos">
         <dia:point val="51.675,10.4"/>
       </dia:attribute>
@@ -3666,11 +4143,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O16" connection="9"/>
-        <dia:connection handle="1" to="O18" connection="3"/>
+        <dia:connection handle="0" to="O17" connection="9"/>
+        <dia:connection handle="1" to="O19" connection="3"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O20">
+    <dia:object type="UML - Class" version="0" id="O21">
       <dia:attribute name="obj_pos">
         <dia:point val="56.072,-9.34441"/>
       </dia:attribute>
@@ -3782,7 +4259,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
-            <dia:string>##</dia:string>
+            <dia:string>#0#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Nombre d'actions pouvant être annulées.#</dia:string>
@@ -3827,7 +4304,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O21">
+    <dia:object type="UML - Dependency" version="1" id="O22">
       <dia:attribute name="obj_pos">
         <dia:point val="40.8375,6.9495"/>
       </dia:attribute>
@@ -3867,11 +4344,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O16" connection="22"/>
-        <dia:connection handle="1" to="O20" connection="6"/>
+        <dia:connection handle="0" to="O17" connection="22"/>
+        <dia:connection handle="1" to="O21" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O22">
+    <dia:object type="UML - Class" version="0" id="O23">
       <dia:attribute name="obj_pos">
         <dia:point val="25,1"/>
       </dia:attribute>
@@ -3981,7 +4458,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O23">
+    <dia:object type="UML - Dependency" version="1" id="O24">
       <dia:attribute name="obj_pos">
         <dia:point val="30,7"/>
       </dia:attribute>
@@ -4021,11 +4498,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O16" connection="0"/>
-        <dia:connection handle="1" to="O22" connection="6"/>
+        <dia:connection handle="0" to="O17" connection="0"/>
+        <dia:connection handle="1" to="O23" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O24">
+    <dia:object type="UML - Class" version="0" id="O25">
       <dia:attribute name="obj_pos">
         <dia:point val="8,-33"/>
       </dia:attribute>
@@ -4135,7 +4612,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O25">
+    <dia:object type="UML - Dependency" version="1" id="O26">
       <dia:attribute name="obj_pos">
         <dia:point val="4.6367,-24.9108"/>
       </dia:attribute>
@@ -4175,11 +4652,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="1"/>
-        <dia:connection handle="1" to="O24" connection="6"/>
+        <dia:connection handle="0" to="O1" connection="1"/>
+        <dia:connection handle="1" to="O25" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O26">
+    <dia:object type="UML - Class" version="0" id="O27">
       <dia:attribute name="obj_pos">
         <dia:point val="-20,-31"/>
       </dia:attribute>
@@ -4289,20 +4766,20 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O27">
+    <dia:object type="UML - Dependency" version="1" id="O28">
       <dia:attribute name="obj_pos">
-        <dia:point val="-28.7426,-11.3208"/>
+        <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-28.7926,-28.45;-17.375,-11.2708"/>
+        <dia:rectangle val="-33.095,-28.45;-17.375,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-28.7426,-11.3208"/>
-        <dia:point val="-28.7426,-19.4604"/>
-        <dia:point val="-17.825,-19.4604"/>
+        <dia:point val="-33.045,-22"/>
+        <dia:point val="-33.045,-24.8"/>
+        <dia:point val="-17.825,-24.8"/>
         <dia:point val="-17.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -4329,11 +4806,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O2" connection="1"/>
-        <dia:connection handle="1" to="O26" connection="6"/>
+        <dia:connection handle="0" to="O3" connection="1"/>
+        <dia:connection handle="1" to="O27" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O28">
+    <dia:object type="UML - Class" version="0" id="O29">
       <dia:attribute name="obj_pos">
         <dia:point val="33,1"/>
       </dia:attribute>
@@ -4443,7 +4920,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O29">
+    <dia:object type="UML - Dependency" version="1" id="O30">
       <dia:attribute name="obj_pos">
         <dia:point val="30,7"/>
       </dia:attribute>
@@ -4483,11 +4960,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O16" connection="0"/>
-        <dia:connection handle="1" to="O28" connection="6"/>
+        <dia:connection handle="0" to="O17" connection="0"/>
+        <dia:connection handle="1" to="O29" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O30">
+    <dia:object type="UML - Class" version="0" id="O31">
       <dia:attribute name="obj_pos">
         <dia:point val="14,-33"/>
       </dia:attribute>
@@ -4597,7 +5074,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O31">
+    <dia:object type="UML - Dependency" version="1" id="O32">
       <dia:attribute name="obj_pos">
         <dia:point val="4.6367,-24.9108"/>
       </dia:attribute>
@@ -4637,11 +5114,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O0" connection="1"/>
-        <dia:connection handle="1" to="O30" connection="6"/>
+        <dia:connection handle="0" to="O1" connection="1"/>
+        <dia:connection handle="1" to="O31" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O32">
+    <dia:object type="UML - Class" version="0" id="O33">
       <dia:attribute name="obj_pos">
         <dia:point val="-48,-67"/>
       </dia:attribute>
@@ -5196,7 +5673,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O33">
+    <dia:object type="UML - Dependency" version="1" id="O34">
       <dia:attribute name="obj_pos">
         <dia:point val="-32.5425,-43"/>
       </dia:attribute>
@@ -5236,11 +5713,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O32" connection="6"/>
-        <dia:connection handle="1" to="O10" connection="1"/>
+        <dia:connection handle="0" to="O33" connection="6"/>
+        <dia:connection handle="1" to="O11" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O34">
+    <dia:object type="UML - Dependency" version="1" id="O35">
       <dia:attribute name="obj_pos">
         <dia:point val="-17.085,-65.1"/>
       </dia:attribute>
@@ -5280,10 +5757,11 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="1" to="O0" connection="0"/>
+        <dia:connection handle="0" to="O33" connection="9"/>
+        <dia:connection handle="1" to="O1" connection="0"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O35">
+    <dia:object type="UML - Dependency" version="1" id="O36">
       <dia:attribute name="obj_pos">
         <dia:point val="-32.5425,-43"/>
       </dia:attribute>
@@ -5323,8 +5801,8 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O32" connection="6"/>
-        <dia:connection handle="1" to="O26" connection="1"/>
+        <dia:connection handle="0" to="O33" connection="6"/>
+        <dia:connection handle="1" to="O27" connection="1"/>
       </dia:connections>
     </dia:object>
   </dia:layer>
