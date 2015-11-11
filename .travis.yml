@@ -1,14 +1,17 @@
 language: cpp
+sudo: false
 
 compiler :
   - gcc
   - clang
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libsuitesparse-dev gfortran cppcheck clang
-  - sudo sed -i '/read dummy/d' `type -p gettextize`
-  - sudo sed -i '/Press Return/d' `type -p gettextize`
+addons:
+  apt:
+    packages:
+      - libsuitesparse-dev
+      - gfortran
+      - cppcheck
+      - clang
 
 script: ./.travis.sh
 
