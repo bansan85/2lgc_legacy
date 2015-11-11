@@ -1,7 +1,6 @@
 DEFAULT_INCLUDES		  =	-I$(srcdir) \
 												-I$(srcdir)/../.. \
 												-I$(srcdir)/../macro \
-												-I$(srcdir)/../libeurocode \
 												-I$(srcdir)/../libundo
 
 AUTOMAKE_OPTIONS		  =	subdir-objects
@@ -31,9 +30,9 @@ libprojet_la_CPPFLAGS	=	@XML_CPPFLAGS@
 libprojet_ladir 			=	$(includedir)/2lgc
 
 libprojet_la_SOURCES 	= \
+	CModele.cpp
+#	CModeleAddAction.cpp \
 	CCalculs.cpp \
-	#CModeleAddAction.cpp \
-	CModele.cpp \
 	CModeleRmAction.cpp \
 	CModeleSetParametres.cpp \
 	EAction.cpp \
@@ -159,12 +158,10 @@ libprojet_la_HEADERS 	=	\
 	POCO/structure/section/Rectangulaire.hpp \
 	POCO/structure/section/T.hpp
 
-$(libprojet_la_SOURCES) : uml
+%.hpp :
+	$(MAKE) -C $(top_builddir)/files/uml projet-uml
 
-uml :
-	$(MAKE) -C ../../files/uml
-
-CLEANFILES = *.gcno *.gcda *.hpp
+CLEANFILES = *.gcno *.gcda $(libprojet_la_HEADERS)
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libprojet_la_SOURCES) &> ../../cppcheck.log

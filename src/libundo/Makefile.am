@@ -31,9 +31,19 @@ libundo_la_SOURCES 	 = IObserveur.cpp \
 											 UndoManager.cpp \
 											 POCO/UndoData.cpp
 
-libundo_la_HEADERS   = $(libundo_la_SOURCES:.cpp=.hpp)
+libundo_la_HEADERS   = \
+	EEvent.hpp \
+	EUndoEtat.hpp \
+	IObserveur.hpp \
+	ISujet.hpp \
+	IUndoableFonction.hpp \
+	POCO/UndoData.hpp \
+	UndoManager.hpp
 
-CLEANFILES = *.gcno *.gcda *.hpp
+%.hpp :
+	$(MAKE) -C $(top_builddir)/files/uml undo-uml
+
+CLEANFILES = *.gcno *.gcda $(libundo_la_HEADERS)
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libundo_la_SOURCES) &> ../../cppcheck-undo.log

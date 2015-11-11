@@ -37,7 +37,7 @@ libeurocode_la_HEADERS	=	$(libeurocode_la_SOURCES:.cpp=.hpp)
 $(libeurocode_la_SOURCES) : uml
 
 uml :
-	$(MAKE) -C ../../files/uml
+	$(MAKE) -C $(top_builddir)/files/uml eurocode-uml
 
 CLEANFILES = *.gcno *.gcda *.hpp
 

@@ -23,7 +23,6 @@
 #include <iostream>
 
 #include "CModele.hpp"
-#include "NbCalcul.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
