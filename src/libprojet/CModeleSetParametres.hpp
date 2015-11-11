@@ -21,22 +21,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-class CModele;
-class IUndoFunc;
-
-#include "IUndoFunc.hpp"
+#include <IUndoableFonction.hpp>
+#include "CModele.hpp"
 
 /**
  * \brief Classe annulable permettant de définir les normes de calculs.
  */
-class CModeleSetParametres : public IUndoFunc
+class CModeleSetParametres : public IUndoableFonction
 {
+  // Attributes
+  private :
+    /// Le modèle à modifier.
+    CModele & modele;
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe CModeleSetParametres.
+     * \param modele_ (in) Le modèle à modifier.
      */
-    CModeleSetParametres ();
+    CModeleSetParametres (CModele & modele_);
     /**
      * \brief Duplication d'une classe CModeleSetParametres.
      * \param other (in) La classe à dupliquer.

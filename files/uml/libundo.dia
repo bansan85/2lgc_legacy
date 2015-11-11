@@ -106,7 +106,7 @@
         <dia:point val="-8.5108,-24.9108"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-8.5608,-24.9608;17.8342,53.6892"/>
+        <dia:rectangle val="-8.5608,-24.9608;17.8342,54.3892"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-8.5108,-24.9108"/>
@@ -115,7 +115,7 @@
         <dia:real val="26.294999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="78.549999999999969"/>
+        <dia:real val="79.249999999999972"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#UndoManager#</dia:string>
@@ -1360,7 +1360,8 @@ Libère l'historique du projet.#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
             <dia:string>#Converti la liste des annulations dans une liste consultable par l'interface graphique.
-Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
+Sous GTK+, cette liste est un GtkPopoverMenu.
+TODO !!!#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -2827,19 +2828,19 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
     </dia:object>
     <dia:object type="UML - LargePackage" version="0" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="-43.1588,-33.1598"/>
+        <dia:point val="-44,-33"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-43.2088,-35.0098;-34.1088,-26.1098"/>
+        <dia:rectangle val="-44.05,-34.85;-35.95,-25.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-43.1588,-33.1598"/>
+        <dia:point val="-44,-33"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="9"/>
+        <dia:real val="8"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="7"/>
@@ -2865,13 +2866,13 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O11">
       <dia:attribute name="obj_pos">
-        <dia:point val="-41,-31"/>
+        <dia:point val="-42,-31"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-41.05,-31.05;-36.6,-27.95"/>
+        <dia:rectangle val="-42.05,-31.05;-37.6,-27.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-41,-31"/>
+        <dia:point val="-42,-31"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="4.3499999999999996"/>
@@ -2979,7 +2980,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="-33.045,-22"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-39.275,-28.45;-32.995,-21.95"/>
+        <dia:rectangle val="-40.275,-28.45;-32.995,-21.95"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -2987,8 +2988,8 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="-33.045,-22"/>
         <dia:point val="-33.045,-24.8"/>
-        <dia:point val="-38.825,-24.8"/>
-        <dia:point val="-38.825,-28"/>
+        <dia:point val="-39.825,-24.8"/>
+        <dia:point val="-39.825,-28"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -5678,7 +5679,7 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
         <dia:point val="-32.5425,-43"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-39.275,-43.05;-32.4925,-30.55"/>
+        <dia:rectangle val="-40.275,-43.05;-32.4925,-30.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -5686,8 +5687,8 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="-32.5425,-43"/>
         <dia:point val="-32.5425,-37.2"/>
-        <dia:point val="-38.825,-37.2"/>
-        <dia:point val="-38.825,-31"/>
+        <dia:point val="-39.825,-37.2"/>
+        <dia:point val="-39.825,-31"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -5718,50 +5719,6 @@ Sous GTK+, cette liste est un GtkPopoverMenu.#</dia:string>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O35">
-      <dia:attribute name="obj_pos">
-        <dia:point val="-17.085,-65.1"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="-17.135,-65.15;-8.0608,-24.4608"/>
-      </dia:attribute>
-      <dia:attribute name="meta">
-        <dia:composite type="dict"/>
-      </dia:attribute>
-      <dia:attribute name="orth_points">
-        <dia:point val="-17.085,-65.1"/>
-        <dia:point val="-12.9979,-65.1"/>
-        <dia:point val="-12.9979,-24.9108"/>
-        <dia:point val="-8.5108,-24.9108"/>
-      </dia:attribute>
-      <dia:attribute name="orth_orient">
-        <dia:enum val="0"/>
-        <dia:enum val="1"/>
-        <dia:enum val="0"/>
-      </dia:attribute>
-      <dia:attribute name="orth_autoroute">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="text_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="line_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="name">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:attribute name="stereotype">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:attribute name="draw_arrow">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:connections>
-        <dia:connection handle="0" to="O33" connection="9"/>
-        <dia:connection handle="1" to="O1" connection="0"/>
-      </dia:connections>
-    </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O36">
       <dia:attribute name="obj_pos">
         <dia:point val="-32.5425,-43"/>
       </dia:attribute>

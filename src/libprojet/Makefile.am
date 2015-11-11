@@ -30,14 +30,21 @@ libprojet_la_CPPFLAGS	=	@XML_CPPFLAGS@
 libprojet_ladir 			=	$(includedir)/2lgc
 
 libprojet_la_SOURCES 	= \
-	CModele.cpp
-#	CModeleAddAction.cpp \
+	CModele.cpp \
+	CModeleActionAdd.cpp \
 	CCalculs.cpp \
+	POCO/calc/CPonderations.cpp \
+	POCO/sol/CAction.cpp \
+	POCO/sol/action/IActionGroupe.cpp \
+	INorme.cpp \
+	norme/Eurocode.cpp
+#	CModeleAddAction.cpp \
 	CModeleRmAction.cpp \
 	CModeleSetParametres.cpp \
 	EAction.cpp \
-	ENorme.cpp \
 	IUndoFunc.cpp \
+	\
+	ENorme.cpp \
 	\
 	POCO/CAdresse.cpp \
 	POCO/CPreferences.cpp \
@@ -47,10 +54,7 @@ libprojet_la_SOURCES 	= \
 	POCO/calcul/CBarreInfoEF.cpp \
 	POCO/calcul/CFonction.cpp \
 	POCO/calcul/CPonderation.cpp \
-	POCO/calcul/CPonderations.cpp \
 	POCO/calcul/CTroncon.cpp \
-	\
-	POCO/calcul/INorme.cpp \
 	\
 	POCO/INb.cpp \
 	POCO/nombre/Calcul.cpp \
@@ -59,11 +63,9 @@ libprojet_la_SOURCES 	= \
 	POCO/sollicitation/CCombinaison.cpp \
 	POCO/sollicitation/CNiveauGroupe.cpp \
 	\
-	POCO/sollicitation/CAction.cpp \
 	POCO/sollicitation/action/CActionSetPsi.cpp \
 	POCO/sollicitation/action/CGroupe.cpp \
 	POCO/sollicitation/action/ECombinaison.cpp \
-	POCO/sollicitation/action/IActionGroupe.cpp \
 	\
 	POCO/sollicitation/ICharge.cpp \
 	POCO/sollicitation/charge/BarrePonctuelle.cpp \

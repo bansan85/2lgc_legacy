@@ -3,8 +3,6 @@ SUBDIRS  = 	libundo \
 						macro \
 						test
 
-#					 #libeurocode
-
 if ENABLE_GTK
 #SUBDIRS += gtk
 endif

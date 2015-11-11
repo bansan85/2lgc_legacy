@@ -33,34 +33,40 @@ main (int32_t,
       char  *[])
 {
   CModele projet (ENorme::EUROCODE);
-  std::shared_ptr <POCO::sollicitation::CAction> action;
+  std::shared_ptr <POCO::sol::CAction> action;
+  bool retour;
   
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action = std::make_shared <POCO::sollicitation::CAction> (
+  action = std::make_shared <POCO::sol::CAction> (
                                std::make_shared <std::string> ("Poids propre"),
                                0);
-  assert (projet.addAction (action));
+  retour = projet.addAction (action);
+  assert (retour);
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action = std::make_shared <POCO::sollicitation::CAction> (
+  action = std::make_shared <POCO::sol::CAction> (
                                  std::make_shared <std::string> ("Chargement"),
                                  2);
-  assert (projet.addAction (action));
+  retour = projet.addAction (action);
+  assert (retour);
   assert (projet.getActionCount () == 2);
   // 18 Neige
-  action = std::make_shared <POCO::sollicitation::CAction> (
+  action = std::make_shared <POCO::sol::CAction> (
                                       std::make_shared <std::string> ("Neige"),
                                       18);
-  assert (projet.addAction (action));
+  retour = projet.addAction (action);
+  assert (retour);
   assert (projet.getActionCount () == 3);
   // 19 Vent
-  action = std::make_shared <POCO::sollicitation::CAction> (
+  action = std::make_shared <POCO::sol::CAction> (
                                        std::make_shared <std::string> ("Vent"),
                                        19);
-  assert (projet.addAction (action));
+  retour = projet.addAction (action);
+  assert (retour);
   
-  assert (projet.enregistre ("action1.xml"));
+  retour = projet.enregistre ("action1.xml");
+  assert (retour);
   
   return 0;
 }

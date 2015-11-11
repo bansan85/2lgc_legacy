@@ -186,6 +186,7 @@ class DllExport UndoManager : public ISujet
     /**
      * \brief Converti la liste des annulations dans une liste consultable par l'interface graphique.
      *        Sous GTK+, cette liste est un GtkPopoverMenu.
+     *        TODO !!!
      * \param param1 (in) Pa
      * \return bool CHK
      */

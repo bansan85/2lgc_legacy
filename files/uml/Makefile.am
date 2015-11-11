@@ -14,11 +14,11 @@ if HAVE_DIA2CODE
 	/home/legarrec/info/programmation/dia2code-git/src/dia2code --buildtree --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libprojet "$(top_srcdir)/files/uml/libprojet.dia"
 endif
 
-eurocode-uml : $(top_builddir)/src/libeurocode/CMatAcierEc.hpp
+eurocode-uml : $(top_builddir)/src/libprojet/POCO/str/materiau/EcAcier.hpp
 
-$(top_builddir)/src/libeurocode/CMatAcierEc.hpp : $(top_srcdir)/files/uml/libeurocode.dia
+$(top_builddir)/src/libprojet/POCO/str/materiau/EcAcier.hpp : $(top_srcdir)/files/uml/libeurocode.dia
 if HAVE_DIA2CODE
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --buildtree --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libeurocode "$(top_srcdir)/files/uml/libeurocode.dia"
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --buildtree --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libprojet "$(top_srcdir)/files/uml/libeurocode.dia"
 endif
 
 if ENABLE_GTK
@@ -32,7 +32,7 @@ else
 gtk-uml :
 endif
 
-checkcode : ../../src/libeurocode/codegui.hpp
+checkcode :
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.

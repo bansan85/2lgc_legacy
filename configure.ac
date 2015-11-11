@@ -402,7 +402,6 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  files/desktop/Makefile
                  files/uml/Makefile
                  src/Makefile
-                 src/libeurocode/Makefile
                  src/libprojet/Makefile
                  src/libundo/Makefile
                  src/macro/Makefile

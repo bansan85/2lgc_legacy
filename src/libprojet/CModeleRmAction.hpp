@@ -21,22 +21,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-class CModele;
-class IUndoFunc;
-
-#include "IUndoFunc.hpp"
+#include <IUndoableFonction.hpp>
+#include "CModele.hpp"
 
 /**
  * \brief Classe annulable permettant de supprimer une action.
  */
-class CModeleRmAction : public IUndoFunc
+class CModeleRmAction : public IUndoableFonction
 {
+  // Attributes
+  private :
+    /// Le modèle à modifier.
+    CModele & modele;
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe CModeleRmAction.
+     * \param modele_ (in) Le modèle à modifier.
      */
-    CModeleRmAction ();
+    CModeleRmAction (CModele & modele_);
     /**
      * \brief Duplication d'une classe CModeleRmAction.
      * \param other (in) La classe à dupliquer.

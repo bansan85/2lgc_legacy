@@ -25,8 +25,9 @@
 #include "CModele.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
+#include "norme/Eurocode.hpp"
 
-CModele::CModele () :
+CModele::CModele (ENorme eNorme) :
   appuis (),
   noeuds (),
   sections (),
@@ -35,6 +36,7 @@ CModele::CModele () :
   barres (),
   actions (),
   niveaux_groupes (),
+  norme (nullptr),
   undoManager ()
 {
   LIBXML_TEST_VERSION
@@ -47,6 +49,21 @@ CModele::CModele () :
   bindtextdomain (PACKAGE_NAME, LOCALEDIR);
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
+
+  switch (eNorme) {
+    case ENorme::EUROCODE :
+      norme = std::make_shared <norme::Eurocode> (
+                                   std::make_shared <std::string> ("Eurocode"),
+                                   norme::ENormeEcAc::FR,
+                                   0);
+      break;
+    default :
+      std::string message ("Erreur lors de la sélection de la norme" +
+                           std::to_string (static_cast<size_t> (eNorme)) +
+                           ".");
+      throw message.c_str ();
+      break;
+  }
 }
 
 CModele::~CModele ()
@@ -55,23 +72,24 @@ CModele::~CModele ()
 }
 
 bool CHK
-CModele::addAction (std::shared_ptr <CAction>)
+CModele::addAction (std::shared_ptr <POCO::sol::CAction>)
 {
 //TODO
   return false;
 }
 
-CAction *
+POCO::sol::CAction *
 CModele::getAction (const std::string & nom) const
 {
-  std::list <std::shared_ptr <CAction> >::const_iterator it;
+  std::list <std::shared_ptr <POCO::sol::CAction> >::const_iterator it;
 
-  it = std::find_if (actions.begin (),
-                     actions.end (),
-                     [&nom](const std::shared_ptr <CAction> & action)
-                     {
-                       return nom.compare (*action.get ()->getNom ()) == 0;
-                     });
+  it = std::find_if (
+                   actions.begin (),
+                   actions.end (),
+                   [&nom] (const std::shared_ptr <POCO::sol::CAction> & action)
+                   {
+                     return nom.compare (*action.get ()->getNom ()) == 0;
+                   });
   
   if (it != actions.end ())
   {

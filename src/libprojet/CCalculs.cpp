@@ -40,7 +40,7 @@ CCalculs::CCalculs () :
   residu (NAN),
   rapport (),
   info_EF (),
-  ponderations (1, 1, 1, 1)
+  ponderations (true, 1, true, true)
 {
   cholmod_start (c);
 }
