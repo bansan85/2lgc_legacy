@@ -25,7 +25,7 @@ class CPonderation;
 class CPonderations;
 class CCalculs;
 class CModele;
-class FuncModeleAddAction;
+class FuncModeleAction;
 
 #include <cholmod.h>
 #include <vector>
@@ -46,7 +46,7 @@ namespace POCO
       // Associations
       // Attributes
       private :
-        friend class ::FuncModeleAddAction;
+        friend class ::FuncModeleAction;
         /// La description de type est donnée par INorme::getPsiDescription.
         uint8_t type;
         /// Flag utilisé temporairement lors des calculs.

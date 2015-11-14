@@ -1,5 +1,5 @@
-#ifndef FUNCMODELEADDACTION__HPP
-#define FUNCMODELEADDACTION__HPP
+#ifndef FUNCMODELEACTION__HPP
+#define FUNCMODELEACTION__HPP
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
@@ -30,7 +30,7 @@ class CModele;
 #include <IUndoableFonction.hpp>
 #include "POCO/sol/CAction.hpp"
 
-class FuncModeleAddAction : public IUndoableFonction
+class FuncModeleAction : public IUndoableFonction
 {
   // Attributes
   private :
@@ -39,31 +39,31 @@ class FuncModeleAddAction : public IUndoableFonction
   // Operations
   public :
     /**
-     * \brief Constructeur d'une interface FuncModeleAddAction.
+     * \brief Constructeur d'une classe FuncModeleAction.
      * \param modele_ (in) Le modèle rattaché à l'ajout de l'action.
      */
-    FuncModeleAddAction (CModele & modele_);
+    FuncModeleAction (CModele & modele_);
     /**
-     * \brief Duplication d'une interface FuncModeleAddAction.
+     * \brief Duplication d'une classe FuncModeleAction.
      * \param other (in) La classe à dupliquer.
      */
-    FuncModeleAddAction (const FuncModeleAddAction & other) = delete;
+    FuncModeleAction (const FuncModeleAction & other) = delete;
     /**
-     * \brief Duplication d'une interface FuncModeleAddAction.
+     * \brief Duplication d'une classe FuncModeleAction.
      * \param other (in) La classe à dupliquer.
-     * \return FuncModeleAddAction &
+     * \return FuncModeleAction &
      */
-    FuncModeleAddAction & operator = (const FuncModeleAddAction & other) = delete;
+    FuncModeleAction & operator = (const FuncModeleAction & other) = delete;
     /**
-     * \brief Destructeur d'une interface FuncModeleAddAction.
+     * \brief Destructeur d'une classe FuncModeleAction.
      */
-    virtual ~FuncModeleAddAction ();
+    virtual ~FuncModeleAction ();
     /**
      * \brief Exécute la fonction.
      * \param action (???)
      * \return bool CHK
      */
-    bool CHK execute (std::shared_ptr <POCO::sol::CAction> & action);
+    bool CHK doAdd (std::shared_ptr <POCO::sol::CAction> & action);
     /**
      * \brief Format XML pour appliquer les modifications.
      * \param nom_ (in) Le nom de l'action.
@@ -71,28 +71,18 @@ class FuncModeleAddAction : public IUndoableFonction
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXML (std::shared_ptr <const std::string> & nom_, uint8_t type_, xmlNodePtr node);
-    /**
-     * \brief La description de la modification.
-     * \return const std::string
-     */
-    const std::string doDescription ();
+    bool CHK doXMLAdd (std::shared_ptr <const std::string> & nom_, uint8_t type_, xmlNodePtr node);
     /**
      * \brief Annule la fonction.
      * \return bool CHK
      */
-    bool CHK undo ();
+    bool CHK undoAdd ();
     /**
      * \brief Format XML  pour annuler les modifications.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK undoXML (xmlNodePtr node);
-    /**
-     * \brief La description de l'annulation.
-     * \return const std::string
-     */
-    const std::string undoDescription ();
+    bool CHK undoXMLAdd (xmlNodePtr node);
 };
 
 #endif

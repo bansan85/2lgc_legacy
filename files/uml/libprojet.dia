@@ -7686,7 +7686,7 @@
       <dia:attribute name="attributes">
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#::FuncModeleAddAction#</dia:string>
+            <dia:string>#::FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#friend class#</dia:string>
@@ -11634,7 +11634,7 @@
       <dia:attribute name="attributes">
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#FuncModeleAddAction#</dia:string>
+            <dia:string>#FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#friend class#</dia:string>
@@ -11913,7 +11913,7 @@
             <dia:string>#fAddAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#FuncModeleAddAction#</dia:string>
+            <dia:string>#FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -37083,19 +37083,19 @@
         <dia:point val="-575,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-575.05,175.95;-542.495,199"/>
+        <dia:rectangle val="-575.05,175.95;-544.805,195.3"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-575,176"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="32.454999999999998"/>
+        <dia:real val="30.145"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="22.950000000000006"/>
+        <dia:real val="19.250000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#FuncModeleAddAction#</dia:string>
+        <dia:string>#FuncModeleAction#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>##</dia:string>
@@ -37209,7 +37209,7 @@
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#FuncModeleAddAction#</dia:string>
+            <dia:string>#FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37221,7 +37221,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une interface FuncModeleAddAction.#</dia:string>
+            <dia:string>#Constructeur d'une classe FuncModeleAction.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -37257,7 +37257,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#FuncModeleAddAction#</dia:string>
+            <dia:string>#FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>#delete#</dia:string>
@@ -37269,7 +37269,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une interface FuncModeleAddAction.#</dia:string>
+            <dia:string>#Duplication d'une classe FuncModeleAction.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -37289,7 +37289,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const FuncModeleAddAction &amp;#</dia:string>
+                <dia:string>#const FuncModeleAction &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -37311,13 +37311,13 @@
             <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#FuncModeleAddAction &amp;#</dia:string>
+            <dia:string>#FuncModeleAction &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une interface FuncModeleAddAction.#</dia:string>
+            <dia:string>#Duplication d'une classe FuncModeleAction.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -37337,7 +37337,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const FuncModeleAddAction &amp;#</dia:string>
+                <dia:string>#const FuncModeleAction &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -37353,7 +37353,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#~FuncModeleAddAction#</dia:string>
+            <dia:string>#~FuncModeleAction#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37365,7 +37365,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Destructeur d'une interface FuncModeleAddAction.#</dia:string>
+            <dia:string>#Destructeur d'une classe FuncModeleAction.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -37383,7 +37383,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#execute#</dia:string>
+            <dia:string>#doAdd#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37431,7 +37431,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#doXML#</dia:string>
+            <dia:string>#doXMLAdd#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37513,37 +37513,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#doDescription#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#const std::string#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#La description de la modification.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#undo#</dia:string>
+            <dia:string>#undoAdd#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37573,7 +37543,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#undoXML#</dia:string>
+            <dia:string>#undoXMLAdd#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -37619,36 +37589,6 @@
             </dia:composite>
           </dia:attribute>
         </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#undoDescription#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#const std::string#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#La description de l'annulation.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters"/>
-        </dia:composite>
       </dia:attribute>
       <dia:attribute name="template">
         <dia:boolean val="false"/>
@@ -37660,16 +37600,16 @@
         <dia:point val="-547.568,207.961"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-558.823,198.9;-546.718,208.011"/>
+        <dia:rectangle val="-559.978,195.2;-546.718,208.011"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-547.568,207.961"/>
-        <dia:point val="-547.568,203.056"/>
-        <dia:point val="-558.773,203.056"/>
-        <dia:point val="-558.773,198.95"/>
+        <dia:point val="-547.568,201.206"/>
+        <dia:point val="-559.928,201.206"/>
+        <dia:point val="-559.928,195.25"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37701,7 +37641,7 @@
         <dia:point val="-548.773,164.75"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-559.223,164.7;-548.722,176.45"/>
+        <dia:rectangle val="-560.378,164.7;-548.722,176.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -37709,8 +37649,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="-548.773,164.75"/>
         <dia:point val="-548.773,170.175"/>
-        <dia:point val="-558.773,170.175"/>
-        <dia:point val="-558.773,176"/>
+        <dia:point val="-559.928,170.175"/>
+        <dia:point val="-559.928,176"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37742,17 +37682,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O157">
       <dia:attribute name="obj_pos">
-        <dia:point val="-542.545,198.95"/>
+        <dia:point val="-544.855,195.25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-542.595,28.4;-396.94,199.8"/>
+        <dia:rectangle val="-544.905,28.4;-396.94,196.1"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-542.545,198.95"/>
-        <dia:point val="-397.39,198.95"/>
+        <dia:point val="-544.855,195.25"/>
+        <dia:point val="-397.39,195.25"/>
         <dia:point val="-397.39,28.85"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -37784,17 +37724,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O158">
       <dia:attribute name="obj_pos">
-        <dia:point val="-558.773,176"/>
+        <dia:point val="-559.928,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-558.823,164.3;-548.322,176.05"/>
+        <dia:rectangle val="-559.978,164.3;-548.322,176.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-558.773,176"/>
-        <dia:point val="-558.773,170.575"/>
+        <dia:point val="-559.928,176"/>
+        <dia:point val="-559.928,170.575"/>
         <dia:point val="-548.773,170.575"/>
         <dia:point val="-548.773,164.75"/>
       </dia:attribute>
@@ -37831,15 +37771,15 @@
         <dia:point val="-397.39,28.85"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-542.995,28.8;-397.34,199.8"/>
+        <dia:rectangle val="-545.305,28.8;-397.34,196.1"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-397.39,28.85"/>
-        <dia:point val="-397.39,198.95"/>
-        <dia:point val="-542.545,198.95"/>
+        <dia:point val="-397.39,195.25"/>
+        <dia:point val="-544.855,195.25"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

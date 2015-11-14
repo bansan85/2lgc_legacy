@@ -107,10 +107,10 @@ POCO::UndoData::execToXML (xmlNodePtr noeud) const
   return true;
 }
 
-const std::string *
+const std::string &
 POCO::UndoData::getDescription () const
 {
-  return &description;
+  return description;
 }
 
 time_t

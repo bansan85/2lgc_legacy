@@ -170,7 +170,7 @@ UndoManager::undoNb () const
   return liste.size () - pos;
 }
 
-const std::string
+const std::string *
 UndoManager::undoDesc (size_t n) const
 {
   POCO::UndoData                             * undoData;
@@ -188,7 +188,7 @@ UndoManager::undoDesc (size_t n) const
   NCALL (n + pos + 1, --it;);
   undoData = *it;
 
-  return *undoData->getDescription ();
+  return &undoData->getDescription ();
 }
 
 bool
@@ -262,7 +262,7 @@ UndoManager::redoNb () const
   return pos;
 }
 
-const std::string
+const std::string *
 UndoManager::redoDesc (size_t n) const
 {
   POCO::UndoData                             * undoData;
@@ -280,7 +280,7 @@ UndoManager::redoDesc (size_t n) const
   NCALL (pos - n, --it;);
   undoData = *it;
 
-  return *undoData->getDescription ();
+  return &undoData->getDescription ();
 }
 
 EUndoEtat
@@ -406,7 +406,7 @@ UndoManager::undoToXML (xmlNodePtr root) const
     BUGCRIT (xmlSetProp (node0.get (),
                          BAD_CAST2 ("Description"),
                          BAD_CAST2 (
-                           data->getDescription ()->c_str ())) != nullptr,
+                           data->getDescription ().c_str ())) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")

@@ -18,24 +18,24 @@
 
 #include "config.h"
 
-#include "FuncModeleAddAction.hpp"
+#include "FuncModeleAction.hpp"
 #include "CModele.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 #include "POCO/nombre/Calcul.hpp"
 
-FuncModeleAddAction::FuncModeleAddAction (CModele & modele_) :
+FuncModeleAction::FuncModeleAction (CModele & modele_) :
   IUndoableFonction (true),
   modele (modele_)
 {
 }
 
-FuncModeleAddAction::~FuncModeleAddAction ()
+FuncModeleAction::~FuncModeleAction ()
 {
 }
 
 bool
-FuncModeleAddAction::execute (std::shared_ptr <POCO::sol::CAction> & action)
+FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 {
   BUGPARAM (static_cast <void *> (action.get ()),
             "%p",
@@ -67,7 +67,7 @@ FuncModeleAddAction::execute (std::shared_ptr <POCO::sol::CAction> & action)
              std::bind (&CModele::rmAction, &modele, action),
              std::bind (&CModele::addAction, &modele, action),
              nullptr,
-             std::bind (&FuncModeleAddAction::doXML,
+             std::bind (&FuncModeleAction::doXMLAdd,
                         this,
                         action->getNom (),
                         action->getType (),
@@ -106,9 +106,9 @@ FuncModeleAddAction::execute (std::shared_ptr <POCO::sol::CAction> & action)
 }
 
 bool
-FuncModeleAddAction::doXML (std::shared_ptr<const std::string> & nom_,
-                            uint8_t type_,
-                            xmlNodePtr root)
+FuncModeleAction::doXMLAdd (std::shared_ptr<const std::string> & nom_,
+                         uint8_t type_,
+                         xmlNodePtr root)
 {
   BUGPARAM (static_cast <void *> (root),
             "%p",
@@ -149,26 +149,14 @@ FuncModeleAddAction::doXML (std::shared_ptr<const std::string> & nom_,
   return true;
 }
 
-const std::string
-FuncModeleAddAction::doDescription ()
-{
-  return "teisuan";
-}
-
-const std::string
-FuncModeleAddAction::undoDescription ()
-{
-  return "teisuan";
-}
-
 bool
-FuncModeleAddAction::undo ()
+FuncModeleAction::undoAdd ()
 {
   return false;
 }
 
 bool
-FuncModeleAddAction::undoXML (xmlNodePtr node)
+FuncModeleAction::undoXMLAdd (xmlNodePtr node)
 {
   (void) node;
   return false;

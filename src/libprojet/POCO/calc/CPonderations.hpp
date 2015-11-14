@@ -24,7 +24,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 class CPonderation;
 class CCalculs;
 class CModele;
-class FuncModeleAddAction;
+class FuncModeleAction;
 class CAction;
 
 #include "POCO/calc/CPonderation.hpp"

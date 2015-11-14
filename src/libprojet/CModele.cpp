@@ -29,6 +29,8 @@
 #include "POCO/nombre/Calcul.hpp"
 #include "norme/Eurocode.hpp"
 
+static std::string errorMessage;
+
 CModele::CModele (ENorme eNorme) :
   appuis (),
   noeuds (),
@@ -63,10 +65,9 @@ CModele::CModele (ENorme eNorme) :
                                    0);
       break;
     default :
-      std::string message ("Erreur lors de la sélection de la norme" +
-                           std::to_string (static_cast<size_t> (eNorme)) +
-                           ".");
-      throw message.c_str ();
+      errorMessage = "Erreur lors de la sélection de la norme" +
+                           std::to_string (static_cast<size_t> (eNorme)) + ".";
+      throw errorMessage.c_str ();
       break;
   }
 }
@@ -79,7 +80,7 @@ CModele::~CModele ()
 bool CHK
 CModele::addAction (std::shared_ptr <POCO::sol::CAction> action)
 {
-  return fAddAction.execute (action);
+  return fAddAction.doAdd (action);
 }
 
 POCO::sol::CAction *

@@ -8,3 +8,5 @@
 -I/usr/include
 -I/usr/include/libxml2
 -std=c++11
+-DLOCALEDIR=\"/usr/local/share/locale\"
+-DDATADIR=\"/usr/local/share/2lgc\"

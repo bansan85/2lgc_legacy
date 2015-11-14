@@ -121,9 +121,9 @@ namespace POCO
       bool CHK setHeure ();
       /**
        * \brief Renvoie la description des données.
-       * \return const std::string *
+       * \return const std::string &
        */
-      const std::string * getDescription () const;
+      const std::string & getDescription () const;
       /**
        * \brief Complète la description des données.
        * \param description_ (in) La description complémentaire.

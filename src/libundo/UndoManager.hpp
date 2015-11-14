@@ -109,9 +109,9 @@ class DllExport UndoManager : public ISujet
     /**
      * \brief Renvoie la description de la nième opération à annuler.
      * \param n (in) L'opération à décrire.
-     * \return const std::string
+     * \return const std::string *
      */
-    const std::string undoDesc (size_t n) const;
+    const std::string * undoDesc (size_t n) const;
     /**
      * \brief Rétablit la dernière modification de la liste.
      * \return bool CHK
@@ -131,9 +131,9 @@ class DllExport UndoManager : public ISujet
     /**
      * \brief Renvoie la description de la nième opération à répéter.
      * \param n (in) L'opération à décrire.
-     * \return const std::string
+     * \return const std::string *
      */
-    const std::string redoDesc (size_t n) const;
+    const std::string * redoDesc (size_t n) const;
     /**
      * \brief Renvoie l'état du gestionnaire des annulations.
      * \return EUndoEtat

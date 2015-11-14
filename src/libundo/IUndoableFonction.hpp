@@ -53,16 +53,6 @@ class IUndoableFonction
      */
     virtual ~IUndoableFonction ();
     /**
-     * \brief La description de la modification.
-     * \return const std::string
-     */
-    virtual const std::string doDescription () = 0;
-    /**
-     * \brief La description de l'annulation.
-     * \return const std::string
-     */
-    virtual const std::string undoDescription () = 0;
-    /**
      * \brief La fonction renvoie true si la classe modifie le modèle et false si elle ne modifie rien de significatif.
      * \return bool CHK
      */
