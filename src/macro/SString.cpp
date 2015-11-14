@@ -16,26 +16,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SSTRING_HPP
-#define __SSTRING_HPP
-
 #include "config.h"
 
-#include <string>
+#include <cstdarg>
+#include "SString.hpp"
 
-/**
- * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais
- *        en version std::string. Honteusement volé de
- *        http://stackoverflow.com/questions/2342162#3742999.
- * \param fmt : le texte à formater,
- * \param ... : les divers paramètres.
- * \return Le texte formaté en format std::string.
- */
-std::string format (const std::string fmt, ...);
-
-#define BAD_CAST2 reinterpret_cast <const xmlChar *>
-#define BAD_TSAC2 reinterpret_cast <const char *>
-
-#endif
+std::string
+format (const std::string fmt,
+        ...)
+{
+  size_t      size = 1024;
+  bool        b = false;
+  va_list     marker;
+  std::string s;
+  
+  while (!b)
+  {
+    int32_t n;
+    
+    s.resize (size);
+    va_start (marker, fmt);
+    n = vsnprintf (const_cast <char *> (s.c_str ()),
+                   size,
+                   fmt.c_str (),
+                   marker);
+    va_end (marker);
+    if (n <= 0)
+    {
+      s = "";
+      return s;
+    }
+    else if ((n > 0) && ((b = (static_cast <size_t> (n) < size)) == true))
+    {
+      s.resize (static_cast <size_t> (n));
+    }
+    else
+    {
+      size = size * 2;
+    }
+  }
+  return s;
+}
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

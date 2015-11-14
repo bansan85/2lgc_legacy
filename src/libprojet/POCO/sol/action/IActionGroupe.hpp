@@ -35,7 +35,7 @@ namespace POCO
       class IActionGroupe
       {
         // Attributes
-        private :
+        protected :
           /// Nom du groupe ou de l'action.
           std::shared_ptr <const std::string> nom;
         // Operations

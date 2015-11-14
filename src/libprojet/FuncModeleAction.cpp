@@ -18,11 +18,14 @@
 
 #include "config.h"
 
+#include <iostream>
+
 #include "FuncModeleAction.hpp"
 #include "CModele.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 #include "POCO/nombre/Calcul.hpp"
+#include "EUniteTxt.hpp"
 
 FuncModeleAction::FuncModeleAction (CModele & modele_) :
   IUndoableFonction (true),
@@ -65,7 +68,7 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 
   BUGCONT (modele.undoManager.push (
              std::bind (&CModele::rmAction, &modele, action),
-             std::bind (&CModele::addAction, &modele, action),
+             std::bind (&FuncModeleAction::doAdd, this, action),
              nullptr,
              std::bind (&FuncModeleAction::doXMLAdd,
                         this,
@@ -78,24 +81,22 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
            &modele.undoManager)
   
   uint8_t type = action->getType ();
-  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales =
-                                            modele.preferences.getDecimales ();
   
   if (modele.undoManager.getEtat () != EUndoEtat::NONE_OR_REVERT)
   {
     std::shared_ptr <POCO::INb> newPsi =
-      std::make_shared <POCO::nombre::Calcul> (
-        modele.norme->getPsi0 (type), EUnite::U_, decimales);
+      std::make_shared <POCO::nombre::Calcul> (modele.norme->getPsi0 (type),
+                                               EUnite::U_);
     action->psi0 = newPsi;
     BUGCONT (modele.undoManager.pushSuppr(newPsi), false, &modele.undoManager)
 
     newPsi = std::make_shared <POCO::nombre::Calcul> (
-      modele.norme->getPsi1 (type), EUnite::U_, decimales);
+               modele.norme->getPsi1 (type), EUnite::U_);
     action->psi1 = newPsi;
     BUGCONT (modele.undoManager.pushSuppr(newPsi), false, &modele.undoManager)
 
     newPsi = std::make_shared <POCO::nombre::Calcul> (
-      modele.norme->getPsi2 (type), EUnite::U_, decimales);
+               modele.norme->getPsi2 (type), EUnite::U_);
     action->psi2 = newPsi;
     BUGCONT (modele.undoManager.pushSuppr(newPsi), false, &modele.undoManager)
   }
@@ -107,8 +108,8 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 
 bool
 FuncModeleAction::doXMLAdd (std::shared_ptr<const std::string> & nom_,
-                         uint8_t type_,
-                         xmlNodePtr root)
+                            uint8_t                              type_,
+                            xmlNodePtr                           root)
 {
   BUGPARAM (static_cast <void *> (root),
             "%p",
@@ -160,6 +161,125 @@ FuncModeleAction::undoXMLAdd (xmlNodePtr node)
 {
   (void) node;
   return false;
+}
+
+bool
+FuncModeleAction::doSetPsi (std::shared_ptr <POCO::sol::CAction> & action,
+                            uint8_t                                psi,
+                            std::shared_ptr <POCO::INb> &          val)
+{
+  BUGPARAM (psi, "%u", psi <= 2, false, &modele.undoManager)
+
+  BUGPROG (val.get ()->getUnite () == EUnite::U_,
+           false,
+           &modele.undoManager,
+           "L'unité est de type [%s] à la place de [%s].\n",
+             EUniteConst[static_cast <size_t> (val.get ()->getUnite ())]
+                                                                     .c_str (),
+                             
+             EUniteConst[static_cast <size_t> (EUnite::U_)].c_str ())
+
+  BUGCONT (modele.undoManager.ref (), false, &modele.undoManager)
+
+  BUGCONT (modele.undoManager.push (
+             psi == 0 ? std::bind (&FuncModeleAction::doSetPsi,
+                                   this, action, psi, action->psi0) :
+               psi == 1 ? std::bind (&FuncModeleAction::doSetPsi,
+                                     this, action, psi, action->psi1) :
+                 std::bind (&FuncModeleAction::doSetPsi,
+                            this, action, psi, action->psi2),
+             std::bind (&FuncModeleAction::doSetPsi, this, action, psi, val),
+             nullptr,
+             std::bind (&FuncModeleAction::doXMLSetPsi,
+                        this,
+                        action->id,
+                        psi,
+                        val,
+                        std::placeholders::_1),
+             format (gettext ("Cœfficient ψ%s de l'action “%s” (%s)"),
+                     psi == 0 ? "₀" : psi == 1 ? "₁" : "₂",
+                     action->nom->c_str (),
+                     val->toString (modele.preferences.getDecimales ()).
+                                                                    c_str ())),
+             false,
+             &modele.undoManager)
+
+  if (psi == 0)
+  {
+    action->psi0 = val;
+  }
+  else if (psi == 1)
+  {
+    action->psi1 = val;
+  }
+  else
+  {
+    action->psi2 = val;
+  }
+
+  BUGCONT (modele.undoManager.unref (), false, &modele.undoManager)
+
+  return true;
+}
+
+bool
+FuncModeleAction::doXMLSetPsi (uint32_t                      id,
+                               uint8_t                       psi,
+                               std::shared_ptr <POCO::INb> & val,
+                               xmlNodePtr                    root)
+{
+  BUGPARAM (static_cast <void *> (root),
+            "%p", root, false, &modele.undoManager)
+  BUGPARAM (psi, "%u", psi <= 2, false, &modele.undoManager)
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
+                                    xmlNewNode (nullptr, BAD_CAST2 ("setpsi")),
+                                    xmlFreeNode);
+  
+  BUGCRIT (node.get () != nullptr,
+           false,
+           &modele.undoManager,
+           "Erreur d'allocation mémoire.\n")
+  
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             BAD_CAST2 ("psi"),
+             BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
+           false,
+           &modele.undoManager,
+           "Problème depuis la librairie : %s\n", "xml2")
+  
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Id"),
+                       BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
+           false,
+           &modele.undoManager,
+           "Problème depuis la librairie : %s\n", "xml2")
+  
+  std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+                                       xmlNewNode (nullptr, BAD_CAST2 ("val")),
+                                       xmlFreeNode);
+  
+  BUGCRIT (node0.get () != nullptr,
+           false,
+           &modele.undoManager,
+           "Erreur d'allocation mémoire.\n")
+  
+  BUGCONT (val->newXML (node0.get ()), false, &modele.undoManager)
+  
+  BUGCRIT (xmlAddChild (node.get (), node0.get ()) != nullptr,
+           false,
+           &modele.undoManager,
+           "Problème depuis la librairie : %s\n", "xml2")
+  node0.release ();
+  
+  BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
+           false,
+           &modele.undoManager,
+           "Problème depuis la librairie : %s\n", "xml2")
+  node.release ();
+  
+  return true;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -21,7 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <array>
 #include "EUnite.hpp"
 #include "POCO/INb.hpp"
 
@@ -40,17 +39,14 @@ namespace POCO
         double val;
         /// L'unité du nombre.
         EUnite unite;
-        /// Le nombre de décimales à afficher.
-        std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales;
       // Operations
       public :
         /**
          * \brief Constructeur d'une classe Calcul.
          * \param valeur (in) La valeur initiale.
          * \param unit (in) L'unité du nombre.
-         * \param decimales_ (in) Le nombre de décimales à afficher.
          */
-        Calcul (double valeur, EUnite unit, std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales_);
+        Calcul (double valeur, EUnite unit);
         /**
          * \brief Constructeur d'une classe Calcul.
          * \param other (in) Le nombre à dupliquer.
@@ -90,9 +86,10 @@ namespace POCO
         bool CHK setUnite (EUnite unite_);
         /**
          * \brief Renvoie le nombre sous forme de texte en respectant le nombre de décimales.
+         * \param decimales (in) Le nombre de décimales à afficher.
          * \return std::string
          */
-        virtual std::string toString () const;
+        virtual std::string toString (std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales) const;
         /**
          * \brief Converti la fonction de création d'un nombre sous format XML.
          * \param root (in) Le noeud dans lequel doit être inséré le nombre.

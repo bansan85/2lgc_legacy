@@ -43,7 +43,7 @@ CModele::CModele (ENorme eNorme) :
   norme (nullptr),
   preferences (),
   undoManager (),
-  fAddAction (*this)
+  fAction (*this)
 {
   LIBXML_TEST_VERSION
 
@@ -77,16 +77,10 @@ CModele::~CModele ()
   xmlCleanupParser ();
 }
 
-bool CHK
-CModele::addAction (std::shared_ptr <POCO::sol::CAction> action)
+std::shared_ptr <POCO::sol::CAction> *
+CModele::getAction (const std::string & nom)
 {
-  return fAddAction.doAdd (action);
-}
-
-POCO::sol::CAction *
-CModele::getAction (const std::string & nom) const
-{
-  std::list <std::shared_ptr <POCO::sol::CAction> >::const_iterator it;
+  std::list <std::shared_ptr <POCO::sol::CAction> >::iterator it;
 
   it = std::find_if (actions.begin (),
                      actions.end (),
@@ -98,7 +92,7 @@ CModele::getAction (const std::string & nom) const
   
   if (it != actions.end ())
   {
-    return (*it).get ();
+    return &(*it);
   }
   else
   {

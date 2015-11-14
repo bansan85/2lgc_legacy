@@ -65,7 +65,7 @@ class FuncModeleAction : public IUndoableFonction
      */
     bool CHK doAdd (std::shared_ptr <POCO::sol::CAction> & action);
     /**
-     * \brief Format XML pour appliquer les modifications.
+     * \brief Format XML pour ajouter une action.
      * \param nom_ (in) Le nom de l'action.
      * \param type_ (in) Le type d'action.
      * \param node (in) Le noeud où ajouter les informations.
@@ -83,6 +83,23 @@ class FuncModeleAction : public IUndoableFonction
      * \return bool CHK
      */
     bool CHK undoXMLAdd (xmlNodePtr node);
+    /**
+     * \brief Modifie le coefficient psi d'une action.
+     * \param action (in) L'action à modifier.
+     * \param psi (in) Le numéro du coefficient psi à modifier (0, 1 ou 2).
+     * \param val (in) Le nouveau cœfficient.
+     * \return bool CHK
+     */
+    bool CHK doSetPsi (std::shared_ptr <POCO::sol::CAction> & action, uint8_t psi, std::shared_ptr <POCO::INb> & val);
+    /**
+     * \brief Format XML pour modifier le cœfficient psi d'une action.
+     * \param id (in) L'identifiant de l'action.
+     * \param psi (in) Le numéro du coefficient psi à modifier (0, 1 ou 2).
+     * \param val (in) Le nouveau cœfficient.
+     * \param root (in) Le noeud où ajouter les informations.
+     * \return bool CHK
+     */
+    bool CHK doXMLSetPsi (uint32_t id, uint8_t psi, std::shared_ptr <POCO::INb> & val, xmlNodePtr root);
 };
 
 #endif

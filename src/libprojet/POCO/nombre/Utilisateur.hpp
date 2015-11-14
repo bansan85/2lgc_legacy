@@ -86,9 +86,10 @@ namespace POCO
         bool CHK setUnite (EUnite unite_);
         /**
          * \brief Renvoie le nombre sous forme de texte sans respecter le nombre de décimales.
+         * \param decimales (in) Le nombre de décimales à afficher.
          * \return std::string
          */
-        virtual std::string toString () const;
+        virtual std::string toString (std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales) const;
         /**
          * \brief Converti la fonction de création d'un nombre sous format XML.
          * \param root (in) Le noeud dans lequel doit être inséré le nombre.

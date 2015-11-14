@@ -20,9 +20,9 @@
 
 #include "config.h"
 
-#include <stdint.h>
+#include <cstdint>
 #include <libintl.h>
-#include <string.h>
+#include <string>
 #include <memory>
 #include <cassert>
 
@@ -42,28 +42,28 @@ main (int32_t,
   action = std::make_shared <POCO::sol::CAction> (
                                std::make_shared <std::string> ("Poids propre"),
                                0);
-  retour = projet.addAction (action);
+  retour = projet.fAction.doAdd (action);
   assert (retour);
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
   action = std::make_shared <POCO::sol::CAction> (
                                  std::make_shared <std::string> ("Chargement"),
                                  2);
-  retour = projet.addAction (action);
+  retour = projet.fAction.doAdd (action);
   assert (retour);
   assert (projet.getActionCount () == 2);
   // 18 Neige
   action = std::make_shared <POCO::sol::CAction> (
                                       std::make_shared <std::string> ("Neige"),
                                       18);
-  retour = projet.addAction (action);
+  retour = projet.fAction.doAdd (action);
   assert (retour);
   assert (projet.getActionCount () == 3);
   // 19 Vent
   action = std::make_shared <POCO::sol::CAction> (
                                        std::make_shared <std::string> ("Vent"),
                                        19);
-  retour = projet.addAction (action);
+  retour = projet.fAction.doAdd (action);
   assert (retour);
   
   retour = projet.enregistre ("action1.xml");

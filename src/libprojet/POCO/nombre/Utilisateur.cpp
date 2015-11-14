@@ -59,7 +59,8 @@ POCO::nombre::Utilisateur::getUnite () const
 }
 
 std::string
-POCO::nombre::Utilisateur::toString () const
+POCO::nombre::Utilisateur::toString (
+  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales) const
 {
   std::string retour;
   uint8_t     width;
@@ -93,7 +94,9 @@ POCO::nombre::Utilisateur::toString () const
     }
   }
   
-  return format ("%.*lf", width, val);
+  return format ("%.*lf",
+                 std::max (width, decimales[static_cast<size_t>(unite)]),
+                 val);
 }
 
 bool CHK

@@ -74,10 +74,10 @@ class DllExport CModele : public ISujet, public CCalculs
     POCO::CPreferences preferences;
     /// Le gestionnaire d'annulation
     UndoManager undoManager;
-    /// Classe gérant l'ajout d'action.
-    FuncModeleAction fAddAction;
-  // Operations
   public :
+    /// Classe gérant l'ajout d'action.
+    FuncModeleAction fAction;
+  // Operations
     /**
      * \brief Constructeur d'une classe CModele.
      * \param norme (in) Norme de calcul.
@@ -243,17 +243,13 @@ class DllExport CModele : public ISujet, public CCalculs
      */
     bool CHK rmBarre (uint32_t num);
     /**
-     * \brief Ajoute une action au modèle.
-     * \param action (in) L'action à ajouter.
-     * \return bool CHK
-     */
-    bool CHK addAction (std::shared_ptr <POCO::sol::CAction> action);
-    /**
      * \brief Recherche une action.
+     *        Renvoie nullptr en cas d'échec.
+     *        La fonction ne peut pas être const car l'action retour peut être modifiée.
      * \param nom (in) Le nom de l'action.
-     * \return POCO::sol::CAction *
+     * \return std::shared_ptr <POCO::sol::CAction> *
      */
-    POCO::sol::CAction * getAction (const std::string & nom) const;
+    std::shared_ptr <POCO::sol::CAction> * getAction (const std::string & nom);
     /**
      * \brief Renvoie le nombre d'actions.
      * \return size_t

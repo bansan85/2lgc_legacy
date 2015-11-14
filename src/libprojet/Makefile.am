@@ -30,6 +30,7 @@ libprojet_la_CPPFLAGS	=	@XML_CPPFLAGS@
 libprojet_ladir 			=	$(includedir)/2lgc
 
 libprojet_la_SOURCES 	= \
+	../macro/SString.cpp \
 	CModele.cpp \
 	CCalculs.cpp \
 	POCO/CPreferences.cpp \

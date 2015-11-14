@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-11-14 10:03+0100\n"
-"PO-Revision-Date: 2015-11-11 22:20+0100\n"
+"POT-Creation-Date: 2015-11-15 00:59+0100\n"
+"PO-Revision-Date: 2015-11-14 22:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -159,17 +159,21 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "L'action “%s” existe déjà.\n"
 "Impossible de l'ajouter.\n"
 msgstr ""
-"L'action '%s' existe déjà.\n"
+"L'action “%s” existe déjà.\n"
 "Impossible de l'ajouter.\n"
 
 #, c-format
 msgid "Ajout de l'action “%s”"
 msgstr "Ajout de l'action “%s”"
+
+#, fuzzy, c-format
+msgid "Cœfficient ψ%s de l'action “%s” (%s)"
+msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
 
 #~ msgid "Permanente"
 #~ msgstr "Permanente"
@@ -284,9 +288,6 @@ msgstr "Ajout de l'action “%s”"
 
 #~ msgid "Paramètres du projet (%s)"
 #~ msgstr "Paramètres du projet (%s)"
-
-#~ msgid "Cœfficient ψ%C de l'action “%s” (%lf)"
-#~ msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
 
 #~ msgid "Paramètres de l'action “%s” (%s)"
 #~ msgstr "Paramètres de l'action “%s” (%s)"

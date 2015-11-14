@@ -20,11 +20,12 @@
 
 #include "config.h"
 
-#include <stdint.h>
+#include <cstdint>
 #include <libintl.h>
-#include <string.h>
+#include <string>
 #include <memory>
 #include <iostream>
+#include <sstream>
 #include <cassert>
 
 #include "CModele.hpp"
@@ -37,7 +38,7 @@ main (int32_t,
 {
   CModele projet (ENorme::EUROCODE);
   std::shared_ptr <POCO::sol::CAction> action;
-  POCO::sol::CAction *action_;
+  std::shared_ptr <POCO::sol::CAction> *action_;
   std::shared_ptr <POCO::INb> nb0, nb1, nb2;
   bool retour;
   
@@ -46,82 +47,97 @@ main (int32_t,
   action = std::make_shared <POCO::sol::CAction> (
                                  std::make_shared <std::string> ("Chargement"),
                                  2);
-  retour = projet.addAction (action);
+  retour = projet.fAction.doAdd (action);
   assert (retour);
   action_ = projet.getAction ("Chargement");
   assert (action_ != nullptr);
+  action = *action_;
   assert (projet.getActionCount () == 1);
 
   nb0 = std::make_shared <POCO::nombre::Utilisateur> (0.0, EUnite::U_);
   nb1 = std::make_shared <POCO::nombre::Utilisateur> (0.1, EUnite::U_);
   nb2 = std::make_shared <POCO::nombre::Utilisateur> (0.2, EUnite::U_);
 
-  retour = action_->setPsi (0, nb0);
+  retour = projet.fAction.doSetPsi(action, 0, nb0);
   assert (retour);
-  retour = action_->setPsi (1, nb1);
+  retour = projet.fAction.doSetPsi(action, 1, nb1);
   assert (retour);
-  retour = action_->setPsi (2, nb2);
+  retour = projet.fAction.doSetPsi(action, 2, nb2);
   assert (retour);
 
   assert (projet.getActionCount () == 1);
 
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
 
+  std::ostringstream out;
+  out.precision(3);
+  out << std::fixed << 0.2;
+  std::cout << *projet.getUndoManager ().undoDesc (0) << "\n" ;
+  std::cout << out.str() << "\n" ;
   assert (projet.getUndoManager ().undoDesc (0)->compare (
-            "Cœfficient ψ₂ de l'action “Chargement” (" +
-            std::to_string (0.2) + ")") == 0);
+          "Cœfficient ψ₂ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().undo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
 
+  out.clear ();
+  out.str ("");
+  out << 0.1;
   assert (projet.getUndoManager ().undoDesc (0)->compare (
-            "Cœfficient ψ₁ de l'action “Chargement” (" +
-            std::to_string (0.1) + ")") == 0);
+          "Cœfficient ψ₁ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().undo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
-  
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
+ 
+  out.clear ();
+  out.str ("");
+  out << 0.0;
   assert (projet.getUndoManager ().undoDesc (0)->compare (
-            "Cœfficient ψ₀ de l'action “Chargement” (" +
-            std::to_string (0.0) + ")") == 0);
+          "Cœfficient ψ₀ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().undo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.7, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
-  
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.7, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
+ 
+  out.clear ();
+  out.str ("");
+  out << 0.0;
   assert (projet.getUndoManager ().redoDesc (0)->compare (
-            "Cœfficient ψ₀ de l'action “Chargement” (" +
-            std::to_string (0.0) + ")") == 0);
+          "Cœfficient ψ₀ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().redo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.5, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
+  out.clear ();
+  out.str ("");
+  out << 0.1;
   assert (projet.getUndoManager ().redoDesc (0)->compare (
-            "Cœfficient ψ₁ de l'action “Chargement” (" +
-            std::to_string (0.1) + ")") == 0);
+          "Cœfficient ψ₁ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().redo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.3, 1., ERR_REL));
   
+  out.clear ();
+  out.str ("");
+  out << 0.2;
   assert (projet.getUndoManager ().redoDesc (0)->compare (
-            "Cœfficient ψ₂ de l'action “Chargement” (" +
-            std::to_string (0.2) + ")") == 0);
+          "Cœfficient ψ₂ de l'action “Chargement” (" + out.str () + ")") == 0);
   retour = projet.getUndoManager ().redo ();
   assert (retour);
-  assert (doublesAreEqual (action_->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
-  assert (doublesAreEqual (action_->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (0)->getVal (), 0.0, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (1)->getVal (), 0.1, 1., ERR_REL));
+  assert (doublesAreEqual (action->getPsi (2)->getVal (), 0.2, 1., ERR_REL));
   
   retour = projet.enregistre ("action2.xml");
   assert (retour);

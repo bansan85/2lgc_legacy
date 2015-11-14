@@ -27,20 +27,17 @@
 #include "EUniteTxt.hpp"
 
 POCO::nombre::Calcul::Calcul (
-  double                                                      valeur,
-  EUnite                                                      unit,
-  std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales_) :
+  double  valeur,
+  EUnite  unit) :
   val (valeur),
-  unite (unit),
-  decimales (decimales_)
+  unite (unit)
 {
 }
 
 POCO::nombre::Calcul::Calcul (const Calcul & nb) :
   INb (),
   val (nb.val),
-  unite (nb.unite),
-  decimales (nb.decimales)
+  unite (nb.unite)
 {
 }
 
@@ -62,7 +59,8 @@ POCO::nombre::Calcul::getUnite () const
 }
 
 std::string
-POCO::nombre::Calcul::toString () const
+POCO::nombre::Calcul::toString (
+   std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales) const
 {
   std::ostringstream oss;
   

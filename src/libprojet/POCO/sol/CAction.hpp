@@ -47,6 +47,8 @@ namespace POCO
       // Attributes
       private :
         friend class ::FuncModeleAction;
+        /// L'identifiant de l'action.
+        uint32_t id;
         /// La description de type est donnée par INorme::getPsiDescription.
         uint8_t type;
         /// Flag utilisé temporairement lors des calculs.
@@ -100,24 +102,11 @@ namespace POCO
          */
         uint8_t getType () const;
         /**
-         * \brief Défini le type de l'action.
-         * \param type_ (in) Le nouveau type.
-         * \return bool CHK
-         */
-        bool CHK setType (uint8_t type_);
-        /**
          * \brief Renvoie le cœfficient psi.
          * \param psi (in) Le numéro du coefficient à renvoyer (0, 1 ou 2).
          * \return POCO::INb const *
          */
         POCO::INb const * getPsi (uint8_t psi) const;
-        /**
-         * \brief Modifie le coefficient psi de l'action.
-         * \param psi (in) Le numéro du coefficient à renvoyer (0, 1 ou 2).
-         * \param psiVal (in) La nouvelle valeur.
-         * \return bool CHK
-         */
-        bool CHK setPsi (uint8_t psi, std::shared_ptr <POCO::INb> psiVal);
         /**
          * \brief Renvoie true si aucune charge n'est présente.
          * \return bool CHK

@@ -31,6 +31,7 @@
 POCO::sol::CAction::CAction (std::shared_ptr <std::string> nom_,
                              uint8_t                       type_) :
   IActionGroupe (nom_),
+  id (0xFFFFFFFF),
   type (type_),
   action_predominante (false),
   charges (),
@@ -73,15 +74,6 @@ POCO::sol::CAction::getPsi (uint8_t psi) const
   {
     return psi2.get ();
   }
-}
-
-bool CHK
-POCO::sol::CAction::setPsi (uint8_t psi,
-                            std::shared_ptr <POCO::INb> psiVal) {
-  (void) psi;
-  (void) psiVal;
-  
-  return false;
 }
 
 bool CHK

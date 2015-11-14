@@ -23,6 +23,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 
 #include <libxml/tree.h>
 #include <string>
+#include <array>
 #include "EUnite.hpp"
 
 namespace POCO
@@ -71,9 +72,10 @@ namespace POCO
       virtual EUnite getUnite () const = 0;
       /**
        * \brief Renvoie le nombre sous forme de texte.
+       * \param decimales (in) Le nombre de décimales à afficher.
        * \return std::string
        */
-      virtual std::string toString () const = 0;
+      virtual std::string toString (std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales) const = 0;
       /**
        * \brief Converti la fonction de création d'un nombre sous format XML.
        * \param root (in) Le noeud dans lequel doit être inséré le nombre.
