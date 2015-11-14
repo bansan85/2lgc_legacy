@@ -22,7 +22,7 @@
 
 #include "CPreferences.hpp"
 
-CPreferences::CPreferences () :
+POCO::CPreferences::CPreferences () :
   decimales
   (
     {
@@ -38,12 +38,12 @@ CPreferences::CPreferences () :
 {
 }
 
-CPreferences::~CPreferences ()
+POCO::CPreferences::~CPreferences ()
 {
 }
 
 std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> &
-CPreferences::getDecimales () const
+POCO::CPreferences::getDecimales () const
 {
   return const_cast <std::array <uint8_t,
                            static_cast <size_t> (EUnite::LAST)> &> (decimales);

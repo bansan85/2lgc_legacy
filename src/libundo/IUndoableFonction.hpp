@@ -53,38 +53,15 @@ class IUndoableFonction
      */
     virtual ~IUndoableFonction ();
     /**
-     * \brief Exécute la fonction.
-     * \return bool CHK
-     */
-    virtual bool CHK execute () = 0;
-  private :
-    /**
-     * \brief Format XML pour appliquer les modifications.
-     * \param node (in) Le noeud où ajouter les informations.
-     * \return bool CHK
-     */
-    virtual bool CHK doXML (xmlNodePtr node) = 0;
-    /**
      * \brief La description de la modification.
-     * \return const std::string &
+     * \return const std::string
      */
-    virtual const std::string & doDescription () = 0;
-    /**
-     * \brief Annule la fonction.
-     * \return bool CHK
-     */
-    virtual bool CHK undo () = 0;
-    /**
-     * \brief Format XML  pour annuler les modifications.
-     * \param node (in) Le noeud où ajouter les informations.
-     * \return bool CHK
-     */
-    virtual bool CHK undoXML (xmlNodePtr node) = 0;
+    virtual const std::string doDescription () = 0;
     /**
      * \brief La description de l'annulation.
-     * \return const std::string &
+     * \return const std::string
      */
-    virtual const std::string & undoDescription () = 0;
+    virtual const std::string undoDescription () = 0;
     /**
      * \brief La fonction renvoie true si la classe modifie le modèle et false si elle ne modifie rien de significatif.
      * \return bool CHK

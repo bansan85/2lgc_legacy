@@ -53,9 +53,9 @@ class DllExport INorme
     virtual ~INorme ();
     /**
      * \brief Renvoie le nom des paramètres de calcul.
-     * \return const std::shared_ptr <std::string> &
+     * \return std::shared_ptr <const std::string>
      */
-    virtual const std::shared_ptr <std::string> & getNom () const = 0;
+    virtual std::shared_ptr <const std::string> getNom () const = 0;
     /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t

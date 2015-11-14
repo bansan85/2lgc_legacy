@@ -23,7 +23,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 
 #include <libxml/tree.h>
 #include <string>
-#include "POCO/EUnite.hpp"
+#include "EUnite.hpp"
 
 namespace POCO
 {

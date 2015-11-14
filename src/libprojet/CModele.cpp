@@ -25,6 +25,8 @@
 #include "CModele.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
+#include "EUnite.hpp"
+#include "POCO/nombre/Calcul.hpp"
 #include "norme/Eurocode.hpp"
 
 CModele::CModele (ENorme eNorme) :
@@ -37,15 +39,18 @@ CModele::CModele (ENorme eNorme) :
   actions (),
   niveaux_groupes (),
   norme (nullptr),
-  undoManager ()
+  preferences (),
+  undoManager (),
+  fAddAction (*this)
 {
   LIBXML_TEST_VERSION
 
   // On charge la localisation
-  setlocale (LC_ALL, "");
-  std::cout.imbue (std::locale (""));
-  std::cin.imbue (std::locale (""));
-  std::cerr.imbue (std::locale (""));
+  setlocale (LC_ALL, nullptr);
+  std::locale foo ("");
+  std::cout.imbue (foo);
+  std::cin.imbue (foo);
+  std::cerr.imbue (foo);
   bindtextdomain (PACKAGE_NAME, LOCALEDIR);
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
@@ -72,10 +77,9 @@ CModele::~CModele ()
 }
 
 bool CHK
-CModele::addAction (std::shared_ptr <POCO::sol::CAction>)
+CModele::addAction (std::shared_ptr <POCO::sol::CAction> action)
 {
-//TODO
-  return false;
+  return fAddAction.execute (action);
 }
 
 POCO::sol::CAction *
@@ -83,13 +87,13 @@ CModele::getAction (const std::string & nom) const
 {
   std::list <std::shared_ptr <POCO::sol::CAction> >::const_iterator it;
 
-  it = std::find_if (
-                   actions.begin (),
-                   actions.end (),
-                   [&nom] (const std::shared_ptr <POCO::sol::CAction> & action)
-                   {
-                     return nom.compare (*action.get ()->getNom ()) == 0;
-                   });
+  it = std::find_if (actions.begin (),
+                     actions.end (),
+                     [&nom] (const std::shared_ptr <POCO::sol::CAction> &
+                                                                        action)
+                     {
+                       return nom.compare (*action.get ()->getNom ()) == 0;
+                     });
   
   if (it != actions.end ())
   {
@@ -105,6 +109,19 @@ size_t
 CModele::getActionCount () const
 {
   return actions.size ();
+}
+
+bool
+CModele::rmAction (std::shared_ptr <POCO::sol::CAction> action)
+{
+  (void) action;
+  return false;
+}
+
+const std::shared_ptr <INorme> &
+CModele::getNorme () const
+{
+  return norme;
 }
 
 UndoManager &
@@ -130,6 +147,39 @@ CModele::enregistre (const std::string fichier) const
            false,
            UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
+
+  norme::Eurocode *normeEC = dynamic_cast <norme::Eurocode *> (norme.get());
+  if (normeEC != nullptr)
+  {
+    BUGCRIT (xmlSetProp (root_node,
+                         BAD_CAST2 ("Norme"),
+                         BAD_CAST2 ("Eurocode")) != nullptr,
+             false,
+             UNDO_MANAGER_NULL,
+             "Problème depuis la librairie : %s\n", "xml2")
+    BUGCRIT (xmlSetProp (root_node,
+                         BAD_CAST2 ("Annexe"),
+                         BAD_CAST2 (std::to_string (static_cast<size_t>
+                                (normeEC->getAnnexe ())).c_str ())) != nullptr,
+             false,
+             UNDO_MANAGER_NULL,
+             "Problème depuis la librairie : %s\n", "xml2")
+    BUGCRIT (xmlSetProp (root_node,
+                         BAD_CAST2 ("Variante"),
+                         BAD_CAST2 (std::to_string
+                                 (norme->getVariante ()).c_str ())) != nullptr,
+             false,
+             UNDO_MANAGER_NULL,
+             "Problème depuis la librairie : %s\n", "xml2")
+  }
+  else
+  {
+    BUGPROG (false,
+             false,
+             UNDO_MANAGER_NULL,
+             "La norme \"%s\" est inconnue.\n", norme->getNom ()->c_str ())
+  }
+
   
   xmlDocSetRootElement (doc.get (), root_node);
   

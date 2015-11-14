@@ -1,7 +1,6 @@
-/*
- * 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
- * Copyright (C) 2011
- *
+/* 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
+ * Copyright (C) 2011-2015
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,19 +13,13 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include "config.h"
+#ifndef MD5SUMFILE__HPP
+#define MD5SUMFILE__HPP
 
-#include "CModeleSetParametres.hpp"
+bool md5sumfiles (const char * file1, const char * file2);
 
-CModeleSetParametres::CModeleSetParametres () :
-  IUndoFunc (true)
-{
-}
-
-CModeleSetParametres::~CModeleSetParametres ()
-{
-}
-
-/* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+#endif

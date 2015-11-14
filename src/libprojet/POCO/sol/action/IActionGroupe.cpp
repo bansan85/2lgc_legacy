@@ -30,7 +30,7 @@ POCO::sol::action::IActionGroupe::~IActionGroupe ()
 {
 }
 
-const std::shared_ptr <std::string> &
+std::shared_ptr <const std::string>
 POCO::sol::action::IActionGroupe::getNom () const
 {
   return nom;

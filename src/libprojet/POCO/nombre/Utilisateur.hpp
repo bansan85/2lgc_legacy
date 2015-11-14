@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include "POCO/EUnite.hpp"
+#include "EUnite.hpp"
 #include "POCO/INb.hpp"
 
 namespace POCO
@@ -38,7 +38,7 @@ namespace POCO
         /// Valeur du nombre.
         double val;
         /// L'unité du nombre.
-        POCO::EUnite unite;
+        EUnite unite;
       // Operations
       public :
         /**

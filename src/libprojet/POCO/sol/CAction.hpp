@@ -21,6 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CModele;
+class FuncModeleAddAction;
+
 #include <cholmod.h>
 #include <vector>
 #include <array>
@@ -40,7 +46,8 @@ namespace POCO
       // Associations
       // Attributes
       private :
-        /// La description de type est donnée par IParametres::getpsiDescription.
+        friend class ::FuncModeleAddAction;
+        /// La description de type est donnée par INorme::getPsiDescription.
         uint8_t type;
         /// Flag utilisé temporairement lors des calculs.
         bool action_predominante;
@@ -104,6 +111,13 @@ namespace POCO
          * \return POCO::INb const *
          */
         POCO::INb const * getPsi (uint8_t psi) const;
+        /**
+         * \brief Modifie le coefficient psi de l'action.
+         * \param psi (in) Le numéro du coefficient à renvoyer (0, 1 ou 2).
+         * \param psiVal (in) La nouvelle valeur.
+         * \return bool CHK
+         */
+        bool CHK setPsi (uint8_t psi, std::shared_ptr <POCO::INb> psiVal);
         /**
          * \brief Renvoie true si aucune charge n'est présente.
          * \return bool CHK

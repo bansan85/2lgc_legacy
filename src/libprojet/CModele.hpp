@@ -21,8 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CAction;
+class FuncModeleAddAction;
+
 #include <UndoManager.hpp>
 #include <ISujet.hpp>
+#include "FuncModeleAddAction.hpp"
 #include "ENorme.hpp"
 #include "CCalculs.hpp"
 #include "POCO/CPreferences.hpp"
@@ -44,6 +51,7 @@ class DllExport CModele : public ISujet, public CCalculs
   // Associations
   // Attributes
   private :
+    friend class FuncModeleAddAction;
     /// Liste des types d'appuis.
     std::list <std::shared_ptr <POCO::str::CAppui> > appuis;
     /// Liste des noeuds.
@@ -62,8 +70,12 @@ class DllExport CModele : public ISujet, public CCalculs
     std::list <std::shared_ptr <POCO::sol::CNiveauGroupe> > niveaux_groupes;
     /// Norme de calculs. Défini lors de la création du modèle.
     std::shared_ptr <INorme> norme;
+    /// Les préférences du projet.
+    POCO::CPreferences preferences;
     /// Le gestionnaire d'annulation
     UndoManager undoManager;
+    /// Classe gérant l'ajout d'action.
+    FuncModeleAddAction fAddAction;
   // Operations
   public :
     /**
@@ -255,9 +267,9 @@ class DllExport CModele : public ISujet, public CCalculs
     bool CHK rmAction (std::shared_ptr <POCO::sol::CAction> action);
     /**
      * \brief Renvoie les paramètres de calculs.
-     * \return std::shared_ptr <INorme> &
+     * \return const std::shared_ptr <INorme> &
      */
-    std::shared_ptr <INorme> & getParametres () const;
+    const std::shared_ptr <INorme> & getNorme () const;
     /**
      * \brief Renvoie le gestionnaire d'annulation.
      * \return UndoManager &

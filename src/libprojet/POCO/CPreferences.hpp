@@ -22,7 +22,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <array>
-#include "POCO/EUnite.hpp"
+#include "EUnite.hpp"
 
 namespace POCO
 {

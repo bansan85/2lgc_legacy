@@ -23,43 +23,43 @@
 #include <sstream>
 #include <iostream>
 
-#include "NbUser.hpp"
+#include "Utilisateur.hpp"
 #include "EUniteTxt.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-NbUser::NbUser (double valeur,
+POCO::nombre::Utilisateur::Utilisateur (double valeur,
                 EUnite unit) :
   val (valeur),
   unite (unit)
 {
 }
 
-NbUser::NbUser (const NbUser & other) :
+POCO::nombre::Utilisateur::Utilisateur (const Utilisateur & other) :
   INb (),
   val (other.val),
   unite (other.unite)
 {
 }
 
-NbUser::~NbUser ()
+POCO::nombre::Utilisateur::~Utilisateur ()
 {
 }
 
 double
-NbUser::getVal () const
+POCO::nombre::Utilisateur::getVal () const
 {
   return val;
 }
 
 EUnite
-NbUser::getUnite () const
+POCO::nombre::Utilisateur::getUnite () const
 {
   return unite;
 }
 
 std::string
-NbUser::toString () const
+POCO::nombre::Utilisateur::toString () const
 {
   std::string retour;
   uint8_t     width;
@@ -97,11 +97,11 @@ NbUser::toString () const
 }
 
 bool CHK
-NbUser::newXML (xmlNodePtr root) const
+POCO::nombre::Utilisateur::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                                    xmlNewNode (nullptr, BAD_CAST2 ("NbUser")),
-                                    xmlFreeNode);
+                               xmlNewNode (nullptr, BAD_CAST2 ("Utilisateur")),
+                               xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,

@@ -22,7 +22,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <array>
-#include "POCO/EUnite.hpp"
+#include "EUnite.hpp"
 #include "POCO/INb.hpp"
 
 namespace POCO
@@ -39,7 +39,7 @@ namespace POCO
         /// Valeur du nombre.
         double val;
         /// L'unité du nombre.
-        POCO::EUnite unite;
+        EUnite unite;
         /// Le nombre de décimales à afficher.
         std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales;
       // Operations

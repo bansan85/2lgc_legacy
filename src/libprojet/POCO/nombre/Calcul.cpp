@@ -21,12 +21,12 @@
 #include <memory>
 #include <sstream>
 
-#include "NbCalcul.hpp"
+#include "Calcul.hpp"
 #include "SString.hpp"
 #include "MErreurs.hpp"
 #include "EUniteTxt.hpp"
 
-NbCalcul::NbCalcul (
+POCO::nombre::Calcul::Calcul (
   double                                                      valeur,
   EUnite                                                      unit,
   std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & decimales_) :
@@ -36,7 +36,7 @@ NbCalcul::NbCalcul (
 {
 }
 
-NbCalcul::NbCalcul (const NbCalcul & nb) :
+POCO::nombre::Calcul::Calcul (const Calcul & nb) :
   INb (),
   val (nb.val),
   unite (nb.unite),
@@ -45,24 +45,24 @@ NbCalcul::NbCalcul (const NbCalcul & nb) :
 }
 
 
-NbCalcul::~NbCalcul ()
+POCO::nombre::Calcul::~Calcul ()
 {
 }
 
 double
-NbCalcul::getVal () const
+POCO::nombre::Calcul::getVal () const
 {
   return val;
 }
 
 EUnite
-NbCalcul::getUnite () const
+POCO::nombre::Calcul::getUnite () const
 {
   return unite;
 }
 
 std::string
-NbCalcul::toString () const
+POCO::nombre::Calcul::toString () const
 {
   std::ostringstream oss;
   
@@ -73,11 +73,11 @@ NbCalcul::toString () const
 }
 
 bool CHK
-NbCalcul::newXML (xmlNodePtr root) const
+POCO::nombre::Calcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                                  xmlNewNode (nullptr, BAD_CAST2 ("NbCalcul")),
-                                  xmlFreeNode);
+                                    xmlNewNode (nullptr, BAD_CAST2 ("Calcul")),
+                                    xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,

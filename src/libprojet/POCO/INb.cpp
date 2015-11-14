@@ -19,34 +19,36 @@
 #include "config.h"
 
 #include "INb.hpp"
-#include "NbCalcul.hpp"
-#include "NbUser.hpp"
+#include "nombre/Calcul.hpp"
+#include "nombre/Utilisateur.hpp"
 
-INb::INb ()
+POCO::INb::INb ()
 {
 }
 
-INb *
-INb::newINb (INb * nb)
+POCO::INb *
+POCO::INb::newINb (INb * nb)
 {
-  if (dynamic_cast <NbCalcul *> (nb) != nullptr)
+  POCO::nombre::Calcul * nbCalc = dynamic_cast <POCO::nombre::Calcul *> (nb);
+  if (nbCalc != nullptr)
   {
-    return new NbCalcul (*dynamic_cast <NbCalcul *> (nb));
+    return new POCO::nombre::Calcul (*nbCalc);
   }
-  else if (dynamic_cast <NbUser *> (nb) != nullptr)
+
+  POCO::nombre::Utilisateur * nbUser;
+  nbUser = dynamic_cast <POCO::nombre::Utilisateur *> (nb);
+  if (nbUser != nullptr)
   {
-    return new NbUser (*dynamic_cast <NbUser *> (nb));
+    return new POCO::nombre::Utilisateur (*nbUser);
   }
-  else
-  {
-    return nullptr;
-  }
+
+  return nullptr;
 }
 
 /**
  * \brief Destructeur d'une classe INb.
  */
-INb::~INb ()
+POCO::INb::~INb ()
 {
 }
 

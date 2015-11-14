@@ -76,6 +76,15 @@ POCO::sol::CAction::getPsi (uint8_t psi) const
 }
 
 bool CHK
+POCO::sol::CAction::setPsi (uint8_t psi,
+                            std::shared_ptr <POCO::INb> psiVal) {
+  (void) psi;
+  (void) psiVal;
+  
+  return false;
+}
+
+bool CHK
 POCO::sol::CAction::emptyCharges () const
 {
   return charges.empty ();

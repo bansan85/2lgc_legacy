@@ -65,9 +65,14 @@ namespace norme
       virtual ~Eurocode ();
       /**
        * \brief Renvoie le nom des paramètres de calcul.
-       * \return const std::shared_ptr <std::string> &
+       * \return std::shared_ptr <const std::string>
        */
-      const std::shared_ptr <std::string> & getNom () const;
+      std::shared_ptr <const std::string> getNom () const;
+      /**
+       * \brief Renvoie l'annexe nationale utilisée.
+       * \return ENormeEcAc
+       */
+      ENormeEcAc getAnnexe () const;
       /**
        * \brief Renvoie la variante de la norme.
        * \return uint32_t

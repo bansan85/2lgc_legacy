@@ -31,23 +31,23 @@ libprojet_ladir 			=	$(includedir)/2lgc
 
 libprojet_la_SOURCES 	= \
 	CModele.cpp \
-	CModeleActionAdd.cpp \
 	CCalculs.cpp \
+	POCO/CPreferences.cpp \
 	POCO/calc/CPonderations.cpp \
 	POCO/sol/CAction.cpp \
 	POCO/sol/action/IActionGroupe.cpp \
+	POCO/INb.cpp \
+	POCO/nombre/Calcul.cpp \
+	POCO/nombre/Utilisateur.cpp \
 	INorme.cpp \
-	norme/Eurocode.cpp
-#	CModeleAddAction.cpp \
-	CModeleRmAction.cpp \
-	CModeleSetParametres.cpp \
-	EAction.cpp \
+	norme/Eurocode.cpp \
+	FuncModeleAddAction.cpp
+#	EAction.cpp \
 	IUndoFunc.cpp \
 	\
 	ENorme.cpp \
 	\
 	POCO/CAdresse.cpp \
-	POCO/CPreferences.cpp \
 	POCO/EUnite.cpp \
 	\
 	POCO/calcul/CAnalyseComm.cpp \
@@ -56,9 +56,6 @@ libprojet_la_SOURCES 	= \
 	POCO/calcul/CPonderation.cpp \
 	POCO/calcul/CTroncon.cpp \
 	\
-	POCO/INb.cpp \
-	POCO/nombre/Calcul.cpp \
-	POCO/nombre/User.cpp \
 	\
 	POCO/sollicitation/CCombinaison.cpp \
 	POCO/sollicitation/CNiveauGroupe.cpp \

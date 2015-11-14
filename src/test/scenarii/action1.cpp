@@ -27,6 +27,7 @@
 #include <cassert>
 
 #include "CModele.hpp"
+#include "../tools/md5sumfile.hpp"
 
 int
 main (int32_t,

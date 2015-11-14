@@ -39,10 +39,16 @@ norme::Eurocode::~Eurocode ()
 {
 }
 
-const std::shared_ptr <std::string> &
+std::shared_ptr <const std::string>
 norme::Eurocode::getNom () const
 {
   return nom;
+}
+
+norme::ENormeEcAc
+norme::Eurocode::getAnnexe () const
+{
+  return annexe;
 }
 
 uint32_t

@@ -1,0 +1,20 @@
+{
+  <CModele::CModele(ENorme), std::locale::locale(char const*)>
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  fun:_ZNSt6localeC1EPKc
+  fun:_ZN7CModeleC1E6ENorme
+  ...
+}
+
+{
+  <C'est pas ma faute1>
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:malloc
+  obj:/usr/lib64/gcc/x86_64-pc-linux-gnu/5.2.0/libstdc++.so.6.0.21
+  fun:call_init.part.0
+  fun:_dl_init
+  obj:/lib64/ld-2.22.so
+}

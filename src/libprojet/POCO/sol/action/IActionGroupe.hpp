@@ -37,7 +37,7 @@ namespace POCO
         // Attributes
         private :
           /// Nom du groupe ou de l'action.
-          std::shared_ptr <std::string> nom;
+          std::shared_ptr <const std::string> nom;
         // Operations
         public :
           /**
@@ -62,9 +62,9 @@ namespace POCO
           virtual ~IActionGroupe ();
           /**
            * \brief Renvoie le nom.
-           * \return const std::shared_ptr <std::string> &
+           * \return std::shared_ptr <const std::string>
            */
-          const std::shared_ptr <std::string> & getNom () const;
+          std::shared_ptr <const std::string> getNom () const;
           /**
            * \brief Défini le nom.
            * \param nom_ (in) Le nouveau nom.

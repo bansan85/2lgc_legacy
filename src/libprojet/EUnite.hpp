@@ -1,5 +1,5 @@
-#ifndef POCO_EUNITE__HPP
-#define POCO_EUNITE__HPP
+#ifndef EUNITE__HPP
+#define EUNITE__HPP
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
@@ -21,47 +21,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-namespace POCO
+/// L'unité du nombre
+enum class EUnite
 {
-  /// L'unité du nombre
-  enum class EUnite
-  {
-    /// Sans unité.
-    U_ = 0,
-    /// Mètre.
-    M,
-    /// Décimètre.
-    DM,
-    /// Centimètre.
-    CM,
-    /// Millimètre.
-    MM,
-    /// Mètre carré.
-    M2,
-    /// Décimètre carré.
-    DM2,
-    /// Centimètre carré.
-    CM2,
-    /// Millimètre carré.
-    MM2,
-    /// Mètre cube.
-    M3,
-    /// Décimètre cube.
-    DM3,
-    /// Centimètre cube.
-    CM3,
-    /// Millimètre cube.
-    MM3,
-    /// Mètre ⁴.
-    M4,
-    /// Décimètre ⁴.
-    DM4,
-    /// Centimètre ⁴.
-    CM4,
-    /// Millimètre ⁴.
-    MM4,
-    LAST
-  };
-}
+  /// Sans unité.
+  U_ = 0,
+  /// Mètre.
+  M,
+  /// Décimètre.
+  DM,
+  /// Centimètre.
+  CM,
+  /// Millimètre.
+  MM,
+  /// Mètre carré.
+  M2,
+  /// Décimètre carré.
+  DM2,
+  /// Centimètre carré.
+  CM2,
+  /// Millimètre carré.
+  MM2,
+  /// Mètre cube.
+  M3,
+  /// Décimètre cube.
+  DM3,
+  /// Centimètre cube.
+  CM3,
+  /// Millimètre cube.
+  MM3,
+  /// Mètre ⁴.
+  M4,
+  /// Décimètre ⁴.
+  DM4,
+  /// Centimètre ⁴.
+  CM4,
+  /// Millimètre ⁴.
+  MM4,
+  LAST
+};
 
 #endif

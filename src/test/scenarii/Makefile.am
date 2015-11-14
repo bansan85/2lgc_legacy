@@ -12,6 +12,9 @@ TESTS	=	action1 \
 				undomanager4 \
 				undomanager5
 
+# pour md5sumfile.cpp
+#LIBS += -lssl -lcrypto
+
 AM_LDFLAGS			= ../../libundo/libundo.la ../../libprojet/libprojet.la
 
 action1_SOURCES	=	action1.cpp

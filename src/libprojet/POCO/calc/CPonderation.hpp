@@ -21,6 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderations;
+class CCalculs;
+class CModele;
+class FuncModeleAddAction;
+class CAction;
+
 #include "POCO/sol/CAction.hpp"
 
 namespace POCO

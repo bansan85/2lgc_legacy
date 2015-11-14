@@ -21,6 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class CPonderation;
+class CPonderations;
+class CModele;
+class FuncModeleAddAction;
+class CAction;
+
 #include "POCO/calc/CPonderations.hpp"
 #include "POCO/calc/CAnalyseComm.hpp"
 #include "POCO/calc/CBarreInfoEF.hpp"

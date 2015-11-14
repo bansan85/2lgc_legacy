@@ -1,5 +1,5 @@
-#ifndef CMODELESETPARAMETRES__HPP
-#define CMODELESETPARAMETRES__HPP
+#ifndef FUNCMODELEADDACTION__HPP
+#define FUNCMODELEADDACTION__HPP
 
 /*
 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
@@ -21,56 +21,62 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
-#include <IUndoableFonction.hpp>
-#include "CModele.hpp"
+class CPonderation;
+class CPonderations;
+class CCalculs;
+class CAction;
+class CModele;
 
-/**
- * \brief Classe annulable permettant de définir les normes de calculs.
- */
-class CModeleSetParametres : public IUndoableFonction
+#include <IUndoableFonction.hpp>
+#include "POCO/sol/CAction.hpp"
+
+class FuncModeleAddAction : public IUndoableFonction
 {
   // Attributes
   private :
-    /// Le modèle à modifier.
+    /// Le modèle rattaché à la classe.
     CModele & modele;
   // Operations
   public :
     /**
-     * \brief Constructeur d'une classe CModeleSetParametres.
-     * \param modele_ (in) Le modèle à modifier.
+     * \brief Constructeur d'une interface FuncModeleAddAction.
+     * \param modele_ (in) Le modèle rattaché à l'ajout de l'action.
      */
-    CModeleSetParametres (CModele & modele_);
+    FuncModeleAddAction (CModele & modele_);
     /**
-     * \brief Duplication d'une classe CModeleSetParametres.
+     * \brief Duplication d'une interface FuncModeleAddAction.
      * \param other (in) La classe à dupliquer.
      */
-    CModeleSetParametres (const CModeleSetParametres & other) = delete;
+    FuncModeleAddAction (const FuncModeleAddAction & other) = delete;
     /**
-     * \brief Duplication d'une classe CModeleSetParametres.
+     * \brief Duplication d'une interface FuncModeleAddAction.
      * \param other (in) La classe à dupliquer.
-     * \return CModeleSetParametres &
+     * \return FuncModeleAddAction &
      */
-    CModeleSetParametres & operator = (const CModeleSetParametres & other) = delete;
+    FuncModeleAddAction & operator = (const FuncModeleAddAction & other) = delete;
     /**
-     * \brief Destructeur d'une classe CModeleSetParametres.
+     * \brief Destructeur d'une interface FuncModeleAddAction.
      */
-    virtual ~CModeleSetParametres ();
+    virtual ~FuncModeleAddAction ();
     /**
      * \brief Exécute la fonction.
+     * \param action (???)
      * \return bool CHK
      */
-    bool CHK execute ();
+    bool CHK execute (std::shared_ptr <POCO::sol::CAction> & action);
     /**
      * \brief Format XML pour appliquer les modifications.
+     * \param nom_ (in) Le nom de l'action.
+     * \param type_ (in) Le type d'action.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXML (xmlNodePtr node);
+    bool CHK doXML (std::shared_ptr <const std::string> & nom_, uint8_t type_, xmlNodePtr node);
     /**
      * \brief La description de la modification.
-     * \return const std::string &
+     * \return const std::string
      */
-    const std::string & doDescription ();
+    const std::string doDescription ();
     /**
      * \brief Annule la fonction.
      * \return bool CHK
@@ -84,14 +90,9 @@ class CModeleSetParametres : public IUndoableFonction
     bool CHK undoXML (xmlNodePtr node);
     /**
      * \brief La description de l'annulation.
-     * \return const std::string &
+     * \return const std::string
      */
-    const std::string & undoDescription ();
-    /**
-     * \brief La fonction renvoie true si la classe modifie le modèle et false si elle ne modifie rien de significatif.
-     * \return bool CHK
-     */
-    virtual bool CHK getModification () const;
+    const std::string undoDescription ();
 };
 
 #endif
