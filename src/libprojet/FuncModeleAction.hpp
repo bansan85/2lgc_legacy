@@ -68,21 +68,24 @@ class FuncModeleAction : public IUndoableFonction
      * \brief Format XML pour ajouter une action.
      * \param nom_ (in) Le nom de l'action.
      * \param type_ (in) Le type d'action.
+     * \param nb0 (in) Le cœfficient psi0.
+     * \param nb1 (in) Le cœfficient psi1.
+     * \param nb2 (in) Le cœfficient psi2.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXMLAdd (std::shared_ptr <const std::string> & nom_, uint8_t type_, xmlNodePtr node);
+    bool CHK doXMLAdd (std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr node) const;
     /**
      * \brief Annule la fonction.
      * \return bool CHK
      */
     bool CHK undoAdd ();
     /**
-     * \brief Format XML  pour annuler les modifications.
+     * \brief Format XML pour annuler les modifications.
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK undoXMLAdd (xmlNodePtr node);
+    bool CHK undoXMLAdd (xmlNodePtr node) const;
     /**
      * \brief Modifie le coefficient psi d'une action.
      * \param action (in) L'action à modifier.
@@ -99,7 +102,7 @@ class FuncModeleAction : public IUndoableFonction
      * \param root (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXMLSetPsi (uint32_t id, uint8_t psi, std::shared_ptr <POCO::INb> & val, xmlNodePtr root);
+    bool CHK doXMLSetPsi (uint32_t id, uint8_t psi, std::shared_ptr <POCO::INb> & val, xmlNodePtr root) const;
 };
 
 #endif
