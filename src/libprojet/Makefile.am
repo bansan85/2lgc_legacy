@@ -52,117 +52,117 @@ libprojet_la_SOURCES 	= \
 	POCO/CAdresse.cpp \
 	POCO/EUnite.cpp \
 	\
-	POCO/calcul/CAnalyseComm.cpp \
-	POCO/calcul/CBarreInfoEF.cpp \
-	POCO/calcul/CFonction.cpp \
-	POCO/calcul/CPonderation.cpp \
-	POCO/calcul/CTroncon.cpp \
+	POCO/calc/CAnalyseComm.cpp \
+	POCO/calc/CBarreInfoEF.cpp \
+	POCO/calc/CFonction.cpp \
+	POCO/calc/CPonderation.cpp \
+	POCO/calc/CTroncon.cpp \
 	\
 	\
-	POCO/sollicitation/CCombinaison.cpp \
-	POCO/sollicitation/CNiveauGroupe.cpp \
+	POCO/sol/CCombinaison.cpp \
+	POCO/sol/CNiveauGroupe.cpp \
 	\
-	POCO/sollicitation/action/CActionSetPsi.cpp \
-	POCO/sollicitation/action/CGroupe.cpp \
-	POCO/sollicitation/action/ECombinaison.cpp \
+	POCO/sol/action/CGroupe.cpp \
+	POCO/sol/action/ECombinaison.cpp \
 	\
-	POCO/sollicitation/ICharge.cpp \
-	POCO/sollicitation/charge/BarrePonctuelle.cpp \
-	POCO/sollicitation/charge/BarreRepartieUniformement.cpp \
-	POCO/sollicitation/charge/Noeud.cpp \
+	POCO/sol/ICharge.cpp \
+	POCO/sol/charge/BarrePonctuelle.cpp \
+	POCO/sol/charge/BarreRepartieUniformement.cpp \
+	POCO/sol/charge/Noeud.cpp \
 	\
-	POCO/structure/CAppui.cpp \
-	POCO/structure/CBarre.cpp \
-	POCO/structure/CPoint.cpp \
-	POCO/structure/CRelachement.cpp \
+	POCO/str/CAppui.cpp \
+	POCO/str/CBarre.cpp \
+	POCO/str/CPoint.cpp \
+	POCO/str/CRelachement.cpp \
 	\
-	POCO/structure/IDeplacementType.cpp \
-	POCO/structure/deplacementType/Bloque.cpp \
-	POCO/structure/deplacementType/Libre.cpp \
-	POCO/structure/deplacementType/Lineaire.cpp \
+	POCO/str/IDeplacementType.cpp \
+	POCO/str/deplacementType/Bloque.cpp \
+	POCO/str/deplacementType/Libre.cpp \
+	POCO/str/deplacementType/Lineaire.cpp \
 	\
-	POCO/structure/IMateriau.cpp \
+	POCO/str/IMateriau.cpp \
 	\
-	POCO/structure/INoeud.cpp \
-	POCO/structure/noeud/Barre.cpp \
-	POCO/structure/noeud/Libre.cpp \
+	POCO/str/INoeud.cpp \
+	POCO/str/noeud/Barre.cpp \
+	POCO/str/noeud/Libre.cpp \
 	\
-	POCO/structure/ISection.cpp \
-	POCO/structure/section/Carree.cpp \
-	POCO/structure/section/Circulaire.cpp \
-	POCO/structure/section/Personnalisee.cpp \
-	POCO/structure/section/Rectangulaire.cpp \
-	POCO/structure/section/T.cpp
+	POCO/str/ISection.cpp \
+	POCO/str/section/Carree.cpp \
+	POCO/str/section/Circulaire.cpp \
+	POCO/str/section/Personnalisee.cpp \
+	POCO/str/section/Rectangulaire.cpp \
+	POCO/str/section/T.cpp
 
 
 libprojet_la_HEADERS 	=	\
 	CCalculs.hpp \
-	CModeleAddAction.hpp \
+	FuncModeleAction.hpp \
+	FuncModeleNorme.hpp \
 	CModele.hpp \
-	CModeleRmAction.hpp \
-	CModeleSetParametres.hpp \
+	INorme.hpp \
 	EAction.hpp \
 	ENorme.hpp \
-	IUndoFunc.hpp \
+	EUnite.hpp \
 	\
 	POCO/CAdresse.hpp \
 	POCO/CPreferences.hpp \
-	POCO/EUnite.hpp \
 	\
-	POCO/calcul/CAnalyseComm.hpp \
-	POCO/calcul/CBarreInfoEF.hpp \
-	POCO/calcul/CFonction.hpp \
-	POCO/calcul/CPonderation.hpp \
-	POCO/calcul/CPonderations.hpp \
-	POCO/calcul/CTroncon.hpp \
-	\
-	POCO/calcul/INorme.hpp \
+	POCO/calc/CAnalyseComm.hpp \
+	POCO/calc/CBarreInfoEF.hpp \
+	POCO/calc/CFonction.hpp \
+	POCO/calc/CPonderation.hpp \
+	POCO/calc/CPonderations.hpp \
+	POCO/calc/CTroncon.hpp \
 	\
 	POCO/INb.hpp \
 	POCO/nombre/Calcul.hpp \
-	POCO/nombre/User.hpp \
+	POCO/nombre/Utilisateur.hpp \
 	\
-	POCO/sollicitation/CCombinaison.hpp \
-	POCO/sollicitation/CNiveauGroupe.hpp \
+	POCO/sol/CCombinaison.hpp \
+	POCO/sol/CNiveauGroupe.hpp \
 	\
-	POCO/sollicitation/CAction.hpp \
-	POCO/sollicitation/action/CActionSetPsi.hpp \
-	POCO/sollicitation/action/CGroupe.hpp \
-	POCO/sollicitation/action/ECombinaison.hpp \
-	POCO/sollicitation/action/IActionGroupe.hpp \
+	POCO/sol/CAction.hpp \
+	POCO/sol/action/CGroupe.hpp \
+	POCO/sol/action/ECombinaison.hpp \
+	POCO/sol/action/IActionGroupe.hpp \
 	\
-	POCO/sollicitation/ICharge.hpp \
-	POCO/sollicitation/charge/BarrePonctuelle.hpp \
-	POCO/sollicitation/charge/BarreRepartieUniformement.hpp \
-	POCO/sollicitation/charge/Noeud.hpp \
+	POCO/sol/ICharge.hpp \
+	POCO/sol/charge/BarrePonctuelle.hpp \
+	POCO/sol/charge/BarreRepartieUniformement.hpp \
+	POCO/sol/charge/Noeud.hpp \
 	\
-	POCO/structure/CAppui.hpp \
-	POCO/structure/CBarre.hpp \
-	POCO/structure/CPoint.hpp \
-	POCO/structure/CRelachement.hpp \
+	POCO/str/CAppui.hpp \
+	POCO/str/CBarre.hpp \
+	POCO/str/CPoint.hpp \
+	POCO/str/CRelachement.hpp \
 	\
-	POCO/structure/IDeplacementType.hpp \
-	POCO/structure/deplacementType/Bloque.hpp \
-	POCO/structure/deplacementType/Libre.hpp \
-	POCO/structure/deplacementType/Lineaire.hpp \
+	POCO/str/IDeplacementType.hpp \
+	POCO/str/deplacementType/Bloque.hpp \
+	POCO/str/deplacementType/Libre.hpp \
+	POCO/str/deplacementType/Lineaire.hpp \
 	\
-	POCO/structure/IMateriau.hpp \
+	POCO/str/IMateriau.hpp \
+	POCO/str/materiau/EcAcier.hpp \
+	POCO/str/materiau/EcBeton.hpp \
 	\
-	POCO/structure/INoeud.hpp \
-	POCO/structure/noeud/Barre.hpp \
-	POCO/structure/noeud/Libre.hpp \
+	POCO/str/INoeud.hpp \
+	POCO/str/noeud/Barre.hpp \
+	POCO/str/noeud/Libre.hpp \
 	\
-	POCO/structure/ISection.hpp \
-	POCO/structure/section/Carree.hpp \
-	POCO/structure/section/Circulaire.hpp \
-	POCO/structure/section/Personnalisee.hpp \
-	POCO/structure/section/Rectangulaire.hpp \
-	POCO/structure/section/T.hpp
+	POCO/str/ISection.hpp \
+	POCO/str/section/Carree.hpp \
+	POCO/str/section/Circulaire.hpp \
+	POCO/str/section/Personnalisee.hpp \
+	POCO/str/section/Rectangulaire.hpp \
+	POCO/str/section/T.hpp \
+	\
+	norme/Eurocode.hpp \
+	norme/ENormeEcAc.hpp
 
 %.hpp :
 	$(MAKE) -C $(top_builddir)/files/uml projet-uml
 
-CLEANFILES = *.gcno *.gcda $(libprojet_la_HEADERS)
+CLEANFILES = *.gcno ../macro/*.gcno POCO/sol/action/*.gcno POCO/sol/*.gcno POCO/*.gcno POCO/calc/*.gcno POCO/nombre/*.gcno norme/*.gcno *.gcda $(libprojet_la_HEADERS)
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libprojet_la_SOURCES) &> ../../cppcheck.log

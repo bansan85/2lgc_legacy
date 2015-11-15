@@ -16,4 +16,6 @@ coverage_SOURCES	=	coverage.cpp
 
 EXTRA_PROGRAMS 		= $(TESTS)
 
+EXTRA_DIST				= tools/md5sumfile.hpp
+
 CLEANFILES 				= *.xml coverage *.gcno *.gcda

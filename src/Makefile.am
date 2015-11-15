@@ -4,7 +4,7 @@ SUBDIRS  = 	libundo \
 						test
 
 if ENABLE_GTK
-#SUBDIRS += gtk
+SUBDIRS += gtk
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)

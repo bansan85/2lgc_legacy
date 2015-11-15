@@ -1077,17 +1077,17 @@
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O7">
       <dia:attribute name="obj_pos">
-        <dia:point val="16.1813,43.6071"/>
+        <dia:point val="16.1813,42.1571"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.9151,40.6643;16.2313,43.6571"/>
+        <dia:rectangle val="10.9151,40.6643;16.2313,42.4857"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="16.1813,43.6071"/>
-        <dia:point val="13.9732,43.6071"/>
+        <dia:point val="16.1813,42.1571"/>
+        <dia:point val="13.9732,42.1571"/>
         <dia:point val="13.9732,41.1143"/>
         <dia:point val="11.3651,41.1143"/>
       </dia:attribute>
@@ -1115,6 +1115,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
+        <dia:connection handle="0" to="O6" connection="8"/>
         <dia:connection handle="1" to="O5" connection="4"/>
       </dia:connections>
     </dia:object>
