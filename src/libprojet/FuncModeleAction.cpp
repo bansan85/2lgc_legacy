@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include <iostream>
+#include <algorithm>
 
 #include "FuncModeleAction.hpp"
 #include "CModele.hpp"
@@ -41,10 +41,7 @@ bool
 FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 {
   BUGPARAM (static_cast <void *> (action.get ()),
-            "%p",
-            action,
-            false,
-            &modele.undoManager)
+            "%p", action, false, &modele.undoManager)
   
   BUGUSER (modele.getAction (*action->getNom ()) == nullptr,
            false,
@@ -66,8 +63,20 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
   
   uint8_t type = action->getType ();
   
-  if (modele.undoManager.getEtat () != EUndoEtat::NONE_OR_REVERT)
+  std::list <std::shared_ptr <POCO::sol::CAction> >::iterator it;
+
+  // Première insertion. Ce n'est pas une action du gestionnaire d'annulation.
+  if (action->id == 0xFFFFFFFF)
   {
+    if (modele.actions.empty ())
+    {
+      action->id = 0;
+    }
+    else
+    {
+      action->id = modele.actions.back ()->id + 1;
+    }
+
     std::shared_ptr <POCO::INb> newPsi =
       std::make_shared <POCO::nombre::Calcul> (modele.norme->getPsi0 (type),
                                                EUnite::U_);
@@ -80,19 +89,29 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
     newPsi = std::make_shared <POCO::nombre::Calcul> (
                modele.norme->getPsi2 (type), EUnite::U_);
     action->psi2 = newPsi;
-  }
 
-  if (modele.actions.empty ())
-  {
-    action->id = 0;
+    it = modele.actions.end ();
   }
   else
   {
-    action->id = modele.actions.back ()->id + 1;
+    it = std::find_if (modele.actions.begin (),
+                       modele.actions.end (),
+                       [&action]
+                         (const std::shared_ptr <POCO::sol::CAction> & action_)
+                       {
+                         return action->id <= action_->id;
+                       });
+    if (it != modele.actions.end ())
+    {
+      BUGPROG ((*it)->id == action->id,
+               false,
+               &modele.undoManager,
+               "L'action avec l'identifiant %u existe déjà.", action->id)
+    }
   }
 
   BUGCONT (modele.undoManager.push (
-             std::bind (&CModele::rmAction, &modele, action),
+             std::bind (&FuncModeleAction::doRemove, this, action),
              std::bind (&FuncModeleAction::doAdd, this, action),
              nullptr,
              std::bind (&FuncModeleAction::doXMLAdd,
@@ -109,7 +128,7 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
            false,
            &modele.undoManager)
   
-  modele.actions.push_back (action);
+  modele.actions.insert (it, action);
 
   BUGCONT (modele.undoManager.unref (), false, &modele.undoManager)
   
@@ -117,19 +136,18 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 }
 
 bool
-FuncModeleAction::doXMLAdd (uint32_t                             id,
-                            std::shared_ptr<const std::string> & nom_,
-                            uint8_t                              type_,
-                            std::shared_ptr <POCO::INb>        & nb0,
-                            std::shared_ptr <POCO::INb>        & nb1,
-                            std::shared_ptr <POCO::INb>        & nb2,
-                            xmlNodePtr                           root) const
+FuncModeleAction::doXMLAdd (uint32_t                              id,
+                            std::shared_ptr <const std::string> & nom_,
+                            uint8_t                               type_,
+                            std::shared_ptr <POCO::INb>         & nb0,
+                            std::shared_ptr <POCO::INb>         & nb1,
+                            std::shared_ptr <POCO::INb>         & nb2,
+                            xmlNodePtr                            root) const
 {
+  BUGPARAM (static_cast <const void *> (nom_.get ()),
+            "%p", root, false, UNDO_MANAGER_NULL)
   BUGPARAM (static_cast <void *> (root),
-            "%p",
-            root,
-            false,
-            &modele.undoManager)
+            "%p", root, false, UNDO_MANAGER_NULL)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                                  xmlNewNode (nullptr, BAD_CAST2 ("addAction")),
@@ -137,37 +155,37 @@ FuncModeleAction::doXMLAdd (uint32_t                             id,
   
   BUGCRIT (node.get () != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Id"),
                        BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
 
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Type"),
                        BAD_CAST2 (std::to_string (type_).c_str ())) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
 
-  BUGCONT (nb0->newXML (node.get ()), false, &modele.undoManager)
-  BUGCONT (nb1->newXML (node.get ()), false, &modele.undoManager)
-  BUGCONT (nb2->newXML (node.get ()), false, &modele.undoManager)
+  BUGCONT (nb0->newXML (node.get ()), false, UNDO_MANAGER_NULL)
+  BUGCONT (nb1->newXML (node.get ()), false, UNDO_MANAGER_NULL)
+  BUGCONT (nb2->newXML (node.get ()), false, UNDO_MANAGER_NULL)
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   node.release ();
@@ -176,24 +194,15 @@ FuncModeleAction::doXMLAdd (uint32_t                             id,
 }
 
 bool
-FuncModeleAction::undoAdd ()
-{
-  return false;
-}
-
-bool
-FuncModeleAction::undoXMLAdd (xmlNodePtr node) const
-{
-  (void) node;
-  return false;
-}
-
-bool
 FuncModeleAction::doSetPsi (std::shared_ptr <POCO::sol::CAction> & action,
                             uint8_t                                psi,
                             std::shared_ptr <POCO::INb> &          val)
 {
+  BUGPARAM (static_cast <void *> (action.get ()),
+            "%p", action, false, &modele.undoManager)
   BUGPARAM (psi, "%u", psi <= 2, false, &modele.undoManager)
+  BUGPARAM (static_cast <void *> (val.get ()),
+            "%p", val, false, &modele.undoManager)
 
   BUGPROG (val.get ()->getUnite () == EUnite::U_,
            false,
@@ -253,9 +262,10 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
                                std::shared_ptr <POCO::INb> & val,
                                xmlNodePtr                    root) const
 {
-  BUGPARAM (static_cast <void *> (root),
-            "%p", root, false, &modele.undoManager)
-  BUGPARAM (psi, "%u", psi <= 2, false, &modele.undoManager)
+  BUGPARAM (psi, "%u", psi <= 2, false, UNDO_MANAGER_NULL)
+  BUGPARAM (static_cast <void *> (val.get ()),
+            "%p", val, false, UNDO_MANAGER_NULL)
+  BUGPARAM (static_cast <void *> (root), "%p", root, false, UNDO_MANAGER_NULL)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
                                     xmlNewNode (nullptr, BAD_CAST2 ("setpsi")),
@@ -270,7 +280,7 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
                        BAD_CAST2 ("Id"),
                        BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (
@@ -278,16 +288,61 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
              BAD_CAST2 ("psi"),
              BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
-  BUGCONT (val->newXML (node.get ()), false, &modele.undoManager)
+  BUGCONT (val->newXML (node.get ()), false, UNDO_MANAGER_NULL)
   
   BUGCRIT (xmlAddChild (root, node.get ()) != nullptr,
            false,
-           &modele.undoManager,
+           UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   node.release ();
+  
+  return true;
+}
+
+bool
+FuncModeleAction::doRemove (std::shared_ptr <POCO::sol::CAction> & action)
+{
+  BUGPARAM (static_cast <void *> (action.get ()),
+            "%p", action, false, &modele.undoManager)
+  BUGPROG (action.get ()->emptyCharges (),
+           false, &modele.undoManager,
+           "Les charges doivent être supprimées avant la charge.")
+
+  BUGCONT (modele.undoManager.ref (), false, &modele.undoManager)
+
+  std::list <std::shared_ptr <POCO::sol::CAction> >::iterator it;
+     
+  it = std::find_if (modele.actions.begin (),
+                     modele.actions.end (),
+                     [&action]
+                       (const std::shared_ptr <POCO::sol::CAction> & action_)
+                     {
+                       return action->id == action_->id;
+                     });
+
+  BUGPROG (it != modele.actions.end (),
+           false,
+           &modele.undoManager,
+           "Impossible de trouver l'action “%s” dans le projet.",
+             action->nom->c_str ())
+
+       
+  modele.actions.erase (it);
+
+  BUGCONT (modele.undoManager.push (
+             std::bind (&FuncModeleAction::doAdd, this, action),
+             std::bind (&FuncModeleAction::doRemove, this, action),
+             nullptr,
+             nullptr,
+             format (gettext ("Suppression de l'action “%s”"),
+               action->nom->c_str ())),
+           false,
+           &modele.undoManager);
+
+  BUGCONT (modele.undoManager.unref (), false, &modele.undoManager)
   
   return true;
 }

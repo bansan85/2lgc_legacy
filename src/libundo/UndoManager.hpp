@@ -78,7 +78,7 @@ class DllExport UndoManager : public ISujet
      * \brief Ajoute une modification à la liste.
      * \param annule (in) La fonction à lancer pour annuler la modification.
      * \param repete (in) La fonction à lancer pour répéter la modification.
-     * \param suppr (in) Le pointer à conserver si nécessaire.
+     * \param suppr (in) Le pointeur à conserver si nécessaire.
      * \param sauve (in) La fonction à lancer pour enregistrer dans un fichier l'historique.
      * \param description (in) La description de l'action.
      * \return bool CHK

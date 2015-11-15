@@ -59,8 +59,8 @@ class FuncModeleAction : public IUndoableFonction
      */
     virtual ~FuncModeleAction ();
     /**
-     * \brief Exécute la fonction.
-     * \param action (???)
+     * \brief Exécute la fonction d'ajout d'une action.
+     * \param action (???) L'action à ajouter.
      * \return bool CHK
      */
     bool CHK doAdd (std::shared_ptr <POCO::sol::CAction> & action);
@@ -76,17 +76,6 @@ class FuncModeleAction : public IUndoableFonction
      * \return bool CHK
      */
     bool CHK doXMLAdd (uint32_t id, std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr node) const;
-    /**
-     * \brief Annule la fonction.
-     * \return bool CHK
-     */
-    bool CHK undoAdd ();
-    /**
-     * \brief Format XML pour annuler les modifications.
-     * \param node (in) Le noeud où ajouter les informations.
-     * \return bool CHK
-     */
-    bool CHK undoXMLAdd (xmlNodePtr node) const;
     /**
      * \brief Modifie le coefficient psi d'une action.
      * \param action (in) L'action à modifier.
@@ -104,6 +93,12 @@ class FuncModeleAction : public IUndoableFonction
      * \return bool CHK
      */
     bool CHK doXMLSetPsi (uint32_t id, uint8_t psi, std::shared_ptr <POCO::INb> & val, xmlNodePtr root) const;
+    /**
+     * \brief Exécute la fonction de suppression d'une action.
+     * \param action (in) L'action à supprimer.
+     * \return bool CHK
+     */
+    bool CHK doRemove (std::shared_ptr <POCO::sol::CAction> & action);
 };
 
 #endif

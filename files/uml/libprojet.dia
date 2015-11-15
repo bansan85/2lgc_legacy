@@ -11443,7 +11443,7 @@
         <dia:point val="-565,70"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-565.05,69.95;-532.495,164.35"/>
+        <dia:rectangle val="-565.05,69.95;-532.495,162.5"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-565,70"/>
@@ -11452,7 +11452,7 @@
         <dia:real val="32.454999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="94.299999999999926"/>
+        <dia:real val="92.449999999999932"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CModele#</dia:string>
@@ -13248,54 +13248,6 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#rmAction#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#bool CHK#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Supprime une action.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#action#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#std::shared_ptr &lt;POCO::sol::CAction&gt;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#L'action à supprimer.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
@@ -36963,7 +36915,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-575,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-575.05,175.95;-544.805,203.8"/>
+        <dia:rectangle val="-575.05,175.95;-544.805,201.95"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-575,176"/>
@@ -36972,7 +36924,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:real val="30.145"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="27.750000000000011"/>
+        <dia:real val="25.900000000000009"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#FuncModeleAction#</dia:string>
@@ -37275,7 +37227,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Exécute la fonction.#</dia:string>
+            <dia:string>#Exécute la fonction d'ajout d'une action.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -37301,7 +37253,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
                 <dia:string>##</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
-                <dia:string>##</dia:string>
+                <dia:string>#L'action à ajouter.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="0"/>
@@ -37440,84 +37392,6 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
                 <dia:enum val="1"/>
               </dia:attribute>
             </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#node#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#xmlNodePtr#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le noeud où ajouter les informations.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
-          </dia:attribute>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#undoAdd#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#bool CHK#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Annule la fonction.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters"/>
-        </dia:composite>
-        <dia:composite type="umloperation">
-          <dia:attribute name="name">
-            <dia:string>#undoXMLAdd#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="stereotype">
-            <dia:string>##</dia:string>
-          </dia:attribute>
-          <dia:attribute name="type">
-            <dia:string>#bool CHK#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="visibility">
-            <dia:enum val="0"/>
-          </dia:attribute>
-          <dia:attribute name="comment">
-            <dia:string>#Format XML pour annuler les modifications.#</dia:string>
-          </dia:attribute>
-          <dia:attribute name="abstract">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="inheritance_type">
-            <dia:enum val="2"/>
-          </dia:attribute>
-          <dia:attribute name="query">
-            <dia:boolean val="true"/>
-          </dia:attribute>
-          <dia:attribute name="class_scope">
-            <dia:boolean val="false"/>
-          </dia:attribute>
-          <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
                 <dia:string>#node#</dia:string>
@@ -37718,6 +37592,54 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
             </dia:composite>
           </dia:attribute>
         </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#doRemove#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#bool CHK#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Exécute la fonction de suppression d'une action.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#action#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#std::shared_ptr &lt;POCO::sol::CAction&gt; &amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>#L'action à supprimer.#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="1"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
+        </dia:composite>
       </dia:attribute>
       <dia:attribute name="template">
         <dia:boolean val="false"/>
@@ -37729,16 +37651,16 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-547.568,207.961"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-559.978,203.7;-546.718,208.011"/>
+        <dia:rectangle val="-559.978,201.85;-546.718,208.011"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-547.568,207.961"/>
-        <dia:point val="-547.568,205.456"/>
-        <dia:point val="-559.928,205.456"/>
-        <dia:point val="-559.928,203.75"/>
+        <dia:point val="-547.568,204.531"/>
+        <dia:point val="-559.928,204.531"/>
+        <dia:point val="-559.928,201.9"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37767,18 +37689,18 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O156">
       <dia:attribute name="obj_pos">
-        <dia:point val="-548.773,164.3"/>
+        <dia:point val="-548.773,162.45"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-560.378,164.25;-548.722,176.45"/>
+        <dia:rectangle val="-560.378,162.4;-548.722,176.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-548.773,164.3"/>
-        <dia:point val="-548.773,169.95"/>
-        <dia:point val="-559.928,169.95"/>
+        <dia:point val="-548.773,162.45"/>
+        <dia:point val="-548.773,169.025"/>
+        <dia:point val="-559.928,169.025"/>
         <dia:point val="-559.928,176"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -37811,17 +37733,17 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O157">
       <dia:attribute name="obj_pos">
-        <dia:point val="-544.855,203.75"/>
+        <dia:point val="-544.855,201.9"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-544.905,26.55;-396.94,204.6"/>
+        <dia:rectangle val="-544.905,26.55;-396.94,202.75"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-544.855,203.75"/>
-        <dia:point val="-397.39,203.75"/>
+        <dia:point val="-544.855,201.9"/>
+        <dia:point val="-397.39,201.9"/>
         <dia:point val="-397.39,27"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -37856,16 +37778,16 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-559.928,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-559.978,163.85;-548.322,176.05"/>
+        <dia:rectangle val="-559.978,162;-548.322,176.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-559.928,176"/>
-        <dia:point val="-559.928,170.35"/>
-        <dia:point val="-548.773,170.35"/>
-        <dia:point val="-548.773,164.3"/>
+        <dia:point val="-559.928,169.425"/>
+        <dia:point val="-548.773,169.425"/>
+        <dia:point val="-548.773,162.45"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37900,15 +37822,15 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-397.39,27"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-545.305,26.95;-397.34,204.6"/>
+        <dia:rectangle val="-545.305,26.95;-397.34,202.75"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-397.39,27"/>
-        <dia:point val="-397.39,203.75"/>
-        <dia:point val="-544.855,203.75"/>
+        <dia:point val="-397.39,201.9"/>
+        <dia:point val="-544.855,201.9"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

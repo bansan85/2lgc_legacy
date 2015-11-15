@@ -106,13 +106,6 @@ CModele::getActionCount () const
   return actions.size ();
 }
 
-bool
-CModele::rmAction (std::shared_ptr <POCO::sol::CAction> action)
-{
-  (void) action;
-  return false;
-}
-
 const std::shared_ptr <INorme> &
 CModele::getNorme () const
 {

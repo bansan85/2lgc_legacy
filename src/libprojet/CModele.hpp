@@ -256,12 +256,6 @@ class DllExport CModele : public ISujet, public CCalculs
      */
     size_t getActionCount () const;
     /**
-     * \brief Supprime une action.
-     * \param action (in) L'action à supprimer.
-     * \return bool CHK
-     */
-    bool CHK rmAction (std::shared_ptr <POCO::sol::CAction> action);
-    /**
      * \brief Renvoie les paramètres de calculs.
      * \return const std::shared_ptr <INorme> &
      */

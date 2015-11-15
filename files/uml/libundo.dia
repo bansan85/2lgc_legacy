@@ -601,7 +601,7 @@ Libère l'historique du projet.#</dia:string>
                 <dia:string>##</dia:string>
               </dia:attribute>
               <dia:attribute name="comment">
-                <dia:string>#Le pointer à conserver si nécessaire.#</dia:string>
+                <dia:string>#Le pointeur à conserver si nécessaire.#</dia:string>
               </dia:attribute>
               <dia:attribute name="kind">
                 <dia:enum val="1"/>
