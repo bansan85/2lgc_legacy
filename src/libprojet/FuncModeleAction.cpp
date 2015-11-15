@@ -28,7 +28,6 @@
 #include "EUniteTxt.hpp"
 
 FuncModeleAction::FuncModeleAction (CModele & modele_) :
-  IUndoableFonction (true),
   modele (modele_)
 {
 }
@@ -145,7 +144,7 @@ FuncModeleAction::doXMLAdd (uint32_t                              id,
                             xmlNodePtr                            root) const
 {
   BUGPARAM (static_cast <const void *> (nom_.get ()),
-            "%p", root, false, UNDO_MANAGER_NULL)
+            "%p", nom_.get (), false, UNDO_MANAGER_NULL)
   BUGPARAM (static_cast <void *> (root),
             "%p", root, false, UNDO_MANAGER_NULL)
   
@@ -159,21 +158,21 @@ FuncModeleAction::doXMLAdd (uint32_t                              id,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Id"),
+                       BAD_CAST2 ("id"),
                        BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
 
   BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Nom"),
+                       BAD_CAST2 ("nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,
            "Problème depuis la librairie : %s\n", "xml2")
   
   BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Type"),
+                       BAD_CAST2 ("type"),
                        BAD_CAST2 (std::to_string (type_).c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,
@@ -268,8 +267,8 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
   BUGPARAM (static_cast <void *> (root), "%p", root, false, UNDO_MANAGER_NULL)
   
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                                    xmlNewNode (nullptr, BAD_CAST2 ("setpsi")),
-                                    xmlFreeNode);
+                              xmlNewNode (nullptr, BAD_CAST2 ("actionSetPsi")),
+                              xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
@@ -277,7 +276,7 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
            "Erreur d'allocation mémoire.\n")
   
   BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Id"),
+                       BAD_CAST2 ("id"),
                        BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
            false,
            UNDO_MANAGER_NULL,

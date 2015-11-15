@@ -62,9 +62,9 @@ namespace POCO
           virtual ~IActionGroupe ();
           /**
            * \brief Renvoie le nom.
-           * \return std::shared_ptr <const std::string>
+           * \return const std::shared_ptr <const std::string> &
            */
-          std::shared_ptr <const std::string> getNom () const;
+          const std::shared_ptr <const std::string> & getNom () const;
           /**
            * \brief Défini le nom.
            * \param nom_ (in) Le nouveau nom.

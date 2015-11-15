@@ -25,11 +25,13 @@ class CPonderation;
 class CPonderations;
 class CCalculs;
 class CAction;
+class FuncModeleNorme;
 class FuncModeleAction;
 
 #include <UndoManager.hpp>
 #include <ISujet.hpp>
 #include "FuncModeleAction.hpp"
+#include "FuncModeleNorme.hpp"
 #include "ENorme.hpp"
 #include "CCalculs.hpp"
 #include "POCO/CPreferences.hpp"
@@ -52,6 +54,7 @@ class DllExport CModele : public ISujet, public CCalculs
   // Attributes
   private :
     friend class FuncModeleAction;
+    friend class FuncModeleNorme;
     /// Liste des types d'appuis.
     std::list <std::shared_ptr <POCO::str::CAppui> > appuis;
     /// Liste des noeuds.
@@ -75,8 +78,10 @@ class DllExport CModele : public ISujet, public CCalculs
     /// Le gestionnaire d'annulation
     UndoManager undoManager;
   public :
-    /// Classe gérant l'ajout d'action.
+    /// Classe gérant la manipulation des actions.
     FuncModeleAction fAction;
+    /// Classe gérant la manipulation des normes.
+    FuncModeleNorme fNorme;
   // Operations
     /**
      * \brief Constructeur d'une classe CModele.

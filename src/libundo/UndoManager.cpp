@@ -31,7 +31,7 @@
 
 UndoManager::UndoManager () :
   ISujet (),
-  liste (),
+  undoDataFort (),
   pos (0),
   count (0),
   tmpListe (nullptr),
@@ -43,8 +43,8 @@ UndoManager::UndoManager () :
 
 UndoManager::~UndoManager ()
 {
-  for_each (liste.begin (),
-            liste.end (),
+  for_each (undoDataFort.begin (),
+            undoDataFort.end (),
             std::default_delete <POCO::UndoData> ());
   
   delete (tmpListe);
@@ -116,14 +116,14 @@ UndoManager::undo ()
   POCO::UndoData                       * undoData;
   std::list <POCO::UndoData *>::iterator it;
   
-  BUGPROG (liste.size () > pos,
+  BUGPROG (undoDataFort.size () > pos,
            false,
            this,
            "Il n'y a plus rien à annuler.\n")
   
   insertion = false;
   
-  it = liste.end ();
+  it = undoDataFort.end ();
   NCALL (pos + 1, --it;);
   undoData = *it;
   
@@ -167,7 +167,7 @@ UndoManager::undoN (uint32_t nb)
 size_t
 UndoManager::undoNb () const
 {
-  return liste.size () - pos;
+  return undoDataFort.size () - pos;
 }
 
 const std::string *
@@ -176,15 +176,15 @@ UndoManager::undoDesc (size_t n) const
   POCO::UndoData                             * undoData;
   std::list <POCO::UndoData *>::const_iterator it;
 
-  BUGPROG (n + pos <= liste.size (),
+  BUGPROG (n + pos <= undoDataFort.size (),
            nullptr,
            UNDO_MANAGER_NULL,
            "Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n",
              n,
              pos,
-             liste.size ())
+             undoDataFort.size ())
 
-  it = liste.end ();
+  it = undoDataFort.end ();
   NCALL (n + pos + 1, --it;);
   undoData = *it;
 
@@ -204,7 +204,7 @@ UndoManager::redo ()
   
   insertion = false;
   
-  it = liste.end ();
+  it = undoDataFort.end ();
   NCALL (pos, --it;);
   undoData = *it;
   
@@ -219,13 +219,13 @@ UndoManager::redo ()
   insertion = true;
 
   // Utile si le paramètre memory est changé alors que pos n'est pas nul.
-  if (liste.size () - pos > memory)
+  if (undoDataFort.size () - pos > memory)
   {
-    size_t iend = liste.size () - pos - memory;
+    size_t iend = undoDataFort.size () - pos - memory;
 
     NCALL (iend,
-           delete *liste.begin ();
-           liste.pop_front ();)
+           delete *undoDataFort.begin ();
+           undoDataFort.pop_front ();)
   }
   
   if (count == 0)
@@ -274,9 +274,9 @@ UndoManager::redoDesc (size_t n) const
            "Indice hors limite (%zu+%zu). La taille de la pile est de %zu.\n",
              n,
              pos,
-             liste.size ())
+             undoDataFort.size ())
 
-  it = liste.end ();
+  it = undoDataFort.end ();
   NCALL (pos - n, --it;);
   undoData = *it;
 
@@ -297,7 +297,7 @@ UndoManager::getEtat () const
 }
 
 bool
-UndoManager::ref ()
+UndoManager::ref (bool undoable)
 {
   BUGCRIT (count != UINT16_MAX,
            false,
@@ -311,14 +311,14 @@ UndoManager::ref ()
   
   if ((count == 0) && (pos != 0))
   {
-    std::list <POCO::UndoData *>::iterator it = liste.end ();
+    std::list <POCO::UndoData *>::iterator it = undoDataFort.end ();
     
     NCALL (pos, --it;);
     
-    for (; it != liste.end (); )
+    for (; it != undoDataFort.end (); )
     {
       delete *it;
-      liste.erase (it++);
+      undoDataFort.erase (it++);
     }
     
     pos = 0;
@@ -326,7 +326,14 @@ UndoManager::ref ()
   
   if (count == 0)
   {
-    tmpListe = new POCO::UndoData ();
+    tmpListe = new POCO::UndoData (undoable);
+  }
+  else
+  {
+    BUGPROG (undoable,
+             false,
+             this,
+             "Impossible de définir undoable à false sauf au début de la modification.\n")
   }
   
   ++count;
@@ -356,16 +363,16 @@ UndoManager::unref ()
   if (count == 0)
   {
     BUGCONT (tmpListe->setHeure (), false, this)
-    liste.push_back (tmpListe);
+    undoDataFort.push_back (tmpListe);
     tmpListe = nullptr;
 
-    if (liste.size () > memory)
+    if (undoDataFort.size () > memory)
     {
-      size_t iend = liste.size () - memory - 1;
+      size_t iend = undoDataFort.size () - memory - 1;
 
       NCALL (iend,
-             delete *liste.begin ();
-             liste.pop_front ();)
+             delete *undoDataFort.begin ();
+             undoDataFort.pop_front ();)
     }
   }
   
@@ -376,17 +383,17 @@ bool
 UndoManager::undoToXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                 xmlNewNode (nullptr, BAD_CAST2 ("UndoManager")), xmlFreeNode);
+                 xmlNewNode (nullptr, BAD_CAST2 ("undoManager")), xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,
            false,
            UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
-  for (POCO::UndoData * data : liste)
+  for (POCO::UndoData * data : undoDataFort)
   {
     std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
-                                      xmlNewNode (nullptr, BAD_CAST2 ("Bloc")),
+                                      xmlNewNode (nullptr, BAD_CAST2 ("bloc")),
                                       xmlFreeNode);
     
     BUGCRIT (node0.get () != nullptr,
@@ -396,15 +403,15 @@ UndoManager::undoToXML (xmlNodePtr root) const
     
     BUGCRIT (xmlSetProp (
                node0.get (),
-               BAD_CAST2 ("Heure"),
-               BAD_CAST2 (
-                 std::to_string (data->getHeure ()).c_str ())) != nullptr,
+               BAD_CAST2 ("heure"),
+               BAD_CAST2 (std::to_string (data->getHeure ()).c_str ()))
+                                                                    != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
     
     BUGCRIT (xmlSetProp (node0.get (),
-                         BAD_CAST2 ("Description"),
+                         BAD_CAST2 ("description"),
                          BAD_CAST2 (
                            data->getDescription ().c_str ())) != nullptr,
              false,
@@ -474,13 +481,13 @@ UndoManager::setMemory (size_t taille)
 {
   memory = taille;
 
-  if (liste.size () - pos > taille)
+  if (undoDataFort.size () - pos > taille)
   {
-    size_t iend = liste.size () - pos - taille;
+    size_t iend = undoDataFort.size () - pos - taille;
 
     NCALL (iend,
-           delete *liste.begin ();
-           liste.pop_front ();)
+           delete *undoDataFort.begin ();
+           undoDataFort.pop_front ();)
   }
 }
 

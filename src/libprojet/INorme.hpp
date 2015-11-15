@@ -21,21 +21,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+class FuncModeleNorme;
+
 #include <memory>
 #include <cstdint>
+#include "ENorme.hpp"
 #include "EAction.hpp"
 
 /**
- * \brief Contient les options de calculs du projet, ceux dépendant de la norme sélectionnée.
+ * \brief Contient les options de calculs du projet, ceux dépendant de la norme du projet.
  */
 class DllExport INorme
 {
+  // Attributes
+  private :
+    friend class FuncModeleNorme;
+    /// L'identifiant de la norme.
+    uint32_t id;
+  protected :
+    /// La norme correspondante.
+    ENorme type;
+    /// Permet de sélectionner différentes variantes de la norme. Par exemple, l'annexe nationale dans le cas de l'Eurocode.
+    uint32_t variante;
+    /// Les options de la norme. Espace réservée pour chaque spécificité des normes.
+    uint32_t options;
+    /// Nom de la norme.
+    std::shared_ptr <const std::string> nom;
   // Operations
   public :
     /**
      * \brief Constructeur d'une classe INorme.
+     * \param type_ (in) La norme correspondante.
+     * \param variante_ (in) La variante de la norme.
+     * \param options_ (in) Les options de la norme.
+     * \param nom_ (in) Le nom de la norme.
      */
-    INorme ();
+    INorme (ENorme type_, uint32_t variante_, uint32_t options_, std::shared_ptr <const std::string> nom_);
     /**
      * \brief Constructeur d'une classe INorme.
      * \param other (in) La classe à dupliquer.
@@ -52,15 +73,25 @@ class DllExport INorme
      */
     virtual ~INorme ();
     /**
-     * \brief Renvoie le nom des paramètres de calcul.
-     * \return std::shared_ptr <const std::string>
+     * \brief Renvoie le type de la norme.
+     * \return ENorme
      */
-    virtual std::shared_ptr <const std::string> getNom () const = 0;
+    ENorme getType () const;
     /**
      * \brief Renvoie la variante de la norme.
      * \return uint32_t
      */
-    virtual uint32_t getVariante () const = 0;
+    uint32_t getVariante () const;
+    /**
+     * \brief Renvoie les options de la norme.
+     * \return uint32_t
+     */
+    uint32_t getOptions () const;
+    /**
+     * \brief Renvoie le nom de la norme de calcul.
+     * \return const std::shared_ptr <const std::string> &
+     */
+    const std::shared_ptr <const std::string> & getNom () const;
     /**
      * \brief Renvoie le nombre de différents types d'actions.
      * \return uint8_t

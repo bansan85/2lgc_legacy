@@ -27,10 +27,12 @@ class CCalculs;
 class CAction;
 class CModele;
 
-#include <IUndoableFonction.hpp>
 #include "POCO/sol/CAction.hpp"
 
-class FuncModeleAction : public IUndoableFonction
+/**
+ * \brief Classe regroupant la manipulation des actions par le modèle.
+ */
+class FuncModeleAction
 {
   // Attributes
   private :
@@ -72,10 +74,10 @@ class FuncModeleAction : public IUndoableFonction
      * \param nb0 (in) Le cœfficient psi0.
      * \param nb1 (in) Le cœfficient psi1.
      * \param nb2 (in) Le cœfficient psi2.
-     * \param node (in) Le noeud où ajouter les informations.
+     * \param root (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXMLAdd (uint32_t id, std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr node) const;
+    bool CHK doXMLAdd (uint32_t id, std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr root) const;
     /**
      * \brief Modifie le coefficient psi d'une action.
      * \param action (in) L'action à modifier.

@@ -25,13 +25,13 @@
 #include "MErreurs.hpp"
 #include "SString.hpp"
 
-norme::Eurocode::Eurocode (std::shared_ptr <std::string> nom_,
-                           ENormeEcAc                    annexe_,
-                           uint16_t                      variante_) :
-  INorme (),
-  nom (nom_),
-  annexe (annexe_),
-  variante (variante_)
+norme::Eurocode::Eurocode (std::shared_ptr <const std::string> nom_,
+                           ENormeEcAc                           variante_,
+                           uint32_t                             options_) :
+  INorme (ENorme::EUROCODE,
+          static_cast <uint32_t> (variante_),
+          options_,
+          nom_)
 {
 }
 
@@ -39,28 +39,10 @@ norme::Eurocode::~Eurocode ()
 {
 }
 
-std::shared_ptr <const std::string>
-norme::Eurocode::getNom () const
-{
-  return nom;
-}
-
-norme::ENormeEcAc
-norme::Eurocode::getAnnexe () const
-{
-  return annexe;
-}
-
-uint32_t
-norme::Eurocode::getVariante () const
-{
-  return variante;
-}
-
 uint8_t
 norme::Eurocode::getPsiN () const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
@@ -72,8 +54,8 @@ norme::Eurocode::getPsiN () const
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 0,
                 UNDO_MANAGER_NULL)
@@ -83,72 +65,72 @@ norme::Eurocode::getPsiN () const
 }
 
 EAction
-norme::Eurocode::getPsiAction (uint8_t type) const
+norme::Eurocode::getPsiAction (uint8_t type_) const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
-      if (type == 0)
+      if (type_ == 0)
       {
         return EAction::POIDS_PROPRE;
       }
-      else if (type == 1)
+      else if (type_ == 1)
       {
         return EAction::PRECONTRAINTE;
       }
-      else if ((2 <= type) && (type <= 14))
+      else if ((2 <= type_) && (type_ <= 14))
       {
         return EAction::VARIABLE;
       }
-      else if (type == 15)
+      else if (type_ == 15)
       {
         return EAction::ACCIDENTELLE;
       }
-      else if (type == 16)
+      else if (type_ == 16)
       {
         return EAction::SISMIQUE;
       }
       else
       {
-        BUGPARAM (type, "%u", false, EAction::INCONNUE, UNDO_MANAGER_NULL)
+        BUGPARAM (type_, "%u", false, EAction::INCONNUE, UNDO_MANAGER_NULL)
       }
     }
     case ENormeEcAc::FR :
     {
-      if (type == 0) 
+      if (type_ == 0) 
       {
         return EAction::POIDS_PROPRE;
       }
-      else if (type == 1) 
+      else if (type_ == 1) 
       {
         return EAction::PRECONTRAINTE;
       }
-      else if ((2 <= type) && (type <= 18))
+      else if ((2 <= type_) && (type_ <= 18))
       {
         return EAction::VARIABLE;
       }
-      else if (type == 19)
+      else if (type_ == 19)
       {
         return EAction::ACCIDENTELLE;
       }
-      else if (type == 20)
+      else if (type_ == 20)
       {
         return EAction::SISMIQUE;
       }
-      else if (type == 21)
+      else if (type_ == 21)
       {
         return EAction::EAU_SOUTERRAINE;
       }
       else
       {
-        BUGPARAM (type, "%u", false, EAction::INCONNUE, UNDO_MANAGER_NULL)
+        BUGPARAM (type_, "%u", false, EAction::INCONNUE, UNDO_MANAGER_NULL)
       }
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 EAction::INCONNUE,
                 UNDO_MANAGER_NULL)
@@ -158,13 +140,13 @@ norme::Eurocode::getPsiAction (uint8_t type) const
 }
 
 std::string const
-norme::Eurocode::getPsiDescription (uint8_t type) const
+norme::Eurocode::getPsiDescription (uint8_t type_) const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return gettext ("Permanente");
         case 1 : return gettext ("Précontrainte");
@@ -185,14 +167,14 @@ norme::Eurocode::getPsiDescription (uint8_t type) const
         case 16 : return gettext ("Sismique");
         default :
         {
-          BUGPARAM (type, "%u", false, std::string (), UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, std::string (), UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     case ENormeEcAc::FR :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return gettext ("Permanente");
         case 1 : return gettext ("Précontrainte");
@@ -218,15 +200,15 @@ norme::Eurocode::getPsiDescription (uint8_t type) const
         case 21 : return gettext ("Eaux souterraines");
         default :
         {
-          BUGPARAM (type, "%u", false, std::string (), UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, std::string (), UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 std::string (),
                 UNDO_MANAGER_NULL)
@@ -236,13 +218,13 @@ norme::Eurocode::getPsiDescription (uint8_t type) const
 }
 
 double
-norme::Eurocode::getPsi0 (uint8_t type) const
+norme::Eurocode::getPsi0 (uint8_t type_) const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -263,14 +245,14 @@ norme::Eurocode::getPsi0 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     case ENormeEcAc::FR :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -296,15 +278,15 @@ norme::Eurocode::getPsi0 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 NAN,
                 UNDO_MANAGER_NULL)
@@ -314,13 +296,13 @@ norme::Eurocode::getPsi0 (uint8_t type) const
 }
 
 double
-norme::Eurocode::getPsi1 (uint8_t type) const
+norme::Eurocode::getPsi1 (uint8_t type_) const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -341,14 +323,14 @@ norme::Eurocode::getPsi1 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     case ENormeEcAc::FR :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -374,15 +356,15 @@ norme::Eurocode::getPsi1 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 NAN,
                 UNDO_MANAGER_NULL)
@@ -392,13 +374,13 @@ norme::Eurocode::getPsi1 (uint8_t type) const
 }
 
 double
-norme::Eurocode::getPsi2 (uint8_t type) const
+norme::Eurocode::getPsi2 (uint8_t type_) const
 {
-  switch (annexe)
+  switch (static_cast <ENormeEcAc> (variante))
   {
     case ENormeEcAc::EU :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -419,14 +401,14 @@ norme::Eurocode::getPsi2 (uint8_t type) const
         case 16 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     case ENormeEcAc::FR :
     {
-      switch (type)
+      switch (type_)
       {
         case 0 : return 0.0;
         case 1 : return 0.0;
@@ -452,15 +434,15 @@ norme::Eurocode::getPsi2 (uint8_t type) const
         case 21 : return 0.0;
         default :
         {
-          BUGPARAM (type, "%u", false, NAN, UNDO_MANAGER_NULL)
+          BUGPARAM (type_, "%u", false, NAN, UNDO_MANAGER_NULL)
           break;
         }
       }
     }
     default :
     {
-      BUGPARAM (static_cast <size_t> (annexe),
-                "%zu",
+      BUGPARAM (variante,
+                "%u",
                 false,
                 NAN,
                 UNDO_MANAGER_NULL)

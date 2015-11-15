@@ -29,93 +29,113 @@
 #include <memory>
 #include <cassert>
 
-#include "CProjet.hpp"
+#include "CModele.hpp"
 #include "SString.hpp"
 
 int
 main (int32_t,
       char   *[])
 {
-  CProjet projet (ENorme::EUROCODE);
-  std::shared_ptr <CAction> action;
+  CModele projet (ENorme::EUROCODE);
+  std::shared_ptr <POCO::sol::CAction> action;
+  bool retour;
   
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                              ("Poids propre"),
-                                       0,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                           std::make_shared <std::string> ("Poids propre"), 0);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                                ("Chargement"),
-                                       2,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                             std::make_shared <std::string> ("Chargement"), 2);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 2);
-  assert (projet.undo ());
+  retour = projet.getUndoManager ().undo ();
+  assert (retour);
   assert (projet.getActionCount () == 1);
   // 18 Neige
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                                     ("Neige"),
-                                       18,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                                 std::make_shared <std::string> ("Neige"), 18);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 2);
   
-  assert (projet.enregistre ("undomanager2.xml"));
+  retour = projet.enregistre ("undomanager2.xml");
+  assert (retour);
   
-  xmlNodePtr root_node, n0, n1, n2, n3;
+  xmlNodePtr root_node, n0, n1, n2, n3, n4;
+  xmlChar *prop;
   
-  root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
+  root_node = xmlNewNode (nullptr, BAD_CAST2 ("projet"));
   assert (root_node);
   
-  assert (projet.undoToXML (root_node));
+  retour = projet.getUndoManager ().undoToXML (root_node);
+  assert (retour);
   
   n0 = root_node;
   assert (n0->type == XML_ELEMENT_NODE);
-  assert (std::string ("Projet").compare (BAD_TSAC2 (n0->name)) == 0);
+  assert (std::string ("projet").compare (BAD_TSAC2 (n0->name)) == 0);
+/*  prop = xmlGetProp (n0, BAD_CAST2 ("Norme"));
+  assert (std::string ("Eurocode").compare (BAD_TSAC2 (prop)) == 0);
+  xmlFree (prop);
+  prop = xmlGetProp (n0, BAD_CAST2 ("Annexe"));
+  assert (std::string ("1").compare (BAD_TSAC2 (prop)) == 0);
+  xmlFree (prop);
+  prop = xmlGetProp (n0, BAD_CAST2 ("Variante"));
+  assert (std::string ("0").compare (BAD_TSAC2 (prop)) == 0);
+  xmlFree (prop);*/
   n1 = n0->children;
   assert (n1);
   assert (n1->type == XML_ELEMENT_NODE);
-  assert (std::string ("UndoManager").compare (BAD_TSAC2 (n1->name)) == 0);
+  assert (std::string ("undoManager").compare (BAD_TSAC2 (n1->name)) == 0);
   n2 = n1->children;
   assert (n2);
-  assert (n2->type == XML_ELEMENT_NODE);
-  assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
-  n3 = n2->children;
-  assert (n3);
-  assert (n3->type == XML_ELEMENT_NODE);
-  assert (std::string ("projetSetParam").compare (BAD_TSAC2 (n3->name)) == 0);
-  
-  xmlChar *prop;
-  
   n2 = n2->next;
   assert (n2);
   assert (n2->type == XML_ELEMENT_NODE);
-  assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
-  prop = xmlGetProp (n2, BAD_CAST2 ("Heure"));
-  assert (prop);
+  assert (std::string ("bloc").compare (BAD_TSAC2 (n2->name)) == 0);
+  prop = xmlGetProp (n2, BAD_CAST2 ("description"));
+  assert (std::string ("Ajout de l'action “Poids propre”").compare (BAD_TSAC2 (prop)) == 0);
+  xmlFree (prop);
   n3 = n2->children;
   assert (n3);
   assert (n3->type == XML_ELEMENT_NODE);
   assert (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0);
+  prop = xmlGetProp (n3, BAD_CAST2 ("id"));
+  assert (std::string ("0").compare (BAD_TSAC2 (prop)) == 0);
   xmlFree (prop);
-  prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
+  prop = xmlGetProp (n3, BAD_CAST2 ("nom"));
   assert (std::string ("Poids propre").compare (BAD_TSAC2 (prop)) == 0);
   xmlFree (prop);
+  prop = xmlGetProp (n3, BAD_CAST2 ("type"));
+  assert (std::string ("0").compare (BAD_TSAC2 (prop)) == 0);
+  xmlFree (prop);
+  n4 = n3->children;
+  assert (n4);
+  assert (n4->type == XML_ELEMENT_NODE);
+  assert (std::string ("calcul").compare (BAD_TSAC2 (n4->name)) == 0);
+  n4 = n4->next;
+  assert (n4);
+  assert (n4->type == XML_ELEMENT_NODE);
+  n4 = n4->next;
+  assert (n4);
+  assert (n4->type == XML_ELEMENT_NODE);
+  n4 = n4->next;
+  assert (!n4);
   n2 = n2->next;
   assert (n2);
   assert (n2->type == XML_ELEMENT_NODE);
-  assert (std::string ("Bloc").compare (BAD_TSAC2 (n2->name)) == 0);
+  assert (std::string ("bloc").compare (BAD_TSAC2 (n2->name)) == 0);
   n3 = n2->children;
   assert (n3);
   assert (n3->type == XML_ELEMENT_NODE);
   assert (std::string ("addAction").compare (BAD_TSAC2 (n3->name)) == 0);
   // On vérifie bien que Chargement n'est plus présent dans la liste des
   // modifications.
-  prop = xmlGetProp (n3, BAD_CAST2 ("Nom"));
+  prop = xmlGetProp (n3, BAD_CAST2 ("nom"));
   assert (std::string ("Neige").compare (BAD_TSAC2 (prop)) == 0);
   xmlFree (prop);
   

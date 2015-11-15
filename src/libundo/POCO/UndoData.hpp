@@ -48,12 +48,15 @@ namespace POCO
       time_t heure;
       /// Description de l'opération.
       std::string description;
+      /// Défini si la présente structure peut être annulable. Est utilisé pour initialiser le projet tout en le laissant dans la liste pour être automatiquement supprimer si la taille maximale de l'historique est atteinte.
+      bool undoable : 1;
     // Operations
     public :
       /**
        * \brief Constructeur d'une classe UndoData.
+       * \param undoable_ (in) Si les données peuvent être annulées.
        */
-      UndoData ();
+      UndoData (bool undoable_);
       /**
        * \brief Duplication d'une classe UndoData.
        * \param other (in) La classe à dupliquer.

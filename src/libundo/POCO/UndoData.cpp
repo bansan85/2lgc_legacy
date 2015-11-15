@@ -23,13 +23,14 @@
 #include "UndoData.hpp"
 #include "MErreurs.hpp"
 
-POCO::UndoData::UndoData () :
+POCO::UndoData::UndoData (bool undoable_) :
   annule (),
   repete (),
   suppr (),
   sauve (),
   heure (0),
-  description ()
+  description (),
+  undoable (undoable_)
 {
 }
 

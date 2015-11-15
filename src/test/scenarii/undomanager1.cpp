@@ -94,7 +94,8 @@ main (int32_t,
   assert (retour);
   assert (projet.getActionCount () == 4);
   
-  assert (projet.enregistre ("undomanager1.xml"));
+  retour = projet.enregistre ("undomanager1.xml");
+  assert (retour);
   
   return 0;
 }

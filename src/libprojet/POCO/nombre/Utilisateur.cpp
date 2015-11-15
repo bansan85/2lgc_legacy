@@ -103,7 +103,7 @@ bool CHK
 POCO::nombre::Utilisateur::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                               xmlNewNode (nullptr, BAD_CAST2 ("Utilisateur")),
+                               xmlNewNode (nullptr, BAD_CAST2 ("utilisateur")),
                                xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,

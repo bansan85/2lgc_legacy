@@ -27,52 +27,56 @@
 #include <memory>
 #include <cassert>
 
-#include "CProjet.hpp"
+#include "CModele.hpp"
 
 int
 main (int32_t,
       char   *[])
 {
-  CProjet projet (ENorme::EUROCODE);
-  std::shared_ptr <CAction> action;
+  CModele projet (ENorme::EUROCODE);
+  std::shared_ptr <POCO::sol::CAction> action;
+  bool retour;
   
-  assert (projet.undoNb () == 1);
+  assert (projet.getUndoManager ().undoNb () == 1);
   // Un pour le projet,
   // Un pour l'historique.
-  assert (projet.getParametres ().use_count () == 2);
-  assert (projet.getParametres ()->getNom ().use_count () == 2);
-  projet.setMemory (0);
-  assert (projet.getParametres ().use_count () == 1);
-  assert (projet.getParametres ()->getNom ().use_count () == 1);
-  projet.setMemory (1000);
+  assert (projet.getNorme ().use_count () == 2);
+  assert (projet.getNorme ()->getNom ().use_count () == 2);
+  projet.getUndoManager ().setMemory (0);
+  assert (projet.getNorme ().use_count () == 1);
+  assert (projet.getNorme ()->getNom ().use_count () == 1);
+  projet.getUndoManager ().setMemory (1000);
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                              ("Poids propre"),
-                                       0,
-                                       projet);
+  action = std::make_shared <POCO::sol::CAction> (
+                           std::make_shared <std::string> ("Poids propre"), 0);
   assert (action.use_count () == 1);
   assert (action->getNom ().use_count () == 1);
-  assert (projet.addAction (action));
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                                ("Chargement"),
-                                       2,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                             std::make_shared <std::string> ("Chargement"), 2);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   // Un pour la variable action.
-  // Un pour l'insertion dans le projet,
-  // Deux pour les std::bind permettant l'annulation et la répétition.
+  // Un pour l'insertion dans la variable actions du modèle,
+  // Deux par les std::bind permettant l'annulation et la répétition.
   assert (action.use_count () == 4);
+  // Un par la variable action.
+  // Un par le std::bind permettant la conversion au format XML.
   assert (action->getNom ().use_count () == 2);
   assert (projet.getActionCount () == 2);
-  projet.setMemory (0);
+  projet.getUndoManager ().setMemory (0);
+  // Les 2 bind permettant l'annulation et la répétition disparaissent.
   assert (action.use_count () == 2);
+  // Le std::bind permettant la conversion au format XML disparait.
   assert (action->getNom ().use_count () == 1);
-  projet.setMemory (1000);
+  projet.getUndoManager ().setMemory (1000);
   
-  assert (projet.enregistre ("undomanager4.xml"));
+  retour = projet.enregistre ("undomanager4.xml");
+  assert (retour);
   
   return 0;
 }

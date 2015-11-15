@@ -81,10 +81,15 @@ for NEW_FLAG in \
     -Wuninitialized \
     -Wunused-parameter \
     -Wuseless-cast \
+    -Wsuggest-attribute=pure \
+    -Wsuggest-attribute=const \
+    -Wsuggest-attribute=noreturn \
+    -Wsuggest-attribute=format \
+    -Wmissing-format-attribute \
+    -Wsuggest-final-types \
+    -Wsuggest-final-methods \
     -Wwrite-strings \
     -Wzero-as-null-pointer-constant \
-    -fabi-version=6 \
-    -Wabi \
     -Wctor-dtor-privacy \
     -Wc++11-compat \
     -Weffc++ \
@@ -106,6 +111,7 @@ do
   ])
   CXXFLAGS="$OLD_CXXFLAGS"
 done
+# -Wsuggest-override \
 
 #gcc/config/warnings.m4 :
 # Do the check with the no- prefix removed since gcc silently

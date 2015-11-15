@@ -27,7 +27,6 @@ libundo_ladir 			 = $(includedir)/2lgc
 
 libundo_la_SOURCES 	 = IObserveur.cpp \
 											 ISujet.cpp \
-											 IUndoableFonction.cpp \
 											 UndoManager.cpp \
 											 POCO/UndoData.cpp
 
@@ -36,7 +35,6 @@ libundo_la_HEADERS   = \
 	EUndoEtat.hpp \
 	IObserveur.hpp \
 	ISujet.hpp \
-	IUndoableFonction.hpp \
 	POCO/UndoData.hpp \
 	UndoManager.hpp
 

@@ -20,12 +20,44 @@
 
 #include "INorme.hpp"
 
-INorme::INorme ()
+INorme::INorme (ENorme                              type_,
+                uint32_t                            variante_,
+                uint32_t                            options_,
+                std::shared_ptr <const std::string> nom_) :
+  id (0xFFFFFFFF),
+  type (type_),
+  variante (variante_),
+  options (options_),
+  nom (nom_)
 {
 }
 
 INorme::~INorme ()
 {
+}
+
+ENorme
+INorme::getType () const
+{
+  return type;
+}
+
+uint32_t
+INorme::getVariante () const
+{
+  return variante;
+}
+
+uint32_t
+INorme::getOptions () const
+{
+  return options;
+}
+
+const std::shared_ptr <const std::string> &
+INorme::getNom () const
+{
+  return nom;
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -37,8 +37,8 @@ class DllExport UndoManager : public ISujet
   // Associations
   // Attributes
   private :
-    /// Historique des modifications. Fonctionne comme une pile mais il est nécessaire de pouvoir la parcourir sans dépiler.
-    std::list <POCO::UndoData *> liste;
+    /// Historique des modifications ayant un impact fort sur le projet (modifiant le projet)
+    std::list <POCO::UndoData *> undoDataFort;
     /// Défini la position des modifications par rapport au haut de la pile.
     size_t pos;
     /// Les modifications en cours sont intégrés lorsque count descend à 0. En cas de modification, chaque méthode ref augmente de 1 et unref diminue de 1. Cela permet de prendre en compte plusieurs modifications dans un même évènement. Les fonctions undo / redo ne peuvent s'exécuter si count est différent de 0.
@@ -141,9 +141,10 @@ class DllExport UndoManager : public ISujet
     EUndoEtat getEtat () const;
     /**
      * \brief Augmente le count de 1.
+     * \param undoable (in) Si le bloc de modification est annulable. Ne peut valoir true que pour démarrer le bloc d'annulation.
      * \return bool CHK
      */
-    bool CHK ref ();
+    bool CHK ref (bool undoable = true);
     /**
      * \brief Diminue le count de 1. Ajoute tmpListe à liste si count passe à 0.
      * \return bool CHK

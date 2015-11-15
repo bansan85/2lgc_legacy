@@ -74,7 +74,7 @@ bool CHK
 POCO::nombre::Calcul::newXML (xmlNodePtr root) const
 {
   std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node (
-                                    xmlNewNode (nullptr, BAD_CAST2 ("Calcul")),
+                                    xmlNewNode (nullptr, BAD_CAST2 ("calcul")),
                                     xmlFreeNode);
   
   BUGCRIT (node.get () != nullptr,

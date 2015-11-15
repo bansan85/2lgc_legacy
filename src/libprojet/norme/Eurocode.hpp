@@ -31,23 +31,15 @@ namespace norme
    */
   class DllExport Eurocode : public INorme
   {
-    // Attributes
-    private :
-      /// Le nom décrivant la norme et les paramètres.
-      std::shared_ptr <std::string> nom;
-      /// L'annexe nationale à utiliser.
-      norme::ENormeEcAc annexe;
-      /// La variante de la norme.
-      uint32_t variante;
     // Operations
     public :
       /**
        * \brief Constructeur d'une classe Eurocode.
        * \param nom_ (in) Le nom décrivant la norme et ses différents options.
-       * \param annexe_ (in) Le choix de l'annexe nationale.
-       * \param variante_ (in) Le numéro de la variante de la norme.
+       * \param variante_ (in) Le choix de l'annexe nationale.
+       * \param options_ (in) Les options de la norme.
        */
-      Eurocode (std::shared_ptr <std::string> nom_, ENormeEcAc annexe_, uint16_t variante_);
+      Eurocode (std::shared_ptr <const std::string> nom_, ENormeEcAc variante_, uint32_t options_);
       /**
        * \brief Constructeur d'une classe Eurocode.
        * \param other (in) La classe à dupliquer.
@@ -64,55 +56,40 @@ namespace norme
        */
       virtual ~Eurocode ();
       /**
-       * \brief Renvoie le nom des paramètres de calcul.
-       * \return std::shared_ptr <const std::string>
-       */
-      std::shared_ptr <const std::string> getNom () const;
-      /**
-       * \brief Renvoie l'annexe nationale utilisée.
-       * \return ENormeEcAc
-       */
-      ENormeEcAc getAnnexe () const;
-      /**
-       * \brief Renvoie la variante de la norme.
-       * \return uint32_t
-       */
-      uint32_t getVariante () const;
-      /**
        * \brief Renvoie le nombre de différents types d'actions.
        * \return uint8_t
        */
       uint8_t getPsiN () const;
       /**
        * \brief Renvoie la catégorie du type d'action.
-       * \param type (in) Le type d'action.
+       * \param type_ (in) Le type d'action.
        * \return EAction
        */
-      EAction getPsiAction (uint8_t type) const;
+      EAction getPsiAction (uint8_t type_) const;
       /**
        * \brief Renvoie la description du type d'actions.
-       * \param type (in) Le type d'action à décrire.
+       * \param type_ (in) Le type d'action à décrire.
        * \return std::string const
        */
-      std::string const getPsiDescription (uint8_t type) const;
+      std::string const getPsiDescription (uint8_t type_) const;
       /**
        * \brief Renvoie la valeur par défaut du coefficient psi0.
-       * \param type (in) Le type de l'action.
+       * \param type_ (in) Le type de l'action.
        * \return double
        */
-      double getPsi0 (uint8_t type) const;
+      double getPsi0 (uint8_t type_) const;
       /**
        * \brief Renvoie la valeur par défaut du coefficient psi1.
-       * \param type (in) Le type de l'action.
+       * \param type_ (in) Le type de l'action.
        * \return double
        */
-      double getPsi1 (uint8_t type) const;
+      double getPsi1 (uint8_t type_) const;
       /**
        * \brief Renvoie la valeur par défaut du coefficient psi2.
-       * \param type (in) Le type de l'action.
+       * \param type_ (in) Le type de l'action.
        * \return double
        */
-      double getPsi2 (uint8_t type) const;
+      double getPsi2 (uint8_t type_) const;
   };
 }
 

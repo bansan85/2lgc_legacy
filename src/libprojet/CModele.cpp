@@ -43,7 +43,8 @@ CModele::CModele (ENorme eNorme) :
   norme (nullptr),
   preferences (),
   undoManager (),
-  fAction (*this)
+  fAction (*this),
+  fNorme (*this)
 {
   LIBXML_TEST_VERSION
 
@@ -59,16 +60,36 @@ CModele::CModele (ENorme eNorme) :
 
   switch (eNorme) {
     case ENorme::EUROCODE :
-      norme = std::make_shared <norme::Eurocode> (
+    {
+      std::shared_ptr <INorme> norme_;
+      norme_ = std::make_shared <norme::Eurocode> (
                                    std::make_shared <std::string> ("Eurocode"),
                                    norme::ENormeEcAc::FR,
                                    0);
+      if (!undoManager.ref (false))
+      {
+        errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
+        throw errorMessage.c_str ();
+      }
+      if (!fNorme.doSet(norme_))
+      {
+        errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
+        throw errorMessage.c_str ();
+      }
+      if (!undoManager.unref ())
+      {
+        errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
+        throw errorMessage.c_str ();
+      }
       break;
+    }
     default :
+    {
       errorMessage = "Erreur lors de la sélection de la norme" +
                            std::to_string (static_cast<size_t> (eNorme)) + ".";
       throw errorMessage.c_str ();
       break;
+    }
   }
 }
 
@@ -130,7 +151,7 @@ CModele::enregistre (const std::string fichier) const
            UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
-  root_node = xmlNewNode (nullptr, BAD_CAST2 ("Projet"));
+  root_node = xmlNewNode (nullptr, BAD_CAST2 ("projet"));
   BUGCRIT (root_node != nullptr,
            false,
            UNDO_MANAGER_NULL,
@@ -139,26 +160,43 @@ CModele::enregistre (const std::string fichier) const
   norme::Eurocode *normeEC = dynamic_cast <norme::Eurocode *> (norme.get());
   if (normeEC != nullptr)
   {
-    BUGCRIT (xmlSetProp (root_node,
-                         BAD_CAST2 ("Norme"),
+    // libxml2 ne permet pas de récupérer les attributs du nœud racine.
+/*    std::unique_ptr <xmlNode, void (*)(xmlNodePtr)> node0 (
+                                     xmlNewNode (nullptr, BAD_CAST2 ("norme")),
+                                     xmlFreeNode);
+    
+    BUGCRIT (node0.get () != nullptr,
+             false,
+             UNDO_MANAGER_NULL,
+             "Erreur d'allocation mémoire.\n")*/
+    
+    BUGCRIT (xmlSetProp (root_node/*node0.get ()*/,
+                         BAD_CAST2 ("norme"),
                          BAD_CAST2 ("Eurocode")) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
-    BUGCRIT (xmlSetProp (root_node,
-                         BAD_CAST2 ("Annexe"),
-                         BAD_CAST2 (std::to_string (static_cast<size_t>
-                                (normeEC->getAnnexe ())).c_str ())) != nullptr,
+    BUGCRIT (xmlSetProp (root_node/*node0.get ()*/,
+                         BAD_CAST2 ("variante"),
+                         BAD_CAST2 (std::to_string (static_cast <size_t>
+                                (normeEC->getVariante ())).c_str ())) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
-    BUGCRIT (xmlSetProp (root_node,
-                         BAD_CAST2 ("Variante"),
+    BUGCRIT (xmlSetProp (root_node/*node0.get ()*/,
+                         BAD_CAST2 ("options"),
                          BAD_CAST2 (std::to_string
-                                 (norme->getVariante ()).c_str ())) != nullptr,
+                                 (norme->getOptions ()).c_str ())) != nullptr,
              false,
              UNDO_MANAGER_NULL,
              "Problème depuis la librairie : %s\n", "xml2")
+
+/*    BUGCRIT (xmlAddChild (root_node, node0.get ()) != nullptr,
+             false,
+             UNDO_MANAGER_NULL,
+             "Problème depuis la librairie : %s\n", "xml2")
+             
+    node0.release ();*/
   }
   else
   {

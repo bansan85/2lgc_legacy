@@ -42,7 +42,8 @@ libprojet_la_SOURCES 	= \
 	POCO/nombre/Utilisateur.cpp \
 	INorme.cpp \
 	norme/Eurocode.cpp \
-	FuncModeleAction.cpp
+	FuncModeleAction.cpp \
+	FuncModeleNorme.cpp
 #	EAction.cpp \
 	IUndoFunc.cpp \
 	\
