@@ -82,12 +82,22 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
     action->psi2 = newPsi;
   }
 
+  if (modele.actions.empty ())
+  {
+    action->id = 0;
+  }
+  else
+  {
+    action->id = modele.actions.back ()->id + 1;
+  }
+
   BUGCONT (modele.undoManager.push (
              std::bind (&CModele::rmAction, &modele, action),
              std::bind (&FuncModeleAction::doAdd, this, action),
              nullptr,
              std::bind (&FuncModeleAction::doXMLAdd,
                         this,
+                        action->id,
                         action->getNom (),
                         action->getType (),
                         action->psi0,
@@ -107,7 +117,8 @@ FuncModeleAction::doAdd (std::shared_ptr <POCO::sol::CAction> & action)
 }
 
 bool
-FuncModeleAction::doXMLAdd (std::shared_ptr<const std::string> & nom_,
+FuncModeleAction::doXMLAdd (uint32_t                             id,
+                            std::shared_ptr<const std::string> & nom_,
                             uint8_t                              type_,
                             std::shared_ptr <POCO::INb>        & nb0,
                             std::shared_ptr <POCO::INb>        & nb1,
@@ -129,6 +140,13 @@ FuncModeleAction::doXMLAdd (std::shared_ptr<const std::string> & nom_,
            &modele.undoManager,
            "Erreur d'allocation mémoire.\n")
   
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Id"),
+                       BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
+           false,
+           &modele.undoManager,
+           "Problème depuis la librairie : %s\n", "xml2")
+
   BUGCRIT (xmlSetProp (node.get (),
                        BAD_CAST2 ("Nom"),
                        BAD_CAST2 (nom_->c_str ())) != nullptr,
@@ -248,17 +266,17 @@ FuncModeleAction::doXMLSetPsi (uint32_t                      id,
            UNDO_MANAGER_NULL,
            "Erreur d'allocation mémoire.\n")
   
-  BUGCRIT (xmlSetProp (
-             node.get (),
-             BAD_CAST2 ("psi"),
-             BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
+  BUGCRIT (xmlSetProp (node.get (),
+                       BAD_CAST2 ("Id"),
+                       BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
            false,
            &modele.undoManager,
            "Problème depuis la librairie : %s\n", "xml2")
   
-  BUGCRIT (xmlSetProp (node.get (),
-                       BAD_CAST2 ("Id"),
-                       BAD_CAST2 (std::to_string (id).c_str ())) != nullptr,
+  BUGCRIT (xmlSetProp (
+             node.get (),
+             BAD_CAST2 ("psi"),
+             BAD_CAST2 (psi == 0 ? "0" : psi == 1 ? "1" : "2")) != nullptr,
            false,
            &modele.undoManager,
            "Problème depuis la librairie : %s\n", "xml2")

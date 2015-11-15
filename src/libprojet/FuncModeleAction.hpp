@@ -66,6 +66,7 @@ class FuncModeleAction : public IUndoableFonction
     bool CHK doAdd (std::shared_ptr <POCO::sol::CAction> & action);
     /**
      * \brief Format XML pour ajouter une action.
+     * \param id (in) L'identifiant interne de l'action.
      * \param nom_ (in) Le nom de l'action.
      * \param type_ (in) Le type d'action.
      * \param nb0 (in) Le cœfficient psi0.
@@ -74,7 +75,7 @@ class FuncModeleAction : public IUndoableFonction
      * \param node (in) Le noeud où ajouter les informations.
      * \return bool CHK
      */
-    bool CHK doXMLAdd (std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr node) const;
+    bool CHK doXMLAdd (uint32_t id, std::shared_ptr <const std::string> & nom_, uint8_t type_, std::shared_ptr <POCO::INb> & nb0, std::shared_ptr <POCO::INb> & nb1, std::shared_ptr <POCO::INb> & nb2, xmlNodePtr node) const;
     /**
      * \brief Annule la fonction.
      * \return bool CHK
