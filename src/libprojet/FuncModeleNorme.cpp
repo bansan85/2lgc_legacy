@@ -54,7 +54,7 @@ FuncModeleNorme::doSet (std::shared_ptr <INorme> & norme)
                norme->options,
                norme->nom,
                std::placeholders::_1),
-    format (gettext ("Utilisation de la norme %s.\n"), norme->nom->c_str ())),
+    format (gettext ("Paramètres du projet (%s)"), norme->nom->c_str ())),
     false,
     &modele.undoManager)
 

@@ -66,6 +66,7 @@ CModele::CModele (ENorme eNorme) :
                                    std::make_shared <std::string> ("Eurocode"),
                                    norme::ENormeEcAc::FR,
                                    0);
+      undoManager.setSauveDesc (2);
       if (!undoManager.ref (false))
       {
         errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
@@ -81,6 +82,7 @@ CModele::CModele (ENorme eNorme) :
         errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
         throw errorMessage.c_str ();
       }
+      undoManager.setSauveDesc (1);
       break;
     }
     default :

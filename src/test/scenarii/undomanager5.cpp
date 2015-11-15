@@ -27,54 +27,57 @@
 #include <memory>
 #include <cassert>
 
-#include "CProjet.hpp"
+#include "CModele.hpp"
 
 int
 main (int32_t,
       char   *[])
 {
-  CProjet projet (ENorme::EUROCODE);
-  std::shared_ptr <CAction> action;
+  CModele projet (ENorme::EUROCODE);
+  std::shared_ptr <POCO::sol::CAction> action;
+  bool retour;
   
-  projet.setSauveDesc (2);
-  assert (projet.ref ());
+  projet.getUndoManager ().setSauveDesc (2);
+  retour = projet.getUndoManager ().ref ();
+  assert (retour);
   assert (projet.getActionCount () == 0);
   // 0 Poids propre
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                              ("Poids propre"),
-                                       0,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                           std::make_shared <std::string> ("Poids propre"), 0);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 1);
   // 2 Exploitation
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                                ("Chargement"),
-                                       2,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                             std::make_shared <std::string> ("Chargement"), 2);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 2);
   // 18 Neige
-  action = std::make_shared <CAction> (std::make_shared <std::string>
-                                                                     ("Neige"),
-                                       18,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                                 std::make_shared <std::string> ("Neige"), 18);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 3);
   // 19 Vent
-  action = std::make_shared <CAction> (std::make_shared <std::string> ("Vent"),
-                                       19,
-                                       projet);
-  assert (projet.addAction (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                                  std::make_shared <std::string> ("Vent"), 19);
+  retour = projet.fAction.doAdd (action);
+  assert (retour);
   assert (projet.getActionCount () == 4);
-  assert (projet.unref ());
+  retour = projet.getUndoManager ().unref ();
+  assert (retour);
 
-  assert (projet.undoDesc (0)->compare ("Ajout de l'action “Poids propre”\n"
-                                        "Ajout de l'action “Chargement”\n"
-                                        "Ajout de l'action “Neige”\n"
-                                        "Ajout de l'action “Vent”") == 0);
-  assert (projet.undoDesc (1)->compare ("Paramètres du projet (Eurocode, annexe nationale)") == 0);
+  assert (projet.getUndoManager ().undoDesc (0)->compare (
+                                           "Ajout de l'action “Poids propre”\n"
+                                           "Ajout de l'action “Chargement”\n"
+                                           "Ajout de l'action “Neige”\n"
+                                           "Ajout de l'action “Vent”") == 0);
+  assert (projet.getUndoManager ().undoDesc (1)->compare (
+                                      "Paramètres du projet (Eurocode)") == 0);
 
-  assert (projet.enregistre ("undomanager5.xml"));
+  retour = projet.enregistre ("undomanager5.xml");
+  assert (retour);
   
   return 0;
 }
