@@ -6,7 +6,7 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
 
 TESTS	=	projet
 
-AM_LDFLAGS      = ../../libeurocode/libeurocode.la ../../libundo/libundo.la ../../libprojet/libprojet.la
+AM_LDFLAGS      = ../../libundo/libundo.la ../../libprojet/libprojet.la
 
 projet_SOURCES	=	projet.cpp
 

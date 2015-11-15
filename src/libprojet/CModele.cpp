@@ -135,6 +135,12 @@ CModele::getNorme () const
   return norme;
 }
 
+const POCO::CPreferences &
+CModele::getPreferences ()
+{
+  return preferences;
+}
+
 UndoManager &
 CModele::getUndoManager ()
 {

@@ -26,15 +26,15 @@
 #include <memory>
 #include <cassert>
 
-#include "CProjet.hpp"
-#include "NbUser.hpp"
+#include "CModele.hpp"
+#include "POCO/nombre/Utilisateur.hpp"
 
 int
 main (int32_t,
       char   *[])
 {
   /* Variables */
-  CProjet projet (ENorme::EUROCODE);
+  CModele projet (ENorme::EUROCODE);
 //  GList   *tmp1, *tmp2;
   
 //  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -44,76 +44,75 @@ main (int32_t,
         -1,
         (gettext ("Impossible d'initialiser gtk.\n")); )*/
   
-  assert (projet.ref ());
+  assert (projet.getUndoManager ().ref ());
   
-  std::shared_ptr <CAction> action;
+  std::shared_ptr <POCO::sol::CAction> action;
   for (uint8_t i = 0; i < 22; i++)
   {
-    action = std::make_shared <CAction> (
+    action = std::make_shared <POCO::sol::CAction> (
                std::make_shared <std::string> (
-                               projet.getParametres ()->getpsiDescription (i)),
-               0,
-               projet);
+                               projet.getNorme ()->getPsiDescription (i)),
+               0);
     
-    assert (projet.addAction (action));
+    assert (projet.fAction.doAdd (action));
   }
   
-  assert (projet.getEtat () == EUndoEtat::MODIF);
-  assert (projet.unref ());
+  assert (projet.getUndoManager ().getEtat () == EUndoEtat::MODIF);
+  assert (projet.getUndoManager ().unref ());
   
-  assert (projet.ref ());
-  CAction *action2;
-  assert (action2 = projet.getAction (projet.getParametres ()->
-                                                       getpsiDescription (5)));
+  assert (projet.getUndoManager ().ref ());
+  std::shared_ptr <POCO::sol::CAction> *action2;
+  assert (action2 = projet.getAction (projet.getNorme ()->
+                                                       getPsiDescription (5)));
   assert (action2);
-  action2->getPsi (0)->getVal ();
-  action2->getPsi (1)->getUnite ();
-  action2->getPsi (2)->toString ();
-  assert (action2->setPsi (0, std::make_shared <NbUser> (0.5, EUnite::U_)));
-  assert (action2->setPsi (1, std::make_shared <NbUser> (0.5, EUnite::U_)));
-  assert (action2->setPsi (2, std::make_shared <NbUser> (0.5, EUnite::U_)));
-  action2->getPsi (0)->getVal ();
-  action2->getPsi (1)->getUnite ();
-  action2->getPsi (2)->toString ();
-  assert (projet.unref ());
-  assert (projet.undo ());
-  assert (projet.redo ());
+  action = *action2;
+  action->getPsi (0)->getVal ();
+  action->getPsi (1)->getUnite ();
+  action->getPsi (2)->toString (projet.getPreferences ().getDecimales ());
+  assert (projet.fAction.doSetPsi (action, 0, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
+  assert (projet.fAction.doSetPsi (action, 1, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
+  assert (projet.fAction.doSetPsi (action, 2, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
+  action->getPsi (0)->getVal ();
+  action->getPsi (1)->getUnite ();
+  action->getPsi (2)->toString (projet.getPreferences ().getDecimales ());
+  assert (projet.getUndoManager ().unref ());
+  assert (projet.getUndoManager ().undo ());
+  assert (projet.getUndoManager ().redo ());
   
-  assert (projet.ref ());
+  assert (projet.getUndoManager ().ref ());
   
-  std::unique_ptr <std::string> nom (new std::string (projet.getParametres ()->
-                                                      getpsiDescription (22)));
-  action = std::make_shared <CAction> (
+  std::unique_ptr <std::string> nom (new std::string (projet.getNorme ()->
+                                                      getPsiDescription (22)));
+  action = std::make_shared <POCO::sol::CAction> (
              std::make_shared <std::string> (
-                              projet.getParametres ()->getpsiDescription (22)),
-             22,
-             projet);
+                              projet.getNorme ()->getPsiDescription (22)),
+             22);
   // Ici, il y a un traitement volontaire de l'erreur.
-  if (!projet.addAction (action))
+  if (!projet.fAction.doAdd (action))
   {
     action = nullptr;
     nom = nullptr;
-    projet.rollback ();
+    projet.getUndoManager ().rollback ();
   }
   else
-    assert (nullptr);
+    assert (false);
   
-  assert (projet.getParametres ()->getpsiDescription (22).empty ());
+  assert (projet.getNorme ()->getPsiDescription (22).empty ());
   assert (projet.getActionCount () == 22);
-  assert (projet.undo ());
-  assert (projet.undo ());
+  assert (projet.getUndoManager ().undo ());
+  assert (projet.getUndoManager ().undo ());
   assert (projet.getActionCount () == 0);
-  assert (projet.redo ());
-  assert (projet.redo ());
+  assert (projet.getUndoManager ().redo ());
+  assert (projet.getUndoManager ().redo ());
   assert (projet.getActionCount () == 22);
-  assert (projet.getEtat () == EUndoEtat::NONE_OR_REVERT);
+  assert (projet.getUndoManager ().getEtat () == EUndoEtat::NONE_OR_REVERT);
   
-  assert (projet.undo ());
-  assert (projet.ref ());
-  assert (projet.getParametres ()->setNom (std::make_shared <std::string>
+  assert (projet.getUndoManager ().undo ());
+/*  assert (projet.getUndoManager ().ref ());
+  assert (projet.getNorme ()->setNom (std::make_shared <std::string>
                                                                      ("nom")));
-  assert (projet.getParametres ()->setVariante (0));
-  assert (projet.unref ());
+  assert (projet.getNorme ()->setVariante (0));
+  assert (projet.getUndoManager ().unref ());*/
   
   assert (projet.enregistre ("coverage.xml"));
   

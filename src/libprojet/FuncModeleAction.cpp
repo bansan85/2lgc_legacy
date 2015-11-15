@@ -193,9 +193,9 @@ FuncModeleAction::doXMLAdd (uint32_t                              id,
 }
 
 bool
-FuncModeleAction::doSetPsi (std::shared_ptr <POCO::sol::CAction> & action,
-                            uint8_t                                psi,
-                            std::shared_ptr <POCO::INb> &          val)
+FuncModeleAction::doSetPsi (const std::shared_ptr<POCO::sol::CAction> & action,
+                            uint8_t                                     psi,
+                            const std::shared_ptr <POCO::INb>         & val)
 {
   BUGPARAM (static_cast <void *> (action.get ()),
             "%p", action, false, &modele.undoManager)

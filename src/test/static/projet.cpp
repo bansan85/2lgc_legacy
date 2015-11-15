@@ -22,14 +22,14 @@
 #include <libintl.h>
 #include <string.h>
 
-#include "CProjet.hpp"
+#include "CModele.hpp"
 
 int
 main (int32_t,
       char   *[])
 {
-  CProjet::showWarranty ();
-  CProjet::showHelp ();
+  CModele::showWarranty ();
+  CModele::showHelp ();
   
   return 0;
 }

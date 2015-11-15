@@ -11443,7 +11443,7 @@
         <dia:point val="-566,74"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-566.05,73.95;-533.495,169.15"/>
+        <dia:rectangle val="-566.05,73.95;-533.495,171"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-566,74"/>
@@ -11452,7 +11452,7 @@
         <dia:real val="32.454999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="95.099999999999937"/>
+        <dia:real val="96.949999999999932"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CModele#</dia:string>
@@ -13319,6 +13319,36 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
           </dia:attribute>
           <dia:attribute name="query">
             <dia:boolean val="true"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#getPreferences#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="stereotype">
+            <dia:string>##</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string>#const POCO::CPreferences &amp;#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="comment">
+            <dia:string>#Renvoie les préférences du modèle.#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="inheritance_type">
+            <dia:enum val="2"/>
+          </dia:attribute>
+          <dia:attribute name="query">
+            <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="class_scope">
             <dia:boolean val="false"/>
@@ -37119,13 +37149,13 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-575,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-575.05,175.95;-544.805,202.65"/>
+        <dia:rectangle val="-575.05,175.95;-544.42,202.65"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-575,176"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="30.145"/>
+        <dia:real val="30.530000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="26.600000000000009"/>
@@ -37649,7 +37679,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
                 <dia:string>#action#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr &lt;POCO::sol::CAction&gt; &amp;#</dia:string>
+                <dia:string>#const std::shared_ptr &lt;POCO::sol::CAction&gt; &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -37683,7 +37713,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
                 <dia:string>#val#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#std::shared_ptr &lt;POCO::INb&gt; &amp;#</dia:string>
+                <dia:string>#const std::shared_ptr &lt;POCO::INb&gt; &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -37852,19 +37882,19 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O154">
       <dia:attribute name="obj_pos">
-        <dia:point val="-549.773,169.1"/>
+        <dia:point val="-549.773,170.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-560.378,169.05;-549.722,176.45"/>
+        <dia:rectangle val="-560.185,170.9;-549.722,176.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-549.773,169.1"/>
-        <dia:point val="-549.773,172.35"/>
-        <dia:point val="-559.928,172.35"/>
-        <dia:point val="-559.928,176"/>
+        <dia:point val="-549.773,170.95"/>
+        <dia:point val="-549.773,173.275"/>
+        <dia:point val="-559.735,173.275"/>
+        <dia:point val="-559.735,176"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37896,16 +37926,16 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O155">
       <dia:attribute name="obj_pos">
-        <dia:point val="-544.855,202.6"/>
+        <dia:point val="-544.47,202.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-544.905,26.55;-396.94,203.45"/>
+        <dia:rectangle val="-544.52,26.55;-396.94,203.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-544.855,202.6"/>
+        <dia:point val="-544.47,202.6"/>
         <dia:point val="-397.39,202.6"/>
         <dia:point val="-397.39,27"/>
       </dia:attribute>
@@ -37938,19 +37968,19 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O156">
       <dia:attribute name="obj_pos">
-        <dia:point val="-559.928,176"/>
+        <dia:point val="-559.735,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-559.978,168.65;-549.322,176.05"/>
+        <dia:rectangle val="-559.785,170.5;-549.322,176.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-559.928,176"/>
-        <dia:point val="-559.928,172.75"/>
-        <dia:point val="-549.773,172.75"/>
-        <dia:point val="-549.773,169.1"/>
+        <dia:point val="-559.735,176"/>
+        <dia:point val="-559.735,173.675"/>
+        <dia:point val="-549.773,173.675"/>
+        <dia:point val="-549.773,170.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37985,7 +38015,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-397.39,27"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-545.305,26.95;-397.34,203.45"/>
+        <dia:rectangle val="-544.92,26.95;-397.34,203.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -37993,7 +38023,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       <dia:attribute name="orth_points">
         <dia:point val="-397.39,27"/>
         <dia:point val="-397.39,202.6"/>
-        <dia:point val="-544.855,202.6"/>
+        <dia:point val="-544.47,202.6"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -38517,16 +38547,16 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-525.312,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-550.222,168.65;-525.262,176.05"/>
+        <dia:rectangle val="-550.222,170.5;-525.262,176.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-525.312,176"/>
-        <dia:point val="-525.312,172.75"/>
-        <dia:point val="-549.773,172.75"/>
-        <dia:point val="-549.773,169.1"/>
+        <dia:point val="-525.312,173.675"/>
+        <dia:point val="-549.773,173.675"/>
+        <dia:point val="-549.773,170.95"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -38558,18 +38588,18 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O160">
       <dia:attribute name="obj_pos">
-        <dia:point val="-549.773,169.1"/>
+        <dia:point val="-549.773,170.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-549.823,169.05;-524.863,176.45"/>
+        <dia:rectangle val="-549.823,170.9;-524.863,176.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-549.773,169.1"/>
-        <dia:point val="-549.773,172.35"/>
-        <dia:point val="-525.312,172.35"/>
+        <dia:point val="-549.773,170.95"/>
+        <dia:point val="-549.773,173.275"/>
+        <dia:point val="-525.312,173.275"/>
         <dia:point val="-525.312,176"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

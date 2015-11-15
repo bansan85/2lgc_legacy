@@ -85,7 +85,7 @@ class FuncModeleAction
      * \param val (in) Le nouveau cœfficient.
      * \return bool CHK
      */
-    bool CHK doSetPsi (std::shared_ptr <POCO::sol::CAction> & action, uint8_t psi, std::shared_ptr <POCO::INb> & val);
+    bool CHK doSetPsi (const std::shared_ptr <POCO::sol::CAction> & action, uint8_t psi, const std::shared_ptr <POCO::INb> & val);
     /**
      * \brief Format XML pour modifier le cœfficient psi d'une action.
      * \param id (in) L'identifiant de l'action.

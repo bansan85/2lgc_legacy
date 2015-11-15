@@ -266,6 +266,11 @@ class DllExport CModele : public ISujet, public CCalculs
      */
     const std::shared_ptr <INorme> & getNorme () const;
     /**
+     * \brief Renvoie les préférences du modèle.
+     * \return const POCO::CPreferences &
+     */
+    const POCO::CPreferences & getPreferences ();
+    /**
      * \brief Renvoie le gestionnaire d'annulation.
      * \return UndoManager &
      */

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.2\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2015-11-15 21:27+0100\n"
-"PO-Revision-Date: 2015-11-14 22:24+0100\n"
+"POT-Creation-Date: 2015-11-15 22:25+0100\n"
+"PO-Revision-Date: 2015-11-15 22:25+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -160,8 +160,8 @@ msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
 #, c-format
-msgid "Utilisation de la norme %s.\n"
-msgstr ""
+msgid "Paramètres du projet (%s)"
+msgstr "Paramètres du projet (%s)"
 
 #, c-format
 msgid ""
@@ -175,9 +175,9 @@ msgstr ""
 msgid "Ajout de l'action “%s”"
 msgstr "Ajout de l'action “%s”"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Cœfficient ψ%s de l'action “%s” (%s)"
-msgstr "Cœfficient ψ%C de l'action “%s” (%lf)"
+msgstr "Cœfficient ψ%s de l'action “%s” (%s)"
 
 #, c-format
 msgid "Suppression de l'action “%s”"
@@ -290,9 +290,6 @@ msgstr "Suppression de l'action “%s”"
 
 #~ msgid "Eurocode, annexe nationale"
 #~ msgstr "Eurocode, annexe nationale"
-
-#~ msgid "Paramètres du projet (%s)"
-#~ msgstr "Paramètres du projet (%s)"
 
 #~ msgid "Paramètres de l'action “%s” (%s)"
 #~ msgstr "Paramètres de l'action “%s” (%s)"

@@ -10,7 +10,7 @@ DEFAULT_INCLUDES	=	-I$(srcdir)/../.. \
 
 TESTS							=	coverage
 
-AM_LDFLAGS				= ../libundo/libundo.la
+AM_LDFLAGS				= ../libundo/libundo.la ../libprojet/libprojet.la
 
 coverage_SOURCES	=	coverage.cpp
 
