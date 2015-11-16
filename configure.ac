@@ -145,22 +145,19 @@ done
 AC_MSG_CHECKING([if $CXX accepts -std=c++11])
 OLD_CFLAGS="$CXXFLAGS"
 CXXFLAGS="$CXXFLAGS -std=c++11 -Werror"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE(
-  [void foo(void); void foo(void) { }])], [
-  AM_CXXFLAGS="$AM_CXXFLAGS -std=c++11"
-  AC_MSG_RESULT([yes])
-], [
-  AC_MSG_RESULT([no])
-  AC_MSG_CHECKING([if $CXX accepts -std=c++0x])
-  CXXFLAGS="$OLD_CFLAGS -std=c++0x -Werror"
-  AC_COMPILE_IFELSE([AC_LANG_SOURCE(
-    [void foo(void); void foo(void) { }])], [
-    AM_CXXFLAGS="$AM_CXXFLAGS -std=c++0x"
-    AC_MSG_RESULT([yes])
-  ], [
-    AC_MSG_RESULT([no])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE([void foo(void); void foo(void) { }])],
+  [AM_CXXFLAGS="$AM_CXXFLAGS -std=c++11"
+   AC_MSG_RESULT([yes])],
+  [AC_MSG_RESULT([no])
+   AC_MSG_CHECKING([if $CXX accepts -std=c++0x])
+   CXXFLAGS="$OLD_CFLAGS -std=c++0x -Werror"
+   AC_COMPILE_IFELSE(
+     [AC_LANG_SOURCE([void foo(void); void foo(void) { }])],
+     [AM_CXXFLAGS="$AM_CXXFLAGS -std=c++0x"
+      AC_MSG_RESULT([yes])],
+     [AC_MSG_RESULT([no])])
   ])
-])
 CXXFLAGS="$OLD_CFLAGS"
 
 AC_MSG_CHECKING(de la récense de gcc...)
@@ -177,6 +174,22 @@ AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <list>
                                    ]])],
                   [AC_MSG_RESULT(ok)],
                   [AC_MSG_ERROR(g++ en version 4.6 minimum est nécessaire.)])
+
+AC_MSG_CHECKING([if classic system])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE(
+    [#include <climits>
+     #include <cassert>
+
+     int main ()
+     {
+       assert (CHAR_BIT == 8);
+       assert (sizeof (char*) == sizeof (int*));
+     }
+    ])
+  ],
+  [AC_MSG_RESULT([yes])],
+  [AC_MSG_RESULT([no])])
 
 # libxml2
 LIBXML_REQUIRED_VERSION=2.7.0
