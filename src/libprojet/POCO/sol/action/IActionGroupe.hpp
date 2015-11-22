@@ -22,6 +22,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <memory>
+#include <string>
 
 namespace POCO
 {

@@ -23,7 +23,7 @@
 
 #include "CBarreInfoEF.hpp"
 
-CBarreInfoEF::CBarreInfoEF () :
+POCO::calc::CBarreInfoEF::CBarreInfoEF () :
   m_rig_loc (nullptr),
   m_rot (nullptr),
   m_rot_t (nullptr),
@@ -42,7 +42,7 @@ CBarreInfoEF::CBarreInfoEF () :
 {
 }
 
-CBarreInfoEF::~CBarreInfoEF ()
+POCO::calc::CBarreInfoEF::~CBarreInfoEF ()
 {
 }
 

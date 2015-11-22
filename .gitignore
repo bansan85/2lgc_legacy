@@ -71,3 +71,6 @@ cov-2LGC.tgz
 cov-int
 massif.out.*
 2lgc_code-?.?.?*
+build/vs2015/*.vcxproj.user
+build/vs2015/Debug
+build/vs2015/*.sdf

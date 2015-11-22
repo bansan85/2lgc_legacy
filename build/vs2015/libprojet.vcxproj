@@ -5,15 +5,102 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\libprojet\CCalculs.hpp" />
+    <ClInclude Include="..\..\src\libprojet\CModele.hpp" />
+    <ClInclude Include="..\..\src\libprojet\EAction.hpp" />
+    <ClInclude Include="..\..\src\libprojet\ENorme.hpp" />
+    <ClInclude Include="..\..\src\libprojet\EUnite.hpp" />
+    <ClInclude Include="..\..\src\libprojet\FuncModeleAction.hpp" />
+    <ClInclude Include="..\..\src\libprojet\FuncModeleNorme.hpp" />
+    <ClInclude Include="..\..\src\libprojet\INorme.hpp" />
+    <ClInclude Include="..\..\src\libprojet\norme\ENormeEcAc.hpp" />
+    <ClInclude Include="..\..\src\libprojet\norme\Eurocode.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\CAdresse.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CAnalyseComm.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CBarreInfoEF.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CFonction.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CPonderation.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CPonderations.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\calc\CTroncon.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\CPoint.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\CPreferences.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\INb.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\nombre\Calcul.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\nombre\Utilisateur.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\action\CGroupe.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\action\ECombinaison.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\action\IActionGroupe.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\CAction.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\CCombinaison.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\charge\BarrePonctuelle.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\charge\BarreRepartieUniformement.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\charge\Noeud.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\CNiveauGroupe.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\sol\ICharge.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\CAppui.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\CBarre.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\CPoint.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\CRelachement.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\deplacementType\Bloque.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\deplacementType\Libre.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\deplacementType\Lineaire.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\IDeplacementType.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\IMateriau.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\INoeud.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\ISection.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\materiau\EcAcier.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\materiau\EcBeton.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\noeud\Barre.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\noeud\Libre.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\section\Carree.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\section\Circulaire.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\section\Personnalisee.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\section\Rectangulaire.hpp" />
+    <ClInclude Include="..\..\src\libprojet\POCO\str\section\T.hpp" />
+    <ClInclude Include="..\..\src\macro\Algo.hpp" />
+    <ClInclude Include="..\..\src\macro\EUniteTxt.hpp" />
+    <ClInclude Include="..\..\src\macro\Math.hpp" />
+    <ClInclude Include="..\..\src\macro\MErreurs.hpp" />
+    <ClInclude Include="..\..\src\macro\MUndo.hpp" />
+    <ClInclude Include="..\..\src\macro\SString.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\libprojet\CCalculs.cpp" />
+    <ClCompile Include="..\..\src\libprojet\CModele.cpp" />
+    <ClCompile Include="..\..\src\libprojet\FuncModeleAction.cpp" />
+    <ClCompile Include="..\..\src\libprojet\FuncModeleNorme.cpp" />
+    <ClCompile Include="..\..\src\libprojet\INorme.cpp" />
+    <ClCompile Include="..\..\src\libprojet\norme\Eurocode.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\calc\CBarreInfoEF.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\calc\CPonderations.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\CPreferences.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\INb.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\nombre\Calcul.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\nombre\Utilisateur.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\sol\action\IActionGroupe.cpp" />
+    <ClCompile Include="..\..\src\libprojet\POCO\sol\CAction.cpp" />
+    <ClCompile Include="..\..\src\macro\SString.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0271CBD-F990-47C7-A13B-B5EB5EC42344}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Win32Project1</RootNamespace>
-    <ProjectName>03-libprojet</ProjectName>
+    <ProjectName>libprojet</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
@@ -27,8 +114,15 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\..\src\libeurocode;..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
@@ -45,72 +139,27 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmsvcrt.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingwex.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingw32.a;C:\msys64\mingw32\lib\gcc\i686-w64-mingw32\5.2.0\libgcc.a;Debug\libundo.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/DLOCALEDIR="\".\\locale\"" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmsvcrt.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingwex.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingw32.a;C:\msys64\mingw32\lib\gcc\i686-w64-mingw32\4.9.2\libgcc.a;Debug\01-libundo.lib;Debug\02-libeurocode.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\libprojet\CAction.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CAdresse.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CAnalyseComm.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CAppui.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CBarre.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CBarreInfoEF.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CCalculs.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CCombinaison.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CFonction.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CGroupe.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ChargeBarrePonctuelle.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ChargeBarreRepUni.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ChargeNoeud.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CModele.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CNiveauGroupe.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CPoint.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CPonderation.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CPonderations.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CPreferences.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CProjet.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CRelachement.hpp" />
-    <ClInclude Include="..\..\src\libprojet\CTroncon.hpp" />
-    <ClInclude Include="..\..\src\libprojet\DepBloque.hpp" />
-    <ClInclude Include="..\..\src\libprojet\DepLibre.hpp" />
-    <ClInclude Include="..\..\src\libprojet\DepLineaire.hpp" />
-    <ClInclude Include="..\..\src\libprojet\EAction.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ECombinaison.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ENorme.hpp" />
-    <ClInclude Include="..\..\src\libprojet\EUnite.hpp" />
-    <ClInclude Include="..\..\src\libprojet\IActionGroupe.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ICharge.hpp" />
-    <ClInclude Include="..\..\src\libprojet\IDeplacementType.hpp" />
-    <ClInclude Include="..\..\src\libprojet\IMateriau.hpp" />
-    <ClInclude Include="..\..\src\libprojet\INb.hpp" />
-    <ClInclude Include="..\..\src\libprojet\INoeud.hpp" />
-    <ClInclude Include="..\..\src\libprojet\IParametres.hpp" />
-    <ClInclude Include="..\..\src\libprojet\ISection.hpp" />
-    <ClInclude Include="..\..\src\libprojet\NbCalcul.hpp" />
-    <ClInclude Include="..\..\src\libprojet\NbUser.hpp" />
-    <ClInclude Include="..\..\src\libprojet\NdBarre.hpp" />
-    <ClInclude Include="..\..\src\libprojet\NdLibre.hpp" />
-    <ClInclude Include="..\..\src\libprojet\SecCarree.hpp" />
-    <ClInclude Include="..\..\src\libprojet\SecCirc.hpp" />
-    <ClInclude Include="..\..\src\libprojet\SecPerso.hpp" />
-    <ClInclude Include="..\..\src\libprojet\SecRect.hpp" />
-    <ClInclude Include="..\..\src\libprojet\SecT.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\libprojet\CAction.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CBarreInfoEF.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CCalculs.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CModele.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CPonderations.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CPreferences.cpp" />
-    <ClCompile Include="..\..\src\libprojet\CProjet.cpp" />
-    <ClCompile Include="..\..\src\libprojet\IActionGroupe.cpp" />
-    <ClCompile Include="..\..\src\libprojet\INb.cpp" />
-    <ClCompile Include="..\..\src\libprojet\IParametres.cpp" />
-    <ClCompile Include="..\..\src\libprojet\NbCalcul.cpp" />
-    <ClCompile Include="..\..\src\libprojet\NbUser.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -25,6 +25,7 @@ class FuncModeleNorme;
 
 #include <memory>
 #include <cstdint>
+#include <string>
 #include "ENorme.hpp"
 #include "EAction.hpp"
 
