@@ -15,10 +15,6 @@ pacman -S mingw-w64-i686-suitesparse mingw-w64-i686-gtkmm3 mingw-w64-x86_64-suit
 
 Enfin, le projet est maintenant utilisable en lançant le fichier 2lgc.sln.
 
-libeurocode et libprojet présentant une dépendance circulaire, il est
-nécessaire de réaliser les opérations de compilation suivante dans l'ordre :
-01 libundo (génère .dll et .lib)
-02 libeurocode (génère .lib)
-03 libprojet (génère .dll et .lib)
-04 libeurocode (génère .dll et .lib)
-10 codegui (génère codegui)
+Il est nécessaire de réaliser les opérations de compilation suivantes dans l'ordre :
+libsouvenir (génère .dll et .lib)
+libprojet (génère .dll et .lib)

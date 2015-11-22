@@ -1,8 +1,7 @@
 DEFAULT_INCLUDES	 =	-I$(builddir) \
 											-I$(srcdir)/../.. \
-											-I$(srcdir)/../libeurocode \
 											-I$(srcdir)/../libprojet \
-											-I$(srcdir)/../libundo \
+											-I$(srcdir)/../libsouvenir \
 											-I$(srcdir)/../macro
 
 bin_PROGRAMS			 =	codegui
@@ -17,7 +16,7 @@ codegui_LDADD			 =	-lcholmod \
 											@BLAS_LIBS@ \
 											@XML_LIBS@ \
 											../libprojet/libprojet.la \
-											../libundo/libundo.la
+											../libsouvenir/libsouvenir.la
 
 if ENABLE_GTK
 codegui_SOURCES   +=	gtk-ressources.cpp \
