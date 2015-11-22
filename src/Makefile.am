@@ -1,4 +1,4 @@
-SUBDIRS  = 	libundo \
+SUBDIRS  = 	libsouvenir \
 						libprojet \
 						macro \
 						test

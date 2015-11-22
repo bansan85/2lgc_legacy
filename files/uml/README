@@ -3,20 +3,19 @@ Convention pour la conception des diagrammes DIA.
 Interface :
 Couleur : vert foncé #008000
 Préfix : "I"
-Fichier dia : nom de l'interface
 
 Classe implémentant une interface :
 Couleur : orange #FFA500
-Préfix : abbréviation du nom de l'interface sans son "I"
-Fichier dia : ces classes sont définies dans le fichier dia de l'interface.
+Préfix : aucun, pas même une abbréviation de l'interface. Par contre, elle est placée dans un paquet dont le nom est identique (ou une abbréviation) à celui de l'interface. Ce paquet doit être dans le même paquet (ou namespace) que celui de l'interface.
+Exemple : soit l'interface ISection dans le namespace POCO::str, toutes les implémentations seront dans POCO::str::section.
 
 Dépendances :
-Couleur : celui de la classe à l'origine de la dépendance.
+Couleur : celui de la classe à l'origine de la dépendance sauf pour les dépendances systèmes où la couleur est celle d'une classe extern système afin de les repérer facilement.
 
 Classe externe désignant une dépendance vers une entête système :
-Couleur : bleu
+Couleur : bleu #0000FF
 Ne contient rien d'autre que le nom de la classe et son stéréotype.
 
 Classe externe désignant une dépendance vers une entête non système :
-Couleur : noir
+Couleur : le même que celui de la classe extern.
 Ne contient rien d'autre que le nom de la classe et son stéréotype.

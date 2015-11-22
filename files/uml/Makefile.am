@@ -1,10 +1,10 @@
-all : undo-uml projet-uml eurocode-uml gtk-uml
+all : souvenir-uml projet-uml eurocode-uml gtk-uml
 
-undo-uml : $(top_builddir)/src/libundo/IObserveur.hpp
+souvenir-uml : $(top_builddir)/src/libsouvenir/IObserveur.hpp
 
-$(top_builddir)/src/libundo/IObserveur.hpp : $(top_srcdir)/files/uml/libundo.dia
+$(top_builddir)/src/libsouvenir/IObserveur.hpp : $(top_srcdir)/files/uml/libsouvenir.dia
 if HAVE_DIA2CODE
-	/home/legarrec/info/programmation/dia2code-git/src/dia2code --buildtree --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libundo "$(top_srcdir)/files/uml/libundo.dia"
+	/home/legarrec/info/programmation/dia2code-git/src/dia2code --buildtree --tab 2 -nl -l $(top_srcdir)/files/uml/COPYING.head -t cpp11 -ext hpp -d $(top_builddir)/src/libsouvenir "$(top_srcdir)/files/uml/libsouvenir.dia"
 endif
 
 projet-uml : $(top_builddir)/src/libprojet/CCalculs.hpp
@@ -52,6 +52,6 @@ CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o *.stamp
 
 EXTRA_DIST	=	COPYING.head \
 							gtk.dia \
-							libundo.dia \
+							libsouvenir.dia \
 							libprojet.dia \
 							libeurocode.dia

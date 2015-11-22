@@ -4,7 +4,7 @@
 AC_PREREQ([2.68])
 AC_INIT(2lgc_code, 0.0.1, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 AM_INIT_AUTOMAKE([-Wno-portability])
-AC_CONFIG_SRCDIR([src/libundo/POCO/UndoData.cpp])
+AC_CONFIG_SRCDIR([src/libsouvenir/UndoManager.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
@@ -421,8 +421,8 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  files/desktop/Makefile
                  files/uml/Makefile
                  src/Makefile
+                 src/libsouvenir/Makefile
                  src/libprojet/Makefile
-                 src/libundo/Makefile
                  src/macro/Makefile
                  docs/Doxyfile
                  src/test/Makefile

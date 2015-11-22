@@ -1,14 +1,14 @@
 DEFAULT_INCLUDES		  =	-I$(srcdir) \
 												-I$(srcdir)/../.. \
 												-I$(srcdir)/../macro \
-												-I$(srcdir)/../libundo
+												-I$(srcdir)/../libsouvenir
 
 AUTOMAKE_OPTIONS		  =	subdir-objects
 
 lib_LTLIBRARIES			  =	libprojet.la
 
 libprojet_la_LIBADD	 	=	@XML_LIBS@ \
-                        ../libundo/libundo.la
+                        ../libsouvenir/libsouvenir.la
 if PLATFORM_LINUX
 if ENABLE_DEBUG
 libprojet_la_LIBADD	 +=	-lgcov

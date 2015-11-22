@@ -1,6 +1,8 @@
 if HAVE_DOXYGEN
 
-$(builddir)/doxyfile.stamp: $(wildcard ../src/lib/*.hpp ../src/macro/*.hpp ../src/libundo/*.hpp)
+HPP_FILES = $(shell find ../src/ -name '*.hpp')
+
+$(builddir)/doxyfile.stamp: $(HPP_FILES)
 	$(DOXYGEN) Doxyfile
 	echo Timestamp > $(builddir)/doxyfile.stamp
 

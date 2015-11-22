@@ -1,7 +1,7 @@
 DEFAULT_INCLUDES	=	-I$(srcdir)/../../.. \
 										-I$(srcdir)/../../libeurocode \
 										-I$(srcdir)/../../libprojet \
-										-I$(srcdir)/../../libundo \
+										-I$(srcdir)/../../libsouvenir \
 										-I$(srcdir)/../../macro
 
 TESTS	=	action1 \
@@ -15,7 +15,7 @@ TESTS	=	action1 \
 # pour md5sumfile.cpp
 #LIBS += -lssl -lcrypto
 
-AM_LDFLAGS			= ../../libundo/libundo.la ../../libprojet/libprojet.la
+AM_LDFLAGS			= ../../libsouvenir/libsouvenir.la ../../libprojet/libprojet.la
 
 action1_SOURCES	=	action1.cpp
 

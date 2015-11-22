@@ -223,7 +223,7 @@
         <dia:point val="-330,-310"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-330.05,-311.05;-199.95,40.05"/>
+        <dia:rectangle val="-330.05,-311.05;-199.95,48.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -235,7 +235,7 @@
         <dia:real val="130"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="350"/>
+        <dia:real val="358"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.10000000149011612"/>
@@ -2256,19 +2256,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O12">
       <dia:attribute name="obj_pos">
-        <dia:point val="-236,0"/>
+        <dia:point val="-236,6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-236.05,-0.05;-208.885,37.8"/>
+        <dia:rectangle val="-236.05,5.95;-208.885,44.5"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-236,0"/>
+        <dia:point val="-236,6"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="27.064999999999998"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="37.750000000000014"/>
+        <dia:real val="38.450000000000017"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#CBarreInfoEF#</dia:string>
@@ -2277,7 +2277,7 @@
         <dia:string>#struct#</dia:string>
       </dia:attribute>
       <dia:attribute name="comment">
-        <dia:string>##</dia:string>
+        <dia:string>#Structure interne permettant de caractériser la poutre aux éléments finis.#</dia:string>
       </dia:attribute>
       <dia:attribute name="abstract">
         <dia:boolean val="false"/>
@@ -5103,13 +5103,13 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O15">
       <dia:attribute name="obj_pos">
-        <dia:point val="-270,6"/>
+        <dia:point val="-270,14"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-270.05,5.95;-242.885,34.9"/>
+        <dia:rectangle val="-270.05,13.95;-242.885,42.9"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-270,6"/>
+        <dia:point val="-270,14"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="27.064999999999998"/>
@@ -15943,7 +15943,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-464.09,141.55"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-464.84,37.7;-220.728,142.4"/>
+        <dia:rectangle val="-464.84,44.4;-220.728,142.4"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -15951,7 +15951,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       <dia:attribute name="orth_points">
         <dia:point val="-464.09,141.55"/>
         <dia:point val="-222.468,141.55"/>
-        <dia:point val="-222.468,37.75"/>
+        <dia:point val="-222.468,44.45"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -16376,7 +16376,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-464.09,139.7"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-464.84,34.8;-254.727,140.55"/>
+        <dia:rectangle val="-464.84,42.8;-254.727,140.55"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -16384,7 +16384,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       <dia:attribute name="orth_points">
         <dia:point val="-464.09,139.7"/>
         <dia:point val="-256.467,139.7"/>
-        <dia:point val="-256.467,34.85"/>
+        <dia:point val="-256.467,42.85"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -19451,17 +19451,17 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Dependency" version="1" id="O70">
       <dia:attribute name="obj_pos">
-        <dia:point val="-236,2.7"/>
+        <dia:point val="-236,9.4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-388.18,1.95;-235.95,54.45"/>
+        <dia:rectangle val="-388.18,8.65;-235.95,54.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-236,2.7"/>
-        <dia:point val="-387.73,2.7"/>
+        <dia:point val="-236,9.4"/>
+        <dia:point val="-387.73,9.4"/>
         <dia:point val="-387.73,54"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

@@ -27,6 +27,7 @@ namespace POCO
 {
   namespace calc
   {
+    /// Structure interne permettant de caractériser la poutre aux éléments finis.
     struct CBarreInfoEF
     {
       /// Matrice de rigidite locale
