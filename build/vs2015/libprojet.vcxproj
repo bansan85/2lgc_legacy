@@ -5,10 +5,6 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\libprojet\CCalculs.hpp" />
@@ -100,12 +96,6 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -114,17 +104,10 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\src\libeurocode;..\..\src\libprojet;..\..\src\libundo;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\src\libprojet;..\..\src\libsouvenir;..\..\src\macro;..\..\;.;C:\msys64\mingw32\include;C:\msys64\mingw32\include\libxml2;$(VC_IncludePath);$(UniversalCRT_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,24 +122,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmsvcrt.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingwex.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingw32.a;C:\msys64\mingw32\lib\gcc\i686-w64-mingw32\5.2.0\libgcc.a;Debug\libundo.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/DLOCALEDIR="\".\\locale\"" %(AdditionalOptions)</AdditionalOptions>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmsvcrt.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingwex.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingw32.a;C:\msys64\mingw32\lib\gcc\i686-w64-mingw32\4.9.2\libgcc.a;Debug\01-libundo.lib;Debug\02-libeurocode.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\msys64\mingw32\lib\libxml2.dll.a;C:\msys64\mingw32\lib\libintl.dll.a;C:\msys64\mingw32\lib\libsuitesparseconfig.a;C:\msys64\mingw32\lib\libumfpack.a;C:\msys64\mingw32\lib\libcholmod.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmsvcrt.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingwex.a;C:\msys64\mingw32\i686-w64-mingw32\lib\libmingw32.a;C:\msys64\mingw32\lib\gcc\i686-w64-mingw32\5.2.0\libgcc.a;Debug\libsouvenir.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
