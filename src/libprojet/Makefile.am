@@ -161,6 +161,7 @@ libprojet_la_HEADERS 	=	\
 
 %.hpp :
 	$(MAKE) -C $(top_builddir)/files/uml projet-uml
+	$(MAKE) -C $(top_builddir)/files/uml projet-uml eurocode-uml
 
 CLEANFILES = *.gcno ../macro/*.gcno POCO/sol/action/*.gcno POCO/sol/*.gcno POCO/*.gcno POCO/calc/*.gcno POCO/nombre/*.gcno norme/*.gcno *.gcda $(libprojet_la_HEADERS)
 
