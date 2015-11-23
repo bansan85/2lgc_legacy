@@ -24,7 +24,6 @@ configure
 cppcheck-undo.log
 cppcheck.log
 depcomp
-docs/Doxyfile
 *.ui.h
 files/ui/ressources.xml
 install-sh
@@ -62,9 +61,8 @@ src/test/static/projet
 *.xml
 src/test/coverage
 doxyfile.stamp
-docs/html
-docs/latex
-docs/man
+docs/libprojet
+docs/libsouvenir
 out_html
 src/gtk/gtk-ressources.cpp
 cov-2LGC.tgz

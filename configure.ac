@@ -424,7 +424,8 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  src/libsouvenir/Makefile
                  src/libprojet/Makefile
                  src/macro/Makefile
-                 docs/Doxyfile
+                 docs/DoxyfileProjet
+                 docs/DoxyfileSouvenir
                  src/test/Makefile
                  src/test/bugs/Makefile
                  src/test/static/Makefile

@@ -1,14 +1,19 @@
 if HAVE_DOXYGEN
 
-HPP_FILES = $(shell find ../src/ -name '*.hpp')
+HPP_SOUVENIR_FILES = $(shell find ../src/libsouvenir -name '*.hpp')
+HPP_PROJET_FILES = $(shell find ../src/macro ../src/libprojet -name '*.hpp')
 
-$(builddir)/doxyfile.stamp: $(HPP_FILES)
-	$(DOXYGEN) Doxyfile
-	echo Timestamp > $(builddir)/doxyfile.stamp
+doxyfilesouvenir.stamp: $(HPP_SOUVENIR_FILES)
+	$(DOXYGEN) DoxyfileSouvenir
+	echo Timestamp > doxyfilesouvenir.stamp
 
-CLEANFILES = doxyfile.stamp
+doxyfileprojet.stamp: $(HPP_PROJET_FILES)
+	$(DOXYGEN) DoxyfileProjet
+	echo Timestamp > doxyfileprojet.stamp
 
-all-local: $(builddir)/doxyfile.stamp
+CLEANFILES = doxyfilesouvenir.stamp doxyfileprojet.stamp
+
+all-local: doxyfilesouvenir.stamp doxyfileprojet.stamp
 
 clean-local:
 	rm -Rf html latex man
