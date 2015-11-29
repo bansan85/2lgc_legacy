@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <string>
+#include <libxml/xmlstring.h>
 
 /**
  * \brief Équivalent de sprintf mais sécurisé ou encore de g_strdup_printf mais

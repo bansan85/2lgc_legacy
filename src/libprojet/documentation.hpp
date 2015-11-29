@@ -1,5 +1,3 @@
-#error Documentation only.
-
 /*!
 
 \namespace norme

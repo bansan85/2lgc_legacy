@@ -65,26 +65,25 @@ namespace POCO
         // Operations
         public :
           /**
-           * \brief Constructeur d'une classe CMatBetonEc.
+           * \brief Constructeur d'une classe EcBeton.
            * \param fck (in) La résistance caractéristique en compression sur cylindre en MPa.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          CMatBetonEc (INb * fck, UndoManager & undo);
+          EcBeton (INb * fck);
           /**
-           * \brief Duplication d'une classe CMatBetonEc.
+           * \brief Duplication d'une classe EcBeton.
            * \param other (in) La classe à dupliquer.
            */
-          CMatBetonEc (const CMatBetonEc & other) = delete;
+          EcBeton (const EcBeton & other) = delete;
           /**
-           * \brief Assignment operator de CMatBetonEc.
+           * \brief Assignment operator de EcBeton.
            * \param other (in) La classe à dupliquer.
-           * \return CMatBetonEc &
+           * \return EcBeton &
            */
-          CMatBetonEc & operator = (const CMatBetonEc & other) = delete;
+          EcBeton & operator = (const EcBeton & other) = delete;
           /**
-           * \brief Destructeur d'une classe CMatBetonEc.
+           * \brief Destructeur d'une classe EcBeton.
            */
-          virtual ~CMatBetonEc ();
+          virtual ~EcBeton ();
           /**
            * \brief Renvoie la valeur de fck en Pa.
            * \return INb const &

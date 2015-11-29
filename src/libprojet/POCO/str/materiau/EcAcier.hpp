@@ -43,27 +43,26 @@ namespace POCO
         // Operations
         public :
           /**
-           * \brief Constructeur d'une classe CMatAcierEc.
+           * \brief Constructeur d'une classe EcAcier.
            * \param fy (in) Limite d’élasticité en MPa.
            * \param fu (in) Résistance à la traction en MPa.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          CMatAcierEc (INb * fy, INb * fu, UndoManager & undo);
+          EcAcier (INb * fy, INb * fu);
           /**
-           * \brief Duplication d'une classe CMatAcierEc.
+           * \brief Duplication d'une classe EcAcier.
            * \param other (in) La classe à dupliquer.
            */
-          CMatAcierEc (const CMatAcierEc & other) = delete;
+          EcAcier (const EcAcier & other) = delete;
           /**
-           * \brief Assignment operator deCMatAcierEc.
+           * \brief Assignment operator de EcAcier.
            * \param other (in) La classe à dupliquer.
-           * \return CMatAcierEc &
+           * \return EcAcier &
            */
-          CMatAcierEc & operator = (const CMatAcierEc & other) = delete;
+          EcAcier & operator = (const EcAcier & other) = delete;
           /**
            * \brief Destructeur d'une classe CMatAcierEc.
            */
-          virtual ~CMatAcierEc ();
+          virtual ~EcAcier ();
           /**
            * \brief Renvoie la limite d’élasticité en Pa.
            * \return INb const &

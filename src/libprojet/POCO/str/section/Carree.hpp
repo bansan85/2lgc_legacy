@@ -43,9 +43,8 @@ namespace POCO
           /**
            * \brief Constructeur d'une classe Carree.
            * \param cote (in) Largeur et hauteur de la section.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Carree (INb * cote, UndoManager & undo);
+          Carree (INb * cote);
           /**
            * \brief Duplication d'une classe Carree.
            * \param other (in) La classe à dupliquer.

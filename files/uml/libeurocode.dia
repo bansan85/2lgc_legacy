@@ -1276,16 +1276,16 @@
         <dia:point val="-143.581,32.5992"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-143.631,32.5492;-117.236,54.4492"/>
+        <dia:rectangle val="-143.631,32.5492;-120.316,53.6492"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-143.581,32.5992"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="26.294999999999998"/>
+        <dia:real val="23.215"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="21.800000000000004"/>
+        <dia:real val="21.000000000000004"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#EcAcier#</dia:string>
@@ -1425,7 +1425,7 @@
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CMatAcierEc#</dia:string>
+            <dia:string>#EcAcier#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -1437,7 +1437,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une classe CMatAcierEc.#</dia:string>
+            <dia:string>#Constructeur d'une classe EcAcier.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1486,28 +1486,11 @@
                 <dia:enum val="1"/>
               </dia:attribute>
             </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#undo#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#UndoManager &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le gestionnaire des modifications.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
           </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CMatAcierEc#</dia:string>
+            <dia:string>#EcAcier#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>#delete#</dia:string>
@@ -1519,7 +1502,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CMatAcierEc.#</dia:string>
+            <dia:string>#Duplication d'une classe EcAcier.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1539,7 +1522,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CMatAcierEc &amp;#</dia:string>
+                <dia:string>#const EcAcier &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1561,13 +1544,13 @@
             <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CMatAcierEc &amp;#</dia:string>
+            <dia:string>#EcAcier &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Assignment operator deCMatAcierEc.#</dia:string>
+            <dia:string>#Assignment operator de EcAcier.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -1587,7 +1570,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CMatAcierEc &amp;#</dia:string>
+                <dia:string>#const EcAcier &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1603,7 +1586,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#~CMatAcierEc#</dia:string>
+            <dia:string>#~EcAcier#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -1799,13 +1782,13 @@
         <dia:point val="-114.581,32.5992"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-114.631,32.5492;-88.236,114.699"/>
+        <dia:rectangle val="-114.631,32.5492;-91.316,114.699"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-114.581,32.5992"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="26.294999999999998"/>
+        <dia:real val="23.215"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="82.049999999999955"/>
@@ -2201,7 +2184,7 @@
       <dia:attribute name="operations">
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CMatBetonEc#</dia:string>
+            <dia:string>#EcBeton#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -2213,7 +2196,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Constructeur d'une classe CMatBetonEc.#</dia:string>
+            <dia:string>#Constructeur d'une classe EcBeton.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -2245,28 +2228,11 @@
                 <dia:enum val="1"/>
               </dia:attribute>
             </dia:composite>
-            <dia:composite type="umlparameter">
-              <dia:attribute name="name">
-                <dia:string>#undo#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="type">
-                <dia:string>#UndoManager &amp;#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="value">
-                <dia:string>##</dia:string>
-              </dia:attribute>
-              <dia:attribute name="comment">
-                <dia:string>#Le gestionnaire des modifications.#</dia:string>
-              </dia:attribute>
-              <dia:attribute name="kind">
-                <dia:enum val="1"/>
-              </dia:attribute>
-            </dia:composite>
           </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#CMatBetonEc#</dia:string>
+            <dia:string>#EcBeton#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>#delete#</dia:string>
@@ -2278,7 +2244,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Duplication d'une classe CMatBetonEc.#</dia:string>
+            <dia:string>#Duplication d'une classe EcBeton.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -2298,7 +2264,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CMatBetonEc &amp;#</dia:string>
+                <dia:string>#const EcBeton &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2320,13 +2286,13 @@
             <dia:string>#delete#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#CMatBetonEc &amp;#</dia:string>
+            <dia:string>#EcBeton &amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Assignment operator de CMatBetonEc.#</dia:string>
+            <dia:string>#Assignment operator de EcBeton.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -2346,7 +2312,7 @@
                 <dia:string>#other#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const CMatBetonEc &amp;#</dia:string>
+                <dia:string>#const EcBeton &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -2362,7 +2328,7 @@
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
-            <dia:string>#~CMatBetonEc#</dia:string>
+            <dia:string>#~EcBeton#</dia:string>
           </dia:attribute>
           <dia:attribute name="stereotype">
             <dia:string>##</dia:string>
@@ -2374,7 +2340,7 @@
             <dia:enum val="0"/>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Destructeur d'une classe CMatBetonEc.#</dia:string>
+            <dia:string>#Destructeur d'une classe EcBeton.#</dia:string>
           </dia:attribute>
           <dia:attribute name="abstract">
             <dia:boolean val="false"/>
@@ -3416,7 +3382,7 @@
         <dia:point val="-119.13,21.1655"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-130.483,21.1155;-118.28,32.6492"/>
+        <dia:rectangle val="-132.024,21.1155;-118.28,32.6492"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -3424,8 +3390,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="-119.13,21.1655"/>
         <dia:point val="-119.13,28.2677"/>
-        <dia:point val="-130.433,28.2677"/>
-        <dia:point val="-130.433,32.5992"/>
+        <dia:point val="-131.974,28.2677"/>
+        <dia:point val="-131.974,32.5992"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -3457,7 +3423,7 @@
         <dia:point val="-119.13,21.1655"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-119.98,21.1155;-101.384,32.6492"/>
+        <dia:rectangle val="-119.98,21.1155;-102.924,32.6492"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -3465,8 +3431,8 @@
       <dia:attribute name="orth_points">
         <dia:point val="-119.13,21.1655"/>
         <dia:point val="-119.13,28.2677"/>
-        <dia:point val="-101.434,28.2677"/>
-        <dia:point val="-101.434,32.5992"/>
+        <dia:point val="-102.974,28.2677"/>
+        <dia:point val="-102.974,32.5992"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

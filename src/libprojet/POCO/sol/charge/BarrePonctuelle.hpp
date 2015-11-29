@@ -38,7 +38,7 @@ namespace POCO
         // Attributes
         private :
           /// Liste des barres où est appliquée la charge.
-          std::list <CBarre *> barres;
+          std::list <POCO::str::CBarre *> barres;
           /// Charge appliquée dans le repère local.
           bool repere_local;
           /// Position en m de la charge par rapport au début de la barre.
@@ -69,9 +69,8 @@ namespace POCO
            * \param mx (in) Moment ponctuel autour de l'axe x.
            * \param my (in) Moment ponctuel autour de l'axe y.
            * \param mz (in) Moment ponctuel autour de l'axe z.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          BarrePonctuelle (std::string nom, std::list <CBarre *> barres, bool repere, INb * position, INb * fx, INb * fy, INb * fz, INb * mx, INb * my, INb * mz, UndoManager & undo);
+          BarrePonctuelle (std::string nom, std::list <POCO::str::CBarre *> barres, bool repere, INb * position, INb * fx, INb * fy, INb * fz, INb * mx, INb * my, INb * mz);
           /**
            * \brief Duplication d'une classe BarrePonctuelle.
            * \param other (in) La classe à dupliquer.
@@ -180,13 +179,13 @@ namespace POCO
            * \param barres (in) La liste de barres à ajouter.
            * \return bool CHK
            */
-          bool CHK addBarres (std::list <CBarre *> * barres);
+          bool CHK addBarres (std::list <POCO::str::CBarre *> & barres);
           /**
            * \brief Enlève plusieurs barres à la charge.
            * \param barres (in) La liste de barres à enlever.
            * \return bool CHK
            */
-          bool CHK rmBarres (std::list <CBarre *> * barres);
+          bool CHK rmBarres (std::list <POCO::str::CBarre *> & barres);
       };
     }
   }

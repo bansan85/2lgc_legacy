@@ -16,6 +16,6 @@ CLEANFILES = doxyfilesouvenir.stamp doxyfileprojet.stamp
 all-local: doxyfilesouvenir.stamp doxyfileprojet.stamp
 
 clean-local:
-	rm -Rf html latex man
+	rm -Rf libsouvenir libprojet
 
 endif 

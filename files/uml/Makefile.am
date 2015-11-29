@@ -32,21 +32,25 @@ else
 gtk-uml :
 endif
 
-checkcode :
+checkcode : all
 # On est obligé de mettre un MAKE car il doit y avoir une optimisation et en
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
 
-SRC_HPP = $(wildcard *.hpp)
-OBJ_CPP = $(SRC_HPP:.hpp=.cpp)
+SRC_HPP = $(shell find $(top_builddir)/src/{libprojet,libsouvenir,macro} -name '*.hpp')
+if ENABLE_GTK
+SRC_HPP += $(shell find $(top_builddir)/src -name '*.hpp')
+endif
+OBJ_CPP = $(SRC_HPP:.hpp=.test.cpp)
+LOG_TEST = $(SRC_HPP:.hpp=.test.cpp.log)
 
 comp_hpp_cpp : $(OBJ_CPP)
-	cat *.cpp.log > log
+	cat $(LOG_TEST) > log
 
-%.cpp : %.hpp
-	echo -e "#include \"$^\" \nint main () { };" > $@
-	g++ $@ -std=c++11 -c -o $@.o &> $@.log
+%.test.cpp : %.hpp
+	echo -e "#include \"config.h\"\n#include \"$^\" \nint main () { };" > `basename $@`
+	g++ `basename $@` -std=c++11 $(XML_CPPFLAGS) -I$(top_srcdir) -I$(top_srcdir)/src/macro -I$(top_srcdir)/src/libsouvenir -I$(top_srcdir)/src/libprojet -I$(top_srcdir)/src/test/tools -c -o $@.o &> $@.log
 
 CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o *.stamp
 

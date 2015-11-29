@@ -38,9 +38,8 @@ namespace POCO
         public :
           /**
            * \brief Constructeur d'une classe Libre.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Libre (UndoManager & undo);
+          Libre ();
           /**
            * \brief Duplication d'une classe Libre.
            * \param other (in) La classe à dupliquer.

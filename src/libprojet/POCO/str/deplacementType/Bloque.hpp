@@ -38,9 +38,8 @@ namespace POCO
         public :
           /**
            * \brief Constructeur d'une classe Bloque.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Bloque (UndoManager & undo);
+          Bloque ();
           /**
            * \brief Duplication d'une classe Bloque.
            * \param other (in) La classe à dupliquer.

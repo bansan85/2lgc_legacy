@@ -52,9 +52,8 @@ namespace POCO
            * \param h_table (in) Hauteur de la table de compression.
            * \param l_retombee (in) Largeur de la retombée de la section.
            * \param h_retombee (in) Hauteur de la retombée de la section.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          T (INb * l_table, INb * h_table, INb * l_retombee, INb * h_retombee, UndoManager & undo);
+          T (INb * l_table, INb * h_table, INb * l_retombee, INb * h_retombee);
           /**
            * \brief Duplication d'une classe T.
            * \param other (in) La classe à dupliquer.

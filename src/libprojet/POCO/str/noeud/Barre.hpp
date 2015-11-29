@@ -47,9 +47,8 @@ namespace POCO
            * \brief Constructeur d'une classe Barre.
            * \param barre (in) La barre qui contiendra le nœud.
            * \param pos (in) La position relative sur la barre.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Barre (CBarre * barre, INb * pos, UndoManager & undo);
+          Barre (CBarre * barre, INb * pos);
           /**
            * \brief Duplication d'une classe Barre.
            * \param other (in) La classe à dupliquer.

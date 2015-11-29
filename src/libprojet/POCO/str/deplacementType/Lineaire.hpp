@@ -44,9 +44,8 @@ namespace POCO
           /**
            * \brief Constructeur d'une classe Lineaire.
            * \param raideur (in) La raideur du déplacement.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Lineaire (INb * raideur, UndoManager & undo);
+          Lineaire (INb * raideur);
           /**
            * \brief Duplication d'une classe Lineaire.
            * \param other (in) La classe à dupliquer.

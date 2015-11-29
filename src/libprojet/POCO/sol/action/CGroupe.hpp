@@ -53,9 +53,8 @@ namespace POCO
            * \brief Constructeur d'une classe CGroupe.
            * \param type (in) Le type de combinaison.
            * \param elements (???) Les Action ou CGroupe.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          CGroupe (ECombinaison type, std::list <IActionGroupe *> * elements, UndoManager & undo);
+          CGroupe (ECombinaison type, std::list <IActionGroupe *> * elements);
           /**
            * \brief Duplication d'une classe CGroupe.
            * \param other (in) La classe à dupliquer.

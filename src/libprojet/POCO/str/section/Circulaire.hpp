@@ -43,9 +43,8 @@ namespace POCO
           /**
            * \brief Constructeur d'une classe Circulaire.
            * \param diametre (in) Diamètre de la section.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Circulaire (INb * diametre, UndoManager & undo);
+          Circulaire (INb * diametre);
           /**
            * \brief Duplication d'une classe Circulaire.
            * \param other (in) La classe à dupliquer.
@@ -60,7 +59,7 @@ namespace POCO
           /**
            * \brief Destructeur d'une classe Circulaire.
            */
-          virtual ~SecCirc ();
+          virtual ~Circulaire ();
           /**
            * \brief Renvoie la dimension du diamètre de la section.
            * \return INb const &

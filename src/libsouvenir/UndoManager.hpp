@@ -23,7 +23,6 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 
 #include <MUndo.hpp>
 #include <cstdint>
-#include <config.h>
 #include "EUndoEtat.hpp"
 #include "ISujet.hpp"
 #include "POCO/UndoData.hpp"

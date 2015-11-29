@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
+#include <list>
 #include "POCO/str/ISection.hpp"
 #include "POCO/str/CPoint.hpp"
 
@@ -71,9 +72,8 @@ namespace POCO
            * \param vzp (in) vz' en m.
            * \param s (in) Surface en m².
            * \param forme (in) Forme de la section.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Personnalisee (std::string description, INb * j, INb * iy, INb * iz, INb * vy, INb * vyp, INb * vz, INb * vzp, INb * s, std::list <std::list <CPoint *> *> * forme, UndoManager & undo);
+          Personnalisee (std::string description, INb * j, INb * iy, INb * iz, INb * vy, INb * vyp, INb * vz, INb * vzp, INb * s, std::list <std::list <CPoint *> *> * forme);
           /**
            * \brief Duplication d'une classe Personnalisee.
            * \param other (in) La classe à dupliquer.

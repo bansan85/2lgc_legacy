@@ -72,3 +72,5 @@ massif.out.*
 build/vs2015/*.vcxproj.user
 build/vs2015/Debug
 build/vs2015/*.sdf
+*.cpp.test
+*.test.cpp

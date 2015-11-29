@@ -38,7 +38,7 @@ namespace POCO
         // Attributes
         private :
           /// Liste des nœuds où est appliquée la charge.
-          std::list <INoeud *> noeuds;
+          std::list <POCO::str::INoeud *> noeuds;
           /// Charge ponctuelle en N dans l'axe x.
           INb * fx;
           /// Charge ponctuelle en N dans l'axe y.
@@ -63,9 +63,8 @@ namespace POCO
            * \param mx (in) Moment ponctuelle en N.m autour de l'axe x.
            * \param my (in) Moment ponctuelle en N.m autour de l'axe y.
            * \param mz (in) Moment ponctuelle en N.m autour de l'axe z.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Noeud (std::string nom, std::list <INoeud *> noeuds, INb * fx, INb * fy, INb * fz, INb * mx, INb * my, INb * mz, UndoManager & undo);
+          Noeud (std::string nom, std::list <POCO::str::INoeud *> noeuds, INb * fx, INb * fy, INb * fz, INb * mx, INb * my, INb * mz);
           /**
            * \brief Duplication d'une classe Noeud.
            * \param other (in) La classe à dupliquer.
@@ -152,13 +151,13 @@ namespace POCO
            * \param noeuds (in) La liste de nœuds à ajouter.
            * \return bool CHK
            */
-          bool CHK addNoeuds (std::list <INoeud *> * noeuds);
+          bool CHK addNoeuds (std::list <POCO::str::INoeud *> & noeuds);
           /**
            * \brief Enlève plusieurs nœuds à la charge.
            * \param noeuds (in) La liste de nœuds à enlever.
            * \return bool CHK
            */
-          bool CHK rmNoeuds (std::list <INoeud *> * noeuds);
+          bool CHK rmNoeuds (std::list <POCO::str::INoeud *> & noeuds);
       };
     }
   }

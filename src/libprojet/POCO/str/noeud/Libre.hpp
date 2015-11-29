@@ -52,9 +52,8 @@ namespace POCO
            * \param y (in) La coordonnée en y.
            * \param z (in) La coordonnée en z.
            * \param nd (in) Le nœud relatif, NULL si aucun.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Libre (INb * x, INb * y, INb * z, INoeud * nd, UndoManager & undo);
+          Libre (INb * x, INb * y, INb * z, INoeud * nd);
           /**
            * \brief Duplication d'une classe Libre.
            * \param other (in) La classe à dupliquer.

@@ -46,9 +46,8 @@ namespace POCO
            * \brief Constructeur d'une classe Rectangulaire.
            * \param largeur (in) Largeur de la section.
            * \param hauteur (in) Hauteur de la section.
-           * \param undo (in) Le gestionnaire des modifications.
            */
-          Rectangulaire (INb * largeur, INb * hauteur, UndoManager & undo);
+          Rectangulaire (INb * largeur, INb * hauteur);
           /**
            * \brief Duplication d'une classe Rectangulaire.
            * \param other (in) La classe à dupliquer.

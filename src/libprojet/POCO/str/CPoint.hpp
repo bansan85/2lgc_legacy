@@ -35,11 +35,11 @@ namespace POCO
       // Attributes
       private :
         /// Coordonnée en x.
-        INb * x;
+        POCO::INb * x;
         /// Coordonnée en y.
-        INb * y;
+        POCO::INb * y;
         /// Coordonnée en z.
-        INb * z;
+        POCO::INb * z;
       // Operations
       public :
         /**
@@ -48,7 +48,7 @@ namespace POCO
          * \param y (in) Coordonnée en y.
          * \param z (in) Coordonnée en z.
          */
-        CPoint (INb * x, INb * y, INb * z);
+        CPoint (POCO::INb * x, POCO::INb * y, POCO::INb * z);
         /**
          * \brief Duplication d'une classe CPoint.
          * \param other (in) La classe à dupliquer.
@@ -66,37 +66,37 @@ namespace POCO
         virtual ~CPoint ();
         /**
          * \brief Renvoie la coordonnée en x.
-         * \return INb const &
+         * \return POCO::INb const &
          */
-        INb const & getX () const;
+        POCO::INb const & getX () const;
         /**
          * \brief Modifie la coordonnée en x.
          * \param valeur (in) La nouvelle valeur en x.
          * \return bool CHK
          */
-        bool CHK setX (INb * valeur);
+        bool CHK setX (POCO::INb * valeur);
         /**
          * \brief Renvoie la coordonnée en y.
-         * \return INb const &
+         * \return POCO::INb const &
          */
-        INb const & getY () const;
+        POCO::INb const & getY () const;
         /**
          * \brief Modifie la coordonnée en y.
          * \param valeur (in) La nouvelle valeur en y.
          * \return bool CHK
          */
-        bool CHK setY (INb * valeur);
+        bool CHK setY (POCO::INb * valeur);
         /**
          * \brief Renvoie la coordonnée en z.
-         * \return INb const &
+         * \return POCO::INb const &
          */
-        INb const & getZ () const;
+        POCO::INb const & getZ () const;
         /**
          * \brief Modifie la coordonnée en z.
          * \param valeur (in) La nouvelle valeur en z.
          * \return bool CHK
          */
-        bool CHK setZ (INb * valeur);
+        bool CHK setZ (POCO::INb * valeur);
         /**
          * \brief Modifie les coordonnées en x, y et z.
          * \param x (in) La nouvelle valeur en x.
@@ -104,7 +104,7 @@ namespace POCO
          * \param z (in) La nouvelle valeur en z.
          * \return bool CHK
          */
-        bool CHK setXYZ (INb * x, INb * y, INb * z);
+        bool CHK setXYZ (POCO::INb * x, POCO::INb * y, POCO::INb * z);
     };
   }
 }
