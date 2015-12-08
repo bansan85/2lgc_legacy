@@ -33,18 +33,11 @@ int
 main (int32_t,
       char   *[])
 {
-  /* Variables */
   CModele projet (ENorme::EUROCODE);
-//  GList   *tmp1, *tmp2;
+  bool retour;
   
-//  EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
-  
-  // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
-/*  INFO (gtk_init_check (&argc, &argv),
-        -1,
-        (gettext ("Impossible d'initialiser gtk.\n")); )*/
-  
-  assert (projet.getUndoManager ().ref ());
+  retour = projet.getUndoManager ().ref ();
+  assert (retour);
   
   std::shared_ptr <POCO::sol::CAction> action;
   for (uint8_t i = 0; i < 22; i++)
@@ -54,32 +47,41 @@ main (int32_t,
                                projet.getNorme ()->getPsiDescription (i)),
                0);
     
-    assert (projet.fAction.doAdd (action));
+    retour = projet.fAction.doAdd (action);
+    assert (retour);
   }
   
   assert (projet.getUndoManager ().getEtat () == EUndoEtat::MODIF);
-  assert (projet.getUndoManager ().unref ());
+  retour = projet.getUndoManager ().unref ();
+  assert (retour);
   
-  assert (projet.getUndoManager ().ref ());
+  retour = projet.getUndoManager ().ref ();
+  assert (retour);
   std::shared_ptr <POCO::sol::CAction> *action2;
-  assert (action2 = projet.getAction (projet.getNorme ()->
-                                                       getPsiDescription (5)));
+  action2 = projet.getAction (projet.getNorme ()->getPsiDescription (5));
   assert (action2);
   action = *action2;
   action->getPsi (0)->getVal ();
   action->getPsi (1)->getUnite ();
   action->getPsi (2)->toString (projet.getPreferences ().getDecimales ());
-  assert (projet.fAction.doSetPsi (action, 0, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
-  assert (projet.fAction.doSetPsi (action, 1, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
-  assert (projet.fAction.doSetPsi (action, 2, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_)));
+  retour = projet.fAction.doSetPsi (action, 0, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_));
+  assert (retour);
+  retour = projet.fAction.doSetPsi (action, 1, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_));
+  assert (retour);
+  retour = projet.fAction.doSetPsi (action, 2, std::make_shared <POCO::nombre::Utilisateur> (0.5, EUnite::U_));
+  assert (retour);
   action->getPsi (0)->getVal ();
   action->getPsi (1)->getUnite ();
   action->getPsi (2)->toString (projet.getPreferences ().getDecimales ());
-  assert (projet.getUndoManager ().unref ());
-  assert (projet.getUndoManager ().undo ());
-  assert (projet.getUndoManager ().redo ());
+  retour = projet.getUndoManager ().unref ();
+  assert (retour);
+  retour = projet.getUndoManager ().undo ();
+  assert (retour);
+  retour = projet.getUndoManager ().redo ();
+  assert (retour);
   
-  assert (projet.getUndoManager ().ref ());
+  retour = projet.getUndoManager ().ref ();
+  assert (retour);
   
   std::unique_ptr <std::string> nom (new std::string (projet.getNorme ()->
                                                       getPsiDescription (22)));
@@ -99,22 +101,23 @@ main (int32_t,
   
   assert (projet.getNorme ()->getPsiDescription (22).empty ());
   assert (projet.getActionCount () == 22);
-  assert (projet.getUndoManager ().undo ());
-  assert (projet.getUndoManager ().undo ());
+  retour = projet.getUndoManager ().undo ();
+  assert (retour);
+  retour = projet.getUndoManager ().undo ();
+  assert (retour);
   assert (projet.getActionCount () == 0);
-  assert (projet.getUndoManager ().redo ());
-  assert (projet.getUndoManager ().redo ());
+  retour = projet.getUndoManager ().redo ();
+  assert (retour);
+  retour = projet.getUndoManager ().redo ();
+  assert (retour);
   assert (projet.getActionCount () == 22);
   assert (projet.getUndoManager ().getEtat () == EUndoEtat::NONE_OR_REVERT);
   
-  assert (projet.getUndoManager ().undo ());
-/*  assert (projet.getUndoManager ().ref ());
-  assert (projet.getNorme ()->setNom (std::make_shared <std::string>
-                                                                     ("nom")));
-  assert (projet.getNorme ()->setVariante (0));
-  assert (projet.getUndoManager ().unref ());*/
+  retour = projet.getUndoManager ().undo ();
+  assert (retour);
   
-  assert (projet.enregistre ("coverage.xml"));
+  retour = projet.enregistre ("coverage.xml");
+  assert (retour);
   
   return 0;
 }

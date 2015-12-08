@@ -1,6 +1,6 @@
 -I.
 -I./src/libprojet
--I./src/libundo
+-I./src/libsouvenir
 -I./src/macro
 -I/usr/lib/gcc/x86_64-pc-linux-gnu/5.2.0/include/g++-v5
 -I/usr/lib/gcc/x86_64-pc-linux-gnu/5.2.0/include/g++-v5/x86_64-pc-linux-gnu

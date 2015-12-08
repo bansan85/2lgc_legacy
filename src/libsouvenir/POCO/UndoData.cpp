@@ -131,7 +131,8 @@ POCO::UndoData::setHeure ()
 bool
 POCO::UndoData::appendDescription (const std::string & description_)
 {
-  if (!description.empty()) {
+  if (!description.empty())
+  {
     description.append ("\n");
   }
   description.append (description_);

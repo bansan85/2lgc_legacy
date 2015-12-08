@@ -57,6 +57,10 @@ for NEW_FLAG in \
     -Wformat=2 \
     -Wformat-nonliteral \
     -Wformat-security \
+    -Wformat-extra-args\
+    -Wformat-zero-length \
+    -Wformat-y2k \
+    -Wformat-signedness \
     -Winit-self \
     -Winline \
     -Wlogical-op \
@@ -73,6 +77,7 @@ for NEW_FLAG in \
     -Wshadow \
     -Wsign-conversion \
     -Wstrict-aliasing=1 \
+    -fstrict-aliasing \
     -Wstrict-overflow=5 \
     -Wswitch-default \
     -Wswitch-enum \

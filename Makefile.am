@@ -18,7 +18,7 @@ endif
 
 export AM_CPPFLAGS
 
-EXTRA_DIST	= config.rpath  config.rpath \
+EXTRA_DIST	= config.rpath \
 							config.h
 
 package_win :
@@ -92,19 +92,19 @@ checkcode :
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
-	$(MAKE) -j9 &> l_gcc_avec_gtk.log
+	$(MAKE) check -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=undefined" CXXFLAGS="-fsanitize=undefined"
-	$(MAKE) -j9 &> l_gcc_undefined.log
+	$(MAKE) check -j9 &> l_gcc_undefined.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=address" CXXFLAGS="-fsanitize=address"
-	$(MAKE) -j9 &> l_gcc_address.log
+	$(MAKE) check -j9 &> l_gcc_address.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
-	$(MAKE) -j9 &> l_clang.log
+	$(MAKE) check -j9 &> l_clang.log
 	
 	$(MAKE) clean
 	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
