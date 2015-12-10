@@ -18,8 +18,6 @@
 
 #include "config.h"
 
-#include <iostream>
-
 #include "CPonderations.hpp"
 
 POCO::calc::CPonderations::CPonderations (bool    eluequ,

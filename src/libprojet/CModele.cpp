@@ -19,14 +19,11 @@
 #include "config.h"
 
 #include <algorithm>
-#include <memory>
 #include <iostream>
 
 #include "CModele.hpp"
 #include "MErreurs.hpp"
 #include "SString.hpp"
-#include "EUnite.hpp"
-#include "POCO/nombre/Calcul.hpp"
 #include "norme/Eurocode.hpp"
 
 static std::string errorMessage;

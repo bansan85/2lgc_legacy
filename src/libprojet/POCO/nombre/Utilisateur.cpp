@@ -19,9 +19,6 @@
 #include "config.h"
 
 #include <complex>
-#include <memory>
-#include <sstream>
-#include <iostream>
 
 #include "Utilisateur.hpp"
 #include "EUniteTxt.hpp"

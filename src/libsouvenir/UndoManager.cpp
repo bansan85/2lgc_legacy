@@ -19,10 +19,6 @@
 #include "config.h"
 
 #include <algorithm>
-#include <memory>
-#include <iostream>
-#include <locale>
-#include <sys/types.h>
 
 #include "Algo.hpp"
 #include "UndoManager.hpp"

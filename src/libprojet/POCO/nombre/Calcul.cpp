@@ -18,7 +18,6 @@
 
 #include "config.h"
 
-#include <memory>
 #include <sstream>
 
 #include "Calcul.hpp"

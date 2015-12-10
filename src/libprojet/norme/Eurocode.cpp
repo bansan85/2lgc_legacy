@@ -18,7 +18,6 @@
 
 #include "config.h"
 
-#include <memory>
 #include <cmath>
 
 #include "Eurocode.hpp"

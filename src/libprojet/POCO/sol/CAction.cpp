@@ -18,15 +18,8 @@
 
 #include "config.h"
 
-#include <cmath>
-#include <algorithm>
-#include <memory>
-#include <iostream>
-
 #include "CAction.hpp"
-#include "EUniteTxt.hpp"
 #include "MErreurs.hpp"
-#include "SString.hpp"
 
 POCO::sol::CAction::CAction (std::shared_ptr <std::string> nom_,
                              uint8_t                       type_) :

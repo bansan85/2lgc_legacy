@@ -18,8 +18,6 @@
 
 #include "config.h"
 
-#include <iostream>
-
 #include "CPreferences.hpp"
 
 POCO::CPreferences::CPreferences () :

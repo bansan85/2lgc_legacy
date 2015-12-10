@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include <cmath>
-#include <iostream>
 
 #include "CBarreInfoEF.hpp"
 
