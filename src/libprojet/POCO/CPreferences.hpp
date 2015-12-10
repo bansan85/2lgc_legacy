@@ -22,6 +22,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
  */
 
 #include <array>
+#include <cstdint>
 #include "EUnite.hpp"
 
 namespace POCO
@@ -34,7 +35,7 @@ namespace POCO
     // Attributes
     private :
       /// Nombre de décimales pour chaque type d'unité.
-      std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> decimales;
+      std::array <uint8_t, static_cast <std::size_t> (EUnite::LAST)> decimales;
     // Operations
     public :
       /**
@@ -58,9 +59,9 @@ namespace POCO
       virtual ~CPreferences ();
       /**
        * \brief Renvoie la liste des décimales applicables aux unités.
-       * \return std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> &
+       * \return std::array <uint8_t, static_cast <std::size_t> (EUnite::LAST)> &
        */
-      std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> & getDecimales () const;
+      std::array <uint8_t, static_cast <std::size_t> (EUnite::LAST)> & getDecimales () const;
   };
 }
 

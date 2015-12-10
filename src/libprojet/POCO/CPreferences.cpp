@@ -40,11 +40,11 @@ POCO::CPreferences::~CPreferences ()
 {
 }
 
-std::array <uint8_t, static_cast <size_t> (EUnite::LAST)> &
+std::array <uint8_t, static_cast <std::size_t> (EUnite::LAST)> &
 POCO::CPreferences::getDecimales () const
 {
   return const_cast <std::array <uint8_t,
-                           static_cast <size_t> (EUnite::LAST)> &> (decimales);
+                      static_cast <std::size_t> (EUnite::LAST)> &> (decimales);
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
