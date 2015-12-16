@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <algorithm>
+#include <cstdbool>
 
 #include "Algo.hpp"
 #include "UndoManager.hpp"

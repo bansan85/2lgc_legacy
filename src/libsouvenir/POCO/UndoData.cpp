@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <ctime>
+
 #include "UndoData.hpp"
 #include "MErreurs.hpp"
 

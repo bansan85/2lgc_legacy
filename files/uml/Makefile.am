@@ -37,6 +37,8 @@ checkcode : all
 # mettant comp_hpp_cpp dans la dépendance, les wildcard doivent être évalués
 # au début et non pas à l'appel de la dépendance de comp_hpp_cpp.
 	$(MAKE) comp_hpp_cpp
+	../../../deheader-1.2/deheader > deheader.log
+	sed -i "s/^.*\"config\.h\".*$//g" deheader.log
 
 SRC_HPP = $(shell find $(top_builddir)/src/{libprojet,libsouvenir,macro} -name '*.hpp')
 if ENABLE_GTK
@@ -48,9 +50,14 @@ LOG_TEST = $(SRC_HPP:.hpp=.test.cpp.log)
 comp_hpp_cpp : $(OBJ_CPP)
 	cat $(LOG_TEST) > log
 
+#Nécessaire pour make checkcode
 %.test.cpp : %.hpp
 	echo -e "#include \"config.h\"\n#include \"$^\" \nint main () { };" > `basename $@`
 	g++ `basename $@` -std=c++11 $(XML_CPPFLAGS) -I$(top_srcdir) -I$(top_srcdir)/src/macro -I$(top_srcdir)/src/libsouvenir -I$(top_srcdir)/src/libprojet -I$(top_srcdir)/src/test/tools -c -o $@.o &> $@.log
+
+#Nécessaire pour deheader
+.cpp.o: .cpp
+	g++ $^ -std=c++11 $(XML_CPPFLAGS) -I$(top_srcdir) -I$(top_srcdir)/src/macro -I$(top_srcdir)/src/libsouvenir -I$(top_srcdir)/src/libprojet -I$(top_srcdir)/src/test/tools -c -o $@.o
 
 CLEANFILES	=	*.cpp.log log *.cpp *.hpp *.cpp.o *.stamp
 

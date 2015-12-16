@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <complex>
+#include <cmath>
 
 #include "Utilisateur.hpp"
 #include "EUniteTxt.hpp"

@@ -22,7 +22,6 @@
 
 #include "Eurocode.hpp"
 #include "MErreurs.hpp"
-#include "SString.hpp"
 
 norme::Eurocode::Eurocode (std::shared_ptr <const std::string> nom_,
                            ENormeEcAc                           variante_,
@@ -53,11 +52,7 @@ norme::Eurocode::getPsiN () const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                0,
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, 0, UNDO_MANAGER_NULL)
       break;
     }
   }
@@ -128,11 +123,7 @@ norme::Eurocode::getPsiAction (uint8_t type_) const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                EAction::INCONNUE,
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, EAction::INCONNUE, UNDO_MANAGER_NULL)
       break;
     }
   }
@@ -206,11 +197,7 @@ norme::Eurocode::getPsiDescription (uint8_t type_) const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                std::string (),
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, std::string (), UNDO_MANAGER_NULL)
       break;
     }
   }
@@ -284,11 +271,7 @@ norme::Eurocode::getPsi0 (uint8_t type_) const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                NAN,
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, NAN, UNDO_MANAGER_NULL)
       break;
     }
   }
@@ -362,11 +345,7 @@ norme::Eurocode::getPsi1 (uint8_t type_) const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                NAN,
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, NAN, UNDO_MANAGER_NULL)
       break;
     }
   }
@@ -440,11 +419,7 @@ norme::Eurocode::getPsi2 (uint8_t type_) const
     }
     default :
     {
-      BUGPARAM (variante,
-                "%u",
-                false,
-                NAN,
-                UNDO_MANAGER_NULL)
+      BUGPARAM (variante, "%u", false, NAN, UNDO_MANAGER_NULL)
       break;
     }
   }

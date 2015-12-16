@@ -1,6 +1,7 @@
 DEFAULT_INCLUDES		 = -I$(srcdir) \
 											 -I$(srcdir)/../.. \
-											 -I$(srcdir)/../macro
+											 -I$(srcdir)/../macro \
+											 @XML_CPPFLAGS@
 
 AUTOMAKE_OPTIONS		 = subdir-objects
 
@@ -21,8 +22,6 @@ endif
 
 libsouvenir_la_LDFLAGS	 = $(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
 
-libsouvenir_la_CPPFLAGS	 = @XML_CPPFLAGS@
-
 libsouvenir_ladir 			 = $(includedir)/2lgc
 
 libsouvenir_la_SOURCES 	 = IObserveur.cpp \
@@ -42,6 +41,10 @@ libsouvenir_la_HEADERS   = \
 	$(MAKE) -C $(top_builddir)/files/uml souvenir-uml
 
 CLEANFILES = *.gcno POCO/*.gcno *.gcda $(libsouvenir_la_HEADERS)
+
+checkcode :
+	../../../deheader-1.2/deheader > deheader.log
+	sed -i "s/^.*\"config\.h\".*$//g" deheader.log
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libsouvenir_la_SOURCES) &> ../../cppcheck-souvenir.log

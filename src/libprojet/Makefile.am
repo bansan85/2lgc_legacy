@@ -1,7 +1,8 @@
 DEFAULT_INCLUDES		  =	-I$(srcdir) \
 												-I$(srcdir)/../.. \
 												-I$(srcdir)/../macro \
-												-I$(srcdir)/../libsouvenir
+												-I$(srcdir)/../libsouvenir \
+												@XML_CPPFLAGS@
 
 AUTOMAKE_OPTIONS		  =	subdir-objects
 
@@ -24,8 +25,6 @@ endif
 libprojet_la_CXXFLAGS = $(AM_CXXFLAGS)
 
 libprojet_la_LDFLAGS	= $(AM_LDFLAGS) -release $(VERSION) -Wl,-O0 -no-undefined
-
-libprojet_la_CPPFLAGS	=	@XML_CPPFLAGS@
 
 libprojet_ladir 			=	$(includedir)/2lgc
 
@@ -164,6 +163,10 @@ libprojet_la_HEADERS 	=	\
 	$(MAKE) -C $(top_builddir)/files/uml projet-uml eurocode-uml
 
 CLEANFILES = *.gcno ../macro/*.gcno POCO/sol/action/*.gcno POCO/sol/*.gcno POCO/*.gcno POCO/calc/*.gcno POCO/nombre/*.gcno norme/*.gcno *.gcda $(libprojet_la_HEADERS)
+
+checkcode :
+	../../../deheader-1.2/deheader > deheader.log
+	sed -i "s/^.*\"config\.h\".*$//g" deheader.log
 
 cppcheck :
 	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libprojet_la_SOURCES) &> ../../cppcheck.log
