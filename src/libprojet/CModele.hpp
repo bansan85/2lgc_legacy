@@ -279,7 +279,7 @@ class DllExport CModele : public CCalculs
      * \param fichier (in) Le nom du fichier.
      * \return bool CHK
      */
-    bool CHK enregistre (const std::string fichier) const;
+    bool CHK enregistre (const std::string & fichier) const;
     /**
      * \brief Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL).
      * \return void

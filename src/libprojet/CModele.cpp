@@ -149,7 +149,7 @@ CModele::getUndoManager ()
 }
 
 bool CHK
-CModele::enregistre (const std::string fichier) const
+CModele::enregistre (const std::string & fichier) const
 {
   std::unique_ptr <xmlDoc, void (*)(xmlDocPtr)> doc (
                                     xmlNewDoc (BAD_CAST2 ("1.0")), xmlFreeDoc);

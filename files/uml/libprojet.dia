@@ -13402,7 +13402,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
                 <dia:string>#fichier#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const std::string#</dia:string>
+                <dia:string>#const std::string &amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -39265,7 +39265,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:point val="-397.39,27"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-545.92,26.95;-397.34,204.2"/>
+        <dia:rectangle val="-545.92,26.95;-397.34,203.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
