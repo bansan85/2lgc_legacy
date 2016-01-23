@@ -51,6 +51,7 @@ CModele::CModele (ENorme eNorme) :
   std::cout.imbue (foo);
   std::cin.imbue (foo);
   std::cerr.imbue (foo);
+
   bindtextdomain (PACKAGE_NAME, LOCALEDIR);
   bind_textdomain_codeset (PACKAGE_NAME, "UTF-8");
   textdomain (PACKAGE_NAME);
@@ -95,6 +96,9 @@ CModele::CModele (ENorme eNorme) :
 CModele::~CModele ()
 {
   xmlCleanupParser ();
+  std::cout.imbue (std::locale ("C"));
+  std::cin.imbue (std::locale ("C"));
+  std::cerr.imbue (std::locale ("C"));
 }
 
 std::shared_ptr <POCO::sol::CAction> *

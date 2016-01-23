@@ -1,14 +1,4 @@
 {
-  <CModele::CModele(ENorme), std::locale::locale(char const*)>
-  Memcheck:Leak
-  match-leak-kinds: reachable
-  ...
-  fun:_ZNSt6localeC1EPKc
-  fun:_ZN7CModeleC1E6ENorme
-  ...
-}
-
-{
   <C'est pas ma faute1>
   Memcheck:Leak
   match-leak-kinds: reachable
