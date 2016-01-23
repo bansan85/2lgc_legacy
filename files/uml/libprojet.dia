@@ -15459,7 +15459,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O25" connection="18"/>
-        <dia:connection handle="1" to="O149" connection="5"/>
+        <dia:connection handle="1" to="O147" connection="5"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O35">
@@ -15882,7 +15882,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O14" connection="4"/>
-        <dia:connection handle="1" to="O149" connection="6"/>
+        <dia:connection handle="1" to="O147" connection="6"/>
       </dia:connections>
     </dia:object>
     <dia:object type="UML - Association" version="2" id="O43">
@@ -35481,157 +35481,6 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O140">
       <dia:attribute name="obj_pos">
-        <dia:point val="-551,58"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="-551.05,57.95;-546.588,61.05"/>
-      </dia:attribute>
-      <dia:attribute name="elem_corner">
-        <dia:point val="-551,58"/>
-      </dia:attribute>
-      <dia:attribute name="elem_width">
-        <dia:real val="4.3624999999999998"/>
-      </dia:attribute>
-      <dia:attribute name="elem_height">
-        <dia:real val="3"/>
-      </dia:attribute>
-      <dia:attribute name="name">
-        <dia:string>#ISujet.hpp#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="stereotype">
-        <dia:string>#extern#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="comment">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:attribute name="abstract">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="suppress_attributes">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="suppress_operations">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="visible_attributes">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="visible_operations">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="visible_comments">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="wrap_operations">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="wrap_after_char">
-        <dia:int val="40"/>
-      </dia:attribute>
-      <dia:attribute name="comment_line_length">
-        <dia:int val="17"/>
-      </dia:attribute>
-      <dia:attribute name="comment_tagging">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="line_width">
-        <dia:real val="0.10000000000000001"/>
-      </dia:attribute>
-      <dia:attribute name="line_color">
-        <dia:color val="#008000"/>
-      </dia:attribute>
-      <dia:attribute name="fill_color">
-        <dia:color val="#ffffff"/>
-      </dia:attribute>
-      <dia:attribute name="text_color">
-        <dia:color val="#008000"/>
-      </dia:attribute>
-      <dia:attribute name="normal_font">
-        <dia:font family="monospace" style="0" name="Courier"/>
-      </dia:attribute>
-      <dia:attribute name="abstract_font">
-        <dia:font family="monospace" style="88" name="Courier-BoldOblique"/>
-      </dia:attribute>
-      <dia:attribute name="polymorphic_font">
-        <dia:font family="monospace" style="8" name="Courier-Oblique"/>
-      </dia:attribute>
-      <dia:attribute name="classname_font">
-        <dia:font family="sans" style="80" name="Helvetica-Bold"/>
-      </dia:attribute>
-      <dia:attribute name="abstract_classname_font">
-        <dia:font family="sans" style="88" name="Helvetica-BoldOblique"/>
-      </dia:attribute>
-      <dia:attribute name="comment_font">
-        <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
-      </dia:attribute>
-      <dia:attribute name="normal_font_height">
-        <dia:real val="0.80000000000000004"/>
-      </dia:attribute>
-      <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.80000000000000004"/>
-      </dia:attribute>
-      <dia:attribute name="abstract_font_height">
-        <dia:real val="0.80000000000000004"/>
-      </dia:attribute>
-      <dia:attribute name="classname_font_height">
-        <dia:real val="1"/>
-      </dia:attribute>
-      <dia:attribute name="abstract_classname_font_height">
-        <dia:real val="1"/>
-      </dia:attribute>
-      <dia:attribute name="comment_font_height">
-        <dia:real val="0.69999999999999996"/>
-      </dia:attribute>
-      <dia:attribute name="attributes"/>
-      <dia:attribute name="operations"/>
-      <dia:attribute name="template">
-        <dia:boolean val="false"/>
-      </dia:attribute>
-      <dia:attribute name="templates"/>
-    </dia:object>
-    <dia:object type="UML - Generalization" version="1" id="O141">
-      <dia:attribute name="obj_pos">
-        <dia:point val="-548.819,61"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="-549.823,60.95;-547.969,74.05"/>
-      </dia:attribute>
-      <dia:attribute name="meta">
-        <dia:composite type="dict"/>
-      </dia:attribute>
-      <dia:attribute name="orth_points">
-        <dia:point val="-548.819,61"/>
-        <dia:point val="-548.819,67.9"/>
-        <dia:point val="-549.773,67.9"/>
-        <dia:point val="-549.773,74"/>
-      </dia:attribute>
-      <dia:attribute name="orth_orient">
-        <dia:enum val="1"/>
-        <dia:enum val="0"/>
-        <dia:enum val="1"/>
-      </dia:attribute>
-      <dia:attribute name="orth_autoroute">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="text_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="line_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="name">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:attribute name="stereotype">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:connections>
-        <dia:connection handle="0" to="O140" connection="6"/>
-        <dia:connection handle="1" to="O25" connection="1"/>
-      </dia:connections>
-    </dia:object>
-    <dia:object type="UML - Class" version="0" id="O142">
-      <dia:attribute name="obj_pos">
         <dia:point val="-200,60"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
@@ -35740,7 +35589,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O143">
+    <dia:object type="UML - Dependency" version="1" id="O141">
       <dia:attribute name="obj_pos">
         <dia:point val="-205.05,-64.6"/>
       </dia:attribute>
@@ -35779,10 +35628,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O17" connection="9"/>
-        <dia:connection handle="1" to="O142" connection="1"/>
+        <dia:connection handle="1" to="O140" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O144">
+    <dia:object type="UML - Class" version="0" id="O142">
       <dia:attribute name="obj_pos">
         <dia:point val="-318,98"/>
       </dia:attribute>
@@ -35892,7 +35741,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O145">
+    <dia:object type="UML - Dependency" version="1" id="O143">
       <dia:attribute name="obj_pos">
         <dia:point val="-307.697,91.75"/>
       </dia:attribute>
@@ -35933,10 +35782,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O60" connection="6"/>
-        <dia:connection handle="1" to="O144" connection="1"/>
+        <dia:connection handle="1" to="O142" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O146">
+    <dia:object type="UML - Class" version="0" id="O144">
       <dia:attribute name="obj_pos">
         <dia:point val="-310,98"/>
       </dia:attribute>
@@ -36046,7 +35895,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O147">
+    <dia:object type="UML - Dependency" version="1" id="O145">
       <dia:attribute name="obj_pos">
         <dia:point val="-307.697,91.75"/>
       </dia:attribute>
@@ -36087,10 +35936,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O60" connection="6"/>
-        <dia:connection handle="1" to="O146" connection="1"/>
+        <dia:connection handle="1" to="O144" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O148">
+    <dia:object type="UML - Dependency" version="1" id="O146">
       <dia:attribute name="obj_pos">
         <dia:point val="-558.778,-254"/>
       </dia:attribute>
@@ -36134,7 +35983,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:connection handle="1" to="O99" connection="0"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O149">
+    <dia:object type="UML - Class" version="0" id="O147">
       <dia:attribute name="obj_pos">
         <dia:point val="-593,-296"/>
       </dia:attribute>
@@ -36706,7 +36555,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       <dia:attribute name="templates"/>
       <dia:childnode parent="O3"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O150">
+    <dia:object type="UML - Dependency" version="1" id="O148">
       <dia:attribute name="obj_pos">
         <dia:point val="-580.622,-296"/>
       </dia:attribute>
@@ -36746,11 +36595,11 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O149" connection="1"/>
+        <dia:connection handle="0" to="O147" connection="1"/>
         <dia:connection handle="1" to="O99" connection="0"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O151">
+    <dia:object type="UML - Class" version="0" id="O149">
       <dia:attribute name="obj_pos">
         <dia:point val="-130,58"/>
       </dia:attribute>
@@ -36860,7 +36709,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O152">
+    <dia:object type="UML - Dependency" version="1" id="O150">
       <dia:attribute name="obj_pos">
         <dia:point val="-128.007,41.1"/>
       </dia:attribute>
@@ -36901,18 +36750,18 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O27" connection="6"/>
-        <dia:connection handle="1" to="O151" connection="1"/>
+        <dia:connection handle="1" to="O149" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O153">
+    <dia:object type="UML - Class" version="0" id="O151">
       <dia:attribute name="obj_pos">
-        <dia:point val="-575,176"/>
+        <dia:point val="-576,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-575.05,175.95;-544.42,202.65"/>
+        <dia:rectangle val="-576.05,175.95;-545.42,202.65"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-575,176"/>
+        <dia:point val="-576,176"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="30.530000000000001"/>
@@ -37640,12 +37489,12 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O154">
+    <dia:object type="UML - Dependency" version="1" id="O152">
       <dia:attribute name="obj_pos">
         <dia:point val="-549.773,170.95"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-560.185,170.9;-549.722,176.45"/>
+        <dia:rectangle val="-561.185,170.9;-549.722,176.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -37653,8 +37502,8 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       <dia:attribute name="orth_points">
         <dia:point val="-549.773,170.95"/>
         <dia:point val="-549.773,173.275"/>
-        <dia:point val="-559.735,173.275"/>
-        <dia:point val="-559.735,176"/>
+        <dia:point val="-560.735,173.275"/>
+        <dia:point val="-560.735,176"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -37681,21 +37530,21 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O25" connection="6"/>
-        <dia:connection handle="1" to="O153" connection="1"/>
+        <dia:connection handle="1" to="O151" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O155">
+    <dia:object type="UML - Dependency" version="1" id="O153">
       <dia:attribute name="obj_pos">
-        <dia:point val="-544.47,202.6"/>
+        <dia:point val="-545.47,202.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-544.52,26.55;-396.94,203.45"/>
+        <dia:rectangle val="-545.52,26.55;-396.94,203.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-544.47,202.6"/>
+        <dia:point val="-545.47,202.6"/>
         <dia:point val="-397.39,202.6"/>
         <dia:point val="-397.39,27"/>
       </dia:attribute>
@@ -37722,23 +37571,23 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O153" connection="7"/>
+        <dia:connection handle="0" to="O151" connection="7"/>
         <dia:connection handle="1" to="O19" connection="7"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O156">
+    <dia:object type="UML - Dependency" version="1" id="O154">
       <dia:attribute name="obj_pos">
-        <dia:point val="-559.735,176"/>
+        <dia:point val="-560.735,176"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-559.785,170.5;-549.322,176.05"/>
+        <dia:rectangle val="-560.785,170.5;-549.322,176.05"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="-559.735,176"/>
-        <dia:point val="-559.735,173.675"/>
+        <dia:point val="-560.735,176"/>
+        <dia:point val="-560.735,173.675"/>
         <dia:point val="-549.773,173.675"/>
         <dia:point val="-549.773,170.95"/>
       </dia:attribute>
@@ -37766,53 +37615,11 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O153" connection="1"/>
+        <dia:connection handle="0" to="O151" connection="1"/>
         <dia:connection handle="1" to="O25" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O157">
-      <dia:attribute name="obj_pos">
-        <dia:point val="-397.39,27"/>
-      </dia:attribute>
-      <dia:attribute name="obj_bb">
-        <dia:rectangle val="-544.92,26.95;-397.34,203.45"/>
-      </dia:attribute>
-      <dia:attribute name="meta">
-        <dia:composite type="dict"/>
-      </dia:attribute>
-      <dia:attribute name="orth_points">
-        <dia:point val="-397.39,27"/>
-        <dia:point val="-397.39,202.6"/>
-        <dia:point val="-544.47,202.6"/>
-      </dia:attribute>
-      <dia:attribute name="orth_orient">
-        <dia:enum val="1"/>
-        <dia:enum val="0"/>
-      </dia:attribute>
-      <dia:attribute name="orth_autoroute">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:attribute name="text_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="line_colour">
-        <dia:color val="#000000"/>
-      </dia:attribute>
-      <dia:attribute name="name">
-        <dia:string>##</dia:string>
-      </dia:attribute>
-      <dia:attribute name="stereotype">
-        <dia:string>#NoLoop#</dia:string>
-      </dia:attribute>
-      <dia:attribute name="draw_arrow">
-        <dia:boolean val="true"/>
-      </dia:attribute>
-      <dia:connections>
-        <dia:connection handle="0" to="O19" connection="7"/>
-        <dia:connection handle="1" to="O153" connection="7"/>
-      </dia:connections>
-    </dia:object>
-    <dia:object type="UML - Class" version="0" id="O158">
+    <dia:object type="UML - Class" version="0" id="O155">
       <dia:attribute name="obj_pos">
         <dia:point val="-540,176"/>
       </dia:attribute>
@@ -38302,7 +38109,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O159">
+    <dia:object type="UML - Dependency" version="1" id="O156">
       <dia:attribute name="obj_pos">
         <dia:point val="-525.312,176"/>
       </dia:attribute>
@@ -38342,11 +38149,11 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O158" connection="1"/>
+        <dia:connection handle="0" to="O155" connection="1"/>
         <dia:connection handle="1" to="O25" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O160">
+    <dia:object type="UML - Dependency" version="1" id="O157">
       <dia:attribute name="obj_pos">
         <dia:point val="-549.773,170.95"/>
       </dia:attribute>
@@ -38387,10 +38194,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O25" connection="6"/>
-        <dia:connection handle="1" to="O158" connection="1"/>
+        <dia:connection handle="1" to="O155" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O161">
+    <dia:object type="UML - Dependency" version="1" id="O158">
       <dia:attribute name="obj_pos">
         <dia:point val="-293.395,91.75"/>
       </dia:attribute>
@@ -38429,10 +38236,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O60" connection="7"/>
-        <dia:connection handle="1" to="O158" connection="7"/>
+        <dia:connection handle="1" to="O155" connection="7"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O162">
+    <dia:object type="UML - Dependency" version="1" id="O159">
       <dia:attribute name="obj_pos">
         <dia:point val="-510.625,193.85"/>
       </dia:attribute>
@@ -38470,11 +38277,11 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O158" connection="7"/>
+        <dia:connection handle="0" to="O155" connection="7"/>
         <dia:connection handle="1" to="O60" connection="7"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - LargePackage" version="0" id="O163">
+    <dia:object type="UML - LargePackage" version="0" id="O160">
       <dia:attribute name="obj_pos">
         <dia:point val="-530,215"/>
       </dia:attribute>
@@ -38512,7 +38319,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:string>#libxml#</dia:string>
       </dia:attribute>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O164">
+    <dia:object type="UML - Class" version="0" id="O161">
       <dia:attribute name="obj_pos">
         <dia:point val="-527,217"/>
       </dia:attribute>
@@ -38621,9 +38428,9 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="false"/>
       </dia:attribute>
       <dia:attribute name="templates"/>
-      <dia:childnode parent="O163"/>
+      <dia:childnode parent="O160"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O165">
+    <dia:object type="UML - Dependency" version="1" id="O162">
       <dia:attribute name="obj_pos">
         <dia:point val="-525.312,193.85"/>
       </dia:attribute>
@@ -38663,11 +38470,11 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:connections>
-        <dia:connection handle="0" to="O158" connection="6"/>
-        <dia:connection handle="1" to="O164" connection="1"/>
+        <dia:connection handle="0" to="O155" connection="6"/>
+        <dia:connection handle="1" to="O161" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O166">
+    <dia:object type="UML - Class" version="0" id="O163">
       <dia:attribute name="obj_pos">
         <dia:point val="-302,98"/>
       </dia:attribute>
@@ -38777,7 +38584,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O167">
+    <dia:object type="UML - Dependency" version="1" id="O164">
       <dia:attribute name="obj_pos">
         <dia:point val="-307.697,91.75"/>
       </dia:attribute>
@@ -38818,10 +38625,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O60" connection="6"/>
-        <dia:connection handle="1" to="O166" connection="1"/>
+        <dia:connection handle="1" to="O163" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O168">
+    <dia:object type="UML - Class" version="0" id="O165">
       <dia:attribute name="obj_pos">
         <dia:point val="-464,54"/>
       </dia:attribute>
@@ -38931,7 +38738,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O169">
+    <dia:object type="UML - Dependency" version="1" id="O166">
       <dia:attribute name="obj_pos">
         <dia:point val="-468.165,-3.75"/>
       </dia:attribute>
@@ -38972,10 +38779,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O18" connection="7"/>
-        <dia:connection handle="1" to="O168" connection="1"/>
+        <dia:connection handle="1" to="O165" connection="1"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O170">
+    <dia:object type="UML - Dependency" version="1" id="O167">
       <dia:attribute name="obj_pos">
         <dia:point val="-428,-218"/>
       </dia:attribute>
@@ -39019,7 +38826,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:connection handle="1" to="O134" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O171">
+    <dia:object type="UML - Class" version="0" id="O168">
       <dia:attribute name="obj_pos">
         <dia:point val="-860,-104"/>
       </dia:attribute>
@@ -39129,7 +38936,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O172">
+    <dia:object type="UML - Dependency" version="1" id="O169">
       <dia:attribute name="obj_pos">
         <dia:point val="-689.245,-111.25"/>
       </dia:attribute>
@@ -39168,10 +38975,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O11" connection="7"/>
-        <dia:connection handle="1" to="O171" connection="4"/>
+        <dia:connection handle="1" to="O168" connection="4"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O173">
+    <dia:object type="UML - Dependency" version="1" id="O170">
       <dia:attribute name="obj_pos">
         <dia:point val="-764.928,-86"/>
       </dia:attribute>
@@ -39210,10 +39017,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O112" connection="1"/>
-        <dia:connection handle="1" to="O171" connection="4"/>
+        <dia:connection handle="1" to="O168" connection="4"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O174">
+    <dia:object type="UML - Dependency" version="1" id="O171">
       <dia:attribute name="obj_pos">
         <dia:point val="-609.09,-255.75"/>
       </dia:attribute>
@@ -39255,7 +39062,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
         <dia:connection handle="1" to="O134" connection="6"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O175">
+    <dia:object type="UML - Dependency" version="1" id="O172">
       <dia:attribute name="obj_pos">
         <dia:point val="-270,42.85"/>
       </dia:attribute>
@@ -39296,10 +39103,10 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O15" connection="5"/>
-        <dia:connection handle="1" to="O166" connection="4"/>
+        <dia:connection handle="1" to="O163" connection="4"/>
       </dia:connections>
     </dia:object>
-    <dia:object type="UML - Class" version="0" id="O176">
+    <dia:object type="UML - Class" version="0" id="O173">
       <dia:attribute name="obj_pos">
         <dia:point val="-96,58"/>
       </dia:attribute>
@@ -39409,7 +39216,7 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:attribute name="templates"/>
     </dia:object>
-    <dia:object type="UML - Dependency" version="1" id="O177">
+    <dia:object type="UML - Dependency" version="1" id="O174">
       <dia:attribute name="obj_pos">
         <dia:point val="-91.0025,41.6"/>
       </dia:attribute>
@@ -39450,7 +39257,49 @@ La fonction ne peut pas être const car l'action retour peut être modifiée.#</
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O66" connection="6"/>
-        <dia:connection handle="1" to="O176" connection="1"/>
+        <dia:connection handle="1" to="O173" connection="1"/>
+      </dia:connections>
+    </dia:object>
+    <dia:object type="UML - Dependency" version="1" id="O175">
+      <dia:attribute name="obj_pos">
+        <dia:point val="-397.39,27"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="-545.92,26.95;-397.34,204.2"/>
+      </dia:attribute>
+      <dia:attribute name="meta">
+        <dia:composite type="dict"/>
+      </dia:attribute>
+      <dia:attribute name="orth_points">
+        <dia:point val="-397.39,27"/>
+        <dia:point val="-397.39,202.6"/>
+        <dia:point val="-545.47,202.6"/>
+      </dia:attribute>
+      <dia:attribute name="orth_orient">
+        <dia:enum val="1"/>
+        <dia:enum val="0"/>
+      </dia:attribute>
+      <dia:attribute name="orth_autoroute">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:attribute name="text_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="line_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="name">
+        <dia:string>##</dia:string>
+      </dia:attribute>
+      <dia:attribute name="stereotype">
+        <dia:string>#noloop#</dia:string>
+      </dia:attribute>
+      <dia:attribute name="draw_arrow">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:connections>
+        <dia:connection handle="0" to="O19" connection="7"/>
+        <dia:connection handle="1" to="O151" connection="7"/>
       </dia:connections>
     </dia:object>
   </dia:layer>

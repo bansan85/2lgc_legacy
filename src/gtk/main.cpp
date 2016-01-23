@@ -62,9 +62,8 @@ gShowMain (int32_t   argc,
                "main")
   }
 
-  std::shared_ptr <GWindowMain> winMain;
-  winMain = std::make_shared <GWindowMain> (builder, modele);
-  modele.addObserver (winMain);
+  modele.getUndoManager().addObserver (
+                             std::make_shared <GWindowMain> (builder, modele));
 
   builder->get_widget ("window1", pDialog);
   app->run (*pDialog);
@@ -77,7 +76,7 @@ main (int32_t argc,
       char   *argv[])
 {
   /* Variables */
-  CModele projet;
+  CModele projet (ENorme::EUROCODE);
   
   // On traite les arguments du programme
   switch (argc)
@@ -106,11 +105,11 @@ main (int32_t argc,
 
   _2lgc_register_resource ();
 
-  std::shared_ptr <CAction> action;
-  action = std::make_shared <CAction> (
+  std::shared_ptr <POCO::sol::CAction> action;
+  action = std::make_shared <POCO::sol::CAction> (
                                std::make_shared <std::string> ("Poids propre"),
                                0);
-  assert (projet.addAction (action));
+  assert (projet.fAction.doAdd (action));
   BUGCONT (gShowMain (argc, argv, projet), -1, UNDO_MANAGER_NULL);
 
   _2lgc_unregister_resource ();

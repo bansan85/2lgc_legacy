@@ -14,7 +14,7 @@ La description des messages doit toujours commencer par :
 [MODIFICATION] : modifie une fonction existant.
 [BRANCHE nom_de_la_branche] : modification sur une branche. Dans ce cas, dans le message, il faut préciser ET le nom de la branche, et le type de modification. Ex : [BRANCHE vues3d][AMELIORATION]
 [DOC] : Ajout / Modification de la documentation.
-[CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, coding style, …).
+[CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, coding style, warning…).
 [GTK] : tout ce qui concerne une modification de l'interface graphique linux.
 [UML] : Modification du diagramme UML.
 [TEST] : Ajout / Modification de tests.

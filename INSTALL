@@ -32,6 +32,7 @@ Avec gcc :
 ./configure --with-gui=none --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 ./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gui=gtk3 --with-debug --with-doc --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 find . -name "Makefile" -exec sed -i "s#-I/usr#-isystem/usr#g" {} \;
 make -j9

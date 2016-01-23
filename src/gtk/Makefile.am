@@ -32,6 +32,7 @@ UI_H_PRINT_FILES = $(UI_FILES:.ui=.ui.h.p)
 
 gtk-ressources.cpp : $(UI_FILES) gtk-ressources.xml
 	glib-compile-resources --target=gtk-ressources.cpp gtk-ressources.xml --c-name _2lgc --generate-source --manual-register
+	sed -i "s/NULL/nullptr/g" gtk-ressources.cpp
 #	glib-compile-resources --target=gtk-ressources.h --sourcedir=../../files/gtk gtk-ressources.xml --c-name _2lgc --generate-header --manual-register
 
 gtk-ressources.xml : $(UI_H_FILES)

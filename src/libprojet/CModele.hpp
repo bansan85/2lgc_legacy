@@ -29,7 +29,6 @@ class FuncModeleNorme;
 class FuncModeleAction;
 
 #include <UndoManager.hpp>
-#include <ISujet.hpp>
 #include "FuncModeleAction.hpp"
 #include "FuncModeleNorme.hpp"
 #include "ENorme.hpp"
@@ -48,7 +47,7 @@ class FuncModeleAction;
 /**
  * \brief Contient toutes les données définissant la structure à analyser.
  */
-class DllExport CModele : public ISujet, public CCalculs
+class DllExport CModele : public CCalculs
 {
   // Associations
   // Attributes
