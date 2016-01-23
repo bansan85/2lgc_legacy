@@ -91,29 +91,29 @@ checkcode :
 	@(cd files/uml && $(MAKE) clean && $(MAKE) $@)
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	$(MAKE) check -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=undefined" CXXFLAGS="-fsanitize=undefined"
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="-fsanitize=undefined" CXXFLAGS="-fsanitize=undefined"
 	$(MAKE) check -j9 &> l_gcc_undefined.log
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="-fsanitize=address" CXXFLAGS="-fsanitize=address"
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="-fsanitize=address" CXXFLAGS="-fsanitize=address"
 	$(MAKE) check -j9 &> l_gcc_address.log
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS="" CC=clang CXX=clang++ GCOV_CFLAGS="-fprofile-arcs -ftest-coverage --coverage" GCOV_LDFLAGS="-fprofile-arcs -ftest-coverage" GCOV_LIBS="-lgcov"
 	$(MAKE) check -j9 &> l_clang.log
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 	../cov-analysis-*/bin/cov-build --dir cov-int make -j9 check
 	tar czvf cov-2LGC.tgz cov-int
 	
 	$(MAKE) clean
-	./configure --with-gui=gtk3 --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+	./configure --with-gui=none --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 	MALLOC_CHECK_=3 MALLOC_PERTURB_=252 $(MAKE) -j9 &> l_gcc_avec_gtk.log
 	
 	$(MAKE) -C src/lib cppcheck
