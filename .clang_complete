@@ -2,8 +2,10 @@
 -I./src/libprojet
 -I./src/libsouvenir
 -I./src/macro
--I/usr/lib/gcc/x86_64-pc-linux-gnu/5.2.0/include/g++-v5
--I/usr/lib/gcc/x86_64-pc-linux-gnu/5.2.0/include/g++-v5/x86_64-pc-linux-gnu
+-I/usr/lib/gcc/x86_64-pc-linux-gnu/5.3.0/include/g++-v5
+-I/usr/lib/gcc/x86_64-pc-linux-gnu/5.3.0/include/g++-v5/x86_64-pc-linux-gnu
+-I/usr/lib/gcc/x86_64-pc-linux-gnu/5.3.0/include
+-I/usr/lib/gcc/x86_64-pc-linux-gnu/5.3.0/include-fixed
 -I/usr/lib/clang/3.7.0/include
 -I/usr/include
 -I/usr/include/libxml2

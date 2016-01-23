@@ -267,7 +267,7 @@ if test "$platform_win" == "Win64"; then
   AM_CXXFLAGS="$AM_CXXFLAGS -march=i686 -mms-bitfields"
 fi
 if test "$withdebug" == "true"; then
-  AM_CXXFLAGS="$AM_CXXFLAGS -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe"
+  AM_CXXFLAGS="$AM_CXXFLAGS -O0 -g2 -ggdb2 -fno-omit-frame-pointer -pipe"
 else
   AM_CXXFLAGS="$AM_CXXFLAGS -O2 -fomit-frame-pointer -pipe"
 fi
@@ -406,7 +406,7 @@ if test "x${ac_enable_valgrind}" = xyes ; then
 fi
 
 # Vérification de la présence de dia2code v0.9
-AC_CHECK_PROG(HAVE_DIA2CODE, dia2code, yes, no, "/home/legarrec/info/programmation/dia2code-git/src")
+AC_CHECK_PROG(HAVE_DIA2CODE, dia2code, yes, no, "/home/legarrec/info/programmation/dia2code-cpp/src")
 AM_CONDITIONAL(HAVE_DIA2CODE, test "x$HAVE_DIA2CODE" = xyes)
 
 # Checks for libraries.
