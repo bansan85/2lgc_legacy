@@ -19,12 +19,14 @@
 #include "config.h"
 
 #include <iostream>
+#include <algorithm>
 #include <libintl.h>
 #include <gtkmm/menutoolbutton.h>
 #include <gtkmm/applicationwindow.h>
 
 #include "GWindowMain.hpp"
 #include "MErreurs.hpp"
+#include "common/GtkMenu.hpp"
 
 GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
                           CModele                     & modele_) :
@@ -44,6 +46,8 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
 
   button->signal_clicked ().connect (
                            sigc::mem_fun (*this, &GWindowMain::onClickedUndo));
+  button->signal_show_menu  ().connect (
+                          sigc::mem_fun (*this, &GWindowMain::onShowMenuUndo));
   signal (EEvent::UNDO_NB, nullptr);
 
   build->get_widget ("buttonRedo", button);
@@ -57,6 +61,8 @@ GWindowMain::GWindowMain (Glib::RefPtr <Gtk::Builder> & builder,
 
   button->signal_clicked ().connect (
                            sigc::mem_fun (*this, &GWindowMain::onClickedRedo));
+  button->signal_show_menu  ().connect (
+                          sigc::mem_fun (*this, &GWindowMain::onShowMenuRedo));
   signal (EEvent::REDO_NB, nullptr);
 }
 
@@ -75,11 +81,11 @@ GWindowMain::signal (EEvent event, void *)
   {
     case EEvent::UNDO_NB :
     {
+      bool undoPossible = modele.getUndoManager ().undoNb () != 0;
+
+      // On récupère le composant buttonUndo
       Gtk::MenuToolButton * undoB = nullptr;
-      bool param2 = modele.getUndoManager ().undoNb () != 0;
-
       build->get_widget ("buttonUndo", undoB);
-
       BUGPROG (undoB,
                ,
                UNDO_MANAGER_NULL,
@@ -87,8 +93,9 @@ GWindowMain::signal (EEvent event, void *)
                  "Main",
                  "buttonUndo");
 
-      undoB->set_sensitive (param2);
-      if (param2)
+      undoB->set_sensitive (undoPossible);
+
+      if (undoPossible)
       {
         undoB->set_tooltip_text (*modele.getUndoManager ().undoDesc (0));
       }
@@ -101,7 +108,7 @@ GWindowMain::signal (EEvent event, void *)
     case EEvent::REDO_NB :
     {
       Gtk::MenuToolButton * redoB = nullptr;
-      bool param2 = modele.getUndoManager ().redoNb () != 0;
+      bool redoPossible = modele.getUndoManager ().redoNb () != 0;
 
       build->get_widget ("buttonRedo", redoB);
 
@@ -112,8 +119,8 @@ GWindowMain::signal (EEvent event, void *)
                  "Main",
                  "buttonRedo");
 
-      redoB->set_sensitive (param2);
-      if (param2)
+      redoB->set_sensitive (redoPossible);
+      if (redoPossible)
       {
         redoB->set_tooltip_text (*modele.getUndoManager ().redoDesc (0));
       }
@@ -141,9 +148,59 @@ GWindowMain::onClickedUndo ()
 }
 
 void
+GWindowMain::onShowMenuUndo ()
+{
+  Gtk::Menu * undoM = nullptr;
+  build->get_widget ("menuUndo", undoM);
+  BUGPROG (undoM,
+           ,
+           UNDO_MANAGER_NULL,
+           "Fenêtre %s, composant %s introuvable.\n",
+             "Main",
+             "menuUndo");
+
+  GtkMenuC::clear (*undoM);
+
+  // On ajoute les nouveaux items.
+  size_t nbUndo = modele.getUndoManager ().undoNb ();
+  for (size_t i = 0; i < std::min(100UL, nbUndo); i++)
+  {
+    Gtk::MenuItem * menuItem = new Gtk::MenuItem (
+                                 *modele.getUndoManager ().undoDesc (i));
+    undoM->append (*menuItem);
+  }
+  undoM->show_all ();
+}
+
+void
 GWindowMain::onClickedRedo ()
 {
   BUGCONT (modele.getUndoManager ().redo (), , UNDO_MANAGER_NULL);
+}
+
+void
+GWindowMain::onShowMenuRedo ()
+{
+  Gtk::Menu * redoM = nullptr;
+  build->get_widget ("menuRedo", redoM);
+  BUGPROG (redoM,
+           ,
+           UNDO_MANAGER_NULL,
+           "Fenêtre %s, composant %s introuvable.\n",
+             "Main",
+             "menuRedo");
+
+  GtkMenuC::clear (*redoM);
+
+  // On ajoute les nouveaux items.
+  size_t nbRedo = modele.getUndoManager ().redoNb ();
+  for (size_t i = 0; i < std::min(100UL, nbRedo); i++)
+  {
+    Gtk::MenuItem * menuItem = new Gtk::MenuItem (
+                                       *modele.getUndoManager ().redoDesc (i));
+    redoM->append (*menuItem);
+  }
+  redoM->show_all ();
 }
 
 /* vim:set shiftwidth=2 softtabstop=2 expandtab: */

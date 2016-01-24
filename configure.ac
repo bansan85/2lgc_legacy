@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.68])
 AC_INIT(2lgc_code, 0.0.1, devel@2lgc.org, 2lgc_code, http://2lgc.org)
-AM_INIT_AUTOMAKE([-Wno-portability])
+AM_INIT_AUTOMAKE([-Wno-portability subdir-objects])
 AC_CONFIG_SRCDIR([src/libsouvenir/UndoManager.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_GNU_GETTEXT([external])

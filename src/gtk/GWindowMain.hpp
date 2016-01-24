@@ -72,10 +72,20 @@ class GWindowMain : public IObserveur
      */
     void onClickedUndo ();
     /**
-     * \brief Répète la dernière opération.
+     * \brief Met à jour le menu permettant de sélectionner l'action à annuler au moment où il s'affiche.
+     * \return void
+     */
+    void onShowMenuUndo ();
+    /**
+     * \brief Rétablit la dernière opération.
      * \return void
      */
     void onClickedRedo ();
+    /**
+     * \brief Met à jour le menu permettant de sélectionner l'action à rétablir au moment où il s'affiche.
+     * \return void
+     */
+    void onShowMenuRedo ();
 };
 
 #endif

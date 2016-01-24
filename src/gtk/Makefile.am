@@ -20,7 +20,8 @@ codegui_LDADD			 =	-lcholmod \
 
 if ENABLE_GTK
 codegui_SOURCES   +=	gtk-ressources.cpp \
-											GWindowMain.cpp
+											GWindowMain.cpp \
+											common/GtkMenu.cpp
 endif
 
 $(codegui_SOURCES) : gtk-ressources.xml
@@ -69,4 +70,4 @@ endif #ENABLE_DEBUG
 
 CLEANFILES	      =	*.gcno *.gcda *.hpp gtk-ressources.cpp gtk-ressources.xml ui/*.ui.h *.stamp
 
-EXTRA_DIST				= gtk-ressources.h
+EXTRA_DIST				= gtk-ressources.h common/GtkMenu.hpp
