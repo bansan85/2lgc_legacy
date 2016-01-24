@@ -74,3 +74,4 @@ build/vs2015/Debug
 build/vs2015/*.sdf
 *.cpp.test
 *.test.cpp
+vgcore.*

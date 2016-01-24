@@ -21,11 +21,12 @@ La description des messages doit toujours commencer par :
 [WIN] : Tout ce qui concerne la compatibilité avec Windows.
 [AUTOTOOLS] : Toutes modifications portant sur les autotools.
 [VISUAL STUDIO] : Toutes modifications portant sur Visual Studio.
-[TRAVIS] : Toutes modifications portant sur Travis.
-[ANDROID] : Tout ce qui concerne la compatibilité avec Android.
-[ICC] : Tout ce qui concerne la compilation avec ICC.
-[CLANG] : Tout ce qui concerne la compilation avec CLANG.
-[VIM] : Tout ce qui concerne la configuration de vim.
+[TRAVIS] : Configuration pour Travis.
+[ANDROID] : Compatibilité avec Android.
+[ICC] : Compilation avec ICC.
+[CLANG] : Compilation avec CLANG.
+[VIM] : Configuration de vim.
+[GIT] : Configuration de git.
 
 
 Performances :
