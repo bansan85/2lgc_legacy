@@ -64,7 +64,10 @@ CModele::CModele (ENorme eNorme) :
                                    std::make_shared <std::string> ("Eurocode"),
                                    norme::ENormeEcAc::FR,
                                    0);
-      undoManager.setSauveDesc (2);
+
+      // On empêche l'insertion dans le gestionnaire de la norme de base.
+      // En effet, il est nécessaire que le projet en possède au moins un.
+      undoManager.setInsertion (false);
       if (!undoManager.ref (false))
       {
         errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
@@ -80,13 +83,13 @@ CModele::CModele (ENorme eNorme) :
         errorMessage = "Erreur lors de la sélection de la norme Eurocode.";
         throw errorMessage.c_str ();
       }
-      undoManager.setSauveDesc (1);
+      undoManager.setInsertion (true);
       break;
     }
     default :
     {
-      errorMessage = "Erreur lors de la sélection de la norme" +
-                           std::to_string (static_cast<size_t> (eNorme)) + ".";
+      errorMessage = "Erreur lors de la sélection de la norme " +
+                          std::to_string (static_cast <size_t> (eNorme)) + ".";
       throw errorMessage.c_str ();
       break;
     }
@@ -96,6 +99,8 @@ CModele::CModele (ENorme eNorme) :
 CModele::~CModele ()
 {
   xmlCleanupParser ();
+
+  // Pour éviter une fuite mémoire et donc faire plaisir à Valgrind.
   std::cout.imbue (std::locale ("C"));
   std::cin.imbue (std::locale ("C"));
   std::cerr.imbue (std::locale ("C"));
