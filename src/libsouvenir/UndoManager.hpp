@@ -99,7 +99,7 @@ class DllExport UndoManager : public ISujet
      * \param nb (in) Le nombre de modifications à annuler.
      * \return bool CHK
      */
-    bool CHK undoN (uint32_t nb);
+    bool CHK undoN (size_t nb);
     /**
      * \brief Renvoie le nombre d'opérations pouvant être annulées.
      * \return size_t
@@ -121,7 +121,7 @@ class DllExport UndoManager : public ISujet
      * \param nb (in) Le nombre de modifications à rétablir.
      * \return bool CHK
      */
-    bool CHK redoN (uint32_t nb);
+    bool CHK redoN (size_t nb);
     /**
      * \brief Renvoie le nombre d'opérations pouvant être répétées.
      * \return size_t

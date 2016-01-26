@@ -143,7 +143,7 @@ UndoManager::undo ()
 }
 
 bool
-UndoManager::undoN (uint32_t nb)
+UndoManager::undoN (size_t nb)
 {
   if (nb == 0)
   {
@@ -235,7 +235,7 @@ UndoManager::redo ()
 }
 
 bool
-UndoManager::redoN (uint32_t nb)
+UndoManager::redoN (size_t nb)
 {
   if (nb == 0)
   {

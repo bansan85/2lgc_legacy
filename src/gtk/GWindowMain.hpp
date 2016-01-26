@@ -23,6 +23,7 @@ Fichier généré automatiquement avec dia2code 0.9.0.
 
 #include <gtkmm/builder.h>
 #include <CModele.hpp>
+#include <gtkmm/cssprovider.h>
 #include <IObserveur.hpp>
 
 /**
@@ -32,10 +33,19 @@ class GWindowMain : public IObserveur
 {
   // Attributes
   private :
+    friend class UndoRedoMenuItem;
     /// Le composant GtkBuirder contenant la fenêtre.
     Glib::RefPtr <Gtk::Builder> build;
     /// Le projet relié à l'interface graphique.
     CModele & modele;
+    /// Contient une liste des menuItem lorsque le menu Undo ou Redo est affiché. Est vide si aucun menu n'est affiché.
+    std::vector <Gtk::Widget *> menuItemsUndoRedo;
+    /// Vaut false si le menu en cours d'affichage est celui d'annulation, vaut true pour le menu de rétablissement.
+    bool showUndoRedo : 1;
+    /// Permet de savoir si le menu est affiché. le signal "show-menu" s'exécutant à l'affichage et au masquage du menu.
+    bool showMenuUndoRedo : 1;
+    /// CssProvider pour surligner les MenuItem qui seront annulé.
+    Glib::RefPtr <Gtk::CssProvider> cssProviderMenuItemUndoRedo;
   // Operations
   public :
     /**
@@ -86,6 +96,11 @@ class GWindowMain : public IObserveur
      * \return void
      */
     void onShowMenuRedo ();
+    /**
+     * \brief Supprime les composants graphiques utiles uniquement pour l'affichage du menu du gestionnaire d'annulation.
+     * \return void
+     */
+    void onHideMenuUndoRedo ();
 };
 
 #endif

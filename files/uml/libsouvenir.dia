@@ -755,7 +755,7 @@ Libère l'historique du projet.#</dia:string>
                 <dia:string>#nb#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint32_t#</dia:string>
+                <dia:string>#size_t#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -911,7 +911,7 @@ Libère l'historique du projet.#</dia:string>
                 <dia:string>#nb#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#uint32_t#</dia:string>
+                <dia:string>#size_t#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -4212,13 +4212,13 @@ TODO !!!#</dia:string>
         <dia:point val="37,33"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="36.95,32.95;48.6825,40.25"/>
+        <dia:rectangle val="36.95,32.95;51.8225,40.25"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="37,33"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="11.6325"/>
+        <dia:real val="14.772499999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="7.2000000000000002"/>
@@ -4322,7 +4322,7 @@ TODO !!!#</dia:string>
             <dia:string>#0#</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Nombre d'actions pouvant être annulées.#</dia:string>
+            <dia:string>#Changement du nombre d'actions pouvant être annulées.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -4345,7 +4345,7 @@ TODO !!!#</dia:string>
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="comment">
-            <dia:string>#Nombre d'actions pouvant être répétées.#</dia:string>
+            <dia:string>#Changement du nombre d'actions pouvant être rétablies.#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -4369,7 +4369,7 @@ TODO !!!#</dia:string>
         <dia:point val="40.8375,23.3005"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="40.7875,23.2505;43.2662,33.45"/>
+        <dia:rectangle val="40.7875,23.2505;44.8362,33.45"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -4377,8 +4377,8 @@ TODO !!!#</dia:string>
       <dia:attribute name="orth_points">
         <dia:point val="40.8375,23.3005"/>
         <dia:point val="40.8375,27.9502"/>
-        <dia:point val="42.8162,27.9502"/>
-        <dia:point val="42.8162,33"/>
+        <dia:point val="44.3862,27.9502"/>
+        <dia:point val="44.3862,33"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>

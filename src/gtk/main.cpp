@@ -110,6 +110,10 @@ main (int32_t argc,
                                std::make_shared <std::string> ("Poids propre"),
                                0);
   assert (projet.fAction.doAdd (action));
+  action = std::make_shared <POCO::sol::CAction> (
+                               std::make_shared <std::string> ("Poids propr2"),
+                               1);
+  assert (projet.fAction.doAdd (action));
   BUGCONT (gShowMain (argc, argv, projet), -1, UNDO_MANAGER_NULL);
 
   _2lgc_unregister_resource ();
